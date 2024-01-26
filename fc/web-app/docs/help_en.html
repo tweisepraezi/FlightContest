@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.4.0,</span>
-<span id="revdate">17.01.2024</span>
+<span id="revnumber">version 3.4.1,</span>
+<span id="revdate">26.01.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -1847,11 +1847,14 @@ The correctness of the route can now be checked with <strong>OSM online map</str
 <li>
 <p>Check points at the correct locations?</p>
 </li>
+<li>
+<p>TO/iLDG/LDG gate in the middle of the runway and correct in preferred direction and width?</p>
+</li>
 </ul>
 </div>
 </li>
 <li>
-<p>Evaluation stages:</p>
+<p>Evaluation legs:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1891,13 +1894,13 @@ appears in front of the track title in the track list and error messages are mar
 <p>Some last turn points of route photos or ground signs could not be calculated.<br>
 Correct the coordinate of the track photo or ground sign.</p>
 </dd>
-<dt class="hdlist1">Number of stages too small</dt>
+<dt class="hdlist1">Number of legs too small</dt>
 <dd>
-<p>Reduce 'Min. stages' (Competition &#8594; Defaults)</p>
+<p>Reduce 'Min. legs' (Competition &#8594; Defaults)</p>
 </dd>
-<dt class="hdlist1">Number of stages too large</dt>
+<dt class="hdlist1">Number of legs too large</dt>
 <dd>
-<p>'Max. Enlarge stages' (Competition &#8594; Defaults)</p>
+<p>'Max. Enlarge legs' (Competition &#8594; Defaults)</p>
 </dd>
 <dt class="hdlist1">Photo number too small</dt>
 <dd>
@@ -1928,12 +1931,19 @@ Decrease 'Min. distance ground signs' (Competition &#8594; Defaults)</p>
 <dt class="hdlist1">Map distances differ</dt>
 <dd>
 <p>Internal data error<br>
-Execute 'Recalculate stages</p>
+Execute 'Recalculate legs</p>
 </dd>
 <dt class="hdlist1">Coordinate turning loops deviating</dt>
 <dd>
 <p>Internal data error<br>
-Execute 'Recalculate stages</p>
+Execute 'Recalculate legs</p>
+</dd>
+<dt class="hdlist1">From this route with circle centers, a route with semi-circle gates must be created for use</dt>
+<dd>
+<p>Open "Route settings"<br>
+Activate the option "Export semi-circle gates from circle centers"<br>
+Execute "GPX export (with semi-circle gates)"<br>
+Execute "Import FC route" with the exported GPX file</p>
 </dd>
 </dl>
 </div>

@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.1
+----------------
+- Integrierter Task-Creator: Fehlermeldungen bei Eingabe des Task-Namens beseitigt
+- Strecken: Verbesserte Fehlermeldung bei Halbkreis-Mittelpunkten einschl. Hilfetext
+- Kartenerzeugung: AirportArea-Name um Strecken-Titel erweitert
+- Karten: Bug "Import einer Karten-zip stürzt ab" beseitigt
+
 Änderungen 3.4.0
 ----------------
 - Menüpunkt "Karten" hinzugefügt

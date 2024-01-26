@@ -28,7 +28,7 @@
 		</style>
 		<script src="js/airrats.min.js"></script>
 	</head>
-	<body>
+	<body onmousemove="get_taskname()">
 		<div id="print_map" style="display: none;" class="print_map no_print">
 			<button class="back">Back</button>
 			<label for="print_scale">Map Scale:</label>
@@ -96,18 +96,35 @@
 			</div>
 			<div id="separador_load" class="separador"><hr></div>
 			<div id="seccion_load">
-                <button id="btn_csv" title="Import from CSV format">Load task data</button>
-                <input type="file" name="File Upload" id="load_csv" accept=".csv" style="display:none;" />
-                <button id="save_as_csv" title="Export to CSV format">Save task data</button>
-            </div>
-			<div id="separador_load2" class="separador"><hr></div>
-			<div id="seccion_load2">
-                <label for="task_name" style="float: left; margin: 4px 5px 0 0;">Task:</label>
+                <label for="task_name" style="float: left; margin: 4px 5px 0 0;">Task name:</label>
                 <div style="display: inline-block; vertical-align: bottom;">
-                    <input type="text" id="task_name" class="task_name" style="width:200px">
+                    <input type="text" id="task_name1" class="task_name" style="width:200px" onchange="set_taskname()" >
                 </div>
-                <button id="btn_delete_task" title="Clear Task">Clear</button>
-                <button id="btn_save_as_fc" style="margin-right: 5px;" title="Export to Flight Contest format.">Export FC kml</button>
+                <div style="display: none;">
+                    <input type="text" id="task_name" class="task_name">
+                </div>
+                <div style="margin-top:4px;">
+                    <button id="btn_csv" title="Import from CSV format">Load task</button>
+                    <input type="file" name="File Upload" id="load_csv" accept=".csv" style="display:none;" />
+                    <button id="save_as_csv" title="Export to CSV format">Save task</button>
+                    <button id="btn_delete_task" title="Clear Task" onclick="clear_taskname()">Clear task</button>
+                    <button id="btn_save_as_fc" style="margin-right: 5px;" title="Export to Flight Contest format.">Export FC kml</button>
+                </div>
+                <script>
+                    function set_taskname() {
+                        var v = $("#task_name1").val();
+                        $('#task_name').val(v);
+                    }
+                    function get_taskname() {
+                        var v = $("#task_name").val();
+                        if (v) {
+                            $('#task_name1').val(v);
+                        }
+                    }
+                    function clear_taskname() {
+                        $('#task_name1').val('');
+                    }
+                </script>
             </div>
 			<div id="separador_carta" class="separador"><hr></div>
 			<div id="seccion_carta">

@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.4.0
-:revdate:   17.01.2024
+:revnumber: 3.4.1
+:revdate:   26.01.2024
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -697,6 +697,7 @@ Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
 
 * OSM-Online-Karte: 
 ** Check-Punkte an den korrekten Stellen?
+** TO/iLDG/LDG-Gate in der Mitte der Startbahn und in Vorzugsrichtung und Breite korrekt?
 * Auswerte-Etappen:
 ** Entfernungen plausibel?
 ** Gesamt-Entfernung plausibel?
@@ -753,6 +754,12 @@ Interner Datenfehler +
 Koordinaten-Wendeschleifen abweichend::
 Interner Datenfehler +
 'Etappen neu berechnen' ausführen
+
+Aus dieser Strecke mit Kreismittelpunkten muss zur Nutzung eine Strecke mit Halbkreis-Toren erzeugt werden::
+Öffnen Sie die Strecken-Einstellungen +
+Aktivieren Sie die Option "Halbkreis-Tore aus Kreismittelpunkten exportieren" +
+Führen Sie "GPX-Export (mit Halbkreis-Tore)" aus +
+Führen Sie "Import FC-Strecke" mit der exportierten GPX-Datei aus
 
 <<<
 [[osm-contest-map]]

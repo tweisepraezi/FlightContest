@@ -1323,61 +1323,62 @@ class Route
         Map status = RouteStatus()
         String s = ""
         boolean wr_comma = false
-        if (status.min_leg_error) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.routelegtest.numerror.min',[status.min_leg_num])
-            wr_comma = true
-        }
-        if (status.max_leg_error) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.routelegtest.numerror.max',[status.max_leg_num])
-            wr_comma = true
-        }
-        if (status.measure_distance_difference) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.routelegtest.legmeasuredistance.difference',[status.measure_distance_difference])
-            wr_comma = true
-        }
-        if (status.procedureturn_difference) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.routelegtest.procedureturn.difference',[status.procedureturn_difference])
-            wr_comma = true
-        }
-        if (status.min_target_error) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.observation.enroute.numerror.min',[status.min_target_num])
-            wr_comma = true
-        }
-        if (status.max_target_error) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.observation.enroute.numerror.max',[status.max_target_num])
-            wr_comma = true
-        }
         if (status.circlecenter_num) {
             if (wr_comma) {
                 s += ", "
             }
             s += getMsgArgs('fc.circlecenter.error',[status.circlecenter_num])
             wr_comma = true
-        }
-        if (status.secret_measure_incomplete) {
-            if (wr_comma) {
-                s += ", "
+        } else {
+            if (status.min_leg_error) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.routelegtest.numerror.min',[status.min_leg_num])
+                wr_comma = true
             }
-            s += getMsgArgs('fc.route.secretmeasureincomplete',[status.secret_measure_incomplete])
-            wr_comma = true
+            if (status.max_leg_error) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.routelegtest.numerror.max',[status.max_leg_num])
+                wr_comma = true
+            }
+            if (status.measure_distance_difference) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.routelegtest.legmeasuredistance.difference',[status.measure_distance_difference])
+                wr_comma = true
+            }
+            if (status.procedureturn_difference) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.routelegtest.procedureturn.difference',[status.procedureturn_difference])
+                wr_comma = true
+            }
+            if (status.min_target_error) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.observation.enroute.numerror.min',[status.min_target_num])
+                wr_comma = true
+            }
+            if (status.max_target_error) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.observation.enroute.numerror.max',[status.max_target_num])
+                wr_comma = true
+            }
+            if (status.secret_measure_incomplete) {
+                if (wr_comma) {
+                    s += ", "
+                }
+                s += getMsgArgs('fc.route.secretmeasureincomplete',[status.secret_measure_incomplete])
+                wr_comma = true
+            }
         }
         return s
     }

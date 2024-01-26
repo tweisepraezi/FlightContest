@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.1
+-------------
+- Integrated Task Creator: Error messages when entering the task name removed
+- Routes: Improved error message for semi-circle center points incl. help text
+- Map generation: AirportArea name extended by route title
+- Maps: Bug "Import of a map zip crashes" fixed
+
 Changes 3.4.0
 -------------
 - Menu item "Maps" added

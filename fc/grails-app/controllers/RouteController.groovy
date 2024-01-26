@@ -3045,8 +3045,9 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            String route_title = "AirportArea ${route.instance.name()} (Online Map)"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: "AirportArea (Online Map)",
+                                                                 routeTitle: route_title,
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -3058,7 +3059,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: VerticalPos.Center
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 0, "AirportArea (Online Map)")
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 0, route_title)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -3173,8 +3174,9 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            String route_title = "AirportArea ${route.instance.name()} (Task Creator)"
                             Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                    routeTitle: "AirportArea (Task Creator)",
+                                                                    routeTitle: route_title,
                                                                     routeId: route.instance.id,
                                                                     webRootDir: webroot_dir,
                                                                     gpxFileName: webroot_dir + route_gpx_file_name,
@@ -3186,7 +3188,7 @@ class RouteController {
                                                                     contestMapCenterVerticalPos: VerticalPos.Center
                                                                    ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 0, "AirportArea (Task Creator)")
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 0, route_title)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)

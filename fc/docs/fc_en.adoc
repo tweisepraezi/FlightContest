@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.0
-:revdate: 17.01.2024
+:revnumber: 3.4.1
+:revdate: 26.01.2024
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -686,7 +686,8 @@ Check your entered route in 'Route details' as follows:
 
 * OSM online map:
 ** Check points at the correct locations?
-* Evaluation stages:
+** TO/iLDG/LDG gate in the middle of the runway and correct in preferred direction and width?
+* Evaluation legs:
 ** Distances plausible?
 ** Total distance plausible?
 ** Turning loops (course changes > 90 degrees) correct?
@@ -709,11 +710,11 @@ Unknown last turning points::
 Some last turn points of route photos or ground signs could not be calculated. +
 Correct the coordinate of the track photo or ground sign.
 
-Number of stages too small::
-Reduce 'Min. stages' (Competition -> Defaults)
+Number of legs too small::
+Reduce 'Min. legs' (Competition -> Defaults)
 
-Number of stages too large::
-'Max. Enlarge stages' (Competition -> Defaults)
+Number of legs too large::
+'Max. Enlarge legs' (Competition -> Defaults)
 
 Photo number too small::
 'Track photo observations -> Definition' set with 'None' (Edit) or +
@@ -737,11 +738,17 @@ Photo+ground character count too large::
 
 Map distances differ::
 Internal data error +
-Execute 'Recalculate stages
+Execute 'Recalculate legs
 
 Coordinate turning loops deviating::
 Internal data error +
-Execute 'Recalculate stages
+Execute 'Recalculate legs
+
+From this route with circle centers, a route with semi-circle gates must be created for use::
+Open "Route settings" +
+Activate the option "Export semi-circle gates from circle centers" +
+Execute "GPX export (with semi-circle gates)" +
+Execute "Import FC route" with the exported GPX file
 
 <<<
 [[osm-contest-map]]

@@ -220,6 +220,10 @@ class MapController {
             MultipartFile zip_file = request.getFile("zipfile")
             if (zip_file && !zip_file.isEmpty()) {
                 String map_dir_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}"
+                File map_folder = new File(map_dir_name)
+                if (!map_folder.exists()) {
+                    map_folder.mkdir()
+                }
                 String new_name = zip_file.getOriginalFilename().substring(0, zip_file.getOriginalFilename().lastIndexOf('.'))
                 String modify_name = ""
                 String modify_num = 0

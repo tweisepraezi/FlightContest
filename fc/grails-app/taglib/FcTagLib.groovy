@@ -154,7 +154,15 @@ class FcTagLib
     // ====================================================================================================================
     // <g:flighttest var="${flightTestInstance}" link="${createLink(controller:'flightTest',action:'show')}"/>
     def flighttest = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        if (p.var.route) {
+            if (p.var.title) {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.route.name().encodeAsHTML()}</a> (${p.var.name().encodeAsHTML()})"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.route.name().encodeAsHTML()}</a>"""
+            }
+        } else {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        }
     }
 
     // ====================================================================================================================

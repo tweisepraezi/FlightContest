@@ -189,63 +189,21 @@ class RouteFileTools
             def kml = new XmlParser().parse(km_reader)
             
             if (!readPlacemarks && kml.Document.Placemark.LineString.coordinates) {
-                
-				/*
-                route_name = kml.Document.Placemark.name.text()
-                if (route_name) {
-                    int num = 0
-                    while (Route.findByContestAndTitle(contestInstance, route_name)) {
-                        num++
-                        route_name = "${kml.Document.Placemark.name.text()} ($num)"
-                    }
-                }
-				*/
-                
                 String coordinates = kml.Document.Placemark.LineString.coordinates.text()
                 Map kml_coords = ReadKMLCoordinates(coordinates, null, null)
                 gates += kml_coords.gates
                 if (gates.size()) {
                     valid_format = true
                 }
-                
             } else {
                 def folder = null
                 boolean root_folder = false
                 if (folderName) {
                     folder = search_folder_by_name(kml.Document, folderName)
-                    println "XX1"
                 } else {
                     folder = kml.Document // root
-                    println "XX2"
-                    /*
-                    folder = kml.Document.Folder[0] // first folder
-                    if (!folder) {
-                        folder = kml.Document // root
-                        root_folder = true
-                        println "XX3"
-                    }
-                    */
                 }
-                
                 if (folder && folder.Placemark) {
-                
-					/*
-                    if (root_folder) {
-                        if (folder.name) {
-                            route_name = folder.name.text()
-                        }
-                    } else if (folder.Placemark.name) {
-                        route_name = folder.Placemark.name.text()
-                    }
-                    if (route_name) {
-                        int num = 0
-                        while (Route.findByContestAndTitle(contestInstance, route_name)) {
-                            num++
-                            route_name = "${folder.Placemark.name.text()} ($num)"
-                        }
-                    }
-					*/
-                    
                     BigDecimal last_latitude = null
                     BigDecimal last_longitude = null
                     for (def pm in folder.Placemark) {
