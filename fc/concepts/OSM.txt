@@ -32,6 +32,7 @@ Mapnik
    https://github.com/mapnik/mapnik/wiki/PolygonSymbolizer
    https://github.com/mapnik/mapnik/wiki/MarkersSymbolizer
    https://github.com/mapnik/mapnik/wiki/PointSymbolizer
+   https://www.w3.org/TR/SVG/coords.html#TransformAttribute
 
    https://www.volkerschatz.com/net/osm/osm.html
                     https://www.volkerschatz.com/net/osm/styleadv.html

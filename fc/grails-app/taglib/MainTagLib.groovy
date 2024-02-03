@@ -106,7 +106,12 @@ class MainTagLib
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
 					} else if (p.controller == "map") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
-						outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator" target="_blank">${p.taskcreatoraction}</a> </li>"""
+                        if (BootStrap.global.IsTaskCreatorExtern()) {
+                            outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_intern" target="_blank">${message(code:'fc.map.taskcreator')} (${message(code:'fc.map.taskcreator.intern')})</a> </li>"""
+                            outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_extern" target="_blank">${message(code:'fc.map.taskcreator')} (${message(code:'fc.map.taskcreator.extern')})</a> </li>"""
+                        } else {
+                            outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_intern" target="_blank">${message(code:'fc.map.taskcreator')}</a> </li>"""
+                        }
 					}
 				}
 				if (p.importaction2) {

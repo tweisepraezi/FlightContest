@@ -23,7 +23,7 @@ Is an open source, multilingual, network-enabled database application based on J
 
 Supports special route features:
 * Secret time checks
-* Curved legs
+* Scenic legs
 * Semicircles
 * Touch-and-go landings
 
@@ -37,7 +37,9 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 
 Creates PDF for print and internet publishing.
 
-Generates OSM-based topographic A3 & A4 competition maps in TÜK-200 style.
+Generates OSM-based topographic competition maps.
+
+Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?lang=en).
 
 Emailing of crew result to participants.
 
@@ -45,4 +47,4 @@ Displays live results (live scoring):
 * Display of preliminary ranking during a debriefing
 * Simultaneous publication in the local network and on the internet
   
-Airsports Live Tracking support (https://airsports.no)
+Support for Airsports Live Tracking (https://airsports.no).

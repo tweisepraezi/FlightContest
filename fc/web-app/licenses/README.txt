@@ -1,5 +1,5 @@
 
-Flight Contest 3.4.1
+Flight Contest 3.4.2
 Copyright 2009-2024 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
@@ -121,10 +121,18 @@ https://www.apache.org/licenses/LICENSE-2.0
 
 ============================================================================
 
+OpenAIP
+https://www.openaip.net/
+
+MIT License
+https://github.com/openAIP/mapstyles/blob/master/LICENSE
+
+============================================================================
+
 Many thanks to Carlos Rocca,
 who allowed me to integrate his Rally Flying Task Creator into Flight Contest.
 
-http://www.airrats.cl/taskcreator?lang=en
+https://www.airrats.cl/taskcreator?lang=en
 
 ============================================================================
 

@@ -26,9 +26,9 @@
 					background:none !important;
 				}
 		</style>
-		<script src="js/airrats.min.js"></script>
+		<script src="https://www.airrats.cl/taskcreator/js/airrats.min.js"></script>
 	</head>
-	<body onmousemove="get_taskname()">
+	<body onmousemove="get_taskname()" onload="clear_addons()">
 		<div id="print_map" style="display: none;" class="print_map no_print">
 			<button class="back">Back</button>
 			<label for="print_scale">Map Scale:</label>
@@ -124,6 +124,10 @@
                     function clear_taskname() {
                         $('#task_name1').val('');
                     }
+                    function clear_addons() {
+                        $('#btn_delete_suas').trigger("click");
+                        $('#btn_delete_map_addons').trigger("click");
+                    }
                 </script>
             </div>
 			<div id="separador_carta" class="separador"><hr></div>
@@ -140,12 +144,22 @@
 					<label for="map_w" style="margin-left: 8px;" title="West limit (use dot as decimal separator)">W:</label>
 					<span><input id="map_w" type="number" min="-180" max="180" lang="en" style="text-align: center; width:60px" title="Límite Weste (usar punto como separador decimal)"></span>
 					<button id="load_url_map">Load</button><br>
+					<label for="addons_url" style="margin-left: 0px;" title="Map addons Url">Addons RL:</label>
+					<input id="addons_url" type="url" style="width:270px; margin:2px;" title="Map addons Url" value="">
+					<button id="btn_load_map_addons" title="Load map addons">Load</button>
+					<button id="btn_delete_map_addons" title="Clear map addons">Clear</button><br>
+					<label for="suas_url" style="margin-left: 0px;" title="Airspace kmz file Url">SUAs Url:</label>
+					<input id="suas_url" type="url" style="width:255px; margin:2px;" title="Airspace kmz file Url" value="">
+					<button id="btn_load_suas" title="Load SUAs kmz file">Load</button>
+					<button id="btn_delete_suas" title="Borrar SUAs">Clear</button>
 				</div>
 				<div>
 					<label for="controls" style="margin-left: 0px;" title="Toggles Google Maps Controls">Map Controls:</label>
 					<input type="checkbox" id="controls" class="chk" checked title="Toggles Google Maps Controls">
 					<label for="chk_show_grid" title="Toggles Lat/Lon Grid">Grid:</label>
 					<input type="checkbox" id="chk_show_grid" class="chk" title="Toggles Lat/Lon Grid">
+					<label for="chk_show_suas" style="margin-left:5px" title="Toggles Special Use Airspaces">SUAs:</label>
+					<input type="checkbox" id="chk_show_suas" class="chk" checked title="Toggles Special Use Airspaces" >
 					<label for="map_opacity" title="Maps Opacity">Opacity:</label>
 					<input type="range" id="map_opacity" value="1.0" min="0.0" max="1.0" step="0.01" style="vertical-align:middle; width:60px;">
 					<button id="delete_map">Clear maps</button>

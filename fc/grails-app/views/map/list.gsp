@@ -5,18 +5,22 @@
         <title>${message(code:'fc.map.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="map" importaction="${message(code:'fc.map.import')}" taskcreatoraction="${message(code:'fc.map.taskcreator')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="map" importaction="${message(code:'fc.map.import')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
+            <g:set var="add_col" value="${0}"/>
+            <g:if test="${BootStrap.global.IsTaskCreatorExtern()}">
+                <g:set var="add_col" value="${1}"/>
+            </g:if>
             <table>
                 <thead>
                     <tr>
-                        <th colspan="7" class="table-head">${message(code:'fc.map.list')}</th>
+                        <th colspan="${7+add_col}" class="table-head">${message(code:'fc.map.list')}</th>
                         <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
                         <th>${message(code:'fc.title')}</th>
-                        <th>${message(code:'fc.map.taskcreator')}</th>
+                        <th colspan="${1+add_col}">${message(code:'fc.map.taskcreator')}</th>
                         <th>${message(code:'fc.map.download.pdf')}</th>
                         <th>${message(code:'fc.map.download.png')}</th>
                         <th>${message(code:'fc.map.download.zip')}</th>
@@ -24,16 +28,33 @@
                         <th>${message(code:'fc.map.delete')}</th>
                         <th/>
                     </tr>
+                    <g:if test="${add_col}">
+                        <th/>
+                        <th>${message(code:'fc.map.taskcreator.intern')}</th>
+                        <th>${message(code:'fc.map.taskcreator.extern')}</th>
+                        <th/>
+                        <th/>
+                        <th/>
+                        <th/>
+                        <th/>
+                        <th/>
+                    </g:if>
                 </thead>
                 <tbody>
                     <g:each var="map_entry" in="${mapList}" status="i">
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                             <td>${map_entry.title}</td>
                             <g:if test="${map_entry.projection == "4326"}">
-                                <td><a href="${createLink(controller:'map',action:'start_taskcreator',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a></td>
+                                <td><a href="${createLink(controller:'map',action:'start_taskcreator_intern',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a></td>
+                                <g:if test="${add_col}">
+                                    <td><a href="${createLink(controller:'map',action:'start_taskcreator_extern',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a></td>
+                                </g:if>
                             </g:if>
                             <g:else>
                                 <td/>
+                                <g:if test="${add_col}">
+                                    <td/>
+                                </g:if>
                             </g:else>
                             <g:if test="${map_entry.projection == "3857"}">
                                 <td><a href="${createLink(controller:'map',action:'download_pdf',params:[name:map_entry.name,title:map_entry.title,landscape:map_entry.landscape,size:map_entry.size])}" target="_blank">${message(code:'fc.map.here')}</a></td>

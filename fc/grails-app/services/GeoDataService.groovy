@@ -35,7 +35,7 @@ class GeoDataService
     {
         Map geo_data = CsvTools.LoadData(geoDataFileName, CSV_DELIMITER, CSV_FIELDS, CSV_FILTER, CSV_LOWERCASE_FIELDS)
         Map geo_info = [newestDate:'']
-        boolean ok = SaveCSVFile(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS, geo_data.Airfields, false, geo_info)
+        boolean ok = true  // SaveCSVFile(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS, geo_data.Airfields, false, geo_info)
         ok &= SaveCSVFile(Defs.FCSAVE_FILE_GEODATA_CHURCHES, geo_data.Churches, false, geo_info)
         ok &= SaveCSVFile(Defs.FCSAVE_FILE_GEODATA_CASTLES, geo_data.Castles, false, geo_info)
         ok &= SaveCSVFile(Defs.FCSAVE_FILE_GEODATA_CHATEAUS, geo_data.Chateaus, false, geo_info)

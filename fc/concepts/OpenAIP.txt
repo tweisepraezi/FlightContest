@@ -1,0 +1,121 @@
+Airspace data
+-------------
+name
+type
+icaoClass
+byNotam
+lowerLimit
+upperLimit
+
+[_id:62614afbcb27f42509448b0e, 
+ name:RMZ EDGS 120.380, 
+ type:6, 
+ icaoClass:8, 
+ onDemand:false, 
+ onRequest:false, 
+ byNotam:false, 
+ specialAgreement:false, 
+ geometry:[type:Polygon, coordinates:[[[8.0177777777778, 50.803333333333], [8.2425, 50.691666666667], [8.1452777777778, 50.613055555556], [7.9208333333333, 50.724722222222], [8.0177777777778, 50.803333333333]]]], 
+ country:DE, 
+ upperLimit:[value:1000, unit:1, referenceDatum:0], 
+ lowerLimit:[value:0, unit:1, referenceDatum:0], 
+ createdAt:2022-04-21T12:15:55.567Z, 
+ updatedAt:2023-03-10T10:22:29.197Z, 
+ createdBy:AUTO-IMPORTER, 
+ updatedBy:openaip-system,
+ __v:4, 
+ activity:0, 
+ hoursOfOperation:[operatingHours:[[dayOfWeek:0, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false], [dayOfWeek:1, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false], [dayOfWeek:2, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false], [dayOfWeek:3, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false], [dayOfWeek:4, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false], [dayOfWeek:5, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false], [dayOfWeek:6, startTime:00:00, endTime:00:00, byNotam:false, sunrise:false, sunset:false, publicHolidaysExcluded:false]]],
+ requestCompliance:false, 
+ dataIngestion:true
+]
+ 
+Airports data
+-------------
+[_id:62614a36cb27f42509443d64,
+ name:AILERTCHEN,
+ icaoCode:EDGA,
+ type:2,
+ trafficType:[0],
+ magneticDeclination:3.142,
+ country:DE,
+ geometry:[
+    type:Point,
+    coordinates:[7.944805555555556, 50.592777777777776]
+ ],
+ elevation:[value:480, unit:0, referenceDatum:1],
+ ppr:false,
+ private:false,
+ skydiveActivity:true,
+ winchOnly:false,
+ frequencies:[[value:126.410, unit:2, type:16, name:Radio, primary:true, publicUse:true, _id:62614a36cb27f42509443d65]],
+ runways:[
+    [designator:03, 
+     trueHeading:33,  
+     alignedTrueNorth:false, 
+     operations:0, 
+     mainRunway:true, 
+     turnDirection:2, 
+     takeOffOnly:false, 
+     landingOnly:false, 
+     surface:[
+        composition:[2], 
+        mainComposite:2, 
+        condition:0, 
+        mtow:[value:2, unit:9]
+     ],
+     dimension:[length:[value:550, unit:0], width:[value:50, unit:0]],
+     declaredDistance:[tora:[value:550, unit:0], lda:[value:550, unit:0]],
+     pilotCtrlLighting:false, 
+     _id:62614a36cb27f42509443d66
+    ],
+    [designator:21, trueHeading:211, alignedTrueNorth:false, operations:0, mainRunway:true, turnDirection:2, takeOffOnly:false, landingOnly:false, surface:[composition:[2], mainComposite:2, condition:0, mtow:[value:2, unit:9]], dimension:[length:[value:550, unit:0], width:[value:50, unit:0]], declaredDistance:[tora:[value:550, unit:0], lda:[value:550, unit:0]], pilotCtrlLighting:false, _id:62614a36cb27f42509443d67]
+ ],
+ createdAt:2022-04-21T12:12:38.585Z,
+ updatedAt:2023-01-07T13:36:56.520Z,
+ createdBy:AUTO-IMPORTER,
+ updatedBy:openaip-system,
+ elevationGeoid:[geoidHeight:48.50903667999998, hae:528.50903668],
+ __v:7,
+ services:[fuelTypes:[1, 3]]
+]
+
+Reporting points
+----------------
+[_id:629cca27f4b4089a578e501a,
+ name:WHISKEY1,
+ compulsory:true,
+ country:DE,
+ airports:[62614a9b5e9ded57104450a3],
+ geometry:[
+    type:Point,
+    coordinates:[8.638333333333334, 51.51]
+ ],
+ elevation:[value:350, unit:0, referenceDatum:1],
+ createdAt:2022-06-05T15:22:15.779Z,
+ updatedAt:2022-06-05T19:50:42.376Z,
+ createdBy:openaip-system,
+ updatedBy:OPONcQnzWGOLiJSceNaf8pvx1fA2,
+ elevationGeoid:[geoidHeight:46.79968560000003, hae:396.79968560000003],
+ __v:0
+]
+
+Obstacles
+---------
+[_id:6316a7b20c480ba5c90f1d59,
+  bboxId:14229,
+  osmId:3905333070,
+  osmType:node,
+  osmTags:[generator:method:wind_turbine, generator:output:electricity:3 MW, generator:source:wind, generator:type:horizontal_axis, height:hub:140, manufacturer:Vestas, manufacturer:type:V 112 3.0, name:WKA3, operator:juwi, operator:wikidata:Q1697142, operator:wikipedia:de:Juwi, power:generator, rotor:diameter:112, start_date:2015-12],
+  name:WKA3,
+  type:3,
+  country:DE,
+  geometry:[type:Point, coordinates:[8.1818735, 50.8228059]],
+  elevation:[value:509, unit:0, referenceDatum:1],
+  elevationGeoid:[geoidHeight:48.55372962691075, hae:557.5537296269108],
+  createdAt:2022-09-06T01:51:46.142Z,
+  updatedAt:2022-09-06T01:51:46.142Z,
+  createdBy:openaip-system,
+  updatedBy:openaip-system,
+  __v:0
+]

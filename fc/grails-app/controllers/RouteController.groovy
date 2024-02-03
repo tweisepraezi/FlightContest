@@ -760,6 +760,53 @@ class RouteController {
         }
 	}
 
+    def getairspaces_airportarea_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            save_map_settings(route.instance, params)
+			Map ret = openAIPService.GetAirspacesAirportarea(route.instance, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+            if (ret.ok) {
+                flash.message = message(code:'fc.contestmap.contestmapgetairspaces.airportarea.done',args:[ret.airspacesnum])
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapgetairspaces.airportarea.notfound',args:[])
+            }
+            redirect(action:'mapexportquestion',id:params.id)
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+    }
+    
+	def csvexportairports_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            save_map_settings(route.instance, params)
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
+			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+            if (ret.ok) {
+                String route_file_name = (route.instance.name() + '.csv').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_csv_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_csv_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapairports.csvexport.notfound')
+                kmlService.DeleteFile(upload_csv_file_name)
+                kmlService.printerror flash.message
+				redirect(action:'mapexportquestion',id:params.id)
+            }
+			
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+	}
+
     def saveshow_ajax = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
@@ -3254,6 +3301,9 @@ class RouteController {
         routeInstance.contestMapSpecials = params.contestMapSpecials == "on"
         routeInstance.contestMapAirspaces = params.contestMapAirspaces == "on"
         routeInstance.contestMapAirspacesLayer2 = params.contestMapAirspacesLayer2
+        if (params.contestMapAirspacesLowerLimit && params.contestMapAirspacesLowerLimit.isInteger()) {
+            routeInstance.contestMapAirspacesLowerLimit = params.contestMapAirspacesLowerLimit.toInteger()
+        }
         String center_points = ""
         String center_points2 = ""
         String center_points3 = ""

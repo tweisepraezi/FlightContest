@@ -1,6 +1,17 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.2
+----------------
+- Bei Konfiguration des Original-Task-Creators werden zusätzliche Links neben den Links zum integrierten Task-Creator angezeigt.
+- Integrierter Task-Creator: 'Addons RL' und 'SUAs Url' hinzugefügt
+- OSM-Wettbewerbs-Karte: 'Lufträume um Flughafen ermitteln' hinzugefügt
+    Dabei werden standardmäßig Lufträume, die unter 4000ft liegen, berücksichtigt (anpassbar).
+    'KMZ-Export-Lufträume' enthält jetzt auch die Namen der Lufträume.
+- OSM-Wettbewerbs-Karte: Flugplätze aus OpenAIP-Daten hinzugefügt
+    Diese werden wie in ICAO-Karten dargestellt.
+    Mit 'CSV-Export-Flughäfen' können die Flupplatz-Koordinaten abgerufen werden.
+
 Änderungen 3.4.1
 ----------------
 - Integrierter Task-Creator: Fehlermeldungen bei Eingabe des Task-Namens beseitigt
@@ -32,7 +43,7 @@
     Die Default-Karte kann in den 'Strecken-Einstellungen' festgelegt werden.
     Für den Task-Creator erzeugte Karten können hier nicht angezeigt werden, da diese Karten eine andere Karten-Projektion nutzen.
 - Integrierter Task-Creator zur Strecken-Konstruktion hinzugefügt
-    Basiert auf http://www.airrats.cl/taskcreator?lang=en von Carlos Rocca.
+    Basiert auf https://www.airrats.cl/taskcreator?lang=en von Carlos Rocca.
     Start des Task-Creators über "..." einer gepeicherten Karte für eine neue Aufgabe:
       Hier ist die "Map Url" im Task-Creator voreingestellt und kann mit "Load" geladen werden.
       Nach Aktivieren von "Turn Points -> Edit" können mit Doppelklick Wendepunkte auf der Karte hinzugefügt werden.

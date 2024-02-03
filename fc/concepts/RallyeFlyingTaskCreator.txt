@@ -1,6 +1,6 @@
 
-http://www.airrats.cl/taskcreator/?lang=en
-http://www.airrats.cl/taskcreator/?lang=en&admin
+https://www.airrats.cl/taskcreator/?lang=en
+https://www.airrats.cl/taskcreator/?lang=en&admin
 
 http://localhost:8080/fc/map/areamap.png
 http://localhost:8080/fc/map/areamap.pnginfo
@@ -16,7 +16,7 @@ Left(Lon):   8.82140479758
 
 loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
 
-http://www.airrats.cl/taskcreator/?lang=en&admin&loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
+https://www.airrats.cl/taskcreator/?lang=en&admin&loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
 
     <!--
     <script>

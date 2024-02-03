@@ -9,7 +9,6 @@ class Defs
     
     static final String FCSAVE_FILE_CONFIG                             = "${Defs.FCSAVE_FOLDER_FC}/config.groovy"
     static final String FCSAVE_FILE_GEODATA_DATE                       = "${FCSAVE_FOLDER_GEODATA}/date.txt"
-    static final String FCSAVE_FILE_GEODATA_AIRFIELDS                  = "${FCSAVE_FOLDER_GEODATA}/airfields.csv"
     static final String FCSAVE_FILE_GEODATA_CHURCHES                   = "${FCSAVE_FOLDER_GEODATA}/churches.csv"
     static final String FCSAVE_FILE_GEODATA_CASTLES                    = "${FCSAVE_FOLDER_GEODATA}/castles.csv"
     static final String FCSAVE_FILE_GEODATA_CHATEAUS                   = "${FCSAVE_FOLDER_GEODATA}/chateaus.csv"
@@ -149,9 +148,10 @@ class Defs
     static final int CONTESTMAPCONTOURLINES_50M                        = 50
     static final int CONTESTMAPCONTOURLINES_100M                       = 100
     
+    static final String CONTESTMAPAIRFIELDS_AUTO                       = "AUTO"    // saved in database. do not modify.
+    static final String CONTESTMAPAIRFIELDS_OPENAIP                    = "OPENAIP" // saved in database. do not modify.
     static final String CONTESTMAPAIRFIELDS_OSM_ICAO                   = "ICAO"    // saved in database. do not modify.
     static final String CONTESTMAPAIRFIELDS_OSM_NAME                   = "NAME"    // saved in database. do not modify.
-    static final String CONTESTMAPAIRFIELDS_GEODATA                    = "GEODATA" // saved in database. do not modify.
     
     static final String CONTESTMAPPOINTS_INIT                          = "Init"    // saved in database. do not modify.
     

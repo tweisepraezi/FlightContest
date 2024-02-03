@@ -877,7 +877,7 @@ class BootStrap {
                             print "    2.21 modifications"
                             Route.findAll().each { Route route_instance ->
                                 route_instance.mapScale = route_instance.contest.mapScale
-                                route_instance.contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO
+                                route_instance.contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_AUTO
                                 route_instance.contestMapCircle = true
                                 route_instance.contestMapProcedureTurn = true
                                 route_instance.contestMapLeg = true
@@ -1241,6 +1241,15 @@ class BootStrap {
                             Coord.findAll().each { Coord coord_instance ->
                                 coord_instance.ignoreGate = false
                                 coord_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 38) { // DB-2.38 compatibility
+                            print "    2.38 modifications"
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_AUTO
+                                route_instance.contestMapAirspacesLowerLimit = 4000
+                                route_instance.save()
                             }
                             println " done."
                         }

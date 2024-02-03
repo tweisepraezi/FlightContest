@@ -1,6 +1,17 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.2
+-------------
+- When configuring the original Task Creator, additional links are displayed next to the links to the integrated Task Creator.
+- Integrated Task Creator: 'Addons RL' and 'SUAs Url' added
+- OSM Contest Map: 'Determine airspaces around the airport' added
+    Airspaces below 4000ft are taken into account by default (customizable).
+    'KMZ export airspaces' now also contains the names of the airspaces.
+- OSM Contest Map: Airfields from OpenAIP data added
+    These are displayed as in ICAO maps.
+    The airfield coordinates can be retrieved with 'CSV export airports'.
+
 Changes 3.4.1
 -------------
 - Integrated Task Creator: Error messages when entering the task name removed
@@ -32,7 +43,7 @@ Changes 3.4.0
     The default map can be defined in the 'Route settings'.
     Maps created for the Task Creator cannot be displayed here because these maps use a different map projection.
 - Integrated Task Creator for route construction added
-    Based on http://www.airrats.cl/taskcreator?lang=en by Carlos Rocca.
+    Based on https://www.airrats.cl/taskcreator?lang=en by Carlos Rocca.
     Start the Task-Creator via "..." of a saved map for a new task:
       Here, the "Map Url" is preset in the Task Creator and can be loaded with "Load".
       After activating "Turn Points -> Edit", turn points can be added to the map with a double-click.
@@ -50,8 +61,6 @@ Changes 3.4.0
 - Results: Print options for pending crew result printing via ... with one click.
     This makes it possible to print corrections more quickly if changes are made to a crew result.
 
-http://www.airrats.cl/taskcreator?lang=en
-    
 Changes 3.3.6
 -------------
 - Bug "SCs of the curved legs in the navigation flight result are always printed for curved legs one behind the other" fixed

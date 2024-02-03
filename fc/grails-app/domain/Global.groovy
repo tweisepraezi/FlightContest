@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.37
+	// Actual database version: DB-2.38
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 37
+	static int DB_MINOR = 38
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -473,7 +473,7 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    boolean IsTaskCreator()
+    boolean IsTaskCreatorExtern()
     {
         if (   grailsApplication.config.flightcontest.taskcreator
             && grailsApplication.config.flightcontest.taskcreator.url

@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.4.1
-:revdate:   26.01.2024
+:revnumber: 3.4.2
+:revdate:   03.02.2024
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -893,7 +893,7 @@ Keine Angabe: 10 Pixel.
     textspacing:90
 +
 Mindest-Abstand 90px. Dieser Wert beeinflusst, wie oft der Randtext auf den Rand geschrieben wird. +
-Keine Angabe: 100 Pixel.
+Keine Angabe: 1 Pixel.
 
 * Alternative Farbe des Randtextes +
 +
@@ -920,15 +920,15 @@ Sinnvolle Attribute:
 
 * ED-R-Fläche in rot +
 +
-  ,text:???,textsize:14,textspacing:100,textcolor:red,fillcolor:red,fillopacity:0.2
+  ,text:???,fillcolor:red,textcolor:red
 
 * RMZ-Fläche in blau +
 +
-  ,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
+  ,text:???,fillcolor:steelblue,textcolor:black
 
 * Umgebende Fläche in grau +
 +
-  ,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:lightgray,fillopacity:0.2
+  ,text:???,fillcolor:lightgray,textcolor:black
 
 [[osm-contest-map-workflow]]
 === Ablauf einer Karten-basierten Streckenkonstruktion
@@ -1967,7 +1967,7 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
 === Original-Task-Creator für Nutzung konfigurieren
  flightcontest {
    taskcreator {
-     url = "http://www.airrats.cl/taskcreator/?lang=en&admin"
+     url = "https://www.airrats.cl/taskcreator/?lang=en&admin"
    }
  }
 

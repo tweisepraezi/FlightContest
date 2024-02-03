@@ -76,18 +76,33 @@ class MapController {
         redirect(controller:'contest',action:'start')
     }
 
-    def start_taskcreator = {
+    def start_taskcreator_intern = {
         String task_creator_url = "http://localhost:8080/fc/taskcreator/run.html?lang=en&admin" // local task creator
-        if (BootStrap.global.IsTaskCreator()) {
-            task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
-        }
-        fcService.println "Task creator: $task_creator_url"
+        fcService.println "Task creator intern: $task_creator_url"
         
         if (params.localref && params.top && params.bottom && params.right && params.left) {
             String login_url = "${task_creator_url}&loadurlmap=%22${params.localref}%22,${params.top},${params.bottom},${params.right},${params.left}"
             fcService.println "Open $login_url"
             render(view:"taskcreator", model:[login_url:login_url])
         } else {
+            fcService.println "Open $task_creator_url"
+            render(view:"taskcreator", model:[login_url:task_creator_url])
+        }
+    }
+    
+    def start_taskcreator_extern = {
+        String task_creator_url = "http://localhost:8080/fc/taskcreator/run.html?lang=en&admin" // local task creator
+        if (BootStrap.global.IsTaskCreatorExtern()) {
+            task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
+        }
+        fcService.println "Task creator extern: $task_creator_url"
+        
+        if (params.localref && params.top && params.bottom && params.right && params.left) {
+            String login_url = "${task_creator_url}&loadurlmap=%22${params.localref}%22,${params.top},${params.bottom},${params.right},${params.left}"
+            fcService.println "Open $login_url"
+            render(view:"taskcreator", model:[login_url:login_url])
+        } else {
+            fcService.println "Open $task_creator_url"
             render(view:"taskcreator", model:[login_url:task_creator_url])
         }
     }

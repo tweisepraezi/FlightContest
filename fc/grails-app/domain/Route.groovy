@@ -48,7 +48,7 @@ class Route
     boolean contestMapDevStyle = false
     String contestMapPrintName = ""
     
-    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO               // DB-2.21
+    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_AUTO                   // DB-2.21
     Boolean contestMapCircle = true                                              // DB-2.21
     Boolean contestMapProcedureTurn = true                                       // DB-2.21
     Boolean contestMapLeg = true                                                 // DB-2.21
@@ -74,6 +74,7 @@ class Route
     Boolean contestMapAirspaces = false                                          // DB-2.21
     String contestMapAirspacesLayer = ""                                         // DB-2.21, UNUSED, since DB-2.32
     String contestMapAirspacesLayer2 = ""                                        // DB-2.32
+    Integer contestMapAirspacesLowerLimit = 4000                                 // DB-2.38
     Boolean contestMapShowFirstOptions = true                                    // DB-2.29
     String contestMapFirstTitle = ""                                             // DB-2.29
     VerticalPos contestMapCenterVerticalPos = VerticalPos.Center                 // DB-2.21
@@ -254,6 +255,9 @@ class Route
 		// DB-2.37 compatibility
         defaultOnlineMap(nullable:true)
         semicircleCourseChange(nullable:true,min:1,max:90)
+        
+		// DB-2.38 compatibility
+        contestMapAirspacesLowerLimit(nullable:true,min:0)
 	}
 
 	static mapping = {

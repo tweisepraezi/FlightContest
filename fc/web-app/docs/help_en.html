@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.4.1,</span>
-<span id="revdate">26.01.2024</span>
+<span id="revnumber">version 3.4.2,</span>
+<span id="revdate">03.02.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -629,7 +629,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Secret time checks</p>
 </li>
 <li>
-<p>Curved legs</p>
+<p>Scenic legs</p>
 </li>
 <li>
 <p>Semicircles</p>
@@ -2212,7 +2212,7 @@ Not specified: 10 pixel.</p>
 </div>
 <div class="paragraph">
 <p>Minimum distance 90px. This value influences how often the margin text is written on the margin.<br>
-Not specified: 100 pixel.</p>
+Not specified: 1 pixel.</p>
 </div>
 </li>
 <li>
@@ -2262,7 +2262,7 @@ Not specified: 0.2</p>
 <p>ED-R area in red<br></p>
 <div class="literalblock">
 <div class="content">
-<pre>,text:???,textsize:14,textspacing:100,textcolor:red,fillcolor:red,fillopacity:0.2</pre>
+<pre>,text:???,fillcolor:red,textcolor:red</pre>
 </div>
 </div>
 </li>
@@ -2270,7 +2270,7 @@ Not specified: 0.2</p>
 <p>RMZ area in blue<br></p>
 <div class="literalblock">
 <div class="content">
-<pre>,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+<pre>,text:???,fillcolor:steelblue,textcolor:black</pre>
 </div>
 </div>
 </li>
@@ -2278,7 +2278,7 @@ Not specified: 0.2</p>
 <p>Surrounding area in gray<br></p>
 <div class="literalblock">
 <div class="content">
-<pre>,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:lightgray,fillopacity:0.2</pre>
+<pre>,text:???,fillcolor:lightgray,textcolor:black</pre>
 </div>
 </div>
 </li>
@@ -4490,7 +4490,7 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
 <div class="content">
 <pre>flightcontest {
   taskcreator {
-    url = "http://www.airrats.cl/taskcreator/?lang=en&amp;admin"
+    url = "https://www.airrats.cl/taskcreator/?lang=en&amp;admin"
   }
 }</pre>
 </div>
