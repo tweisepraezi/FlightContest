@@ -77,7 +77,7 @@ class MapController {
     }
 
     def start_taskcreator_intern = {
-        String task_creator_url = "http://localhost:8080/fc/taskcreator/run.html?lang=en&admin" // local task creator
+        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en" // local task creator
         fcService.println "Task creator intern: $task_creator_url"
         
         if (params.localref && params.top && params.bottom && params.right && params.left) {
@@ -91,9 +91,15 @@ class MapController {
     }
     
     def start_taskcreator_extern = {
-        String task_creator_url = "http://localhost:8080/fc/taskcreator/run.html?lang=en&admin" // local task creator
+        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en" // local task creator
         if (BootStrap.global.IsTaskCreatorExtern()) {
             task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
+            if (task_creator_url.contains('?')) {
+                task_creator_url += "&"
+            } else {
+                task_creator_url += "?"
+            }
+            task_creator_url += "lang=${session.taskCreatorLanguage}"
         }
         fcService.println "Task creator extern: $task_creator_url"
         

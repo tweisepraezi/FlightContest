@@ -1141,6 +1141,9 @@ class Route
                 enroute_titles += routelegtest_instance.startTitle
             }
         }
+        if (addUnknown) {
+            enroute_titles += new CoordTitle(CoordType.UNKNOWN,2)
+        }
         return enroute_titles
     }
     
@@ -1782,8 +1785,8 @@ class Route
     
     Map GetFlightTestWindDirection()
     {
-        Map ret = [TODirection:0.0, LDGDirection:0.0, iTOiLDGDirection:0.0]
-        CoordRoute.findAllByRoute(this,[sort:"id"]).each { CoordRoute coordroute_instance ->
+        Map ret = [TODirection:0.0, LDGDirection:0.0, iTOiLDGDirection:0.0, isIntermediateRunway:false]
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,,[sort:"id"])) {
             switch (coordroute_instance.type) {
                 case CoordType.TO:
                     ret.TODirection = coordroute_instance.gateDirection
@@ -1794,6 +1797,7 @@ class Route
                 case CoordType.iTO:
                 case CoordType.iLDG:
                     ret.iTOiLDGDirection = coordroute_instance.gateDirection
+                    ret.isIntermediateRunway = true
                     break
             }
         }

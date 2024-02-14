@@ -1253,6 +1253,28 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 39) { // DB-2.39 compatibility
+                            print "    2.39 modifications"
+                            FlightTestWind.findAll().each { FlightTestWind flighttestwind_instance ->
+                                flighttestwind_instance.TODurationFormula = flighttestwind_instance.flighttest.task.risingDurationFormula
+                                flighttestwind_instance.LDGDurationFormula = flighttestwind_instance.flighttest.task.maxLandingDurationFormula
+                                flighttestwind_instance.iLDGDurationFormula = flighttestwind_instance.flighttest.task.iLandingDurationFormula
+                                flighttestwind_instance.iTODurationFormula = flighttestwind_instance.flighttest.task.iRisingDurationFormula
+                                flighttestwind_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.risingDurationFormula = ""
+                                task_instance.maxLandingDurationFormula = ""
+                                task_instance.iLandingDurationFormula = ""
+                                task_instance.iRisingDurationFormula = ""
+                                task_instance.save()
+                            }
+							Contest.findAll().each { Contest contest_instance ->
+								contest_instance.printCrewSortHelp = false
+								contest_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

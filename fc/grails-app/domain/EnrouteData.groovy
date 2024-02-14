@@ -102,4 +102,12 @@ class EnrouteData // DB-2.13
         }
         return false
     }
+    
+    boolean IsEvaluationFromTPFalse()
+    {
+        if ((evaluationType == CoordType.UNKNOWN) && (evaluationNumber == 2)) {
+            return true
+        }
+        return false
+    }
 }

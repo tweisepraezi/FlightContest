@@ -1471,7 +1471,8 @@ class GpxService
         if (params.showPoints) {
             if (!(params.showCoord) && testInstance.IsLoggerResultWithoutRunwayMissed()) {
                 println "Generate points for buttons (GetShowPoints)"
-                show_points = GetShowPoints(gpxFileName, params.wrEnrouteSign)
+                show_points = RoutePointsTools.GetShowPointsNearRunways(route_instance,[isPrint:params.isPrint])
+                show_points += GetShowPoints(gpxFileName, params.wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
                 show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false, showCoord:params.showCoord])
@@ -1750,9 +1751,18 @@ class GpxService
                         BigDecimal min_longitude = null
                         BigDecimal max_latitude = null
                         BigDecimal max_longitude = null
+                        boolean min_one_center_point = false
                         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                             if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                                if (!contestMapParams.contestMapCenterPoints || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                                    min_one_center_point = true
+                                    break
+                                }
+                            }
+                        }
+                        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                                if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
                                     BigDecimal lat = coordroute_instance.latMath()
                                     BigDecimal lon = coordroute_instance.lonMath()
                                     if (min_latitude == null || lat < min_latitude) {
@@ -2316,6 +2326,7 @@ class GpxService
             CoordRoute last_coordroute_instance = null
             CoordRoute start_coordroute_instance = null
             CoordRoute center_coordroute_instance = null
+            Map last_semicircle_coord = null
             boolean set_endcurved = false
             boolean first = true
             int secret_gate_num = 0
@@ -2323,7 +2334,7 @@ class GpxService
                 if (coordroute_instance.type == CoordType.SECRET && !coordroute_instance.circleCenter) {
                     secret_gate_num++
                 }
-                if (routeInstance.exportSemicircleGates && params.gpxExport) {
+                if (true) { // routeInstance.exportSemicircleGates && params.gpxExport) {
                     if (center_coordroute_instance) { // semicircle
                         boolean write_gate = false
                         boolean show_curved_point = params.gpxExport || routeInstance.showCurvedPoints
@@ -2333,7 +2344,7 @@ class GpxService
                         if (coordroute_instance.ignoreGate && routeInstance.showCurvedPoints) {
                             write_gate = false
                         }
-                        if (write_gate) {
+                        if (true) { // write_gate) {
                             List semicircle_coords = AviationMath.getSemicircle(
                                 center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                                 start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
@@ -2347,24 +2358,25 @@ class GpxService
                             if (!gate_width) {
                                 gate_width = center_coordroute_instance.gatewidth2
                             }
-                            Map last_semicircle_coord = null
                             for (Map semicircle_coord in semicircle_coords) {
                                 if (last_semicircle_coord) {
-                                    secret_gate_num++
-                                    Map gate = AviationMath.getGate(
-                                        last_semicircle_coord.lat, last_semicircle_coord.lon,
-                                        semicircle_coord.lat, semicircle_coord.lon,
-                                        gate_width
-                                    )
-                                    xml.rte {
-                                        wr_gate_semicircle(semicircle_coord.lat, semicircle_coord.lon, center_coordroute_instance.altitude, gate_width, secret_gate_num, xml, task_instance)
-                                        //BigDecimal altitude_meter = center_coordroute_instance.altitude.toLong() / ftPerMeter
-                                        xml.name "${getMsg(CoordType.SECRET.code, is_print)}${secret_gate_num}"
-                                        xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
-                                            //xml.ele altitude_meter
-                                        }
-                                        xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
-                                            //xml.ele altitude_meter
+                                    if (write_gate && routeInstance.exportSemicircleGates && params.gpxExport) {
+                                        secret_gate_num++
+                                        Map gate = AviationMath.getGate(
+                                            last_semicircle_coord.lat, last_semicircle_coord.lon,
+                                            semicircle_coord.lat, semicircle_coord.lon,
+                                            gate_width
+                                        )
+                                        xml.rte {
+                                            wr_gate_semicircle(semicircle_coord.lat, semicircle_coord.lon, center_coordroute_instance.altitude, gate_width, secret_gate_num, xml, task_instance)
+                                            //BigDecimal altitude_meter = center_coordroute_instance.altitude.toLong() / ftPerMeter
+                                            xml.name "${getMsg(CoordType.SECRET.code, is_print)}${secret_gate_num}"
+                                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                                //xml.ele altitude_meter
+                                            }
+                                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                                //xml.ele altitude_meter
+                                            }
                                         }
                                     }
                                 }
@@ -2545,11 +2557,20 @@ class GpxService
                                 if (!gate_width) {
                                     gate_width = coordroute_instance.gatewidth2
                                 }
-                                Map gate = AviationMath.getGate(
-                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    gate_width
-                                )
+                                Map gate = [:]
+                                if (last_semicircle_coord) {
+                                    gate = AviationMath.getGate(
+                                        last_semicircle_coord.lat,last_semicircle_coord.lon,
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        gate_width
+                                    )
+                                } else {
+                                    gate = AviationMath.getGate(
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        gate_width
+                                    )
+                                }
                                 xml.rte {
                                     wr_gate(coordroute_instance, gate_width, secret_gate_num, xml, task_instance, wr_photoimage, null, null, set_endcurved)
                                     // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
@@ -2570,6 +2591,7 @@ class GpxService
                     }
                     last_coordroute_instance = coordroute_instance
                     set_endcurved = false
+                    last_semicircle_coord = null
                 }
             }
             

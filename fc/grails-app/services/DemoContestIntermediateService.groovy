@@ -52,67 +52,67 @@ class DemoContestIntermediateService
 		fcService.importCrewList(contest, "FC-CrewList-Test.xlsx", false) // false - mit Start-Nr. 13
 		
 		// Flight Tests
-		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME ($NOWIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_normal = fcService.putFlightTest(task_normal,"",route)
+		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind:1","wind:1")
+		fcService.putflighttestwindTask(task_normal,flighttestwind_normal)
         Map planningtest_normal = fcService.putPlanningTest(task_normal,"")
         Map planningtesttask_normal = fcService.putPlanningTestTask(planningtest_normal,"",route,0,0)
         fcService.putplanningtesttaskTask(task_normal,planningtesttask_normal)
-		Map flighttest_normal = fcService.putFlightTest(task_normal,"",route)
-		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_normal,flighttestwind_normal)
 		fcService.runcalculatetimetableTask(task_normal)
 		
-		Map task_wind = fcService.putTask(contest,"$ROUTE_NAME ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_wind = fcService.putTask(contest,"$ROUTE_NAME ($WIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_wind = fcService.putFlightTest(task_wind,"",route)
+		Map flighttestwind_wind = fcService.putFlightTestWind(flighttest_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind:1","wind:1")
+		fcService.putflighttestwindTask(task_wind,flighttestwind_wind)
         Map planningtest_wind = fcService.putPlanningTest(task_wind,"")
         Map planningtesttask_wind = fcService.putPlanningTestTask(planningtest_wind,"",route,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind,planningtesttask_wind)
-		Map flighttest_wind = fcService.putFlightTest(task_wind,"",route)
-		Map flighttestwind_wind = fcService.putFlightTestWind(flighttest_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_wind,flighttestwind_wind)
 		fcService.runcalculatetimetableTask(task_wind)
 		
-		Map task_wind_iup = fcService.putTask(contest,"$ROUTE_NAME ($WIND+)",START_TIME,2,"time:10min","time:10min",5,"wind+:1","wind+:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_wind_iup = fcService.putTask(contest,"$ROUTE_NAME ($WIND+)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_wind_iup = fcService.putFlightTest(task_wind_iup,"",route)
+		Map flighttestwind_wind_iup = fcService.putFlightTestWind(flighttest_wind_iup,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind+:1","wind+:1")
+		fcService.putflighttestwindTask(task_wind_iup,flighttestwind_wind_iup)
         Map planningtest_wind_iup = fcService.putPlanningTest(task_wind_iup,"")
         Map planningtesttask_wind_iup = fcService.putPlanningTestTask(planningtest_wind_iup,"",route,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_iup,planningtesttask_wind_iup)
-		Map flighttest_wind_iup = fcService.putFlightTest(task_wind_iup,"",route)
-		Map flighttestwind_wind_iup = fcService.putFlightTestWind(flighttest_wind_iup,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_wind_iup,flighttestwind_wind_iup)
 		fcService.runcalculatetimetableTask(task_wind_iup)
 		
-		Map task_wind_iall = fcService.putTask(contest,"$ROUTE_NAME ($WIND+) All",START_TIME,2,"wind+:2NM","wind:2NM",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_wind_iall = fcService.putTask(contest,"$ROUTE_NAME ($WIND+) All",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_wind_iall = fcService.putFlightTest(task_wind_iall,"",route)
+		Map flighttestwind_wind_iall = fcService.putFlightTestWind(flighttest_wind_iall,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"wind+:2NM","wind:2NM","wind:1","wind:1")
+		fcService.putflighttestwindTask(task_wind_iall,flighttestwind_wind_iall)
         Map planningtest_wind_iall = fcService.putPlanningTest(task_wind_iall,"")
         Map planningtesttask_wind_iall = fcService.putPlanningTestTask(planningtest_wind_iall,"",route,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_iall,planningtesttask_wind_iall)
-		Map flighttest_wind_iall = fcService.putFlightTest(task_wind_iall,"",route)
-		Map flighttestwind_wind_iall = fcService.putFlightTestWind(flighttest_wind_iall,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_wind_iall,flighttestwind_wind_iall)
 		fcService.runcalculatetimetableTask(task_wind_iall)
 		
-		Map task_wind_noito = fcService.putTask(contest,"$ROUTE_NAME_NOITO ($WIND+) All",START_TIME,2,"wind+:2NM","wind:2NM",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_wind_noito = fcService.putTask(contest,"$ROUTE_NAME_NOITO ($WIND+) All",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_wind_noito = fcService.putFlightTest(task_wind_noito,"",route_noito)
+		Map flighttestwind_wind_noito = fcService.putFlightTestWind(flighttest_wind_noito,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"wind+:2NM","wind:2NM","wind:1","wind:1")
+		fcService.putflighttestwindTask(task_wind_noito,flighttestwind_wind_noito)
         Map planningtest_wind_noito = fcService.putPlanningTest(task_wind_noito,"")
         Map planningtesttask_wind_noito = fcService.putPlanningTestTask(planningtest_wind_noito,"",route_noito,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_noito,planningtesttask_wind_noito)
-		Map flighttest_wind_noito = fcService.putFlightTest(task_wind_noito,"",route_noito)
-		Map flighttestwind_wind_noito = fcService.putFlightTestWind(flighttest_wind_noito,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_wind_noito,flighttestwind_wind_noito)
 		fcService.runcalculatetimetableTask(task_wind_noito)
 		
-		Map task_wind_noildg = fcService.putTask(contest,"$ROUTE_NAME_NOILDG ($WIND+) All",START_TIME,2,"wind+:2NM","wind:2NM",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_wind_noildg = fcService.putTask(contest,"$ROUTE_NAME_NOILDG ($WIND+) All",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_wind_noildg = fcService.putFlightTest(task_wind_noildg,"",route_noildg)
+		Map flighttestwind_wind_noildg = fcService.putFlightTestWind(flighttest_wind_noildg,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"wind+:2NM","wind:2NM","wind:1","wind:1")
+		fcService.putflighttestwindTask(task_wind_noildg,flighttestwind_wind_noildg)
         Map planningtest_wind_noildg = fcService.putPlanningTest(task_wind_noildg,"")
         Map planningtesttask_wind_noildg = fcService.putPlanningTestTask(planningtest_wind_noildg,"",route_noildg,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_noildg,planningtesttask_wind_noildg)
-		Map flighttest_wind_noildg = fcService.putFlightTest(task_wind_noildg,"",route_noildg)
-		Map flighttestwind_wind_noildg = fcService.putFlightTestWind(flighttest_wind_noildg,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_wind_noildg,flighttestwind_wind_noildg)
 		fcService.runcalculatetimetableTask(task_wind_noildg)
 		
-		Map task_wind_noitoldg = fcService.putTask(contest,"$ROUTE_NAME_NOITOLDG ($WIND+) All",START_TIME,2,"wind+:2NM","wind:2NM",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_wind_noitoldg = fcService.putTask(contest,"$ROUTE_NAME_NOITOLDG ($WIND+) All",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map flighttest_wind_noitoldg = fcService.putFlightTest(task_wind_noitoldg,"",route_noitoldg)
+		Map flighttestwind_wind_noitoldg = fcService.putFlightTestWind(flighttest_wind_noitoldg,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"wind+:2NM","wind:2NM","wind:1","wind:1")
+		fcService.putflighttestwindTask(task_wind_noitoldg,flighttestwind_wind_noitoldg)
         Map planningtest_wind_noitoldg = fcService.putPlanningTest(task_wind_noitoldg,"")
         Map planningtesttask_wind_noitoldg = fcService.putPlanningTestTask(planningtest_wind_noitoldg,"",route_noitoldg,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_noitoldg,planningtesttask_wind_noitoldg)
-		Map flighttest_wind_noitoldg = fcService.putFlightTest(task_wind_noitoldg,"",route_noitoldg)
-		Map flighttestwind_wind_noitoldg = fcService.putFlightTestWind(flighttest_wind_noitoldg,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
-		fcService.putflighttestwindTask(task_wind_noitoldg,flighttestwind_wind_noitoldg)
 		fcService.runcalculatetimetableTask(task_wind_noitoldg)
 		
 		fcService.printdone ""
@@ -456,25 +456,25 @@ class DemoContestIntermediateService
 	
 	List testTask() {
 		  [[title:"$ROUTE_NAME ($NOWIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME ($WIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME ($WIND+)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,iLandingDurationFormula:"wind+:1",iRisingDurationFormula:"wind+:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME ($WIND+) All",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"wind+:2NM",maxLandingDurationFormula:"wind:2NM",parkingDuration:5,iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME_NOITO ($WIND+) All",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"wind+:2NM",maxLandingDurationFormula:"wind:2NM",parkingDuration:5,iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME_NOILDG ($WIND+) All",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"wind+:2NM",maxLandingDurationFormula:"wind:2NM",parkingDuration:5,iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME_NOITOLDG ($WIND+) All",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"wind+:2NM",maxLandingDurationFormula:"wind:2NM",parkingDuration:5,iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,
 			minNextFlightDuration:30,procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		  ]
 	}

@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.4.2,</span>
-<span id="revdate">03.02.2024</span>
+<span id="revnumber">version 3.4.3,</span>
+<span id="revdate">14.02.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -1805,14 +1805,26 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 <p>Strecke mit TO anlegen (Strecken &#8594; <strong>Neue Strecke</strong>)</p>
 </li>
 <li>
+<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Lufträume um Flughafen ermitteln</strong> (wenn ein  <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert wurde)<br></p>
+<div class="paragraph">
+<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt).<br>
+Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden.<br>
+Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.</p>
+</div>
+</li>
+<li>
 <p>Wettbewerbs-Karte mit TO drucken</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Strecke &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Online-Karte um Flughafen erzeugen</strong></p>
+<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Online-Karte um Flughafen erzeugen</strong></p>
 </li>
 <li>
-<p>Strecke &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Task-Creator-Karte um Flughafen erzeugen</strong></p>
+<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Task-Creator-Karte um Flughafen erzeugen</strong></p>
+</li>
+<li>
+<p>Wurde ein <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet.<br>
+Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet.</p>
 </li>
 </ul>
 </div>
@@ -4507,7 +4519,7 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
 <div class="content">
 <pre>flightcontest {
   taskcreator {
-    url = "https://www.airrats.cl/taskcreator/?lang=en&amp;admin"
+    url = "https://www.airrats.cl/taskcreator?admin"
   }
 }</pre>
 </div>

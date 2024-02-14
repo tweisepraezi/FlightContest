@@ -13,38 +13,71 @@
                 <div class="block" id="forms" >
                     <g:form params="${['flighttestReturnAction':flighttestReturnAction,'flighttestReturnController':flighttestReturnController,'flighttestReturnID':flighttestReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.title')}:</td>
-                                    <td>${flightTestInstance.name()}</td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.route')}:</td>
-                                    <td><g:route var="${flightTestInstance?.route}" link="${createLink(controller:'route',action:'show')}"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.observation')}:</td>
-                                    <g:if test="${flightTestInstance.IsObservationSignUsed()}">
-                                        <td>${message(code:'fc.yes')}</td>
+                        <fieldset>
+                            <p>
+                                <label>${message(code:'fc.title')} (${flightTestInstance.idName()}):</label>
+                                <br/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
+                                    <g:if test="${Test.findByFlighttestwind(flighttestwind_instance)}">
+                                        <g:set var="foundTest" value="${true}" />
                                     </g:if>
-                                    <g:else>
-                                        <td>${message(code:'fc.no')}</td>
-                                    </g:else>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.flighttestwind.list')}:</td>
-                                    <td>
+                                </g:each>
+                                <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
+                                    <label>${message(code:'fc.route')}*:</label>
+                                    <br/>
+                                    <g:select from="${Route.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                </g:if>
+                                <g:else>
+                                    <label>${message(code:'fc.route')}:</label>
+                                    <g:route var="${flightTestInstance?.route}" link="${createLink(controller:'route',action:'show')}"/>
+                                </g:else>
+                            </p>
+                        </fieldset>
+                        <g:editFlightTest flighttest="${flightTestInstance}" ti="${ti}"/>
+                        <fieldset>
+                            <p>
+                                <label>${message(code:'fc.flighttestwind.list')}:</label>
+                                <br/>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>${message(code:'fc.runway.direction.to')}</th>
+                                            <th>${message(code:'fc.runway.duration.to2sp')}</th>
+                                            <th>${message(code:'fc.runway.direction.ldg')}</th>
+                                            <th>${message(code:'fc.runway.duration.fp2ldg')}</th>
+                                            <g:if test="${flightTestInstance.route.IsIntermediateRunway()}">
+                                                <th>${message(code:'fc.runway.direction.itoildg')}</th>
+                                                <th>${message(code:'fc.runway.duration.ifp2ildg')}</th>
+                                                <th>${message(code:'fc.runway.duration.ildg2isp')}</th>
+                                            </g:if>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
-                                            <g:flighttestwind var="${flighttestwind_instance}" link="${createLink(controller:'flightTestWind',action:'edit')}"/>
-                                            <br/>
+                                            <tr>
+                                                <td><g:flighttestwind var="${flighttestwind_instance}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
+                                                <td>${fieldValue(bean:flighttestwind_instance,field:'TODirection')}${message(code:'fc.grad')}</td>
+                                                <td>${fieldValue(bean:flighttestwind_instance,field:'TODurationFormula')}</td>
+                                                <td>${fieldValue(bean:flighttestwind_instance,field:'LDGDirection')}${message(code:'fc.grad')}</td>
+                                                <td>${fieldValue(bean:flighttestwind_instance,field:'LDGDurationFormula')}</td>
+                                                <g:if test="${flightTestInstance.route.IsIntermediateRunway()}">
+                                                    <td>${fieldValue(bean:flighttestwind_instance,field:'iTOiLDGDirection')}${message(code:'fc.grad')}</td>
+                                                    <td>${fieldValue(bean:flighttestwind_instance,field:'iLDGDurationFormula')}</td>
+                                                    <td>${fieldValue(bean:flighttestwind_instance,field:'iTODurationFormula')}</td>
+                                                </g:if>
+                                            </tr>
                                         </g:each>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
+                            </p>
+                        </fieldset>
                         <input type="hidden" name="id" value="${flightTestInstance?.id}" />
-                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" tabIndex="${ti[0]++}" />
+                        <g:actionSubmit action="update" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="update_end" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
                         <g:if test="${flightTestInstance.CanObservationsAdd()}">
                             <g:actionSubmit action="addobservations" value="${message(code:'fc.flighttestwind.addobservation')}" tabIndex="${ti[0]++}" />
                         </g:if>
@@ -60,10 +93,12 @@
                                 <g:set var="foundTest" value="${true}" />
                             </g:if>
                         </g:each>
-                        <g:if test="${!foundTest}">
+                        <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}" />
                         </g:if>
-                        <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.flighttestwind.add1')}" tabIndex="${ti[0]++}" />
+                        <g:if test="${!flightTestInstance.task.lockPlanning}">
+                            <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.flighttestwind.add1')}" tabIndex="${ti[0]++}" />
+                        </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}" />
                     </g:form>
                 </div>

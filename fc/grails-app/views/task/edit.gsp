@@ -99,28 +99,6 @@
 								</g:else>
                             </p>
                             <p>
-                                <label>${message(code:'fc.task.risingduration')}*:</label>
-                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-								<g:if test="${taskInstance.lockPlanning}">
-									<input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
-								</g:if>
-								<g:else>
-									<input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="${ti[0]++}"/>
-								</g:else>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.maxlandingduration')}*:</label>
-                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-								<g:if test="${taskInstance.lockPlanning}">
-									<input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
-								</g:if>
-								<g:else>
-									<input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
-								</g:else>
-                            </p>
-                            <p>
                                 <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
 								<g:if test="${taskInstance.lockPlanning}">
@@ -138,28 +116,6 @@
 								</g:if>
 								<g:else>
 									<input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="${ti[0]++}"/>
-								</g:else>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.ilandingduration')}*:</label>
-                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-								<g:if test="${taskInstance.lockPlanning}">
-									<input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
-								</g:if>
-								<g:else>
-									<input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
-								</g:else>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.irisingduration')}*:</label>
-                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-								<g:if test="${taskInstance.lockPlanning}">
-									<input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
-								</g:if>
-								<g:else>
-									<input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="${ti[0]++}"/>
 								</g:else>
                             </p>
                         </fieldset>

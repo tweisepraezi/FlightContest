@@ -41,42 +41,42 @@ class DemoContestCurvedService
 		fcService.importCrewList(contest, "FC-CrewList-Test.xlsx", false) // false - mit Start-Nr. 13
 		
 		// Task Curved
-		Map task_curved = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_curved = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($NOWIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_curved = fcService.putPlanningTest(task_curved,"")
 		Map planningtesttask_curved = fcService.putPlanningTestTask(planningtest_curved,"",route_curved,0,0)
 		fcService.putplanningtesttaskTask(task_curved,planningtesttask_curved)
 		Map flighttest_curved = fcService.putFlightTest(task_curved,"",route_curved)
-		Map flighttestwind_curved = fcService.putFlightTestWind(flighttest_curved,0,0,0,0,0,0,0,0,0,0,0)
+		Map flighttestwind_curved = fcService.putFlightTestWind(flighttest_curved,0,0,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task_curved,flighttestwind_curved)
 		fcService.runcalculatetimetableTask(task_curved)
 		
 		// Task Normal
-		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($NOWIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_normal = fcService.putPlanningTest(task_normal,"")
 		Map planningtesttask_normal = fcService.putPlanningTestTask(planningtest_normal,"",route_normal,0,0)
 		fcService.putplanningtesttaskTask(task_normal,planningtesttask_normal)
 		Map flighttest_normal = fcService.putFlightTest(task_normal,"",route_normal)
-		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0,0,0,0,0,0,0,0,0,0)
+		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task_normal,flighttestwind_normal)
 		fcService.runcalculatetimetableTask(task_normal)
 		
 		// Task Curved + Wind
-		Map task_curved_wind = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_curved_wind = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($WIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_curved_wind = fcService.putPlanningTest(task_curved_wind,"")
 		Map planningtesttask_curved_wind = fcService.putPlanningTestTask(planningtest_curved_wind,"",route_curved,WIND_DIRECTION,WIND_SPEED)
 		fcService.putplanningtesttaskTask(task_curved_wind,planningtesttask_curved_wind)
 		Map flighttest_curved_wind = fcService.putFlightTest(task_curved_wind,"",route_curved)
-		Map flighttestwind_curved_wind = fcService.putFlightTestWind(flighttest_curved_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
+		Map flighttestwind_curved_wind = fcService.putFlightTestWind(flighttest_curved_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task_curved_wind,flighttestwind_curved_wind)
 		fcService.runcalculatetimetableTask(task_curved_wind)
 		
 		// Task Normal + Wind
-		Map task_normal_wind = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_normal_wind = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($WIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_normal_wind = fcService.putPlanningTest(task_normal_wind,"")
 		Map planningtesttask_normal_wind = fcService.putPlanningTestTask(planningtest_normal_wind,"",route_normal,WIND_DIRECTION,WIND_SPEED)
 		fcService.putplanningtesttaskTask(task_normal_wind,planningtesttask_normal_wind)
 		Map flighttest_normal_wind = fcService.putFlightTest(task_normal_wind,"",route_normal)
-		Map flighttestwind_normal_wind = fcService.putFlightTestWind(flighttest_normal_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
+		Map flighttestwind_normal_wind = fcService.putFlightTestWind(flighttest_normal_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task_normal_wind,flighttestwind_normal_wind)
 		fcService.runcalculatetimetableTask(task_normal_wind)
 		
@@ -262,16 +262,16 @@ class DemoContestCurvedService
 	
 	List testTask() {
 		  [[title:"$ROUTE_NAME_CURVED ($NOWIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+			preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 			procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME_NORMAL ($NOWIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+			preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 			procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME_CURVED ($WIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+			preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 			procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		   [title:"$ROUTE_NAME_NORMAL ($WIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+			preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 			procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		  ]
 	}

@@ -71,6 +71,10 @@
                                     <label>${message(code:'fc.crew.uuid')}</label>
                                 </div>
                                 <div>
+                                    <g:checkBox name="printCrewSortHelp" value="${contestInstance.printCrewSortHelp}" onclick="modify();"/>
+                                    <label>${message(code:'fc.crew.sorthelp')}</label>
+                                </div>
+                                <div>
                                     <g:checkBox name="printCrewEmptyColumn1" value="${contestInstance.printCrewEmptyColumn1}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.emptycolumn')} 1</label>
                                 </div>

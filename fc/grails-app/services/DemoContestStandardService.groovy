@@ -30,7 +30,7 @@ class DemoContestStandardService
         fcService.printdone ""
         
         // Task
-        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, true,true,true, false,false)
+        Map task1 = fcService.putTask(contest,"","09:00",3,5,true,true,true,true,false, false,true, true,true,true, true,true,true,true, true,true,true, false,false)
         
 		// Planning Test
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
@@ -39,7 +39,7 @@ class DemoContestStandardService
 
 		// Flight Test
 		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
-		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0,"time:8min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task1,flighttestwind1)
 		
 		// Planning
@@ -294,7 +294,7 @@ class DemoContestStandardService
 		Map team3 = fcService.putTeam(contest,'Polen')
 		
         // Task
-        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+        Map task1 = fcService.putTask(contest,"","09:00",3,5,true,true,true,true,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
         
 		// TaskClass properties
 		fcService.puttaskclassTask(task1,resultclass1,true,true,false,false,false, false,true, true,true,true, true,true,true,true, true,true,true)
@@ -317,7 +317,7 @@ class DemoContestStandardService
 		
 		// Flight Test
 		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
-		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0,"time:8min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task1,flighttestwind1)
 		
 		// Planning
@@ -593,7 +593,7 @@ class DemoContestStandardService
         // TaskClass properties
 		
 		// 1 - 23. August
-        Map task1 = fcService.putTask(contest,"23. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false,  false,true, true,false,false, true,true,true,true, true,true,true, false,false)
+        Map task1 = fcService.putTask(contest,"23. August","10:00",3,5,true,true,true,true,false,  false,true, true,false,false, true,true,true,true, true,true,true, false,false)
 		
         fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,true,true,true, true,true,true)
         fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false, false,false,false)
@@ -604,14 +604,14 @@ class DemoContestStandardService
 		fcService.putplanningtesttaskcrewsTask(task1,planningtesttask1,[crew3,crew11,crew13,crew19,crew18])
 		
 		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
-		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0,"time:8min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindcrewsTask(task1,flighttestwind1,[crew3,crew11,crew13,crew19,crew18])
 		
 		fcService.putsequenceTask(task1,[crew3,crew11,crew13,crew19,crew18])
 		fcService.runcalculatetimetableTask(task1)
 		
 		// 2 - 24. August
-		Map task2 = fcService.putTask(contest,"24. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,false,false, false,true, false,true,true, false,false,false,false, false,false,false, false,false)
+		Map task2 = fcService.putTask(contest,"24. August","10:00",3,5,true,true,true,false,false, false,true, false,true,true, false,false,false,false, false,false,false, false,false)
 		
         fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, true,false,false, false,false,false,false, false,false,false)
         fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false, false,false,false)
@@ -622,14 +622,14 @@ class DemoContestStandardService
 		fcService.putplanningtesttaskcrewsTask(task2,planningtesttask2,[crew3,crew11,crew13,crew19,crew18])
 		
 		Map flighttest2 = fcService.putFlightTest(task2,"",route2)
-		Map flighttestwind2 = fcService.putFlightTestWind(flighttest2,300,15,274,0,0,260,-0.05,0,0,0,0)
+		Map flighttestwind2 = fcService.putFlightTestWind(flighttest2,300,15,274,0,0,260,-0.05,0,0,0,0,"time:8min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindcrewsTask(task2,flighttestwind2,[crew3,crew11,crew13,crew19,crew18])
 		
 		fcService.putsequenceTask(task2,[crew3,crew11,crew13,crew19,crew18])
 		fcService.runcalculatetimetableTask(task2)
 
 		// 3 - 25. August
-		Map task3 = fcService.putTask(contest,"25. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false,  false,true, true,false,false, true,false,false,false, false,false,false, false,false)
+		Map task3 = fcService.putTask(contest,"25. August","10:00",3,5,true,true,true,true,false,  false,true, true,false,false, true,false,false,false, false,false,false, false,false)
 		
 		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,false,false,false, false,false,false)
 		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false, true,false,false,false, false,false,false)
@@ -640,7 +640,7 @@ class DemoContestStandardService
 		fcService.putplanningtesttaskTask(task3,planningtesttask3)
 		
 		Map flighttest3 = fcService.putFlightTest(task3,"",route1)
-		Map flighttestwind3 = fcService.putFlightTestWind(flighttest3,300,15,274,0,0,260,-0.05,0,0,0,0)
+		Map flighttestwind3 = fcService.putFlightTestWind(flighttest3,300,15,274,0,0,260,-0.05,0,0,0,0,"time:8min","time:10min","wind+:2NM","wind+:2NM")
 		fcService.putflighttestwindTask(task3,flighttestwind3)
 		
 		fcService.putsequenceTask(task3,[crew14,crew4,crew5,crew12,crew3,crew1,crew9,crew18,crew19,crew7,crew10,crew11,crew13,crew2,crew8])
@@ -900,7 +900,7 @@ class DemoContestStandardService
 	
     List test1Task() {
       [[title:"",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-        preparationDuration:15,risingDurationFormula:"time:8min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+        preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
         procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true]
       ]
     }

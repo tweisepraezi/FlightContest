@@ -16,6 +16,11 @@ class FlightTestWind
     BigDecimal iTOiLDGOffset = 0.0                         // DB-2.12, Positionsabweichung längs zur Startbahn, NM
     BigDecimal iTOiLDGOrthogonalOffset = 0.0               // DB-2.12, Positionsabweichung quer zur Startbahn, NM
 
+	String TODurationFormula = "wind+:3NM"                 // DB-2.39
+	String LDGDurationFormula = "wind+:6NM"                // DB-2.39
+	String iLDGDurationFormula = "wind+:2NM"               // DB-2.39
+	String iTODurationFormula = "wind+:3NM"                // DB-2.39
+
     Integer idTitle = 0                                    // DB-2.12
 	
 	// transient Wind values
@@ -40,6 +45,12 @@ class FlightTestWind
         iTOiLDGOffset(nullable:true,range:-2..2,scale:3)
         iTOiLDGOrthogonalOffset(nullable:true,range:-1..1,scale:3)
         idTitle(nullable:true)
+        
+        // DB-2.39 compatibility
+        TODurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+        LDGDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+        iLDGDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+        iTODurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
 	}
 	
 	String name()
@@ -60,4 +71,84 @@ class FlightTestWind
         }
         return false
     }
+    
+	static boolean DurationValid(val, obj)
+	{
+		if (val) {
+			if (val.startsWith('time+:')) {
+				if (val.endsWith('min')) {
+					String f = val.substring(6,val.size()-3).replace(',','.')
+					if (f.isInteger()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('time:')) {
+				if (val.endsWith('min')) {
+					String f = val.substring(5,val.size()-3).replace(',','.')
+					if (f.isInteger()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('wind+:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(6,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(6,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('wind:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(5,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(5,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('nowind+:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(8,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(8,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('nowind:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(7,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(7,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('func+:')) {
+				String f = val.substring(6,val.size())
+				if (f) {
+					return true
+				}
+			} else if (val.startsWith('func:')) {
+				String f = val.substring(5,val.size())
+				if (f) {
+					return true
+				}
+			}
+		}
+		return false
+	}
 }

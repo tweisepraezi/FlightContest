@@ -43,13 +43,13 @@
                                 <g:if test="${task_instance.planningtest}">
                                     <td><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                 </g:if> <g:else>
-                                    <td class="add"><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
+                                    <td class="add"><g:if test="${!task_instance.lockPlanning}"><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></g:if></td>
                                 </g:else>
 
                                 <g:if test="${task_instance.flighttest}">
                                     <td><g:flighttest var="${task_instance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </g:if> <g:else>
-                                    <td class="add"><g:link controller="flightTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
+                                    <td class="add"><g:if test="${!task_instance.lockPlanning}"><g:link controller="flightTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></g:if></td>
                                 </g:else>
                                 
                                 <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >

@@ -658,6 +658,7 @@ class KmlService
                 List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:isPrint, wrEnrouteSign:true, showCurvedPoints:true, addImageCoord:true])
                 int route_point_pos = 0
                 CoordRoute last_coordroute_instance = null
+                CoordRoute start_coordroute_instance = null
                 boolean first = true
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     
@@ -976,11 +977,33 @@ class KmlService
                                 if (!gate_width) {
                                     gate_width = coordroute_instance.gatewidth2
                                 }
-                                Map gate = AviationMath.getGate(
-                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    gate_width
-                                )
+                                Map gate = [:]
+                                Map last_semicircle_coord = null
+                                if (last_coordroute_instance.circleCenter) {
+                                    List semicircle_coords = AviationMath.getSemicircle(
+                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                        start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(), coordroute_instance.lonMath(), last_coordroute_instance.semiCircleInvert,
+                                        routeInstance.semicircleCourseChange
+                                    )
+                                    for (Map semicircle_coord in semicircle_coords) {
+                                        last_semicircle_coord = semicircle_coord
+                                    }
+                                    start_coordroute_instance = null
+                                }
+                                if (last_semicircle_coord) {
+                                    gate = AviationMath.getGate(
+                                        last_semicircle_coord.lat,last_semicircle_coord.lon,
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        gate_width
+                                    )
+                                } else {
+                                    gate = AviationMath.getGate(
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        gate_width
+                                    )
+                                }
                                 xml.Placemark {
                                     BigDecimal altitude_meter2 = coordroute_instance.altitude.toLong() / ftPerMeter
                                     if (coordroute_instance.type.IsEnrouteFinishCoord()) {
@@ -1034,6 +1057,9 @@ class KmlService
                     }
                     if (coordroute_instance.type == CoordType.iSP) {
                         first = true
+                    }
+                    if (coordroute_instance.circleCenter) {
+                        start_coordroute_instance = last_coordroute_instance
                     }
                     last_coordroute_instance = coordroute_instance
                 }

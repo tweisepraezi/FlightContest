@@ -25,9 +25,20 @@
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.route')}*:</label>
-                                <br/>
-                                <g:select from="${Route.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
+                                    <g:if test="${Test.findByFlighttestwind(flighttestwind_instance)}">
+                                        <g:set var="foundTest" value="${true}" />
+                                    </g:if>
+                                </g:each>
+                                <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
+                                    <label>${message(code:'fc.route')}*:</label>
+                                    <br/>
+                                    <g:select from="${Route.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                </g:if>
+                                <g:else>
+                                    <label>${message(code:'fc.route')}:</label>
+                                    <g:route var="${flightTestInstance?.route}" link="${createLink(controller:'route',action:'show')}"/>
+                                </g:else>
                             </p>
                         </fieldset>
                         <g:editFlightTest flighttest="${flightTestInstance}" ti="${ti}"/>

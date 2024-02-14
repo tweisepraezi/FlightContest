@@ -58,18 +58,6 @@
                                 <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="7"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.task.risingduration')}*:</label>
-                                <a href="../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-                                <input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="8"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.maxlandingduration')}*:</label>
-                                <a href="../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-                                <input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="9"/>
-                            </p>
-                            <p>
                                 <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
                                 <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="10"/>
@@ -78,18 +66,6 @@
                                 <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
                                 <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="11"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.ilandingduration')}*:</label>
-                                <a href="../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-                                <input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="12"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.irisingduration')}*:</label>
-                                <a href="../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-                                <input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="13"/>
                             </p>
                         </fieldset>
                         <fieldset>

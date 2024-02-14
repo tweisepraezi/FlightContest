@@ -35,13 +35,13 @@ class Task
 	int planningTestDuration                 = 60    // duration of planning test [min]
 	int preparationDuration                  = 15    // duration of aircraft preparation [min]
 	int risingDuration                       = 5     // duration from takeoff to start point [min]
-	String risingDurationFormula             = "wind+:3NM" // DB-2.7
+	String risingDurationFormula             = ""    // DB-2.7, since DB-2.39 empty
     int maxLandingDuration                   = 5     // duration from finish point to landing [min]
-	String maxLandingDurationFormula         = "wind+:6NM" // DB-2.7
+	String maxLandingDurationFormula         = ""    // DB-2.7, since DB-2.39 empty
     int parkingDuration                      = 5     // change DB-2.7: duration of aircraft parking after landing [min]
 	                                                 // before DB-2.7: duration from finish point to aircraft parking [min] (> maxLandingDuration), 10 min
-	String iLandingDurationFormula           = "wind+:2NM" // DB-2.7
-	String iRisingDurationFormula            = "wind+:3NM" // DB-2.7
+	String iLandingDurationFormula           = ""    // DB-2.7, since DB-2.39 empty
+	String iRisingDurationFormula            = ""    // DB-2.7, since DB-2.39 empty
 	
 	int minNextFlightDuration                = 30    // duration of aircraft maintenance between two flights [min]
 	int procedureTurnDuration                = 1     // duration of Procedure Turn [min]
@@ -500,7 +500,7 @@ class Task
 				}
 			}
 		}
-		return false
+		return true // true since DB-2.39
 	}
 	
 	void CopyValues(Task taskInstance)

@@ -461,6 +461,9 @@ class FcService
                 if (params["printCrewUUID"]) {
                     contestInstance.printCrewUUID = params.printCrewUUID == "on"
                 }
+                if (params["printCrewSortHelp"]) {
+                    contestInstance.printCrewSortHelp = params.printCrewSortHelp == "on"
+                }
 				if (params["printCrewEmptyColumn1"]) {
 					contestInstance.printCrewEmptyColumn1 = params.printCrewEmptyColumn1 == "on"
 				}
@@ -495,6 +498,7 @@ class FcService
 				contestInstance.printCrewTAS = true
                 contestInstance.printCrewTrackerID = false
                 contestInstance.printCrewUUID = false
+                contestInstance.printCrewSortHelp = false
 				contestInstance.printCrewEmptyColumn1 = false
 				contestInstance.printCrewEmptyTitle1 = ""
 				contestInstance.printCrewEmptyColumn2 = false
@@ -521,6 +525,7 @@ class FcService
 				contestInstance.printCrewTAS = false
                 contestInstance.printCrewTrackerID = false
                 contestInstance.printCrewUUID = false
+                contestInstance.printCrewSortHelp = false
 				contestInstance.printCrewEmptyColumn1 = false
 				contestInstance.printCrewEmptyTitle1 = ""
 				contestInstance.printCrewEmptyColumn2 = false
@@ -547,6 +552,7 @@ class FcService
 				contestInstance.printCrewTAS = true
                 contestInstance.printCrewTrackerID = true
                 contestInstance.printCrewUUID = true
+                contestInstance.printCrewSortHelp = true
 				contestInstance.printCrewEmptyColumn1 = true
 				contestInstance.printCrewEmptyTitle1 = ""
 				contestInstance.printCrewEmptyColumn2 = true
@@ -573,6 +579,7 @@ class FcService
 				contestInstance.printCrewTAS = false
                 contestInstance.printCrewTrackerID = false
                 contestInstance.printCrewUUID = false
+                contestInstance.printCrewSortHelp = false
 				contestInstance.printCrewEmptyColumn1 = true
 				contestInstance.printCrewEmptyTitle1 = getPrintMsg('fc.test.landing.field')
 				contestInstance.printCrewEmptyColumn2 = true
@@ -1441,19 +1448,7 @@ class FcService
 			if (is_modified(params.preparationDuration,task_instance.preparationDuration)) {
 				duration_modified = true
 			}
-			if (is_modified(params.risingDurationFormula,task_instance.risingDurationFormula)) {
-				duration_modified = true
-			}
-			if (is_modified(params.maxLandingDurationFormula,task_instance.maxLandingDurationFormula)) {
-				duration_modified = true
-			}
 			if (is_modified(params.parkingDuration,task_instance.parkingDuration)) {
-				duration_modified = true
-			}
-			if (is_modified(params.iLandingDurationFormula,task_instance.iLandingDurationFormula)) {
-				duration_modified = true
-			}
-			if (is_modified(params.iRisingDurationFormula,task_instance.iRisingDurationFormula)) {
 				duration_modified = true
 			}
 			if (is_modified(params.procedureTurnDuration,task_instance.procedureTurnDuration)) {
@@ -9635,6 +9630,9 @@ class FcService
                 if (params["${coordtitle_id}${enroutedata_instance.id}"] == Defs.EnrouteValue_NotFound) {
                     enroutedata_instance.evaluationType = CoordType.UNKNOWN
                     enroutedata_instance.evaluationNumber = 1
+                } else if (params["${coordtitle_id}${enroutedata_instance.id}"] == Defs.EnrouteValue_False) {
+                    enroutedata_instance.evaluationType = CoordType.UNKNOWN
+                    enroutedata_instance.evaluationNumber = 2
                 } else {
                     CoordTitle evaluation_coordtitle = CoordTitle.get(params["${coordtitle_id}${enroutedata_instance.id}"].split(" : ")[1].toLong())
                     enroutedata_instance.evaluationType = evaluation_coordtitle.type
@@ -9663,6 +9661,8 @@ class FcService
 					} else {
 						enroutedata_instance.resultValue = EvaluationValue.NotFound
 					}
+				} else if (enroutedata_instance.IsEvaluationFromTPFalse()) {
+                    enroutedata_instance.resultValue = EvaluationValue.False
                 } else if ((enroutedata_instance.evaluationType == enroutedata_instance.tpType) && (enroutedata_instance.evaluationNumber == enroutedata_instance.tpNumber)) {
                     if (!enroutePhoto && enroutedata_instance.canvasSign == EnrouteCanvasSign.NoSign) {
 						enroutedata_instance.resultValue = EvaluationValue.False
@@ -10989,7 +10989,7 @@ class FcService
         FlightTest flighttest_instance = new FlightTest()
         List flighttest_routes = Route.GetOkFlightTestRoutes(contestInstance)
         if (flighttest_routes) {
-            setFlightTestWindDirection(flighttest_routes[0], flighttest_instance)
+            set_new_flighttestwind(null, flighttest_routes[0], flighttest_instance)
         }
         flighttest_instance.properties = params
         return ['instance':flighttest_instance]
@@ -11496,8 +11496,8 @@ class FcService
                 }
             }
             
-			BigDecimal old_direction = flighttestwind_instance.wind.direction
-			BigDecimal old_speed = flighttestwind_instance.wind.speed  
+			//BigDecimal old_direction = flighttestwind_instance.wind.direction
+			//BigDecimal old_speed = flighttestwind_instance.wind.speed  
             flighttestwind_instance.properties = params
             if (params.direction != null && params.speed != null) {
                 flighttestwind_instance.direction = FcMath.toBigDecimal(params.direction)
@@ -11506,12 +11506,48 @@ class FcService
                 flighttestwind_instance.wind.speed = flighttestwind_instance.speed
             }
             
+            /*
+			boolean duration_modified = false
+			if (is_modified(params.TODurationFormula, flighttestwind_instance.TODurationFormula)) {
+				duration_modified = true
+			}
+			if (is_modified(params.LDGDurationFormula, flighttestwind_instance.LDGDurationFormula)) {
+				duration_modified = true
+			}
+			if (is_modified(params.iLDGDurationFormula, flighttestwind_instance.iLDGDurationFormula)) {
+				duration_modified = true
+			}
+			if (is_modified(params.iTODurationFormula, flighttestwind_instance.iTODurationFormula)) {
+				duration_modified = true
+			}
+
+            if (duration_modified) {
+                int calulate_num = 0
+                Test.findAllByFlighttestwind(flighttestwind_instance,[sort:"viewpos"]).each { Test test_instance ->
+                    if (!test_instance.crew.disabled && !test_instance.disabledCrew) {
+                        calculate_testlegflight(test_instance)
+                        if (test_instance.timeCalculated) {
+                            GregorianCalendar testing_time = new GregorianCalendar()
+                            testing_time.setTime(test_instance.testingTime)
+                            Task task_instance = test_instance.task
+                            calculate_test_time(test_instance, task_instance, testing_time, null, true)
+                            calculate_coordresult(test_instance)
+                            task_instance.timetableModified = true
+                            task_instance.save()
+                        }
+                        test_instance.save()
+                        calulate_num++
+                    }
+                }
+                if (calulate_num) {
+                    println "$calulate_num new calculated times."
+                } 
+            }
+            
 			if (old_direction != flighttestwind_instance.wind.direction || old_speed != flighttestwind_instance.wind.speed) {
                 int calulate_reset_num = 0
 		        Test.findAllByTask(flighttestwind_instance.flighttest.task,[sort:"id"]).each { Test test_instance ->
-                    if (!test_instance.crew.disabled && !test_instance.disabledCrew 
-                    && (test_instance.flighttestwind == flighttestwind_instance) && test_instance.timeCalculated) 
-                    {
+                    if (!test_instance.crew.disabled && !test_instance.disabledCrew && (test_instance.flighttestwind == flighttestwind_instance) && test_instance.timeCalculated) {
                         test_instance.timeCalculated = false
                         test_instance.ResetFlightTestResults()
                         test_instance.CalculateTestPenalties()
@@ -11526,6 +11562,7 @@ class FcService
                     println "$calulate_reset_num calculated times have been reset."
                 } 
 			}
+            */
 			
             if(!flighttestwind_instance.hasErrors() && flighttestwind_instance.save()) {
                 Map ret = ['instance':flighttestwind_instance,'saved':true,'message':getMsg('fc.updated',["${flighttestwind_instance.name()}"]),
@@ -11548,14 +11585,14 @@ class FcService
     {
         FlightTest flighttest_instance = FlightTest.get(params.flighttestid)
         FlightTestWind flighttestwind_instance = new FlightTestWind()
-        setFlightTestWindDirection(flighttest_instance.route, flighttestwind_instance)
+        set_new_flighttestwind(flighttest_instance, flighttest_instance.route, flighttestwind_instance)
         flighttestwind_instance.properties = params
         flighttestwind_instance.flighttest = flighttest_instance
         return ['instance':flighttestwind_instance]
     }
 
     //--------------------------------------------------------------------------
-    private void setFlightTestWindDirection(Route routeInstance, directionInstance)
+    private void set_new_flighttestwind(FlightTest flighttestInstance, Route routeInstance, directionInstance)
     {
         if (routeInstance) {
             CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
@@ -11571,6 +11608,19 @@ class FcService
                         directionInstance.iTOiLDGDirection = coordroute_instance.gateDirection
                         break
                 }
+            }
+        }
+        if (flighttestInstance) {
+            for (FlightTestWind flighttestwind_instance in FlightTestWind.findAllByFlighttest(flighttestInstance,[sort:"id"])) {
+                directionInstance.TODirection = flighttestwind_instance.TODirection.toInteger()
+                directionInstance.LDGDirection = flighttestwind_instance.LDGDirection.toInteger()
+                directionInstance.iTOiLDGDirection = flighttestwind_instance.iTOiLDGDirection.toInteger()
+                directionInstance.TODurationFormula = flighttestwind_instance.TODurationFormula
+                directionInstance.LDGDurationFormula = flighttestwind_instance.LDGDurationFormula
+                directionInstance.iLDGDurationFormula = flighttestwind_instance.iLDGDurationFormula
+                directionInstance.iTODurationFormula = flighttestwind_instance.iTODurationFormula
+                directionInstance.direction = flighttestwind_instance.wind.direction
+                directionInstance.speed = flighttestwind_instance.wind.speed
             }
         }
     }
@@ -13093,7 +13143,7 @@ class FcService
         testInstance.takeoffTime = time.getTime()
         
         // calulate startTime
-		Map calculated_time = TimeCalculator(CoordType.SP, taskInstance.risingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
+		Map calculated_time = TimeCalculator(CoordType.SP, testInstance.flighttestwind.TODurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
 			FcMath.SetFullMinute(time)
@@ -13110,7 +13160,7 @@ class FcService
         testInstance.finishTime = time.getTime()
         
         // calculate maxLandingTime
-		calculated_time = TimeCalculator(CoordType.LDG, taskInstance.maxLandingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
+		calculated_time = TimeCalculator(CoordType.LDG, testInstance.flighttestwind.LDGDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
 			FcMath.SetFullMinute(time)
@@ -13511,12 +13561,20 @@ class FcService
 	    testLegInstance.planGroundSpeed = ret.groundspeed
 		switch (testLegInstance.coordTitle.type) {
 			case CoordType.iLDG:
-				Map calculated_time = TimeCalculator(CoordType.iLDG, testInstance.task.iLandingDurationFormula, routeInstance, windInstance, valueTAS)
+                String ildgdurationformula = "time+:10min" // for PlanningTest
+                if (testInstance.flighttestwind) {
+                    ildgdurationformula = testInstance.flighttestwind.iLDGDurationFormula
+                }
+				Map calculated_time = TimeCalculator(CoordType.iLDG, ildgdurationformula, routeInstance, windInstance, valueTAS)
 				testLegInstance.planLegTime = calculated_time.hours
 				testLegInstance.planFullMinute = calculated_time.fullminute
 				break
 			case CoordType.iSP:
-				Map calculated_time = TimeCalculator(CoordType.iSP, testInstance.task.iRisingDurationFormula, routeInstance, windInstance, valueTAS)
+                String itodurationformula = "time+:10min" // for PlanningTest
+                if (testInstance.flighttestwind) {
+                    itodurationformula = testInstance.flighttestwind.iTODurationFormula
+                }
+				Map calculated_time = TimeCalculator(CoordType.iSP, itodurationformula, routeInstance, windInstance, valueTAS)
 				testLegInstance.planLegTime = calculated_time.hours
 				testLegInstance.planFullMinute = calculated_time.fullminute
 				break
@@ -13581,8 +13639,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putTask(Map contest, String title, String firstTime, int takeoffIntervalNormal, String risingDurationFormula,
-				String maxLandingDurationFormula, int parkingDuration, String iLandingDurationFormula, String iRisingDurationFormula,
+    Map putTask(Map contest, String title, String firstTime, int takeoffIntervalNormal, int parkingDuration,
 		        boolean planningTestRun, boolean flightTestRun, boolean observationTestRun, boolean landingTestRun, boolean specialTestRun,
 		 		boolean planningTestDistanceMeasure, boolean planningTestDirectionMeasure, 
 				boolean flightTestCheckSecretPoints, boolean flightTestCheckTakeOff, boolean flightTestCheckLanding,
@@ -13596,11 +13653,7 @@ class FcService
 		p.liveTrackingNavigationTaskDate = contest.instance.liveTrackingContestDate
 		p.firstTime = firstTime
 		p.takeoffIntervalNormal = takeoffIntervalNormal
-		p.risingDurationFormula = risingDurationFormula
-		p.maxLandingDurationFormula = maxLandingDurationFormula
 		p.parkingDuration = parkingDuration
-		p.iLandingDurationFormula = iLandingDurationFormula
-		p.iRisingDurationFormula = iRisingDurationFormula
 		p.planningTestRun = planningTestRun
 		p.flightTestRun = flightTestRun
 		p.observationTestRun = observationTestRun
@@ -13802,7 +13855,8 @@ class FcService
     Map putFlightTestWind(Map flighttest, BigDecimal direction, BigDecimal speed, 
                           BigDecimal toDirection, BigDecimal toOffset, BigDecimal toOrthogonalOffset,
                           BigDecimal ldgDirection, BigDecimal ldgOffset, BigDecimal ldgOrthogonalOffset,
-                          BigDecimal itoildgDirection, BigDecimal itoildgOffset, BigDecimal itoildgOrthogonalOffset)
+                          BigDecimal itoildgDirection, BigDecimal itoildgOffset, BigDecimal itoildgOrthogonalOffset,
+                          String toDurationFormula, String ldgDurationFormula, String ildgDurationFormula, String itoDurationFormula)
     {
 		printstart "putFlightTestWind"
         Map p = [:]
@@ -13817,6 +13871,10 @@ class FcService
         p.iTOiLDGDirection = itoildgDirection
         p.iTOiLDGOffset = itoildgOffset
         p.iTOiLDGOrthogonalOffset = itoildgOrthogonalOffset
+        p.TODurationFormula = toDurationFormula
+        p.LDGDurationFormula = ldgDurationFormula
+        p.iLDGDurationFormula = ildgDurationFormula
+        p.iTODurationFormula = itoDurationFormula
         p.speed = speed
         Map ret = saveFlightTestWind("", p)
 		printdone ret

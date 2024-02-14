@@ -60,18 +60,48 @@
                                 <input type="text" id="TODirection" name="TODirection" value="${fieldValue(bean:flightTestInstance,field:'TODirection')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.runway.duration.to2sp')}*:</label>
+                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <br/>
+								<input type="text" id="TODurationFormula" name="TODurationFormula" value="${fieldValue(bean:flightTestInstance,field:'TODurationFormula')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
                                 <label>${message(code:'fc.runway.direction.ldg')} [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="LDGDirection" name="LDGDirection" value="${fieldValue(bean:flightTestInstance,field:'LDGDirection')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.runway.duration.fp2ldg')}*:</label>
+                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <br/>
+								<input type="text" id="LDGDurationFormula" name="LDGDurationFormula" value="${fieldValue(bean:flightTestInstance,field:'LDGDurationFormula')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                        </fieldset>
+                        <fieldset id="intermediateRunway" hidden >
+                            <legend>${message(code:'fc.runway.intermediate')}</legend>
+                            <p>
                                 <label>${message(code:'fc.runway.direction.itoildg')} [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${fieldValue(bean:flightTestInstance,field:'iTOiLDGDirection')}" tabIndex="${ti[0]++}"/>
                             </p>
+                            <p>
+                                <label>${message(code:'fc.runway.duration.ifp2ildg')}*:</label>
+                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <br/>
+                                <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestInstance,field:'iLDGDurationFormula')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.runway.duration.ildg2isp')}*:</label>
+                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <br/>
+                                <input type="text" id="iTODurationFormula" name="iTODurationFormula" value="${fieldValue(bean:flightTestInstance,field:'iTODurationFormula')}" tabIndex="${ti[0]++}"/>
+                            </p>
                         </fieldset>
                         <script>
                             $(document).on('change', '#routeselect_id', function() {
+                                set_runway_data();
+                            });
+                            function set_runway_data() {
                             	var select_route_id = "";
                                 $("#routeselect_id :selected").each(function() {
                                    	select_route_id = $(this).val();
@@ -83,10 +113,16 @@
                                             $("#TODirection").val(data.TODirection);
                                             $("#LDGDirection").val(data.LDGDirection);
                                             $("#iTOiLDGDirection").val(data.iTOiLDGDirection);
+                                            if (!data.isIntermediateRunway) {
+                                                $("#intermediateRunway").hide()
+                                            } else {
+                                                $("#intermediateRunway").show()
+                                            }
                                         }
                                     }
                                 }
-                            });
+                            }
+                            set_runway_data();
                         </script>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>

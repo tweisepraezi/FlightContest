@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.4.2
-:revdate:   03.02.2024
+:revnumber: 3.4.3
+:revdate:   14.02.2024
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -666,10 +666,18 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 
 . Strecke mit TO anlegen (Strecken -> *Neue Strecke*)
 
+. Strecken -> OSM-Wettbewerbs-Karte -> *Lufträume um Flughafen ermitteln* (wenn ein  <<fc.adoc#configuration-openaip,OpenAIP-Zugang>> konfiguriert wurde) +
++
+Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt). +
+Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden. +
+Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.
+
 . Wettbewerbs-Karte mit TO drucken
 
-- Strecke -> OSM-Wettbewerbs-Karte -> *Online-Karte um Flughafen erzeugen*
-- Strecke -> OSM-Wettbewerbs-Karte -> *Task-Creator-Karte um Flughafen erzeugen*
+- Strecken -> OSM-Wettbewerbs-Karte -> *Online-Karte um Flughafen erzeugen*
+- Strecken -> OSM-Wettbewerbs-Karte -> *Task-Creator-Karte um Flughafen erzeugen*
+- Wurde ein <<fc.adoc#configuration-openaip,OpenAIP-Zugang>> konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet. +
+Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet.
 
 . Task-Creator starten (Karten -> AirportArea (Task Creator) -> *...*) +
 +
@@ -1967,7 +1975,7 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
 === Original-Task-Creator für Nutzung konfigurieren
  flightcontest {
    taskcreator {
-     url = "https://www.airrats.cl/taskcreator/?lang=en&admin"
+     url = "https://www.airrats.cl/taskcreator?admin"
    }
  }
 

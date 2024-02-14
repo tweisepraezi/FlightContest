@@ -55,21 +55,21 @@ class DemoContestRoutesService
 		Map crew2 = fcService.putCrew(contest,2,"Besatzung 60", "","","","D-EAAB","","",60)
 
         // Flight Tests
-        Map task5 = fcService.putTask(contest,ROUTE_5,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+        Map task5 = fcService.putTask(contest,ROUTE_5,"09:00",2,5,false,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
         Map flighttest5 = fcService.putFlightTest(task5,"",route5)
-        Map flighttestwind5 = fcService.putFlightTestWind(flighttest5,0,0,0,0,0,0,0,0,0,0,0)
+        Map flighttestwind5 = fcService.putFlightTestWind(flighttest5,0,0,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind:1","wind:1")
         fcService.putflighttestwindTask(task5,flighttestwind5)
 		fcService.runcalculatetimetableTask(task5)
 		
-        Map task6 = fcService.putTask(contest,ROUTE_6,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+        Map task6 = fcService.putTask(contest,ROUTE_6,"09:00",2,5,false,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
         Map flighttest6 = fcService.putFlightTest(task6,"",route6)
-        Map flighttestwind6 = fcService.putFlightTestWind(flighttest6,0,0,0,0,0,0,0,0,0,0,0)
+        Map flighttestwind6 = fcService.putFlightTestWind(flighttest6,0,0,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind:1","wind:1")
         fcService.putflighttestwindTask(task6,flighttestwind6)
 		fcService.runcalculatetimetableTask(task6)
 		
-        Map task7 = fcService.putTask(contest,ROUTE_7,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+        Map task7 = fcService.putTask(contest,ROUTE_7,"09:00",2,5,false,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
         Map flighttest7 = fcService.putFlightTest(task7,"",route7)
-        Map flighttestwind7 = fcService.putFlightTestWind(flighttest7,0,0,0,0,0,0,0,0,0,0,0)
+        Map flighttestwind7 = fcService.putFlightTestWind(flighttest7,0,0,0,0,0,0,0,0,0,0,0,"time:10min","time:10min","wind:1","wind:1")
         fcService.putflighttestwindTask(task7,flighttestwind7)
 		fcService.runcalculatetimetableTask(task7)
 		
@@ -463,13 +463,13 @@ class DemoContestRoutesService
 	
 	List testTask() {
 		[[title:ROUTE_5,firstTime:"09:00",takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-    	  preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+    	  preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 		  procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 	     [title:ROUTE_6,firstTime:"09:00",takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-		  preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+		  preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 		  procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 	     [title:ROUTE_7,firstTime:"09:00",takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-		  preparationDuration:15,risingDurationFormula:"time:10min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
+		  preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 		  procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true]
 		]
 	}

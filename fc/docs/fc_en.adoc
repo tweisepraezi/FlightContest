@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.2
-:revdate: 03.02.2024
+:revnumber: 3.4.3
+:revdate: 14.02.2024
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -655,10 +655,19 @@ Edit "Properties" of the added points in the 'Placemark' dialog:
 
 . Create route with TO (Routes -> *New route*)
 
+. Routes -> OSM Contest Map -> *Determine airspaces around the airport* (if <<fc_en.adoc#configuration-openaip,OpenAIP access>> has been configured) +
++
+The height of the airspaces to be taken into account can be adjusted (4000ft by default). +
+Airspaces not to be taken into account can be commented out with a # in front if required. +
+An export for viewing in Google Earth can be carried out with "KMZ export airspaces".
+
 . Print competition map with TO
 
-- Route -> OSM Contest Map -> *Generate online map around airport*
-- Route -> OSM Contest Map -> *Generate Task Creator map around airport*
+- Routes -> OSM Contest Map -> *Generate online map around airport*
+- Routes -> OSM Contest Map -> *Generate Task Creator map around airport*
+- If <<fc_en.adoc#configuration-openaip,OpenAIP access>> has been configured, airports with ICAO map style are plotted on the map. +
+Otherwise, airfields from OSM data are plotted on the map with a simple aircraft symbol.
+
 
 . Start Task Creator (Maps -> AirportArea (Task Creator) -> *...*) +
 +
@@ -1953,7 +1962,7 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
 === Configure original Task Creator for use
  flightcontest {
    taskcreator {
-     url = "https://www.airrats.cl/taskcreator/?lang=en&admin"
+     url = "https://www.airrats.cl/taskcreator?admin"
    }
  }
 

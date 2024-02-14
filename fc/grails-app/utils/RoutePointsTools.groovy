@@ -101,6 +101,99 @@ class RoutePointsTools
     }
     
     //--------------------------------------------------------------------------
+    static List GetShowPointsNearRunways(Route routeInstance, Map params)
+    {
+        List points = []
+        BigDecimal to_lat = null
+        BigDecimal to_lon = null
+        String to_name = ""
+        BigDecimal fp_lat = null
+        BigDecimal fp_lon = null
+        String fp_name = ""
+        BigDecimal ifp_lat = null
+        BigDecimal ifp_lon = null
+        String ifp_name = ""
+        BigDecimal ildg_lat = null
+        BigDecimal ildg_lon = null
+        String ildg_name = ""
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            if (coordroute_instance.type == CoordType.TO) {
+                to_lat = coordroute_instance.latMath()
+                to_lon = coordroute_instance.lonMath()
+                to_name = coordroute_instance.titleCode(params.isPrint)
+            } else if (coordroute_instance.type == CoordType.SP) {
+                BigDecimal sp_lat = coordroute_instance.latMath()
+                BigDecimal sp_lon = coordroute_instance.lonMath()
+                String sp_name = coordroute_instance.titleCode(params.isPrint)
+                BigDecimal lat_center = (to_lat+sp_lat)/2
+                BigDecimal lon_center = (to_lon+sp_lon)/2
+                String name = "${to_name}-${sp_name}"
+                BigDecimal distance = AviationMath.calculateLeg(to_lat, to_lon, sp_lat, sp_lon).dis
+                Map new_point = [name:name]
+                new_point += [latcenter:lat_center, loncenter:lon_center]
+                new_point += [radius:distance/2]
+                points += new_point
+            } else if (coordroute_instance.type == CoordType.FP) {
+                fp_lat = coordroute_instance.latMath()
+                fp_lon = coordroute_instance.lonMath()
+                fp_name = coordroute_instance.titleCode(params.isPrint)
+            } else if (coordroute_instance.type == CoordType.LDG) {
+                BigDecimal ldg_lat = coordroute_instance.latMath()
+                BigDecimal ldg_lon = coordroute_instance.lonMath()
+                String ldg_name = coordroute_instance.titleCode(params.isPrint)
+                BigDecimal lat_center = (fp_lat+ldg_lat)/2
+                BigDecimal lon_center = (fp_lon+ldg_lon)/2
+                String name = "${fp_name}-${ldg_name}"
+                BigDecimal distance = AviationMath.calculateLeg(fp_lat, fp_lon, ldg_lat, ldg_lon).dis
+                Map new_point = [name:name]
+                new_point += [latcenter:lat_center, loncenter:lon_center]
+                new_point += [radius:distance/2]
+                points += new_point
+            } else if (coordroute_instance.type == CoordType.iFP) {
+                ifp_lat = coordroute_instance.latMath()
+                ifp_lon = coordroute_instance.lonMath()
+                ifp_name = coordroute_instance.titleCode(params.isPrint)
+            } else if (coordroute_instance.type == CoordType.iLDG) {
+                ildg_lat = coordroute_instance.latMath()
+                ildg_lon = coordroute_instance.lonMath()
+                ildg_name = coordroute_instance.titleCode(params.isPrint)
+                BigDecimal lat_center = (ifp_lat+ildg_lat)/2
+                BigDecimal lon_center = (ifp_lon+ildg_lon)/2
+                String name = "${ifp_name}-${ildg_name}"
+                BigDecimal distance = AviationMath.calculateLeg(ifp_lat, ifp_lon, ildg_lat, ildg_lon).dis
+                Map new_point = [name:name]
+                new_point += [latcenter:lat_center, loncenter:lon_center]
+                new_point += [radius:distance/2]
+                points += new_point
+            } else if (coordroute_instance.type == CoordType.iSP) {
+                BigDecimal isp_lat = coordroute_instance.latMath()
+                BigDecimal isp_lon = coordroute_instance.lonMath()
+                String isp_name = coordroute_instance.titleCode(params.isPrint)
+                if (ildg_lat) {
+                    BigDecimal lat_center = (ildg_lat+isp_lat)/2
+                    BigDecimal lon_center = (ildg_lon+isp_lon)/2
+                    String name = "${ildg_name}-${isp_name}"
+                    BigDecimal distance = AviationMath.calculateLeg(ildg_lat, ildg_lon, isp_lat, isp_lon).dis
+                    Map new_point = [name:name]
+                    new_point += [latcenter:lat_center, loncenter:lon_center]
+                    new_point += [radius:distance/2]
+                    points += new_point
+                } else if (ifp_lat) {
+                    BigDecimal lat_center = (ifp_lat+isp_lat)/2
+                    BigDecimal lon_center = (ifp_lon+isp_lon)/2
+                    String name = "${ifp_name}-${isp_name}"
+                    BigDecimal distance = AviationMath.calculateLeg(ifp_lat, ifp_lon, isp_lat, isp_lon).dis
+                    Map new_point = [name:name]
+                    new_point += [latcenter:lat_center, loncenter:lon_center]
+                    new_point += [radius:distance/2]
+                    points += new_point
+                }
+            }
+        }
+        return points
+    }
+    
+    //--------------------------------------------------------------------------
     private static List GetEnrouteSignShowPoints(Route routeInstance, CoordType coordType, int titleNumber, boolean addImageCoord)
     {
         List enroute_points = []

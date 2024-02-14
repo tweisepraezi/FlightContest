@@ -160,6 +160,8 @@ class ObservationResultsTagLib
                                 outln"""<td>${message(code:'fc.observation.evaluationvalue.enroute.noinput')}</td>"""
                             } else if (enroutephotodata_instance.IsEvaluationFromTPNotFound()) {
                                 outln"""<td>-</td>"""
+                            } else if (enroutephotodata_instance.IsEvaluationFromTPFalse()) {
+                                outln"""<td>x</td>"""
                             } else {
                                 outln"""<td>${enroutephotodata_instance.evaluationName()} ${FcMath.DistanceStr(enroutephotodata_instance.evaluationDistance)} ${message(code:'fc.mile')}</td>"""
                             }
@@ -170,6 +172,8 @@ class ObservationResultsTagLib
                                 outln"""<td>${message(code:'fc.observation.evaluationvalue.enroute.noinput')}</td>"""
                             } else if (enroutephotodata_instance.IsEvaluationFromTPNotFound()) {
                                 outln"""<td>-</td>"""
+                            } else if (enroutephotodata_instance.IsEvaluationFromTPFalse()) {
+                                outln"""<td>x</td>"""
                             } else {
                                 outln"""<td>${enroutephotodata_instance.evaluationName()} ${FcMath.DistanceMeasureStr(enroutephotodata_instance.evaluationDistance)} ${message(code:'fc.mm')}</td>"""
                             }
@@ -271,6 +275,8 @@ class ObservationResultsTagLib
                                 outln"""<td>${message(code:'fc.observation.evaluationvalue.enroute.noinput')}</td>"""
                             } else if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
                                 outln"""<td>-</td>"""
+                            } else if (enroutecanvasdata_instance.IsEvaluationFromTPFalse()) {
+                                outln"""<td>x</td>"""
                             } else {
                                 outln"""<td>${enroutecanvasdata_instance.evaluationName()} ${FcMath.DistanceStr(enroutecanvasdata_instance.evaluationDistance)} ${message(code:'fc.mile')}</td>"""
                             }
@@ -281,6 +287,8 @@ class ObservationResultsTagLib
                                 outln"""<td>${message(code:'fc.observation.evaluationvalue.enroute.noinput')}</td>"""
                             } else if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
                                 outln"""<td>-</td>"""
+                            } else if (enroutecanvasdata_instance.IsEvaluationFromTPFalse()) {
+                                outln"""<td>x</td>"""
                             } else {
                                 outln"""<td>${enroutecanvasdata_instance.evaluationName()} ${FcMath.DistanceMeasureStr(enroutecanvasdata_instance.evaluationDistance)} ${message(code:'fc.mm')}</td>"""
                             }
@@ -601,7 +609,7 @@ class ObservationResultsTagLib
 							String disabled_attribute = ""
 							if (show_buttons && !complete) {
 								write_buttons(enroutephotodata_instance, true)
-								if (enroutephotodata_instance.IsEvaluationFromTPNotFound()) {
+								if (enroutephotodata_instance.IsEvaluationFromTPNotFound() || enroutephotodata_instance.IsEvaluationFromTPFalse()) {
 									disabled_attribute = "disabled"
 								}
 							} else {
@@ -630,7 +638,7 @@ class ObservationResultsTagLib
 							String disabled_attribute = ""
 							if (show_buttons && !complete) {
 								write_buttons(enroutephotodata_instance, true)
-								if (enroutephotodata_instance.IsEvaluationFromTPNotFound()) {
+								if (enroutephotodata_instance.IsEvaluationFromTPNotFound() || enroutephotodata_instance.IsEvaluationFromTPFalse()) {
 									disabled_attribute = "disabled"
 								}
 							} else {
@@ -807,7 +815,7 @@ class ObservationResultsTagLib
 							String disabled_attribute = ""
 							if (show_buttons && !complete) {
 								write_buttons(enroutecanvasdata_instance, false)
-								if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
+								if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound() || enroutecanvasdata_instance.IsEvaluationFromTPFalse()) {
 									disabled_attribute = "disabled"
 								}
 							} else {
@@ -836,7 +844,7 @@ class ObservationResultsTagLib
 							String disabled_attribute = ""
 							if (show_buttons && !complete) {
 								write_buttons(enroutecanvasdata_instance, false)
-								if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
+								if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound() || enroutecanvasdata_instance.IsEvaluationFromTPFalse()) {
 									disabled_attribute = "disabled"
 								}
 							} else {
@@ -994,6 +1002,12 @@ class ObservationResultsTagLib
                 } else {
                     outln"""<option value="${Defs.EnrouteValue_NotFound}">${message(code:'fc.observation.evaluationvalue.enroute.notfound')}</option>"""
                 }
+            } else if ((coord_title.type == CoordType.UNKNOWN) && (coord_title.number == 2)) {
+                if (enrouteDataInstance.IsEvaluationFromTPFalse()) {
+                    outln"""<option value="${Defs.EnrouteValue_False}" selected="selected">${message(code:'fc.observation.evaluationvalue.enroute.false')}</option>"""
+                } else {
+                    outln"""<option value="${Defs.EnrouteValue_False}">${message(code:'fc.observation.evaluationvalue.enroute.false')}</option>"""
+                }
             } else {
                 if ((coord_title.type == enrouteDataInstance.evaluationType) && (coord_title.number == enrouteDataInstance.evaluationNumber)) {
                     outln"""<option value="${coord_title}" selected="selected">${coord_title.titleCode()}</option>"""
@@ -1023,17 +1037,24 @@ class ObservationResultsTagLib
                 }
             } else if ((coordtitle_instance.type == CoordType.UNKNOWN) && (coordtitle_instance.number == 1)) {
                 if (enrouteDataInstance.IsEvaluationFromTPNotFound()) {
-                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
 					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${Defs.EnrouteValue_NotFound}"/>"""
                 } else {
-                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+                }
+            } else if ((coordtitle_instance.type == CoordType.UNKNOWN) && (coordtitle_instance.number == 2)) {
+                if (enrouteDataInstance.IsEvaluationFromTPFalse()) {
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.false')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_False}');"/>"""
+					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${Defs.EnrouteValue_False}"/>"""
+                } else {
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.false')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_False}');"/>"""
                 }
             } else {
                 if ((coordtitle_instance.type == enrouteDataInstance.evaluationType) && (coordtitle_instance.number == enrouteDataInstance.evaluationNumber)) {
-                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${coordtitle_instance.titleCode()}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${coordtitle_instance}');"/>"""
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${coordtitle_instance.titleCode()}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${coordtitle_instance}');"/>"""
 					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${coordtitle_instance}"/>"""
                 } else {
-                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${coordtitle_instance.titleCode()}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${coordtitle_instance}');"/>"""
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${coordtitle_instance.titleCode()}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${coordtitle_instance}');"/>"""
                 }
             }
         }
@@ -1042,12 +1063,10 @@ class ObservationResultsTagLib
 		outln"""	function set_enroute_value(coordtitle_id, data_id, button_id, input_id, value) {"""
 		outln"""		\$("#"+coordtitle_id+data_id).val(value);"""
         for (CoordTitle coordtitle_instance in enrouteDataInstance.route.GetEnrouteCoordTitles(true)) {
-			//outln"""	\$("#button_"+coordtitle_id+data_id+"_${coordtitle_instance.id}").attr("style", "");"""
-			outln"""	\$("#button_"+coordtitle_id+data_id+"_${coordtitle_instance.id}").attr("class", "");"""
+			outln"""	\$("#button_"+coordtitle_id+data_id+"_${get_coordtitle_id(coordtitle_instance)}").attr("class", "");"""
 		}
-		//outln"""		\$("#button_"+coordtitle_id+data_id+"_"+button_id).attr("style", "background-color:yellow;");"""
 		outln"""		\$("#button_"+coordtitle_id+data_id+"_"+button_id).attr("class", "observationinputbutton");"""
-		outln"""		if (value == '${Defs.EnrouteValue_NotFound}') {"""
+		outln"""		if (value == '${Defs.EnrouteValue_NotFound}' || value == '${Defs.EnrouteValue_False}') {"""
 		outln"""			\$("#"+input_id).val(0);"""
 		outln"""			\$("#"+input_id).attr("disabled", true);"""
 		outln"""		} else {"""
@@ -1058,6 +1077,20 @@ class ObservationResultsTagLib
 		outln"""		\$("#"+input_id).select();"""
 		outln"""	}"""
 		outln"""</script>"""
+    }
+    
+	// --------------------------------------------------------------------------------------------------------------------
+    String get_coordtitle_id(CoordTitle coordtitleInstance)
+    {
+        if ((coordtitleInstance.type == CoordType.UNKNOWN) && (coordtitleInstance.number == 0)) {
+            return "${coordtitleInstance.id}_0"
+        } else if ((coordtitleInstance.type == CoordType.UNKNOWN) && (coordtitleInstance.number == 1)) {
+            return "${coordtitleInstance.id}_1"
+        } else if ((coordtitleInstance.type == CoordType.UNKNOWN) && (coordtitleInstance.number == 2)) {
+            return "${coordtitleInstance.id}_2"
+        } else {
+            return coordtitleInstance.id
+        }
     }
     
 	// --------------------------------------------------------------------------------------------------------------------

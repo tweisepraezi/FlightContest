@@ -58,6 +58,7 @@ class Defs
     static final String LIVETRACKING_VISIBILITY_PUBLIC                 = "public"
     static final String LIVETRACKING_VISIBILITY_PRIVATE                = "private"
     static final String LIVETRACKING_VISIBILITY_UNLISTED               = "unlisted"
+    static final String TASKCREATOR_LOCAL_URL                          = "http://localhost:8080/fc/taskcreator/run.html"
     
     static final int OSMPRINTMAP_RUNSECONDS                            = 2
     static final String OSMPRINTMAP_GROUP                              = "OsmPrintMapGroup"
@@ -99,6 +100,7 @@ class Defs
 
     static final String EnrouteValue_Unevaluated                       = "unevaluated"
     static final String EnrouteValue_NotFound                          = "not_found"
+    static final String EnrouteValue_False                             = "false"
     
     static final String TaskClassID                                    = "taskclass_"
     static final String TaskClassSubID_PlanningTestRun                 = "_planningTestRun"
@@ -161,6 +163,8 @@ class Defs
     static final String CONTESTMAPPRINTSIZE_A1                         = "A1"      // saved in database. do not modify.
     static final String CONTESTMAPPRINTSIZE_ANR                        = "ANR"     // saved in database. do not modify.
     static final String CONTESTMAPPRINTSIZE_AIRPORTAREA                = "AIRPORTAREA"
+    
+    static final String NAME_AIRPORTAREA                               = "AirportArea"
     
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
     static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"

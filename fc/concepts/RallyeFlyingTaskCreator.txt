@@ -1,6 +1,6 @@
 
-https://www.airrats.cl/taskcreator/?lang=en
-https://www.airrats.cl/taskcreator/?lang=en&admin
+https://www.airrats.cl/taskcreator?lang=en
+https://www.airrats.cl/taskcreator?lang=en&admin
 
 http://localhost:8080/fc/map/areamap.png
 http://localhost:8080/fc/map/areamap.pnginfo
@@ -16,7 +16,20 @@ Left(Lon):   8.82140479758
 
 loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
 
-https://www.airrats.cl/taskcreator/?lang=en&admin&loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
+https://www.airrats.cl/taskcreator?lang=en&admin&loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
+
+Modifications
+    Task line
+        Task    -> Task name       new control without DB connection
+        Load                       deleted (load from database)
+        Save                       deleted (save to database)
+        Clear   -> Clear task      moved to top
+        FC      -> Export FC kml   moved to top
+    Category line / Admin buttons
+        Fr csv  -> Load task       moved to top
+        T csv   -> Save task       moved to top
+        T kml                      deleted (export Google Earth kml)
+        T fpl                      deleted (export Garmin fpl)
 
     <!--
     <script>
@@ -114,5 +127,7 @@ Service PATH
 http://workblog.pilin.name/2013/03/service-environment-variables.html?m=1
 https://superuser.com/questions/222238/how-to-change-path-to-executable-for-a-windows-service
 
-
+Load html
+---------
+https://stackoverflow.com/questions/17636528/how-do-i-load-an-html-page-in-a-div-using-javascript
 

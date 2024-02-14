@@ -2418,7 +2418,7 @@ class Test
             if (testlegflight_instance.coordTitle.type == CoordType.iLDG) {
                 if (viewShortTime) {
                     return FcMath.TimeStrShort(tp_time)
-                } else if (task.IsFullMinute(task.iLandingDurationFormula)) {
+                } else if (task.IsFullMinute(flighttestwind.iLDGDurationFormula)) {
                     return FcMath.TimeStrShort(tp_time)
                 } else {
                     return FcMath.TimeStr(tp_time)

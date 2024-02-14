@@ -48,6 +48,13 @@ class ContestController {
                 session.showLanguage = show_language
             }
         }
+        if (!session?.taskCreatorLanguage) {
+            String taskcreator_language = fcService.GetCookie("TaskCreatorLanguage",TaskCreatorLanguages.de.toString())
+            if (taskcreator_language) {
+                fcService.println "Set taskCreatorLanguage to '$taskcreator_language' (cookie)"
+                session.taskCreatorLanguage = taskcreator_language
+            }
+        }
         
         if (restart) {
             fcService.printdone "Restart contest with language $show_language"

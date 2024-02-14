@@ -33,9 +33,9 @@ class DemoContestProcedureTurnService
         fcService.putCrew(contest,1,CREW_60,"","","",AIRCRAFT_60,"","",60)
 		
 		// Task Procdure Turn
-		Map task_pt = fcService.putTask(contest,"$ROUTE_NAME_PT ($NOWIND)",START_TIME,2,"wind:1","wind:1",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
+		Map task_pt = fcService.putTask(contest,"$ROUTE_NAME_PT ($NOWIND)",START_TIME,2,5,true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map flighttest_pt = fcService.putFlightTest(task_pt,"",route_pt)
-		Map flighttestwind_pt = fcService.putFlightTestWind(flighttest_pt,0,0,0,0,0,0,0,0,0,0,0)
+		Map flighttestwind_pt = fcService.putFlightTestWind(flighttest_pt,0,0,0,0,0,0,0,0,0,0,0,"wind:1","wind:1","wind:1","wind:1")
 		fcService.putflighttestwindTask(task_pt,flighttestwind_pt)
 		fcService.runcalculatetimetableTask(task_pt)
 		
@@ -159,8 +159,7 @@ class DemoContestProcedureTurnService
 	
 	List testTask() {
 		  [[title:"$ROUTE_NAME_PT ($NOWIND)",firstTime:START_TIME,takeoffIntervalNormal:2,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
-			preparationDuration:15,risingDurationFormula:"wind:1",maxLandingDurationFormula:"wind:1",parkingDuration:5,minNextFlightDuration:30,
-			iLandingDurationFormula:"wind:1",iRisingDurationFormula:"wind:1",
+			preparationDuration:15,parkingDuration:5,minNextFlightDuration:30,
 			procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
 		  ]
 	}

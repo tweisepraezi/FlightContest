@@ -36,10 +36,12 @@
                                 <g:set var="foundTest" value="${true}" />
                             </g:if>
                         </g:each>
-                        <g:if test="${!foundTest}">
+                        <g:if test="${!foundTest && !planningTestInstance.task.lockPlanning}">
                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
-                        <g:actionSubmit action="createplanningtesttask" value="${message(code:'fc.planningtesttask.add1')}" />
+                        <g:if test="${!planningTestInstance.task.lockPlanning}">
+                            <g:actionSubmit action="createplanningtesttask" value="${message(code:'fc.planningtesttask.add1')}" />
+                        </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>

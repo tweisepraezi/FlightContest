@@ -53,6 +53,27 @@ class FlightTestController {
         }
     }
 
+    def update_end = {
+        def flighttest = fcService.updateFlightTest(session.showLanguage, params) 
+        if (flighttest.saved) {
+        	flash.message = flighttest.message
+            if (params.flighttestReturnAction) {
+                redirect(action:params.flighttestReturnAction,controller:params.flighttestReturnController,id:params.flighttestReturnID)
+            } else if (params.fromlistplanning) {
+                redirect(controller:"task",action:"listplanning",id:params.taskid)
+            } else if (params.fromtask) {
+                redirect(controller:"task",action:"show",id:params.taskid)
+            } else {
+                redirect(action:"show",id:params.id)
+            }
+        } else if (flighttest.instance) {
+        	render(view:'edit',model:[flightTestInstance:flighttest.instance])
+        } else {
+        	flash.message = flighttest.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
     def create = {
         def flighttest = fcService.createFlightTest(params,session.lastContest)
         if (flighttest.error) {

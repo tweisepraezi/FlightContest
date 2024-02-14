@@ -337,13 +337,8 @@ class OsmPrintMapService
                 break
             case Defs.CONTESTMAPPRINTSIZE_ANR:
                 paper_size = "ANR"
-                if (contestMapParams.contestMapPrintLandscape) {
-                    print_width = ANR_LONG
-                    print_height = ANR_SHORT
-                } else {
-                    print_width = ANR_SHORT
-                    print_height = ANR_LONG
-                }
+                print_width = ANR_LONG
+                print_height = ANR_SHORT
                 break
             case Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA:
                 paper_size = "T/O"
@@ -627,18 +622,23 @@ class OsmPrintMapService
                         String airspace_textcolor = 'black'
                         String airspace_fillcolor = 'steelblue'
                         String airspace_fillopacity = '0.2'
+                        boolean first_style = true
                         for (String airspace_style in Tools.Split(airspace_layer, AIRSPACE_LAYER_STYLE_SEPARATOR)) {
                             List airspace_style_values = Tools.Split(airspace_style.trim(), AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
                             if (airspace_style_values.size() == 1) {
-                                airspace_layer = airspace_style_values[0].trim()
-                                airspace_text = airspace_layer
+                                if (first_style) {
+                                    airspace_layer = airspace_style_values[0].trim()
+                                    airspace_text = airspace_layer
+                                } else if (airspace_text) {
+                                    airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
+                                }
                             } else if (airspace_style_values.size() == 2) {
                                 switch (airspace_style_values[0].trim()) {
                                     case 'file': 
                                         airspace_filename = airspace_style_values[1].trim()
                                         break
                                     case 'text': 
-                                        airspace_text = airspace_style_values[1].trim()
+                                        airspace_text = airspace_style_values[1]
                                         break
                                     case 'textsize': 
                                         airspace_textsize = airspace_style_values[1].trim()
@@ -657,7 +657,9 @@ class OsmPrintMapService
                                         break
                                 }
                             }
+                            first_style = false
                         }
+                        airspace_text = airspace_text.trim()
                         airspaces_lines += """,{
                             "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
                             "SRS": "+init=${ATTR_INPUT_SRS}",

@@ -79,6 +79,9 @@ class GlobalController {
 		if (!session.showLanguage) {
 			session.showLanguage = Languages.de.toString()
 		}
+		if (!session.taskCreatorLanguage) {
+			session.taskCreatorLanguage = TaskCreatorLanguages.de.toString()
+		}
 		if (!session.printLanguage) {
 			session.printLanguage = Languages.de.toString()
 		}
@@ -102,6 +105,9 @@ class GlobalController {
         fcService.println "Set showLanguage to '$params.showLanguage'"
 		session.showLanguage = params.showLanguage
         
+        fcService.println "Set taskCreatorLanguage to '$params.taskCreatorLanguage'"
+		session.taskCreatorLanguage = params.taskCreatorLanguage
+        
         fcService.println "Set printLanguage to '$params.printLanguage'"
         session.printLanguage = params.printLanguage
         
@@ -112,6 +118,7 @@ class GlobalController {
         session.configText = params.configText
 		
 		fcService.SetCookie(response, "ShowLanguage",     params.showLanguage)
+		fcService.SetCookie(response, "TaskCreatorLanguage", params.taskCreatorLanguage)
 		fcService.SetCookie(response, "PrintLanguage",    params.printLanguage)
 		fcService.SetCookie(response, "ShowLimitTestNum", params.showLimitCrewNum)
         

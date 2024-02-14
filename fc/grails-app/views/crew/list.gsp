@@ -42,6 +42,9 @@
 	                </thead>
 	                <tbody>
 						<g:set var="crew_pos" value="${0}"></g:set>
+						<g:set var="last_tas" value="${1000}"></g:set>
+						<g:set var="last_team" value=""></g:set>
+						<g:set var="last_team2" value=""></g:set>
 	                    <g:each var="crew_instance" in="${crewList}" status="i">
 							<g:set var="pagebreak_class" value=""></g:set>
 							<g:if test="${crew_instance.pageBreak}">
@@ -72,8 +75,16 @@
 								</g:else>
                                 <td>${fieldValue(bean:crew_instance, field:'email')}</td>
                                 <g:if test="${crew_instance.team}">                          
+                                    <g:set var="team_order_problem" value=""></g:set>
+                                    <g:if test="${crew_instance.team.name == last_team && !crew_instance.pageBreak}">
+                                        <g:set var="team_order_problem" value="!!"></g:set>
+                                    </g:if>
+                                    <g:elseif test="${crew_instance.team.name == last_team2 && !crew_instance.pageBreak}">
+                                        <g:set var="team_order_problem" value="!"></g:set>
+                                    </g:elseif>
                                     <td>
                                         <g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/>
+                                        ${team_order_problem}
                                         <g:if test="${crew_instance.team.disabled}"> (${message(code:'fc.disabled')})</g:if>
                                         <g:elseif test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:elseif>
                                     </td>
@@ -90,9 +101,16 @@
 	                                </g:else>
                                 </g:if>
 	                            <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${crew_instance.aircraft?.user1 && crew_instance.aircraft?.user2}"> *</g:if></td>
-	                            <td>${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}<g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if></td>
+                                <g:set var="tas_order_problem" value=""></g:set>
+                                <g:if test="${crew_instance.tas > last_tas && !crew_instance.pageBreak}">
+                                    <g:set var="tas_order_problem" value="!"></g:set>
+                                </g:if>
+	                            <td>${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')} ${tas_order_problem}<g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if></td>
                                 <td>${fieldValue(bean:crew_instance, field:'trackerID')}</td>
 	                        </tr>
+                            <g:set var="last_tas" value="${crew_instance.tas}"></g:set>
+                            <g:set var="last_team2" value="${last_team}"></g:set>
+                            <g:set var="last_team" value="${crew_instance.team.name}"></g:set>
 	                    </g:each>
 	                </tbody>
 	                <tfoot>

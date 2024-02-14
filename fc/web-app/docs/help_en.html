@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.4.2,</span>
-<span id="revdate">03.02.2024</span>
+<span id="revnumber">version 3.4.3,</span>
+<span id="revdate">14.02.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -1792,14 +1792,26 @@ Edit "Properties" of the added points in the 'Placemark' dialog:</p>
 <p>Create route with TO (Routes &#8594; <strong>New route</strong>)</p>
 </li>
 <li>
+<p>Routes &#8594; OSM Contest Map &#8594; <strong>Determine airspaces around the airport</strong> (if <a href="#configuration-openaip">OpenAIP access</a> has been configured)<br></p>
+<div class="paragraph">
+<p>The height of the airspaces to be taken into account can be adjusted (4000ft by default).<br>
+Airspaces not to be taken into account can be commented out with a # in front if required.<br>
+An export for viewing in Google Earth can be carried out with "KMZ export airspaces".</p>
+</div>
+</li>
+<li>
 <p>Print competition map with TO</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Route &#8594; OSM Contest Map &#8594; <strong>Generate online map around airport</strong></p>
+<p>Routes &#8594; OSM Contest Map &#8594; <strong>Generate online map around airport</strong></p>
 </li>
 <li>
-<p>Route &#8594; OSM Contest Map &#8594; <strong>Generate Task Creator map around airport</strong></p>
+<p>Routes &#8594; OSM Contest Map &#8594; <strong>Generate Task Creator map around airport</strong></p>
+</li>
+<li>
+<p>If <a href="#configuration-openaip">OpenAIP access</a> has been configured, airports with ICAO map style are plotted on the map.<br>
+Otherwise, airfields from OSM data are plotted on the map with a simple aircraft symbol.</p>
 </li>
 </ul>
 </div>
@@ -4490,7 +4502,7 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
 <div class="content">
 <pre>flightcontest {
   taskcreator {
-    url = "https://www.airrats.cl/taskcreator/?lang=en&amp;admin"
+    url = "https://www.airrats.cl/taskcreator?admin"
   }
 }</pre>
 </div>

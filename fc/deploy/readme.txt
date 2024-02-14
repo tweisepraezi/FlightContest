@@ -1,6 +1,28 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.3
+----------------
+- Online/Offline-Viewer im Navigationsflug-Ergebnis wurde um Buttons "T/O-SP" und "FP-LDG" erweitert.
+  Zoomt zu den Logger-Daten des angeklickten Bereiches, wobei die beiden Punkte die Auflösung bestimmen.
+- Die Einstellungen für die Flugzeit-Berechnung von Starts und Landungen wurden von den Aufgaben- zu den Wind-Einstellungen verlegt.
+  Damit wird es möglich, dass bei Richtungswechsel der Startbahn andere Werte verwendet werden können,
+  so dass abweichende An- bzw. Abflugentfernungen besser berücksichtigt werden können.
+- Strecken-Beobachtungen: Auswahl des Beobachtungswertes ??? hinzugefügt.
+  Dieses ist auszuwählen, wenn z.B. ein unbekanntes Bodenzeichen im Antwort-Bogen angegeben wurde. Wird mit "Falsch" bestraft.
+- Planung: Anordnung der Aktions-Buttons wurde übersichtlicher organisert.
+- Planung: Die Eingabe von Navigationstest-Details wurde vereinfacht.
+- Besatzungs-Druck: Option "Sortierungshilfe" hinzugefügt.
+    Zeigt eine zusätzliche Spalte mit der Start-Nr. des anderen Flugzeuges an.
+    Zeigt eine zusätzliche Spalte mit der Positionsdifferenz zur Startliste des anderen Flugzeuges an.
+    Markiert TAS mit !, die höher als vom Vorgänger sind.
+    Markiert Teams mit !!, die gleich zum Vorgänger sind.
+    Markiert Teams mit !, die gleich zum Vorgänger des Vorgängers sind.
+- Bug "Tor-Richtung am Halbkreis-Ende im Konstruktions-Modus fehlerhaft" behoben
+- Spracheinstellung für Task-Creator in "Extras -> Einstellungen" hinzugefügt (Deutsch, Englisch, Spanisch)
+    Diese Einstellung wirkt nur im Original-Task-Creator vollständig.
+    Der integrierte Task-Creator arbeitet nur in Englisch.
+    
 Änderungen 3.4.2
 ----------------
 - Bei Konfiguration des Original-Task-Creators werden zusätzliche Links neben den Links zum integrierten Task-Creator angezeigt.

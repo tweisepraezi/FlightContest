@@ -740,7 +740,7 @@ class RouteController {
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
 			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false)
             if (ret.ok) {
-                String route_file_name = (route.instance.name() + '.kmz').replace(' ',"_")
+                String route_file_name = ("${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airspaces.kmz") // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
                 response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
                 kmlService.Download(webroot_dir + upload_kmz_file_name, route_file_name, response.outputStream)
@@ -787,7 +787,7 @@ class RouteController {
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
 			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
             if (ret.ok) {
-                String route_file_name = (route.instance.name() + '.csv').replace(' ',"_")
+                String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
                 response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
                 kmlService.Download(webroot_dir + upload_csv_file_name, route_file_name, response.outputStream)
@@ -3092,7 +3092,7 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            String route_title = "AirportArea ${route.instance.name()} (Online Map)"
+                            String route_title = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} (Online Map)"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
                                                                  routeTitle: route_title,
                                                                  routeId: route.instance.id,
@@ -3221,7 +3221,7 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            String route_title = "AirportArea ${route.instance.name()} (Task Creator)"
+                            String route_title = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} (Task Creator)"
                             Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
                                                                     routeTitle: route_title,
                                                                     routeId: route.instance.id,

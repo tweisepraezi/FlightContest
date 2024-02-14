@@ -1,6 +1,28 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.3
+-------------
+- Online/Offline viewer in the navigation flight result has been extended by buttons "T/O-SP" and "FP-LDG".
+  Zooms to the logger data of the clicked area, whereby the two points determine the resolution.
+- The settings for the flight time calculation of take-offs and landings have been moved from the task settings to the wind settings.
+  This makes it possible to use different values when changing the direction of the runway,
+  so that deviating approach and departure distances can be better taken into account.
+- Enroute observations: Selection of the observation value ??? has been added.
+  This must be selected if, for example, an unknown canvas sign was entered in the answer sheet. Will be penalized with "Incorrect".
+- Planning: Arrangement of the action buttons has been organized more clearly.
+- Planning: The entry of navigation test details has been simplified.
+- Crew print: "Sorting help" option added.
+    Displays an additional column with the start no. of the other aircraft.
+    Displays an additional column with the position difference to the start list of the other aircraft.
+    Marks TAS with !, which are higher than the predecessor.
+    Marks teams with !! that are equal to the predecessor.
+    Marks teams with ! that are equal to the predecessor's predecessor.
+- Bug "Gate direction at the end of the semicircle in construction mode incorrect" fixed
+- Language setting for Task Creator in "Extras -> Settings" added (German, English, Spanish)
+    This setting is only fully effective in the original Task Creator.
+    The integrated Task Creator only works in English.
+
 Changes 3.4.2
 -------------
 - When configuring the original Task Creator, additional links are displayed next to the links to the integrated Task Creator.

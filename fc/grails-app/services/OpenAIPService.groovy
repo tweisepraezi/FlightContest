@@ -85,18 +85,28 @@ class OpenAIPService
 						String airspace_name = layer.trim()
                         if (!airspace_name.startsWith(Defs.IGNORE_LINE)) {
                             String airspace_text = ""
+                            boolean first_style = true
                             for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
                                 List airspace_style_values = Tools.Split(airspace_style.trim(), OsmPrintMapService.AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
                                 if (airspace_style_values.size() == 1) {
-                                    airspace_name = airspace_style_values[0].trim()
+                                    if (first_style) {
+                                        airspace_name = airspace_style_values[0].trim()
+                                    } else if (airspace_text) {
+                                        airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
+                                    }
                                 } else if (airspace_style_values.size() == 2) {
                                     switch (airspace_style_values[0].trim()) {
                                         case 'text': 
-                                            airspace_text = airspace_style_values[1].trim()
+                                            airspace_text = airspace_style_values[1]
                                             break
                                     }
                                 }
+                                first_style = false
                             }
+                            if (!airspace_text) {
+                                airspace_text = airspace_name
+                            }   
+                            airspace_text = airspace_text.trim()
                             Map ret = [:]
                             if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
                                 String search_id = airspace_name.substring(3)
@@ -420,7 +430,25 @@ class OpenAIPService
         ret = call_rest("obstacles?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
         if (ret.ok && ret.data) {
             for (Map d in ret.data) {
-                println "XX1 $d"
+                if (d.geometry.type == "Point") {
+                    String point_symbol = ""
+                    if (d.osmTags.'generator:method' == 'wind_turbine') {
+                    } else if (d.osmTags.'communication:radio' == 'yes') {
+                    } else {
+                        println "XX1 ${d.osmTags}"
+                    }
+                    if (point_symbol) {
+                        airports_num++
+                        csv_writer << CSV_LINESEPARATOR + line_id
+                        csv_writer << CSV_DELIMITER + point_symbol
+                        csv_writer << CSV_DELIMITER
+                        csv_writer << CSV_DELIMITER
+                        csv_writer << CSV_DELIMITER
+                        csv_writer << CSV_DELIMITER + '"' + d.name + '"'
+                        csv_writer << CSV_DELIMITER + "POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
+                        line_id++
+                    }
+                }
             }
         }
         */

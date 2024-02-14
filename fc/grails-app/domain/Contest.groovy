@@ -217,6 +217,7 @@ class Contest
 	Boolean printCrewTAS = true                         // DB-2.3
     Boolean printCrewTrackerID = false                  // DB-2.16
     Boolean printCrewUUID = false                       // DB-2.10
+    Boolean printCrewSortHelp = false                   // DB-2.39
 	Boolean printCrewEmptyColumn1 = false               // DB-2.3
 	String printCrewEmptyTitle1 = ""                    // DB-2.3
 	Boolean printCrewEmptyColumn2 = false               // DB-2.3
@@ -617,6 +618,9 @@ class Contest
         // DB-2.36 compatibility
         liveShowSize(nullable:true,min:1)
         liveNewestShowSize(nullable:true,min:0)
+
+        // DB-2.39 compatibility
+        printCrewSortHelp(nullable:true)
 	}
 
     static mapping = {

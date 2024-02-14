@@ -35,12 +35,7 @@
                     </g:else>
                 </g:elseif>
                 <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_ANR}">
-                    <g:if test="${params.landscape=='true'}">
-                        size: 198mm 140mm;
-                    </g:if>
-                    <g:else>
-                        size: 140mm 198mm;
-                    </g:else>
+                    size: 140mm 198mm;
                 </g:elseif>
                 <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA}">
                     size: 840mm 840mm;

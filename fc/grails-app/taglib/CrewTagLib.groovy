@@ -72,7 +72,7 @@ class CrewTagLib
         }
         if (attrs.contest.printCrewTeam) {
             if (attrs.crew.team) {                          
-                outln"""<td class="team">${attrs.crew.team.name}</td>"""
+                outln"""<td class="team">${attrs.crew.team.name} ${attrs.teamOrderProblem}</td>"""
             } else {
                 outln"""<td class="team">-</td>"""
             }
@@ -121,13 +121,39 @@ class CrewTagLib
             }
         }
         if (attrs.contest.printCrewTAS) {
-            outln"""<td class="tas">${fieldValue(bean:attrs.crew, field:'tas')}${message(code:'fc.knot')}</td>"""
+            outln"""<td class="tas">${fieldValue(bean:attrs.crew, field:'tas')}${message(code:'fc.knot')} ${attrs.tasOrderProblem}</td>"""
         }
         if (attrs.contest.printCrewTrackerID) {
             outln"""<td class="trackerID">${attrs.crew.trackerID}</td>"""
         }
         if (attrs.contest.printCrewUUID) {
             outln"""<td class="id">${fieldValue(bean:attrs.crew, field:'uuid')}</td>"""
+        }
+        if (attrs.contest.printCrewSortHelp) {
+            if (attrs.crew.aircraft.user1 && attrs.crew.aircraft.user2) {
+                int second_viewpos = 0
+                if (attrs.crew.id == attrs.crew.aircraft.user1.id) {
+                    outln"""<td class="sorthelpstartnum">${attrs.crew.aircraft.user2.startNum}</td>"""
+                    second_viewpos = attrs.crew.aircraft.user2.viewpos + 1
+                } else if (attrs.crew.id == attrs.crew.aircraft.user2.id) {
+                    outln"""<td class="sorthelpstartnum">${attrs.crew.aircraft.user1.startNum}</td>"""
+                    second_viewpos = attrs.crew.aircraft.user1.viewpos + 1
+                }
+                if (attrs.pageBreakPos && attrs.viewPos) {
+                    int diff_viewpos = 0
+                    if (attrs.pageBreakPos > attrs.viewPos) {
+                        diff_viewpos = second_viewpos + 1 - attrs.pageBreakPos - attrs.viewPos
+                    } else {
+                        diff_viewpos =  second_viewpos + attrs.pageBreakPos - attrs.viewPos - 1
+                    }
+                    outln"""<td class="sorthelporderdifference">${diff_viewpos}</td>"""
+                } else {
+                    outln"""<td class="sorthelporderdifference"></td>"""
+                }
+            } else {
+                outln"""<td class="sorthelpstartnum"></td>"""
+                outln"""<td class="sorthelporderdifference"></td>"""
+            }
         }
         if (attrs.contest.printCrewEmptyColumn1) {
             outln"""<td class="empty1"/>"""
