@@ -1,6 +1,22 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.4
+----------------
+- "Flight Contest Manager" hinzugefügt.
+  Startet bei der Anmeldung als Taskleistensymbol.
+  Enthält folgende Kontextmenü-Kommandos, die bisher nur als Windows-Startmenü-Kommandos zur Verfügung standen:
+    Auswertungs-Kommandos -> Logger-Daten automatisch laden: Startet Hintergrund-Programm zum Importieren neu gespeicherter Logger-Daten.
+    Auswertungs-Kommandos -> Beobachtungs-Formulare automatisch laden: Startet Hintergrund-Programm zum Importieren gescannter Beobachtungs-Formulare
+    Auswertungs-Kommandos -> Planungs-Aufgaben-Formulare automatisch laden: Startet Hintergrund-Programm zum Importieren gescannter Planungs-Test-Formulare
+    Dienst-Kommandos -> Dienst-Manager: Startet Flight Contest-Dienst-Manager, wo z.B. der Java-Speicher vergrößert werden kann (Java -> Maximum memory pool)
+    Dienst-Kommandos -> Neustart Flight Contest: Stoppt und startet Flight Contest-Dienst
+    Dienst-Kommandos -> Start Flight Contest: Startet Flight Contest-Dienst
+    Dienst-Kommandos -> Stop Flight Contest: Stoppt Flight Contest-Dienst
+    Dienst-Kommandos -> Datenbank sichern: Speichert Datenbank in C:\FCSave
+    Beenden: "Flight Contest Manager" beenden. Kann mit Windows-Startmenü-Kommando wieder gestartet werden.
+  Ein Klick auf das Taskleistensymbol öffnen die Flight-Contest-Bedienoberfläche im Browser.
+
 Änderungen 3.4.3
 ----------------
 - Online/Offline-Viewer im Navigationsflug-Ergebnis wurde um Buttons "T/O-SP" und "FP-LDG" erweitert.

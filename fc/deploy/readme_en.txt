@@ -1,6 +1,22 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.4
+-------------
+- "Flight Contest Manager" added.
+  Starts as a taskbar icon when logging in.
+  Contains the following context menu commands, which were previously only available as Windows start menu commands:
+    Evaluation commands -> Auto load logger data: Starts background program for importing newly saved logger data.
+    Evaluation commands -> Auto load observation forms: Starts background program for importing scanned observation forms
+    Evaluation commands -> Auto load planning task forms: Starts background program for importing scanned planning test forms
+    Service commands -> Service Manager: Starts FlightContest Service Manager, where e.g. the Java memory can be increased (Java -> Maximum memory pool)
+    Service commands -> Restart Flight Contest: Stops and starts Flight Contest service
+    Service commands -> Start Flight Contest: Starts Flight Contest service
+    Service commands -> Stop Flight Contest: Stops Flight Contest service
+    Service commands -> Save database: Saves database in C:\FCSave
+    Exit: Exit "Flight Contest Manager". Can be restarted with Windows start menu command.
+  Click on the taskbar icon to open the Flight Contest user interface in the browser.
+
 Changes 3.4.3
 -------------
 - Online/Offline viewer in the navigation flight result has been extended by buttons "T/O-SP" and "FP-LDG".

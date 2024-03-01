@@ -4,21 +4,21 @@
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
 const DBVersion = '2.39.0';     // DB-2.39
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '3.4.3';      // no milestone
+const FCVersion = '3.4.4';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '3.4.3';    // no milestone
+const FCVersion64 = '3.4.4';    // no milestone
 [Setup]
 AppName=Flight Contest
 
 AppVerName=Flight Contest
-AppVersion=3.4.3
+AppVersion=3.4.4
 ; no milestone below
-VersionInfoVersion=3.4.3
+VersionInfoVersion=3.4.4
 
 AppCopyright=(C) 2009-2024 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-AppPublisherURL=http://flightcontest.de
-AppSupportURL=http://flightcontest.de
+AppPublisherURL=https://flightcontest.de
+AppSupportURL=https://flightcontest.de
 
 DefaultDirName={commonpf}\Flight Contest
 DefaultGroupName=Flight Contest
@@ -74,6 +74,9 @@ Source: ".\FCAutoLoad_Logger.vbs";                    DestDir: "{app}\scripts"; 
 Source: ".\read_skytraq_logger.bat";                  DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\read_dg100_logger.bat";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\read_dg200_logger.bat";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: "..\..\..\..\RunHidden\RunHidden.exe";        DestDir: "{app}"; DestName:"FlightContestManager.exe"; Flags: ignoreversion overwritereadonly;
+Source: ".\fcmanager.ps1";                            DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\start_fcmanager.bat";                      DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: "..\web-app\licenses\GPL_License.txt";        DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
 [Dirs]
@@ -85,14 +88,17 @@ Name: "C:\FCSave\.geodata";Flags: uninsneveruninstall; Permissions: everyone-mod
 Name: "C:\FCSave\.geodata\images";Flags: uninsneveruninstall; Permissions: everyone-modify;
 
 [Registry]
-Root: HKLM64; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat9w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC64();
+;Root: HKLM64; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat9w.exe"; ValueData: "RUNASADMIN"; Flags: "uninsdeletevalue"; Check: IsUAC64(); 
+;Root: HKLM64; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Flight Contest Manager"; ValueData: "{app}\scripts\start_fcmanager.bat"; Flags: "uninsdeletevalue"; Check: IsUAC64();
+;Root: HKLM64; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Flight Contest Manager"; ValueData: "powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden powershell ""{app}\scripts\fcmanager.ps1"""; Flags: "uninsdeletevalue"; Check: IsUAC64(); 
+Root: HKLM64; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Flight Contest Manager"; ValueData: """{app}\FlightContestManager.exe"" ""{app}\scripts\fcmanager.ps1"""; Flags: "uninsdeletevalue"; Check: IsUAC64();
 
 [Run]
 ; install FlightContest service
 Filename: "{app}\install-service.bat";      Parameters: "install FlightContest";           WorkingDir: "{app}"; Flags: runhidden;
 Filename: "sc.exe";                         Parameters: "sdset FlightContest D:AR(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPWPDTLOCRRC;;;IU)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)"; WorkingDir: "{app}";  Flags: runhidden;
 ; start tomcat monitor
-Filename: "{app}\tomcat\bin\tomcat9w.exe";  Parameters: "//MS//FlightContest";             WorkingDir: "{app}"; Flags: nowait;
+; Filename: "{app}\tomcat\bin\tomcat9w.exe";  Parameters: "//MS//FlightContest";             WorkingDir: "{app}"; Flags: nowait;
 
 [UninstallRun]
 ; remove FlightContest service
@@ -119,7 +125,7 @@ Type: filesandordirs; Name: "{app}\rules";
 Name: "{commondesktop}\Flight Contest";         Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";    
 Name: "{group}\Flight Contest Service Manager"; Filename: "{app}\tomcat\bin\tomcat9w.exe";          Parameters: "//MS//FlightContest";           WorkingDir: "{app}";
 Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";
-Name: "{group}\flightcontest.de";               Filename: "http://flightcontest.de";                                                             WorkingDir: "{commondesktop}";
+Name: "{group}\flightcontest.de";               Filename: "https://flightcontest.de";                                                            WorkingDir: "{commondesktop}";
 Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
 Name: "{group}\Hilfe";                          Filename: "{app}\tomcat\webapps\fc\docs\help_de.html";                                           WorkingDir: "{commondesktop}";
 Name: "{group}\Help";                           Filename: "{app}\tomcat\webapps\fc\docs\help_en.html";                                           WorkingDir: "{commondesktop}";
@@ -130,6 +136,7 @@ Name: "{group}\Planungstest-Ablauf";            Filename: "{app}\tomcat\webapps\
 Name: "{group}\Planning Test schedule";         Filename: "{app}\tomcat\webapps\fc\docs\info\FC-PlanningTest-Info_en.docx";                      WorkingDir: "{commondesktop}";
 Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";
 Name: "{group}\Uninstall Flight Contest";                                            Filename: "{uninstallexe}";
+Name: "{group}\Scripts\Flight Contest Manager";                                      Filename: "{app}\scripts\start_fcmanager.bat";              WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\Save contest database";                                       Filename: "{app}\scripts\save_fcdb.bat";                    WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\Save saved files";                                            Filename: "{app}\scripts\save_fcsave.bat";                  WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\Start Flight Contest";                                        Filename: "{app}\scripts\start_fc.bat";                     WorkingDir: "{commondesktop}";
@@ -203,7 +210,7 @@ function IsUAC64(): boolean;
 var win_version: TWindowsVersion;
 begin
   GetWindowsVersionEx(win_version);
-  if win_version.Major = 6 then begin
+  if win_version.Major >= 6 then begin
     if IsWin64() then begin
       Result := true;
       exit;
@@ -316,7 +323,6 @@ begin
   
   // get db directory
   db_dir := ExpandConstant('{app}\fc');
-  // fc_service_start_filename := ExpandConstant('{app}\fc-service-start.xml');
   
   // db backup
   if DirExists( db_dir ) then begin

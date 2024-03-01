@@ -1,0 +1,21 @@
+
+https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.4
+    Set a different policy for one session
+    
+    powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden powershell .\fcmanager.ps1
+
+    powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden powershell "C:\Program Files\Flight Contest\scripts\fcmanager.ps1"
+
+    powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden -FilePath "powershell" -ArgumentList "C:\Program Files\Flight Contest\scripts\fcmanager.ps1"
+    
+    powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden -FilePath "powershell" -ArgumentList ('"C:\Program Files\Flight Contest\scripts\fcmanager.ps1"')
+
+    
+    powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden powershell "C:\Projects\EPJ\fcdev\fc\deploy\fcmanager.ps1"
+    
+    powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden -FilePath "powershell" -ArgumentList "C:\Projects\EPJ\fcdev\fc\deploy\fcmanager.ps1"
+
+https://stackoverflow.com/questions/20575257/how-do-i-run-a-powershell-script-when-the-computer-starts
+
+https://github.com/LesFerch/RunHidden
+

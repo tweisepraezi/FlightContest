@@ -57,7 +57,7 @@ class MainTagLib
         	}
         }
         
-        outln """        <li class="secondary"> <a name="start" class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
+        outln """        <li class="secondary"> <a name="start" class="${active(p.controller,'flightcontest')}" href="https://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
         outln """        <li class="secondary"> <a href="${p.link}/../../docs/help_${session.showLanguage}.html" target="_blank">${message(code:'fc.help')}</a></li>"""
         outln """        <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
         if (Global.IsDevelopmentEnvironment()) {

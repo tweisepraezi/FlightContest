@@ -21,6 +21,7 @@ set GRAILS_HOME=%basedir%\Grails\Grails-2.5.6
 set GRAILS_OPTS=-server -Xmx4096M -Xms768M -Dfile.encoding=UTF-8
 set SETUPEXE=%ProgramFiles(x86)%\Inno Setup 6\iscc.exe
 set TOUCHEXE=%basedir%\Touch\touch.exe
+set RUNHIDDENEXE=%basedir%\RunHidden\RunHidden.exe
 ::set GDAL_BIN=%basedir%\gdal\gdal-3.2.1\bin
 ::set GDAL_BIN2=%basedir%\gdal\gdal-3.2.1\bin\gdal\java
 ::set PROJ_LIB=%basedir%\gdal\gdal-3.2.1\bin\proj7\share
@@ -31,6 +32,7 @@ if not exist %ASCIIDOCTOR_HOME% goto asciidoctorerror
 if not exist "%GRAILS_HOME%" goto grailserror
 if not exist "%SETUPEXE%" goto setuperror
 if not exist "%TOUCHEXE%" goto setuperror
+if not exist "%RUNHIDDENEXE%" goto setuperror
 ::if not exist "%GDAL_BIN%" goto setuperror
 ::if not exist "%GDAL_BIN2%" goto setuperror
 ::if not exist "%PROJ_LIB%" goto setuperror
@@ -54,6 +56,7 @@ echo GRAILS_HOME=%GRAILS_HOME%
 echo GRAILS_OPTS=%GRAILS_OPTS%
 echo SETUPEXE=%SETUPEXE%
 echo TOUCHEXE=%TOUCHEXE%
+echo RUNHIDDENEXE=%RUNHIDDENEXE%
 ::echo GDAL_BIN=%GDAL_BIN%
 ::echo GDAL_BIN2=%GDAL_BIN2%
 ::echo PROJ_LIB=%PROJ_LIB%
@@ -177,6 +180,7 @@ goto :eof
 echo.
 if not exist "%SETUPEXE%" echo '%SETUPEXE%' not found.
 if not exist "%TOUCHEXE%" echo '%TOUCHEXE%' not found.
+if not exist "%RUNHIDDENEXE%" echo '%RUNHIDDENEXE%' not found.
 if not exist "%GDAL_BIN%" echo '%GDAL_BIN%' not found.
 if not exist "%GDAL_BIN2%" echo '%GDAL_BIN2%' not found.
 ::if not exist "%PROJ_LIB%" echo '%PROJ_LIB%' not found.
