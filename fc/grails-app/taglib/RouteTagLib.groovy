@@ -457,13 +457,12 @@ class RouteTagLib
             outln"""    <br/>"""
             outln"""    <select id="defaultOnlineMap" name="defaultOnlineMap" value="AirportArea" tabIndex="${attrs.ti[0]++}">"""
             outln"""        <option></option>"""
-            map_folder.traverse { File file ->
-                if (file.name.endsWith('.png') && !file.name.endsWith('.warped.png')) {
-                    String file_title = file.name.substring(0,file.name.size()-4)
-                    if (file_title == attrs.route.defaultOnlineMap) {
-                        outln"""<option value="${file_title}" selected>${file_title}</option>"""
+            for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
+                if (map_entry.projection == "3857") {
+                    if (map_entry.title == attrs.route.defaultOnlineMap) {
+                        outln"""<option value="${map_entry.title}" selected>${map_entry.title}</option>"""
                     } else {
-                        outln"""<option value="${file_title}">${file_title}</option>"""
+                        outln"""<option value="${map_entry.title}">${map_entry.title}</option>"""
                     }
                 }
             }

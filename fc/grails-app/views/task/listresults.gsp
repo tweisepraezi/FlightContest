@@ -231,8 +231,12 @@
 									</g:else>
 								</g:if>
                                 <g:if test="${taskInstance.IsSpecialTestRun()}">
+                                    <g:set var="specialtest_title" value="${taskInstance.GetSpecialTestTitle()}"/>
+                                    <g:if test="${!specialtest_title}">
+                                        <g:set var="specialtest_title" value="${message(code:'fc.specialresults.other')}"/>
+                                    </g:if>
 	                                <th>
-                                        ${message(code:'fc.specialresults.other')}
+                                        ${specialtest_title}
                                         <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsSpecialID}" >
                                             <g:if test="${taskInstance.liveTrackingResultsPublishImmediately}">
                                                 <img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="height:0.6rem;"/>

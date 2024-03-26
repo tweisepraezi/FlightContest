@@ -1,6 +1,23 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.5
+----------------
+- Karten-Menüpunkt "Alle Wettbewerbs-Karten exportieren" hinzugefügt
+- Karten-Import zeigt jetzt eine Fehlermeldung an, wenn die zu importierende(n) Karte(n) bereits im Karten-Menü vorhanden sind.
+    Eine bestehende Karte muss erst gelöscht werden, bevor sie neu importiert werden kann.
+- Integrierter Task-Creator: 'Sync map url'-Schalter hinzugefügt.
+    Nach dem Laden eines Task, der auf einem anderen Computer erstellt worden ist, zeigt die Map-URL auf Karten eines anderen Wettbewerbs.
+    Mit diesem Schalter wird die Map-URL auf den aktuellen Wettbewerb angepasst.
+- Die zu berücksichtigende Luftraum-Höhe wird jetzt beim Strecken-Export/Import und Strecken-Kopie mit transportiert.
+- Der in der Aufgabe definierte Titel für "Anderer Test" wird jetzt in der Auswertung anstelle von "And." angezeigt.
+- Bug "Besatzungsliste stürzt ab, wenn Besatzung ohne Team eingegeben wird" behoben
+- Bug "Umbenennen von Flugzeugen stürzt ab, wenn ein bereits existerendes Kennzeichen verwendet wird" behoben
+- Bug "Strecken-Einstellung 'Default-Online-Karte' zeigt zu viele Auswahlwerte an" behoben
+- Bug "OSM-Online-Karte hat nicht die in Strecken-Einstellung 'Default-Online-Karte' eingestellte Karte angezeigt" behoben
+- Bug "OSM-Wettbewerbs-Karte verwendet nicht die eingestellte Druck-Sprache" behoben
+- Bug "KMZ-Export verwendet nicht die eingestellte Druck-Sprache" behoben
+
 Änderungen 3.4.4
 ----------------
 - "Flight Contest Manager" hinzugefügt.

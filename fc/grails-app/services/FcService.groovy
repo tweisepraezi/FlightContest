@@ -61,7 +61,7 @@ class FcService
             if (params.registration != aircraft_instance.registration) {
                 Aircraft aircraft2Instance = Aircraft.findByRegistrationAndContest(params.registration,aircraft_instance.contest)
                 if (aircraft2Instance) {
-                    return ['instance':aircraft2Instance,'error':true,'message':getMsg('fc.aircraft.registration.error',["${params.registration}"])]
+                    return ['instance':aircraft_instance,'error':true,'message':getMsg('fc.aircraft.registration.error',["${params.registration}"])]
                 }
             }
             
@@ -14361,7 +14361,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map importMap(MultipartFile zipFile, String mapDirName, String mapName)
     {
-        Map ret = [importOk:false]
+        Map ret = [importOk:true, notImportedNames:"", importNum:0]
         
         // upload zip file
         String uuid = UUID.randomUUID().toString()
@@ -14395,14 +14395,30 @@ class FcService
         if (png_found && pngw_found && pnginfo_found) {
             zip_file.entries().findAll { !it.directory }.each {
                 if (!it.isDirectory()) {
-                    String extension = it.name.substring(it.name.lastIndexOf('.')).toLowerCase()
-                    String save_file_name = "${mapDirName}/${mapName}${extension}"
+                    String map_name = it.name
+                    if (it.name.startsWith("Map.png")) {
+                        String extension = it.name.substring(it.name.lastIndexOf('.')).toLowerCase()
+                        map_name = mapName + extension
+                    }
+                    String save_file_name = "${mapDirName}/${map_name}"
                     println save_file_name
                     File save_file = new File(save_file_name)
-                    save_file << zip_file.getInputStream(it)
+                    if (save_file.exists()) {
+                        ret.importOk = false
+                        if (map_name.endsWith('.png')) {
+                            if (ret.notImportedNames) {
+                                ret.notImportedNames += ", "
+                            }
+                            ret.notImportedNames += map_name
+                        }
+                    } else {
+                        if (map_name.endsWith('.png')) {
+                            ret.importNum++
+                        }
+                        save_file << zip_file.getInputStream(it)
+                    }
                 }
             }
-            ret.importOk = true
         }
         zip_file.close()
         

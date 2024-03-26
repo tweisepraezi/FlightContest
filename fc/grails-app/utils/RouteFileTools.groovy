@@ -1251,6 +1251,11 @@ class RouteFileTools
                         route_instance.contestMapAirspacesLayer2 = contestmapairspaceslayer2
                         save_route = true
                     }
+                    String contestmapairspaceslowerlimit = gpx.extensions.flightcontest.mapsettings.'@contestmapairspaceslowerlimit'[0]
+                    if (contestmapairspaceslowerlimit) {
+                        route_instance.contestMapAirspacesLowerLimit = contestmapairspaceslowerlimit.toInteger()
+                        save_route = true
+                    }
                     String contestmapshowoptions1 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions1'[0]
                     if (contestmapshowoptions1) {
                         route_instance.contestMapShowFirstOptions = contestmapshowoptions1 == "yes"
@@ -1773,6 +1778,9 @@ class RouteFileTools
                                 break
                             case "contestmapairspaceslayer2":
                                 route_instance.contestMapAirspacesLayer2 = d.value.text()
+                                break
+                            case "contestmapairspaceslowerlimit":
+                                route_instance.contestMapAirspacesLowerLimit = d.value.text().toInteger()
                                 break
                             case "contestmapshowoptions1":
                                 route_instance.contestMapShowFirstOptions = d.value.text() == "yes"

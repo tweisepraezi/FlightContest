@@ -1220,6 +1220,9 @@ class KmlService
                             xml.Data(name:"contestmapairspaceslayer2") {
                                 xml.value routeInstance.contestMapAirspacesLayer2
                             }
+                            xml.Data(name:"contestmapairspaceslowerlimit") {
+                                xml.value routeInstance.contestMapAirspacesLowerLimit
+                            }
                             xml.Data(name:"contestmapshowoptions1") {
                                 xml.value getYesNo(routeInstance.contestMapShowFirstOptions)
                             }

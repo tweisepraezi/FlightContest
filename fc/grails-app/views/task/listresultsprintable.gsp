@@ -117,7 +117,13 @@
 			                    </g:else>
 	                        </g:if>
 		                    <g:if test="${taskclass_instance.specialTestRun}">
-		                        <th>${message(code:'fc.specialresults.other.short')}</th>
+                                <g:set var="specialtest_title" value="${resultclassInstance.GetSpecialTestTitle(taskInstance)}"/>
+                                <g:if test="${specialtest_title}">
+                                    <th>${specialtest_title}</th>
+                                </g:if>
+                                <g:else>
+                                    <th>${message(code:'fc.specialresults.other.short')}</th>
+                                </g:else>
 		                    </g:if>
 		                    <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
 	                            <th>${message(code:'fc.test.results.summary')}</th>
@@ -307,7 +313,13 @@
                                 </g:else>
                             </g:if>
                             <g:if test="${taskInstance.IsSpecialTestRun()}">
-                                <th>${message(code:'fc.specialresults.other.short')}</th>
+                                <g:set var="specialtest_title" value="${taskInstance.GetSpecialTestTitle()}"/>
+                                <g:if test="${specialtest_title}">
+                                    <th>${specialtest_title}</th>
+                                </g:if>
+                                <g:else>
+                                    <th>${message(code:'fc.specialresults.other.short')}</th>
+                                </g:else>
                             </g:if>
                             <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
                               	<th>${message(code:'fc.test.results.summary')}</th>

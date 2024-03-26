@@ -1,6 +1,23 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.5
+-------------
+- Added map menu item "Export all contest maps"
+- Map import now displays an error message if the map(s) to be imported already exist in the map menu.
+    An existing map must first be deleted before it can be imported again.
+- Integrated Task Creator: 'Sync map url' button added.
+    After loading a task that has been created on another computer, the map URL points to maps of another contest.
+    With this button, the map URL is changed to the current contest.
+- The airspace altitude to be taken into account is now also transported during route export/import and route copy.
+- The title defined in the task for "Other Results" is now displayed in the final evaluation instead of "Other".
+- Bug "Crew list crashes if crew is entered without team" fixed
+- Bug "Renaming aircraft crashes if an already existing registration is used" fixed
+- Bug "Route setting 'Default online map' shows too many selection values" fixed
+- Bug "OSM online map did not display the map set in route setting 'Default online map'" fixed
+- Bug "OSM competition map does not use the set print language" fixed
+- Bug "KMZ export does not use the set print language" fixed
+
 Changes 3.4.4
 -------------
 - "Flight Contest Manager" added.

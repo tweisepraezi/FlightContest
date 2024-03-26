@@ -159,7 +159,7 @@
 	                           	<g:if test="${testInstance.IsSpecialTestRun()}">
 	                           	   <g:set var="task_penalties" value="${task_penalties + testInstance.specialTestPenalties}" />
 			                     	<tr>
-			                     		<td class="detailtitle">${message(code:'fc.specialresults.other')}:</td>
+			                     		<td class="detailtitle">${testInstance.GetSpecialTestTitle(false)}:</td>
         	                            <td>${testInstance.specialTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})<g:if test="${!testInstance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                    	</tr>
 	                            </g:if>

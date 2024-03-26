@@ -5,7 +5,7 @@
         <title>${message(code:'fc.map.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="map" importaction="${message(code:'fc.map.import')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="map" importaction="${message(code:'fc.map.import')}" downloadallzipaction="${message(code:'fc.map.download.all.zip')}"/>
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <g:set var="add_col" value="${0}"/>
@@ -16,7 +16,7 @@
                 <thead>
                     <tr>
                         <th colspan="${7+add_col}" class="table-head">${message(code:'fc.map.list')}</th>
-                        <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+                        <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
                         <th>${message(code:'fc.title')}</th>

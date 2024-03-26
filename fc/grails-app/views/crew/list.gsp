@@ -24,7 +24,7 @@
 	                <thead>
 	                    <tr>
 	                        <th colspan="${columns}" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
-	                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>&#x00A0;&#x00A0;&#x00A0;<a href="../docs/help_${session.showLanguage}.html#create-crew-list" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+	                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>&#x00A0;&#x00A0;&#x00A0;<a href="/fc/docs/help_${session.showLanguage}.html#create-crew-list" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
 	                    </tr>
 	                    <tr>
                             <th>${message(code:'fc.crew.startnum')}</th>
@@ -43,8 +43,8 @@
 	                <tbody>
 						<g:set var="crew_pos" value="${0}"></g:set>
 						<g:set var="last_tas" value="${1000}"></g:set>
-						<g:set var="last_team" value=""></g:set>
-						<g:set var="last_team2" value=""></g:set>
+						<g:set var="last_team_name" value=""></g:set>
+						<g:set var="last_team_name2" value=""></g:set>
 	                    <g:each var="crew_instance" in="${crewList}" status="i">
 							<g:set var="pagebreak_class" value=""></g:set>
 							<g:if test="${crew_instance.pageBreak}">
@@ -76,10 +76,10 @@
                                 <td>${fieldValue(bean:crew_instance, field:'email')}</td>
                                 <g:if test="${crew_instance.team}">                          
                                     <g:set var="team_order_problem" value=""></g:set>
-                                    <g:if test="${crew_instance.team.name == last_team && !crew_instance.pageBreak}">
+                                    <g:if test="${crew_instance.team?.name == last_team_name && !crew_instance.pageBreak}">
                                         <g:set var="team_order_problem" value="!!"></g:set>
                                     </g:if>
-                                    <g:elseif test="${crew_instance.team.name == last_team2 && !crew_instance.pageBreak}">
+                                    <g:elseif test="${crew_instance.team?.name == last_team_name2 && !crew_instance.pageBreak}">
                                         <g:set var="team_order_problem" value="!"></g:set>
                                     </g:elseif>
                                     <td>
@@ -109,8 +109,8 @@
                                 <td>${fieldValue(bean:crew_instance, field:'trackerID')}</td>
 	                        </tr>
                             <g:set var="last_tas" value="${crew_instance.tas}"></g:set>
-                            <g:set var="last_team2" value="${last_team}"></g:set>
-                            <g:set var="last_team" value="${crew_instance.team.name}"></g:set>
+                            <g:set var="last_team_name2" value="${last_team_name}"></g:set>
+                            <g:set var="last_team_name" value="${crew_instance.team?.name}"></g:set>
 	                    </g:each>
 	                </tbody>
 	                <tfoot>

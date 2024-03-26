@@ -27,7 +27,7 @@
 	                            <tbody>
 	                                <tr>
 	                                    <td><p class="warning">${message(code:'fc.contestmap.warning')}</p></td>
-	                                    <td><a href="../../docs/help_${session.showLanguage}.html#osm-contest-map" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
+	                                    <td><a href="/fc/docs/help_${session.showLanguage}.html#osm-contest-map" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
 	                                </tr>
 	                            </tbody>
 	                        </table>

@@ -500,7 +500,7 @@ class PointsTagLib
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="../docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1PenaltyCalculator" name="landingTest1PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest1PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
         if (attrs.i.landingTest1PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest1PenaltyCalculator) {
@@ -607,7 +607,7 @@ class PointsTagLib
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="../docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2PenaltyCalculator" name="landingTest2PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest2PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
         if (attrs.i.landingTest2PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest2PenaltyCalculator) {
@@ -723,7 +723,7 @@ class PointsTagLib
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="../docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3PenaltyCalculator" name="landingTest3PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest3PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
         if (attrs.i.landingTest3PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest3PenaltyCalculator) {
@@ -830,7 +830,7 @@ class PointsTagLib
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="../docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4PenaltyCalculator" name="landingTest4PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest4PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
         if (attrs.i.landingTest4PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest4PenaltyCalculator) {

@@ -105,6 +105,7 @@
                 </div>
                 <div style="margin-top:4px;">
                     <button id="btn_csv" title="Import from CSV format">Load task</button>
+                    <button style="margin-right: 5px;" title="Synchronize map url with the actual contest." onclick="sync_map_url()">Sync map url</button>
                     <input type="file" name="File Upload" id="load_csv" accept=".csv" style="display:none;" />
                     <button id="save_as_csv" title="Export to CSV format">Save task</button>
                     <button id="btn_delete_task" title="Clear Task" onclick="clear_taskname()">Clear task</button>
@@ -127,6 +128,27 @@
                     function clear_addons() {
                         $('#btn_delete_suas').trigger("click");
                         $('#btn_delete_map_addons').trigger("click");
+                    }
+                    function get_map_params(params, searchParam) {
+                        params = params.substr(1);
+                        var params_array = params.split('&');
+                        for (let i in params_array) {
+                            if (params_array[i].startsWith(searchParam)) {
+                                var data = params_array[i].substr(searchParam.length+1);
+                                var data_array = data.split(',');
+                                return data_array;
+                            }
+                        }
+                        return null;
+                    }
+                    function sync_map_url() {
+                        if ($("#map_url").val()) {
+                            var map_data = get_map_params(window.location.search, 'baseurl');
+                            if (map_data) {
+                                var new_map_url = map_data[0].replaceAll('%22','') + $("#map_url").val().substr($("#map_url").val().lastIndexOf('/')+1)
+                                $("#map_url").val(new_map_url)
+                            }
+                        }
                     }
                 </script>
             </div>

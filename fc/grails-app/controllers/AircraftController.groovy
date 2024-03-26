@@ -91,11 +91,15 @@ class AircraftController {
                 } else {
                     redirect(controller:"aircraft",action:"list")
                 }
+            } else if (aircraft.error) {
+                flash.message = aircraft.message
+                flash.error = true
+                render(view:'edit',model:[aircraftInstance:aircraft.instance])
             } else {
                 if (next_id) {
-                    render(view:'edit',model:[crewInstance:aircraft.instance,params:[next:next_id]])
+                    render(view:'edit',model:[aircraftInstance:aircraft.instance,params:[next:next_id]])
                 } else {
-                    render(view:'edit',model:[crewInstance:aircraft.instance])
+                    render(view:'edit',model:[aircraftInstance:aircraft.instance])
                 }
             }
         } else {

@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.4
-:revdate: 28.02.2024
+:revnumber: 3.4.5
+:revdate: 26.03.2024
 :nofooter:
 :title-page:
 :toc-title: Table of Contents

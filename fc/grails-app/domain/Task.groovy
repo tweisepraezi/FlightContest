@@ -9,7 +9,7 @@ class Task
 	PlanningTest planningtest
 	FlightTest flighttest
 	
-	boolean planningTestRun                  = true
+	boolean planningTestRun                  = false
 	boolean flightTestRun                    = true
 	boolean observationTestRun               = true
     Boolean observationTestTurnpointRun      = true  // DB-2.13
@@ -918,6 +918,19 @@ class Task
 		return specialTestRun
 	}
 	
+    String GetSpecialTestTitle()
+    {
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.specialTestTitle) {
+                    return taskclass_instance.specialTestTitle
+                }
+            }
+            return ""
+        }
+        return specialTestTitle
+    }
+    
     int GetDetailNum()
     {
         int detail_num = 0

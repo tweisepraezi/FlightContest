@@ -58,7 +58,7 @@ class MainTagLib
         }
         
         outln """        <li class="secondary"> <a name="start" class="${active(p.controller,'flightcontest')}" href="https://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
-        outln """        <li class="secondary"> <a href="${p.link}/../../docs/help_${session.showLanguage}.html" target="_blank">${message(code:'fc.help')}</a></li>"""
+        outln """        <li class="secondary"> <a href="/fc/docs/help_${session.showLanguage}.html" target="_blank">${message(code:'fc.help')}</a></li>"""
         outln """        <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
         if (Global.IsDevelopmentEnvironment()) {
             outln """    <li class="secondary"> <a href="${p.link}/../../dbconsole" target="_blank">${message(code:'fc.dbconsole')}</a> </li>"""
@@ -112,6 +112,7 @@ class MainTagLib
                         } else {
                             outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_intern" target="_blank">${message(code:'fc.map.taskcreator')}</a> </li>"""
                         }
+                        outln """    <li> <a href="${p.link}/../../${p.controller}/download_allpngzip">${p.downloadallzipaction}</a> </li>"""
 					}
 				}
 				if (p.importaction2) {

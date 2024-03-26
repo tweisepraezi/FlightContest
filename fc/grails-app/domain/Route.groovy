@@ -321,6 +321,7 @@ class Route
         contestMapSpecials = routeInstance.contestMapSpecials
         contestMapAirspaces = routeInstance.contestMapAirspaces
         contestMapAirspacesLayer2 = routeInstance.contestMapAirspacesLayer2
+        contestMapAirspacesLowerLimit = routeInstance.contestMapAirspacesLowerLimit
 		contestMapShowFirstOptions = routeInstance.contestMapShowFirstOptions
         contestMapFirstTitle = routeInstance.contestMapFirstTitle
         contestMapCenterVerticalPos = routeInstance.contestMapCenterVerticalPos

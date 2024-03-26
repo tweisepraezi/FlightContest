@@ -232,7 +232,13 @@
 	                                    </g:if>
 	                                    <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
 	                                        <g:set var="detail_num" value="${detail_num+1}"/>
-	                                        <th>${message(code:'fc.specialresults.other.short')}</th>
+                                            <g:set var="specialtest_title" value="${task_instance.GetSpecialTestTitle()}"/>
+                                            <g:if test="${specialtest_title}">
+                                                <th>${specialtest_title}</th>
+                                            </g:if>
+                                            <g:else>
+                                                <th>${message(code:'fc.specialresults.other.short')}</th>
+                                            </g:else>
 	                                    </g:if>
 	                                </g:if>
 	                                <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">

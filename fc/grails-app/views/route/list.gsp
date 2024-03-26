@@ -12,7 +12,7 @@
                 <thead>
                     <tr>
                         <th colspan="11" class="table-head">${message(code:'fc.route.list')}</th>
-                        <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+                        <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
                        <th>${message(code:'fc.title')}</th>

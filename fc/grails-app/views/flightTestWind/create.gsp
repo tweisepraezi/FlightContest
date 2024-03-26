@@ -45,7 +45,7 @@
                             </p>
                             <p>
                                 <label>${message(code:'fc.runway.duration.to2sp')}*:</label>
-                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
 								<g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">
 									<input type="text" id="TODurationFormula" name="TODurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'TODurationFormula')}" disabled tabIndex="${ti[0]++}"/>
@@ -61,7 +61,7 @@
                             </p>
                             <p>
                                 <label>${message(code:'fc.runway.duration.fp2ldg')}*:</label>
-                                <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
 								<g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">
 									<input type="text" id="LDGDurationFormula" name="LDGDurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'LDGDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
@@ -81,7 +81,7 @@
 	                            </p>
                                 <p>
                                     <label>${message(code:'fc.runway.duration.ifp2ildg')}*:</label>
-                                    <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                    <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                     <br/>
                                     <g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">
                                         <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'iLDGDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
@@ -92,7 +92,7 @@
                                 </p>
                                 <p>
                                     <label>${message(code:'fc.runway.duration.ildg2isp')}*:</label>
-                                    <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                    <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                     <br/>
                                     <g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">
                                         <input type="text" id="iTODurationFormula" name="iTODurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'iTODurationFormula')}" disabled tabIndex="${ti[0]++}"/>

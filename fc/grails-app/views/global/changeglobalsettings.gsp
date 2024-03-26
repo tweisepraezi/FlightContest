@@ -40,7 +40,7 @@
 	                        <fieldset>
 		                        <p>
 		                            <label>${message(code:'fc.config')}:</label>
-		                            <a href="../docs/help_${session.showLanguage}.html#configuration" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+		                            <a href="/fc/docs/help_${session.showLanguage}.html#configuration" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
 		                            <br/>
 		                            <g:textArea name="configText" value="${session.configText}" rows="20" cols="110" tabIndex="${ti[0]++}"/>
 		                        </p>

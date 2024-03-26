@@ -87,7 +87,7 @@
 		                            <legend>${resultclass_instance.name}</legend>
 		                            <p>
 		                                <div>
-			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestRun}" value="${true}" />
+			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestRun}" value="${false}" />
 		    	                            <label>${message(code:'fc.planningtest')}</label>
 		                                </div>
                                         <div style="margin-left:20px">
@@ -142,7 +142,7 @@
 		                                </div>
 				                        <div style="margin-left:20px">
 			                                <div>
-				                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest1Run}" value="${false}" />
+				                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest1Run}" value="${true}" />
 			    	                            <label>${message(code:'fc.landingtest.landing1')}</label>
 			                                </div>
 			                                <div>

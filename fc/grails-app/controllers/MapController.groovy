@@ -10,59 +10,6 @@ class MapController {
 		fcService.printstart "List maps"
         if (session?.lastContest) {
 			session.lastContest.refresh()
-            
-            def map_list = []
-            String map_folder_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/"
-            File map_folder = new File(map_folder_name)
-            if (map_folder.exists()) {
-                map_folder.traverse { File file ->
-                    if (file.name.endsWith('.png') && !file.name.endsWith('.warped.png')) {
-                        Map map_entry = [name:"",title:"", localref:"",top:0,bottom:0,right:0,left:0,projection:"",landscape:false,size:"",tif:false]
-                        map_entry.name = file.name
-                        map_entry.title = file.name.substring(0,file.name.size()-4)
-                        //map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}.warped.png"
-                        map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}.png"
-                        File map_tif = new File("${map_folder_name}${map_entry.title}.tif")
-                        if (map_tif.exists()) {
-                            map_entry.tif = true
-                        }
-                        File map_info = new File("${map_folder_name}${file.name}info")
-                        if (map_info.exists()) {
-                            LineNumberReader map_info_reader = map_info.newReader()
-                            while (true) {
-                                String value = map_info_reader.readLine()
-                                if (value) {
-                                    List value_list = value.split(':')
-                                    if (value_list.size() == 2) {
-                                        String v = value_list[1].trim()
-                                        if (value.startsWith("Top(Lat):") && v.isBigDecimal()) {
-                                            map_entry.top = v.toBigDecimal()
-                                        } else if (value.startsWith("Bottom(Lat):") && v.isBigDecimal()) {
-                                            map_entry.bottom = v.toBigDecimal()
-                                        } else if (value.startsWith("Right(Lon):") && v.isBigDecimal()) {
-                                            map_entry.right = v.toBigDecimal()
-                                        } else if (value.startsWith("Left(Lon):") && v.isBigDecimal()) {
-                                            map_entry.left = v.toBigDecimal()
-                                        } else if (value.startsWith("Projection:")) {
-                                            map_entry.projection = v
-                                        } else if (value.startsWith("Landscape:")) {
-                                            if (v == "true") {
-                                                map_entry.landscape = true
-                                            }
-                                        } else if (value.startsWith("Size:")) {
-                                            map_entry.size = v
-                                        }
-                                    }
-                                } else {
-                                    break
-                                }
-                            }
-                            map_info_reader.close()
-                        }
-                        map_list += map_entry
-                    }
-                }
-            }
 			fcService.printdone "last contest"
             session.planningtesttaskReturnAction = actionName
             session.planningtesttaskReturnController = controllerName
@@ -70,14 +17,15 @@ class MapController {
             session.flighttestReturnAction = actionName
             session.flighttestReturnController = controllerName
             session.flighttestReturnID = params.id
-            return [mapList:map_list]
+            return [mapList:MapTools.GetMapList(servletContext, session)]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
     }
 
     def start_taskcreator_intern = {
-        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en" // local task creator
+        String base_url = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/"
+        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en&baseurl=%22${base_url}%22" // local task creator
         fcService.println "Task creator intern: $task_creator_url"
         
         if (params.localref && params.top && params.bottom && params.right && params.left) {
@@ -91,7 +39,8 @@ class MapController {
     }
     
     def start_taskcreator_extern = {
-        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en" // local task creator
+        String base_url = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/"
+        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en&baseurl=%22${base_url}%22" // local task creator
         if (BootStrap.global.IsTaskCreatorExtern()) {
             task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
             if (task_creator_url.contains('?')) {
@@ -147,6 +96,34 @@ class MapController {
             gpxService.printdone ""
             gpxService.printstart "Download PNGZIP"
             String map_file_name = (params.title + '.zip') // .replace(' ',"_")
+            response.setContentType("application/octet-stream")
+            response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
+            gpxService.Download(map_zip_file_name, map_file_name, response.outputStream)
+            gpxService.DeleteFile(map_zip_file_name)
+            gpxService.printdone ""
+        } else {
+            redirect(controller:'contest',action:'start')
+        }
+    }
+    
+    def download_allpngzip = {
+        if (session?.lastContest) {
+            String uuid = UUID.randomUUID().toString()
+            String map_zip_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_GPXUPLOAD}/ALLMAPS-${uuid}.zip"
+            gpxService.printstart "Write ${map_zip_file_name}"
+            ZipOutputStream zip_stream = new ZipOutputStream(new FileOutputStream(map_zip_file_name))
+            for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
+                String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${map_entry.name}"
+                String world_file_name = "${map_png_file_name}w"
+                String info_file_name = "${map_png_file_name}info"
+                write_file_to_zip(zip_stream, map_entry.name,          map_png_file_name)
+                write_file_to_zip(zip_stream, map_entry.name + "w",    world_file_name)
+                write_file_to_zip(zip_stream, map_entry.name + "info", info_file_name)
+            }
+            zip_stream.close()
+            gpxService.printdone ""
+            gpxService.printstart "Download PNGZIP"
+            String map_file_name = (session.lastContest.title + '-Maps.zip') // .replace(' ',"_")
             response.setContentType("application/octet-stream")
             response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
             gpxService.Download(map_zip_file_name, map_file_name, response.outputStream)
@@ -245,20 +222,14 @@ class MapController {
                 if (!map_folder.exists()) {
                     map_folder.mkdir()
                 }
-                String new_name = zip_file.getOriginalFilename().substring(0, zip_file.getOriginalFilename().lastIndexOf('.'))
-                String modify_name = ""
-                String modify_num = 0
-                while (new File("${map_dir_name}/${new_name}${modify_name}.png").exists()) {
-                    modify_num++
-                    modify_name = " (${modify_num})"
-                }
-                new_name += modify_name
-                gpxService.println "Import map '${new_name}'"
-                Map ret = fcService.importMap(zip_file, map_dir_name, new_name)
+                String map_name = zip_file.getOriginalFilename().substring(0, zip_file.getOriginalFilename().lastIndexOf('.'))
+                gpxService.println "Import map '${map_name}'"
+                Map ret = fcService.importMap(zip_file, map_dir_name, map_name)
+
                 if (ret.importOk) {
-                    flash.message = message(code:'fc.map.import.done',args:[new_name])
+                    flash.message = message(code:'fc.map.import.done',args:[ret.importNum, map_name])
                 } else {
-                    flash.message = message(code:'fc.map.import.error',args:[new_name])
+                    flash.message = message(code:'fc.map.import.error',args:[ret.importNum, ret.notImportedNames])
                     flash.error = true
                 }
             }

@@ -223,7 +223,13 @@
 			                                </g:if>
 			                                <g:if test="${liveContest.contestSpecialResults && live_task.isTaskSpecialTest}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
-			                                    <th>${message(code:'fc.specialresults.other.short')}</th>
+                                                <g:set var="specialtest_title" value="${live_task.isTaskSpecialTestTitle}"/>
+                                                <g:if test="${specialtest_title}">
+                                                    <th>${specialtest_title}</th>
+                                                </g:if>
+                                                <g:else>
+                                                    <th>${message(code:'fc.specialresults.other.short')}</th>
+                                                </g:else>
 			                                </g:if>
 			                            </g:if>
                                         <g:if test="${liveContest.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (live_task.isTaskIncreaseEnabled))}">

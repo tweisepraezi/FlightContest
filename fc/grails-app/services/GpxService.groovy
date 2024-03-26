@@ -1684,6 +1684,7 @@ class GpxService
                             contestmapspecials: getYesNo(routeInstance.contestMapSpecials),
                             contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
                             contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
+                            contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
                             contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
                             contestmaptitle1: routeInstance.contestMapFirstTitle,
                             contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,

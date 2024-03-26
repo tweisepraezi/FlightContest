@@ -385,15 +385,14 @@ class GpxTagLib
         int onlinemap_index = 1
         int i = 0
         if (map_folder.exists()) {
-            map_folder.traverse { File file ->
-                if (file.name.endsWith('.png') && !file.name.endsWith('.warped.png')) {
+            for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
+                if (map_entry.projection == "3857") {
                     if (onlinemap_names) {
                         onlinemap_names += ","
                     }
-                    onlinemap_names += "http://localhost:8080/fc/map/${attrs.contestUUID}/${file.name}"
+                    onlinemap_names += map_entry.localref
                     i++
-                    String file_title = file.name.substring(0,file.name.size()-4)
-                    if (file_title == attrs.defaultOnlineMap) {
+                    if (map_entry.title == attrs.defaultOnlineMap) {
                         onlinemap_index = i
                     }
                 }

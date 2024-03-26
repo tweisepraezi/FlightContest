@@ -520,6 +520,12 @@ class ResultClass
         return taskclass_instance.specialTestRun
     }
     
+    String GetSpecialTestTitle(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.specialTestTitle
+    }
+    
     boolean IsSpecialTestRun()
     {
         for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {

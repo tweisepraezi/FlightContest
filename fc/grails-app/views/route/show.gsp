@@ -28,12 +28,17 @@
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td>${routeInstance.name()}</td>
                                     <td class="errors">${info = routeInstance.GetRouteStatusInfo()}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.scale')}:</td>
                                     <td>1:${fieldValue(bean:routeInstance, field:'mapScale')}</td>
+                                    <td colspan="3"/>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.route.onlinemap.default')}:</td>
+                                    <td>${fieldValue(bean:routeInstance, field:'defaultOnlineMap')}</td>
                                     <td colspan="3"/>
                                 </tr>
                                 <tr>
@@ -109,7 +114,7 @@
                                     <td class="detailtitle">${message(code:'fc.observation.turnpoint')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.turnpointRoute.code)}<br/>${message(code:'fc.observation.measurement')}: <g:if test="${routeInstance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
                                     <td class="errors">${info = routeInstance.GetTurnpointSignStatusInfo()}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td>
                                         <g:if test="${upload_job_status == UploadJobStatus.Done || map_links}">
                                             <a href="/fc/route/routelinks/${routeInstance.id}">...</a>
@@ -121,7 +126,7 @@
                                     <td class="detailtitle">${message(code:'fc.observation.enroute.photo')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enroutePhotoRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enroutePhotoMeasurement.code)}</td>
                                     <td class="errors">${info = routeInstance.GetEnrouteSignStatusInfo(true)}<br/>${info += routeInstance.GetEnrouteMeasurementStatusInfo(true)}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
                                 <tr>
@@ -129,7 +134,7 @@
                                     <td class="detailtitle">${message(code:'fc.observation.enroute.canvas')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enrouteCanvasRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enrouteCanvasMeasurement.code)}</td>
                                     <td class="errors">${info = routeInstance.GetEnrouteSignStatusInfo(false)}<br/>${info += routeInstance.GetEnrouteMeasurementStatusInfo(false)}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
                                 <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">
@@ -344,7 +349,7 @@
                                     <td>
                                         <g:if test="${!route_empty}">
                                             <g:actionSubmit action="showofflinemap_route" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:actionSubmit action="showmap_route" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="showonlinemap_route" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
 	                                        <g:if test="${BootStrap.global.GetPrintServerAPI()}">
 	                                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 	                                        </g:if>

@@ -238,6 +238,7 @@ class EvaluationService
                                     isTaskLanding3Test:task_values.isTaskLanding3Test,
                                     isTaskLanding4Test:task_values.isTaskLanding4Test,
                                     isTaskSpecialTest:task_values.isTaskSpecialTest,
+                                    isTaskSpecialTestTitle:task_values.isTaskSpecialTestTitle,
                                     isTaskIncreaseEnabled:task_values.isTaskIncreaseEnabled, 
                                     bestOfAnalysis:task_values.bestOfAnalysis,
                                     bestOfName:task_values.bestOfName,
@@ -331,6 +332,7 @@ class EvaluationService
                                 isTaskLanding3Test:live_task.isTaskLanding3Test,
                                 isTaskLanding4Test:live_task.isTaskLanding4Test,
                                 isTaskSpecialTest:live_task.isTaskSpecialTest,
+                                isTaskSpecialTestTitle:live_task.isTaskSpecialTestTitle,
                                 isTaskIncreaseEnabled:live_task.isTaskIncreaseEnabled,
                                 bestOfAnalysis:live_task.bestOfAnalysis,
                                 bestOfName:live_task.bestOfName
@@ -351,6 +353,7 @@ class EvaluationService
                         isTaskLanding3Test:taskInstance.IsLandingTest3Run(),
                         isTaskLanding4Test:taskInstance.IsLandingTest4Run(),
                         isTaskSpecialTest:taskInstance.IsSpecialTestRun(),
+                        isTaskSpecialTestTitle:taskInstance.GetSpecialTestTitle(),
                         isTaskIncreaseEnabled:taskInstance.IsIncreaseEnabled(),
                         bestOfAnalysis:taskInstance.bestOfAnalysis,
                         bestOfName:taskInstance.bestOfName()
