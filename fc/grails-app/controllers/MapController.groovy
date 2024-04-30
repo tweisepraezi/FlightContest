@@ -25,7 +25,12 @@ class MapController {
 
     def start_taskcreator_intern = {
         String base_url = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/"
-        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en&baseurl=%22${base_url}%22" // local task creator
+        String task_creator_url = Defs.TASKCREATOR_INTERN_ROOT_DIR + "/run_${session.taskCreatorLanguage}.html"
+        if (BootStrap.global.IsTaskCreatorJSExtern()) {
+            task_creator_url = Defs.TASKCREATOR_INTERN_ROOT_DIR + "/run_jsextern_${session.taskCreatorLanguage}.html"
+        }
+        task_creator_url += "?lang=${session.taskCreatorLanguage}"
+        task_creator_url += "&admin&baseurl=%22${base_url}%22"
         fcService.println "Task creator intern: $task_creator_url"
         
         if (params.localref && params.top && params.bottom && params.right && params.left) {
@@ -39,17 +44,13 @@ class MapController {
     }
     
     def start_taskcreator_extern = {
-        String base_url = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/"
-        String task_creator_url = "${Defs.TASKCREATOR_LOCAL_URL}?admin&lang=en&baseurl=%22${base_url}%22" // local task creator
-        if (BootStrap.global.IsTaskCreatorExtern()) {
-            task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
-            if (task_creator_url.contains('?')) {
-                task_creator_url += "&"
-            } else {
-                task_creator_url += "?"
-            }
-            task_creator_url += "lang=${session.taskCreatorLanguage}"
+        String task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
+        if (task_creator_url.contains('?')) {
+            task_creator_url += "&"
+        } else {
+            task_creator_url += "?"
         }
+        task_creator_url += "lang=${session.taskCreatorLanguage}"
         fcService.println "Task creator extern: $task_creator_url"
         
         if (params.localref && params.top && params.bottom && params.right && params.left) {
@@ -60,6 +61,10 @@ class MapController {
             fcService.println "Open $task_creator_url"
             render(view:"taskcreator", model:[login_url:task_creator_url])
         }
+    }
+    
+    def start_taskcreator_load = {
+        redirect(uri:"/taskcreator/load.html")
     }
     
     def taskcreator = {
@@ -146,12 +151,12 @@ class MapController {
             if (ret.error) {
                 flash.message = ret.message
                 flash.error = true
-                redirect(action:'show',id:params.id)
+                redirect(action:'list')
             } else if (ret.content) {
-                String map_file_name = (params.title + '.pdf').replace(' ',"_")
+                String map_file_name = (params.title + '.pdf') // .replace(' ',"_")
                 printService.WritePDF3(response, ret.content, map_file_name)
             } else {
-                redirect(action:'show',id:params.id)
+                redirect(action:'list')
             }
         } else {
             redirect(controller:'contest',action:'start')

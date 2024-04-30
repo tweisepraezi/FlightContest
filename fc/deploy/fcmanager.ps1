@@ -10,17 +10,23 @@ If ($Restart -ne "") {
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc = "Flight Contest 3.4.5"
+$str_fc_version = "3.4.6"
+$str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"
 $str_homepage_url = "https://flightcontest.de"
 $str_fcsave = "C:\FCSave"
+$str_firefox_url = "C:\Program Files\Mozilla Firefox\firefox.exe"
+$str_new_version_url = "http://download.flightcontest.de/FCSetup-NewVersion.txt"
+$str_new_setup_url = "http://download.flightcontest.de"
+$str_new_setup_path = "C:\FCSave\.fcsetups"
 if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_help = "Hilfe"
     $str_help_url = "http://localhost:8080/fc/docs/help_de.html"
     $str_areyousure = "Sind Sie sicher?"
     $str_menu_exit = "Beenden"
     $str_menu_restart = "Manager neu starten"
+    $str_menu_fc_install = "Installiere Flight Contest"
     $str_evaluation = "Auswertungs-Kommandos"
     $str_evaluation_loadlogger = "Logger-Daten automatisch laden"
     $str_evaluation_loadobservations = "Beobachtungs-Formulare automatisch laden"
@@ -42,6 +48,7 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_areyousure = "Are you sure?"
     $str_menu_exit = "Exit"
     $str_menu_restart = "Restart manager"
+    $str_menu_fc_install = "Install Flight Contest"
     $str_evaluation = "Evaluation commands"
     $str_evaluation_loadlogger = "Auto load logger data"
     $str_evaluation_loadobservations = "Auto load observation forms"
@@ -58,7 +65,7 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_service_stopped = "Flight Contest is already stopped."
     $str_service_savedb = "Save database"
 }
-  
+
 # Load assemblies 
 # ---------------
 [System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')    | out-null
@@ -91,6 +98,33 @@ $window_close_button.Add_Click({
 })
 #>
 
+# Functions
+#----------
+function start_flightcontest {
+    if ([System.IO.File]::Exists($str_firefox_url)) {
+        Start-Process $str_firefox_url $str_fc_url
+    } else {
+        Start-Process $str_fc_url
+    }
+}
+
+function stop_manager {
+    
+    foreach ($proc in (Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Where-Object -Property CommandLine -like '*fcmanager.ps1*' ))
+    {
+        Stop-Process $proc.ProcessId
+    }
+}
+
+# Stop other running FCManager
+# ----------------------------
+foreach ($proc in (Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Where-Object -Property CommandLine -like '*fcmanager.ps1*' ))
+{
+    if ($proc.ProcessId -ne $pid) {
+        Stop-Process $proc.ProcessId
+    }
+}
+
 # Taskbar icon
 # ------------
 $icon = New-Object System.Drawing.Icon "C:\Program Files\Flight Contest\fc.ico"
@@ -107,25 +141,25 @@ $taskbar_icon.Visible = $true
  
 # Flight Contest menu entries
 # ---------------------------
-$menu_fc = New-Object System.Windows.Forms.MenuItem
+$menu_fc = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_fc.Text = $str_fc
 $menu_fc.Add_Click({
-    Start-Process $str_fc_url
+    start_flightcontest
 })
 
-$menu_homepage = New-Object System.Windows.Forms.MenuItem
+$menu_homepage = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_homepage.Text = $str_homepage
 $menu_homepage.Add_Click({
     Start-Process $str_homepage_url
 })
 
-$menu_help = New-Object System.Windows.Forms.MenuItem
+$menu_help = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_help.Text = $str_help
 $menu_help.Add_Click({
     Start-Process $str_help_url
 })
 
-$menu_fcsave = New-Object System.Windows.Forms.MenuItem
+$menu_fcsave = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_fcsave.Text = $str_fcsave
 $menu_fcsave.Add_Click({
     Start-Process $str_fcsave
@@ -134,35 +168,44 @@ $menu_fcsave.Add_Click({
 # Evaluation menu entries
 # -----------------------
 
-$menu_evaluation = New-Object System.Windows.Forms.MenuItem
+$menu_evaluation = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_evaluation.Text = $str_evaluation
 
-$menu_evaluation_loadlogger = $menu_evaluation.MenuItems.Add($str_evaluation_loadlogger)
+$menu_evaluation_loadlogger = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_evaluation_loadlogger.Text = $str_evaluation_loadlogger
 $menu_evaluation_loadlogger.Add_Click({ 
     Start-Process "C:\Program Files\Flight Contest\scripts\FCAutoLoad_Logger.vbs"
 })
+$menu_evaluation.DropDownItems.Add($menu_evaluation_loadlogger)
 
-$menu_evaluation_loadobservations = $menu_evaluation.MenuItems.Add($str_evaluation_loadobservations)
+$menu_evaluation_loadobservations = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_evaluation_loadobservations.Text = $str_evaluation_loadobservations
 $menu_evaluation_loadobservations.Add_Click({ 
     Start-Process "C:\Program Files\Flight Contest\scripts\FCAutoLoadScan_Observation.vbs"
 })
+$menu_evaluation.DropDownItems.Add($menu_evaluation_loadobservations)
  
-$menu_evaluation_loadplanningtasks = $menu_evaluation.MenuItems.Add($str_evaluation_loadplanningtasks)
+$menu_evaluation_loadplanningtasks = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_evaluation_loadplanningtasks.Text = $str_evaluation_loadplanningtasks
 $menu_evaluation_loadplanningtasks.Add_Click({ 
     Start-Process "C:\Program Files\Flight Contest\scripts\FCAutoLoadScan_PlanningTask.vbs"
 })
+$menu_evaluation.DropDownItems.Add($menu_evaluation_loadplanningtasks)
 
 # Service menu entries
 # --------------------
-$menu_service = New-Object System.Windows.Forms.MenuItem
+$menu_service = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_service.Text = $str_service
 
-$menu_service_manager = $menu_service.MenuItems.Add($str_service_manager)
+$menu_service_manager = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_service_manager.Text = $str_service_manager
 $menu_service_manager.Add_Click({
     Start-Process "C:\Program Files\Flight Contest\tomcat\bin\tomcat9w.exe" //MS//FlightContest
 })
+$menu_service.DropDownItems.Add($menu_service_manager)
 
-$menu_service_restart = $menu_service.MenuItems.Add($str_service_restart)
+$menu_service_restart = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_service_restart.Text = $str_service_restart
 $menu_service_restart.Add_Click({
     $service = Get-Service -name FlightContest
     if ($service.Status -eq "running") {
@@ -176,8 +219,10 @@ $menu_service_restart.Add_Click({
         }
     }
 })
+$menu_service.DropDownItems.Add($menu_service_restart)
 
-$menu_service_start = $menu_service.MenuItems.Add($str_service_start)
+$menu_service_start = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_service_start.Text = $str_service_start
 $menu_service_start.Add_Click({
     $service = Get-Service -name FlightContest
     if ($service.Status -eq "running") {
@@ -187,8 +232,10 @@ $menu_service_start.Add_Click({
         [System.Windows.Forms.MessageBox]::Show($str_service_starting, $str_fcmanager)
     }
 })
+$menu_service.DropDownItems.Add($menu_service_start)
 
-$menu_service_stop = $menu_service.MenuItems.Add($str_service_stop)
+$menu_service_stop = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_service_stop.Text = $str_service_stop
 $menu_service_stop.Add_Click({
     $service = Get-Service -name FlightContest
     if ($service.Status -eq "stopped") {
@@ -198,15 +245,47 @@ $menu_service_stop.Add_Click({
         [System.Windows.Forms.MessageBox]::Show($str_service_stopping, $str_fcmanager)
     }
 })
+$menu_service.DropDownItems.Add($menu_service_stop)
 
-$menu_service_savedb = $menu_service.MenuItems.Add($str_service_savedb)
+$menu_service_savedb = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_service_savedb.Text = $str_service_savedb
 $menu_service_savedb.Add_Click({
     Start-Process "C:\Program Files\Flight Contest\scripts\save_fcdb.bat"
 })
+$menu_service.DropDownItems.Add($menu_service_savedb)
+
+# Download menu entry
+# -------------------
+$new_fc_version = Invoke-WebRequest -Uri $str_new_version_url
+if ([String]$new_fc_version -ne "") {
+    if ([String]$new_fc_version -ne $str_fc_version) {
+        $newversion_icon = New-Object System.Drawing.Icon "C:\Program Files\Flight Contest\fcdownload.ico"
+        if (!$newversion_icon) {
+            $newversion_icon = New-Object System.Drawing.Icon "..\web-app\images\fcdownload.ico"
+        }
+        $taskbar_icon.Icon = $newversion_icon
+        $fc_setup_name = "FCSetup-" + $new_fc_version + ".exe"
+        $fc_setup_uri = $str_new_setup_url + "/" + $fc_setup_name
+        $fc_setup_file = $str_new_setup_path + "\" + $fc_setup_name
+        $menu_download = New-Object System.Windows.Forms.ToolStripMenuItem
+        $menu_download.Text = $str_menu_fc_install + " " + $new_fc_version
+        $menu_download.add_Click({
+            if (![System.IO.File]::Exists($fc_setup_file)) {
+                Invoke-WebRequest -Uri $fc_setup_uri -OutFile $fc_setup_file
+            }
+            if ([System.IO.File]::Exists($fc_setup_file)) {
+                Start-Process $fc_setup_file
+                stop_manager
+            } else {
+                [System.Windows.Forms.MessageBox]::Show($fc_setup_file + " not found", $str_fcmanager)
+            }
+        })
+    }
+}
 
 # Restart menu entry
 # ------------------
-$menu_restart = New-Object System.Windows.Forms.MenuItem
+$menu_restart = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_restart.Text = $str_menu_restart
 $menu_restart.add_Click({
     $Restart = "Yes"
@@ -223,7 +302,7 @@ $menu_restart.add_Click({
 
 # Exit menu entry
 # ---------------
-$menu_exit = New-Object System.Windows.Forms.MenuItem
+$menu_exit = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_exit.Text = $str_menu_exit
 $menu_exit.add_Click({
     $result = [System.Windows.Forms.MessageBox]::Show($str_menu_exit + ".`r`n`r`n" + $str_areyousure, $str_fcmanager, [System.Windows.Forms.MessageBoxButtons]::OKCancel, [System.Windows.Forms.MessageBoxIcon]::Question)
@@ -237,26 +316,34 @@ $menu_exit.add_Click({
         } 
     }
 })
- 
+
+# Separators
+# ----------
+$separator1 = New-Object System.Windows.Forms.ToolStripSeparator
+$separator2 = New-Object System.Windows.Forms.ToolStripSeparator
+$separator3 = New-Object System.Windows.Forms.ToolStripSeparator
+
 # Create taskbar menu
 # -------------------
-$taskbar_menu = New-Object System.Windows.Forms.ContextMenu
-$taskbar_menu.MenuItems.AddRange($menu_fc)
-$taskbar_menu.MenuItems.AddRange($menu_fcsave)
-$taskbar_menu.MenuItems.AddRange($menu_help)
-$taskbar_menu.MenuItems.AddRange($menu_homepage)
-$taskbar_menu.MenuItems.AddRange($menu_evaluation)
-$taskbar_menu.MenuItems.AddRange($menu_service)
-$taskbar_menu.MenuItems.AddRange($menu_restart)
-$taskbar_menu.MenuItems.AddRange($menu_exit)
-$taskbar_icon.ContextMenu = $taskbar_menu
+$taskbar_menu_strip = New-Object System.Windows.Forms.ContextMenuStrip
+$taskbar_menu_strip.Items.Add($menu_fc)
+if ($menu_download) {
+    $taskbar_menu_strip.Items.Add($menu_download)
+}
+$taskbar_menu_strip.Items.Add($separator1)
+$taskbar_menu_strip.Items.Add($menu_fcsave)
+$taskbar_menu_strip.Items.Add($menu_help)
+$taskbar_menu_strip.Items.Add($menu_homepage)
+$taskbar_menu_strip.Items.Add($separator2)
+$taskbar_menu_strip.Items.Add($menu_evaluation)
+$taskbar_menu_strip.Items.Add($menu_service)
+$taskbar_menu_strip.Items.Add($separator3)
+$taskbar_menu_strip.Items.Add($menu_restart)
+$taskbar_menu_strip.Items.Add($menu_exit);
+$taskbar_icon.ContextMenuStrip = $taskbar_menu_strip
 $taskbar_icon.Add_Click({
     If ($_.Button -eq [Windows.Forms.MouseButtons]::Left) {
-        Start-Process "http://localhost:8080/fc/contest/start"
-#        $window.Left = $([System.Windows.SystemParameters]::WorkArea.Width-$window.Width)
-#        $window.Top = $([System.Windows.SystemParameters]::WorkArea.Height-$window.Height)
-#        $window.Show()
-#        $window.Activate() 
+        start_flightcontest
     }  
 })
  
@@ -273,3 +360,4 @@ $null = $asyncwindow::ShowWindowAsync((Get-Process -PID $pid).MainWindowHandle, 
 # This helps with responsiveness, especially when clicking Exit.
 $appContext = New-Object System.Windows.Forms.ApplicationContext
 [void][System.Windows.Forms.Application]::Run($appContext)
+

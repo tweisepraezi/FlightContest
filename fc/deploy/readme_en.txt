@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.6
+-------------
+- Integrated Task Creator: German and Spanish user interface added.
+  The desired language can be set under "Extras -> Settings".
+- Flight Contest Manager: Flight Contest starts with Firefox if it is available, even if it is not the default browser.
+- Bug "PDF contest map cannot be created if the map title contains umlauts" fixed
+
 Changes 3.4.5
 -------------
 - Added map menu item "Export all contest maps"

@@ -58,7 +58,7 @@ class Defs
     static final String LIVETRACKING_VISIBILITY_PUBLIC                 = "public"
     static final String LIVETRACKING_VISIBILITY_PRIVATE                = "private"
     static final String LIVETRACKING_VISIBILITY_UNLISTED               = "unlisted"
-    static final String TASKCREATOR_LOCAL_URL                          = "http://localhost:8080/fc/taskcreator/run.html"
+    static final String TASKCREATOR_INTERN_ROOT_DIR                    = "http://localhost:8080/fc/taskcreator"
     
     static final int OSMPRINTMAP_RUNSECONDS                            = 2
     static final String OSMPRINTMAP_GROUP                              = "OsmPrintMapGroup"

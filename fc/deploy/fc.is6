@@ -4,16 +4,16 @@
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
 const DBVersion = '2.39.0';     // DB-2.39
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '3.4.5';      // no milestone
+const FCVersion = '3.4.6';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '3.4.5';    // no milestone
+const FCVersion64 = '3.4.6';    // no milestone
 [Setup]
 AppName=Flight Contest
 
 AppVerName=Flight Contest
-AppVersion=3.4.5
+AppVersion=3.4.6
 ; no milestone below
-VersionInfoVersion=3.4.5
+VersionInfoVersion=3.4.6
 
 AppCopyright=(C) 2009-2024 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -63,6 +63,7 @@ Source: "..\output\fc.war";                           DestDir: "{app}\tomcat\web
 Source: ".\readme.txt";                               DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\install-service.bat";                      DestDir: "{app}";
 Source: "..\web-app\images\fc.ico";                   DestDir: "{app}";
+Source: "..\web-app\images\fcdownload.ico";           DestDir: "{app}";
 Source: ".\save_fcdb.bat";                            DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\save_fcsave.bat";                          DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\start_fc.bat";                             DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
@@ -82,6 +83,7 @@ Source: "..\web-app\licenses\GPL_License.txt";        DestDir: "{app}";         
 [Dirs]
 Name: "C:\FCSave";         Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.fc";     Flags: uninsneveruninstall; Permissions: everyone-modify;
+Name: "C:\FCSave\.fcsetups"; Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.scan";   Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.logger"; Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.geodata";Flags: uninsneveruninstall; Permissions: everyone-modify;
@@ -99,6 +101,7 @@ Filename: "{app}\install-service.bat";      Parameters: "install FlightContest";
 Filename: "sc.exe";                         Parameters: "sdset FlightContest D:AR(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPWPDTLOCRRC;;;IU)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)"; WorkingDir: "{app}";  Flags: runhidden;
 ; start tomcat monitor
 ; Filename: "{app}\tomcat\bin\tomcat9w.exe";  Parameters: "//MS//FlightContest";             WorkingDir: "{app}"; Flags: nowait;
+Filename: "{app}\scripts\start_fcmanager.bat";                                             WorkingDir: "{app}"; Flags: runhidden;
 
 [UninstallRun]
 ; remove FlightContest service

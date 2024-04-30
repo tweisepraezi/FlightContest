@@ -5,28 +5,14 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 		<link rel="stylesheet" type="text/css" href="css/airrats.css" />
-		<link rel="stylesheet" type="text/css" href="css/jquery.ajax-combobox.css"/>
-		<link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="js/jquery.ajax-combobox/css/jquery.ajax-combobox.css"/>
+		<link rel="icon" type="image/x-icon" href="favicon.ico" />
 		<script defer src="https://maps.googleapis.com/maps/api/js?callback=InitMap&amp;libraries=geometry&amp;v=beta&amp;key=AIzaSyDFCicW-Cz5hVwe3sBG5qyWdyzBfWiRIY0"></script>
 		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
-		<script src="js/jquery.ajax-combobox.js"></script>
-		<style>
-				/*estilo para limipar Google Maps*/
-				a[href^="http://maps.google.com/maps"]{
-					display:none !important
-				}
-				a[href^="https://maps.google.com/maps"]{
-					display:none !important
-				}
-				.gmnoprint a, .gmnoprint span, .gm-style-cc, .gmnoscreen {
-					display:none;
-				}
-				.gmnoprint div {
-					background:none !important;
-				}
-		</style>
-		<script src="https://www.airrats.cl/taskcreator/js/airrats.min.js"></script>
+		<!--<script src="js/jquery.blockUI.js"></script>-->
+		<script src="js/jquery.ajax-combobox/js/jquery.ajax-combobox.js"></script>
+							<script src="js/airrats.min.js"></script>
 	</head>
 	<body onmousemove="get_taskname()" onload="clear_addons()">
 		<div id="print_map" style="display: none;" class="print_map no_print">
@@ -70,7 +56,7 @@
 			<input type="checkbox" id="chk_print_suas" class="chk" title="Toggles Special Use Airspaces">
 			<label for="chk_print_grid" title="Toggles Lat/Lon Grid">Grid:</label>
 			<input type="checkbox" id="chk_print_grid" class="chk" checked title="Toggles Lat/Lon Grid">
-			<label for="chk_disable_drag" title="Deshabilita arrastrar el mapa en Impresión">Deshabilitar Arrastrar:</label>
+			<label for="chk_disable_drag" title="Deshabilita arrastrar el mapa en Impresión">Lock scrolling:</label>
 			<input type="checkbox" id="chk_disable_drag" class="chk" checked title="Deshabilita arrastrar el mapa en Impresión">
 			<br>
 			<span id="print_loading_tiles" style="padding-top: 15px;"><b>Loading Map...</b></span>
@@ -87,12 +73,24 @@
 			</div>
 			<div style="display:block;">
 				<span id="titulo1" style="font-size: 25px;">Rally Flying Task Creator</span>
+				<!--				<label for="langID" style="margin-left: 30px;">Idioma:</label>
+								<select name="langID" id="langID" >
+									<option value="es" selected>Español</option>
+									<option value="en">Inglés</option>
+								</select>-->
 				<span>
-					<a href="https://docs.google.com/document/d/1-TuXVMyfXsetKNR76ihWCCA9OulyypiDCdrvXN9wnA4" target="_blank" style="float:right; margin-right: 20px; margin-top: 5px; font-size: 15px;">Instructions</a>
+					<a href="https://docs.google.com/document/d/1-TuXVMyfXsetKNR76ihWCCA9OulyypiDCdrvXN9wnA4"
+						 target="_blank" style="float:right; margin-right: 20px; margin-top: 5px; font-size: 15px;">Instructions</a>
 				</span>
+				<!--				<div>
+									<label for="username" style="">Username:</label>
+									<span><input id="username" type="text" style="text-align: center; width:100px;"></span>
+									<label for="password" style="">Password:</label>
+									<span><input id="password" type="password" style="text-align: center; width:100px;"></span>
+								</div>-->
 			</div>
 			<div style="display:block;">
-                <span id="titulo1" style="font-size: 12px;">Flight Contest user interface</span>
+                <span id="titulo1" style="font-size: 12px;">Flight Contest User Interface</span>
 			</div>
 			<div id="separador_load" class="separador"><hr></div>
 			<div id="seccion_load">
@@ -104,12 +102,12 @@
                     <input type="text" id="task_name" class="task_name">
                 </div>
                 <div style="margin-top:4px;">
-                    <button id="btn_csv" title="Import from CSV format">Load task</button>
-                    <button style="margin-right: 5px;" title="Synchronize map url with the actual contest." onclick="sync_map_url()">Sync map url</button>
+                    <button id="save_as_csv" title="Save task to CSV file.">Save</button>
+                    <button id="btn_delete_task" title="Clear task" onclick="clear_taskname()" style="margin-left:10px;">Clear</button>
+                    <button id="btn_csv" title="Load task from CSV file.">Load</button>
+                    <button title="Synchronize map url with the actual contest." onclick="sync_map_url()" style="margin-right:5px;">Sync map url</button>
                     <input type="file" name="File Upload" id="load_csv" accept=".csv" style="display:none;" />
-                    <button id="save_as_csv" title="Export to CSV format">Save task</button>
-                    <button id="btn_delete_task" title="Clear Task" onclick="clear_taskname()">Clear task</button>
-                    <button id="btn_save_as_fc" style="margin-right: 5px;" title="Export to Flight Contest format.">Export FC kml</button>
+                    <button id="btn_save_as_fc" style="margin-left:5px;" title="Save FC route file (kml). Import with FC route import.">Export FC kml</button>
                 </div>
                 <script>
                     function set_taskname() {
@@ -152,9 +150,9 @@
                     }
                 </script>
             </div>
-			<div id="separador_carta" class="separador"><hr></div>
+            <div id="separador_carta" class="separador"><hr></div>
 			<div id="seccion_carta">
-				<div id="seccion_mapa_usuario">
+				<div id="seccion_mapa_usuario" style="margin-left:10px;">
 					<label for="map_url" style="margin-left: 0px;" title="For own maps">Map Url:</label>
 					<input id="map_url" type="url" style="width:340px; margin-left: 2px; margin-right: 2px; margin-bottom: 2px;"><br>
 					<label for="map_n" style="margin-left: 0px;" title="North limit (use dot as decimal separator)">N:</label>
@@ -166,12 +164,14 @@
 					<label for="map_w" style="margin-left: 8px;" title="West limit (use dot as decimal separator)">W:</label>
 					<span><input id="map_w" type="number" min="-180" max="180" lang="en" style="text-align: center; width:60px" title="Límite Weste (usar punto como separador decimal)"></span>
 					<button id="load_url_map">Load</button><br>
-					<label for="addons_url" style="margin-left: 0px;" title="Map addons Url">Addons RL:</label>
-					<input id="addons_url" type="url" style="width:270px; margin:2px;" title="Map addons Url" value="">
+					<label for="addons_url" style="margin-left: 0px;" title="Map addons Url">Addons URL:</label>
+					<input id="addons_url" type="url" style="width:270px; margin:2px;" title="Map addons Url"
+								 value="https://www.airrats.cl/taskcreator/maps/addons_chile.kmz">
 					<button id="btn_load_map_addons" title="Load map addons">Load</button>
 					<button id="btn_delete_map_addons" title="Clear map addons">Clear</button><br>
 					<label for="suas_url" style="margin-left: 0px;" title="Airspace kmz file Url">SUAs Url:</label>
-					<input id="suas_url" type="url" style="width:255px; margin:2px;" title="Airspace kmz file Url" value="">
+					<input id="suas_url" type="url" style="width:255px; margin:2px;" title="Airspace kmz file Url"
+								 value="https://www.airrats.cl/taskcreator/maps/suas_chile.kmz">
 					<button id="btn_load_suas" title="Load SUAs kmz file">Load</button>
 					<button id="btn_delete_suas" title="Borrar SUAs">Clear</button>
 				</div>
@@ -184,7 +184,7 @@
 					<input type="checkbox" id="chk_show_suas" class="chk" checked title="Toggles Special Use Airspaces" >
 					<label for="map_opacity" title="Maps Opacity">Opacity:</label>
 					<input type="range" id="map_opacity" value="1.0" min="0.0" max="1.0" step="0.01" style="vertical-align:middle; width:60px;">
-					<button id="delete_map">Clear maps</button>
+					<button id="delete_map">Clear All</button>
 				</div>
 			</div>
 			<div id="separador_prueba" class="separador"><hr></div>
@@ -203,7 +203,7 @@
 						<option value="Print">Print</option>
 						<option value="Gates" disabled>Gates</option>
 					</select>
-				</div>
+									</div>
 				<div style="margin-top: 3px;">
 					<label for="desviacion" style="margin-left: 0px;" title="Magnetic Declination (E<0, W>0)">M.Dec.:</label>
 					<span><input id="desviacion" class="desviacion" type="text" title="Magnetic Declination (E<0, W>0)" style="text-align: center; width:20px" value="0"></span>
@@ -213,6 +213,7 @@
 					<span><input id="velocidad_sp" class="velocidad_sp" type="text" style="text-align: center; width:15px" value="70" title="Speed to SP in knots"></span>
 					<label for="seconds_to_sp" title="Aditional seconds to SP (Max. 255)">Seconds:</label>
 					<span><input id="seconds_to_sp" class="seconds_to_sp" type="text" style="text-align: center; width:25px" value="0" title="Aditional seconds to SP (Max. 255)"></span>
+					<!--<button id="test1">T1</button>-->
 				</div>
 				<div style="margin-top: 3px;">
 					<label for="notes"  style="margin-left: 0px;" title="Notes">Notes:</label>
@@ -228,6 +229,7 @@ Advanced Category: False photos, TP heading tilt zoom, EPs, EPs heading tilt zoo
 					<button id="btn_print_folder_photos">Folder Photos</button>
 					<button id="btn_print_gm_photos">Google Maps Photos</button>
 					<input type="file" id="importar_fotos" name="fotos[]" accept=".jpg" multiple style="width:200px; display:none;" />
+					<!--<button id="boton_respuestas">Respuestas</button>-->
 					<label for="cps_por_pagina" style="display: none;">CPs/pág:</label>
 					<select id="cps_por_pagina" style="display: none;">
 						<option value="8">8</option>
@@ -320,11 +322,8 @@ Advanced Category: False photos, TP heading tilt zoom, EPs, EPs heading tilt zoo
 				<div id="subtitulo_prueba" class="subtitulo">Practice Task</div>
 				<div id="subtitulo_prueba" class="subtitulo"><br>Notes<br></div>
 				<textarea id="print_notes" class="notes" style="display:block; margin:auto; width:600px; max-height:8in; border:none;">Check:
-
 Both Categories: TPs, Total Distance, Map Name, Speed, Spd to SP, Seconds, Mag Dec, Arc descriptions, Scenic Leg descriptions
-
 Unlimited Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Unsort
-
 Advanced Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Sort</textarea>
 			</div>
 			<div class="titulo page_break_before">
@@ -368,6 +367,28 @@ Advanced Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading ti
 		</div>
 		<div id="page_real_photos" style="display: none;">
 			<div class="no_print" style="position:absolute; left:10px; top:10px;">
+<!--				<label for="cambio_fr_fotos" id="label_cambio_fr_fotos">Cambio de página de FR en:</label>
+				<select id="cambio_fr_fotos" class="ep_change">
+					<option value="19" selected>1 Pag</option>
+					<option value="1">TP1</option>
+					<option value="2">TP2</option>
+					<option value="3">TP3</option>
+					<option value="4">TP4</option>
+					<option value="5">TP5</option>
+					<option value="6">TP6</option>
+					<option value="7">TP7</option>
+					<option value="8">TP8</option>
+					<option value="9">TP9</option>
+					<option value="10">TP10</option>
+					<option value="11">TP11</option>
+					<option value="12">TP12</option>
+					<option value="13">TP13</option>
+					<option value="14">TP14</option>
+					<option value="15">TP15</option>
+					<option value="16">TP16</option>
+					<option value="17">TP17</option>
+					<option value="18">TP18</option>
+				</select>-->
 				<button class="back">Back</button>
 			</div>
 			<div id="div_real_photos"></div>

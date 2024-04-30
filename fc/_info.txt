@@ -124,6 +124,9 @@ Code
             }
     }
     
+    // Encode URL 
+    URLEncoder.encode(file_name, "UTF-8")
+    
 Konfiguration
 =============
     Alle Grails-Konfigurationsänderungen sind mit FC: markiert.

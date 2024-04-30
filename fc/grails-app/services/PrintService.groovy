@@ -3,6 +3,7 @@ import org.xhtmlrenderer.extend.FontResolver
 import org.xhtmlrenderer.pdf.ITextRenderer
 import org.springframework.web.context.request.RequestContextHolder
 import com.lowagie.text.pdf.BaseFont
+import java.net.URLEncoder
 
 class PrintService
 {
@@ -586,7 +587,7 @@ class PrintService
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/route/mapprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printSize=${printSize}&landscape=${landscape}"
-            String map_file_name = ("file:///" + HTMLFilter.GetStr(mapFileName)).replaceAll('\\\\','/')
+            String map_file_name = ("file:///" + URLEncoder.encode(mapFileName, "UTF-8")).replaceAll('\\\\','/')
             url += "&mapFileName=${map_file_name}"
             println "Print: $url"
             renderer.setDocument(url)

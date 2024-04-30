@@ -2,6 +2,9 @@
 https://www.airrats.cl/taskcreator?lang=en
 https://www.airrats.cl/taskcreator?lang=en&admin
 
+https://www.airrats.cl/taskcreator/js/airrats.min.js
+Download -> Convert to ANSI -> Save "C:\Projects\EPJ\fcdev\fc\web-app\taskcreator\js\airrats.min.js"
+
 http://localhost:8080/fc/map/areamap.png
 http://localhost:8080/fc/map/areamap.pnginfo
 

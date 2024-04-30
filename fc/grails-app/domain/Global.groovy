@@ -483,5 +483,15 @@ class Global
         return false
     }
     
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsTaskCreatorJSExtern()
+    {
+        if (   grailsApplication.config.flightcontest.taskcreator
+            && grailsApplication.config.flightcontest.taskcreator.jsextern
+        ) {
+            return true
+        }
+        return false
+    }
     
 }

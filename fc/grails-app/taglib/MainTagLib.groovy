@@ -109,6 +109,7 @@ class MainTagLib
                         if (BootStrap.global.IsTaskCreatorExtern()) {
                             outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_intern" target="_blank">${message(code:'fc.map.taskcreator')} (${message(code:'fc.map.taskcreator.intern')})</a> </li>"""
                             outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_extern" target="_blank">${message(code:'fc.map.taskcreator')} (${message(code:'fc.map.taskcreator.extern')})</a> </li>"""
+                            //outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_load" target="_blank">${message(code:'fc.map.taskcreator')} (${message(code:'fc.map.taskcreator.load')})</a> </li>"""
                         } else {
                             outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator_intern" target="_blank">${message(code:'fc.map.taskcreator')}</a> </li>"""
                         }

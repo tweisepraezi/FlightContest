@@ -1,20 +1,11 @@
 Home-Page:
 http://asciidoctor.org/
 
-K:\Projects\Install\Ruby
-  Version nach K:\Projects\Ruby auspacken
-  https://rubyinstaller.org/downloads/
-  https://www.ruby-lang.org/de/
+AsciiDoctorJ:
+https://docs.asciidoctor.org/asciidoctorj/latest/
 
-CMD öffnen und wechseln nach K:\Projects\Ruby\ruby-2.3.3-x64-mingw32\bin
-
-gem install asciidoctor
-gem install --pre asciidoctor-pdf
-
-Kommandos:
-asciidoctor --version
-asciidoctor help.adoc
-asciidoctor-pdf readme.adoc
+AsciiDoctorJ Command Line Interface:
+https://docs.asciidoctor.org/asciidoctorj/latest/cli/
 
 AsciiDoctor-Kommando-Doc:
 http://asciidoctor.org/man/asciidoctor/

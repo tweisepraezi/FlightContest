@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.6
+----------------
+- Integrierter Task-Creator: Deutsche und spanische Benutzeroberfläche hinzugefügt.
+  Unter "Extras -> Einstellungen" kann die gewünschte Sprache eingestellt werden.
+- Flight Contest Manager: Flight Contest startet mit Firefox, wenn dieser vorhanden ist, auch wenn er nicht der Standard-Browser ist.
+- Bug "PDF-Wettbewerbs-Karte kann nicht erzeugt werden, wenn der Karten-Titel Umlaute enthält" behoben
+
 Änderungen 3.4.5
 ----------------
 - Karten-Menüpunkt "Alle Wettbewerbs-Karten exportieren" hinzugefügt

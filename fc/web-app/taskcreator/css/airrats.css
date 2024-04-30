@@ -113,8 +113,8 @@ button {
 }
 
 .photo_div {
-	/*	margenes canon: 0,25 inches por lado, tÃ­tulo y sibtÃ­tulo: 0,5", hoja oficio 8,5x13" => 8x12"
-		tamaÃ±o de cada foto: 4x2,4" */
+	/*	margenes canon: 0,25 inches por lado, título y sibtítulo: 0,5", hoja oficio 8,5x13" => 8x12"
+		tamaño de cada foto: 4x2,4" */
 	width: 3.95in;
 	height: 2.4in;
 	margin-left: 0in;
@@ -367,3 +367,4 @@ select {
 	font-weight: bold;
 	text-decoration: underline;
 }
+

@@ -97,7 +97,7 @@
 				option.show_field[0] = '*';
 			}
 
-			// CASE WHENå¾Œã®ORDER BY
+			// CASE WHEN後のORDER BY
 			option.order_by = (option.order_by === undefined) ?
 				option.search_field :
 				option.order_by;
@@ -116,17 +116,17 @@
 			return option;
 		},
 		_strToArray: function(str) {
-			return str.replace(/[\sã€€]+/g, '').split(',');
+			return str.replace(/[\s　]+/g, '').split(',');
 		},
 		_setRegExpShort: function(shorten_reg, shorten_min) {
 			if (shorten_reg) return shorten_reg;
-			var reg = '(?:^|[\\s|ã€€\\[(<ã€Œã€Žï¼ˆã€ï¼»ï¼œã€ˆã€Š]+)';
+			var reg = '(?:^|[\\s|　\\[(<「『（【［＜〈《]+)';
 			reg += '(';
-			reg += 'https:\\/\\/[^\\s|ã€€\\])>ã€ã€ï¼‰ã€‘ï¼½ï¼žã€‰ã€‹]{' + (shorten_min - 7) + ',}';
+			reg += 'https:\\/\\/[^\\s|　\\])>」』）】］＞〉》]{' + (shorten_min - 7) + ',}';
 			reg += '|';
-			reg += 'http:\\/\\/[^\\s|ã€€\\])>ã€ã€ï¼‰ã€‘ï¼½ï¼žã€‰ã€‹]{' + (shorten_min - 6) + ',}';
+			reg += 'http:\\/\\/[^\\s|　\\])>」』）】］＞〉》]{' + (shorten_min - 6) + ',}';
 			reg += '|';
-			reg += 'ftp:\\/\\/[^\\s|ã€€\\])>ã€ã€ï¼‰ã€‘ï¼½ï¼žã€‰ã€‹]{' + (shorten_min - 5) + ',}';
+			reg += 'ftp:\\/\\/[^\\s|　\\])>」』）】］＞〉》]{' + (shorten_min - 5) + ',}';
 			reg += ')';
 			return new RegExp(reg, 'g');
 		},
@@ -170,10 +170,10 @@
 			return {
 				left: pattern[0],
 				right: pattern[1],
-				reg_left: new RegExp(esc_left + '((?:(?!' + esc_left + '|' + esc_right + ')[^\\sã€€])*)$'),
-				reg_right: new RegExp('^((?:(?!' + esc_left + '|' + esc_right + ')[^\\sã€€])+)'),
-				space_left: new RegExp('^' + esc_left + '$|[\\sã€€]+' + esc_left + '$'),
-				space_right: new RegExp('^$|^[\\sã€€]+'),
+				reg_left: new RegExp(esc_left + '((?:(?!' + esc_left + '|' + esc_right + ')[^\\s　])*)$'),
+				reg_right: new RegExp('^((?:(?!' + esc_left + '|' + esc_right + ')[^\\s　])+)'),
+				space_left: new RegExp('^' + esc_left + '$|[\\s　]+' + esc_left + '$'),
+				space_right: new RegExp('^$|^[\\s　]+'),
 				comp_right: new RegExp('^' + esc_right)
 			};
 		},
@@ -204,25 +204,25 @@
 				// German (Thanks Sebastian Gohres)
 				case 'de':
 					message = {
-						add_btn: 'HinzufÃ¼gen-Button',
-						add_title: 'Box hinzufÃ¼gen',
-						del_btn: 'LÃ¶schen-Button',
-						del_title: 'Box lÃ¶schen',
-						next: 'NÃ¤chsten',
-						next_title: 'NÃ¤chsten' + this.option.per_page + ' (Pfeil-rechts)',
+						add_btn: 'Hinzufügen-Button',
+						add_title: 'Box hinzufügen',
+						del_btn: 'Löschen-Button',
+						del_title: 'Box löschen',
+						next: 'Nächsten',
+						next_title: 'Nächsten' + this.option.per_page + ' (Pfeil-rechts)',
 						prev: 'Vorherigen',
 						prev_title: 'Vorherigen' + this.option.per_page + ' (Pfeil-links)',
 						first_title: 'Ersten (Umschalt + Pfeil-links)',
 						last_title: 'Letzten (Umschalt + Pfeil-rechts)',
 						get_all_btn: 'alle (Pfeil-runter)',
 						get_all_alt: '(Button)',
-						close_btn: 'SchlieÃŸen (Tab)',
+						close_btn: 'Schließen (Tab)',
 						close_alt: '(Button)',
 						loading: 'lade...',
 						loading_alt: '(lade)',
 						page_info: 'num_page_top - num_page_end von cnt_whole',
-						select_ng: 'Achtung: Bitte wÃ¤hlen Sie aus der Liste aus.',
-						select_ok: 'OK : Richtig ausgewÃ¤hlt.',
+						select_ng: 'Achtung: Bitte wählen Sie aus der Liste aus.',
+						select_ok: 'OK : Richtig ausgewählt.',
 						not_found: 'nicht gefunden',
 						ajax_error: 'Bei der Verbindung zum Server ist ein Fehler aufgetreten. (ajax-combobox)'
 					};
@@ -278,33 +278,33 @@
 						select_ng: 'Atencion: Elija una opcion de la lista.',
 						select_ok: 'OK: Correctamente seleccionado.',
 						not_found: 'no encontrado',
-						ajax_error: 'OcurriÃ³ un error al conectar con el servidor. (ajax-combobox)'
+						ajax_error: 'Ocurrió un error al conectar con el servidor. (ajax-combobox)'
 					};
 					break;
 
 					// Brazilian Portuguese (Thanks Marcio de Souza)
 				case 'pt-br':
 					message = {
-						add_btn: 'Adicionar botÃ£o',
+						add_btn: 'Adicionar botão',
 						add_title: 'Adicionar uma caixa',
-						del_btn: 'Apagar botÃ£o',
+						del_btn: 'Apagar botão',
 						del_title: 'Apagar uma caixa',
-						next: 'PrÃ³xima',
-						next_title: 'PrÃ³xima ' + this.option.per_page + ' (tecla direita)',
+						next: 'Próxima',
+						next_title: 'Próxima ' + this.option.per_page + ' (tecla direita)',
 						prev: 'Anterior',
 						prev_title: 'Anterior ' + this.option.per_page + ' (tecla esquerda)',
 						first_title: 'Primeira (Shift + Left)',
-						last_title: 'Ãšltima (Shift + Right)',
+						last_title: 'Última (Shift + Right)',
 						get_all_btn: 'Ver todos (Seta para baixo)',
-						get_all_alt: '(botÃ£o)',
+						get_all_alt: '(botão)',
 						close_btn: 'Fechar (tecla TAB)',
-						close_alt: '(botÃ£o)',
+						close_alt: '(botão)',
 						loading: 'Carregando...',
 						loading_alt: '(Carregando)',
 						page_info: 'num_page_top - num_page_end de cnt_whole',
-						select_ng: 'AtenÃ§Ã£o: Escolha uma opÃ§Ã£o da lista.',
+						select_ng: 'Atenção: Escolha uma opção da lista.',
 						select_ok: 'OK: Selecionado Corretamente.',
-						not_found: 'nÃ£o encontrado',
+						not_found: 'não encontrado',
 						ajax_error: 'Um erro aconteceu enquanto conectando a servidor. (ajax-combobox)'
 					};
 					break;
@@ -312,27 +312,27 @@
 					// Japanese (ja)
 				default:
 					message = {
-						add_btn: 'è¿½åŠ ãƒœã‚¿ãƒ³',
-						add_title: 'å…¥åŠ›ãƒœãƒƒã‚¯ã‚¹ã‚’è¿½åŠ ã—ã¾ã™',
-						del_btn: 'å‰Šé™¤ãƒœã‚¿ãƒ³',
-						del_title: 'å…¥åŠ›ãƒœãƒƒã‚¯ã‚¹ã‚’å‰Šé™¤ã—ã¾ã™',
-						next: 'æ¬¡ã¸',
-						next_title: 'æ¬¡ã®' + this.option.per_page + 'ä»¶ (å³ã‚­ãƒ¼)',
-						prev: 'å‰ã¸',
-						prev_title: 'å‰ã®' + this.option.per_page + 'ä»¶ (å·¦ã‚­ãƒ¼)',
-						first_title: 'æœ€åˆã®ãƒšãƒ¼ã‚¸ã¸ (Shift + å·¦ã‚­ãƒ¼)',
-						last_title: 'æœ€å¾Œã®ãƒšãƒ¼ã‚¸ã¸ (Shift + å³ã‚­ãƒ¼)',
-						get_all_btn: 'å…¨ä»¶å–å¾— (ä¸‹ã‚­ãƒ¼)',
-						get_all_alt: 'ç”»åƒ:ãƒœã‚¿ãƒ³',
-						close_btn: 'é–‰ã˜ã‚‹ (Tabã‚­ãƒ¼)',
-						close_alt: 'ç”»åƒ:ãƒœã‚¿ãƒ³',
-						loading: 'èª­ã¿è¾¼ã¿ä¸­...',
-						loading_alt: 'ç”»åƒ:èª­ã¿è¾¼ã¿ä¸­...',
-						page_info: 'num_page_top - num_page_end ä»¶ (å…¨ cnt_whole ä»¶)',
-						select_ng: 'æ³¨æ„ : ãƒªã‚¹ãƒˆã®ä¸­ã‹ã‚‰é¸æŠžã—ã¦ãã ã•ã„',
-						select_ok: 'OK : æ­£ã—ãé¸æŠžã•ã‚Œã¾ã—ãŸã€‚',
-						not_found: '(0 ä»¶)',
-						ajax_error: 'ã‚µãƒ¼ãƒã¨ã®é€šä¿¡ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚(ajax-combobox)'
+						add_btn: '追加ボタン',
+						add_title: '入力ボックスを追加します',
+						del_btn: '削除ボタン',
+						del_title: '入力ボックスを削除します',
+						next: '次へ',
+						next_title: '次の' + this.option.per_page + '件 (右キー)',
+						prev: '前へ',
+						prev_title: '前の' + this.option.per_page + '件 (左キー)',
+						first_title: '最初のページへ (Shift + 左キー)',
+						last_title: '最後のページへ (Shift + 右キー)',
+						get_all_btn: '全件取得 (下キー)',
+						get_all_alt: '画像:ボタン',
+						close_btn: '閉じる (Tabキー)',
+						close_alt: '画像:ボタン',
+						loading: '読み込み中...',
+						loading_alt: '画像:読み込み中...',
+						page_info: 'num_page_top - num_page_end 件 (全 cnt_whole 件)',
+						select_ng: '注意 : リストの中から選択してください',
+						select_ok: 'OK : 正しく選択されました。',
+						not_found: '(0 件)',
+						ajax_error: 'サーバとの通信でエラーが発生しました。(ajax-combobox)'
 					};
 			}
 			this.message = message;
@@ -428,7 +428,7 @@
 				var hidden_name = ($(elem.combo_input).attr('name') !== undefined) ?
 					$(elem.combo_input).attr('name') :
 					$(elem.combo_input).attr('id');
-				// CakePHPç”¨ã®å¯¾ç­– ä¾‹:data[search][user] -> data[search][user_primary_key]
+				// CakePHP用の対策 例:data[search][user] -> data[search][user_primary_key]
 				if (hidden_name.match(/\]$/)) {
 					hidden_name = hidden_name.replace(/\]?$/, '_primary_key]');
 				} else {
@@ -973,7 +973,7 @@
 					self._hideResults(self);
 					return;
 				}
-				q_word = q_word.split(/[\sã€€]+/);
+				q_word = q_word.split(/[\s　]+/);
 			} else {
 				q_word = [self.prop.tag.str];
 			}
@@ -1319,7 +1319,7 @@
 					}
 				}
 				$(self.elem.navi_p).show();
-				self._ehNaviPaging(self); // ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©è¨­å®š
+				self._ehNaviPaging(self); // イベントハンドラ設定
 			} else {
 				$(self.elem.navi_p).hide();
 			}
@@ -1397,7 +1397,7 @@
 						dd = $('<dd>').text(arr_subinfo[i][key]); // for XSS
 						$dl.append(dd);
 					}
-					// sub_infoå±žæ€§ã‚’å€™è£œãƒªã‚¹ãƒˆã®liã«è¿½åŠ 
+					// sub_info属性を候補リストのliに追加
 					str_subinfo = '{' + str_subinfo.join(',') + '}';
 					$(list).attr('sub_info', str_subinfo);
 
@@ -1423,7 +1423,7 @@
 			}
 			$(self.elem.container).width(w);
 
-			// containerã®positionã®å€¤ã«åˆã‚ã›ã¦top,leftã‚’è¨­å®šã™ã‚‹ã€‚
+			// containerのpositionの値に合わせてtop,leftを設定する。
 			if ($(self.elem.container).css('position') == 'static') {
 				// position: static
 				var offset = $(self.elem.combo_input).offset();
@@ -1458,7 +1458,7 @@
 			$(self.elem.container).removeClass(self.css_class.container_open);
 
 			self._abortAjax(self);
-			self._setButtonAttrDefault(); // ãƒœã‚¿ãƒ³ã®titleå±žæ€§åˆæœŸåŒ–
+			self._setButtonAttrDefault(); // ボタンのtitle属性初期化
 		},
 		_firstPage: function(self) {
 			if (!self.prop.is_suggest) {

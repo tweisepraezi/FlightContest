@@ -60,6 +60,7 @@ class OsmPrintMapService
     final static String HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY = "placenames-medium"
     
     final static String ATTR_OUTPUT_PROJECTION = "3857" // EPSG-Nummer, WGS84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
+    final static String ATTR_OUTPUT_PROJECTION_TASKCREATOR = "4326"
     final static String ATTR_INPUT_SRS = "epsg:4326"
      
     // Formate
@@ -81,52 +82,50 @@ class OsmPrintMapService
     final static int AIRPORTAREA_DISTANCE = 420 // mm
     final static int MARGIN = 10 // nicht bedruckbarer Rand [mm]
 
-    final static int FACTOR = 1 // Maßstabsverkleinerung (1 = 1:200000, 2 =  1:100000, 4 = 1:50000)
-    final static int FACTOR2 = 1 // Druckvergrößerung (1 = 1:100000, 2 = 1:50000)
     final static int DPI = 600 // Original: 300 DPI
     
     final static int TEXT_XPOS_LEFT = 5  // Abstand vom linken Rand [mm]
     final static int TEXT_XPOS_RIGHT = 5 // Abstand vom rechten Rand [mm]
     
-    final static int CONTEST_TITLE_FONT_SIZE = FACTOR*14
+    final static int CONTEST_TITLE_FONT_SIZE = 14
     final static int CONTEST_TITLE_YPOS_TOP = 6
      
-    final static int ROUTE_TITLE_FONT_SIZE = FACTOR*10
+    final static int ROUTE_TITLE_FONT_SIZE = 10
     final static int ROUTE_TITLE_YPOS_CONTEST_TITLE = 4
     
-    final static int EDITION_TITLE_FONT_SIZE = FACTOR*8
+    final static int EDITION_TITLE_FONT_SIZE = 8
     final static int EDITION_TITLE_YPOS_CONTEST_TITLE = 3
     
-    final static int BOTTOM_TEXT_FONT_SIZE = FACTOR*8
-    final static int BOTTOM_TEXT_YPOS = FACTOR*2 // mm
-    final static int BOTTOM_TEXT_YPOS2 = FACTOR*5 // mm
+    final static int BOTTOM_TEXT_FONT_SIZE = 8
+    final static int BOTTOM_TEXT_YPOS = 2 // mm
+    final static int BOTTOM_TEXT_YPOS2 = 5 // mm
     
     final static int SCALEBAR_YPOS_TOP = 6
     final static String SCALEBAR_TITLE = "5 NM"
-    final static int SCALEBAR_TITLE_FONT_SIZE = FACTOR*8
+    final static int SCALEBAR_TITLE_FONT_SIZE = 8
     
-    final static int TP_FONT_SIZE = FACTOR*24
+    final static int TP_FONT_SIZE = 24
     
-    final static BigDecimal FRAME_STROKE_WIDTH = FACTOR*1
-    final static BigDecimal TRACK_STROKE_WIDTH = FACTOR*0.75
-    final static BigDecimal GRATICULE_STROKE_WIDTH = FACTOR*0.5
-    final static BigDecimal SCALEBAR_STROKE_WIDTH = FACTOR*4
+    final static BigDecimal FRAME_STROKE_WIDTH = 1
+    final static BigDecimal TRACK_STROKE_WIDTH = 0.75
+    final static BigDecimal GRATICULE_STROKE_WIDTH = 0.5
+    final static BigDecimal SCALEBAR_STROKE_WIDTH = 4
     
     
-    final static int GRATICULE_TEXT_FONT_SIZE = FACTOR*8
+    final static int GRATICULE_TEXT_FONT_SIZE = 8
     final static BigDecimal GRATICULE_SCALEBAR_LEN = 0.2 // NM
-    final static int AIRFIELD_TEXT_FONT_SIZE = FACTOR*10
-    final static int PEAKS_TEXT_FONT_SIZE = FACTOR*10
-    final static int SPECIALS_TEXT_FONT_SIZE = FACTOR*10
+    final static int AIRFIELD_TEXT_FONT_SIZE = 10
+    final static int PEAKS_TEXT_FONT_SIZE = 10
+    final static int SPECIALS_TEXT_FONT_SIZE = 10
     final static String GEODATA_BUILDING_SCALE = "scale(0.75, 0.75)"
     final static String GEODATA_SYMBOL_SCALE = "scale(0.75, 0.75)"
-    final static int SYMBOL_TEXT_FONT_SIZE = FACTOR*10
+    final static int SYMBOL_TEXT_FONT_SIZE = 10
     
     final static String AIRSPACE_PRAEFIX = "AIRSPACE:"
     final static String AIRSPACE_LAYER_STYLE_SEPARATOR = ","
     final static String AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR = ":"
     final static String AIRSPACE_LAYER_ID_PREAFIX = "id_"
-    final static BigDecimal AIRSPACE_STROKE_WIDTH = FACTOR*0.75
+    final static BigDecimal AIRSPACE_STROKE_WIDTH = 0.75
     
     // 1:50000
     //final static int landuse_residential = 0xe0dfdf
@@ -209,6 +208,11 @@ class OsmPrintMapService
     {
         Map ret = [ok:false, message:'']
         
+        String projection = ATTR_OUTPUT_PROJECTION
+        if (contestMapParams.taskCreator) {
+            projection = ATTR_OUTPUT_PROJECTION_TASKCREATOR
+        }
+        
         String printjob_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
         String printjobid_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + contestMapParams.routeId + ".txt"
         String printfileid_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + contestMapParams.routeId + ".txt"
@@ -285,8 +289,8 @@ class OsmPrintMapService
         }
         
         int map_scale = contestMapParams.mapScale
-        int print_scale = map_scale/FACTOR
-        BigDecimal scalebar_x_diff = FACTOR*5*Defs.CONTESTMAPSCALE_200000/map_scale*GpxService.kmPerNM // 1 NM (9.26mm)
+        int print_scale = map_scale
+        BigDecimal scalebar_x_diff = 5*Defs.CONTESTMAPSCALE_200000/map_scale*GpxService.kmPerNM // 1 NM (9.26mm)
         
         int print_width = 0 // mm
         int print_height = 0 // mm
@@ -344,6 +348,7 @@ class OsmPrintMapService
                 paper_size = "T/O"
                 print_width = 2*AIRPORTAREA_DISTANCE
                 print_height = 2*AIRPORTAREA_DISTANCE
+                alternate_pos = true
                 break
         }
         if (contestMapParams.contestMapPrintLandscape) {
@@ -353,9 +358,6 @@ class OsmPrintMapService
         }
         print_width -= 2*MARGIN
         print_height -= 2*MARGIN
-        print_width *= FACTOR
-        print_height *= FACTOR
-        min_print_height *= FACTOR
         
         if (contestMapParams.contestMapCenterHorizontalPos != HorizontalPos.Center || contestMapParams.contestMapCenterVerticalPos != VerticalPos.Center) {
             BigDecimal print_width_nm = print_scale * print_width / Route.mmPerNM
@@ -380,14 +382,19 @@ class OsmPrintMapService
             }
         }
         
-        int contest_title_ypos = print_height - CONTEST_TITLE_YPOS_TOP*FACTOR
-        int route_title_ypos = contest_title_ypos - ROUTE_TITLE_YPOS_CONTEST_TITLE*FACTOR
-        int edition_title_ypos = route_title_ypos - EDITION_TITLE_YPOS_CONTEST_TITLE*FACTOR
-        int text_xpos_left = TEXT_XPOS_LEFT*FACTOR
-        int text_xpos_right = print_width - TEXT_XPOS_RIGHT*FACTOR
+        BigDecimal latlon_relation = 1
+        if (contestMapParams.taskCreator) {
+            latlon_relation = AviationMath.getLatLonDistanceRelation(contestMapParams.centerLatitude)
+            print_height *= latlon_relation
+        }
+        int contest_title_ypos = print_height - CONTEST_TITLE_YPOS_TOP
+        int route_title_ypos = contest_title_ypos - ROUTE_TITLE_YPOS_CONTEST_TITLE
+        int edition_title_ypos = route_title_ypos - EDITION_TITLE_YPOS_CONTEST_TITLE
+        int text_xpos_left = TEXT_XPOS_LEFT
+        int text_xpos_right = print_width - TEXT_XPOS_RIGHT
         int scalebar_xpos = text_xpos_right - TEXT_XPOS_RIGHT*scalebar_x_diff
-        int scalebar_ypos = print_height - SCALEBAR_YPOS_TOP*FACTOR
-        int scalbar_text_ypos = scalebar_ypos - 3*FACTOR   // 3mm nach unten
+        int scalebar_ypos = print_height - SCALEBAR_YPOS_TOP
+        int scalbar_text_ypos = scalebar_ypos - 3   // 3mm nach unten
         
         //...........................................................................................
         String mapdata_date = ""
@@ -425,68 +432,71 @@ class OsmPrintMapService
         if (mapdata_date) {
             copyright_text += ". ${getMsg('fc.contestmap.mapdata.date',[mapdata_date],true)}"
         }
-        String user_text = """{
-            "Style": "<LineSymbolizer stroke='black' stroke-width='${FRAME_STROKE_WIDTH}' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(0.0 0.0, 0.0 ${print_height}, ${print_width} ${print_height}, ${print_width} 0.0, 0.0 0.0)"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${CONTEST_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.contestTitle}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_left} ${contest_title_ypos})"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${ROUTE_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.routeTitle}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_left} ${route_title_ypos})"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${EDITION_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${edition_text}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_left} ${edition_title_ypos})"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${generator_text}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS2})"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${copyright_text}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS})"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.scale',true)} 1:${map_scale}, ${paper_size}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS})"
-        },
-        {
-            "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos} ${scalebar_ypos}, ${scalebar_xpos + scalebar_x_diff} ${scalebar_ypos})"
-        },            
-        {
-            "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='0.2' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 2*scalebar_x_diff} ${scalebar_ypos})"
-        },            
-        {
-            "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + 2*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 3*scalebar_x_diff} ${scalebar_ypos})"
-        },            
-        {
-            "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='0.2' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + 3*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 4*scalebar_x_diff} ${scalebar_ypos})"
-        },            
-        {
-            "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + 4*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 5*scalebar_x_diff} ${scalebar_ypos})"
-        },
-        {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SCALEBAR_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${SCALEBAR_TITLE}'</TextSymbolizer>",
-            "WellKnownText": "POINT(${text_xpos_right} ${scalbar_text_ypos})"
-        }"""
-        if (contestMapParams.contestMapContourLines) {
-            user_text += """,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.contestmapcontourlines',true)} ${contestMapParams.contestMapContourLines}${getMsg('fc.contestmap.contestmapcontourlines.unit',true)}'</TextSymbolizer>",
-                "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS2})"
-            }"""
+        String user_text = ""
+        if (!contestMapParams.taskCreator) {
+            user_text = """{
+                "Style": "<LineSymbolizer stroke='black' stroke-width='${FRAME_STROKE_WIDTH}' stroke-linecap='butt' />",
+                "WellKnownText": "LINESTRING(0.0 0.0, 0.0 ${print_height}, ${print_width} ${print_height}, ${print_width} 0.0, 0.0 0.0)"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-2' size='${CONTEST_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.contestTitle}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_left} ${contest_title_ypos})"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-2' size='${ROUTE_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.routeTitle}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_left} ${route_title_ypos})"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${EDITION_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${edition_text}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_left} ${edition_title_ypos})"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${generator_text}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS2})"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${copyright_text}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS})"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.scale',true)} 1:${map_scale}, ${paper_size}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS})"
+            },
+            {
+                "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
+                "WellKnownText": "LINESTRING(${scalebar_xpos} ${scalebar_ypos}, ${scalebar_xpos + scalebar_x_diff} ${scalebar_ypos})"
+            },            
+            {
+                "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='0.2' stroke-linecap='butt' />",
+                "WellKnownText": "LINESTRING(${scalebar_xpos + scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 2*scalebar_x_diff} ${scalebar_ypos})"
+            },            
+            {
+                "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
+                "WellKnownText": "LINESTRING(${scalebar_xpos + 2*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 3*scalebar_x_diff} ${scalebar_ypos})"
+            },            
+            {
+                "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='0.2' stroke-linecap='butt' />",
+                "WellKnownText": "LINESTRING(${scalebar_xpos + 3*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 4*scalebar_x_diff} ${scalebar_ypos})"
+            },            
+            {
+                "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
+                "WellKnownText": "LINESTRING(${scalebar_xpos + 4*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 5*scalebar_x_diff} ${scalebar_ypos})"
+            },
+            {
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SCALEBAR_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${SCALEBAR_TITLE}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_right} ${scalbar_text_ypos})"
+            },"""
+            if (contestMapParams.contestMapContourLines) {
+                user_text += """{
+                    "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.contestmapcontourlines',true)} ${contestMapParams.contestMapContourLines}${getMsg('fc.contestmap.contestmapcontourlines.unit',true)}'</TextSymbolizer>",
+                    "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS2})"
+                },"""
+            }
         }
         
         String gpx_file_name = contestMapParams.gpxFileName.replaceAll('\\\\', '/')
         String gpx_short_file_name = gpx_file_name.substring(gpx_file_name.lastIndexOf('/')+1)
-        String gpx_lines = """,{
+        String gpx_lines = """{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
             "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
@@ -523,7 +533,7 @@ class OsmPrintMapService
         }"""
         
         String graticule_lines = ""
-        if (graticule_file_name) {
+        if (!contestMapParams.taskCreator && graticule_file_name) {
             if (create_graticule_csv(graticule_file_name, contestMapParams.centerGraticuleLatitude, contestMapParams.centerGraticuleLongitude, contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_scale, print_width, print_height, min_print_height, alternate_pos)) {
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
@@ -699,21 +709,38 @@ class OsmPrintMapService
             }
             airports_file_name = contestMapParams.webRootDir + file_name
             String airports_short_file_name = airports_file_name.substring(airports_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
-            airports_lines = """,{
-                "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0),scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
-                "Type": "csv",
-                "File": "${airports_short_file_name}",
-                "Layer": ""
+            if (contestMapParams.taskCreator) {
+                airports_lines = """,{
+                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='scale(0.6, ${latlon_relation*0.6}),rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0)' allow-overlap='true' placement='point' />",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "Type": "csv",
+                    "File": "${airports_short_file_name}",
+                    "Layer": ""
+                }
+                ,{
+                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, ${latlon_relation*0.6})' allow-overlap='true' placement='point' />",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "Type": "csv",
+                    "File": "${airports_short_file_name}",
+                    "Layer": ""
+                }"""
+            } else {
+                airports_lines = """,{
+                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0),scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "Type": "csv",
+                    "File": "${airports_short_file_name}",
+                    "Layer": ""
+                }
+                ,{
+                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "Type": "csv",
+                    "File": "${airports_short_file_name}",
+                    "Layer": ""
+                }"""
             }
-            ,{
-                "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
-                "Type": "csv",
-                "File": "${airports_short_file_name}",
-                "Layer": ""
-            }
-            ,{
+            airports_lines += """,{
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='6' fill='black' allow-overlap='true' dy='8' placement='point'>[${OpenAIPService.CSV_AIRPORT_NAME}]</TextSymbolizer>",
                 "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
@@ -730,16 +757,8 @@ class OsmPrintMapService
         }
         
         printstart "print_osm Scale=1:${print_scale} Width=${print_width} Height=${print_height}"
-        BigDecimal INCH_2_MM = 25.4
-        BigDecimal PX_PER_MM = DPI / INCH_2_MM
-        BigDecimal PXX = 6.75
-        int print_width_px = (print_width * PX_PER_MM / FACTOR).toInteger()
-        int print_height_px = (print_height * PX_PER_MM / FACTOR).toInteger()
-        int print_width_pxx = (print_width_px / PXX).toInteger()
-        int print_height_pxx = (print_height_px / PXX).toInteger()
-        println "PX_PER_MM: $PX_PER_MM"
-        println "print_width: $print_width mm, $print_width_px px, $print_width_pxx pxx"
-        println "print_height: $print_height mm, $print_height_px px, $print_height_pxx pxx"
+        println "print_width: $print_width mm"
+        println "print_height: $print_height mm"
     
         String printjob_id = ""
         boolean job_started = false
@@ -762,7 +781,7 @@ class OsmPrintMapService
                     "Latitude": ${contestMapParams.centerLatitude},
                     "Longitude": ${contestMapParams.centerLongitude},
                     "Style": "${style}",
-                    "Projection": "${ATTR_OUTPUT_PROJECTION}",
+                    "Projection": "${projection}",
                     "HideLayers": "${hide_layers}",
                     "UserObjects": [
                         ${user_text}
@@ -836,7 +855,7 @@ class OsmPrintMapService
                     }
                 }
             }
-            if (graticule_file_name) {
+            if (!contestMapParams.taskCreator && graticule_file_name) {
                 printstart "Upload graticule"
                 FileUpload("/upload/${printjob_id}", graticule_file_name)
                 printdone ""
@@ -941,7 +960,7 @@ class OsmPrintMapService
                  (Defs.OSMPRINTMAP_PNGFILENAME):contestMapParams.pngFileName,
                  (Defs.OSMPRINTMAP_PRINTLANDSCAPE):contestMapParams.contestMapPrintLandscape,
                  (Defs.OSMPRINTMAP_PRINTSIZE):contestMapParams.contestMapPrintSize,
-                 (Defs.OSMPRINTMAP_PRINTPROJECTION):ATTR_OUTPUT_PROJECTION,
+                 (Defs.OSMPRINTMAP_PRINTPROJECTION):projection,
                  (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):false // contestMapParams.printColorChanges
                 ]
             )
@@ -1095,23 +1114,17 @@ class OsmPrintMapService
                         }
                         
                         // Generate pngFileName
-                        if (FACTOR > 1) {
-                            printstart "Downscale ${unpacked_png_file_name} -> ${pngFileName}"
-                            downscaleImage(unpacked_png_file_name, pngFileName, (img_width/FACTOR2).toInteger(), (img_height/FACTOR2).toInteger(), printLandscape, printColorChanges)
+                        printstart "Copy ${unpacked_png_file_name} -> ${pngFileName}"
+                        def src_file = new File(unpacked_png_file_name).newInputStream()
+                        try {
+                            def dest_file = new File(pngFileName).newOutputStream()
+                            dest_file << src_file
+                            dest_file.close()
                             printdone ""
-                        } else {
-                            printstart "Copy ${unpacked_png_file_name} -> ${pngFileName}"
-                            def src_file = new File(unpacked_png_file_name).newInputStream()
-                            try {
-                                def dest_file = new File(pngFileName).newOutputStream()
-                                dest_file << src_file
-                                dest_file.close()
-                                printdone ""
-                            } catch (Exception e) {
-                                printerror e.getMessage()
-                            }
-                            src_file.close()
+                        } catch (Exception e) {
+                            printerror e.getMessage()
                         }
+                        src_file.close()
 
                         /*
                         if (BootStrap.global.IsGDALAvailable()) {
@@ -1546,105 +1559,7 @@ class OsmPrintMapService
         connection.doOutput = true
         connection.useCaches = false
         
-        /*
-        if (outputData) {
-            connection.doOutput = true
-            switch (dataType) {
-                case DataType.JSON:
-                    byte[] output_bytes = outputData.getBytes("UTF-8")
-                    OutputStream os = connection.getOutputStream()
-                    os.write(output_bytes)
-                    os.close()
-                    break
-                case DataType.BINARY:
-                    OutputStream os = connection.getOutputStream()
-                    os << outputData
-                    os.close()
-                    break
-            }
-        }
-        
-        //String auth_str = "${LOGIN_NAME}:${LOGIN_PASSWORD}".getBytes().encodeBase64().toString()
-        //connection.setRequestProperty( "Authorization", "Basic ${auth_str}" )
-        try {
-            switch (dataType) {
-                case DataType.JSON:
-                    String s = connection.content.text
-                    s = new String(s.getBytes("ISO-8859-1"), "UTF-8")
-                    ret.json = new JsonSlurper().parseText(s)
-                    break
-                case DataType.BINARY:
-                    ret.binary = connection.content
-                    break
-            }
-            ret.responseCode = connection.responseCode
-            if (LOG_RESTAPI_RETURNS) {
-                if (dataType == DataType.JSON) {
-                    println "${ret.responseCode} ${ret.json}"
-                } else {
-                    println "${ret.responseCode}"
-                }
-            }
-            return ret
-        } catch (Exception e) {
-            if (LOG_RESTAPI_EXCEPTIONS) {
-                println "Exception: ${e.getMessage()} ${e}"
-            }
-        }
-        */
-        
         return ret
-    }
-
-    //--------------------------------------------------------------------------
-    private void downscaleImage(String pngInputFileName, String pngResizedFileName, int imgWidth, int imgHeight, boolean isLandscape, boolean printColorChanges)
-    {
-        println "Width=${imgWidth}, Height=${imgHeight}, Landscape=${isLandscape}"
-        try {
-            File input_png_file = new File(pngInputFileName)
-            BufferedImage input_img = ImageIO.read(input_png_file)
-            int type = input_img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : input_img.getType()
-            
-            BufferedImage resized_image = resizeImage(input_img, type, imgWidth, imgHeight, printColorChanges)
-            
-            def dest_file = new File(pngResizedFileName)
-            savePNGImage(dest_file, resized_image, isLandscape)
-            
-        } catch(IOException e) {
-            println(e.getMessage())
-        }
-    }
-    
-    //--------------------------------------------------------------------------
-    private static BufferedImage resizeImage(BufferedImage originalImage, int type, int imgWidth, int imgHeight, boolean printColorChanges)
-    {
-        BufferedImage resized_image = new BufferedImage(imgWidth, imgHeight, type)
-        
-        Graphics2D g = resized_image.createGraphics()
-        g.drawImage(originalImage, 0, 0, imgWidth, imgHeight, null)
-        g.dispose()
-    
-        if (printColorChanges) {
-            BufferedImage recolored_image = new BufferedImage(imgWidth, imgHeight, type)
-            for (int x = 0; x < imgWidth; x++) {
-                for (int y = 0; y < imgHeight; y++) {
-                    int pixel = resized_image.getRGB(x, y)
-                    int alpha = (pixel & 0xff000000) >> 24
-                    int rgb = (pixel & 0x00ffffff)
-                    for (Map color_change in COLOR_CHANGES) {
-                        for (int old_rgb in color_change.OldRGBs) {
-                            if (rgb == old_rgb) {
-                                pixel = (alpha << 24) + color_change.NewRGB
-                            }
-                        }
-                    }
-                    recolored_image.setRGB(x, y, pixel)
-                }
-            }
-            return recolored_image
-        }
-        
-        return resized_image
     }
 
     //--------------------------------------------------------------------------

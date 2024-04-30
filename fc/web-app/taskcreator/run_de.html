@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Rally Flying Task Creator</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<link rel="stylesheet" type="text/css" href="css/airrats.css" />
+		<link rel="stylesheet" type="text/css" href="js/jquery.ajax-combobox/css/jquery.ajax-combobox.css"/>
+		<link rel="icon" type="image/x-icon" href="favicon.ico" />
+		<script defer src="https://maps.googleapis.com/maps/api/js?callback=InitMap&amp;libraries=geometry&amp;v=beta&amp;key=AIzaSyDFCicW-Cz5hVwe3sBG5qyWdyzBfWiRIY0"></script>
+		<script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
+		<!--<script src="js/jquery.blockUI.js"></script>-->
+		<script src="js/jquery.ajax-combobox/js/jquery.ajax-combobox.js"></script>
+							<script src="js/airrats.min.js"></script>
+	</head>
+	<body onmousemove="get_taskname()" onload="clear_addons()">
+		<div id="print_map" style="display: none;" class="print_map no_print">
+			<button class="back">Zurück</button>
+			<label for="print_scale">Karten-Maßstab:</label>
+			<select id="print_scale">
+				<option value="200000" selected>1:200.000</option>
+				<option value="250000" disabled>1:250.000</option>
+			</select>
+			<label for="print_task_margin_nm">Task-Rand (NM):</label>
+			<span><input id="print_task_margin_nm" type="text" value="3" style="width: 20px; text-align: center;"></span>
+			<label for="print_map_width">Karten-Breite (px):</label>
+			<span><input id="print_map_width" type="text" style="width: 35px; text-align: center;"></span>
+			<label for="print_map_height">Karten-Höhe (px):</label>
+			<span><input id="print_map_height" type="text" style="width: 35px; text-align: center;"></span>
+			<br>
+			<label for="paper_size">Papier-Größe:</label>
+			<select id="paper_size">
+				<option value="A3">A3 (297 x 420 mm)</option>
+				<option value="A4">A4 (210 x 297 mm)</option>
+				<option value="Letter">Letter (8.5 x 11 in)</option>
+				<option value="Folio" selected>Folio (8.5 x 13 in)</option>
+				<option value="user">Benutzer-definiert</option>
+			</select>
+			<label for="paper_width">Papier-Breite (in):</label>
+			<span><input id="paper_width" type="text" style="width: 25px; text-align: center;" value="8.5"></span>
+			<label for="paper_height">Papier-Höhe (in):</label>
+			<span><input id="paper_height" type="text" style="width: 25px; text-align: center;" value="13"></span>
+			<label for="printer_margin">Druck-Rand (in):</label>
+			<span><input id="printer_margin" type="text" style="width: 25px; text-align: center;" value="0.25"></span>
+			<br>
+			<label for="chk_print_task">Zeige Task:</label>
+			<span><input id="chk_print_task" class="chk" type="checkbox"></span>
+			<label for="print_task_format">Format:</label>
+			<select id="print_task_format" class="task_format">
+				<option value="Normal">Normal</option>
+				<option value="Print" selected>Drucken</option>
+				<option value="Gates" disabled>Tore</option>
+			</select>
+			<label for="chk_print_suas" style="margin-left:5px" title="Ein/Aus von SUAs">SUAs:</label>
+			<input type="checkbox" id="chk_print_suas" class="chk" title="Ein/Aus von SUAs">
+			<label for="chk_print_grid" title="Ein/Aus Gradnetz">Gradnetz:</label>
+			<input type="checkbox" id="chk_print_grid" class="chk" checked title="Ein/Aus Gradnetz">
+			<label for="chk_disable_drag" title="Deshabilita arrastrar el mapa en Impresión">Scrollen sperren:</label>
+			<input type="checkbox" id="chk_disable_drag" class="chk" checked title="Deshabilita arrastrar el mapa en Impresión">
+			<br>
+			<span id="print_loading_tiles" style="padding-top: 15px;"><b>Lade Karte...</b></span>
+			<span id="print_pages_message">
+				<b><span id="print_map_orientation" style="padding-top: 15px;">Drucke im Hochformat.</span></b>
+				Seite <span id="print_map_page_num">1</span> von <span id="print_map_pages">1</span>.
+			</span>
+			<button id="btn_print_map_next_page" style="vertical-align: middle;">Nächste Seite</button>
+			<button id="btn_print" style="vertical-align: middle;">Drucken</button>
+		</div>
+		<div id="left_panel">
+			<div style="display:block;">
+                <span id="titulo1" style="font-size: 15px;">Carlos Rocca's</span>
+			</div>
+			<div style="display:block;">
+				<span id="titulo1" style="font-size: 25px;">Rally Flying Task Creator</span>
+				<!--				<label for="langID" style="margin-left: 30px;">Idioma:</label>
+								<select name="langID" id="langID" >
+									<option value="es" selected>Español</option>
+									<option value="en">Inglés</option>
+								</select>-->
+				<span>
+					<a href="https://docs.google.com/document/d/1-TuXVMyfXsetKNR76ihWCCA9OulyypiDCdrvXN9wnA4"
+						 target="_blank" style="float:right; margin-right: 20px; margin-top: 5px; font-size: 15px;">Anweisungen</a>
+				</span>
+				<!--				<div>
+									<label for="username" style="">Username:</label>
+									<span><input id="username" type="text" style="text-align: center; width:100px;"></span>
+									<label for="password" style="">Password:</label>
+									<span><input id="password" type="password" style="text-align: center; width:100px;"></span>
+								</div>-->
+			</div>
+			<div style="display:block;">
+                <span id="titulo1" style="font-size: 12px;">Flight Contest Benutzeroberfläche</span>
+			</div>
+			<div id="separador_load" class="separador"><hr></div>
+			<div id="seccion_load">
+                <label for="task_name" style="float: left; margin: 4px 5px 0 0;">Task-Name:</label>
+                <div style="display: inline-block; vertical-align: bottom;">
+                    <input type="text" id="task_name1" class="task_name" style="width:200px" onchange="set_taskname()" >
+                </div>
+                <div style="display: none;">
+                    <input type="text" id="task_name" class="task_name">
+                </div>
+                <div style="margin-top:4px;">
+                    <button id="save_as_csv" title="Task in eine CSV-Datei speichern.">Speichern</button>
+                    <button id="btn_delete_task" title="Task löschen." onclick="clear_taskname()" style="margin-left:10px;">Löschen</button>
+                    <button id="btn_csv" title="Task von einer CSV-Datei laden.">Laden</button>
+                    <button title="Karten-Url mit dem aktuellen Wettbewerb synchronisieren." onclick="sync_map_url()" style="margin-right:5px;">Sync Karten-Url</button>
+                    <input type="file" name="File Upload" id="load_csv" accept=".csv" style="display:none;" />
+                    <button id="btn_save_as_fc" style="margin-left:5px;" title="FC-Strechen-Datei (kml) speichern. Mit FC-Strecken-Import importieren.">Export FC kml</button>
+                </div>
+                <script>
+                    function set_taskname() {
+                        var v = $("#task_name1").val();
+                        $('#task_name').val(v);
+                    }
+                    function get_taskname() {
+                        var v = $("#task_name").val();
+                        if (v) {
+                            $('#task_name1').val(v);
+                        }
+                    }
+                    function clear_taskname() {
+                        $('#task_name1').val('');
+                    }
+                    function clear_addons() {
+                        $('#btn_delete_suas').trigger("click");
+                        $('#btn_delete_map_addons').trigger("click");
+                    }
+                    function get_map_params(params, searchParam) {
+                        params = params.substr(1);
+                        var params_array = params.split('&');
+                        for (let i in params_array) {
+                            if (params_array[i].startsWith(searchParam)) {
+                                var data = params_array[i].substr(searchParam.length+1);
+                                var data_array = data.split(',');
+                                return data_array;
+                            }
+                        }
+                        return null;
+                    }
+                    function sync_map_url() {
+                        if ($("#map_url").val()) {
+                            var map_data = get_map_params(window.location.search, 'baseurl');
+                            if (map_data) {
+                                var new_map_url = map_data[0].replaceAll('%22','') + $("#map_url").val().substr($("#map_url").val().lastIndexOf('/')+1)
+                                $("#map_url").val(new_map_url)
+                            }
+                        }
+                    }
+                </script>
+            </div>
+            <div id="separador_carta" class="separador"><hr></div>
+			<div id="seccion_carta">
+				<div id="seccion_mapa_usuario" style="margin-left:10px;">
+					<label for="map_url" style="margin-left: 0px;" title="Für eigene Karten">Karten-Url:</label>
+					<input id="map_url" type="url" style="width:340px; margin-left: 2px; margin-right: 2px; margin-bottom: 2px;"><br>
+					<label for="map_n" style="margin-left: 0px;" title="Nördliche Grenze(Punkt als Dezimaltrennzeichen verwenden)">N:</label>
+					<span><input id="map_n" type="number" min="-90" max="90" lang="en" style="text-align: center; width:60px" title="Nördliche Grenze(Punkt als Dezimaltrennzeichen verwenden)"></span>
+					<label for="map_s" style="margin-left: 8px;" title="Südliche Grenze (Punkt als Dezimaltrennzeichen verwenden)">S:</label>
+					<span><input id="map_s" type="number" min="-90" max="90" lang="en" style="text-align: center; width:60px" title="Südliche Grenze (Punkt als Dezimaltrennzeichen verwenden)"></span>
+					<label for="map_e" style="margin-left: 8px;" title="Östliche Grenze (Punkt als Dezimaltrennzeichen verwenden)">E:</label>
+					<span><input id="map_e" type="number" min="-180" max="180" lang="en" style="text-align: center; width:60px" title="Östliche Grenze (Punkt als Dezimaltrennzeichen verwenden)"></span>
+					<label for="map_w" style="margin-left: 8px;" title="Westliche Grenze (Punkt als Dezimaltrennzeichen verwenden)">W:</label>
+					<span><input id="map_w" type="number" min="-180" max="180" lang="en" style="text-align: center; width:60px" title="Límite Weste (usar punto como separador decimal)"></span>
+					<button id="load_url_map">Laden</button><br>
+					<label for="addons_url" style="margin-left: 0px;" title="Karten-Zusätze-Url">Addons-Url:</label>
+					<input id="addons_url" type="url" style="width:270px; margin:2px;" title="Karten-Zusätze-Url"
+								 value="https://www.airrats.cl/taskcreator/maps/addons_chile.kmz">
+					<button id="btn_load_map_addons" title="Lade Karten-Zusätze">Laden</button>
+					<button id="btn_delete_map_addons" title="Karten-Zusätze löschen">Löschen</button><br>
+					<label for="suas_url" style="margin-left: 0px;" title="Luftraum-KMZ-Datei-Url">SUAs-Url:</label>
+					<input id="suas_url" type="url" style="width:255px; margin:2px;" title="Luftraum-KMZ-Datei-Url"
+								 value="https://www.airrats.cl/taskcreator/maps/suas_chile.kmz">
+					<button id="btn_load_suas" title="Lade SUA-kmz-Dateien">Laden</button>
+					<button id="btn_delete_suas" title="Borrar SUAs">Löschen</button>
+				</div>
+				<div>
+					<label for="controls" style="margin-left: 0px;" title="Ein/Aus Google Maps Steuerung">Karten-Steuerelemente:</label>
+					<input type="checkbox" id="controls" class="chk" checked title="Ein/Aus Google Maps Steuerung">
+					<label for="chk_show_grid" title="Ein/Aus Gradnetz">Gradnetz:</label>
+					<input type="checkbox" id="chk_show_grid" class="chk" title="Ein/Aus Gradnetz">
+					<label for="chk_show_suas" style="margin-left:5px" title="Ein/Aus von SUAs">SUAs:</label>
+					<input type="checkbox" id="chk_show_suas" class="chk" checked title="Ein/Aus von SUAs" >
+					<label for="map_opacity" title="Karten-Deckkraft">Deckkraft:</label>
+					<input type="range" id="map_opacity" value="1.0" min="0.0" max="1.0" step="0.01" style="vertical-align:middle; width:60px;">
+					<button id="delete_map">Alles löschen</button>
+				</div>
+			</div>
+			<div id="separador_prueba" class="separador"><hr></div>
+			<div id="seccion_prueba">
+				<div>
+				</div>
+				<div style="margin-top: 3px;">
+					<label for="category" style="margin: 0px;">Kategorie:</label>
+					<select id="category">
+						<option value="A">Erweitert</option>
+						<option value="U" selected>Unlimited</option>
+					</select>
+					<label for="task_format" style="margin: 0px;">Format:</label>
+					<select id="task_format" class= "task_format">
+						<option value="Normal" selected>Normal</option>
+						<option value="Print">Drucken</option>
+						<option value="Gates" disabled>Tore</option>
+					</select>
+									</div>
+				<div style="margin-top: 3px;">
+					<label for="desviacion" style="margin-left: 0px;" title="Magnetische Deklination (E<0, W>0)">M.Dekl.:</label>
+					<span><input id="desviacion" class="desviacion" type="text" title="Magnetische Deklination (E<0, W>0)" style="text-align: center; width:20px" value="0"></span>
+					<label for="velocidad" title="Task-Geschwindigkeit in Knoten">Geschwindigkeit:</label>
+					<input id="velocidad" class="velocidad" type="text" style="text-align: center; width:15px" value="70" title="Task-Geschwindigkeit in Knoten">
+					<label for="velocidad_sp" title="Geschwindigkeit zum SP in Knoten">Geschw. zum SP:</label>
+					<span><input id="velocidad_sp" class="velocidad_sp" type="text" style="text-align: center; width:15px" value="70" title="Geschwindigkeit zum SP in Knoten"></span>
+					<label for="seconds_to_sp" title="Zusätzliche Sekunden zum SP (max. 255)">Sekunden:</label>
+					<span><input id="seconds_to_sp" class="seconds_to_sp" type="text" style="text-align: center; width:25px" value="0" title="Zusätzliche Sekunden zum SP (max. 255)"></span>
+					<!--<button id="test1">T1</button>-->
+				</div>
+				<div style="margin-top: 3px;">
+					<label for="notes"  style="margin-left: 0px;" title="Notizen">Notizen:</label>
+					<textarea id="notes" class="notes" style="width:360px; height:15px; vertical-align:middle;" title="Notizen">Check Both Categories: TPs, Total Distance, Map Name, Speed, Spd to SP, Seconds, Mag Dec, Arc descriptions, Scenic Leg descriptions
+Unlimited Category: False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Unsort
+Advanced Category: False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Sort</textarea>
+				</div>
+				<div style="margin-top: 3px;">
+					Drucken:
+					<button id="btn_print_task">Task</button>
+					<button id="btn_print_map">Karte</button>
+					<button id="btn_print_real_photos">Aufgenommene Fotos</button>
+					<button id="btn_print_folder_photos">Foto-Ordner</button>
+					<button id="btn_print_gm_photos">Google Maps Fotos</button>
+					<input type="file" id="importar_fotos" name="fotos[]" accept=".jpg" multiple style="width:200px; display:none;" />
+					<!--<button id="boton_respuestas">Respuestas</button>-->
+					<label for="cps_por_pagina" style="display: none;">CPs/pág:</label>
+					<select id="cps_por_pagina" style="display: none;">
+						<option value="8">8</option>
+						<option value="10" selected>10</option>
+					</select>
+				</div>
+			</div>
+			<div id="separador_checkpoints" class="separador"><hr></div>
+			<div id ="seccion_checkpoints">
+				<span class="titulo_seccion">Check-Punkte</span>
+				<label for="edit_cps">Bearbeiten:</label>
+				<input type="checkbox" id="edit_cps" class="chk">
+				<label for="chk_tp_guide" title="Zeigt in roten Zonen, wo TPs nicht erlaubt sind.">Leitfäden:</label>
+				<input type="checkbox" id="chk_tp_guide" class="chk" checked>
+				<label for="auto_centrar">Auto-Center:</label>
+				<input type="checkbox" id="auto_centrar" class="chk" checked>
+				<label for="chk_show_task">Zeige Task:</label>
+				<input type="checkbox" id="chk_show_task" class="chk" checked>
+				<br>
+				Zeige:
+				<label for="tp">CPs</label>
+				<input type="radio" name="fields" id="tp" value="tp" checked>
+				<label for="refs">Refs</label>
+				<input type="radio" name="fields" id="refs" value="refs">
+				<label for="photo">Fotos</label>
+				<input type="radio" name="fields" id="photo" value = "photo">
+				<span style="float: right; margin-right: 10px; vertical-align: bottom;" 
+							title="Entfernung (SP to FP) / Gesamtentfernung (TO to LDP)">
+					SP - FP / TO - LDG: <span id="totalDistance">0 / 0</span> mn</span>
+				<div id="tps_table"></div>
+			</div>
+			<div id="separador_plottingpoints" class="separador"><hr></div>
+			<div id ="seccion_plottingpoints">
+				<span class="titulo_seccion">PLOTTING POINTS</span>
+				<label for="edit_pps">Bearbeiten:</label>
+				<input type="checkbox" id="edit_pps" class="edit_pps chk">
+				<div id="plotting_points"></div>
+			</div>
+			<div id="separador_fotos_de_ruta" class="separador"><hr></div>
+			<div id="seccion_fotos_de_ruta">
+				<div>
+					<div class="titulo_seccion" style="margin-top:2px; margin-bottom: 3px; float:left;">STRECKEN-FOTOS</div>
+					<label for="edit_eps">Bearbeiten:</label>
+					<input type="checkbox" id="edit_eps" class="edit_eps chk">
+					<label for="show_eps">Zeige:</label>
+					<input type="checkbox" id="show_eps" class="show_eps chk" checked>
+					<label for="ep_change" title="Strecken-Foto-Seitenwechsel nach TP">Seitenwechsel:</label>
+					<select id="ep_change" class="ep_change" title="Strecken-Foto-Seitenwechsel nach TP">
+						<option value="19" selected>1 Pag</option>
+						<option value="1">CP1</option>
+						<option value="2">CP2</option>
+						<option value="3">CP3</option>
+						<option value="4">CP4</option>
+						<option value="5">CP5</option>
+						<option value="6">CP6</option>
+						<option value="7">CP7</option>
+						<option value="8">CP8</option>
+						<option value="9">CP9</option>
+						<option value="10">CP10</option>
+						<option value="11">CP11</option>
+						<option value="12">CP12</option>
+						<option value="13">CP13</option>
+						<option value="14">CP14</option>
+						<option value="15">CP15</option>
+						<option value="16">CP16</option>
+						<option value="17">CP17</option>
+						<option value="18">CP18</option>
+					</select>
+					<br>
+					<button id="btn_delete_eps" style="margin-left:5px;">Alles löschen</button>
+					<button id="btn_sort_eps">Sort</button>
+					<button id="btn_unsort_eps">Unsortiert</button>
+					<label for="chk_eps_photo_view">Foto-Anzeige:</label>
+					<input type="checkbox" id="chk_eps_photo_view" class="chk" style="margin-top: 5px;">
+				</div>
+				<div id="fotos_de_ruta"></div>
+			</div>
+		</div>
+		<div id="photo_frame_left" class="photo_frame" style="width: 0; height: 2.4in; border-left: 5px dashed red;"></div>
+		<div id="photo_frame_top" class="photo_frame" style="width: 3.95in; height: 0; border-top: 5px dashed red;"></div>
+		<div id="photo_frame_right" class="photo_frame" style="width: 0; height: 2.4in; border-right: 5px dashed red;"></div>
+		<div id="photo_frame_bottom" class="photo_frame" style="width: 3.95in; height: 0; border-bottom: 5px dashed red;"></div>
+		<div id="map" style="overflow: hidden; height: 99%;"></div>
+		<div id="page_print_task" style="display: none;">
+			<button class="back no_print">Zurück</button>
+			<div id="print_notes_div">
+				<div class="titulo page_break_before">
+					<span class="task_name">Nombre Prueba</span>&nbsp;&nbsp;-&nbsp;&nbsp;Kategorie <span class="category">Unlimited</span>
+				</div>
+				<div id="subtitulo_prueba" class="subtitulo">Übungs-Task</div>
+				<div id="subtitulo_prueba" class="subtitulo"><br>Notizen<br></div>
+				<textarea id="print_notes" class="notes" style="display:block; margin:auto; width:600px; max-height:8in; border:none;">Check:
+Both Categories: TPs, Total Distance, Map Name, Speed, Spd to SP, Seconds, Mag Dec, Arc descriptions, Scenic Leg descriptions
+Unlimited Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Unsort
+Advanced Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Sort</textarea>
+			</div>
+			<div class="titulo page_break_before">
+				<span class="task_name">Nombre Prueba</span>&nbsp;&nbsp;-&nbsp;&nbsp;Kategorie <span class="category">Unlimited</span>
+			</div>
+			<div id="subtitulo_prueba" class="subtitulo">Übungs-Task</div>
+			<div id="map_title" class="map_title">Karte</div>
+			<div style="text-align: center;">
+				<label for="velocidad">Task-Geschwindigkeit:</label>
+				<span><input id="velocidad_imp" class="velocidad" type="text" style="width:30px; text-align: center;" value="70"></span>
+				<label for="velocidad">kn</label>
+				<div id="desviacion_imp" class="desviacion" style="display: inline-block; text-align: center; margin-left: 40px;">Magnetische Deklination: 0°E</div>
+				<br>
+				<div>
+					<label for="velocidad_sp">Speed to SP:</label>
+					<span><input id="velocidad_sp_imp" class="velocidad_sp" type="text" style="width:30px; text-align: center;" value="70"></span>
+					<label for="velocidad_sp">kn</label>
+					<label for="seconds_to_sp_imp">Segundos adicionales al SP:</label>
+					<span><input id="seconds_to_sp_imp" class="seconds_to_sp" type="text" style="width:30px; text-align: center;" value="0"></span>
+				</div>
+				<div style="margin: 10px 5px;">Wichtig! Fotografieren Sie die Uhr und die GPS-Zeit zusammen und tragen Sie die Zeitäquivalenz in den Antwortbogen ein.</div>
+				<div id="imprimir_prueba"></div>
+				<div class="titulo page_break_before">
+					<span class="task_name">Nombre Prueba</span>&nbsp;&nbsp;-&nbsp;&nbsp;Kategorie <span class="category">Unlimited</span>
+				</div>
+				<div class="subtitulo">Antwortbogen</div>
+				<div id="encabezado_respuestas" style="line-height: 30px; text-align: center;">
+					Datum: ___________&nbsp;&nbsp;&nbsp;Club: ____________________________________________________________________<br>
+					Pilot: ________________________________&nbsp;&nbsp;&nbsp;Navigator: _________________________________<br>
+					Flugzeug-Typ: ________________&nbsp;&nbsp;&nbsp;Kennzeichen: _________________&nbsp;&nbsp;&nbsp;Geschwindigkeit: ________________<br>
+					Wichtig! Machen Sie ein Foto von der Uhr und der GPS-Zeit zusammen und schreiben Sie die Zeitgleichheit auf:<br>
+					Uhrzeit (hh:mm:ss): ___________________&nbsp;&nbsp;&nbsp;GPS-Zeit (hh:mm:ss): ___________________
+				</div>
+				<div id="imprimir_hoja_respuestas"></div>
+			</div>
+			<div class="titulo page_break_before">
+				<span class="task_name">Nombre Prueba</span>&nbsp;&nbsp;-&nbsp;&nbsp;Kategorie <span class="category">Unlimited</span>
+			</div>
+			<div class="subtitulo">Antworten</div>
+			<div id="imprimir_respuestas"></div>
+		</div>
+		<div id="page_real_photos" style="display: none;">
+			<div class="no_print" style="position:absolute; left:10px; top:10px;">
+<!--				<label for="cambio_fr_fotos" id="label_cambio_fr_fotos">Cambio de página de FR en:</label>
+				<select id="cambio_fr_fotos" class="ep_change">
+					<option value="19" selected>1 Pag</option>
+					<option value="1">CP1</option>
+					<option value="2">CP2</option>
+					<option value="3">CP3</option>
+					<option value="4">CP4</option>
+					<option value="5">CP5</option>
+					<option value="6">CP6</option>
+					<option value="7">CP7</option>
+					<option value="8">CP8</option>
+					<option value="9">CP9</option>
+					<option value="10">CP10</option>
+					<option value="11">CP11</option>
+					<option value="12">CP12</option>
+					<option value="13">CP13</option>
+					<option value="14">CP14</option>
+					<option value="15">CP15</option>
+					<option value="16">CP16</option>
+					<option value="17">CP17</option>
+					<option value="18">CP18</option>
+				</select>-->
+				<button class="back">Zurück</button>
+			</div>
+			<div id="div_real_photos"></div>
+		</div>
+		<div id="page_google_maps_photos" style="display: none;">
+			<div class="no_print" style="position:absolute; left:10px; top:10px;">
+				<button class="back">Zurück</button>
+				<button class="next_page">Nächste Seite</button>
+			</div>
+			<div class="titulo page_break_before">
+				<span class="task_name">Nombre Prueba</span>&nbsp;&nbsp;-&nbsp;&nbsp;Kategorie <span class="category">Unlimited</span>
+			</div>
+			<div id ="subtitulo_fotos_gm" class="subtitulo">Fotos de TPs desde el <b>SP</b> al <b>FP</b></div>
+			<div id="fotos_gm"></div>
+		</div>
+		<div id="blockMessage" style="display:none;"></div>
+		<figure id="print_figure_scale" style="margin:0px; overflow:hidden;">
+			<img id="print_map_scale" src="images/scale_200K_272,355mm_en.png" style="display:none; width:1743px; margin-top: 10px;"/>
+		</figure>
+	</body>
+</html>

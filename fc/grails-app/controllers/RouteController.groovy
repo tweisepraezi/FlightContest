@@ -11,7 +11,6 @@ class RouteController {
     def gpxService
     def kmlService
     def osmPrintMapService
-    def taskCreatorMapService
     def emailService
     def quartzScheduler
 	def openAIPService
@@ -1632,7 +1631,7 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
+                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
                                                                     routeTitle: route.instance.GetOSMRouteName1() + " (Task Creator)",
                                                                     routeId: route.instance.id,
                                                                     webRootDir: webroot_dir,
@@ -1642,7 +1641,8 @@ class RouteController {
                                                                     contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                     mapScale: route.instance.mapScale,
                                                                     contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
+                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos,
+                                                                    taskCreator: true
                                                                    ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 1, route.instance.contestMapFirstTitle + " (Task Creator)")
@@ -1888,7 +1888,7 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
+                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
                                                                     routeTitle: route.instance.GetOSMRouteName2() + " (Task Creator)",
                                                                     routeId: route.instance.id,
                                                                     webRootDir: webroot_dir,
@@ -1898,7 +1898,8 @@ class RouteController {
                                                                     contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                     mapScale: route.instance.mapScale,
                                                                     contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
+                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2,
+                                                                    taskCreator: true
                                                                    ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 2, route.instance.contestMapSecondTitle + " (Task Creator)")
@@ -2144,7 +2145,7 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
+                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
                                                                     routeTitle: route.instance.GetOSMRouteName3() + " (Task Creator)",
                                                                     routeId: route.instance.id,
                                                                     webRootDir: webroot_dir,
@@ -2154,7 +2155,8 @@ class RouteController {
                                                                     contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                     mapScale: route.instance.mapScale,
                                                                     contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
+                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3,
+                                                                    taskCreator: true
                                                                    ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 3, route.instance.contestMapThirdTitle + " (Task Creator)")
@@ -2400,7 +2402,7 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
+                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
                                                                     routeTitle: route.instance.GetOSMRouteName4() + " (Task Creator)",
                                                                     routeId: route.instance.id,
                                                                     webRootDir: webroot_dir,
@@ -2410,7 +2412,8 @@ class RouteController {
                                                                     contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                     mapScale: route.instance.mapScale,
                                                                     contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
+                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4,
+                                                                    taskCreator: true
                                                                    ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 4, route.instance.contestMapForthTitle + " (Task Creator)")
@@ -3222,7 +3225,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             String route_title = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} (Task Creator)"
-                            Map r = taskCreatorMapService.PrintOSM([contestTitle: session.lastContest.title,
+                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
                                                                     routeTitle: route_title,
                                                                     routeId: route.instance.id,
                                                                     webRootDir: webroot_dir,
@@ -3232,7 +3235,8 @@ class RouteController {
                                                                     contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                     mapScale: route.instance.mapScale,
                                                                     contestMapCenterHorizontalPos: HorizontalPos.Center,
-                                                                    contestMapCenterVerticalPos: VerticalPos.Center
+                                                                    contestMapCenterVerticalPos: VerticalPos.Center,
+                                                                    taskCreator: true
                                                                    ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 0, route_title)

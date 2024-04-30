@@ -19,3 +19,20 @@ https://stackoverflow.com/questions/20575257/how-do-i-run-a-powershell-script-wh
 
 https://github.com/LesFerch/RunHidden
 
+Powershell-Version ermitteln (Windows 11: 5.1):
+    powershell $PSVersionTable
+
+Datei herunterladen:
+    Invoke-WebRequest -Uri "http://download.flightcontest.de/FCSetup-NewVersion.txt" -OutFile "C:\FCSave\FCSetup-NewVersion.txt"
+    
+Dateinhalt herunterladen:
+    $content = Invoke-WebRequest -Uri "http://download.flightcontest.de/FCSetup-NewVersion.txt"
+    Weiterverarbeitung als String: [String]$content
+
+
+Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Select-Object ProcessId, CommandLine
+
+Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Where-Object -Property CommandLine -like '*fcmanager.ps1*' | Select-Object ProcessId
+
+
+
