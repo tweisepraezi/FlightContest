@@ -385,8 +385,12 @@ class AviationMath
         }
         BigDecimal value_track = start_leg.dir
         BigDecimal track_change = 0
+        Map last_coord = [:]
         while (track_change < course_change2) {
-            circle_coords += getCoordinate(centerLatitude, centerLongitude, value_track, start_leg_radius)
+            Map next_coord = getCoordinate(centerLatitude, centerLongitude, value_track, start_leg_radius)
+            if (last_coord) {
+                circle_coords += last_coord
+            }
             if (course_change > 0) {
                 if (invertSemicircle) {
                     value_track -= semicircleCourseChange
@@ -406,8 +410,14 @@ class AviationMath
                 value_track -= 360
             }
             track_change += semicircleCourseChange
+            last_coord = next_coord
         }
-        //circle_coords += getCoordinate(centerLatitude, centerLongitude, end_leg.dir, start_leg_radius)
+        if (last_coord) {
+            Map last_leg = calculateLeg(endLatitude, endLongitude, last_coord.lat, last_coord.lon)
+            if (last_leg.dis >= 0.5) { // Min. distance 0.5 NM
+                circle_coords += last_coord
+            }
+        }
         return circle_coords
     }
     

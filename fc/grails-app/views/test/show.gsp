@@ -173,7 +173,7 @@
                                 </tr>
 
                                 <tr>
-                                    <g:if test="${testInstance.task.planningTestDuration == 0}">
+                                    <g:if test="${testInstance.task.planningTestDuration == 0 || testInstance.task.preparationDuration == 0}">
                                         <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</th>
                                         <g:if test="${testInstance.timeCalculated}">
                                             <td>${testInstance.testingTime.format('HH:mm')}</td>

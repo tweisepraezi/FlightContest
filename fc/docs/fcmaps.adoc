@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.6
-:revdate:   30.04.2024
+:revnumber: 3.4.7
+:revdate:   28.07.2024
 :nofooter:
 :title-page:
 :toc-title: Table of content
@@ -213,23 +213,26 @@ Create database *gis2*
  psql -d gis2 -c 'CREATE EXTENSION postgis;'
 
 Load OSM data into OSM database (~/data/osm/*.pbf -> gis2) +
-(Germany, Austria, Switzerland, parts of France, Poland, Czech Republic, Slovakia, Hungary)
+(Germany, Austria, Switzerland, Poland, Czech Republic, Slovakia, Hungary, parts of France, parts of Denmark)
 
  osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
 
-Wait... (22h)
+Wait... (37h)
 
 Preprocessing
 
  cd ~/fcmaps/otm-dev/mapnik/tools/
  psql gis2 < arealabel.sql
  psql gis2 < stationdirection.sql
+
+Wait... (10min)
+
  psql gis2 < viewpointdirection.sql
  psql gis2 < pitchicon.sql
  psql -d gis2 -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
  bash update_lowzoom.sh
 
-Wait... (12h)
+Wait... (20h)
 
 Activate new databases *gis* and *lowzoom*
 
@@ -240,6 +243,13 @@ Activate new databases *gis* and *lowzoom*
  psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
  psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'
  
+Change date
+
+ cd ~/fcmaps
+ nano printmaps_webservice_capabilities.json
+ 
+Restart server
+
 Check database size
 
  psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
@@ -357,7 +367,7 @@ Find out database size
 
  psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
 
-gis: 190GB, contours: 80GB, lowzoom: 800MB (Germany, Austria, Switzerland, France, South Africa)
+gis: 107GB, contours: 56GB, lowzoom: 152MB
  
 Display free disk space
  

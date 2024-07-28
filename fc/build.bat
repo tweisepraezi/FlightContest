@@ -15,7 +15,7 @@ cd %startdir%
 
 for /f %%a in ('powershell -Command "Get-Date -format yyyy-MM-ddTHH-mm-ss"') do set BUILD_TIME=%%a
 
-set JAVA_HOME=%basedir%\Java\openjdk-1.8.0.302x64
+set JAVA_HOME=%basedir%\Java\jdk8u422-b05
 set ASCIIDOCTOR_HOME=%basedir%\AsciiDoctorJ\asciidoctorj-2.5.1
 set GRAILS_HOME=%basedir%\Grails\Grails-2.5.6
 set GRAILS_OPTS=-server -Xmx4096M -Xms768M -Dfile.encoding=UTF-8

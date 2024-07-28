@@ -1,0 +1,44 @@
+
+Get Firebase ID token
+=====================
+API_KEY = Firebase Web API Key, see https://docs.openaip.net/
+EMAIL = email of your OpenAIP user account
+PASSWORD = password of your OpenAIP user account
+curl 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]' -H 'Content-Type: application/json' --data-binary '{"email":"[EMAIL]","password":"[PASSWORD]","returnSecureToken":true}'
+Method POST
+Successful return code 200
+
+Answer:
+{
+  "localId": "ZY1rJK0eYLg...",
+  "email": "[EMAIL]",
+  "displayName": "",
+  "idToken": "[ID_TOKEN]",
+  "registered": true,
+  "refreshToken": "[REFRESH_TOKEN]",
+  "expiresIn": "3600"
+}
+
+
+Firebase ID token aktualisieren (alle 60 Minuten)
+=================================================
+
+curl 'https://securetoken.googleapis.com/v1/token?key=[API_KEY]' -H 'Content-Type: application/x-www-form-urlencoded' --data 'grant_type=refresh_token&refresh_token=[REFRESH_TOKEN]'
+Method POST
+Successful return code 200
+
+Answer:
+{
+  "expires_in": "3600",
+  "token_type": "Bearer",
+  "refresh_token": "[REFRESH_TOKEN]",
+  "id_token": "[ID_TOKEN]",
+  "user_id": "tRcfmLH7o2XrNELi...",
+  "project_id": "1234567890"
+}
+
+
+Usage
+=====
+Give ID_TOKEN as Bearer to OpenAIP REST calls
+

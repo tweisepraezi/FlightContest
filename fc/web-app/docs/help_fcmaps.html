@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.4.6,</span>
-<span id="revdate">30.04.2024</span>
+<span id="revnumber">version 3.4.7,</span>
+<span id="revdate">28.07.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -854,7 +854,7 @@ psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 <div class="paragraph">
 <p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)<br>
-(Germany, Austria, Switzerland, parts of France, Poland, Czech Republic, Slovakia, Hungary)</p>
+(Germany, Austria, Switzerland, Poland, Czech Republic, Slovakia, Hungary, parts of France, parts of Denmark)</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -862,7 +862,7 @@ psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (22h)</p>
+<p>Wait&#8230;&#8203; (37h)</p>
 </div>
 <div class="paragraph">
 <p>Preprocessing</p>
@@ -871,15 +871,22 @@ psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 <div class="content">
 <pre>cd ~/fcmaps/otm-dev/mapnik/tools/
 psql gis2 &lt; arealabel.sql
-psql gis2 &lt; stationdirection.sql
-psql gis2 &lt; viewpointdirection.sql
+psql gis2 &lt; stationdirection.sql</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (10min)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>psql gis2 &lt; viewpointdirection.sql
 psql gis2 &lt; pitchicon.sql
 psql -d gis2 -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
 bash update_lowzoom.sh</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (12h)</p>
+<p>Wait&#8230;&#8203; (20h)</p>
 </div>
 <div class="paragraph">
 <p>Activate new databases <strong>gis</strong> and <strong>lowzoom</strong></p>
@@ -893,6 +900,18 @@ psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
 psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
 psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Change date</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cd ~/fcmaps
+nano printmaps_webservice_capabilities.json</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Restart server</p>
 </div>
 <div class="paragraph">
 <p>Check database size</p>
@@ -1096,7 +1115,7 @@ psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>gis: 190GB, contours: 80GB, lowzoom: 800MB (Germany, Austria, Switzerland, France, South Africa)</p>
+<p>gis: 107GB, contours: 56GB, lowzoom: 152MB</p>
 </div>
 <div class="paragraph">
 <p>Display free disk space</p>

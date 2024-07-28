@@ -2476,7 +2476,7 @@ class RouteFileTools
         int sc_num = 1
         for (Map import_sign in signData.import_signs) {
             if (importSign.IsEnroutePhoto()) {
-                if (CoordEnroutePhoto.countByRoute(routeInstance) < routeInstance.contest.maxEnroutePhotos) {
+                //if (CoordEnroutePhoto.countByRoute(routeInstance) < routeInstance.contest.maxEnroutePhotos) {
                     CoordEnroutePhoto coordenroutephoto_instance = new CoordEnroutePhoto()
                     coordenroutephoto_instance.route = routeInstance
                     coordenroutephoto_instance.enroutePhotoName = import_sign.name
@@ -2547,9 +2547,9 @@ class RouteFileTools
                         }
                         read_errors += import_sign.name
                     }
-                }
+                //}
             } else if (importSign.IsEnrouteCanvas()) {
-                if (CoordEnrouteCanvas.countByRoute(routeInstance) < routeInstance.contest.maxEnrouteCanvas) {
+                //if (CoordEnrouteCanvas.countByRoute(routeInstance) < routeInstance.contest.maxEnrouteCanvas) {
 					EnrouteCanvasSign enroute_canvassign = EnrouteCanvasSign.(import_sign.name)
                     CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
                     coordenroutecanvas_instance.route = routeInstance
@@ -2610,7 +2610,7 @@ class RouteFileTools
                         }
                         read_errors += import_sign.name
                     }
-                }
+                //}
             } else  if (importSign.IsTurnpoint()) {
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
                     if ((import_sign.tptype == coordroute_instance.type) && (import_sign.tpnumber == coordroute_instance.titleNumber)) {

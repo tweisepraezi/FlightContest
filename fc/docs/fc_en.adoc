@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.6
-:revdate: 30.04.2024
+:revnumber: 3.4.7
+:revdate: 28.07.2024
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -1955,6 +1955,8 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
      token = "TODO"                          // Client ID Token 
                                              // to enable access to the OpenAIP server
                                              // Registration at https://www.openaip.net
+     ignoreAirspacesStartsWith = ""          // Airspaces to ignore
+                                             // (separate several with a comma)
    }
  }
 

@@ -1,6 +1,22 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.7
+----------------
+- OpenAIP-Zugang wiederhergestellt
+- Strecken-Foto/Bodenzeichen-Import: Die Anzahl importierbarer Fotos und Bodenzeichen wird nicht mehr beschränkt.
+- OSM-Wettbewerbs-Karten-Verbesserungen:
+    Wendepunkt-Namen wurden in der Größe reduziert (16 Punkte) und näher am Wendepunkt geschrieben (1.1 NM).
+    Strecken-Foto-Name wird größer gedruckt.
+    Bug "Strecken-Foto/Bodenzeichen-Symbole fehlten machmal" behoben
+    Lufträume: Areas und FIS werden standardmäßig ignoriert. Mit der Konfiguration flightcontest.openaip.ignoreAirspacesStartsWith
+      können weitere zu ignorierende Lufträume hinzugefügt werden.
+- Bug "Besatzungslistendruck stürzt ab, wenn Besatzung ohne Team vorhanden ist" behoben
+- Bug "Übersichts-Zeitplan: Planausgabezeitbereich bei Einsteigern fehlerhaft" behoben
+- Bug "Halbkreis-Berechnung: Torrichtung am Ende manchmal fehlerhaft" behoben 
+- Bug "Halbkreis-Tore aus Kreismittelpunkten exportieren: Halbkreis nach iSP fehlerhaft" behoben
+- Bug "Wind-Zuweisung hat Zeitplan-Warnungen nicht neu berechnet" behoben
+
 Änderungen 3.4.6
 ----------------
 - Integrierter Task-Creator: Deutsche und spanische Benutzeroberfläche hinzugefügt.

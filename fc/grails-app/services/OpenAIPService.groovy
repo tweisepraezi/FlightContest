@@ -243,15 +243,20 @@ class OpenAIPService
     //--------------------------------------------------------------------------
     private boolean is_hidden_airspace(Map d)
     {
-        return false
+        String ignore_airspaces = BootStrap.global.GetOpenAIPIgnoreAirspacesStartsWith()
+        if (ignore_airspaces) {
+            for (String ignore_airspace in ignore_airspaces.split(',')) {
+                String ignore_airspace2 = ignore_airspace.trim()
+                if (d.name.startsWith(ignore_airspace2)) {
+                    return true
+                }
+            }
+        }
         
-        if (d.icaoClass == 2 && d.type == 10) { // FIS
+        if (d.icaoClass == 4 && d.type == 0) { // AREA
             return true
         }
-        if (d.icaoClass == 2 && d.type == 0) { // um Großflughafen, näher untersuchen
-            return true
-        }
-        if (d.icaoClass == 8 && d.type == 28) { // PARA
+        if (d.icaoClass == 8 && d.type == 33) { // FIS
             return true
         }
         return false
@@ -501,29 +506,70 @@ class OpenAIPService
     //--------------------------------------------------------------------------
     private Map call_rest(String funcURL, String requestMethod, int successfulResponseCode, String outputData, String retDataKey)
     {
+        String openaip_url_path = "${BootStrap.global.GetOpenAIPAPI()}/${funcURL}"
+        if (funcURL.contains('?')) {
+            openaip_url_path += "&"
+        } else {
+            openaip_url_path += "?"
+        }
+        openaip_url_path += "apiKey=${BootStrap.global.GetOpenAIPToken()}"
+        
+        return call_rest2(openaip_url_path, "", requestMethod, successfulResponseCode, outputData, retDataKey)
+    }
+        
+    //--------------------------------------------------------------------------
+    private Map call_rest_firebase(String funcURL, String requestMethod, int successfulResponseCode, String outputData, String retDataKey)
+    {
+        boolean show_log = false
+        
+        String firebase_url_path = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=API_KEY"
+        String firebase_output_data = """{"email":"EMAIL","password":"PASSWORD","returnSecureToken":true}"""
+        
+        Map firebase_ret = call_rest2(firebase_url_path, "", "POST", 200, firebase_output_data, ALL_DATA)
+        if (show_log) {
+            println firebase_ret
+            println ""
+        }
+        if (firebase_ret.responseCode == 200) {
+            String firebase_id_token = firebase_ret.data.idToken
+            
+            String openaip_url_path = "${BootStrap.global.GetOpenAIPAPI()}/${funcURL}"
+            if (funcURL.contains('?')) {
+                openaip_url_path += "&"
+            } else {
+                openaip_url_path += "?"
+            }
+            openaip_url_path += "apiKey=${BootStrap.global.GetOpenAIPToken()}"
+            
+            return call_rest2(openaip_url_path, firebase_id_token, requestMethod, successfulResponseCode, outputData, retDataKey)
+        }
+        return [responseCode:firebase_ret.responseCode, data:null, ok:false, errorMsg:""]
+    }
+        
+    //--------------------------------------------------------------------------
+    private Map call_rest2(String urlPath, String bearerToken, String requestMethod, int successfulResponseCode, String outputData, String retDataKey)
+    {
         Map ret = [responseCode:null, data:null, ok:false, errorMsg:""]
         
         boolean show_log = false
-        int max_output_size = 0 // 2000
-        
-        String url_path = "${BootStrap.global.GetOpenAIPAPI()}/${funcURL}"
-		
-		if (funcURL.contains('?')) {
-			url_path += "&"
-		} else {
-			url_path += "?"
-		}
-		url_path += "apiKey=${BootStrap.global.GetOpenAIPToken()}"
         
         if (show_log) {
-            printstart "${requestMethod} ${url_path}"
+            printstart "${requestMethod} ${urlPath}"
         }
             
+        int max_output_size = 0 // 2000
         try {
-            def connection = url_path.toURL().openConnection()
+            def connection = urlPath.toURL().openConnection()
             connection.requestMethod = requestMethod
             connection.setRequestProperty("Content-Type", "application/json")
             connection.setRequestProperty("Accept", "application/json")
+            connection.setRequestProperty("User-Agent", "Application")
+            if (bearerToken) {
+                connection.setRequestProperty("Authorization", "Bearer ${bearerToken}")
+                if (show_log) {
+                    println "Bearer ${bearerToken}"
+                }
+            }
             connection.doOutput = true
             connection.doInput = true
     

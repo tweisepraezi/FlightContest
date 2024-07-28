@@ -9,7 +9,7 @@ Windows x64
 
 Downloads:
 ----------
-Open JDK 8: https://adoptium.net -> Other platforms and versions -> Windows, x64, JDK, 8
+Open JDK 8: https://adoptium.net/de/temurin/releases/?os=windows&arch=x64&package=jdk&version=8 (Windows, x64, JDK, 8)
 Grails 2.5.6: https://grails.org/download.html/
 Apache Tomcat 9: https://tomcat.apache.org/download-90.cgi -> 64-bit Windows zip
 AsciiDoctorJ 2.5.1: https://docs.asciidoctor.org/asciidoctorj/latest/distribution/ -> asciidoctorj
@@ -29,7 +29,7 @@ Source folder:
 		contains folder .git, fc, fcmaps, gpx2gac, printlabel, and files .gitignore and readme.txt
 	
 Additional sources for installer compilation (used by build.bat and fc.is6):
-	Open JDK 8 (x64) in folder '%PROJECT_ROOT%\Java\openjdk-1.8.0.302x64'
+	Open JDK 8 (x64) in folder '%PROJECT_ROOT%\Java\jdk8u422-b05'
 	Grails 2.5.6 in folder '%PROJECT_ROOT%\Grails\grails-2.5.6'
 	Apache Tomcat 9 (x64) in folder '%PROJECT_ROOT%\Server\apache-tomcat-9.0.54-windows-x64'
 	Apache Tomcat 9 (x64) in folder '%PROJECT_ROOT%\Server\apache-tomcat-9.0.13-windows-x64'

@@ -85,7 +85,7 @@
                             </g:if>
                         </g:if>
                         <g:if test="${taskInstance.printTimetablePlanning}">
-                            <g:if test="${taskInstance.planningTestDuration == 0}">
+                            <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
                                 <th>${message(code:'fc.test.planning.publish')}</th>
                             </g:if>
                             <g:else>

@@ -58,9 +58,10 @@
         <h2>${message(code:'fc.task.timetableoverview')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
         <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
         <g:form>
-            <g:set var="first_test" value="${taskInstance.GetFirstTestBefore()}"/>
-            <g:if test="${!first_test}">
-                <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+            <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+            <g:set var="first_test_before" value="${taskInstance.GetFirstTestBefore()}"/>
+            <g:if test="${first_test_before && first_test_before.GetTestingTime() < first_test.GetTestingTime()}">
+                <g:set var="first_test" value="${first_test_before}"/>
             </g:if>
             <g:set var="last_test" value="${taskInstance.GetLastTest()}"/>
             <g:if test="${first_test && last_test}">
@@ -74,7 +75,7 @@
                             </tr>
                         </g:if>
                         <g:if test="${taskInstance.IsFlightTestRun()}">
-                            <g:if test="${taskInstance.planningTestDuration == 0}">
+                            <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
                                 <tr class="planning">
                                     <td class="col1">${message(code:'fc.test.planning.publish')}:</td>
                                     <td class="col2">${first_test.GetTestingTime().format('HH:mm')}</td>

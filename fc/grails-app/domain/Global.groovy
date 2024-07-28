@@ -430,6 +430,18 @@ class Global
 	}
 	
     // --------------------------------------------------------------------------------------------------------------------
+    String GetOpenAIPIgnoreAirspacesStartsWith()
+    {
+        if (   grailsApplication.config.flightcontest.openaip
+            && grailsApplication.config.flightcontest.openaip.ignoreAirspacesStartsWith
+           )
+        {
+            return grailsApplication.config.flightcontest.openaip.ignoreAirspacesStartsWith
+        }
+        return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsGDALAvailable() {
         return gdalJNI.isAvailable()
     }

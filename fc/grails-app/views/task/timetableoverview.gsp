@@ -24,9 +24,10 @@
                                 <br/>
                                 <input type="text" id="briefingTime" name="briefingTime" value="${fieldValue(bean:taskInstance,field:'briefingTime')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                             </p>
-                            <g:set var="first_test" value="${taskInstance.GetFirstTestBefore()}"/>
-                            <g:if test="${!first_test}">
-                                <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+                            <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+                            <g:set var="first_test_before" value="${taskInstance.GetFirstTestBefore()}"/>
+                            <g:if test="${first_test_before && first_test_before.GetTestingTime() < first_test.GetTestingTime()}">
+                                <g:set var="first_test" value="${first_test_before}"/>
                             </g:if>
                             <g:set var="last_test" value="${taskInstance.GetLastTest()}"/>
                             <g:if test="${first_test && last_test}">
@@ -34,7 +35,7 @@
 	                            <table>
 	                                <tbody>
 	                                    <g:if test="${taskInstance.IsFlightTestRun()}">
-                                            <g:if test="${taskInstance.planningTestDuration == 0}">
+                                            <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
                                                 <tr>
                                                     <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</td>
                                                     <td>${first_test.GetTestingTime().format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>

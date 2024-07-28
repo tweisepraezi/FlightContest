@@ -68,7 +68,11 @@ class CrewTagLib
             outln"""<td class="crew">${attrs.crew.name}</td>"""
         }
         if (attrs.contest.printCrewEmail) {
-            outln"""<td class="email">${attrs.crew.email}</td>"""
+            if (attrs.crew.email) {
+                outln"""<td class="email">${attrs.crew.email}</td>"""
+            } else {
+                outln"""<td class="email"/>"""
+            }
         }
         if (attrs.contest.printCrewTeam) {
             if (attrs.crew.team) {                          
@@ -124,7 +128,11 @@ class CrewTagLib
             outln"""<td class="tas">${fieldValue(bean:attrs.crew, field:'tas')}${message(code:'fc.knot')} ${attrs.tasOrderProblem}</td>"""
         }
         if (attrs.contest.printCrewTrackerID) {
-            outln"""<td class="trackerID">${attrs.crew.trackerID}</td>"""
+            if (attrs.crew.trackerID) {
+                outln"""<td class="trackerID">${attrs.crew.trackerID}</td>"""
+            } else {
+                outln"""<td class="trackerID"/>"""
+            }
         }
         if (attrs.contest.printCrewUUID) {
             outln"""<td class="id">${fieldValue(bean:attrs.crew, field:'uuid')}</td>"""

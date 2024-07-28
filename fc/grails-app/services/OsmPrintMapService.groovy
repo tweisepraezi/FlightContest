@@ -104,7 +104,7 @@ class OsmPrintMapService
     final static String SCALEBAR_TITLE = "5 NM"
     final static int SCALEBAR_TITLE_FONT_SIZE = 8
     
-    final static int TP_FONT_SIZE = 24
+    final static int TP_FONT_SIZE = 16
     
     final static BigDecimal FRAME_STROKE_WIDTH = 1
     final static BigDecimal TRACK_STROKE_WIDTH = 0.75
@@ -119,7 +119,7 @@ class OsmPrintMapService
     final static int SPECIALS_TEXT_FONT_SIZE = 10
     final static String GEODATA_BUILDING_SCALE = "scale(0.75, 0.75)"
     final static String GEODATA_SYMBOL_SCALE = "scale(0.75, 0.75)"
-    final static int SYMBOL_TEXT_FONT_SIZE = 10
+    final static int SYMBOL_TEXT_FONT_SIZE = 12
     
     final static String AIRSPACE_PRAEFIX = "AIRSPACE:"
     final static String AIRSPACE_LAYER_STYLE_SEPARATOR = ","
@@ -518,14 +518,14 @@ class OsmPrintMapService
             "Layer": "waypoints"
         },
         {
-            "Style": "<MarkersSymbolizer file='[sym]' transform='${GEODATA_SYMBOL_SCALE}' placement='point' />",
+            "Style": "<MarkersSymbolizer file='[sym]' transform='${GEODATA_SYMBOL_SCALE}' placement='point' allow-overlap='true'/>",
             "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SYMBOL_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='10' placement='point'>[type]</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${SYMBOL_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='10' placement='point'>[type]</TextSymbolizer>",
             "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",

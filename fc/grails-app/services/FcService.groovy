@@ -3041,13 +3041,18 @@ class FcService
         Map task = domainService.GetTask(params) 
         if (task.instance) {
             FlightTestWind flighttestwind_instance = FlightTestWind.get(params.flighttestwind.id)
+            boolean wind_set = false
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
 					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 						setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
+                        wind_set = true
 					}
                 }
+            }
+            if (wind_set) {
+                calulateTimetableWarnings(task.instance)
             }
             task.message = getMsg('fc.task.selectflighttestwind.assigned',[flighttestwind_instance.wind.name()])
         }

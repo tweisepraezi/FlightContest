@@ -1,6 +1,22 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.7
+-------------
+- OpenAIP access restored
+- Enroute photo/canvas import: The number of importable photos and canvas is no longer limited.
+- OSM Contest Map improvements:
+    Turning point names have been reduced in size (16 points) and written closer to the turning point (1.1 NM).
+    Enroute photo name is printed larger.
+    Bug "Enroute photo/canvas symbols were sometimes missing" fixed
+    Airspaces: Areas and FIS are ignored by default. The configuration flightcontest.openaip.ignoreAirspacesStartsWith
+      can be used to add further airspaces to be ignored.
+- Bug "Crew list printing crashes if crew without team is present" fixed
+- Bug "Overview timetable: Plan output time range incorrect for newcomers" fixed
+- Bug "Semicircle calculation: Gate direction at the end sometimes incorrect" fixed
+- Bug "Export semicircle gates from circle centers: Semicircle after iSP incorrect" fixed
+- Bug "Wind assignment did not recalculate time table warnings" fixed
+
 Changes 3.4.6
 -------------
 - Integrated Task Creator: German and Spanish user interface added.
@@ -22,7 +38,7 @@ Changes 3.4.5
 - Bug "Renaming aircraft crashes if an already existing registration is used" fixed
 - Bug "Route setting 'Default online map' shows too many selection values" fixed
 - Bug "OSM online map did not display the map set in route setting 'Default online map'" fixed
-- Bug "OSM competition map does not use the set print language" fixed
+- Bug "OSM Contest Map does not use the set print language" fixed
 - Bug "KMZ export does not use the set print language" fixed
 
 Changes 3.4.4

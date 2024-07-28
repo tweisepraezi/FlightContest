@@ -122,8 +122,8 @@
                         <g:set var="page_break_pos" value="${0}"/>
                         <g:set var="crew_pos" value="${0}"></g:set>
                         <g:set var="last_tas" value="${1000}"></g:set>
-                        <g:set var="last_team" value=""></g:set>
-                        <g:set var="last_team2" value=""></g:set>
+                        <g:set var="last_team_name" value=""></g:set>
+                        <g:set var="last_team_name2" value=""></g:set>
                         <g:each var="crew_instance" in="${crewList}" >
                             <g:if test="${crew_instance.pageBreak}">
                                 <g:set var="page_break_pos" value="${crew_instance.viewpos + 1}"/>
@@ -136,23 +136,23 @@
                                 <g:if test="${crew_instance.tas > last_tas && !crew_instance.pageBreak}">
                                     <g:set var="tas_order_problem" value="!"></g:set>
                                 </g:if>
-                                <g:if test="${crew_instance.team.name == last_team && !crew_instance.pageBreak}">
+                                <g:if test="${crew_instance.team?.name == last_team_name && !crew_instance.pageBreak}">
                                     <g:set var="team_order_problem" value="!!"></g:set>
                                 </g:if>
-                                <g:elseif test="${crew_instance.team.name == last_team2 && !crew_instance.pageBreak}">
+                                <g:elseif test="${crew_instance.team?.name == last_team_name2 && !crew_instance.pageBreak}">
                                     <g:set var="team_order_problem" value="!"></g:set>
                                 </g:elseif>
                             </g:if>
                             <g:crewPrintable crew="${crew_instance}" contest="${contestInstance}" pageBreak="${crew_instance.pageBreak}" viewPos="${crew_instance.viewpos + 1}" pageBreakPos="${page_break_pos}" tasOrderProblem="${tas_order_problem}" teamOrderProblem="${team_order_problem}" />
                             <g:set var="last_tas" value="${crew_instance.tas}"></g:set>
-                            <g:set var="last_team2" value="${last_team}"></g:set>
-                            <g:set var="last_team" value="${crew_instance.team.name}"></g:set>
+                            <g:set var="last_team_name2" value="${last_team_name}"></g:set>
+                            <g:set var="last_team_name" value="${crew_instance.team?.name}"></g:set>
                         </g:each>
                     </g:if>
                     <g:else>
                         <g:each var="test_instance" in="${testList}">
                             <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
-                                <g:crewPrintable crew="${test_instance.crew}" contest="${contestInstance}" pageBreak="${test_instance.pageBreak}" />
+                                <g:crewPrintable crew="${test_instance.crew}" contest="${contestInstance}" pageBreak="${test_instance.pageBreak}" tasOrderProblem="" teamOrderProblem="" />
                             </g:if>
                         </g:each>
                     </g:else>
