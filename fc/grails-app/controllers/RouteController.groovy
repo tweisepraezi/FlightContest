@@ -91,7 +91,20 @@ class RouteController {
     }
 
     def save = {
-        def route = fcService.saveRoute(params,session.lastContest) 
+        def route = fcService.saveRoute(params,session.lastContest, false) 
+        flash.message = route.message
+        if (route.error) {
+            flash.error = true
+        }
+        if (route.saved) {
+        	redirect(action:"show",id:route.instance.id)
+        } else {
+            render(view:'create',model:[routeInstance:route.instance])
+        }
+    }
+
+    def save_noobservations = {
+        def route = fcService.saveRoute(params,session.lastContest, true) 
         flash.message = route.message
         if (route.error) {
             flash.error = true
@@ -349,15 +362,15 @@ class RouteController {
     def importenroutesign = {
         Route route_instance = Route.get(params.routeid)
         def file = request.getFile('txtfile')
-        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix)
+        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix, params?.autoname == 'on')
         if (!import_txt.found) {
-            import_txt = fcService.importSignFile(RouteFileTools.KML_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix)
+            import_txt = fcService.importSignFile(RouteFileTools.KML_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix, params?.autoname == 'on')
         }
         if (!import_txt.found) {
-            import_txt = fcService.importSignFile(RouteFileTools.KMZ_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix)
+            import_txt = fcService.importSignFile(RouteFileTools.KMZ_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix, params?.autoname == 'on')
         }
         if (!import_txt.found) {
-            import_txt = fcService.importSignFile("", route_instance, file, ImportSign.(params.importSign), "", "")
+            import_txt = fcService.importSignFile("", route_instance, file, ImportSign.(params.importSign), "", "", false)
         }
         flash.error = import_txt.error
         flash.message = import_txt.message
@@ -784,7 +797,36 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+            if (ret.ok) {
+                String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_csv_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_csv_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapairports.csvexport.notfound')
+                kmlService.DeleteFile(upload_csv_file_name)
+                kmlService.printerror flash.message
+				redirect(action:'mapexportquestion',id:params.id)
+            }
+			
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+	}
+
+	def csvexportairports_check_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            save_map_settings(route.instance, params)
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
+			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")

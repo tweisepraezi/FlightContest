@@ -1,6 +1,17 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.8
+-------------
+- Help "Manage photos and canvas signs" added
+- Help for the Maps menu added
+- Import enroute photo: Option "Set names automatically" added. Numbers the photos starting with 1.
+- Import enroute canvas: Option "Set names automatically" added. Adds canvas placeholder * with given coordinate.
+  The canvas placeholder * must be replaced by the desired canvas sign before use in a competition.
+- New route: Button "Create without observations" added
+- Overview Timetable: Planning, take-off and landing times are printed for each group when page breaks are made to form groups.
+- Integrated Task Creator: Bug "Magnetic declination swapped east with west" fixed.
+
 Changes 3.4.7
 -------------
 - OpenAIP access restored

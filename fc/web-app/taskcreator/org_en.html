@@ -165,14 +165,16 @@
 					</select>
 									</div>
 				<div style="margin-top: 3px;">
-					<label for="desviacion" style="margin-left: 0px;" title="Magnetic Declination (E<0, W>0)">M.Dec.:</label>
-					<span><input id="desviacion" class="desviacion" type="text" title="Magnetic Declination (E<0, W>0)" style="text-align: center; width:20px" value="0"></span>
+					<label for="desviacion" style="margin-left: 0px;" title="Magnetic Declination (E>0, W<0)">M.Dec.:</label>
+					<span><input id="desviacion" class="desviacion" type="text" title="Magnetic Declination (E>0, W<0)" style="text-align: center; width:20px" value="0"></span>
 					<label for="velocidad" title="Task speed in knots">Speed:</label>
 					<input id="velocidad" class="velocidad" type="text" style="text-align: center; width:15px" value="70" title="Task speed in knots">
 					<label for="velocidad_sp" title="Speed to SP in knots">Spd. to SP:</label>
 					<span><input id="velocidad_sp" class="velocidad_sp" type="text" style="text-align: center; width:15px" value="70" title="Speed to SP in knots"></span>
-					<label for="seconds_to_sp" title="Aditional seconds to SP (Max. 255)">Seconds:</label>
-					<span><input id="seconds_to_sp" class="seconds_to_sp" type="text" style="text-align: center; width:25px" value="0" title="Aditional seconds to SP (Max. 255)"></span>
+					<label for="seconds_to_sp" title="Aditional seconds to SP (max. 255)">Seconds:</label>
+					<span><input id="seconds_to_sp" class="seconds_to_sp" type="text" style="text-align: center; width:25px" value="0" title="Aditional seconds to SP (max. 255)"></span>
+					<label for="chk_private" title="Private Task, requires password to load">Private:</label>
+					<span><input id="chk_private" class="chk" type="checkbox"></span>
 					<!--<button id="test1">T1</button>-->
 				</div>
 				<div style="margin-top: 3px;">
@@ -304,7 +306,7 @@ Advanced Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading ti
 					<label for="velocidad_sp">Speed to SP:</label>
 					<span><input id="velocidad_sp_imp" class="velocidad_sp" type="text" style="width:30px; text-align: center;" value="70"></span>
 					<label for="velocidad_sp">knots</label>
-					<label for="seconds_to_sp_imp">Segundos adicionales al SP:</label>
+					<label for="seconds_to_sp_imp">Aditional seconds to SP:</label>
 					<span><input id="seconds_to_sp_imp" class="seconds_to_sp" type="text" style="width:30px; text-align: center;" value="0"></span>
 				</div>
 				<div style="margin: 10px 5px;">Important!, take a photo of the clock and GPS time together and write the time equivalence in the answer sheet.</div>
@@ -364,7 +366,7 @@ Advanced Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading ti
 			<div class="titulo page_break_before">
 				<span class="task_name">Nombre Prueba</span>&nbsp;&nbsp;-&nbsp;&nbsp;Category <span class="category">Unlimited</span>
 			</div>
-			<div id ="subtitulo_fotos_gm" class="subtitulo">Fotos de TPs desde el <b>SP</b> al <b>FP</b></div>
+			<div id ="subtitulo_fotos_gm" class="subtitulo">Turn Point Photos from <b>SP</b> to <b>FP</b></div>
 			<div id="fotos_gm"></div>
 		</div>
 		<div id="blockMessage" style="display:none;"></div>

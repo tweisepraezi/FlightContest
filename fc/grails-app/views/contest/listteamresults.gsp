@@ -16,6 +16,7 @@
                             <tbody>
                             	<tr>
 				                	<td>${contestInstance.GetResultTitle(contestInstance.GetTeamResultSettings(),false)}</td>
+                                    <td style="width:1%;"><a href="/fc/docs/help_${session.showLanguage}.html#evaluation-team" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
 				                </tr>
 				            </tbody>
 				        </table>

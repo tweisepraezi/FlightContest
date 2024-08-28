@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.4.7,</span>
-<span id="revdate">28.07.2024</span>
+<span id="revnumber">version 3.4.8,</span>
+<span id="revdate">28.08.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -460,10 +460,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-mandatory-details">Erforderliche Angaben für eine Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
+<li><a href="#route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</a></li>
 <li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
 <li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a></li>
 <li><a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a></li>
-<li><a href="#route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</a></li>
+<li><a href="#route-planning-on-printed-map">Wettbewerbsstrecken mit Hilfe einer gedruckten Karte erstellen</a></li>
+<li><a href="#route-planning-photos-canvas">Fotos und Bodenzeichen verwalten</a></li>
 <li><a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
@@ -472,7 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#osm-contest-map">OSM-Wettbewerbs-Karte</a>
 <ul class="sectlevel2">
 <li><a href="#osm-contest-map-options">Druck-Optionen</a></li>
-<li><a href="#osm-contest-map-workflow">Ablauf einer Karten-basierten Streckenkonstruktion</a></li>
+<li><a href="#osm-contest-map-maps">Karten-Menü</a></li>
 <li><a href="#osm-contest-map-configuration">Server-Konfiguration</a></li>
 <li><a href="#osm-contest-map-datasources">Datenquellen</a></li>
 </ul>
@@ -539,16 +541,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#live-tracking">Live-Tracking</a></li>
 <li><a href="#automatic-actions">Automatische Aktionen</a>
 <ul class="sectlevel2">
-<li><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a></li>
-<li><a href="#automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</a></li>
-<li><a href="#automatic-actions-loadscanobservation">FCAutoLoadScanObservation</a></li>
-<li><a href="#automatic-actions-loadlogger">FCAutoLoadLogger</a></li>
+<li><a href="#automatic-actions-loadlogger">Logger-Daten automatisch laden</a></li>
+<li><a href="#automatic-actions-loadscanobservation">Beobachtungs-Formulare automatisch laden</a></li>
+<li><a href="#automatic-actions-loadscanplanningtask">Planungs-Aufgaben-Formulare automatisch laden</a></li>
 </ul>
 </li>
 <li><a href="#save-data">Datensicherung eines laufenden Wettbewerbes</a>
 <ul class="sectlevel2">
 <li><a href="#save-fcdb">Sicherung der 'Flight Contest'-Datenbank</a></li>
 <li><a href="#save-prints">Sicherung der 'Flight Contest'-Ausdrucke (Firefox)</a></li>
+<li><a href="#save-fcsave">Sicherung der in C:\FCSave gespeicherten Daten</a></li>
 <li><a href="#restore-fcdb">Datenwiederherstellung der 'Flight Contest'-Datenbank</a></li>
 </ul>
 </li>
@@ -1206,10 +1208,12 @@ einem Import nur noch in 'Flight Contest'.</p>
 <a href="#route-planning-mandatory-details">Erforderliche Angaben für eine Wettbewerbsstrecke</a><br>
 <a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-import">Import von Wettbewerbsstrecken</a><br>
+<a href="#route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</a><br>
 <a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
 <a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a><br>
 <a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a><br>
-<a href="#route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</a><br>
+<a href="#route-planning-on-printed-map">Wettbewerbsstrecken mit Hilfe einer gedruckten Karte erstellen</a><br>
+<a href="#route-planning-photos-canvas">Fotos und Bodenzeichen verwalten</a><br>
 <a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a><br>
 <a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</a><br>
 <a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
@@ -1572,6 +1576,67 @@ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Strecke mit TO anlegen (Strecken &#8594; <strong>Neue Strecke</strong>)</p>
+</li>
+<li>
+<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Lufträume um Flughafen ermitteln</strong> (wenn ein  <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert wurde)<br></p>
+<div class="paragraph">
+<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt).<br>
+Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden.<br>
+Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.</p>
+</div>
+</li>
+<li>
+<p>Wettbewerbs-Karte mit TO drucken</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Online-Karte um Flughafen erzeugen</strong></p>
+</li>
+<li>
+<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Task-Creator-Karte um Flughafen erzeugen</strong></p>
+</li>
+<li>
+<p>Wurde ein <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet.<br>
+Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Task-Creator starten (Karten &#8594; AirportArea (Task Creator) &#8594; <strong>&#8230;&#8203;</strong>)<br></p>
+<div class="paragraph">
+<p>Im gestarteten Task-Creator ist die "Map Url" im Task-Creator voreingestellt und kann mit <strong>Load</strong> geladen werden.<br>
+Nach Aktivieren von <strong>Turn Points &#8594; Edit</strong> können mit Doppelklick Wendepunkte auf der Karte hinzugefügt werden.<br>
+Mit <strong>Save task data</strong> kann die Aufgabe als CSV-Datei im Download-Ordner des Computers abgespeichert werden.</p>
+</div>
+</li>
+<li>
+<p>Task-Creator zur weiteren Bearbeitung starten (Karten &#8594; <strong>Task-Creator</strong>)<br></p>
+<div class="paragraph">
+<p>Mit <strong>Load task data</strong> kann die gespeicherte CSV-Datei einer Aufgabe geladen werden.<br>
+Eine voreingestellte "Map Url" muss mit <strong>Load</strong> geladen werden.<br>
+Nach Aktivieren von <strong>Turn Points &#8594; Edit</strong> ist eine Weiterbearbeitung der Aufgabe möglich.</p>
+</div>
+</li>
+<li>
+<p>Export der Wettbewerbsstrecke (Task-Creator &#8594; <strong>Export FC kml</strong>)</p>
+</li>
+<li>
+<p>Import der Wettbewerbsstrecke (Strecken &#8594; <strong>Import FC-Strecke</strong>)<br></p>
+<div class="paragraph">
+<p>Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche <strong>Etappen neu berechnen</strong>.<br>
+Die Korrektheit der Strecke kann nun mit <strong>OSM-Online-Karte</strong> geprüft werden.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
 <h3 id="route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</h3>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -1798,64 +1863,201 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</h3>
+<h3 id="route-planning-on-printed-map">Wettbewerbsstrecken mit Hilfe einer gedruckten Karte erstellen</h3>
 <div class="olist arabic">
 <ol class="arabic">
+<li>
+<p>Gebiet um TO auswählen</p>
+</li>
 <li>
 <p>Strecke mit TO anlegen (Strecken &#8594; <strong>Neue Strecke</strong>)</p>
 </li>
 <li>
-<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Lufträume um Flughafen ermitteln</strong> (wenn ein  <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert wurde)<br></p>
-<div class="paragraph">
-<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt).<br>
-Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden.<br>
-Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.</p>
+<p>Wettbewerbs-Karte mit TO drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)<br>
+Dabei TO an eine gewünschte Position legen (rechts oben, links unten o.ä.).</p>
+</li>
+<li>
+<p>Geeignete Wendepunkte auf der gedruckten Karte auswählen<br>
+Mit den Koordinaten-Linealen links und oben können mit einem Zirkel die Wendepunkt-Koordinaten Minuten-genau bestimmt werden.</p>
+</li>
+<li>
+<p>Strecke mit den abgelesenden Koordinaten eingeben (Strecke &#8594; <strong>Koordinate hinzufügen</strong>)</p>
+</li>
+<li>
+<p>Strecke exportieren (Strecke &#8594; <strong>KMZ-Export</strong>)</p>
+</li>
+<li>
+<p>KMZ-Datei mit <strong>Google Earth Pro</strong> öffnen und Wendepunkte auf die exakten Positionen schieben</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Zum Knoten 'Dateiname.kmz &#8594; Streckenname &#8594; Strecken-Export &#8594; turnpoints' navigieren</p>
+</li>
+<li>
+<p>Jeden Punkt anklicken und jeweils Kontextmenüpunkt 'Eigenschaften' aufrufen</p>
+</li>
+<li>
+<p>Punkt zur exakten Position schieben und Eigenschaften-Dialog schließen</p>
+</li>
+<li>
+<p>'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
+</li>
+</ol>
 </div>
 </li>
 <li>
-<p>Wettbewerbs-Karte mit TO drucken</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Online-Karte um Flughafen erzeugen</strong></p>
+<p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
 </li>
 <li>
-<p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Task-Creator-Karte um Flughafen erzeugen</strong></p>
+<p>Wettbewerbs-Karte prüfen (Strecke &#8594; <strong>OSM-Online-Karte</strong>)</p>
 </li>
 <li>
-<p>Wurde ein <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet.<br>
-Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet.</p>
+<p>Wettbewerbs-Karte drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)</p>
 </li>
-</ul>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-photos-canvas">Fotos und Bodenzeichen verwalten</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In den <strong>Strecken-Einstellungen</strong> einer ungenutzten Strecke werden Dateneingabe (&#8594; Definition), Auswertung (&#8594; Messung) und Druck-Stil
+für Wendepunkte, Strecken-Fotos und Strecken-Bodenzeichen festgelegt.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Definition „Keine“: Keine Beobachtung</p>
+</li>
+<li>
+<p>Definition „Fotos zuordnen“: Dem Wendepunkt wird ein benanntes Foto zugeordnet.</p>
+</li>
+<li>
+<p>Definition „Bodenzeichen zuordnen“: Dem Wendepunkt wird ein definiertes Bodenzeichen zugeordnet.</p>
+</li>
+<li>
+<p>Definition „Foto richtig/falsch“: Dem Wendepunkt wird die Information zugeordnet, ob das Wendepunkt-Foto richtig oder falsch ist.</p>
+</li>
+<li>
+<p>Definition „Name“: Es wird nur der Name eines Strecken-Fotos/Bodenzeichens festgelegt. Dadurch ist nur die Messung „Karte“ durch Debriefing-Schiedsrichter möglich.</p>
+</li>
+<li>
+<p>Definition „Koordinate“: Die Position eines Strecken-Fotos/Bodenzeichens wird durch eine Koordinate festgelegt. Dadurch kann die Entfernung von der Strecke berechnet werden.</p>
+</li>
+<li>
+<p>Definition „Entfernung in NM“: Die Position eines Strecken-Fotos/Bodenzeichens wird durch eine Entfernung in NM vom letzten Wendepunkt festgelegt.</p>
+</li>
+<li>
+<p>Definition „Entfernung in mm“: Die Position eines Strecken-Fotos/Bodenzeichens wird durch eine Entfernung in mm vom letzten Wendepunkt festgelegt.</p>
+</li>
+<li>
+<p>Definition „Koordinate und Entfernung in mm“: Die Position eines Strecken-Fotos/Bodenzeichens wird sowohl durch eine Koordinate als auch eine Entfernung in mm vom letzten Wendepunkt festgelegt.
+Dadurch können Karten mit starken Abweichungen der Bilderposition von der Koordinate verwendet werden.</p>
+</li>
+<li>
+<p>Messung „Karte“: Ein Debriefing-Schiedsrichter prüft die Teilnehmer-Karte und füllt ein Debriefing-Formular aus. Ansonsten erledigt das die Besatzung selbst.</p>
+</li>
+<li>
+<p>Messung „NM vom letzten Wendepunkt“: Die Besatzung ermittelt die Entfernung vom letzten Wendepunkt in NM selbst.</p>
+</li>
+<li>
+<p>Messung „mm vom letzten Wendepunkt“: Die Besatzung ermittelt die Entfernung vom letzten Wendepunkt in mm selbst.</p>
+</li>
+<li>
+<p>Der „Druck-Stil“ legt die Anordnung der Wendepunkt- und Strecken-Fotos beim Druck fest.</p>
+</li>
+<li>
+<p>Die aktivierte „Markierung der Position im Foto-Druck“ zeichnet auf die Foto eine viereckige Markierung ein, deren Position bei der Eingabe festgelegt werden kann.</p>
+</li>
+</ol>
 </div>
 </li>
 <li>
-<p>Task-Creator starten (Karten &#8594; AirportArea (Task Creator) &#8594; <strong>&#8230;&#8203;</strong>)<br></p>
+<p>Festlegung der <strong>Wendepunkt-Zuordnungen</strong><br></p>
 <div class="paragraph">
-<p>Im gestarteten Task-Creator ist die "Map Url" im Task-Creator voreingestellt und kann mit <strong>Load</strong> geladen werden.<br>
-Nach Aktivieren von <strong>Turn Points &#8594; Edit</strong> können mit Doppelklick Wendepunkte auf der Karte hinzugefügt werden.<br>
-Mit <strong>Save task data</strong> kann die Aufgabe als CSV-Datei im Download-Ordner des Computers abgespeichert werden.</p>
+<p>Öffnen Sie in den Streckendetails die „Wendepunkt-Beobachtungen“. Mit Klick auf „1 &#8230;&#8203;“ wird die Bearbeitung des ersten Wendepunktes geöffnet.
+Hier ist jetzt festzulegen, ob das Wendepunkt-Foto richtig oder falsch ist (bei der Definition „Foto richtig/falsch“).
+Mit „Speichern und nächster Punkt“ wird die Einstellung gespeichert und die Bearbeitung des folgenden Wendepunktes geöffnet.<br></p>
+</div>
+<div class="paragraph">
+<p>Alternativ können diese Festlegungen auch in einer Textdatei angegeben und mit „Wendepunkt-Zeichen importieren“ importiert werden.</p>
 </div>
 </li>
 <li>
-<p>Task-Creator zur weiteren Bearbeitung starten (Karten &#8594; <strong>Task-Creator</strong>)<br></p>
+<p><strong>Import</strong> der Wendepunkt-Bilder<br></p>
 <div class="paragraph">
-<p>Mit <strong>Load task data</strong> kann die gespeicherte CSV-Datei einer Aufgabe geladen werden.<br>
-Eine voreingestellte "Map Url" muss mit <strong>Load</strong> geladen werden.<br>
-Nach Aktivieren von <strong>Turn Points &#8594; Edit</strong> ist eine Weiterbearbeitung der Aufgabe möglich.</p>
+<p>Sie benötigen eine zip-Datei, in der alle Wendepunkt-Bilder als jpg-Dateien enthalten sind.
+Die jpg-Dateien müssen den englischen Wendepunkte-Namen haben (SP.jpg, TP1.jpg, &#8230;&#8203;, FP.jpg).
+Mit „Wendepunkt-Foto-Bilder importieren“ ist die zip-Datei auszuwählen und mit „Import“ der Import zu starten.</p>
 </div>
 </li>
 <li>
-<p>Export der Wettbewerbsstrecke (Task-Creator &#8594; <strong>Export FC kml</strong>)</p>
+<p><strong>Druck</strong> der Wendepunkt-Bilder<br></p>
+<div class="paragraph">
+<p>Mit „Wendepunkt-Foto-Druck“ werden die Wendepunkt-Bilder gedruckt.<br>
+Passen sie bei Bedarf unter „Strecken-Einstellungen &#8594; Druck-Stil“ die Aufteilung der Wendepunkt-Bilder an.<br>
+Ein gewünschter Seitenwechsel ist in „Wendepunkt-Beobachtungen“ in einem Wendepunkt mit „Wendepunkt-Foto-Druck auf nächster Seite fortsetzen“ einzustellen.</p>
+</div>
 </li>
 <li>
-<p>Import der Wettbewerbsstrecke (Strecken &#8594; <strong>Import FC-Strecke</strong>)<br></p>
+<p>Import der <strong>Strecken-Foto-Koordinaten</strong><br></p>
 <div class="paragraph">
-<p>Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche <strong>Etappen neu berechnen</strong>.<br>
-Die Korrektheit der Strecke kann nun mit <strong>OSM-Online-Karte</strong> geprüft werden.</p>
+<p>Sie benötigen eine kmz- oder kml-Datei, die ein Verzeichnis beinhaltet, in dem alle Strecken-Fotos als „Ortsmarkierung“ eingetragen sind.
+Mit „Strecken-Fotos importieren“ ist diese Datei auszuwählen, der Verzeichnisname anzugeben und mit „Import“ der Import zu starten.<br>
+Die Option „Namen automatisch festlegen“ ist zu deaktivieren, wenn sie die Namen der Fotos beibehalten wollen.
+In dem Fall sind allerdings nur ganze Zahlen (1, 2, &#8230;&#8203;) oder Buchstaben (A, B, &#8230;&#8203;) erlaubt.</p>
+</div>
+</li>
+<li>
+<p><strong>Import</strong> der Strecken-Bilder<br></p>
+<div class="paragraph">
+<p>Sie benötigen eine zip-Datei, in der alle Strecken-Bilder als jpg-Dateien enthalten sind.
+Die jpg-Dateien müssen den Strecken-Foto-Namen haben (1.jpg, 2.jpg, &#8230;&#8203;).
+Mit „Strecken-Foto-Bilder importieren“ ist die zip-Datei auszuwählen und mit „Import“ der Import zu starten.<br></p>
+</div>
+<div class="paragraph">
+<p>Mit „Strecken-Foto-Namen zufällig vergeben“ werden die Foto-Namen in eine zufällige Reihenfolge gebracht.</p>
+</div>
+</li>
+<li>
+<p><strong>Druck</strong> der Strecken-Bilder<br></p>
+<div class="paragraph">
+<p>Mit „Strecken-Foto-Druck (alphabetisch)“ werden die Strecken-Bilder für die Ausgabe an die Besatzungen gedruckt.<br>
+Passen sie bei Bedarf unter „Strecken-Einstellungen &#8594; Druck-Stil“ die Aufteilung der Strecken-Bilder an.<br>
+Ein gewünschter Seitenwechsel ist in „Wendepunkt-Beobachtungen“ in einem Wendepunkt mit „Strecken-Foto-Druck auf nächster Seite fortsetzen“ einzustellen.</p>
+</div>
+</li>
+<li>
+<p>Import der <strong>Strecken-Bodenzeichen-Koordinaten</strong><br></p>
+<div class="paragraph">
+<p>Sie benötigen eine kmz- oder kml-Datei, die ein Verzeichnis beinhaltet, in dem alle Strecken-Bodenzeichen als „Ortsmarkierung“ eingetragen sind.
+Mit „Strecken-Bodenzeichen importieren“ ist diese Datei auszuwählen, der Verzeichnisname anzugeben und mit „Import“ der Import zu starten.<br>
+Die Option „Namen automatisch festlegen“ ist zu deaktivieren, wenn sie die Namen der Bodenzeichen beibehalten wollen.
+In dem Fall sind allerdings nur die Bezeichnungen der Bodenzeichen (S01, S02, &#8230;&#8203;, S15) erlaubt.</p>
 </div>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>Ergänzende Hinweise:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Das Verwalten von Bildern in Flight Contest erfordert erheblichen Hauptspeicher. Bei Bedarf ist dazu der Hauptspeicher zu vergrößern
+(Flight Contest Manager &#8594; Rechte Maustaste &#8594; Dienst-Kommandos &#8594; Dienst-Manager &#8594; Configure &#8594; Java &#8594; Maximum memory pool) und Flight Contest neu zu starten.</p>
+</li>
+<li>
+<p>Strecken mit Bildern sollten nicht bei der Wettbewerbs-Auswertung verwendet werden, da das die Laufzeit von Auswerte-Kommandos erheblich vergrößert.
+Kopieren Sie deshalb den Wettbewerb mit den Strecken und löschen Sie die Bilder in dem neuen Wettbewerb mit „Wendepunkt-Foto-Bilder löschen“ und „Strecken-Foto-Bilder löschen“
+für jede Strecke.</p>
+</li>
+<li>
+<p>Löschen Sie nach Abschluss des Wettbewerbes die Datenbank ('C:\Program Files\Flight Contest\fc\fcdb.h2.db'),
+damit Sie für den nächsten Wettbewerb wieder ausreichend Hauptspeicher für die Bilder-Verwaltung haben.
+Dazu müssen Sie zuvor Flight Contest stoppen (Flight Contest Manager &#8594; Rechte Maustaste &#8594; Dienst-Kommandos &#8594; Stop Flight Contest).</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -1981,13 +2183,26 @@ Führen Sie "Import FC-Strecke" mit der exportierten GPX-Datei aus</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="#osm-contest-map-options">Druck-Optionen</a><br>
-<a href="#osm-contest-map-workflow">Ablauf einer Karten-basierten Streckenkonstruktion</a><br>
+<a href="#osm-contest-map-maps">Karten-Menü</a><br>
 <a href="#osm-contest-map-configuration">Server-Konfiguration</a><br>
 <a href="#osm-contest-map-datasources">Datenquellen</a><br></p>
 </div>
 <div class="paragraph">
 <p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine topographische PDF-Wettbewerbskarte
 im Maßstab 1:200000 oder 1:250000 mit Hilfe eines Druck-Servers erzeugt werden.</p>
+</div>
+<div class="paragraph">
+<p>Karten können entweder als Online/PDF-Karte oder als Task-Creator-Karte erzeugt werden.</p>
+</div>
+<div class="paragraph">
+<p>Die Online/PDF-Karte wird mit der Web-Mercator-Projektion erzeugt, was vertikale Verzerrungen verursacht.
+Diese hat bei großen Karten (&gt; A3) deutliche Abweichungen, wenn man diese in anderen Geo-Tools weiter verwenden will.</p>
+</div>
+<div class="paragraph">
+<p>Die Task-Creator-Karte wird mit einer LatLon-Projektion erzeugt, so dass in nördlichen Breiten alle Grafik-Symbole vertikal vergrößert sind.</p>
+</div>
+<div class="paragraph">
+<p>Erzeugte Karten werden im Karten-Menü gespeichert.</p>
 </div>
 <div class="paragraph">
 <p>Nutzung der Karten:<br>
@@ -2065,7 +2280,114 @@ Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen
 <p>Alle genannten Streckendetails und Objekte können abgewählt werden.</p>
 </div>
 <div class="paragraph">
-<p><strong>Übersichts-Karten-Druck-Optionen:</strong></p>
+<p><strong>Lufträume</strong></p>
+</div>
+<div class="paragraph">
+<p>"<em>Lufträume um Flughafen ermitteln</em>" ruft aus OpenAIP alle Lufträume ab, die nötig sind, um alle Karten-Größen zu bedienen.
+Dabei werden alle Lufträume berücksichtigt, wo das untere Höhenlimit kleiner als die eingestellte Höhe (Standard: 4000ft) ist.</p>
+</div>
+<div class="paragraph">
+<p>Die ermittelten Lufträume werden in das Luftraum-Textfeld eingetragen. AREA- und FIS-Lufträume sowie in der <a href="#configuration-openaip">OpenAIP-Konfiguration</a>
+in <em>ignoreAirspacesStartsWith</em> angegebene Lufträume werden auskommentiert.</p>
+</div>
+<div class="paragraph">
+<p>"<em>KMZ-Export-Lufträume</em>" erzeugt eine KMZ-Datei, in der alle im Luftraum-Textfeld eingetragenen und nicht auskommentierten
+Lufträume eingezeichnet sind. Mit Google Earth kann diese KMZ begutachtet werden.
+Die hier sichtbaren Lufträume werden auf die Wettbewerbskarte gezeichnet.
+Bei Bedarf können weitere nicht benötigte Lufträume im Luftraum-Textfeld mit # auskommentiert werden.</p>
+</div>
+<div class="paragraph">
+<p>Im Luftraum-Textfeld einer Strecke können beliebig viele Lufträume eingetragen sein.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>#id_65fc178d9c985c1a9d9b0664,text:AREA 2500ft-FL100,fillcolor:gray,textcolor:black
+id_65fbf33c9c985c1a9d995bfb,text:CTR BUECHEL GND-4100ft
+#id_65fc178c9c985c1a9d9b05f2,text:DÜSSELDORF 1000ft-2500ft,fillcolor:gray,textcolor:black
+id_65fbf3379c985c1a9d99593f,text:ED-R5 BIBLIS H24 GND-2300ft,fillcolor:red,textcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fehlerhafte oder nicht existierende Luftraum-IDs verhinderen die Kartenerzeugung.</p>
+</div>
+<div class="paragraph">
+<p>Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden.
+Dazu sind der ID mit Komma getrennt verschiedene Attribute mitzugeben.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Randtext festlegen<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>text:ED-R5 BIBLIS H24 GND-2300ft</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Alternative Größe des Randtextes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textsize:14</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Es werden 14 Pixel Höhe geschrieben.<br>
+Keine Angabe: 10 Pixel.</p>
+</div>
+</li>
+<li>
+<p>Alternative Abstände des Randtextes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textspacing:90</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mindest-Abstand 90px. Dieser Wert beeinflusst, wie oft der Randtext auf den Rand geschrieben wird.<br>
+Keine Angabe: 1 Pixel.</p>
+</div>
+</li>
+<li>
+<p>Alternative Farbe des Randtextes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Roter Text.<br>
+Keine Angabe: schwarz</p>
+</div>
+</li>
+<li>
+<p>Alternative Farbe der Fläche des Luftraumes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>fillcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fläche des Luftraumes wird rot gefüllt.<br>
+Keine Angabe: blau</p>
+</div>
+</li>
+<li>
+<p>Alternative Transparenz der Fläche des Luftraumes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>fillopacity:0.3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fläche des Luftraumes mit geringer Überdeckung.<br>
+Keine Angabe: 0.2</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Übersichts-Karten-Druck-Optionen</strong></p>
 </div>
 <div class="ulist">
 <ul>
@@ -2078,7 +2400,7 @@ Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>4 Einstellungs-Bereiche erlauben folgende Karten-Druck-Optionen in einer Strecke parallel zu nutzen:</strong></p>
+<p><strong>4 Einstellungs-Bereiche erlauben folgende Karten-Druck-Optionen in einer Strecke parallel zu nutzen</strong></p>
 </div>
 <div class="ulist">
 <ul>
@@ -2177,192 +2499,54 @@ und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jeden 
 <div class="paragraph">
 <p>Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.</p>
 </div>
-<div class="paragraph">
-<p><strong>Lufträume</strong></p>
-</div>
-<div class="paragraph">
-<p>Es können einer Strecke beliebig viele Lufträume zugeordnet werden.
-Tragen Sie die Namen benötigter Lufträume, die Sie in <a href="https://www.openaip.net/data/airspaces" class="bare">https://www.openaip.net/data/airspaces</a> finden, mit Zeilenwechsel in das Textfeld ein.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>CTR BERLIN
-ED-R37A Nordhorn MON-FRI</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Fehlerhafte oder nicht existierende Luftraum-Namen verhinderen die Kartenerzeugung.</p>
-</div>
-<div class="paragraph">
-<p>Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden.
-Dazu sind dem Namen mit Komma getrennt verschiedene Attribute mitzugeben.
-Das Beispiel zeigt alle möglichen Attribute:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>ED-R37A Nordhorn MON-FRI,text:ED-R37A Nordhorn GND-FL100,textsize:14,textspacing:90,textcolor:red,fillcolor:red,fillopacity:0.3</pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Alternativer Randtext<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>text:ED-R37A Nordhorn GND-FL100</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wirkung: Durch diese Angabe wird im Randtext anstelle von "ED-R37A Nordhorn MON-FRI" die Bezeichnung "ED-R37A Nordhorn GND-FL100" in die Karte geschrieben.</p>
-</div>
-</li>
-<li>
-<p>Alternative Größe des Randtextes<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>textsize:14</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Es werden 14 Pixel Höhe geschrieben.<br>
-Keine Angabe: 10 Pixel.</p>
-</div>
-</li>
-<li>
-<p>Alternative Abstände des Randtextes<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>textspacing:90</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Mindest-Abstand 90px. Dieser Wert beeinflusst, wie oft der Randtext auf den Rand geschrieben wird.<br>
-Keine Angabe: 1 Pixel.</p>
-</div>
-</li>
-<li>
-<p>Alternative Farbe des Randtextes<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>textcolor:red</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Roter Text.<br>
-Keine Angabe: schwarz</p>
-</div>
-</li>
-<li>
-<p>Alternative Farbe der Fläche des Luftraumes<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>fillcolor:red</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Fläche des Luftraumes wird rot gefüllt.<br>
-Keine Angabe: blau</p>
-</div>
-</li>
-<li>
-<p>Alternative Transparenz der Fläche des Luftraumes<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>fillopacity:0.3</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Fläche des Luftraumes mit geringer Überdeckung.<br>
-Keine Angabe: 0.2</p>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Sinnvolle Attribute:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>ED-R-Fläche in rot<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>,text:???,fillcolor:red,textcolor:red</pre>
-</div>
-</div>
-</li>
-<li>
-<p>RMZ-Fläche in blau<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>,text:???,fillcolor:steelblue,textcolor:black</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Umgebende Fläche in grau<br></p>
-<div class="literalblock">
-<div class="content">
-<pre>,text:???,fillcolor:lightgray,textcolor:black</pre>
-</div>
-</div>
-</li>
-</ul>
-</div>
 </div>
 <div class="sect2">
-<h3 id="osm-contest-map-workflow">Ablauf einer Karten-basierten Streckenkonstruktion</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Gebiet um TO auswählen</p>
-</li>
-<li>
-<p>Strecke mit TO anlegen (Strecken &#8594; <strong>Neue Strecke</strong>)</p>
-</li>
-<li>
-<p>Wettbewerbs-Karte mit TO drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)<br>
-Dabei TO an eine gewünschte Position legen (rechts oben, links unten o.ä.).</p>
-</li>
-<li>
-<p>Geeignete Wendepunkte auf der gedruckten Karte auswählen<br>
-Mit den Koordinaten-Linealen links und oben können mit einem Zirkel die Wendepunkt-Koordinaten Minuten-genau bestimmt werden.</p>
-</li>
-<li>
-<p>Strecke mit den abgelesenden Koordinaten eingeben (Strecke &#8594; <strong>Koordinate hinzufügen</strong>)</p>
-</li>
-<li>
-<p>Strecke exportieren (Strecke &#8594; <strong>KMZ-Export</strong>)</p>
-</li>
-<li>
-<p>KMZ-Datei mit <strong>Google Earth Pro</strong> öffnen und Wendepunkte auf die exakten Positionen schieben</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Zum Knoten 'Dateiname.kmz &#8594; Streckenname &#8594; Strecken-Export &#8594; turnpoints' navigieren</p>
-</li>
-<li>
-<p>Jeden Punkt anklicken und jeweils Kontextmenüpunkt 'Eigenschaften' aufrufen</p>
-</li>
-<li>
-<p>Punkt zur exakten Position schieben und Eigenschaften-Dialog schließen</p>
-</li>
-<li>
-<p>'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
-</li>
-</ol>
+<h3 id="osm-contest-map-maps">Karten-Menü</h3>
+<div class="paragraph">
+<p><strong>Folgende Operationen sind mit gespeicherten Karten durck Klick auf &#8230;&#8203; möglich:</strong></p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Task-Creator mit Karte öffnen (sofern gespeicherte Karte explizit dafür erzeugt wurde).<br>
+Zum Konstruieren einer neuen Strecke.</p>
 </li>
 <li>
-<p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
+<p>PDF-Wettbewerbs-Karte erzeugen und downloaden (sofern gespeicherte Karte explizit dafür erzeugt wurde)</p>
 </li>
 <li>
-<p>Wettbewerbs-Karte prüfen (Strecke &#8594; <strong>OSM-Online-Karte</strong>)</p>
+<p>PNG-Wettbewerbs-Karte downloaden</p>
 </li>
 <li>
-<p>Wettbewerbs-Karte drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)</p>
+<p>Wettbewerbs-Karte als zip-Archiv exportieren</p>
 </li>
-</ol>
+<li>
+<p>Gespeicherte Karte umbenennen</p>
+</li>
+<li>
+<p>Gespeicherte Karte löschen</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Im Unter-Menü stehen folgende Operationen zur Verfügung:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Als zip-Archiv exportierte Wettbewerbs-Karte importieren</p>
+</li>
+<li>
+<p>Task-Creator ohne Karte öffnen<br>
+Zum Laden der csv-Datei einer bereits gestarteten Strecken-Konstruktion.</p>
+</li>
+<li>
+<p>Alle gespeicherten Wettbewerbs-Karten in einem zip-Archiv exportieren</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Darüberhinaus stehen gespeicherte Karten, aus denen eine PDF erzeugt werden kann, auch in der OSM-Online-Karte von Strecken zur Verfügung.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2413,6 +2597,16 @@ OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und ermöglich
 <ul>
 <li>
 <p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Flugplätze und Lufträume:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.openaip.net" class="bare">https://www.openaip.net</a></p>
 </li>
 </ul>
 </div>
@@ -4759,9 +4953,9 @@ Mit diesen Einstellungen wird jedes mit "Ergebnis fertig" freigegebene Testergeb
 <ul>
 <li>
 <p>Datenbank des historischen Wettbewerbs kopieren<br>
-&#8594; Stop Flight Contest (Startmenü &#8594; Flight Contest &#8594; Stop Flight Contest)<br>
+&#8594; Flight Contest stoppen (Flight Contest Manager &#8594; Rechte Maustaste &#8594; Dienst-Kommandos &#8594; Stop Flight Contest)<br>
 &#8594; Kopiere 'HistoricalContest.fcdb.h2.db' nach 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'<br>
-&#8594; Start Flight Contest (Startmenü &#8594; Flight Contest &#8594; Start Flight Contest)</p>
+&#8594; Flight Contest starten (Flight Contest Manager &#8594; Rechte Maustaste &#8594; Dienst-Kommandos &#8594; Start Flight Contest)</p>
 </li>
 <li>
 <p>Flight Contest öffnen<br>
@@ -4800,49 +4994,28 @@ Mit diesen Einstellungen wird jedes mit "Ergebnis fertig" freigegebene Testergeb
 <h2 id="automatic-actions">Automatische Aktionen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Automatische Aktionen werden durch dauerhaft laufende Skripte erledigt
-und funktionieren nur mit dem Firefox-Browser.<br>
-Der erste Aufruf des Skriptes schaltet automatische Aktion ein.<br>
-Erneuter Aufruf des Skriptes schaltet automatische Aktion nach Rückfrage aus.<br>
-&#8594; 'Startmenü &#8594; Flight Contest'</p>
+<p>Execute actions automatically in the open Firefox browser.</p>
 </div>
 <div class="paragraph">
-<p><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a><br>
-<a href="#automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</a><br>
-<a href="#automatic-actions-loadscanobservation">FCAutoLoadScanObservation</a><br>
-<a href="#automatic-actions-loadlogger">FCAutoLoadLogger</a></p>
+<p><a href="#automatic-actions-loadlogger">Logger-Daten automatisch laden</a><br>
+<a href="#automatic-actions-loadscanobservation">Beobachtungs-Formulare automatisch laden</a><br>
+<a href="#automatic-actions-loadscanplanningtask">Planungs-Aufgaben-Formulare automatisch laden</a></p>
 </div>
 <div class="sect2">
-<h3 id="automatic-actions-openpdf">FCAutoOpenPDF</h3>
+<h3 id="automatic-actions-loadlogger">Logger-Daten automatisch laden</h3>
 <div class="paragraph">
-<p>Automatisches Öffnen von PDF im Acrobat Reader.</p>
+<p>Ein/Ausschalten: Flight Contest Manager &#8594; Auswertungs-Kommandos &#8594; Logger-Daten automatisch laden</p>
 </div>
 <div class="paragraph">
-<p>Notwendige Firefox-Einstellungen:</p>
+<p>Automatisches Laden eingelesener Logger-Daten.</p>
+</div>
+<div class="paragraph">
+<p>Notwendige Logger-Software-Einstellungen:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Allgemein &#8594; Alle Dateien in folgendem Ordner abspeichern: C:\FCSave</p>
-</li>
-<li>
-<p>Anwendungen &#8594; Adobe Acrobat Document: Datei speichern</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</h3>
-<div class="paragraph">
-<p>Automatisches Laden gescannter Planungstest-Formulare.</p>
-</div>
-<div class="paragraph">
-<p>Notwendige Scanner-Einstellungen:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>JPG-Dateien in das Verzeichnis "C:\FCSave\.scan" speichern</p>
+<p>GAC-, IGC-, GPX-, KML-, KMZ- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern</p>
 </li>
 </ul>
 </div>
@@ -4861,7 +5034,10 @@ Erneuter Aufruf des Skriptes schaltet automatische Aktion nach Rückfrage aus.<b
 </div>
 </div>
 <div class="sect2">
-<h3 id="automatic-actions-loadscanobservation">FCAutoLoadScanObservation</h3>
+<h3 id="automatic-actions-loadscanobservation">Beobachtungs-Formulare automatisch laden</h3>
+<div class="paragraph">
+<p>Ein/Ausschalten: Flight Contest Manager &#8594; Auswertungs-Kommandos &#8594; Beobachtungs-Formulare automatisch laden</p>
+</div>
 <div class="paragraph">
 <p>Automatisches Laden gescannter Beobachtungstest-Formulare.</p>
 </div>
@@ -4890,17 +5066,20 @@ Erneuter Aufruf des Skriptes schaltet automatische Aktion nach Rückfrage aus.<b
 </div>
 </div>
 <div class="sect2">
-<h3 id="automatic-actions-loadlogger">FCAutoLoadLogger</h3>
+<h3 id="automatic-actions-loadscanplanningtask">Planungs-Aufgaben-Formulare automatisch laden</h3>
 <div class="paragraph">
-<p>Automatisches Laden eingelesener Logger-Daten.</p>
+<p>Ein/Ausschalten: Flight Contest Manager &#8594; Auswertungs-Kommandos &#8594; Planungs-Aufgaben-Formulare automatisch laden</p>
 </div>
 <div class="paragraph">
-<p>Notwendige Logger-Software-Einstellungen:</p>
+<p>Automatisches Laden gescannter Planungstest-Formulare</p>
+</div>
+<div class="paragraph">
+<p>Notwendige Scanner-Einstellungen:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>GAC-, IGC-, GPX-, KML-, KMZ- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern</p>
+<p>JPG-Dateien in das Verzeichnis "C:\FCSave\.scan" speichern</p>
 </li>
 </ul>
 </div>
@@ -4952,40 +5131,45 @@ nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.</p>
 <div class="paragraph">
 <p><a href="#save-fcdb">Sicherung der 'Flight Contest'-Datenbank</a><br>
 <a href="#save-prints">Sicherung der 'Flight Contest'-Ausdrucke (Firefox)</a><br>
+<a href="#save-fcsave">Sicherung der in C:\FCSave gespeicherten Daten</a><br>
 <a href="#restore-fcdb">Datenwiederherstellung der 'Flight Contest'-Datenbank</a></p>
 </div>
 <div class="sect2">
 <h3 id="save-fcdb">Sicherung der 'Flight Contest'-Datenbank</h3>
 <div class="paragraph">
-<p>Rufen Sie das Skript
-'Startmenü &#8594; Flight Contest &#8594; Save contest database' auf.<br>
-Die Datenbank wird mit Datum und Uhrzeit versehen
+<p>Aufruf von 'Flight Contest Manager &#8594; Rechte Maustaste &#8594; Dienst-Kommandos &#8594; Datenbank sichern'</p>
+</div>
+<div class="paragraph">
+<p>Die Datenbank wird mit Datum und Uhrzeit versehen
 ins Sicherungsverzeichnis C:\FCSave gespeichert (&lt;Datum&gt;-&lt;Uhrzeit&gt;-fcdb.h2.db).</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="save-prints">Sicherung der 'Flight Contest'-Ausdrucke (Firefox)</h3>
 <div class="paragraph">
-<p>Empfohlene Firefox-Einstellungen:</p>
+<p>Alle PDF-Ausdrucke werden durch folgende Firefox-Einstellungen gesichert:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Allgemein -&gt; Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
-Anwendungen -&gt; Adobe Acrobat Document: Datei speichern</pre>
+<pre>Dateien und Anwendungen -&gt; Downloads -&gt; Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
+Dateien und Anwendungen -&gt; Anwendungen -&gt; Portable document format (PDF): Datei speichern</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Diese Einstellungen stellen sicher, dass alle Ausdrucke im Sicherungsverzeichnis
-C:\FCSave gespeichert werden. Öffnen der PDF und Ausdruck erfolgt dann über
-den Download-Manager.</p>
+C:\FCSave gespeichert werden. Öffnen der PDF und Ausdruck erfolgt dann über den Download-Manager.</p>
 </div>
 <div class="paragraph">
-<p>Ist diese Einstellung nicht möglich oder gewünscht,
-landen Ausdrucke im Windows-Temp-Verzeichnis.
-Von dort können sie mit dem Skript 'Startmenü &#8594; Flight Contest &#8594; Save contest prints'
-ins Sicherungsverzeichnis C:\FCSave gespeichert werden.
+<p>Ist diese Einstellung nicht möglich oder gewünscht, landen Ausdrucke im Windows-Temp-Verzeichnis.
 Beachten Sie jedoch, dass Firefox beim Schließen alle Downloads aus dem Windows-Temp-Verzeichnis löscht,
-so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Skript nicht regelmässig aufgerufen wird.</p>
+so dass der Verlust erfolgter Ausdrucke droht.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="save-fcsave">Sicherung der in C:\FCSave gespeicherten Daten</h3>
+<div class="paragraph">
+<p>Verwenden Sie dazu eine Kopie des Scriptes 'C:\Program Files\Flight Contest\scripts\save_fcsave.bat',
+bei dem Sie die Variable <strong>dest_dir</strong> auf einen Ordner auf einem externen Speichermedium einstellen.</p>
 </div>
 </div>
 <div class="sect2">
@@ -4993,7 +5177,7 @@ so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Skript nicht regelmä
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Zur Datenwiederherstellung muss der Dienst 'Apache Tomcat FlightContest' gestoppt sein.</p>
+<p>Flight Contest stoppen (Flight Contest Manager &#8594; Rechte Maustaste &#8594; Dienst-Kommandos &#8594; Stop Flight Contest)</p>
 </li>
 <li>
 <p>Kopieren Sie 'C:\FCSave\&lt;Datum&gt;-&lt;Uhrzeit&gt;-fcdb.h2.db'

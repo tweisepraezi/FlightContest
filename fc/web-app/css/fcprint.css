@@ -142,11 +142,15 @@ table.timetableoverviewlist tr.briefing td {
 }
 
 table.timetableoverviewlist tr.landing td {
-	padding-bottom: 2em;
+	padding-bottom: 0.5em;
+}
+
+table.timetableoverviewlist tr.takeoffinterval td {
+	padding-bottom: 0.5em;
 }
 
 table.timetableoverviewlist td {
-    font-size: 2em;
+    font-size: 1.6em;
 }
 
 table.timetableoverviewlist td.col2 {

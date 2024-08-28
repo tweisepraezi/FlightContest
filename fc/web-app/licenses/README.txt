@@ -1,5 +1,5 @@
 
-Flight Contest 3.4.7
+Flight Contest 3.4.8
 Copyright 2009-2024 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
@@ -126,14 +126,6 @@ https://www.openaip.net/
 
 MIT License
 https://github.com/openAIP/mapstyles/blob/master/LICENSE
-
-============================================================================
-
-RunHidden
-https://github.com/LesFerch/RunHidden
-
-MIT License
-https://github.com/LesFerch/RunHidden/blob/main/LICENSE
 
 ============================================================================
 

@@ -4651,7 +4651,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map saveRoute(Map params,Contest contestInstance)
+    Map saveRoute(Map params,Contest contestInstance, boolean noObservations)
     {
         Route route_instance = new Route(params)
         
@@ -4660,6 +4660,14 @@ class FcService
         
         if (!route_instance.liveTrackingScorecard) {
             route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
+        }
+        
+        if (noObservations) {
+            route_instance.turnpointRoute = TurnpointRoute.None
+            route_instance.enroutePhotoRoute = EnrouteRoute.None
+            route_instance.enrouteCanvasRoute = EnrouteRoute.None
+            route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
+            route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
         }
         
         String error_messages = ""
@@ -5071,7 +5079,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importSignFile(String fileExtension, Route routeInstance, def file, ImportSign importSign, String folderName, String namePrefix)
+    Map importSignFile(String fileExtension, Route routeInstance, def file, ImportSign importSign, String folderName, String namePrefix, boolean autoName)
     {
         Map ret = [found: false, error: false, message: ""]
         
@@ -5088,7 +5096,7 @@ class FcService
             ret.error = true
             ret.message = getMsg('fc.route.signfileimport.nofile')
         } else {
-            printstart "importSignFile '$original_filename' Prefix='$namePrefix'"
+            printstart "importSignFile '$original_filename' Prefix='$namePrefix', autoName='$autoName'"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -5102,7 +5110,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_sign_file(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, importSign, folderName, namePrefix)
+                Map reader = import_sign_file(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, importSign, folderName, namePrefix, autoName)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5130,12 +5138,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_sign_file(String fileExtension, Route routeInstance, String loadFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix)
+    private Map import_sign_file(String fileExtension, Route routeInstance, String loadFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix, boolean autoName)
     {
-        printstart "import_sign_file '$loadFileName' Folder='$folderName' Prefix='$namePrefix'"
+        printstart "import_sign_file '$loadFileName' Folder='$folderName' Prefix='$namePrefix' autoName='$autoName'"
         
         // read file
-        Map reader = RouteFileTools.ReadImportSignFile(fileExtension, routeInstance, loadFileName, originalFileName, importSign, folderName, namePrefix)
+        Map reader = RouteFileTools.ReadImportSignFile(fileExtension, routeInstance, loadFileName, originalFileName, importSign, folderName, namePrefix, autoName)
         
         // calculate legs
         if (importSign == ImportSign.RouteCoord) {
@@ -13776,7 +13784,7 @@ class FcService
         p.enrouteCanvasRoute = enrouteCanvasRoute
         p.enroutePhotoMeasurement = enroutePhotoMeasurement
         p.enrouteCanvasMeasurement = enrouteCanvasMeasurement
-        Map ret = saveRoute(p,contest.instance)
+        Map ret = saveRoute(p,contest.instance,false)
 		printdone ret
 		return ret
     }

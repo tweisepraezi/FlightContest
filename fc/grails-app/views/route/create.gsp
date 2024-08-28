@@ -41,9 +41,11 @@
                                     <input type="text" id="altitudeAboveGround" name="altitudeAboveGround" value="${fieldValue(bean:routeInstance,field:'altitudeAboveGround')}" tabIndex="${ti[0]++}"/>
                                 </p>
                             </fieldset>
+                            <a href="/fc/docs/help_${session.showLanguage}.html#route-planning-photos-canvas" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                             <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
                         </fieldset>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="save_noobservations" value="${message(code:'fc.route.create.noobservations')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>

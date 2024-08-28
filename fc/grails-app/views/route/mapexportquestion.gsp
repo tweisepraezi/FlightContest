@@ -218,6 +218,9 @@
                                     <div>
                                         <g:checkBox name="contestMapDevStyle" value="${routeInstance.contestMapDevStyle}" tabIndex="${ti[0]++}" />
                                         <label>${message(code:'fc.contestmap.devstyle')}</label>
+                                        <g:if test="${BootStrap.global.IsOpenAIP()}">
+                                            <g:actionSubmit action="csvexportairports_check_route" value="${message(code:'fc.contestmap.contestmapairports.csvexport.check')}" tabIndex="${ti[0]++}" />
+                                        </g:if>
                                     </div>
                                 </fieldset>
 		                    </g:if>

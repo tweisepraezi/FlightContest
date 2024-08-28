@@ -16,7 +16,7 @@
                 <thead>
                     <tr>
                         <th colspan="${7+add_col}" class="table-head">${message(code:'fc.map.list')}</th>
-                        <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+                        <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#osm-contest-map-maps" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
                         <th>${message(code:'fc.title')}</th>

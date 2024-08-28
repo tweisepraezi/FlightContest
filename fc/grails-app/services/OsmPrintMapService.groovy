@@ -413,11 +413,15 @@ class OsmPrintMapService
         
         //...........................................................................................
         String edition_text = "${getMsg('fc.contestmap.edition',true)} ${contestMapParams.contestMapEdition}"
-        String generator_text = getMsg('fc.contestmap.generator.printmaps',true)
+        String generator_date = new Date().format("dd-MMM-yyyy HH:mm")
+        String generator_text = getMsg('fc.contestmap.generator.printmaps',[generator_date],true)
         if (contestMapParams.contestMapFCStyle) {
-            generator_text = getMsg('fc.contestmap.generator.flightcontest',true)
+            generator_text = getMsg('fc.contestmap.generator.flightcontest',[generator_date],true)
         }
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
+        if (mapdata_date) {
+            copyright_text += " (${getMsg('fc.contestmap.mapdata.date',[mapdata_date],true)})"
+        }
         String copyright_date = GeoDataService.ReadTxtFile(Defs.FCSAVE_FILE_GEODATA_DATE)
         if (contestMapParams.contestMapChateaus || contestMapParams.contestMapPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
@@ -426,11 +430,8 @@ class OsmPrintMapService
             copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
             // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
         }
-        if (BootStrap.global.IsOpenAIP() && contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) {
+        if (BootStrap.global.IsOpenAIP() && ((contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) || openaip_airfields)) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.openaip',[],true)}"
-        }
-        if (mapdata_date) {
-            copyright_text += ". ${getMsg('fc.contestmap.mapdata.date',[mapdata_date],true)}"
         }
         String user_text = ""
         if (!contestMapParams.taskCreator) {
@@ -702,7 +703,7 @@ class OsmPrintMapService
             String uuid = UUID.randomUUID().toString()
             Route route_instance = Route.get(contestMapParams.routeId)
             String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-            Map ret2 = openAIPService.WriteAirports2CSV(route_instance, contestMapParams.webRootDir, file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+            Map ret2 = openAIPService.WriteAirports2CSV(route_instance, contestMapParams.webRootDir, file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
             if (!ret2.ok) {
                 ret.message = getMsg('fc.contestmap.contestmapairports.csvexport.notfound', [], false)
                 return ret

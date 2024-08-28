@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.7
-:revdate:   28.07.2024
+:revnumber: 3.4.8
+:revdate:   28.08.2024
 :nofooter:
 :title-page:
 :toc-title: Table of content

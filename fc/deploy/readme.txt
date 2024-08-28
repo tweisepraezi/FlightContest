@@ -1,6 +1,17 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.8
+----------------
+- Hilfe "Fotos und Bodenzeichen verwalten" hinzugefügt
+- Hilfe für das Karten-Menü hinzugefügt
+- Strecken-Fotos importieren: Option "Namen automatisch festlegen" hinzugefügt. Nummeriert die Fotos beginnend mit 1.
+- Strecken-Bodenzeichen importieren: Option "Namen automatisch festlegen" hinzugefügt. Fügt Bodenzeichen-Platzhalter * mit angegebener Koordinate hinzu.
+  Der Bodenzeichen-Platzhalter * muss vor Nutzung in einem Wettbewerb durch das gewünschte Bodenzeichen ersetzt werden.
+- Neue Strecke: Schaltfläche "Ohne Beobachtungen erstellen" hinzugefügt
+- Übersichts-Zeitplan: Bei Seitenumbrüchen zur Bildung von Gruppen werden Planungs-, Takeoff- und Lande-Zeiten je Gruppe gedruckt.
+- Integrierter Task-Creator: Bug "Bei der magnetische Deklination wurde Ost mit West vertauscht" behoben.
+
 Änderungen 3.4.7
 ----------------
 - OpenAIP-Zugang wiederhergestellt
@@ -29,9 +40,9 @@
 - Karten-Menüpunkt "Alle Wettbewerbs-Karten exportieren" hinzugefügt
 - Karten-Import zeigt jetzt eine Fehlermeldung an, wenn die zu importierende(n) Karte(n) bereits im Karten-Menü vorhanden sind.
     Eine bestehende Karte muss erst gelöscht werden, bevor sie neu importiert werden kann.
-- Integrierter Task-Creator: 'Sync map url'-Schalter hinzugefügt.
+- Integrierter Task-Creator: 'Sync map url'-Schaltfläche hinzugefügt.
     Nach dem Laden eines Task, der auf einem anderen Computer erstellt worden ist, zeigt die Map-URL auf Karten eines anderen Wettbewerbs.
-    Mit diesem Schalter wird die Map-URL auf den aktuellen Wettbewerb angepasst.
+    Mit dieser Schaltfläche wird die Map-URL auf den aktuellen Wettbewerb angepasst.
 - Die zu berücksichtigende Luftraum-Höhe wird jetzt beim Strecken-Export/Import und Strecken-Kopie mit transportiert.
 - Der in der Aufgabe definierte Titel für "Anderer Test" wird jetzt in der Auswertung anstelle von "And." angezeigt.
 - Bug "Besatzungsliste stürzt ab, wenn Besatzung ohne Team eingegeben wird" behoben
@@ -107,11 +118,11 @@
     Dabei muss für PDF/PNG oder für den Task-Creator jeweils eine eigene Karte erzeugt werden.
     Mit "Karte importieren" kann ein Karten-Export auf einem anderen Notebook oder in einem anderen Wettbewerb importiert werden.
 - OSM-Wettbewerbs-Karte erweitert:
-    1. Schalter "Online-Karte um Flughafen erzeugen" hinzugefügt,
+    1. Schaltfläche "Online-Karte um Flughafen erzeugen" hinzugefügt,
        welche eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für OSM-Online-Anzeige erzeugt.
-    2. Schalter "Task-Creator-Karte um Flughafen erzeugen" hinzugefügt,
+    2. Schaltfläche "Task-Creator-Karte um Flughafen erzeugen" hinzugefügt,
        welche eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für Verwendung im Task-Creator erzeugt.
-    3. Schalter "Erzeugen (für Task-Creator)" jeweils in den 1./2./3./4. Einstellungen hinzugefügt,
+    3. Schaltfläche "Erzeugen (für Task-Creator)" jeweils in den 1./2./3./4. Einstellungen hinzugefügt,
        welche Karten mit T/O und ggf. LDG aber ohne weitere Streckendetails zur Verwendung im Task-Creator erzeugt.
     4. Erzeugte OSM-Karten werden jetzt immer lokal gespeichert und sind dann über den Menüpunkt "Karten" erreichbar,
        wo Weiterverarbeitungs-Kommandos zur Verfügung stehen.
@@ -219,13 +230,13 @@
 - Planung: Zeitplan-Export (Start-Liste) hinzugefügt. Für die Startliste von FFA_SkyTraq.
 - Strecken-Druck: Übersicht der Koordinaten-Karten-Entfernungen (in mm) hinzugefügt.
 - Besatzungs-Druck: Team-Druck und Flugzeug-Druck auf Folge-Seiten hinzugefügt.
-- Landungs-Ergebnis-Eingabe: Schalter 'Speichern und nächstes Ergebnis' hinzugefügt.
+- Landungs-Ergebnis-Eingabe: Schaltfläche 'Speichern und nächstes Ergebnis' hinzugefügt.
 - Ergebnisse: Die Ergebnis-Liste enthält nun für jede Landung eine separate Spalte (max. 4: Ldg1, Ldg2, Ldg3, Ldg4).
-- Ergebnis-Eingabe: Schalter 'Vorheriges Ergebnis' hinzugefügt.
+- Ergebnis-Eingabe: Schaltfläche 'Vorheriges Ergebnis' hinzugefügt.
 - Beobachtungs-Ergebnis-Eingabe wurde für Touchscreen-Nutzung optimiert:
-    Strecken-Foto-Eingabe wurde von Auswahlliste auf Schalter umgestellt.
+    Strecken-Foto-Eingabe wurde von Auswahlliste auf Schaltfläche umgestellt.
 	Radio-Buttons wurden vergrößert und mit Rahmen versehen.
-- Alle Listen-Details: Schalter 'Vorheriges Element' hinzugefügt.
+- Alle Listen-Details: Schaltfläche 'Vorheriges Element' hinzugefügt.
 - Planung: Landetest-Startliste hinzugefügt. Erlaubt Ausdruck einer Startliste, ohne einen Zeitplan festzulegen.
   Ausdruck mit Gruppierung.
 - Logger auslesen: Option 'Logger eines neuen Ports sofort auslesen' hinzugefügt.

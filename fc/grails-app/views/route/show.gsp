@@ -290,6 +290,7 @@
                                                     <g:actionSubmit action="print_turnpointphoto_route" value="${message(code:'fc.coordroute.turnpointphoto.print.route')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                                 </g:else>
                                                 <g:actionSubmit action="delete_turnpointphoto_route" value="${message(code:'fc.coordroute.turnpointphoto.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                                <a href="/fc/docs/help_${session.showLanguage}.html#route-planning-photos-canvas" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                             </g:if>
 	                                    </td>
 	                                </tr>
@@ -325,6 +326,7 @@
                                                     <g:actionSubmit action="delete_enroutephoto_route" value="${message(code:'fc.coordroute.photo.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                                 </g:if>
                                             </g:if>
+                                            <a href="/fc/docs/help_${session.showLanguage}.html#route-planning-photos-canvas" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -338,6 +340,7 @@
                                             <g:actionSubmit action="importenroutecanvas" value="${message(code:'fc.coordroute.canvas.import')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="createenroutecanvas" value="${message(code:'fc.coordroute.canvas.add')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="removeallenroutecanvas" value="${message(code:'fc.coordroute.canvas.removeall')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+                                            <a href="/fc/docs/help_${session.showLanguage}.html#route-planning-photos-canvas" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                         </td>
                                     </tr>
                                 </tfoot>

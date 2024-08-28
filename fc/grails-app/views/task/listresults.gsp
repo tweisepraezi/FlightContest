@@ -47,7 +47,7 @@
                                 <td/>
                                 <td/>
                                 <td/>
-                                <td/>
+                                <td style="width:1%;"><a href="/fc/docs/help_${session.showLanguage}.html#automatic-actions" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
                             </tr>
                             <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID}" >
                                 <tr>

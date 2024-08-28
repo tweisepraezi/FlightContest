@@ -14,7 +14,6 @@ Grails 2.5.6: https://grails.org/download.html/
 Apache Tomcat 9: https://tomcat.apache.org/download-90.cgi -> 64-bit Windows zip
 AsciiDoctorJ 2.5.1: https://docs.asciidoctor.org/asciidoctorj/latest/distribution/ -> asciidoctorj
 Inno Setup 6.1.2: http://www.innosetup.com/
-RunHidden 1.1: http://download.flightcontest.de/RunHidden.exe (compiled for 64-bit from https://github.com/LesFerch/RunHidden)
 Python 3.7.9: https://www.python.org/downloads/ (otional)
 GDAL 3.2.1: https://www.gisinternals.com/release.php (otional)
 
@@ -35,7 +34,6 @@ Additional sources for installer compilation (used by build.bat and fc.is6):
 	Apache Tomcat 9 (x64) in folder '%PROJECT_ROOT%\Server\apache-tomcat-9.0.13-windows-x64'
 	AsciiDoctorJ 2.5.1 in folder '%PROJECT_ROOT%\AsciiDoctorJ\asciidoctorj-2.5.1
     Touch in folder '%PROJECT_ROOT%\Touch'
-    RunHidden in folder '%PROJECT_ROOT%\RunHidden'
 
 Build configuration:
     %PROJECT_ROOT%\EPJ\fcdev\fc\grails-app\conf\BuildConfig.groovy

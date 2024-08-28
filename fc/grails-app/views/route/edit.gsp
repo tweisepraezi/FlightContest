@@ -44,6 +44,7 @@
                                 </p>
                             </fieldset>
 	                        <g:if test="${!routeInstance.IsObservationSignUsed()}">
+                                <a href="/fc/docs/help_${session.showLanguage}.html#route-planning-photos-canvas" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
 	                        </g:if>
                             <g:editRouteSpecialSettings route="${routeInstance}" ti="${ti}"/>

@@ -1909,7 +1909,7 @@ class RouteFileTools
                 route_instance.save()
                 
                 // Add coordinates
-                Map sign_data = read_import_sign(ImportSign.RouteCoord, turnpoints_folder, "", kmz_file)
+                Map sign_data = read_import_sign(ImportSign.RouteCoord, turnpoints_folder, "", false, kmz_file)
                 Map ret = add_sign_data(route_instance, ImportSign.RouteCoord, sign_data, false)
                 
                 // Add observations
@@ -1929,7 +1929,7 @@ class RouteFileTools
                         }
                     } else if (photos_folder) {
 						ImportSign import_sign = ImportSign.GetEnrouteSign(route_instance, true)
-                        sign_data = read_import_sign(import_sign, photos_folder, "", kmz_file)
+                        sign_data = read_import_sign(import_sign, photos_folder, "", false, kmz_file)
                         add_sign_data(route_instance, import_sign, sign_data, false)
                     }
                     
@@ -1946,7 +1946,7 @@ class RouteFileTools
                         }
                     } else if (canvas_folder) {
 						ImportSign import_sign = ImportSign.GetEnrouteSign(route_instance, false)
-                        sign_data = read_import_sign(import_sign, canvas_folder, "", kmz_file)
+                        sign_data = read_import_sign(import_sign, canvas_folder, "", false, kmz_file)
                         add_sign_data(route_instance, import_sign, sign_data, false)
                     }
                 }
@@ -1968,7 +1968,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    static Map ReadImportSignFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix)
+    static Map ReadImportSignFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix, boolean autoName)
     // Return: importedsignnum - Number of imported signs 
     //         filesignnum     - Number of signs in file 
     //         valid           - true, if valid route file format
@@ -1976,20 +1976,20 @@ class RouteFileTools
     {
         switch (fileExtension) {
             case TXT_EXTENSION:
-                Map sign_data = ReadImportSignTXTFile(routeInstance, routeFileName, importSign, namePrefix)
+                Map sign_data = ReadImportSignTXTFile(routeInstance, routeFileName, importSign, namePrefix, autoName)
                 return add_sign_data(routeInstance, importSign, sign_data, true)
             case KML_EXTENSION:
-                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, false)
+                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, autoName, false)
                 return add_sign_data(routeInstance, importSign, sign_data, false)
             case KMZ_EXTENSION:
-                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, true)
+                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, autoName, true)
                 return add_sign_data(routeInstance, importSign, sign_data, false)
         }
         return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadImportSignTXTFile(Route routeInstance, String txtFileName, ImportSign importSign, String namePrefix)
+    private static Map ReadImportSignTXTFile(Route routeInstance, String txtFileName, ImportSign importSign, String namePrefix, boolean autoName)
     // Return: import_signs - List of enroute signs
     //         valid        - true, if valid sign file format
     //         errors       - <> ""
@@ -2004,6 +2004,7 @@ class RouteFileTools
         LineNumberReader txt_reader = txt_file.newReader()
         
         try {
+            int photo_num = 0
             while (true) {
                 String line = txt_reader.readLine()
                 if (line == null) {
@@ -2025,6 +2026,14 @@ class RouteFileTools
                     } else {
                         boolean invalid_line = false
                         boolean found = false
+                        if (autoName) {
+                            if (importSign.IsEnrouteCanvas()) {
+                                import_sign.name = EnrouteCanvasSign.NoSign
+                            } else if (importSign.IsEnroutePhoto()) {
+                                photo_num++
+                                import_sign.name = photo_num.toString()
+                            }
+                        }
                         if (namePrefix) {
                             if (import_sign.name.toLowerCase().startsWith(namePrefix.toLowerCase())) {
                                 found = true
@@ -2033,7 +2042,7 @@ class RouteFileTools
                             found = true
                         }
                         if (found) {
-                            if (import_sign.name) {
+                            if (import_sign.name && !autoName) {
                                 if (importSign.IsEnroutePhoto()) {
                                     // check non canvas name
                                     for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
@@ -2213,7 +2222,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadImportSignKMLFile(Route routeInstance, String kmFileName, ImportSign importSign, String folderName, String namePrefix, boolean kmzFile)
+    private static Map ReadImportSignKMLFile(Route routeInstance, String kmFileName, ImportSign importSign, String folderName, String namePrefix, boolean autoName, boolean kmzFile)
     // Return: import_signs - List of enroute signs
     //         valid        - true, if valid sign file format
     //         errors       - <> ""
@@ -2244,7 +2253,7 @@ class RouteFileTools
                 folder = kml.Document.Folder[0] // first folder
             }
             if (folder && folder.name) {
-                ret = read_import_sign(importSign, folder, namePrefix, kmz_file)
+                ret = read_import_sign(importSign, folder, namePrefix, autoName, kmz_file)
             }
         } catch (Exception e) {
             ret.read_errors += e.getMessage()
@@ -2260,7 +2269,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map read_import_sign(ImportSign importSign, def readFolder, String namePrefix, def kmzFile)
+    private static Map read_import_sign(ImportSign importSign, def readFolder, String namePrefix, boolean autoName, def kmzFile)
     {
         List import_signs = []
         boolean valid_format = false
@@ -2269,9 +2278,18 @@ class RouteFileTools
         
         if (readFolder.Placemark) {
             valid_format = true
+            int photo_num = 0
             for (def pm in readFolder.Placemark) {
                 if (pm.Point.coordinates) {
                     String sign_name = pm.name.text()
+                    if (autoName) {
+                        if (importSign.IsEnrouteCanvas()) {
+                            sign_name = EnrouteCanvasSign.NoSign
+                        } else if (importSign.IsEnroutePhoto()) {
+                            photo_num++
+                            sign_name = photo_num.toString()
+                        }
+                    }
                     
                     boolean found = false
                     if (namePrefix) {

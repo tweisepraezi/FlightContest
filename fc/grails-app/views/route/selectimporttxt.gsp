@@ -32,6 +32,12 @@
                             </div>
                             <div>
                                 <br/>
+                                <g:checkBox name="autoname" value="${autoname}" checked= "${true}" tabIndex="${ti[0]++}"/>
+                                <label>${message(code:'fc.route.signfileimport.autoname')}</label>
+                                <br/>
+                            </div>
+                            <div>
+                                <br/>
                                 <label>${message(code:'fc.route.signfileimport.namepraefix')}:</label>
                                 <br/>
                                 <input type="text" id="namepraefix" name="namepraefix" value="" tabIndex="${ti[0]++}"/>

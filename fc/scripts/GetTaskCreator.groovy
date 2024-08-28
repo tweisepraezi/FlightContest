@@ -92,6 +92,7 @@ MODIFY_DATA = [
     ],
     [Old:"""<label for="map_name" """, RemoveTo:"""<div id="separador_mapa_usuario" """],
     [Old:"""<label for="task_name" """, RemoveTo:"""<button id="btn_save_as_fc" """],
+    [Old:"""<label for="chk_private" """, RemoveTo:"""<span><input id="chk_private" """],
 ]
 
 TRANSLATIONS = [
