@@ -40,27 +40,24 @@ class OsmPrintMapService
     final static Map HEADER_CONTENTTYPE = [name:"Content-Type", value:"application/vnd.api+json; charset=utf-8"]
     final static Map HEADER_ACCEPT = [name:"Accept", value:"application/vnd.api+json; charset=utf-8"]
     
-    final static String STYLE_FC = "fcmaps" // < 3.1.8 nutzt Stil opentopomap-fc 
-    final static String STYLE_FC_DEV = "fcmaps-dev"
-    final static String STYLE_PRINTMAPS_CARTO = "osm-carto"
-    final static String STYLE_PRINTMAPS_CARTO_CONTOURLINES = "osm-carto-ele20"
-
-    final static String HIDELAYERS_FC = "" // borders
-    final static String HIDELAYERS_FC_CONTOURS20 = "contours20"
-    final static String HIDELAYERS_FC_CONTOURS50 = "contours50"
-    final static String HIDELAYERS_FC_CONTOURS100 = "contours100"
-    final static String HIDELAYERS_FC_AIRFIELDSNAME = "airports-name"
-    final static String HIDELAYERS_FC_AIRFIELDSICAO = "airports-icao"
-    final static String HIDELAYERS_FC_CHURCHES = "symbols-poly-churches" // "symbols-poly-churches,symbols-point-churches"
-    final static String HIDELAYERS_FC_CASTLES = "symbols-poly-castles" // "symbols-poly-castles,symbols-point-castles"
-    final static String HIDELAYERS_FC_POWERLINES = "powerlines"
+    final static String HIDELAYERS_FC                   = ""
+    final static String HIDELAYERS_FC_CONTOURS20        = "contours20"
+    final static String HIDELAYERS_FC_CONTOURS50        = "contours50"
+    final static String HIDELAYERS_FC_CONTOURS100       = "contours100"
+    final static String HIDELAYERS_FC_AIRFIELDSNAME     = "airports-name"
+    final static String HIDELAYERS_FC_AIRFIELDSICAO     = "airports-icao"
+    final static String HIDELAYERS_FC_CHURCHES          = "symbols-churches"
+    final static String HIDELAYERS_FC_CASTLES           = "symbols-castles"
+    final static String HIDELAYERS_FC_POWERLINES        = "powerlines"
     final static String HIDELAYERS_FC_WINDPOWERSTATIONS = "symbols-point-windpowerstations,symbols-poly-windpowerstations"
-    final static String HIDELAYERS_FC_SMALLROADS = "roads-small"
-    final static String HIDELAYERS_PRINTMAPS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
-    final static String HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY = "placenames-medium"
+    final static String HIDELAYERS_FC_SMALLROADS_1      = "roads-small-grade1"
+    final static String HIDELAYERS_FC_SMALLROADS_2      = "roads-small-grade2"
+    final static String HIDELAYERS_FC_SMALLROADS_3      = "roads-small-grade3"
+    final static String HIDELAYERS_FC_SMALLROADS_4      = "roads-small-grade4"
+    final static String HIDELAYERS_FC_SMALLROADS_5      = "roads-small-grade5"
     
-    final static String ATTR_OUTPUT_PROJECTION = "3857" // EPSG-Nummer, WGS84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
-    final static String ATTR_OUTPUT_PROJECTION_TASKCREATOR = "4326"
+    final static String ATTR_OUTPUT_PROJECTION_PRINTPDF    = "3857" // Web Mercator projection, used by Google Maps, OpenStreetMap, OpenTopoMap and others
+    final static String ATTR_OUTPUT_PROJECTION_TASKCREATOR = "4326" // linear lat lon projection
     final static String ATTR_INPUT_SRS = "epsg:4326"
      
     // Formate
@@ -111,42 +108,19 @@ class OsmPrintMapService
     final static BigDecimal GRATICULE_STROKE_WIDTH = 0.5
     final static BigDecimal SCALEBAR_STROKE_WIDTH = 4
     
-    
     final static int GRATICULE_TEXT_FONT_SIZE = 8
     final static BigDecimal GRATICULE_SCALEBAR_LEN = 0.2 // NM
-    final static int AIRFIELD_TEXT_FONT_SIZE = 10
-    final static int PEAKS_TEXT_FONT_SIZE = 10
-    final static int SPECIALS_TEXT_FONT_SIZE = 10
-    final static String GEODATA_BUILDING_SCALE = "scale(0.75, 0.75)"
     final static String GEODATA_SYMBOL_SCALE = "scale(0.75, 0.75)"
     final static int SYMBOL_TEXT_FONT_SIZE = 12
     
-    final static String AIRSPACE_PRAEFIX = "AIRSPACE:"
+    final static int OBJECT_TEXT_FONT_SIZE = 6
+    final static int OBJECT_TEXT_LINE1_DY = 8
+    final static int OBJECT_TEXT_LINE2_DY = 14
+    
     final static String AIRSPACE_LAYER_STYLE_SEPARATOR = ","
     final static String AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR = ":"
     final static String AIRSPACE_LAYER_ID_PREAFIX = "id_"
     final static BigDecimal AIRSPACE_STROKE_WIDTH = 0.75
-    
-    // 1:50000
-    //final static int landuse_residential = 0xe0dfdf
-    //final static int landuse_commercial = 0xf2dad9
-    //final static int landuse_industrial = 0xebdbe8
-    //final static int landuse_retail = 0xffd6d1 // Handel
-    //final static int buildings = 0xd1c6bd
-    //final static int buildings_major = 0xaf9c8d
-    //final static List COLOR_CHANGES = [[NewRGB:0xf7b5bd, OldRGBs:[landuse_residential,landuse_commercial,landuse_industrial,landuse_retail,buildings,buildings_major]]]
-    
-    // 1:100000
-    final static List COLOR_CHANGES = [[OldRGBs:[0xd3d3d3], NewRGB:0xf7b5bd], // Ortschaften, Industrie (grau -> rot)
-                                       [OldRGBs:[0xfbeeda], NewRGB:0xffffff], // Felder (grün -> weiß)
-                                       [OldRGBs:[0xdbf1c6], NewRGB:0xffffff], // Wiesen (grün -> weiß)
-                                       [OldRGBs:[0xf2efe9], NewRGB:0xffffff], // Felder (grau -> weiß)
-                                       [OldRGBs:[0xffffff], NewRGB:0xbbbbbb], // Straße (weiß -> grau)
-                                       [OldRGBs:[0xe892a2], NewRGB:0xf85858], // Straße (rot -> rot)
-                                       [OldRGBs:[0xfcd6a4], NewRGB:0xf85858], // Straße (orange -> rot)
-                                       [OldRGBs:[0xf9b29c], NewRGB:0xf85858], // Straße (orange -> rot)
-                                       [OldRGBs:[0xf7fabf], NewRGB:0xf8f858], // Straße (gelb -> gelb)
-                                      ]
     
     // CSV files
     final static String CSV_DELIMITER = "|"
@@ -208,9 +182,9 @@ class OsmPrintMapService
     {
         Map ret = [ok:false, message:'']
         
-        String projection = ATTR_OUTPUT_PROJECTION
+        String map_projection = ATTR_OUTPUT_PROJECTION_PRINTPDF
         if (contestMapParams.taskCreator) {
-            projection = ATTR_OUTPUT_PROJECTION_TASKCREATOR
+            map_projection = ATTR_OUTPUT_PROJECTION_TASKCREATOR
         }
         
         String printjob_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
@@ -226,66 +200,68 @@ class OsmPrintMapService
         
         String graticule_file_name = contestMapParams.graticuleFileName.replaceAll('\\\\', '/')
 
-        String style = ""
-        String hide_layers = ""
+        String hide_layers = HIDELAYERS_FC
         boolean openaip_airfields = false
-        if (contestMapParams.contestMapFCStyle) {
-            style = STYLE_FC
-            hide_layers = HIDELAYERS_FC
-            switch (contestMapParams.contestMapContourLines) {
-                case Defs.CONTESTMAPCONTOURLINES_20M:
-                    hide_layers += ",${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
-                    break
-                case Defs.CONTESTMAPCONTOURLINES_50M:
-                    hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS100}"
-                    break
-                case Defs.CONTESTMAPCONTOURLINES_100M:
-                    hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50}"
-                    break
-                default:
-                    hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
-                    break
-            }
-            if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_AUTO || contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OPENAIP) {
-                if (BootStrap.global.IsOpenAIP()) {
-                    openaip_airfields = true
-                    hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME},${HIDELAYERS_FC_AIRFIELDSICAO}"
-                } else { // ICAO
-                    hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME}"
-                }
-            } else if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO) {
+        switch (contestMapParams.contestMapContourLines) {
+            case Defs.CONTESTMAPCONTOURLINES_20M:
+                hide_layers += ",${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
+                break
+            case Defs.CONTESTMAPCONTOURLINES_50M:
+                hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS100}"
+                break
+            case Defs.CONTESTMAPCONTOURLINES_100M:
+                hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50}"
+                break
+            default:
+                hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
+                break
+        }
+        if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_AUTO || contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OPENAIP) {
+            if (BootStrap.global.IsOpenAIP()) {
+                openaip_airfields = true
+                hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME},${HIDELAYERS_FC_AIRFIELDSICAO}"
+            } else { // ICAO
                 hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME}"
-            } else {
-                hide_layers += ",${HIDELAYERS_FC_AIRFIELDSICAO}"
             }
-            if (!contestMapParams.contestMapChurches) {
-                hide_layers += ",${HIDELAYERS_FC_CHURCHES}"
-            }
-            if (!contestMapParams.contestMapCastles) {
-                hide_layers += ",${HIDELAYERS_FC_CASTLES}"
-            }
-            if (!contestMapParams.contestMapPowerlines) {
-                hide_layers += ",${HIDELAYERS_FC_POWERLINES}"
-            }
-            if (!contestMapParams.contestMapWindpowerstations) {
-                hide_layers += ",${HIDELAYERS_FC_WINDPOWERSTATIONS}"
-            }
-            if (!contestMapParams.contestMapSmallRoads) {
-                hide_layers += ",${HIDELAYERS_FC_SMALLROADS}"
-            }
-            if (contestMapParams.contestMapDevStyle) {
-                style = STYLE_FC_DEV
-            }
+        } else if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO) {
+            hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME}"
         } else {
-            if (contestMapParams.contestMapContourLines) {
-                style = STYLE_PRINTMAPS_CARTO_CONTOURLINES
-            } else {
-                style = STYLE_PRINTMAPS_CARTO
-            }
-            hide_layers = HIDELAYERS_PRINTMAPS_CARTO
-            if (!contestMapParams.contestMapMunicipalityNames) {
-                hide_layers += ",${HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY}"
-            }
+            hide_layers += ",${HIDELAYERS_FC_AIRFIELDSICAO}"
+        }
+        if (!contestMapParams.contestMapChurches) {
+            hide_layers += ",${HIDELAYERS_FC_CHURCHES}"
+        }
+        if (!contestMapParams.contestMapCastles) {
+            hide_layers += ",${HIDELAYERS_FC_CASTLES}"
+        }
+        if (!contestMapParams.contestMapPowerlines) {
+            hide_layers += ",${HIDELAYERS_FC_POWERLINES}"
+        }
+        if (!contestMapParams.contestMapWindpowerstations) {
+            hide_layers += ",${HIDELAYERS_FC_WINDPOWERSTATIONS}"
+        }
+        switch (contestMapParams.contestMapSmallRoadsGrade) {
+            case Defs.CONTESTMAPSMALLROADSGRADE_1:
+                hide_layers += ",${HIDELAYERS_FC_SMALLROADS_2},${HIDELAYERS_FC_SMALLROADS_3},${HIDELAYERS_FC_SMALLROADS_4},${HIDELAYERS_FC_SMALLROADS_5}"
+                break
+            case Defs.CONTESTMAPSMALLROADSGRADE_2:
+                hide_layers += ",${HIDELAYERS_FC_SMALLROADS_3},${HIDELAYERS_FC_SMALLROADS_4},${HIDELAYERS_FC_SMALLROADS_5}"
+                break
+            case Defs.CONTESTMAPSMALLROADSGRADE_3:
+                hide_layers += ",${HIDELAYERS_FC_SMALLROADS_4},${HIDELAYERS_FC_SMALLROADS_5}"
+                break
+            case Defs.CONTESTMAPSMALLROADSGRADE_4:
+                hide_layers += ",${HIDELAYERS_FC_SMALLROADS_5}"
+                break
+            case Defs.CONTESTMAPSMALLROADSGRADE_5:
+                hide_layers += ""
+                break
+            default: // non small roads
+                hide_layers += ",${HIDELAYERS_FC_SMALLROADS_1},${HIDELAYERS_FC_SMALLROADS_2},${HIDELAYERS_FC_SMALLROADS_3},${HIDELAYERS_FC_SMALLROADS_4},${HIDELAYERS_FC_SMALLROADS_5}"
+                break
+        }
+        if (hide_layers.startsWith(',')) {
+            hide_layers = hide_layers.substring(1)
         }
         
         int map_scale = contestMapParams.mapScale
@@ -397,27 +373,41 @@ class OsmPrintMapService
         int scalbar_text_ypos = scalebar_ypos - 3   // 3mm nach unten
         
         //...........................................................................................
+        String map_region = ""
         String mapdata_date = ""
         printstart "Get service capabilities"
         Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
         if (status.responseCode == 200) {
             for (def config_style in status.json.ConfigStyles) {
-                if (config_style.Name == style) {
-                    mapdata_date = config_style.Date
+                if (config_style.Name.startsWith('region-')) {
+                    if (!contestMapParams.contestMapDevStyle || config_style.Name.endsWith('-dev')) {
+                        BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
+                        BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
+                        BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
+                        BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                        if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
+                            map_region = config_style.Name
+                            mapdata_date = config_style.Date
+                            break
+                        }
+                    }
                 }
             }
-            printdone mapdata_date
+            if (map_region) {
+                printdone "${map_region} ${mapdata_date}"
+            } else {
+                printerror ""
+                ret.message = getMsg('fc.contestmap.noregionerror', [contestMapParams.centerLatitude, contestMapParams.centerLongitude], false)
+                return ret
+            }
         } else {
-            printerror ""
+            printerror status.responseCode
         }
         
         //...........................................................................................
         String edition_text = "${getMsg('fc.contestmap.edition',true)} ${contestMapParams.contestMapEdition}"
-        String generator_date = new Date().format("dd-MMM-yyyy HH:mm")
-        String generator_text = getMsg('fc.contestmap.generator.printmaps',[generator_date],true)
-        if (contestMapParams.contestMapFCStyle) {
-            generator_text = getMsg('fc.contestmap.generator.flightcontest',[generator_date],true)
-        }
+        String generator_date = new Date().format("dd.MM.yyyy HH:mm")
+        String generator_text = getMsg('fc.contestmap.generator.flightcontest',[generator_date],true)
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
         if (mapdata_date) {
             copyright_text += " (${getMsg('fc.contestmap.mapdata.date',[mapdata_date],true)})"
@@ -426,10 +416,8 @@ class OsmPrintMapService
         if (contestMapParams.contestMapChateaus || contestMapParams.contestMapPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
         }
-        if (contestMapParams.contestMapFCStyle) {
-            copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
-            // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
-        }
+        copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
+        // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
         if (BootStrap.global.IsOpenAIP() && ((contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) || openaip_airfields)) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.openaip',[],true)}"
         }
@@ -563,44 +551,29 @@ class OsmPrintMapService
             }
         }
         
-        String additionals_lines = ""
-        String additionals_file_name = ""
+        String mapobjects_lines = ""
+        String mapobjects_file_name = ""
+        List mapobjects_symbol_filenames = []
         if (contestMapParams.contestMapAdditionals) {
-            additionals_file_name = Defs.FCSAVE_FILE_GEODATA_ADDITIONALS
-            String additionals_short_file_name = additionals_file_name.substring(additionals_file_name.lastIndexOf('/')+1)
-            additionals_lines = """,{
-                "Style": "<MarkersSymbolizer file='[symbol]' transform='${GEODATA_BUILDING_SCALE}' allow-overlap='true' placement='point' />",
+            String uuid = UUID.randomUUID().toString()
+            Route route_instance = Route.get(contestMapParams.routeId)
+            String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAPOBJECTS-${uuid}-UPLOAD.csv"
+            String symbol_praefix = "SYMBOL-${uuid}-"
+            mapobjects_symbol_filenames = create_mapobjects_csv(route_instance, contestMapParams.webRootDir, file_name, false, symbol_praefix)
+            mapobjects_file_name = contestMapParams.webRootDir + file_name
+            String mapobjects_short_file_name = mapobjects_file_name.substring(mapobjects_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
+            mapobjects_lines = """,{
+                "Style": "<MarkersSymbolizer file='[symbol]' transform='${GEODATA_SYMBOL_SCALE}' allow-overlap='true' placement='point' />",
                 "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
-                "File": "${additionals_short_file_name}",
+                "File": "${mapobjects_short_file_name}",
                 "Layer": ""
             }
             ,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${AIRFIELD_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='10' placement='point'>[name]</TextSymbolizer>",
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${OBJECT_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' horizontal-alignment='[horizontal-alignment]' vertical-alignment='[vertical-alignment]' dy='[dy]' placement='point'>[name]</TextSymbolizer>",
                 "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
-                "File": "${additionals_short_file_name}",
-                "Layer": ""
-            }"""
-        }
-        
-        String specials_lines = ""
-        String specials_file_name = ""
-        if (contestMapParams.contestMapSpecials) {
-            specials_file_name = Defs.FCSAVE_FILE_GEODATA_SPECIALS
-            String specials_short_file_name = specials_file_name.substring(specials_file_name.lastIndexOf('/')+1)
-            specials_lines = """,{
-                "Style": "<MarkersSymbolizer file='special.png' transform='${GEODATA_BUILDING_SCALE}' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
-                "Type": "csv",
-                "File": "${specials_short_file_name}",
-                "Layer": ""
-            }
-            ,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SPECIALS_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='[dx]' dy='[dy]' placement='point'>[name]</TextSymbolizer>",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
-                "Type": "csv",
-                "File": "${specials_short_file_name}",
+                "File": "${mapobjects_short_file_name}",
                 "Layer": ""
             }"""
         }
@@ -612,7 +585,7 @@ class OsmPrintMapService
 				String uuid = UUID.randomUUID().toString()
 				Route route_instance = Route.get(contestMapParams.routeId)
 				String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
-				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false)
+				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false, false)
 				if (!ret2.ok) {
                     ret.message = getMsg('fc.contestmap.contestmapairspaces.kmzexport.missedairspaces', [ret2.missingAirspaces], false)
                     return ret
@@ -699,63 +672,57 @@ class OsmPrintMapService
         
         String airports_lines = ""
         String airports_file_name = ""
-        if (openaip_airfields) {
-            String uuid = UUID.randomUUID().toString()
-            Route route_instance = Route.get(contestMapParams.routeId)
-            String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-            Map ret2 = openAIPService.WriteAirports2CSV(route_instance, contestMapParams.webRootDir, file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
-            if (!ret2.ok) {
-                ret.message = getMsg('fc.contestmap.contestmapairports.csvexport.notfound', [], false)
-                return ret
-            }
-            airports_file_name = contestMapParams.webRootDir + file_name
-            String airports_short_file_name = airports_file_name.substring(airports_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
-            if (contestMapParams.taskCreator) {
-                airports_lines = """,{
-                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='scale(0.6, ${latlon_relation*0.6}),rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0)' allow-overlap='true' placement='point' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
-                    "Type": "csv",
-                    "File": "${airports_short_file_name}",
-                    "Layer": ""
-                }
-                ,{
-                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, ${latlon_relation*0.6})' allow-overlap='true' placement='point' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
-                    "Type": "csv",
-                    "File": "${airports_short_file_name}",
-                    "Layer": ""
-                }"""
-            } else {
-                airports_lines = """,{
-                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0),scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
-                    "Type": "csv",
-                    "File": "${airports_short_file_name}",
-                    "Layer": ""
-                }
-                ,{
-                    "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
-                    "Type": "csv",
-                    "File": "${airports_short_file_name}",
-                    "Layer": ""
-                }"""
-            }
-            airports_lines += """,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='6' fill='black' allow-overlap='true' dy='8' placement='point'>[${OpenAIPService.CSV_AIRPORT_NAME}]</TextSymbolizer>",
+        String uuid = UUID.randomUUID().toString()
+        Route route_instance = Route.get(contestMapParams.routeId)
+        String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
+        openAIPService.WriteAirports2CSV(route_instance, contestMapParams.webRootDir, file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", openaip_airfields, contestMapParams.contestMapAdditionals)
+        airports_file_name = contestMapParams.webRootDir + file_name
+        String airports_short_file_name = airports_file_name.substring(airports_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
+        if (contestMapParams.taskCreator) {
+            airports_lines = """,{
+                "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='scale(0.6, ${latlon_relation*0.6}),rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0)' allow-overlap='true' placement='point' />",
                 "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${airports_short_file_name}",
                 "Layer": ""
             }
             ,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='6' fill='black' allow-overlap='true' dy='14' placement='point'>[${OpenAIPService.CSV_AIRPORT_ICAO}]</TextSymbolizer>",
+                "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, ${latlon_relation*0.6})' allow-overlap='true' placement='point' />",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "Type": "csv",
+                "File": "${airports_short_file_name}",
+                "Layer": ""
+            }"""
+        } else {
+            airports_lines = """,{
+                "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0),scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "Type": "csv",
+                "File": "${airports_short_file_name}",
+                "Layer": ""
+            }
+            ,{
+                "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
                 "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${airports_short_file_name}",
                 "Layer": ""
             }"""
         }
+        airports_lines += """,{
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${OBJECT_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='${OBJECT_TEXT_LINE1_DY}' placement='point'>[${OpenAIPService.CSV_AIRPORT_NAME}]</TextSymbolizer>",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "Type": "csv",
+            "File": "${airports_short_file_name}",
+            "Layer": ""
+        }
+        ,{
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${OBJECT_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='${OBJECT_TEXT_LINE2_DY}' placement='point'>[${OpenAIPService.CSV_AIRPORT_ICAO}]</TextSymbolizer>",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "Type": "csv",
+            "File": "${airports_short_file_name}",
+            "Layer": ""
+        }"""
         
         printstart "print_osm Scale=1:${print_scale} Width=${print_width} Height=${print_height}"
         println "print_width: $print_width mm"
@@ -768,46 +735,47 @@ class OsmPrintMapService
         int img_height = 0
         
         //...........................................................................................
-        printstart "Create job"
-        status = CallPrintServer("/metadata", [HEADER_CONTENTTYPE,HEADER_ACCEPT], "POST", DataType.JSON,
-        """{
-            "Data": {
-                "Type": "maps",
-                "ID": "",
-                "Attributes": {
-                    "Fileformat": "png",
-                    "Scale": ${print_scale},
-                    "PrintWidth": ${print_width},
-                    "PrintHeight": ${print_height},
-                    "Latitude": ${contestMapParams.centerLatitude},
-                    "Longitude": ${contestMapParams.centerLongitude},
-                    "Style": "${style}",
-                    "Projection": "${projection}",
-                    "HideLayers": "${hide_layers}",
-                    "UserObjects": [
-                        ${user_text}
-                        ${gpx_lines}
-                        ${graticule_lines}
-                        ${additionals_lines}
-                        ${specials_lines}
-                        ${airspaces_lines}
-                        ${airports_lines}
-                    ]
+        if (map_region) {
+            printstart "Create job"
+            status = CallPrintServer("/metadata", [HEADER_CONTENTTYPE,HEADER_ACCEPT], "POST", DataType.JSON,
+            """{
+                "Data": {
+                    "Type": "maps",
+                    "ID": "",
+                    "Attributes": {
+                        "Fileformat": "png",
+                        "Scale": ${print_scale},
+                        "PrintWidth": ${print_width},
+                        "PrintHeight": ${print_height},
+                        "Latitude": ${contestMapParams.centerLatitude},
+                        "Longitude": ${contestMapParams.centerLongitude},
+                        "Style": "${map_region}",
+                        "Projection": "${map_projection}",
+                        "HideLayers": "${hide_layers}",
+                        "UserObjects": [
+                            ${user_text}
+                            ${gpx_lines}
+                            ${graticule_lines}
+                            ${mapobjects_lines}
+                            ${airspaces_lines}
+                            ${airports_lines}
+                        ]
+                    }
                 }
-            }
-        }""")
-        
-        if (status.responseCode) {
-            if (status.json) {
-                printdone "responseCode=${status.responseCode}, printjob_id=${status.json.Data.ID}"
+            }""")
+            
+            if (status.responseCode) {
+                if (status.json) {
+                    printdone "responseCode=${status.responseCode}, printjob_id=${status.json.Data.ID}"
+                } else {
+                    printerror "responseCode=${status.responseCode}"
+                }
             } else {
-                printerror "responseCode=${status.responseCode}"
+                printerror ""
             }
-        } else {
-            printerror ""
-        }
-        if (status.responseCode == 201) {
-            printjob_id = status.json.Data.ID
+            if (status.responseCode == 201) {
+                printjob_id = status.json.Data.ID
+            }
         }
     
         //...........................................................................................
@@ -856,20 +824,34 @@ class OsmPrintMapService
                     }
                 }
             }
+            // turnpoint images
+            if (contestMapParams.contestMapTurnpointSign) {
+                TurnpointSign.each { turnpoint_sign ->
+                    if (turnpoint_sign.imagePngName) {
+                        printstart "Upload ${turnpoint_sign.imagePngName}"
+                        FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + turnpoint_sign.imagePngName)
+                        printdone ""
+                    }
+                }
+            }
             if (!contestMapParams.taskCreator && graticule_file_name) {
                 printstart "Upload graticule"
                 FileUpload("/upload/${printjob_id}", graticule_file_name)
                 printdone ""
             }
-            if (additionals_file_name) {
-                printstart "Upload additionals"
-                FileUpload("/upload/${printjob_id}", additionals_file_name)
+            if (mapobjects_file_name) {
+                printstart "Upload mapobjects"
+                FileUpload("/upload/${printjob_id}", mapobjects_file_name)
                 printdone ""
+				gpxService.DeleteFile(mapobjects_file_name)
             }
-            if (specials_file_name) {
-                printstart "Upload specials"
-                FileUpload("/upload/${printjob_id}", specials_file_name)
-                printdone ""
+            if (mapobjects_symbol_filenames) {
+                for (String symbol_filename in mapobjects_symbol_filenames) {
+                    printstart "Upload symbols"
+                    FileUpload("/upload/${printjob_id}", symbol_filename)
+                    printdone ""
+                    gpxService.DeleteFile(symbol_filename)
+                }
             }
             if (airspaces_file_name) {
                 printstart "Upload airspaces"
@@ -880,7 +862,7 @@ class OsmPrintMapService
 				}
             }
             if (airports_file_name) {
-                printstart "Upload additionals"
+                printstart "Upload airports"
                 FileUpload("/upload/${printjob_id}", airports_file_name)
                 printdone ""
 				if (BootStrap.global.IsOpenAIP()) {
@@ -961,7 +943,7 @@ class OsmPrintMapService
                  (Defs.OSMPRINTMAP_PNGFILENAME):contestMapParams.pngFileName,
                  (Defs.OSMPRINTMAP_PRINTLANDSCAPE):contestMapParams.contestMapPrintLandscape,
                  (Defs.OSMPRINTMAP_PRINTSIZE):contestMapParams.contestMapPrintSize,
-                 (Defs.OSMPRINTMAP_PRINTPROJECTION):projection,
+                 (Defs.OSMPRINTMAP_PRINTPROJECTION):map_projection,
                  (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):false // contestMapParams.printColorChanges
                 ]
             )
@@ -973,6 +955,22 @@ class OsmPrintMapService
         return ret
     }
     
+    //--------------------------------------------------------------------------
+    private BigDecimal get_value(String valueStr, String searchStr)
+    {
+        if (valueStr.contains(searchStr)) {
+            String s = valueStr.substring(valueStr.indexOf(searchStr)+searchStr.size()).trim()
+            int end_pos = s.indexOf(';')
+            if (end_pos > 0) {
+                s = s.substring(0, end_pos)
+                if (s.isBigDecimal()) {
+                    return s.toBigDecimal()
+                }
+            }
+        }
+        return 0
+    }
+
     //--------------------------------------------------------------------------
     void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String fileIdFileName, String pngFileName, boolean printLandscape, String printSize, String printProjection, boolean printColorChanges)
     {
@@ -1369,6 +1367,69 @@ class OsmPrintMapService
         
         printdone ""
         return true
+    }
+    
+    //--------------------------------------------------------------------------
+    private List create_mapobjects_csv(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, String symbolPraefix)
+    {
+        println "create_mapobjects_csv ${routeInstance.GetName(isPrint)} -> ${webRootDir + csvFileName}"
+        
+        List mapobjects_symbol_filenames = []
+        int[] line_id = [] + 1
+        
+        File csv_file = new File(webRootDir + csvFileName)
+        Writer csv_writer = csv_file.newWriter("UTF-8",false)
+        csv_writer << "id${CSV_DELIMITER}symbol${CSV_DELIMITER}name${CSV_DELIMITER}vertical-alignment${CSV_DELIMITER}horizontal-alignment${CSV_DELIMITER}dy${CSV_DELIMITER}wkt"
+        
+        mapobjects_symbol_filenames += create_mapobjects_csv2(routeInstance, webRootDir, symbolPraefix, line_id, csv_writer)
+        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+            Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+            if (route_instance) {
+                mapobjects_symbol_filenames += create_mapobjects_csv2(route_instance, webRootDir, symbolPraefix, line_id, csv_writer)
+            }
+        }
+        
+        csv_writer.close()
+        return mapobjects_symbol_filenames
+    }
+
+    //--------------------------------------------------------------------------
+    private List create_mapobjects_csv2(Route routeInstance, String webRootDir, String symbolPraefix, int[] lineID, Writer csvWriter)
+    {
+        List mapobjects_symbol_filenames = []
+        
+        for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(routeInstance, [sort:"enrouteViewPos"])) {
+            if (coordmapobject_instance.mapObjectType != MapObjectType.Airfield) {
+                csvWriter << CSV_LINESEPARATOR + lineID[0]
+                if (coordmapobject_instance.mapObjectType == MapObjectType.Symbol) {
+                    String symbol_name = symbolPraefix + coordmapobject_instance.id + '.png'
+                    csvWriter << CSV_DELIMITER + symbol_name
+                    String symbol_filename = webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD + "/" + symbol_name
+                    mapobjects_symbol_filenames += symbol_filename
+                    File symbol_file = new File(symbol_filename)
+                    FileOutputStream symbol_stream = new FileOutputStream(symbol_file)
+                    if (coordmapobject_instance.imagecoord) {
+                        symbol_stream << coordmapobject_instance.imagecoord.imageData
+                    }
+                    symbol_stream.close()
+                } else {
+                    csvWriter << CSV_DELIMITER + coordmapobject_instance.mapObjectType.imageShortName
+                }
+                csvWriter << CSV_DELIMITER + '"' + coordmapobject_instance.mapObjectText + '"'
+                if (false) { // if (coordmapobject_instance.mapObjectType == MapObjectType.Subtitle) {
+                    csvWriter << CSV_DELIMITER + "bottom"
+                    csvWriter << CSV_DELIMITER + "right"
+                    csvWriter << CSV_DELIMITER + 0
+                } else {
+                    csvWriter << CSV_DELIMITER + "auto"
+                    csvWriter << CSV_DELIMITER + "auto"
+                    csvWriter << CSV_DELIMITER + OBJECT_TEXT_LINE1_DY
+                }
+                csvWriter << CSV_DELIMITER + "POINT(${coordmapobject_instance.lonMath()} ${coordmapobject_instance.latMath()})"
+                lineID[0]++
+            }
+        }
+        return mapobjects_symbol_filenames
     }
     
     //--------------------------------------------------------------------------

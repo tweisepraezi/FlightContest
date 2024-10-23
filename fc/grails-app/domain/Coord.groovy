@@ -71,6 +71,12 @@ class Coord
     Boolean observationNextPrintPage = false  // DB-2.28, Turnpoint
     Boolean observationNextPrintPageEnroute = false  // DB-2.30
     
+    // Map objects
+    MapObjectType mapObjectType = MapObjectType.None  // DB-2.40
+    String mapObjectText = ""                         // DB-2.40
+    Boolean mapObjectGliderAirfield = false           // DB-2.40
+    Boolean mapObjectPavedAirfield = false            // DB-2.40
+    
 	static hasOne = [imagecoord:ImageCoord]   // DB-2.28
     
     // plan, results, penalties
@@ -234,6 +240,12 @@ class Coord
         
         // DB-2.37 compatibility
         ignoreGate(nullable:true)
+        
+        // DB-2.40 compatibility
+        mapObjectType(nullable:true)
+        mapObjectText(nullable:true)
+        mapObjectGliderAirfield(nullable:true)
+        mapObjectPavedAirfield(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -929,6 +941,26 @@ class Coord
         }
     }
 
+    String GetExportMapObject()
+    {
+        String s = "${mapObjectType}, ${latExportName()}, ${lonExportName()}"
+        switch(mapObjectType) {
+            case MapObjectType.Airfield:
+                s += ", ${RouteFileTools.TRACK} ${gateDirection}${RouteFileTools.UNIT_GRAD}"
+                if (mapObjectGliderAirfield) {
+                    s += ", ${RouteFileTools.AIRFIELD_GLIDER}"
+                }
+                if (mapObjectPavedAirfield) {
+                    s += ", ${RouteFileTools.AIRFIELD_PAVED}"
+                }
+                break
+        }
+        if (mapObjectText) {
+            s += ", ${RouteFileTools.TEXT} ${mapObjectText}"
+        }
+        return s
+    }
+    
     String GetExportEnrouteKML(boolean enroutePhoto)
     {
         if (enroutePhoto) {
@@ -958,6 +990,26 @@ class Coord
         }
     }
 
+    String GetExportMapObjectKML()
+    {
+        String s = "${mapObjectType}"
+        switch(mapObjectType) {
+            case MapObjectType.Airfield:
+                s += ", ${RouteFileTools.TRACK} ${gateDirection}${RouteFileTools.UNIT_GRAD}"
+                if (mapObjectGliderAirfield) {
+                    s += ", ${RouteFileTools.AIRFIELD_GLIDER}"
+                }
+                if (mapObjectPavedAirfield) {
+                    s += ", ${RouteFileTools.AIRFIELD_PAVED}"
+                }
+                break
+        }
+        if (mapObjectText) {
+            s += ", ${RouteFileTools.TEXT} ${mapObjectText}"
+        }
+        return s
+    }
+    
     String GetGeoDataRouteCoord()
     {
         return """"${route.printName()} - ${titleExport()}"|"${titlePrintCode()}"|POINT (${CoordPresentation.DecimalGradStr(lonMath()).replaceAll(',','.')} ${CoordPresentation.DecimalGradStr(latMath()).replaceAll(',','.')})"""

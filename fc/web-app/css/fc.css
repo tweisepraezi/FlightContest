@@ -64,6 +64,11 @@ td.detailtitle {
     white-space:nowrap;
 }
 
+td.detailtitle2 {
+    width:1%;
+    white-space:nowrap;
+}
+
 td.position {
     width:10%;
     white-space:nowrap;
@@ -185,4 +190,16 @@ a.error {
 
 tr.pagebreak td {
 	border-top: 2px solid black;
+}
+
+.mapexportquestionsection {
+    padding-left: 20px;
+}
+
+.mapexportquestionbuttonline {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mapexportquestionbutton {
 }

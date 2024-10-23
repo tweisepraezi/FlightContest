@@ -4716,6 +4716,9 @@ class FcService
                 
                 Route.findAllByContest(contest_instance,[sort:"idTitle"]).eachWithIndex { Route route_instance2, int index -> 
                     route_instance2.idTitle = index + 1
+                    if (route_instance2.contestMapShowMapObjectsFromRouteID == route_instance.id) {
+                        route_instance2.contestMapShowMapObjectsFromRouteID = 0
+                    }
                 }
                 
                 Map ret = ['deleted':true,'message':getMsg('fc.deleted',["${route_instance.name()}"])]
@@ -7636,6 +7639,322 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
+    Map getCoordMapObject(Map params)
+    {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+
+        if (!coordmapobject_instance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+        
+        if (coordmapobject_instance.type == CoordType.UNKNOWN) {
+            CoordMapObject last_coordmapobject_instance = CoordMapObject.findByRouteAndTypeNotEqual(coordmapobject_instance.route,CoordType.UNKNOWN,[sort:"enrouteViewPos", order:"desc"])
+            if (last_coordmapobject_instance) {
+                coordmapobject_instance.type = last_coordmapobject_instance.type
+                coordmapobject_instance.titleNumber = last_coordmapobject_instance.titleNumber
+            }
+        }
+        
+        // transient variables
+        coordmapobject_instance.latGradDecimal = coordmapobject_instance.latMath()
+        coordmapobject_instance.latMin = coordmapobject_instance.latMinute.toInteger()
+        coordmapobject_instance.latSecondDecimal = CoordPresentation.GetSecond(coordmapobject_instance.latMinute)
+        coordmapobject_instance.lonGradDecimal = coordmapobject_instance.lonMath()
+        coordmapobject_instance.lonMin = coordmapobject_instance.lonMinute.toInteger()
+        coordmapobject_instance.lonSecondDecimal = CoordPresentation.GetSecond(coordmapobject_instance.lonMinute)
+        
+        return ['instance':coordmapobject_instance]
+    }
+
+    //--------------------------------------------------------------------------
+    Map createCoordMapObject(Map params)
+    {
+        Route route_instance = Route.get(params.routeid)
+        
+        Coord last_coord_instance = CoordMapObject.findByRoute(route_instance,[sort:"enrouteViewPos", order:"desc"])
+        if (!last_coord_instance) {
+            last_coord_instance = CoordRoute.findByRoute(route_instance)
+        }
+        CoordMapObject coordmapobject_instance = new CoordMapObject()
+        coordmapobject_instance.properties = params
+        coordmapobject_instance.route = route_instance
+        
+        if (last_coord_instance) {
+            coordmapobject_instance.mapObjectType = last_coord_instance.mapObjectType
+            coordmapobject_instance.latGrad = last_coord_instance.latGrad
+            coordmapobject_instance.latMinute = last_coord_instance.latMinute
+            coordmapobject_instance.latDirection = last_coord_instance.latDirection
+            coordmapobject_instance.lonGrad = last_coord_instance.lonGrad
+            coordmapobject_instance.lonMinute = last_coord_instance.lonMinute
+            coordmapobject_instance.lonDirection = last_coord_instance.lonDirection
+            
+            // transient variables
+            coordmapobject_instance.latGradDecimal = coordmapobject_instance.latMath()
+            coordmapobject_instance.latMin = coordmapobject_instance.latMinute.toInteger()
+            coordmapobject_instance.latSecondDecimal = CoordPresentation.GetSecond(coordmapobject_instance.latMinute)
+            coordmapobject_instance.lonGradDecimal = coordmapobject_instance.lonMath()
+            coordmapobject_instance.lonMin = coordmapobject_instance.lonMinute.toInteger()
+            coordmapobject_instance.lonSecondDecimal = CoordPresentation.GetSecond(coordmapobject_instance.lonMinute)
+        }
+        
+        return ['instance':coordmapobject_instance]
+    }
+
+    //--------------------------------------------------------------------------
+    Map saveCoordMapObject(String showLanguage, Map params)
+    {
+        printstart "saveCoordMapObject $showLanguage $params"
+        Route route_instance = Route.get(params.routeid)
+
+        params = calculateCoordCoord(showLanguage, params, route_instance.contest.coordPresentation)
+        
+        // new CoordMapObject
+        CoordMapObject coordmapobject_instance = new CoordMapObject(params)
+        coordmapobject_instance.route = route_instance
+
+        if (params.mapObjectType) {
+            coordmapobject_instance.mapObjectType = params.mapObjectType
+        }
+        if (params.mapObjectText) {
+            coordmapobject_instance.mapObjectText = params.mapObjectText
+        } else {
+            coordmapobject_instance.mapObjectText = ""
+        }
+        coordmapobject_instance.mapObjectGliderAirfield = params.mapObjectGliderAirfield == "on"
+        coordmapobject_instance.mapObjectPavedAirfield = params.mapObjectPavedAirfield == "on"
+        if (coordmapobject_instance.mapObjectType == MapObjectType.None) {
+            Map ret = ['instance':coordmapobject_instance,'error':true,'message':getMsg('fc.coordroute.mapobjects.notype')]
+            printerror ret.message
+            return ret
+        }
+        
+        coordmapobject_instance.enrouteViewPos = CoordMapObject.countByRoute(route_instance) + 1
+
+        // save CoordMapObject
+        if(!coordmapobject_instance.hasErrors() && coordmapobject_instance.save()) {
+            Map ret = ['saved':true,'message':getMsg('fc.created',[coordmapobject_instance.name()])]
+            printdone ret.message
+            return ret
+        } else {
+            printerror ""
+            return ['instance':coordmapobject_instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map updateCoordMapObject(String showLanguage, Map params)
+    {
+        printstart "updateCoordMapObject $showLanguage $params"
+        
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+        
+        if (coordmapobject_instance) {
+
+            if(params.version) {
+                long version = params.version.toLong()
+                if(coordmapobject_instance.version > version) {
+                    coordmapobject_instance.errors.rejectValue("version", "coordMapObject.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    printerror ""
+                    return ['instance':coordmapobject_instance,'error':true]
+                }
+            }
+            
+            params = calculateCoordCoord(showLanguage, params, coordmapobject_instance.route.contest.coordPresentation)
+            
+            coordmapobject_instance.properties = params
+            if (params.mapObjectType) {
+                coordmapobject_instance.mapObjectType = params.mapObjectType
+            }
+            if (params.mapObjectText) {
+                coordmapobject_instance.mapObjectText = params.mapObjectText
+            } else {
+                coordmapobject_instance.mapObjectText = ""
+            }
+            coordmapobject_instance.mapObjectGliderAirfield = params.mapObjectGliderAirfield == "on"
+            coordmapobject_instance.mapObjectPavedAirfield = params.mapObjectPavedAirfield == "on"
+            if (coordmapobject_instance.mapObjectType == MapObjectType.None) {
+                Map ret = ['instance':coordmapobject_instance,'error':true,'message':getMsg('fc.coordroute.mapobjects.notype')]
+                printerror ret.message
+                return ret
+            }
+
+            if (!params.enrouteDistance) {
+                coordmapobject_instance.enrouteDistance = null
+            }
+            if (!params.measureDistance) {
+                coordmapobject_instance.measureDistance = null
+            }
+
+            if(!coordmapobject_instance.hasErrors() && coordmapobject_instance.save()) {
+                Map ret = ['instance':coordmapobject_instance,'saved':true,'message':getMsg('fc.updated',["${coordmapobject_instance.enrouteCanvasSign}"])]
+                printdone ret.message
+                return ret
+            } else {
+                printerror ""
+                return ['instance':coordmapobject_instance,'error':true]
+            }
+        } else {
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+            printerror ret.message
+            return ret
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map resetmeasureCoordMapObject(Map params)
+    {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+        
+        if (coordmapobject_instance) {
+
+            if(params.version) {
+                long version = params.version.toLong()
+                if(coordmapobject_instance.version > version) {
+                    coordmapobject_instance.errors.rejectValue("version", "coordMapObject.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordmapobject_instance]
+                }
+            }
+            
+            coordmapobject_instance.measureDistance = null
+            
+            if(!coordmapobject_instance.hasErrors() && coordmapobject_instance.save()) {
+                return ['instance':coordmapobject_instance,'saved':true,'message':getMsg('fc.updated',["${coordmapobject_instance.enrouteCanvasSign}"])]
+            } else {
+                return ['instance':coordmapobject_instance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map addpositionCoordMapObject(Map params)
+    {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+        
+        if (coordmapobject_instance) {
+
+            if(params.version) {
+                long version = params.version.toLong()
+                if(coordmapobject_instance.version > version) {
+                    coordmapobject_instance.errors.rejectValue("version", "coordMapObject.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordmapobject_instance]
+                }
+            }
+            
+            CoordMapObject coordenroutecanvas_instance2 = CoordMapObject.findByRouteAndEnrouteViewPos(coordmapobject_instance.route, coordmapobject_instance.enrouteViewPos + 1)
+            coordmapobject_instance.enrouteViewPos++
+            
+            if(!coordmapobject_instance.hasErrors() && coordmapobject_instance.save()) {
+                coordenroutecanvas_instance2.enrouteViewPos--
+                coordenroutecanvas_instance2.save()
+                return ['instance':coordmapobject_instance,'saved':true,'message':getMsg('fc.updated',["${coordmapobject_instance.enrouteCanvasSign}"])]
+            } else {
+                return ['instance':coordmapobject_instance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map subpositionCoordMapObject(Map params)
+    {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+        
+        if (coordmapobject_instance) {
+
+            if(params.version) {
+                long version = params.version.toLong()
+                if(coordmapobject_instance.version > version) {
+                    coordmapobject_instance.errors.rejectValue("version", "coordMapObject.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordmapobject_instance]
+                }
+            }
+            
+            CoordMapObject coordenroutecanvas_instance2 = CoordMapObject.findByRouteAndEnrouteViewPos(coordmapobject_instance.route, coordmapobject_instance.enrouteViewPos - 1)
+            coordmapobject_instance.enrouteViewPos--
+            
+            if(!coordmapobject_instance.hasErrors() && coordmapobject_instance.save()) {
+                coordenroutecanvas_instance2.enrouteViewPos++
+                coordenroutecanvas_instance2.save()
+                return ['instance':coordmapobject_instance,'saved':true,'message':getMsg('fc.updated',["${coordmapobject_instance.enrouteCanvasSign}"])]
+            } else {
+                return ['instance':coordmapobject_instance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map deleteCoordMapObject(Map params)
+    {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+        
+        if (coordmapobject_instance) {
+            try {
+                Route route_instance = coordmapobject_instance.route
+                
+                int deleted_enrouteviewpos = coordmapobject_instance.enrouteViewPos
+                coordmapobject_instance.delete()
+                
+                // correct all CoordMapObject's enrouteViewPos
+                CoordMapObject.findAllByRoute(route_instance,[sort:"id"]).each { CoordMapObject coordenroutecanvas_instance2 ->
+                    if (coordenroutecanvas_instance2.enrouteViewPos > deleted_enrouteviewpos) {
+                        coordenroutecanvas_instance2.enrouteViewPos--
+                        coordenroutecanvas_instance2.save()
+                    }
+                }
+                
+                return ['deleted':true,'message':getMsg('fc.deleted',["${coordmapobject_instance.enrouteCanvasSign}"]),'routeid':route_instance.id]
+            }
+            catch(org.springframework.dao.DataIntegrityViolationException e) {
+                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.coordroute'),params.id])]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map removeallCoordMapObject(Map params)
+    {
+        Route route_instance = Route.get(params.routeid)
+        
+        for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(route_instance)) {
+            if (coordmapobject_instance) {
+                coordmapobject_instance.delete()
+            }
+        }
+        
+        return ['deleted':true,'message':getMsg('fc.coordroute.mapobjects.removedall'),'routeid':route_instance.id]
+    }
+
+    //--------------------------------------------------------------------------
+    Map importCoordMapObjectSymbol(Map params, MultipartFile imageFile)
+    {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+
+        if (!coordmapobject_instance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+        
+        if (!coordmapobject_instance.imagecoord) {
+            ImageCoord imagecoord_instance = new ImageCoord(imageData:imageFile.getBytes(), coord:coordmapobject_instance)
+            imagecoord_instance.save()
+        
+            coordmapobject_instance.imagecoord = imagecoord_instance
+            coordmapobject_instance.save()
+        } else {
+            coordmapobject_instance.imagecoord.imageData = imageFile.getBytes()
+            coordmapobject_instance.imagecoord.save()
+        }
+        
+        return ['instance':coordmapobject_instance]
+    }
+
+    //--------------------------------------------------------------------------
     Map getCrew(Map params)
     {
         Crew crew_instance = Crew.get(params.id)
@@ -7936,7 +8255,7 @@ class FcService
                     test_instance.loggerData = new LoggerDataTest()
                     test_instance.loggerResult = new LoggerResult()
 	                test_instance.save()
-                    if (task_instance.flighttest?.route?.IsObservationSignOk() && task_instance.flighttest?.IsObservationSignUsed()) {
+                    if (RouteTools.IsObservationSignOk(task_instance.flighttest?.route) && task_instance.flighttest?.IsObservationSignUsed()) {
                         generate_observation(test_instance, task_instance.flighttest.route)
                     }
 				//}
@@ -10937,7 +11256,7 @@ class FcService
 				println "Calculated times have been reset."
 				
                 set_disabledcheckpoints_from_route(flighttest_instance.task, flighttest_instance.route)
-                if (flighttest_instance.route.IsObservationSignOk()) {
+                if (RouteTools.IsObservationSignOk(flighttest_instance.route)) {
                     generate_observations(flighttest_instance.task, flighttest_instance.route)
                 }
 			}
@@ -11000,7 +11319,7 @@ class FcService
         }
          
         FlightTest flighttest_instance = new FlightTest()
-        List flighttest_routes = Route.GetOkFlightTestRoutes(contestInstance)
+        List flighttest_routes = RouteTools.GetOkFlightTestRoutes(contestInstance)
         if (flighttest_routes) {
             set_new_flighttestwind(null, flighttest_routes[0], flighttest_instance)
         }
@@ -11057,7 +11376,7 @@ class FcService
             flighttestwind_instance.save()
 			
             set_disabledcheckpoints_from_route(task_instance, flighttest_instance.route)
-            if (flighttest_instance.route.IsObservationSignOk()) {
+            if (RouteTools.IsObservationSignOk(flighttest_instance.route)) {
                 generate_observations(task_instance, flighttest_instance.route)
             }
 
@@ -11089,7 +11408,7 @@ class FcService
                 }
             }
 
-            if (flighttest_instance.route.IsObservationSignOk()) {
+            if (RouteTools.IsObservationSignOk(flighttest_instance.route)) {
                 generate_observations(flighttest_instance.task, flighttest_instance.route)
             }
             

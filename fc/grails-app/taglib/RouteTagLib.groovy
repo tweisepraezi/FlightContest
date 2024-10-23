@@ -311,13 +311,109 @@ class RouteTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def editCoordMapObject = { attrs, body ->
+        select_map_object(attrs.coordEnroute, attrs)
+        edit_coord_latitude(attrs.coordEnroute, attrs)
+        edit_coord_longitude(attrs.coordEnroute, attrs)
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    private void select_map_object(Coord coordValue, attrs)
+    {
+        outln"""<fieldset>"""
+        outln"""    <table>"""
+        outln"""        <tbody>"""
+        outln"""            <tr>"""
+        outln"""                <td class="detailtitle2">${message(code:'fc.coordroute.mapobjects.type')}*:</td>"""
+        outln"""                <td>"""
+        outln"""                    <select id="mapObjectType" name="mapObjectType" tabIndex="${attrs.ti[0]++}" onchange="mapobject_type_changed();" >"""
+        if (attrs.create) {
+            outln"""                    <option></option>"""
+        }
+        for (def mapobject_type in MapObjectType.values()) {
+            if (mapobject_type != MapObjectType.None) {
+                if (mapobject_type == coordValue.mapObjectType) {
+                    outln"""            <option value="${mapobject_type}" selected="selected">${message(code:mapobject_type.code)}</option>"""
+                } else {
+                    outln"""            <option value="${mapobject_type}">${message(code:mapobject_type.code)}</option>"""
+                }
+            }
+        }
+        outln"""                    </select>"""
+        outln"""                </td>"""
+        outln"""            </tr>"""
+        outln"""            <tr>"""
+        outln"""                <td class="detailtitle2">${message(code:'fc.coordroute.mapobjects.subtitle')}:</td>"""
+        outln"""                <td>"""
+        outln"""                    <input type="text" name="mapObjectText" value="${fieldValue(bean:coordValue,field:'mapObjectText')}"  tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""                </td>"""
+        outln"""            </tr>"""
+        outln"""            <tr id="gatedirection" hidden >"""
+        outln"""                <td class="detailtitle2">${message(code:'fc.gatedirection')} [${message(code:'fc.grad')}]:</td>"""
+        outln"""                <td>"""
+        outln"""                    <input type="text" name="gateDirection" value="${fieldValue(bean:coordValue,field:'gateDirection')}"  tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""                </td>"""
+        outln"""            </tr>"""
+        outln"""            <tr id="mapobjectgliderairfield" hidden >"""
+        outln"""                <td class="detailtitle2"/>"""
+        outln"""                <td nowrap>"""
+        checkBox("mapObjectGliderAirfield", coordValue.mapObjectGliderAirfield, 'fc.coordroute.mapobjects.details.gliderairfield', attrs)
+        outln"""                </td>"""
+        outln"""            </tr>"""
+        outln"""            <tr id="mapobjectpavedairfield" hidden >"""
+        outln"""                <td class="detailtitle2"/>"""
+        outln"""                <td nowrap>"""
+        checkBox("mapObjectPavedAirfield", coordValue.mapObjectPavedAirfield, 'fc.coordroute.mapobjects.details.pavedairfield', attrs)
+        outln"""                </td>"""
+        outln"""            </tr>"""
+        outln"""            <tr id="importsymbol" hidden >"""
+        if (coordValue.imagecoord) {
+            outln"""            <td class="detailtitle2"><img style="max-height:12px;" src="/fc/route/get_mapobject_symbol/${coordValue.id}"/></td>"""
+        } else {
+            outln"""            <td class="detailtitle2"></td>"""
+        }
+        outln"""                <td>"""
+        outln"""                    <input type="button" class="mapexportquestionbutton" id="" value="${message(code:'fc.coordroute.mapobjects.importsymbol')}" onclick="importsymbol_click();"/>"""
+        outln"""                </td>"""
+        outln"""            </tr>"""
+        outln"""        </tbody>"""
+        outln"""    </table>"""
+        outln"""</fieldset>"""
+        outln"""<script>"""
+        outln"""    mapobject_type_changed();"""
+        outln"""    function mapobject_type_changed() {"""
+        outln"""        var map_object_type = \$('#mapObjectType').val();"""
+        outln"""        if (map_object_type == 'Airfield') {"""
+        outln"""            \$('#gatedirection').show();"""
+        outln"""            \$('#mapobjectgliderairfield').show();"""
+        outln"""            \$('#mapobjectpavedairfield').show();"""
+        outln"""        } else {"""
+        outln"""            \$('#gatedirection').hide();"""
+        outln"""            \$('#mapobjectgliderairfield').hide();"""
+        outln"""            \$('#mapobjectpavedairfield').hide();"""
+        outln"""        }"""
+        if (!attrs.create) {
+            outln"""        if (map_object_type == 'Symbol') {"""
+            outln"""            \$('#importsymbol').show();"""
+            outln"""        } else {"""
+            outln"""            \$('#importsymbol').hide();"""
+            outln"""        }"""
+        }
+        outln"""    }"""
+        outln"""    function importsymbol_click() {"""
+        outln"""        window.location.href = "/fc/coordMapObject/selectsymbolfilename/${coordValue.id}";"""
+        outln"""    }"""
+        outln"""</script>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     private void edit_coord_latitude(Coord coordValue, attrs)
     {
         outln"""<fieldset>"""
         outln"""    <legend>${message(code:'fc.latitude')}*</legend>"""
         outln"""    <div>"""
         if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREE) {
-            outln"""    <input type="text" id="latGradDecimal" name="latGradDecimal" value="${coordValue.latGradDecimal.toFloat()}"  tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="latGradDecimal" name="latGradDecimal" value="${coordValue.latGradDecimal?.toFloat()}"  tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.grad')}</label>"""
         } else if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE) {
             outln"""    <select class="direction" id="latDirection" name="latDirection" tabIndex="${attrs.ti[0]++}">"""
@@ -333,7 +429,7 @@ class RouteTagLib
             outln"""    </select>"""
             outln"""    <input class="grad" type="text" id="latGrad" name="latGrad" value="${fieldValue(bean:coordValue,field:'latGrad')}"  tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.grad')}</label>"""
-            outln"""    <input type="text" id="latMinute" name="latMinute" value="${coordValue.latMinute.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="latMinute" name="latMinute" value="${coordValue.latMinute?.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.min')}</label>"""
         } else if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTESECOND) {
             outln"""    <select class="direction" id="latDirection" name="latDirection" tabIndex="${attrs.ti[0]++}">"""
@@ -351,7 +447,7 @@ class RouteTagLib
             outln"""    <label>${message(code:'fc.grad')}</label>"""
             outln"""    <input class="minute" type="text" id="latMin" name="latMin" value="${fieldValue(bean:coordValue,field:'latMin')}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.min')}</label>"""
-            outln"""    <input type="text" id="latSecondDecimal" name="latSecondDecimal" value="${coordValue.latSecondDecimal.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="latSecondDecimal" name="latSecondDecimal" value="${coordValue.latSecondDecimal?.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.sec')}</label>"""
         }
         outln"""    </div>"""
@@ -365,7 +461,7 @@ class RouteTagLib
         outln"""    <legend>${message(code:'fc.longitude')}*</legend>"""
         outln"""    <div>"""
         if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREE) {
-            outln"""    <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${coordValue.lonGradDecimal.toFloat()}"  tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${coordValue.lonGradDecimal?.toFloat()}"  tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.grad')}</label>"""
         } else if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE) {
             outln"""    <select class="direction" id="lonDirection" name="lonDirection" tabIndex="${attrs.ti[0]++}">"""
@@ -381,7 +477,7 @@ class RouteTagLib
             outln"""    </select>"""
             outln"""    <input class="grad" type="text" id="lonGrad" name="lonGrad" value="${fieldValue(bean:coordValue,field:'lonGrad')}"  tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.grad')}</label>"""
-            outln"""    <input type="text" id="lonMinute" name="lonMinute" value="${coordValue.lonMinute.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="lonMinute" name="lonMinute" value="${coordValue.lonMinute?.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.min')}</label>"""
         } else if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTESECOND) {
             outln"""    <select class="direction" id="lonDirection" name="lonDirection" tabIndex="${attrs.ti[0]++}">"""
@@ -399,7 +495,7 @@ class RouteTagLib
             outln"""    <label>${message(code:'fc.grad')}</label>"""
             outln"""    <input class="minute" type="text" id="lonMin" name="lonMin" value="${fieldValue(bean:coordValue,field:'lonMin')}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.min')}</label>"""
-            outln"""    <input type="text" id="lonSecondDecimal" name="lonSecondDecimal" value="${coordValue.lonSecondDecimal.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="lonSecondDecimal" name="lonSecondDecimal" value="${coordValue.lonSecondDecimal?.toFloat()}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.sec')}</label>"""
         }
         outln"""    </div>"""
@@ -1324,7 +1420,7 @@ class RouteTagLib
             outln"""</fieldset>"""
         }
     }
-    
+        
     // --------------------------------------------------------------------------------------------------------------------
     private String coordroutenum(Coord coordInstance, int num, long nextId, String link, boolean showMeasure) {
         String t = num.toString()

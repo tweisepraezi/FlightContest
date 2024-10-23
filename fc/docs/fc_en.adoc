@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.4.8
-:revdate: 28.08.2024
+:revnumber: 3.5.0
+:revdate: 23.10.2024
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -69,9 +69,9 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)^]
 * link:rules/DE_Navigationsflug_2017_en.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
-* link:rules/FAI_rally_flying_rules_2023.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_precision_flying_rules_2023.pdf[FAI Precision Flying^]
-* link:rules/FAI_landing_rules_2023.pdf[FAI GAC Landing appendix^]
+* link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)^]
 * link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
 * link:rules/AT_Motorflug_2023.pdf#page=29[Navigationsflug-Reglement Österreich (German)^]
@@ -338,9 +338,7 @@ compliance with the latest landing time.
 Intermediate points are design points for an intermediate landing.
 At the intermediate final point (iFP) and intermediate takeoff point (iSP) the
 overflight time and altitude are measured and evaluated.
-Intermediate landing (iLDG) and intermediate takeoff (iTO) only serve
-for display in the flight plan of a crew.
-In the case of a touch&go intermediate landing, iTO must be dropped.
+Intermediate landing (iLDG) is only used for display in the flight plan of a crew.
 
 [[route-planning-mandatory-details]]
 === Required details for a competitive route
@@ -357,16 +355,16 @@ are to be indicated language-dependently with the following designations:
 |===
 
 Intermediate points shall be indicated with the following designations:
-  iFP, iLDG, iTO, iSP
+  iFP, iLDG, iSP
   
 For a competition route, the following information is required for all check points:
 
 * Coordinates
 * Height of the terrain above normal zero (Altitude, in ft)
 +
-TO, LDG, iTO, iLDG: 0 ft
+TO, LDG, iLDG: 0 ft
 * Gate width (in NM)
-* Gate direction for TO, LDG, iTO, iLDG (in degrees)
+* Gate direction for TO, LDG, iLDG (in degrees)
 * For precise correspondence of the printed competition map with the data to be processed,
   distances must be measured on the competition map and entered into the field
   'Distance measurement (map) [mm]'. Thereby the distance from the previous turn point is measured in mm
@@ -385,7 +383,7 @@ TO, LDG, iTO, iLDG: 0 ft
 The flight plan of the crew receives as direction automatically the direction
 to the first auxiliary point as entry course to the curved leg.
   
-* For stopovers, enter the following information for iLDG and iTO:
+* For stopovers, enter the following information for iLDG:
 ** Gate width (in NM)
 ** Gate direction (in degrees)
 ** No time evaluation
@@ -445,17 +443,6 @@ Properties to be entered for the check points of a route:
                               TP1          -         yes        yes  yes    yes
                               iFP          -         yes        yes  yes    yes
                               iLDG (1,2)   250       yes        no   no     no
-                              iSP (2)      -         yes        yes  no     yes
-                              TP2          -         yes        yes  yes    yes
-                              FP           -         yes        yes  yes    yes
-                              LDG          250       yes        yes  no     no
-  
-  Stopover with pause         TO           250       yes        yes  no     no
-                              SP           -         yes        yes  no     yes
-                              TP1          -         yes        yes  yes    yes
-                              iFP          -         yes        yes  yes    yes
-                              iLDG (1,2)   250       yes        no   no     no
-                              iTO (1,2)    250       yes        no   no     no
                               iSP (2)      -         yes        yes  no     yes
                               TP2          -         yes        yes  yes    yes
                               FP           -         yes        yes  yes    yes
@@ -919,10 +906,9 @@ The providers of the map data and the manufacturer of this function do not assum
 * Churches, castles and ruins
 * Power lines
 * Wind power stations
-* Forest and field tracks
-* Additional object positions
-* Special locations
+* Field paths
 * Airspaces
+* Additional map objects (circle centers as well as missing airfields, churches, castles, castle ruins, country houses, mountain peaks, towers, wind turbines, etc.)
 
 All mentioned route details and objects can be deselected.
 
@@ -1004,46 +990,6 @@ In addition, a horizontal and/or vertical shift by an amount configurable in NM 
 * Printout can be in landscape or portrait format in A1 to A4 or ANR size.
 * The printout can be made with or without the configured route details, with all route details, or for use in the Task Creator.
 
-*Additional object positions*
-
-Missing airfields, churches, castles, ruins, wind power stations
-as well as own symbols can be added in the file *C:\FCSave\.geodata\additionals.csv* for printing.
-To do this, use the template link:samples/additionals.csv[additionals.csv^] 
-and, using a text editor with the UTF-8 character set, add lines for each additional object according to the following example:
-
-  id|symbol|name|wkt
-  1|church.png|""|POINT (9.46600 49.50288)
-  2|airfield.png|"Airfield name"|POINT (9.54128 49.51144)
-
-1. Sequence number
-2. Symbol to display: +
-airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of the own symbol
-3. Name of the object (in quotes) ("": do not print a name)
-4. Display position in geo-coordinates
-
-Own symbols are to be saved in *C:\FCSave\.geodata\images* (png).
-Note that the case of the symbol names is the same.
-
-Incorrect structure of this file prevents map generation.
-
-*Special locations*
-
-Special locations can be added to the *C:\FCSave\.geodata\specials.csv* file for printing.
-To do this, use the template link:samples/specials.csv[specials.csv^]
-and, using a text editor with the UTF-8 character set, add lines for each additional location according to the following example:
-
-  id|point|name|wkt|dx|dy
-  1|"Route 1 - TP3"|"Vacation farm"|POINT (9.9166569218 48.9058522143)|10|0
-
-1. Sequence number
-2. Description (in quotes, will not be printed)
-3. Name of the object (in quotes) ("": do not print a name)
-4. Display position in geo-coordinates
-5. Horizontal displacement of the object name to be printed (in pixels)
-6. Vertical displacement of the object name to be printed (in pixels)
-
-Incorrect structure of this file prevents map generation.
-
 [[osm-contest-map-maps]]
 === Maps menu
 
@@ -1113,7 +1059,7 @@ Specifications can be made for the following items:
 * Departure to take-off point (TO -> SP)
 * Final point to landing (FP -> LDG)
 * Intermediate landing (iFP -> iLDG)
-* Intermediate take-off point (iFP, iLDG or iTO -> iSP)
+* Intermediate take-off point (iFP or iLDG -> iSP)
 
 The default value of new tasks "wind+:3NM" causes that the wind of the
 the wind of the navigation flight task is taken into account for the time-of-flight calculation,
@@ -1166,7 +1112,7 @@ between the points by the given value (here by 3NM).
 |===
 |expression|application example
 
-|wind+:3NM|Airfield with standard course round (TO -> SP, iTO -> iSP).
+|wind+:3NM|Airfield with standard course round (TO -> SP, iLDG -> iSP).
 |wind+:xNM|Apply a larger distance x for larger airfield circles.
 |wind+:6NM|Latest landing time (FP -> LDG)
 |time+:xmin|Fixed flight time of x minutes (for precision flight competitions)
@@ -1178,7 +1124,7 @@ Check your settings by creating flight plans:
 
 * Flight time TO -> SP plausible?
 * Flight time FP -> LDG (to determine latest landing time) sufficient?
-* Flight time iFP -> iLDG (-> iTO) -> iSP plausible for stopover?
+* Flight time iFP -> iLDG -> iSP plausible for stopover?
 
 <<<
 [[planning-test-and-flight-preparation]]
@@ -1293,11 +1239,11 @@ The following formulas are used for penalty point calculation of landings:
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
-* link:rules/FAI_landing_rules_2023.pdf#page=10[FAI Air Rally Flying - Edition 2023^] ( all landings)
+* link:rules/FAI_landing_rules_2024.pdf#page=10[FAI Air Rally Flying^] (all landings)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-* link:rules/FAI_landing_rules_2023.pdf#page=11[FAI Precision Flying - Edition 2023^]
+* link:rules/FAI_landing_rules_2024.pdf#page=11[FAI Precision Flying^]
 ** Landing 1 and 4
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
@@ -2065,7 +2011,7 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
    openaip {
      server = "https://api.core.openaip.net" // Adress of OpenAIP server
      api = "/api"
-     token = "TODO"                          // Client ID Token 
+     token = "TODO"                          // API Key 
                                              // to enable access to the OpenAIP server
                                              // Registration at https://www.openaip.net
      ignoreAirspacesStartsWith = ""          // Airspaces to ignore
@@ -2101,7 +2047,6 @@ which prevents a task from being saved in a publicly accessible database.
    }
    contestmap {
      devoptions = true       // Show additional devoptions in the OSM contest map dialog
-     osmcartostyle = true    // Switches to OSM-Carto style
    }
  }
 

@@ -68,6 +68,13 @@ class KmlService
     final static String TILT_ENROUTE = "60" // Betrachtungswinkel in Grad
     final static String RANGE_ENROUTE = "1000" // Betrachtungsentfernung in m
     
+    final static String MAPOBJECT_SYMBOL = "MapObjectSymbol-"
+    final static String STYLE_MAPOBJECT = "MapObjectStyle-"
+    final static String STYLE_MAPOBJECT_IMAGECOLOR = "ffffffff"
+    final static String STYLE_MAPOBJECT_IMAGESCALE = "0.7"
+    final static String STYLE_MAPOBJECT_LABELCOLOR = "ffffffff"
+    final static String STYLE_MAPOBJECT_LABELSCALE = "1"
+    
     final static String GPXDATA = "GPXDATA"
 	
     //--------------------------------------------------------------------------
@@ -363,6 +370,24 @@ class KmlService
                 }
             }
         }
+        MapObjectType.each { mapobject_type ->
+            if (mapobject_type.kmlImageName) {
+                xml.Style(id:STYLE_MAPOBJECT + mapobject_type) {
+                    xml.IconStyle {
+                        xml.color STYLE_MAPOBJECT_IMAGECOLOR
+                        xml.scale STYLE_MAPOBJECT_IMAGESCALE
+                        xml.Icon {
+                            xml.href "files/${mapobject_type.kmlImageShortName}"
+                        }
+                        xml.hotSpot(x:"0.5", y:"0.5", xunits:"fraction", yunits:"fraction")
+                    }
+                    xml.LabelStyle {
+                        xml.color STYLE_MAPOBJECT_LABELCOLOR
+                        xml.scale STYLE_MAPOBJECT_LABELSCALE
+                    }
+                }
+            }
+        }
     }
     
     //--------------------------------------------------------------------------
@@ -389,6 +414,11 @@ class KmlService
                 write_file_to_kmz(kmz_zip_output_stream, "files/${enroute_canvas_sign.imageJpgShortName}", webRootDir, enroute_canvas_sign.imageJpgName)
             }
         }
+        MapObjectType.each { mapobject_type ->
+            if (mapobject_type.kmlImageName) {
+                write_file_to_kmz(kmz_zip_output_stream, "files/${mapobject_type.kmlImageShortName}", webRootDir, mapobject_type.kmlImageName)
+            }
+        }
         if (photoList.turnpoint_photos) {
             kmz_zip_output_stream.putNextEntry(new ZipEntry("turnpointphotos/"))
             for (Map turnpoint_photo in photoList.turnpoint_photos) {
@@ -399,6 +429,12 @@ class KmlService
             kmz_zip_output_stream.putNextEntry(new ZipEntry("photos/"))
             for (Map enroute_photo in photoList.enroute_photos) {
                 write_image_to_kmz(kmz_zip_output_stream, "photos/${enroute_photo.imagename}.jpg", enroute_photo.imagedata)
+            }
+        }
+        if (photoList.map_symbols) {
+            kmz_zip_output_stream.putNextEntry(new ZipEntry("symbols/"))
+            for (Map map_symbol in photoList.map_symbols) {
+                write_image_to_kmz(kmz_zip_output_stream, "symbols/${map_symbol.imagename}.png", map_symbol.imagedata)
             }
         }
 
@@ -432,7 +468,7 @@ class KmlService
     {
         printstart "kmz_route Print:$isPrint wrEnrouteSign:$wrEnrouteSign"
         
-        Map photo_list = [turnpoint_photos:[], enroute_photos:[]]
+        Map photo_list = [turnpoint_photos:[], enroute_photos:[], map_symbols:[]]
         
         Media media = Media.Screen
         if (isPrint) {
@@ -663,7 +699,7 @@ class KmlService
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     
                     boolean wr_enroute_points = false
-                    if (last_coordroute_instance && (enroute_points[route_point_pos].name == last_coordroute_instance.titleCode())) {
+                    if (last_coordroute_instance && (enroute_points[route_point_pos].name == last_coordroute_instance.titleCode(isPrint))) {
                         route_point_pos++
                         wr_enroute_points = true
                     }
@@ -1175,6 +1211,9 @@ class KmlService
                             xml.Data(name:"contestmapenroutecanvas") {
                                 xml.value getYesNo(routeInstance.contestMapEnrouteCanvas)
                             }
+                            xml.Data(name:"contestmapturnpointsign") {
+                                xml.value getYesNo(routeInstance.contestMapTurnpointSign)
+                            }
                             xml.Data(name:"contestmapgraticule") {
                                 xml.value getYesNo(routeInstance.contestMapGraticule)
                             }
@@ -1199,8 +1238,8 @@ class KmlService
                             xml.Data(name:"contestmapwindpowerstations") {
                                 xml.value getYesNo(routeInstance.contestMapWindpowerstations)
                             }
-                            xml.Data(name:"contestmapsmallroads") {
-                                xml.value getYesNo(routeInstance.contestMapSmallRoads)
+                            xml.Data(name:"contestmapsmallroadsgrade") {
+                                xml.value routeInstance.contestMapSmallRoadsGrade
                             }
                             xml.Data(name:"contestmappeaks") {
                                 xml.value getYesNo(routeInstance.contestMapPeaks)
@@ -1210,9 +1249,6 @@ class KmlService
                             }
                             xml.Data(name:"contestmapadditionals") {
                                 xml.value getYesNo(routeInstance.contestMapAdditionals)
-                            }
-                            xml.Data(name:"contestmapspecials") {
-                                xml.value getYesNo(routeInstance.contestMapSpecials)
                             }
                             xml.Data(name:"contestmapairspaces") {
                                 xml.value getYesNo(routeInstance.contestMapAirspaces)
@@ -1524,6 +1560,55 @@ class KmlService
                                     xml.Point {
                                         xml.coordinates "${coordenroutecanvas_instance.lonMath()},${coordenroutecanvas_instance.latMath()},0"
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+                List coordmapobject_instances = []
+                if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                    Route route_instance_from = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                    if (route_instance_from) {
+                        coordmapobject_instances += CoordMapObject.findAllByRoute(route_instance_from,[sort:"enrouteViewPos"])
+                    }
+                }
+                if (routeInstance.mapobjects) {
+                    coordmapobject_instances += CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])
+                }
+                if (coordmapobject_instances) {
+                    xml.Folder {
+                        xml.name Defs.ROUTEEXPORT_MAPOBJECTS
+                        xml.visibility "0"
+                        for (CoordMapObject coordmapobject_instance in coordmapobject_instances) {
+                            xml.Placemark {
+                                xml.name coordmapobject_instance.GetExportMapObjectKML()
+                                xml.visibility "0"
+                                if (!coordmapobject_instance.imagecoord) {
+                                    xml.styleUrl "#${STYLE_MAPOBJECT}${coordmapobject_instance.mapObjectType}"
+                                }
+                                xml.Point {
+                                    xml.coordinates "${coordmapobject_instance.lonMath()},${coordmapobject_instance.latMath()},0"
+                                }
+                                if (coordmapobject_instance.imagecoord) {
+                                    xml.Style() {
+                                        xml.IconStyle {
+                                            xml.color STYLE_MAPOBJECT_IMAGECOLOR
+                                            xml.scale STYLE_MAPOBJECT_IMAGESCALE
+                                            xml.Icon {
+                                                xml.href "symbols/${MAPOBJECT_SYMBOL}${coordmapobject_instance.id}.png"
+                                            }
+                                            xml.hotSpot(x:"0.5", y:"0.5", xunits:"fraction", yunits:"fraction")
+                                        }
+                                        xml.LabelStyle {
+                                            xml.color STYLE_MAPOBJECT_LABELCOLOR
+                                            xml.scale STYLE_MAPOBJECT_LABELSCALE
+                                        }
+                                    }
+                                    Map new_symbol = [
+                                        imagename: "${MAPOBJECT_SYMBOL}${coordmapobject_instance.id}",
+                                        imagedata: coordmapobject_instance.imagecoord.imageData
+                                    ]
+                                    photo_list.map_symbols += new_symbol
                                 }
                             }
                         }

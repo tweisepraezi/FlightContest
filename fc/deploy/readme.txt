@@ -1,6 +1,35 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.5.0
+----------------
+- OSM-Wettbewerbs-Karte: Integrierte Bearbeitung zusätzlicher Karten-Objekte hinzugefügt
+    Kirchen, Burgen/Schlösser, Ruinen, Landhäuser, Berggipfel, Türme, Fernmeldetürme, Leuchttürme, Windkraftanlagen,
+    Kreismittelpunkte, Fluplätze und eigene Symbole können zum Zeichen auf die Karte hinzugefügt werden.
+    Jedes Objekt kann mit einem Untertitel versehen werden.
+    Die zusätzlichen Karten-Objekte sind bei einem gpx- und kml-Export mit enthalten.
+    Die Karten-Objekte einer Strecke kann in anderen Strecken mit benutzt werden.
+    Bei einem GPX-Export mit Halbkreis-Toren werden die Halbkreis-Mittelpunkte als Karten-Objekt hinzugefügt.
+- OSM-Wettbewerbs-Karte: Stil-Veränderungen
+    Straßen-Brücken und Waldwege wurden entfernt
+    Feldwege können jetzt in 5 Abstufungen (1 = wenig bis 5 = viele) hinzugefügt werden.
+- OSM-Wettbewerbs-Karte: Unterstützung für zusätzliche Karten-Regionen hinzugefügt
+    Zusätzlich zu den mitteleuropäischen Ländern können nun auch Karten von Zentral-Chile erstellt werden.
+- OSM-Wettbewerbs-Karte: Option 'Verschiebung des Kartenzentrums' wurde in 'Verschiebung des Kartenrandes' umbenannt
+- OSM-Wettbewerbs-Karte: 'KMZ-Export-Lufträume (verborgen)' hinzugefügt
+- Strecken: iTO wurde entfernt. Bei Zwischenlandungen ist nur iLDG zu verwenden.
+- Logger mit mehreren Meßwerten je Sekunde werden akzeptiert.
+- Die Wettbewerbs-Vorgabe "Mehrfachverwendung von Strecken-Bodenzeichen erlauben" ist jetzt standardmäßig aktiviert.
+- Strecken: Die Berechung von Strecken-Fehlern wurde überarbeitet.
+    Die Anzeige-Spalte 'Nutzbar' zeigt jetzt mit 'Ja' an, dass eine Strecke für Navigationsflug oder Planungstest verwendet werden kann.
+    Rote Markierungen zeigen an, dass Fehler wegen Nichteinhaltung des Regelwerkes bestehen.
+    Auch bei Über- oder Unterschreiten der Anzahl von Bildern, Bodenzeichen oder Strecken-Abschnitte kann eine Strecke verwendet werden.
+    Die Bodenzeichen-Anzahl-Überprüfung schliesst jetzt Wendepunkt-Bodenzeichen mit ein.
+- OSM-Wettbewerbs-Karte: Option 'Wendepunkt-Bodenzeichen' hinzugefügt. Druckt das konfigurierte Wendepunkt-Bodenzeichen rechts neben den Wendepunkt-Kreis.
+- Aktualisierung folgender Regelwerke
+    FAI Air Rally Flying - Edition 2024
+    GAC Landing appendix - Edition 2024
+
 Änderungen 3.4.8
 ----------------
 - Hilfe "Fotos und Bodenzeichen verwalten" hinzugefügt

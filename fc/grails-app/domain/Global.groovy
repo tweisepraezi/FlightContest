@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.39
+	// Actual database version: DB-2.40
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 39
+	static int DB_MINOR = 40
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -342,18 +342,6 @@ class Global
             return grailsApplication.config.flightcontest.contestmap.printserverapi
         }
         return ""
-    }
-    
-    // --------------------------------------------------------------------------------------------------------------------
-    boolean GetPrintServerFCStyle()
-    {
-        if (   grailsApplication.config.flightcontest.contestmap
-            && grailsApplication.config.flightcontest.contestmap.osmcartostyle
-           )
-        {
-            return false
-        }
-        return true
     }
     
     // --------------------------------------------------------------------------------------------------------------------

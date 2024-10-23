@@ -36,7 +36,7 @@
                             <p>
                                 <label>${message(code:'fc.route')}*:</label>
                                 <br/>
-                                <g:select id="routeselect_id" from="${Route.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
+                                <g:select id="routeselect_id" from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
                             </p>
                         </fieldset>
                         <fieldset>

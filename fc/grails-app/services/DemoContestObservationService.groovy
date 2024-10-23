@@ -58,6 +58,26 @@ class DemoContestObservationService
         //route4.instance.enroutePhotoMeasurement = EnrouteMeasurement.Map
         //route4.instance.enrouteCanvasMeasurement = EnrouteMeasurement.Map
         route4.instance.save()
+
+        // TODO CoordMapObject
+        for (int view_pos = 1; view_pos < 4; view_pos++) {
+            CoordMapObject coordmapobject_instance = new CoordMapObject()
+            coordmapobject_instance.route = route4.instance
+            coordmapobject_instance.enrouteViewPos = view_pos
+            
+            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(52.12345 + view_pos, true)
+            coordmapobject_instance.latDirection = lat.direction
+            coordmapobject_instance.latGrad = lat.grad
+            coordmapobject_instance.latMinute = lat.minute
+            
+            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(8.12345 + view_pos, false)
+            coordmapobject_instance.lonDirection = lon.direction
+            coordmapobject_instance.lonGrad = lon.grad
+            coordmapobject_instance.lonMinute = lon.minute
+            
+            coordmapobject_instance.save()
+        }
+        
         fcService.printdone ""
         
         // Task 1

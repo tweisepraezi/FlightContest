@@ -25,6 +25,7 @@ class RouteFileTools
     final static String DIST = "Dist"
     final static String TRACK = "Track"
     final static String SIGN = "Sign"
+    final static String TEXT = "Text"
     final static String UNIT_mm = "mm"
     final static String UNIT_m = "m"
     final static String UNIT_ft = "ft"
@@ -41,6 +42,8 @@ class RouteFileTools
     final static String UNIT_TPsemicircleinvert = "invert"
     final static String UNIT_TPignoregate = "ignoregate"
     final static String UNIT_TPnosign = "-"
+    final static String AIRFIELD_GLIDER = "glider"
+    final static String AIRFIELD_PAVED = "paved"
     
     //--------------------------------------------------------------------------
     static Map ReadRouteFile(String fileExtension, Contest contestInstance, String routeFileName, String originalFileName, Map importParams)
@@ -1171,6 +1174,11 @@ class RouteFileTools
                         route_instance.contestMapEnrouteCanvas = contestmapenroutecanvas == "yes"
                         save_route = true
                     }
+                    String contestmapturnpointsign = gpx.extensions.flightcontest.mapsettings.'@contestmapturnpointsign'[0]
+                    if (contestmapturnpointsign) {
+                        route_instance.contestMapTurnpointSign = contestmapturnpointsign == "yes"
+                        save_route = true
+                    }
                     String contestmapgraticule = gpx.extensions.flightcontest.mapsettings.'@contestmapgraticule'[0]
                     if (contestmapgraticule) {
                         route_instance.contestMapGraticule = contestmapgraticule == "yes"
@@ -1213,7 +1221,12 @@ class RouteFileTools
                     }
                     String contestmapsmallroads = gpx.extensions.flightcontest.mapsettings.'@contestmapsmallroads'[0]
                     if (contestmapsmallroads) {
-                        route_instance.contestMapSmallRoads = contestmapsmallroads == "yes"
+                        route_instance.contestMapSmallRoadsGrade = Defs.CONTESTMAPSMALLROADSGRADE_OLD
+                        save_route = true
+                    }
+                    String contestmapsmallroadsgrade = gpx.extensions.flightcontest.mapsettings.'@contestmapsmallroadsgrade'[0]
+                    if (contestmapsmallroadsgrade) {
+                        route_instance.contestMapSmallRoadsGrade = contestmapsmallroadsgrade.toInteger()
                         save_route = true
                     }
                     String contestmappeaks = gpx.extensions.flightcontest.mapsettings.'@contestmappeaks'[0]
@@ -1229,11 +1242,6 @@ class RouteFileTools
                     String contestmapadditionals = gpx.extensions.flightcontest.mapsettings.'@contestmapadditionals'[0]
                     if (contestmapadditionals) {
                         route_instance.contestMapAdditionals = contestmapadditionals == "yes"
-                        save_route = true
-                    }
-                    String contestmapspecials = gpx.extensions.flightcontest.mapsettings.'@contestmapspecials'[0]
-                    if (contestmapspecials) {
-                        route_instance.contestMapSpecials = contestmapspecials == "yes"
                         save_route = true
                     }
                     String contestmapairspaces = gpx.extensions.flightcontest.mapsettings.'@contestmapairspaces'[0]
@@ -1574,6 +1582,38 @@ class RouteFileTools
                             //coordenroutecanvas_instance.calculateCoordEnrouteValues(coordenroutecanvas_instance.route.enrouteCanvasRoute)
                             coordenroutecanvas_instance.save()
                         }
+                        if (wpt.extensions.flightcontest.mapobject) { // TODO
+                            CoordMapObject coordmapobject_instance = new CoordMapObject()
+                            coordmapobject_instance.mapObjectType = wpt.extensions.flightcontest.mapobject.'@type'[0]
+                            coordmapobject_instance.route = route_instance
+                            coordmapobject_instance.enrouteViewPos = wpt.extensions.flightcontest.mapobject.'@viewpos'[0].toInteger()
+                            
+                            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lat'.toBigDecimal(), true)
+                            coordmapobject_instance.latDirection = lat.direction
+                            coordmapobject_instance.latGrad = lat.grad
+                            coordmapobject_instance.latMinute = lat.minute
+                            
+                            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lon'.toBigDecimal(), false)
+                            coordmapobject_instance.lonDirection = lon.direction
+                            coordmapobject_instance.lonGrad = lon.grad
+                            coordmapobject_instance.lonMinute = lon.minute
+                            
+                            coordmapobject_instance.gateDirection = wpt.extensions.flightcontest.mapobject.'@directionairfield'[0].toBigDecimal()
+                            coordmapobject_instance.mapObjectGliderAirfield = wpt.extensions.flightcontest.mapobject.'@gliderairfield'[0] == "yes"
+                            coordmapobject_instance.mapObjectPavedAirfield = wpt.extensions.flightcontest.mapobject.'@pavedairfield'[0] == "yes"
+                            coordmapobject_instance.mapObjectText = wpt.extensions.flightcontest.mapobject.'@text'[0]
+                            
+                            coordmapobject_instance.save()
+                            
+                            if (wpt.extensions.flightcontest.mapobjectimage && wpt.extensions.flightcontest.mapobjectimage.imagedata) {
+                                byte[] image_data = Base64.getDecoder().decode(wpt.extensions.flightcontest.mapobjectimage.imagedata[0].text())
+                                if (image_data) {
+                                    ImageCoord imagecoord_instance = new ImageCoord(imageData:image_data, coord:coordmapobject_instance)
+                                    imagecoord_instance.save()
+                                    coordmapobject_instance.imagecoord = imagecoord_instance
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1619,6 +1659,7 @@ class RouteFileTools
             def turnpoints_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_TURNPOINTS)
             def photos_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_PHOTOS)
             def canvas_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_CANVAS)
+            def mapobjects_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_MAPOBJECTS)
             if (settings_folder && turnpoints_folder) {
                 valid_format = true
                 
@@ -1731,6 +1772,12 @@ class RouteFileTools
                             case "contestmapenroutephotos":
                                 route_instance.contestMapEnroutePhotos = d.value.text() == "yes"
                                 break
+                            case "contestmapenroutecanvas":
+                                route_instance.contestMapEnrouteCanvas = d.value.text() == "yes"
+                                break
+                            case "contestmapturnpointsign":
+                                route_instance.contestMapTurnpointSign = d.value.text() == "yes"
+                                break
                             case "contestmapgraticule":
                                 route_instance.contestMapGraticule = d.value.text() == "yes"
                                 break
@@ -1756,7 +1803,10 @@ class RouteFileTools
                                 route_instance.contestMapWindpowerstations = d.value.text() == "yes"
                                 break
                             case "contestmapsmallroads":
-                                route_instance.contestMapSmallRoads = d.value.text() == "yes"
+                                route_instance.contestMapSmallRoadsGrade = Defs.CONTESTMAPSMALLROADSGRADE_OLD
+                                break
+                            case "contestmapsmallroadsgrade":
+                                route_instance.contestMapSmallRoadsGrade = d.value.text().toInteger()
                                 break
                             case "contestmappeaks":
                                 route_instance.contestMapPeaks = d.value.text() == "yes"
@@ -1766,9 +1816,6 @@ class RouteFileTools
                                 break
                             case "contestmapadditionals":
                                 route_instance.contestMapAdditionals = d.value.text() == "yes"
-                                break
-                            case "contestmapspecials":
-                                route_instance.contestMapSpecials = d.value.text() == "yes"
                                 break
                             case "contestmapairspaces":
                                 route_instance.contestMapAirspaces = d.value.text() == "yes"
@@ -1949,6 +1996,11 @@ class RouteFileTools
                         sign_data = read_import_sign(import_sign, canvas_folder, "", false, kmz_file)
                         add_sign_data(route_instance, import_sign, sign_data, false)
                     }
+                    
+                    if (mapobjects_folder) {
+                        sign_data = read_import_sign(ImportSign.MapObject, mapobjects_folder, "", false, kmz_file)
+                        Map ret1 = add_sign_data(route_instance, ImportSign.MapObject, sign_data, false)
+                    }
                 }
                 
                 valid_format = ret.valid
@@ -2042,38 +2094,53 @@ class RouteFileTools
                             found = true
                         }
                         if (found) {
-                            if (import_sign.name && !autoName) {
+                            if (import_sign.name) {
                                 if (importSign.IsEnroutePhoto()) {
-                                    // check non canvas name
-                                    for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
-                                        if (sign.canvasName == import_sign.name) {
-                                            invalid_line = true
-                                            break
+                                    if (!autoName) {
+                                        // check non canvas name
+                                        for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
+                                            if (sign.canvasName == import_sign.name) {
+                                                invalid_line = true
+                                                break
+                                            }
                                         }
-                                    }
-                                    // check duplicate name
-                                    if (!invalid_line) {
-                                        if (CoordEnroutePhoto.findByEnroutePhotoNameAndRoute(import_sign.name,routeInstance)) {
-                                            invalid_line = true
+                                        // check duplicate name
+                                        if (!invalid_line) {
+                                            if (CoordEnroutePhoto.findByEnroutePhotoNameAndRoute(import_sign.name,routeInstance)) {
+                                                invalid_line = true
+                                            }
                                         }
                                     }
                                 } else if (importSign.IsEnrouteCanvas()) { 
-                                    // check canvas name
+                                    if (!autoName) {
+                                        // check canvas name
+                                        boolean invalid = true
+                                        for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
+                                            if (sign.canvasName == import_sign.name) {
+                                                invalid = false
+                                                break
+                                            }
+                                        }
+                                        if (invalid) {
+                                            invalid_line = true
+                                        }
+                                        // check duplicate name
+                                        if (!invalid_line && !routeInstance.contest.enrouteCanvasMultiple) {
+                                            if (CoordEnrouteCanvas.findByEnrouteCanvasSignAndRoute(EnrouteCanvasSign.(import_sign.name),routeInstance)) {
+                                                invalid_line = true
+                                            }
+                                        }
+                                    }
+                                } else if (importSign == ImportSign.MapObject) {
                                     boolean invalid = true
-                                    for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
-                                        if (sign.canvasName == import_sign.name) {
+                                    for (MapObjectType sign in MapObjectType.values()) {
+                                        if (sign.toString() == import_sign.name) {
                                             invalid = false
                                             break
                                         }
                                     }
                                     if (invalid) {
                                         invalid_line = true
-                                    }
-                                    // check duplicate name
-                                    if (!invalid_line && !routeInstance.contest.enrouteCanvasMultiple) {
-                                        if (CoordEnrouteCanvas.findByEnrouteCanvasSignAndRoute(EnrouteCanvasSign.(import_sign.name),routeInstance)) {
-                                            invalid_line = true
-                                        }
                                     }
                                 } else {
                                     invalid_line = true
@@ -2334,7 +2401,7 @@ class RouteFileTools
                         import_sign += [lat_value:CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)]
                         import_sign += [lon_value:CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)]
                         import_sign += [alt_value:[invalid:false, alt:altitude]]
-            
+
                         if (importSign == ImportSign.RouteCoord) {
                             CoordType tp_type = CoordType.UNKNOWN
                             for (CoordType coord_type in CoordType.values()) {
@@ -2373,6 +2440,11 @@ class RouteFileTools
                                 case ImportSign.EnroutePhotoCoord:
                                     if (import_sign.name) {
                                         import_sign += [imagedata: read_zipentry_data(kmzFile, "photos/${import_sign.name}.jpg")]
+                                    }
+                                    break
+                                case ImportSign.MapObject:
+                                    if (pm.Style.IconStyle.Icon.href) {
+                                        import_sign += [imagedata: read_zipentry_data(kmzFile, pm.Style.IconStyle.Icon.href.text())]
                                     }
                                     break
                             }
@@ -2823,6 +2895,56 @@ class RouteFileTools
                         read_errors += ", "
                     }
                     read_errors += import_sign.tpname
+                }
+            } else if (importSign == ImportSign.MapObject) {
+                CoordMapObject coordmapobject_instance = new CoordMapObject()
+                coordmapobject_instance.mapObjectType = import_sign.name
+                coordmapobject_instance.route = routeInstance
+                coordmapobject_instance.enrouteViewPos = CoordMapObject.countByRoute(routeInstance) + 1
+                if (import_sign.lat || import_sign.lat_value) {
+                    coordmapobject_instance.latDirection = import_sign.lat_value.direction
+                    coordmapobject_instance.latGrad = import_sign.lat_value.grad
+                    coordmapobject_instance.latMinute = import_sign.lat_value.minute
+                }
+                if (import_sign.lon || import_sign.lon_value) {
+                    coordmapobject_instance.lonDirection = import_sign.lon_value.direction
+                    coordmapobject_instance.lonGrad = import_sign.lon_value.grad
+                    coordmapobject_instance.lonMinute = import_sign.lon_value.minute
+                }
+                if (import_sign.other) {
+                    for (String o in import_sign.other) {
+                        if (o.startsWith(TRACK) && o.endsWith(UNIT_GRAD)) {
+                            String s = o.substring(TRACK.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_GRAD.size())
+                            if (s.isBigDecimal()) {
+                                coordmapobject_instance.gateDirection = s.toBigDecimal()
+                            }
+                        }
+                        if (o == AIRFIELD_GLIDER) {
+                            coordmapobject_instance.mapObjectGliderAirfield = true
+                        }
+                        if (o == AIRFIELD_PAVED) {
+                            coordmapobject_instance.mapObjectPavedAirfield = true
+                        }
+                        if (o.startsWith(TEXT)) {
+                            String s = o.substring(TEXT.size()).trim()
+                            coordmapobject_instance.mapObjectText = s
+                        }
+                    }
+                }
+                if (coordmapobject_instance.save()) {
+                    if (import_sign.imagedata) {
+                        ImageCoord imagecoord_instance = new ImageCoord(imageData:import_sign.imagedata, coord:coordmapobject_instance)
+                        imagecoord_instance.save()
+                        coordmapobject_instance.imagecoord = imagecoord_instance
+                    }
+                    imported_sign_num++
+                } else {
+                    invalid_line_num++
+                    if (read_errors) {
+                        read_errors += ", "
+                    }
+                    read_errors += import_sign.name
                 }
             }
         }

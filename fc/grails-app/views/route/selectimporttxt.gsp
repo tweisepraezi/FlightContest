@@ -23,19 +23,23 @@
                                 <input type="file" size="80" accept="${RouteFileTools.TURNPOINT_EXTENSIONS}" name="txtfile" tabIndex="${ti[0]++}"/>
                             </g:else>
                         </div>
-                        <g:if test="${params.importEnrouteData=="true"}" >
+                        <g:if test="${params.showFolderName=="true"}" >
                             <div>
                                 <br/>
                                 <label>${message(code:'fc.route.fileimport.foldername')}:</label>
                                 <br/>
-                                <input type="text" id="foldername" name="foldername" value="" tabIndex="${ti[0]++}"/>
+                                <input type="text" id="foldername" name="foldername" value="${params.folderName}" tabIndex="${ti[0]++}"/>
                             </div>
+                        </g:if>
+                        <g:if test="${params.autoName=="true"}" >
                             <div>
                                 <br/>
                                 <g:checkBox name="autoname" value="${autoname}" checked= "${true}" tabIndex="${ti[0]++}"/>
                                 <label>${message(code:'fc.route.signfileimport.autoname')}</label>
                                 <br/>
                             </div>
+                        </g:if>
+                        <g:if test="${params.namePrefix=="true"}" >
                             <div>
                                 <br/>
                                 <label>${message(code:'fc.route.signfileimport.namepraefix')}:</label>

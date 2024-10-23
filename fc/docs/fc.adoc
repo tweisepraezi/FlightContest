@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.4.8
-:revdate:   28.08.2024
+:revnumber: 3.5.0
+:revdate:   23.10.2024
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -70,9 +70,9 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020^]
 * link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
-* link:rules/FAI_rally_flying_rules_2023.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_precision_flying_rules_2023.pdf[FAI Precision Flying^]
-* link:rules/FAI_landing_rules_2023.pdf[FAI GAC Landing appendix^]
+* link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
 * link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich^]
 * link:rules/AT_Motorflug_2023.pdf#page=29[Navigationsflug-Reglement Österreich^]
@@ -344,9 +344,7 @@ der Einhaltung der spätesten Landezeit gemessen wird.
 Intermediate-Punkte sind Konstruktionspunkte für eine Zwischenlandung.
 Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
 Überflugzeit und Flughöhe gemessen und ausgewertet. 
-Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
-zur Anzeige im Flugplan einer Besatzung.
-Bei einer Touch&Go-Zwischenlandung ist auf iTO zu verzichten.
+Intermediate-Landung (iLDG) dient nur zur Anzeige im Flugplan einer Besatzung.
 
 [[route-planning-mandatory-details]]
 === Erforderliche Angaben für eine Wettbewerbsstrecke
@@ -363,16 +361,16 @@ einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:
 |===
 
 Intermediate-Punkte sind mit folgenden Bezeichnungen anzugeben:
-  iFP, iLDG, iTO, iSP
+  iFP, iLDG, iSP
   
 Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig:
 
 * Koordinaten
 * Höhe des Geländes über Normal-Null (Altitude, in ft)
 + 
-TO, LDG, iTO, iLDG: 0 ft
+TO, LDG, iLDG: 0 ft
 * Tor-Breite (in NM)
-* Tor-Richtung für TO, LDG, iTO, iLDG (in Grad)
+* Tor-Richtung für TO, LDG, iLDG (in Grad)
 * Für präzise Übereinstimmung der ausgegebenen gedruckten Wettbewerbs-Karte 
   mit den zu verarbeitenden Daten müssen bei Präzisionsflug-Wettbewerben 
   Entfernungen auf der Wettbewerbs-Karte gemessen und bei jedem Check-Punkt
@@ -395,7 +393,7 @@ TO, LDG, iTO, iLDG: 0 ft
 Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
 auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke. 
   
-* Für Zwischenlandungen sind für iLDG und iTO folgenden Angaben einzugeben:
+* Für Zwischenlandungen sind für iLDG folgenden Angaben einzugeben:
 ** Tor-Breite (in NM)
 ** Tor-Richtung (in Grad)
 ** Keine Zeitauswertung
@@ -456,17 +454,6 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
                               WP1          -         ja         ja   ja   ja
                               iFP          -         ja         ja   ja   ja
                               iLDG (1,2)   250       ja         nein nein nein
-                              iSP  (2)     -         ja         ja   nein ja
-                              WP2          -         ja         ja   ja   ja
-                              FP           -         ja         ja   ja   ja
-                              LDG          250       ja         ja   nein nein
-  
-  Zwischenlandung mit Pause   TO           250       ja         ja   nein nein
-                              SP           -         ja         ja   nein ja
-                              WP1          -         ja         ja   ja   ja
-                              iFP          -         ja         ja   ja   ja
-                              iLDG (1,2)   250       ja         nein nein nein
-                              iTO  (1,2)   250       ja         nein nein nein
                               iSP  (2)     -         ja         ja   nein ja
                               WP2          -         ja         ja   ja   ja
                               FP           -         ja         ja   ja   ja
@@ -928,10 +915,9 @@ Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen
 * Burgen, Schlösser und Ruinen
 * Hochspannungsleitungen
 * Windkraftanlagen
-* Wald- und Feldwege
-* Zusätzliche Objekt-Positionen
-* Besondere Orte
+* Feldwege
 * Lufträume
+* Zusätzliche Karten-Objekte (Kreismittelpunkte sowie fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Berggipfel, Türme, Windkraftanlagen u.a.)
 
 Alle genannten Streckendetails und Objekte können abgewählt werden.
 
@@ -1013,46 +999,6 @@ Zusätzlich ist noch eine horizontale und/oder vertikale Verschiebung um einen i
 * Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.
 * Der Ausdruck kann mit oder ohne den konfigurierten Streckendetails, mit allen Streckendetails oder für Nutzung im Task-Creator erfolgen.
 
-*Zusätzliche Objekt-Positionen*
-
-Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
-sowie eigene Symbole können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden.
-Verwenden Sie dazu die Vorlage link:samples/additionals.csv[additionals.csv^] 
-und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jedes zusätzliche Objekt entsprechend dem folgendem Beispiel hinzu:
-
-  id|symbol|name|wkt
-  1|church.png|""|POINT (9.46600 49.50288)
-  2|airfield.png|"Flugplatz"|POINT (9.54128 49.51144)
-
-1. Laufende Nummer 
-2. Anzuzeigendes Symbol: +
-airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png oder Name des eigenen Symbols
-3. Name des Objektes (in Anführungszeichen) ("": kein Name drucken)
-4. Anzeigeposition in Geo-Koordinaten
-
-Eigene Symbole sind in *C:\FCSave\.geodata\images* zu speichern (png).
-Beachten Sie, dass die Groß-/Kleinschreibung der Symbolnamen übereinstimmt.
-
-Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.
-
-*Besondere Orte*
-
-Besondere Objekte können in der Datei *C:\FCSave\.geodata\specials.csv* zum Druck hinzugefügt werden.
-Verwenden Sie dazu die Vorlage link:samples/specials.csv[specials.csv^]
-und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jeden zusätzlichen Ort entsprechend dem folgendem Beispiel hinzu:
-
-  id|point|name|wkt|dx|dy
-  1|"Strecke 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
-
-1. Laufende Nummer
-2. Beschreibung (in Anführungszeichen, wird nicht gedruckt)
-3. Name des Objektes (in Anführungszeichen) ("": kein Name drucken)
-4. Anzeigeposition in Geo-Koordinaten
-5. Horizontale Verschiebung des zu druckenden Objekt-Namens (in Pixel)
-6. Vertikale Verschiebung des zu druckenden Objekt-Namens (in Pixel)
-
-Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.
-
 [[osm-contest-map-maps]]
 === Karten-Menü
 
@@ -1121,7 +1067,7 @@ Für folgende Punkte können Festlegungen getroffen werden:
 * Abflug bis Startpunkt (TO -> SP)
 * Finalpunkt bis Landung (FP -> LDG)
 * Intermediate-Landung (iFP -> iLDG)
-* Intermediate-Startpunkt (iFP, iLDG oder iTO -> iSP)
+* Intermediate-Startpunkt (iFP oder iLDG -> iSP)
 
 Der Standard-Wert neuer Aufgaben "wind+:3NM" bewirkt, dass bei der 
 Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit berücksichtigt wird,
@@ -1174,7 +1120,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).
 |===
 |Ausdruck|Anwendungsbeispiel
 
-|wind+:3NM|Flugplatz mit Standard-Platzrunde (TO -> SP, iTO -> iSP)
+|wind+:3NM|Flugplatz mit Standard-Platzrunde (TO -> SP, iLDG -> iSP)
 |wind+:xNM|Bei größeren Platzrunden eine größere Entfernung x anwenden.
 |wind+:6NM|Spätestete Landezeit (FP -> LDG)
 |time+:xmin|Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
@@ -1186,7 +1132,7 @@ Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
 
 * Flugzeit TO -> SP plausibel?
 * Flugzeit FP -> LDG (zur Ermittlung der spätesten Landezeit) ausreichend?
-* Flugzeit iFP -> iLDG (-> iTO) -> iSP bei Zwischenlandung plausibel?
+* Flugzeit iFP -> iLDG -> iSP bei Zwischenlandung plausibel?
 
 <<<
 [[planning-test-and-flight-preparation]]
@@ -1302,11 +1248,11 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
-* link:rules/FAI_landing_rules_2023.pdf#page=10[FAI Air Rally Flying - Edition 2023^] ((alle Landungen)
+* link:rules/FAI_landing_rules_2024.pdf#page=10[FAI Air Rally Flying^] (alle Landungen)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-* link:rules/FAI_landing_rules_2023.pdf#page=11[FAI Precision Flying - Edition 2023^]
+* link:rules/FAI_landing_rules_2024.pdf#page=11[FAI Precision Flying^]
 ** Landung 1 und 4
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
@@ -2076,7 +2022,7 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
    openaip {
      server = "https://api.core.openaip.net" // Adresse des OpenAIP-Servers
      api = "/api"
-     token = "TODO"                          // Client ID Token, mit dem der Zugriff
+     token = "TODO"                          // API Key, mit dem der Zugriff
                                              // auf den OpenAIP-Server ermöglicht wird
                                              // Anmeldung auf https://www.openaip.net
      ignoreAirspacesStartsWith = ""          // Zu ignorierende Lufträume
@@ -2112,7 +2058,6 @@ was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhi
    }
    contestmap {
      devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
-     osmcartostyle = true // Schaltet auf OSM-Carto-Stil um
    }
  }
 

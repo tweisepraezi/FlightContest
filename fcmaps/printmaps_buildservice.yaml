@@ -54,3 +54,15 @@ styles:
 - name: opentopomap-fc
   xmlpath: ../otm/mapnik
   xmlfile: fcmaps-old.xml
+- name: region-eu
+  xmlpath: ../otm/mapnik
+  xmlfile: region-eu.xml
+- name: region-eu-dev
+  xmlpath: ../otm-dev/mapnik
+  xmlfile: region-eu.xml
+- name: region-cl
+  xmlpath: ../otm/mapnik
+  xmlfile: region-cl.xml
+- name: region-cl-dev
+  xmlpath: ../otm-dev/mapnik
+  xmlfile: region-cl.xml

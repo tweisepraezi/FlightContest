@@ -130,7 +130,7 @@ enum ContestRules
             turnpointMapMeasurement:false,
             enroutePhotoRule:EnrouteRule.NMFromTP,               // 3.4.8
             enrouteCanvasRule:EnrouteRule.NMFromTP,              // 3.4.8
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:10,                                     // 3.1
             maxRouteLegs:16,                                     // 3.1
             minEnroutePhotos:15,                                 // 3.4.1
@@ -272,7 +272,7 @@ enum ContestRules
             turnpointMapMeasurement:true,
             enroutePhotoRule:EnrouteRule.Map,
             enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:0,
             maxRouteLegs:8,
             minEnroutePhotos:8,
@@ -414,7 +414,7 @@ enum ContestRules
             turnpointMapMeasurement:false,
             enroutePhotoRule:EnrouteRule.NMFromTP,
             enrouteCanvasRule:EnrouteRule.NMFromTP,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:10,
             maxRouteLegs:16,
             minEnroutePhotos:15,
@@ -556,7 +556,7 @@ enum ContestRules
             turnpointMapMeasurement:true,
             enroutePhotoRule:EnrouteRule.Map,
             enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:0,
             maxRouteLegs:8,                                       // A2.2.3
             minEnroutePhotos:8,                                   // A3.2
@@ -698,7 +698,7 @@ enum ContestRules
             turnpointMapMeasurement:true,
             enroutePhotoRule:EnrouteRule.Map,
             enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:5,                                         // 4.7.12
             maxRouteLegs:8,                                         // 4.7.12
             minEnroutePhotos:8,                                     // 4.8.1
@@ -713,7 +713,7 @@ enum ContestRules
 	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
     R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2023",
+            ruleTitle:"FAI Air Rally Flying - Edition 2024",
             
             // General
             precisionFlying:false,
@@ -840,7 +840,7 @@ enum ContestRules
             turnpointMapMeasurement:false,
             enroutePhotoRule:EnrouteRule.NMFromTP,
             enrouteCanvasRule:EnrouteRule.NMFromTP,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:10,                                     // A3.1.2
             maxRouteLegs:16,                                     // A3.1.2
             minEnroutePhotos:15,                                 // A3.4.3
@@ -852,7 +852,7 @@ enum ContestRules
             useProcedureTurns:false,
             liveTrackingScorecard:"FAI Air Rally"
         ]
-    ), // "FAI Air Rally Flying - Edition 2023"
+    ), // "FAI Air Rally Flying - Edition 2024"
 
     R7 ([
             ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023",
@@ -982,7 +982,7 @@ enum ContestRules
             turnpointMapMeasurement:true,
             enroutePhotoRule:EnrouteRule.Map,
             enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:0,
             maxRouteLegs:8,                                      // 4.2.2c
             minEnroutePhotos:8,                                  // 4.3.a
@@ -1124,7 +1124,7 @@ enum ContestRules
             turnpointMapMeasurement:true,
             enroutePhotoRule:EnrouteRule.Map,
             enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:0,
             maxRouteLegs:8,                                      // 4.2.2c
             minEnroutePhotos:8,                                  // 4.3a
@@ -1266,7 +1266,7 @@ enum ContestRules
             turnpointMapMeasurement:true,
             enroutePhotoRule:EnrouteRule.Map,
             enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:0,
             maxRouteLegs:8,                                      // 4.2.2c
             minEnroutePhotos:8,                                  // 4.3a
@@ -1408,7 +1408,7 @@ enum ContestRules
             turnpointMapMeasurement:false,
             enroutePhotoRule:EnrouteRule.NMFromTP,
             enrouteCanvasRule:EnrouteRule.NMFromTP,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:11,                                     // 5.2.5b, 5.2.5c
             maxRouteLegs:16,                                     // 5.2.5b, 5.2.5c
             minEnroutePhotos:12,                                 // 5.2.5b
@@ -1550,7 +1550,7 @@ enum ContestRules
             turnpointMapMeasurement:false,
             enroutePhotoRule:EnrouteRule.MapOrMeasurement,
             enrouteCanvasRule:EnrouteRule.None,
-            enrouteCanvasMultiple:false,
+            enrouteCanvasMultiple:true,
             minRouteLegs:0,
             maxRouteLegs:8,                                      // 3.2.3
             minEnroutePhotos:0,
@@ -1578,7 +1578,7 @@ enum ContestRules
         ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
         ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
         ret += R4  // FAI Precision Flying - Edition 2023
-        ret += R6  // FAI Air Rally Flying - Edition 2023
+        ret += R6  // FAI Air Rally Flying - Edition 2024
         ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
         ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023
         ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023

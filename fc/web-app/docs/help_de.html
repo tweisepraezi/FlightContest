@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.4.8,</span>
-<span id="revdate">28.08.2024</span>
+<span id="revnumber">version 3.5.0,</span>
+<span id="revdate">23.10.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -706,13 +706,13 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p><a href="rules/DE_Navigationsflug_2017.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland 2017</a></p>
 </li>
 <li>
-<p><a href="rules/FAI_rally_flying_rules_2023.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
+<p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_precision_flying_rules_2023.pdf" target="_blank" rel="noopener">FAI Precision Flying</a></p>
 </li>
 <li>
-<p><a href="rules/FAI_landing_rules_2023.pdf" target="_blank" rel="noopener">FAI GAC Landing appendix</a></p>
+<p><a href="rules/FAI_landing_rules_2024.pdf" target="_blank" rel="noopener">FAI GAC Landing appendix</a></p>
 </li>
 <li>
 <p><a href="rules/CH_Praezisionsflug_2017.pdf" target="_blank" rel="noopener">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft</a></p>
@@ -1245,9 +1245,7 @@ der Einhaltung der spätesten Landezeit gemessen wird.</p>
 <p>Intermediate-Punkte sind Konstruktionspunkte für eine Zwischenlandung.
 Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
 Überflugzeit und Flughöhe gemessen und ausgewertet.
-Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
-zur Anzeige im Flugplan einer Besatzung.
-Bei einer Touch&amp;Go-Zwischenlandung ist auf iTO zu verzichten.</p>
+Intermediate-Landung (iLDG) dient nur zur Anzeige im Flugplan einer Besatzung.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1280,7 +1278,7 @@ einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:</p>
 </table>
 <div class="paragraph">
 <p>Intermediate-Punkte sind mit folgenden Bezeichnungen anzugeben:
-  iFP, iLDG, iTO, iSP</p>
+  iFP, iLDG, iSP</p>
 </div>
 <div class="paragraph">
 <p>Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig:</p>
@@ -1293,14 +1291,14 @@ einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:</p>
 <li>
 <p>Höhe des Geländes über Normal-Null (Altitude, in ft)</p>
 <div class="paragraph">
-<p>TO, LDG, iTO, iLDG: 0 ft</p>
+<p>TO, LDG, iLDG: 0 ft</p>
 </div>
 </li>
 <li>
 <p>Tor-Breite (in NM)</p>
 </li>
 <li>
-<p>Tor-Richtung für TO, LDG, iTO, iLDG (in Grad)</p>
+<p>Tor-Richtung für TO, LDG, iLDG (in Grad)</p>
 </li>
 <li>
 <p>Für präzise Übereinstimmung der ausgegebenen gedruckten Wettbewerbs-Karte
@@ -1349,7 +1347,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 </li>
 <li>
-<p>Für Zwischenlandungen sind für iLDG und iTO folgenden Angaben einzugeben:</p>
+<p>Für Zwischenlandungen sind für iLDG folgenden Angaben einzugeben:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1432,17 +1430,6 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
                               WP1          -         ja         ja   ja   ja
                               iFP          -         ja         ja   ja   ja
                               iLDG (1,2)   250       ja         nein nein nein
-                              iSP  (2)     -         ja         ja   nein ja
-                              WP2          -         ja         ja   ja   ja
-                              FP           -         ja         ja   ja   ja
-                              LDG          250       ja         ja   nein nein
-
-  Zwischenlandung mit Pause   TO           250       ja         ja   nein nein
-                              SP           -         ja         ja   nein ja
-                              WP1          -         ja         ja   ja   ja
-                              iFP          -         ja         ja   ja   ja
-                              iLDG (1,2)   250       ja         nein nein nein
-                              iTO  (1,2)   250       ja         nein nein nein
                               iSP  (2)     -         ja         ja   nein ja
                               WP2          -         ja         ja   ja   ja
                               FP           -         ja         ja   ja   ja
@@ -2263,16 +2250,13 @@ Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen
 <p>Windkraftanlagen</p>
 </li>
 <li>
-<p>Wald- und Feldwege</p>
-</li>
-<li>
-<p>Zusätzliche Objekt-Positionen</p>
-</li>
-<li>
-<p>Besondere Orte</p>
+<p>Feldwege</p>
 </li>
 <li>
 <p>Lufträume</p>
+</li>
+<li>
+<p>Zusätzliche Karten-Objekte (Kreismittelpunkte sowie fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Berggipfel, Türme, Windkraftanlagen u.a.)</p>
 </li>
 </ul>
 </div>
@@ -2420,85 +2404,6 @@ Zusätzlich ist noch eine horizontale und/oder vertikale Verschiebung um einen i
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>Zusätzliche Objekt-Positionen</strong></p>
-</div>
-<div class="paragraph">
-<p>Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
-sowie eigene Symbole können in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugefügt werden.
-Verwenden Sie dazu die Vorlage <a href="samples/additionals.csv" target="_blank" rel="noopener">additionals.csv</a>
-und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jedes zusätzliche Objekt entsprechend dem folgendem Beispiel hinzu:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>id|symbol|name|wkt
-1|church.png|""|POINT (9.46600 49.50288)
-2|airfield.png|"Flugplatz"|POINT (9.54128 49.51144)</pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Laufende Nummer</p>
-</li>
-<li>
-<p>Anzuzeigendes Symbol:<br>
-airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png oder Name des eigenen Symbols</p>
-</li>
-<li>
-<p>Name des Objektes (in Anführungszeichen) ("": kein Name drucken)</p>
-</li>
-<li>
-<p>Anzeigeposition in Geo-Koordinaten</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Eigene Symbole sind in <strong>C:\FCSave\.geodata\images</strong> zu speichern (png).
-Beachten Sie, dass die Groß-/Kleinschreibung der Symbolnamen übereinstimmt.</p>
-</div>
-<div class="paragraph">
-<p>Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.</p>
-</div>
-<div class="paragraph">
-<p><strong>Besondere Orte</strong></p>
-</div>
-<div class="paragraph">
-<p>Besondere Objekte können in der Datei <strong>C:\FCSave\.geodata\specials.csv</strong> zum Druck hinzugefügt werden.
-Verwenden Sie dazu die Vorlage <a href="samples/specials.csv" target="_blank" rel="noopener">specials.csv</a>
-und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jeden zusätzlichen Ort entsprechend dem folgendem Beispiel hinzu:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>id|point|name|wkt|dx|dy
-1|"Strecke 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0</pre>
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Laufende Nummer</p>
-</li>
-<li>
-<p>Beschreibung (in Anführungszeichen, wird nicht gedruckt)</p>
-</li>
-<li>
-<p>Name des Objektes (in Anführungszeichen) ("": kein Name drucken)</p>
-</li>
-<li>
-<p>Anzeigeposition in Geo-Koordinaten</p>
-</li>
-<li>
-<p>Horizontale Verschiebung des zu druckenden Objekt-Namens (in Pixel)</p>
-</li>
-<li>
-<p>Vertikale Verschiebung des zu druckenden Objekt-Namens (in Pixel)</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="osm-contest-map-maps">Karten-Menü</h3>
@@ -2632,7 +2537,7 @@ OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und ermöglich
 <p>Intermediate-Landung (iFP &#8594; iLDG)</p>
 </li>
 <li>
-<p>Intermediate-Startpunkt (iFP, iLDG oder iTO &#8594; iSP)</p>
+<p>Intermediate-Startpunkt (iFP oder iLDG &#8594; iSP)</p>
 </li>
 </ul>
 </div>
@@ -2791,7 +2696,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:3NM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Flugplatz mit Standard-Platzrunde (TO &#8594; SP, iTO &#8594; iSP)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flugplatz mit Standard-Platzrunde (TO &#8594; SP, iLDG &#8594; iSP)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:xNM</p></td>
@@ -2827,7 +2732,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <p>Flugzeit FP &#8594; LDG (zur Ermittlung der spätesten Landezeit) ausreichend?</p>
 </li>
 <li>
-<p>Flugzeit iFP &#8594; iLDG (&#8594; iTO) &#8594; iSP bei Zwischenlandung plausibel?</p>
+<p>Flugzeit iFP &#8594; iLDG &#8594; iSP bei Zwischenlandung plausibel?</p>
 </li>
 </ul>
 </div>
@@ -3103,7 +3008,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/FAI_landing_rules_2023.pdf#page=10" target="_blank" rel="noopener">FAI Air Rally Flying - Edition 2023</a> ((alle Landungen)</p>
+<p><a href="rules/FAI_landing_rules_2024.pdf#page=10" target="_blank" rel="noopener">FAI Air Rally Flying</a> (alle Landungen)</p>
 <div class="literalblock">
 <div class="content">
 <pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
@@ -3111,7 +3016,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/FAI_landing_rules_2023.pdf#page=11" target="_blank" rel="noopener">FAI Precision Flying - Edition 2023</a></p>
+<p><a href="rules/FAI_landing_rules_2024.pdf#page=11" target="_blank" rel="noopener">FAI Precision Flying</a></p>
 <div class="ulist">
 <ul>
 <li>
@@ -4699,7 +4604,7 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
   openaip {
     server = "https://api.core.openaip.net" // Adresse des OpenAIP-Servers
     api = "/api"
-    token = "TODO"                          // Client ID Token, mit dem der Zugriff
+    token = "TODO"                          // API Key, mit dem der Zugriff
                                             // auf den OpenAIP-Server ermöglicht wird
                                             // Anmeldung auf https://www.openaip.net
     ignoreAirspacesStartsWith = ""          // Zu ignorierende Lufträume
@@ -4744,7 +4649,6 @@ was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhi
   }
   contestmap {
     devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
-    osmcartostyle = true // Schaltet auf OSM-Carto-Stil um
   }
 }</pre>
 </div>

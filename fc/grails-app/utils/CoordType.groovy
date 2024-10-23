@@ -48,8 +48,6 @@ enum CoordType
 			case CoordType.iFP:
 				return CoordType.iLDG
 			case CoordType.iLDG:
-				return CoordType.iTO
-			case CoordType.iTO:
 				return CoordType.iSP
 		}
 		return null
@@ -85,7 +83,6 @@ enum CoordType
                 break
 			case CoordType.iLDG:
                 l += CoordType.iLDG
-                l += CoordType.iTO
                 l += CoordType.iSP
                 break
 			case CoordType.iTO:

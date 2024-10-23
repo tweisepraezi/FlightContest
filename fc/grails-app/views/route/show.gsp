@@ -21,13 +21,14 @@
                         <g:set var="route_empty" value="${routeInstance.IsRouteEmpty()}"/>
                         <g:set var="route_canturnpointsignmodify" value="${routeInstance.CanTurnpointSignModify()}"/>
                         <g:set var="route_useprocedureturns" value="${routeInstance.useProcedureTurns}" />
+                        <g:set var="route_status" value="${RouteTools.GetRouteStatus(routeInstance)}" />
                         <table>
                             <tbody>
                                 <tr>
                                     <g:set var="info" value=""/>
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td>${routeInstance.name()}</td>
-                                    <td class="errors">${info = routeInstance.GetRouteStatusInfo()}</td>
+                                    <td class="errors">${info = route_status.routeInfo}</td>
                                     <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
@@ -113,7 +114,7 @@
                                     <g:set var="info" value=""/>
                                     <td class="detailtitle">${message(code:'fc.observation.turnpoint')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.turnpointRoute.code)}<br/>${message(code:'fc.observation.measurement')}: <g:if test="${routeInstance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
-                                    <td class="errors">${info = routeInstance.GetTurnpointSignStatusInfo()}</td>
+                                    <td class="errors">${info = route_status.turnpointSignStatusInfo}</td>
                                     <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td>
                                         <g:if test="${upload_job_status == UploadJobStatus.Done || map_links}">
@@ -123,18 +124,20 @@
                                 </tr>
                                 <tr>
                                     <g:set var="info" value=""/>
+                                    <g:set var="info2" value=""/>
                                     <td class="detailtitle">${message(code:'fc.observation.enroute.photo')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enroutePhotoRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enroutePhotoMeasurement.code)}</td>
-                                    <td class="errors">${info = routeInstance.GetEnrouteSignStatusInfo(true)}<br/>${info += routeInstance.GetEnrouteMeasurementStatusInfo(true)}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td class="errors">${info = route_status.enrouteSignPhotoStatusInfo}<br/>${info2 = route_status.enrouteMeasurementPhotoInfo}</td>
+                                    <td style="width:1%;"><g:if test="${info || info2}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
                                 <tr>
                                     <g:set var="info" value=""/>
+                                    <g:set var="info2" value=""/>
                                     <td class="detailtitle">${message(code:'fc.observation.enroute.canvas')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enrouteCanvasRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enrouteCanvasMeasurement.code)}</td>
-                                    <td class="errors">${info = routeInstance.GetEnrouteSignStatusInfo(false)}<br/>${info += routeInstance.GetEnrouteMeasurementStatusInfo(false)}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td class="errors">${info = route_status.enrouteSignCanvasStatusInfo}<br/>${info2 = route_status.enrouteMeasurementCanvasInfo}</td>
+                                    <td style="width:1%;"><g:if test="${info || info2}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
                                 <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">

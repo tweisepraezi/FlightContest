@@ -43,6 +43,8 @@ class GpxService
     final static BigDecimal CONTESTMAP_TPCIRCLE_RADIUS = 0.5 // NM
     final static BigDecimal CONTESTMAP_CIRCLECENTER_RADIUS = 0.15 // NM
     final static BigDecimal CONTESTMAP_PROCEDURETURN_DISTANCE = 1 // NM
+    final static BigDecimal CONTESTMAP_TPCANVAS_TRACK = 90 // Grad
+    final static BigDecimal CONTESTMAP_TPCANVAS_DISTANCE = 0.7 // NM
     final static BigDecimal CONTESTMAP_TPNAME_DISTANCE = 1.1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DISTANCE = 1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DIRECTION = 0 // Grad
@@ -827,7 +829,11 @@ class GpxService
                     xml.trkseg {
                         gpx.trk.trkseg.trkpt.each { p ->
                             xml.trkpt(lat:p.'@lat', lon:p.'@lon') {
-                                ele p.ele[0].text()
+                                if (p.ele) {
+                                    ele p.ele[0].text()
+                                } else {
+                                    ele "0"
+                                }
                                 time p.time[0].text()
                             }
                         }
@@ -1133,8 +1139,11 @@ class GpxService
         track_points.each {
             BigDecimal latitude_math = it.'@lat'.toBigDecimal()
             BigDecimal longitude_math = it.'@lon'.toBigDecimal()
-            BigDecimal altitude = it.ele.text().toBigDecimal()
-            String utc = it.time.text()
+            BigDecimal altitude = 0
+            if (it.ele && it.ele.text() && it.ele.text().isBigDecimal()) {
+                altitude = it.ele.text().toBigDecimal()
+            }
+            String utc = FcTime.UTCGetValidDateTime(it.time.text())
             int x = 0
             int y = 0
             if (portrait) {
@@ -1270,7 +1279,7 @@ class GpxService
                 BigDecimal latitude_math = it.'@lat'.toBigDecimal()
                 BigDecimal longitude_math = it.'@lon'.toBigDecimal()
                 BigDecimal altitude = 0.0
-                if (it.ele) {
+                if (it.ele && it.ele.text() && it.ele.text().isBigDecimal()) {
                     altitude = it.ele.text().toBigDecimal()
                 }
                 String point_name = it.name.text()
@@ -1669,6 +1678,7 @@ class GpxService
                             contestmapsecretgates: getYesNo(routeInstance.contestMapSecretGates),
                             contestmapenroutephotos: getYesNo(routeInstance.contestMapEnroutePhotos),
                             contestmapenroutecanvas: getYesNo(routeInstance.contestMapEnrouteCanvas),
+                            contestmapturnpointsign: getYesNo(routeInstance.contestMapTurnpointSign),
                             contestmapgraticule: getYesNo(routeInstance.contestMapGraticule),
                             contestmapcontourlines: routeInstance.contestMapContourLines,
                             contestmapmunicipalitynames: getYesNo(routeInstance.contestMapMunicipalityNames),
@@ -1677,11 +1687,10 @@ class GpxService
                             contestmapchateaus: getYesNo(routeInstance.contestMapChateaus),
                             contestmappowerlines: getYesNo(routeInstance.contestMapPowerlines),
                             contestmapwindpowerstations: getYesNo(routeInstance.contestMapWindpowerstations),
-                            contestmapsmallroads: getYesNo(routeInstance.contestMapSmallRoads),
+                            contestmapsmallroadsgrade: routeInstance.contestMapSmallRoadsGrade,
                             contestmappeaks: getYesNo(routeInstance.contestMapPeaks),
                             contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
                             contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
-                            contestmapspecials: getYesNo(routeInstance.contestMapSpecials),
                             contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
                             contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
                             contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
@@ -2322,6 +2331,24 @@ class GpxService
                 }
             }
             
+            // Turnpoint sign
+            if (contestMapParams.contestMapTurnpointSign) {
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                        if (coordroute_instance.assignedSign.imagePngName) {
+                                Map sign_coord = AviationMath.getCoordinate(
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_TPCANVAS_TRACK, CONTESTMAP_TPCANVAS_DISTANCE
+                                )
+                                xml.wpt(lat:sign_coord.lat, lon:sign_coord.lon) {
+                                    xml.name ""
+                                    xml.sym "${coordroute_instance.assignedSign.toString().toLowerCase()}.png"
+                                    xml.type ""
+                                }
+                        }
+                    }
+                }
+            }
+            
         } else {
             // gates
             CoordRoute last_coordroute_instance = null
@@ -2700,6 +2727,70 @@ class GpxService
                     }
                     xml.name coordenroutecanvas_instance.enrouteCanvasSign
                     xml.sym coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()
+                }
+            }
+        }
+        
+        // MapObjects
+        if (params.gpxExport) {
+            int view_pos = 1
+            List coordmapobject_instances = []
+            if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                Route route_instance_from = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                if (route_instance_from) {
+                    coordmapobject_instances += CoordMapObject.findAllByRoute(route_instance_from,[sort:"enrouteViewPos"])
+                }
+            }
+            if (routeInstance.mapobjects) {
+                coordmapobject_instances += CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])
+            }
+            if (coordmapobject_instances) {
+                for (CoordMapObject coordmapobject_instance in coordmapobject_instances) {
+                    xml.wpt(lat:coordmapobject_instance.latMath(), lon:coordmapobject_instance.lonMath()) {
+                        xml.extensions {
+                            xml.flightcontest {
+                                xml.mapobject(
+                                    type:              coordmapobject_instance.mapObjectType,
+                                    viewpos:           view_pos,
+                                    text:              coordmapobject_instance.mapObjectText,
+                                    directionairfield: coordmapobject_instance.gateDirection,
+                                    gliderairfield:    getYesNo(coordmapobject_instance.mapObjectGliderAirfield),
+                                    pavedairfield:     getYesNo(coordmapobject_instance.mapObjectPavedAirfield)
+                                )
+                                if (coordmapobject_instance.imagecoord) {
+                                    xml.mapobjectimage() {
+                                        xml.imagedata Base64.getEncoder().encodeToString(coordmapobject_instance.imagecoord.imageData)
+                                    }
+                                }
+                            }
+                        }
+                        xml.name coordmapobject_instance.mapObjectType
+                        //xml.sym coordmapobject_instance.mapObjectType.imageShortName
+                    }
+                    view_pos++
+                }
+            }
+            if (routeInstance.exportSemicircleGates) {
+                int circle_pos = 1
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRouteAndCircleCenter(routeInstance,true,[sort:'id'])) {
+                    xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                        xml.extensions {
+                            xml.flightcontest {
+                                xml.mapobject(
+                                    type:              MapObjectType.CircleCenter,
+                                    viewpos:           view_pos,
+                                    text:              "Circle-${circle_pos}",
+                                    directionairfield: 0,
+                                    gliderairfield:    getYesNo(false),
+                                    pavedairfield:     getYesNo(false)
+                                )
+                            }
+                        }
+                        xml.name MapObjectType.CircleCenter
+                        //xml.sym MapObjectType.CircleCenter.imageShortName
+                    }
+                    view_pos++
+                    circle_pos++
                 }
             }
         }

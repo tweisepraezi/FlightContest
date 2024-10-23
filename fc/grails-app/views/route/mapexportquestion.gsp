@@ -76,10 +76,13 @@
 	                                    <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
 	                                </div>
 	                            </g:if>
+	                            <g:if test="${routeInstance.turnpointRoute == TurnpointRoute.AssignCanvas}">
+	                                <div>
+	                                    <g:checkBox name="contestMapTurnpointSign" value="${routeInstance.contestMapTurnpointSign}" tabIndex="${ti[0]++}" />
+	                                    <label>${message(code:'fc.observationtest.turnpointsign')}</label>
+	                                </div>
+	                            </g:if>
 	                        </fieldset>
-	                        <g:set var="geodata_additionals" value="${new File(Defs.FCSAVE_FILE_GEODATA_ADDITIONALS).exists()}"/>
-	                        <g:set var="geodata_special" value="${new File(Defs.FCSAVE_FILE_GEODATA_SPECIALS).exists()}"/>
-	                        <g:set var="geodata_airspace" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRSPACES).exists()}"/>
 	                        <fieldset>
 								<div>
 									<g:if test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_AUTO}">
@@ -150,8 +153,7 @@
                                     <img src="${createLinkTo(dir:'images/map',file:'windpowerstation.png')}"/>
                                 </div>
                                 <div>
-                                    <g:checkBox name="contestMapSmallRoads" value="${routeInstance.contestMapSmallRoads}" tabIndex="${ti[0]++}" />
-                                    <label>${message(code:'fc.contestmap.contestmapsmallroads')}</label>
+                                    <g:contestMapSmallRoadsGradeSelect route="${routeInstance}" ti="${ti}" />
                                 </div>
 	                            <g:if test="${false}">
 	                                <div>
@@ -165,20 +167,7 @@
 	                                    <label>${message(code:'fc.contestmap.contestmapmunicipalitynames')}</label>
 	                                </div>
 	                            </g:if>
-	                            <g:if test="${geodata_additionals}">
-	                                <div>
-	                                    <g:checkBox name="contestMapAdditionals" value="${routeInstance.contestMapAdditionals}" tabIndex="${ti[0]++}" />
-	                                    <label>${message(code:'fc.contestmap.contestmapadditionals')}</label>
-	                                </div>
-	                            </g:if>
-	                            <g:if test="${geodata_special}">
-	                                <div>
-	                                    <g:checkBox name="contestMapSpecials" value="${routeInstance.contestMapSpecials}" tabIndex="${ti[0]++}" />
-	                                    <label>${message(code:'fc.contestmap.contestmapspecial')}</label>
-	                                    <img src="${createLinkTo(dir:'images/map',file:'special.png')}"/>
-	                                </div>
-	                            </g:if>
-	                            <g:if test="${BootStrap.global.IsOpenAIP() || geodata_airspace}">
+	                            <g:if test="${BootStrap.global.IsOpenAIP()}">
 	                                <div>
 	                                    <g:checkBox name="contestMapAirspaces" value="${routeInstance.contestMapAirspaces}" tabIndex="${ti[0]++}" />
 	                                    <label>${message(code:'fc.contestmap.contestmapairspaces')}</label>
@@ -194,10 +183,13 @@
                                             </g:else>
                                             <input type="text" name="contestMapAirspacesLowerLimit" value="${routeInstance.contestMapAirspacesLowerLimit}" min="0" size="6" tabIndex="${ti[0]++}"/> <label>${message(code:'fc.foot')}</label>
 											<g:actionSubmit action="kmzexportairspaces_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport')}" tabIndex="${ti[0]++}" />
+											<g:actionSubmit action="kmzexportairspaceshidden_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport.hidden')}" tabIndex="${ti[0]++}" />
 											<g:actionSubmit action="csvexportairports_route" value="${message(code:'fc.contestmap.contestmapairports.csvexport')}" tabIndex="${ti[0]++}" />
 										</g:if>
 	                                </div>
+                                    <br/>
 	                            </g:if>
+                                <g:showContestMapRouteMapObjects route="${routeInstance}" ti="${ti}"/>
 	                        </fieldset>
 	                        <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
 		                        <fieldset>

@@ -784,33 +784,19 @@ class TaskController {
 			boolean last_found = false
 			if (session?.lastContestResults) {
 				last_found = true
-				fcService.println "last results contest"
+				fcService.println "last contest results"
 				redirect(controller:'contest',action:'listresults',params:params)
 			} else if (session?.lastTeamResults) {
 				last_found = true
-				fcService.println "last results contest"
+				fcService.println "last team results"
 				redirect(controller:'contest',action:'listteamresults',params:params)
 			} else if (session?.lastResultClassResults) {
 				def resultclass = fcService.startresultsResultClass(params, session.lastContest, session.lastResultClassResults)
 				if (resultclass.resultclassid) {
 					last_found = true
 					params.id = resultclass.resultclassid
-					fcService.println "last results resultclass $resultclass.resultclassid"
+					fcService.println "last class results $resultclass.resultclassid"
 					redirect(controller:'resultClass',action:'listresults',params:params)
-				}
-			} else {
-				if (session.lastContest.resultClasses) {
-					ResultClass first_resultclass_instance = ResultClass.findByContest(session.lastContest,[sort:"id"])
-					if (first_resultclass_instance) {
-						session.lastResultClassResults = first_resultclass_instance.id
-						def resultclass = fcService.startresultsResultClass(params, session.lastContest, session.lastResultClassResults)
-						if (resultclass.resultclassid) {
-							last_found = true
-							params.id = resultclass.resultclassid
-							fcService.println "last results resultclass $resultclass.resultclassid"
-							redirect(controller:'resultClass',action:'listresults',params:params)
-						}
-					}
 				}
 			}
 			if (!last_found) {

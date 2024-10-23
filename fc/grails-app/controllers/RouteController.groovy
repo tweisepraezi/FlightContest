@@ -311,8 +311,8 @@ class RouteController {
         session.routeReturnController = controllerName
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
-        Map turnpoint_sign_data = ImportSign.GetRouteCoordData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: true])
+        Map coord_data = ImportSign.GetRouteCoordData(route_instance)
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:coord_data.importsign, lineContent:coord_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"turnpoints"])
     }
     
     def importturnpointsign = {
@@ -322,6 +322,15 @@ class RouteController {
         Route route_instance = Route.get(params.id)
         Map turnpoint_sign_data = ImportSign.GetTurnpointSignData(route_instance)
         redirect(action:selectimporttxt, params:[titlecode:turnpoint_sign_data.titlecode, routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
+    }
+    
+    def importmapobject = {
+        session.routeReturnAction = "mapexportquestion"
+        session.routeReturnController = controllerName
+        session.routeReturnID = params.routeid
+        Route route_instance = Route.get(params.routeid)
+        Map mapobject_data = ImportSign.GetMapObjectData(route_instance)
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.mapobjects.import', routeid:params.routeid, importSign:mapobject_data.importsign, lineContent:mapobject_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"mapobjects"])
     }
     
     def selectturnpointphotos = {
@@ -347,7 +356,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, true)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.photo.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true])
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.photo.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"photos", autoName:true, namePrefix:true])
     }
     
     def importenroutecanvas = {
@@ -356,7 +365,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, false)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.canvas.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true])
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.canvas.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"canvas", autoName:true, namePrefix:true])
     }
     
     def importenroutesign = {
@@ -374,7 +383,11 @@ class RouteController {
         }
         flash.error = import_txt.error
         flash.message = import_txt.message
-        redirect(action:"show",controller:"route",id:route_instance.id)
+        if (ImportSign.(params.importSign) == ImportSign.MapObject) {
+            redirect(action:"mapexportquestion",controller:"route",id:route_instance.id)
+        } else {
+            redirect(action:"show",controller:"route",id:route_instance.id)
+        }
     }
     
     def selectenroutephotos = {
@@ -632,6 +645,14 @@ class RouteController {
 		}
 	}
     
+	def get_mapobject_symbol = {
+        CoordMapObject coordmapobject_instance = CoordMapObject.get(params.id)
+        if (coordmapobject_instance && coordmapobject_instance.imagecoord) {
+            response.setContentType("application/octet-stream")
+            response.outputStream << coordmapobject_instance.imagecoord.imageData
+		}
+	}
+    
     def showofflinemap_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
@@ -746,11 +767,42 @@ class RouteController {
 	def kmzexportairspaces_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
+            kmlService.printstart "kmzexportairspaces_route"
             save_map_settings(route.instance, params)
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
-			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false)
+			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, false)
+            if (ret.ok) {
+                String route_file_name = ("${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airspaces.kmz") // .replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_kmz_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapairspaces.kmzexport.missedairspaces',args:[ret.missingAirspaces])
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printerror flash.message
+				redirect(action:'mapexportquestion',id:params.id)
+            }
+			
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+	}
+
+	def kmzexportairspaceshidden_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            kmlService.printstart "kmzexportairspaceshidden_route"
+            save_map_settings(route.instance, params)
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
+			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, true)
             if (ret.ok) {
                 String route_file_name = ("${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airspaces.kmz") // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -793,11 +845,12 @@ class RouteController {
 	def csvexportairports_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
+            kmlService.printstart "csvexportairports_route"
             save_map_settings(route.instance, params)
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -822,11 +875,12 @@ class RouteController {
 	def csvexportairports_check_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
+            kmlService.printstart "csvexportairports_check_route"
             save_map_settings(route.instance, params)
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -868,6 +922,9 @@ class RouteController {
             }
             if (params.showEnrouteCanvas) {
                 route.instance.showEnrouteCanvas = params.showEnrouteCanvas == "true"
+            }
+            if (params.contestMapShowMapObjects) {
+                route.instance.contestMapShowMapObjects = params.contestMapShowMapObjects == "true"
             }
             route.instance.save()
         }
@@ -977,6 +1034,7 @@ class RouteController {
                                          contestMapSecretGates:route.instance.contestMapSecretGates,
                                          contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
                                          contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                                         contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -986,11 +1044,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
@@ -999,7 +1056,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1105,6 +1161,7 @@ class RouteController {
                                          contestMapSecretGates:route.instance.contestMapSecretGates,
                                          contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
                                          contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                                         contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1114,11 +1171,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
@@ -1127,7 +1183,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1233,6 +1288,7 @@ class RouteController {
                                          contestMapSecretGates:route.instance.contestMapSecretGates,
                                          contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
                                          contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                                         contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1242,11 +1298,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
@@ -1255,7 +1310,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1361,6 +1415,7 @@ class RouteController {
                                          contestMapSecretGates:route.instance.contestMapSecretGates,
                                          contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
                                          contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                                         contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1370,11 +1425,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
@@ -1383,7 +1437,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1489,6 +1542,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1498,11 +1552,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
@@ -1511,7 +1564,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1617,6 +1669,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1626,11 +1679,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
@@ -1639,7 +1691,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1746,6 +1797,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1755,11 +1807,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
@@ -1768,7 +1819,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -1874,6 +1924,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -1883,11 +1934,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
@@ -1896,7 +1946,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2003,6 +2052,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2012,11 +2062,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
@@ -2025,7 +2074,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2131,6 +2179,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2140,11 +2189,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
@@ -2153,7 +2201,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2260,6 +2307,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2269,11 +2317,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
@@ -2282,7 +2329,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2388,6 +2434,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2397,11 +2444,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
@@ -2410,7 +2456,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2530,6 +2575,7 @@ class RouteController {
                                          contestMapSecretGates:true,
                                          contestMapEnroutePhotos:true,
                                          contestMapEnrouteCanvas:true,
+                                         contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2539,11 +2585,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
@@ -2552,7 +2597,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2671,6 +2715,7 @@ class RouteController {
                                          contestMapSecretGates:true,
                                          contestMapEnroutePhotos:true,
                                          contestMapEnrouteCanvas:true,
+                                         contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2680,11 +2725,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
@@ -2693,7 +2737,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2812,6 +2855,7 @@ class RouteController {
                                          contestMapSecretGates:true,
                                          contestMapEnroutePhotos:true,
                                          contestMapEnrouteCanvas:true,
+                                         contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2821,11 +2865,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
@@ -2834,7 +2877,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -2953,6 +2995,7 @@ class RouteController {
                                          contestMapSecretGates:true,
                                          contestMapEnroutePhotos:true,
                                          contestMapEnrouteCanvas:true,
+                                         contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -2962,11 +3005,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
@@ -2975,7 +3017,6 @@ class RouteController {
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
                                          contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -3081,6 +3122,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -3090,11 +3132,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
@@ -3103,7 +3144,6 @@ class RouteController {
                                          contestMapCenterMoveX:0.0,
                                          contestMapCenterMoveY:0.0,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -3210,6 +3250,7 @@ class RouteController {
                                          contestMapSecretGates:false,
                                          contestMapEnroutePhotos:false,
                                          contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -3219,11 +3260,10 @@ class RouteController {
                                          contestMapChateaus:route.instance.contestMapChateaus,
                                          contestMapPowerlines:route.instance.contestMapPowerlines,
                                          contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
-                                         contestMapSmallRoads:route.instance.contestMapSmallRoads,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
@@ -3232,7 +3272,6 @@ class RouteController {
                                          contestMapCenterMoveX:0.0,
                                          contestMapCenterMoveY:0.0,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
-                                         contestMapFCStyle:BootStrap.global.GetPrintServerFCStyle(),
                                         ]
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
                 if (converter.ok) {
@@ -3331,6 +3370,7 @@ class RouteController {
         routeInstance.contestMapSecretGates = params.contestMapSecretGates == "on"
         routeInstance.contestMapEnroutePhotos = params.contestMapEnroutePhotos == "on"
         routeInstance.contestMapEnrouteCanvas = params.contestMapEnrouteCanvas == "on"
+        routeInstance.contestMapTurnpointSign = params.contestMapTurnpointSign == "on"
         routeInstance.contestMapGraticule = params.contestMapGraticule == "on"
         routeInstance.contestMapContourLines = params.contestMapContourLines.toInteger()
         routeInstance.contestMapMunicipalityNames = params.contestMapMunicipalityNames == "on"
@@ -3340,11 +3380,12 @@ class RouteController {
         routeInstance.contestMapChateaus = params.contestMapChateaus == "on"
         routeInstance.contestMapPowerlines = params.contestMapPowerlines == "on"
         routeInstance.contestMapWindpowerstations = params.contestMapWindpowerstations == "on"
-        routeInstance.contestMapSmallRoads = params.contestMapSmallRoads == "on"
+        if (params.contestMapSmallRoadsGrade && params.contestMapSmallRoadsGrade.isInteger()) {
+            routeInstance.contestMapSmallRoadsGrade = params.contestMapSmallRoadsGrade.toInteger()
+        }
         routeInstance.contestMapPeaks = params.contestMapPeaks == "on"
         routeInstance.contestMapDropShadow = params.contestMapDropShadow == "on"
         routeInstance.contestMapAdditionals = params.contestMapAdditionals == "on"
-        routeInstance.contestMapSpecials = params.contestMapSpecials == "on"
         routeInstance.contestMapAirspaces = params.contestMapAirspaces == "on"
         routeInstance.contestMapAirspacesLayer2 = params.contestMapAirspacesLayer2
         if (params.contestMapAirspacesLowerLimit && params.contestMapAirspacesLowerLimit.isInteger()) {
@@ -3489,6 +3530,12 @@ class RouteController {
         }
         if (params.contestMapCenterMoveY4 && params.contestMapCenterMoveY4.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY4 = params.contestMapCenterMoveY4.replace(',','.').toBigDecimal()
+        }
+        routeInstance.contestMapShowMapObjects = params.contestMapShowMapObjects == "on"
+        if (params.contestMapShowMapObjectsFromRouteID) {
+            routeInstance.contestMapShowMapObjectsFromRouteID = params.contestMapShowMapObjectsFromRouteID.toLong()
+        } else {
+            routeInstance.contestMapShowMapObjectsFromRouteID = 0
         }
         routeInstance.contestMapDevStyle = params.contestMapDevStyle == "on"
         routeInstance.save()

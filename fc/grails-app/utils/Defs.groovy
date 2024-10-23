@@ -155,6 +155,14 @@ class Defs
     static final String CONTESTMAPAIRFIELDS_OSM_ICAO                   = "ICAO"    // saved in database. do not modify.
     static final String CONTESTMAPAIRFIELDS_OSM_NAME                   = "NAME"    // saved in database. do not modify.
     
+    static final Integer CONTESTMAPSMALLROADSGRADE_NONE                = 0
+    static final Integer CONTESTMAPSMALLROADSGRADE_1                   = 1
+    static final Integer CONTESTMAPSMALLROADSGRADE_2                   = 2
+    static final Integer CONTESTMAPSMALLROADSGRADE_3                   = 3
+    static final Integer CONTESTMAPSMALLROADSGRADE_4                   = 4
+    static final Integer CONTESTMAPSMALLROADSGRADE_5                   = 5
+    static final Integer CONTESTMAPSMALLROADSGRADE_OLD                 = 5
+    
     static final String CONTESTMAPPOINTS_INIT                          = "Init"    // saved in database. do not modify.
     
     static final String CONTESTMAPPRINTSIZE_A4                         = "A4"      // saved in database. do not modify.
@@ -176,12 +184,13 @@ class Defs
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
-    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 12"
+    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 13"
     static final String ROUTEEXPORT_SETTINGS                           = "settings"
     static final String ROUTEEXPORT_MAPSETTINGS                        = "mapsettings"
     static final String ROUTEEXPORT_TURNPOINTS                         = "turnpoints"
     static final String ROUTEEXPORT_PHOTOS                             = "photos"
     static final String ROUTEEXPORT_CANVAS                             = "canvas"
+    static final String ROUTEEXPORT_MAPOBJECTS                         = "mapobjects"
     
     static final String ALTITUDE_GND                                   = "GND:"
     static final String ALTITUDE_MINIMUM                               = ">"

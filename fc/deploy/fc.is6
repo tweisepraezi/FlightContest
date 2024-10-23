@@ -2,18 +2,18 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.39.0';     // DB-2.39
+const DBVersion = '2.40.0';     // DB-2.40
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '3.4.8';      // no milestone
+const FCVersion = '3.5.0';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '3.4.8';    // no milestone
+const FCVersion64 = '3.5.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
 AppVerName=Flight Contest
-AppVersion=3.4.8
+AppVersion=3.5.0
 ; no milestone below
-VersionInfoVersion=3.4.8
+VersionInfoVersion=3.5.0
 
 AppCopyright=(C) 2009-2024 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -154,8 +154,8 @@ Name: "{group}\Scripts\Read logger GlobalSat DG-200";                           
 Name: "{group}\Samples\FC-CrewList-Sample.xlsx";                                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-CrewList-Sample.xlsx";          WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-TakoffLandingCalculation-Sample.xlsx";                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-TakoffLandingCalculation-Sample.xlsx"; WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2023";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2023.pdf";WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2023";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_rally_flying_rules_2023.pdf";    WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI GAC Landing appendix 2023";                                 Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_landing_rules_2023.pdf";         WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2024";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_rally_flying_rules_2024.pdf";    WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI GAC Landing appendix 2024";                                 Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_landing_rules_2024.pdf";         WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2020";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2020.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2017";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2017.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2017"; Filename: "{app}\tomcat\webapps\fc\docs\rules\CH_Praezisionsflug_2017.pdf";        WorkingDir: "{commondesktop}";
@@ -303,14 +303,15 @@ var map_dir: string;
 begin
   // save maps
   map_dir := ExpandConstant('{app}\tomcat\webapps\fc\map');
-  map_backup_dir := ExpandConstant('{app}\map-backup');
-  map_backup_dir2 := ExpandConstant('{app}\map-backup-' + GetDateTimeString('yyyy.mm.dd-hh.nn.ss', #0, #0));
-  if CreateDir(map_backup_dir2) then begin
-    DirectoryCopy(map_dir, map_backup_dir2);
+  if DirExists( map_dir ) then begin
+      map_backup_dir := ExpandConstant('{app}\map-backup');
+      map_backup_dir2 := ExpandConstant('{app}\map-backup-' + GetDateTimeString('yyyy.mm.dd-hh.nn.ss', #0, #0));
+      if CreateDir(map_backup_dir2) then begin
+        DirectoryCopy(map_dir, map_backup_dir2);
+      end;
+      DelTree(map_backup_dir, True, True, True);
+      RenameFile(map_dir, map_backup_dir);
   end;
-  DelTree(map_backup_dir, True, True, True);
-  RenameFile(map_dir, map_backup_dir);
-
   Result := '';
 end;
 

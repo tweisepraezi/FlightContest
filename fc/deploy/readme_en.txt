@@ -1,6 +1,35 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.5.0
+-------------
+- OSM Contest Map: Integrated editing of additional map objects added
+    Churches, castles, ruins, chateaus, mountain peaks, towers, communication towers, lighthouses, wind power stations,
+    circle centers, airfields and own symbols can be added to the map for drawing.
+    Each object can be provided with a subtitle.
+    The additional map objects are included in a gpx and kml export.
+    The map objects of a route can be used in other routes.
+    For a GPX export with semi-circle gates, the semi-circle center points are added as a map object.
+- OSM Contest Map: Style changes
+    Road bridges and forest paths were removed
+    Field paths can now be added in 5 gradations (1 = few to 5 = many).
+- OSM Contest Map: Support for additional map regions added
+    In addition to Central European countries, maps of Central Chile can now also be generated.
+- OSM Contest Map: Option 'Shift of the map center' has been renamed to 'Shift of the map border'
+- OSM Contest Map: 'KMZ export hidden airspaces' added
+- Routes: iTO has been removed. Only iLDG is to be used for Touch&Go landings.
+- Loggers with several measured values per second are accepted.
+- The competition default "Allow multiple usage of enroute canvas" is now activated by default.
+- Routes: The calculation of route errors has been revised.
+    The display column 'Usable' now indicates with 'Yes' that a route can be used for navigation flight or planning test.
+    Red markings indicate errors due to non-compliance with the rules and regulations. 
+    A route can also be used if the number of images, canvas signs or route legs is exceeded or not reached.
+    The canvas count check now includes turnpoint canvas signs.
+- OSM Contest Map: Option 'Turnpoint canvas' added. Prints the configured turnpoint canvas to the right of the turning point circle.
+- Updating of the following sets of rules
+    FAI Air Rally Flying - Edition 2024
+    GAC Landing appendix - Edition 2024
+
 Changes 3.4.8
 -------------
 - Help "Manage photos and canvas signs" added

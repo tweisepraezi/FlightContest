@@ -16,7 +16,8 @@ enum ImportSign
     EnrouteCanvasCoord,
     EnrouteCanvasNMFromTP,
     EnrouteCanvasmmFromTP,
-    EnrouteCanvasCoordmm
+    EnrouteCanvasCoordmm,
+    MapObject
     
     static Map GetRouteCoordData(Route routeInstance)
     {
@@ -126,6 +127,26 @@ enum ImportSign
         return ImportSign.None
     }
     
+    static Map GetMapObjectData(Route routeInstance)
+    {
+        ImportSign import_sign = ImportSign.MapObject
+        String line_content = "${MapObjectType.Subtitle}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 10.0, CoordPresentation.EAST)}, ${RouteFileTools.TEXT} HAL LO"
+        line_content += "<br/>${MapObjectType.Church}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 11.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.Castle}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 12.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.CastleRuin}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 13.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.Chateau}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 14.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.Peak}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 15.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.Tower}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 16.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.CommunicationsTower}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 17.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.Lighthouse}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 18.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.WindpowerStation}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 19.0, CoordPresentation.EAST)}"
+        line_content += "<br/>${MapObjectType.CircleCenter}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 20.0, CoordPresentation.EAST)}, ${RouteFileTools.TEXT} MP-1"
+        line_content += "<br/>${MapObjectType.Airfield}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 21.0, CoordPresentation.EAST)}, ${RouteFileTools.TRACK} 50${RouteFileTools.UNIT_GRAD}, ${RouteFileTools.AIRFIELD_GLIDER}, ${RouteFileTools.TEXT} EDBG"
+        line_content += "<br/>${MapObjectType.Airfield}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 22.0, CoordPresentation.EAST)}, ${RouteFileTools.TRACK} 105${RouteFileTools.UNIT_GRAD}, ${RouteFileTools.AIRFIELD_PAVED}, ${RouteFileTools.TEXT} EDDA"
+        line_content += "<br/>${MapObjectType.Symbol}, ${GetImportTxtLineContent3(routeInstance.contest, 54, 30.0, CoordPresentation.NORTH, 9, 23.0, CoordPresentation.EAST)}, ${RouteFileTools.TEXT} SYM1"
+        return [importsign:import_sign, linecontent:line_content]
+    }
+    
     static String GetImportTxtLineContent(Contest contestInstance)
     {
         Coord coord_demo = new Coord()
@@ -152,6 +173,20 @@ enum ImportSign
         String coord_demo_lat = contestInstance.coordPresentation.GetCoordName(coord_demo, true).replaceAll(',', '.')
         String coord_demo_lon = contestInstance.coordPresentation.GetCoordName(coord_demo, false).replaceAll(',', '.')
         return "${coord_demo_lat}, ${coord_demo_lon}, ${RouteFileTools.ALT} ${altitudeValue}${RouteFileTools.UNIT_ft}"
+    }
+    
+    static String GetImportTxtLineContent3(Contest contestInstance, int latGrad, BigDecimal latMinute, String latDirection, int lonGrad, BigDecimal lonMinute, String lonDirection)
+    {
+        Coord coord_demo = new Coord()
+        coord_demo.latGrad = latGrad
+        coord_demo.latMinute = latMinute
+        coord_demo.latDirection = latDirection
+        coord_demo.lonGrad = lonGrad
+        coord_demo.lonMinute = lonMinute
+        coord_demo.lonDirection = lonDirection
+        String coord_demo_lat = contestInstance.coordPresentation.GetCoordName(coord_demo, true).replaceAll(',', '.')
+        String coord_demo_lon = contestInstance.coordPresentation.GetCoordName(coord_demo, false).replaceAll(',', '.')
+        return "${coord_demo_lat}, ${coord_demo_lon}"
     }
     
     static String GetImportTxtLineSignContent(Route routeInstance, String signValue, String trueFalseValue)
@@ -349,6 +384,25 @@ enum ImportSign
                     ret.mm = line_values[3].trim()
                 }
                 break
+            case ImportSign.MapObject:
+                if (line_values.size() >= 3) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.lat = line_values[1].trim()
+                    ret.lon = line_values[2].trim()
+                    int i = 0
+                    for (l in line_values) {
+                        i++
+                        if (i > 3) {
+                            String s = l.trim()
+                            while (s.contains('  ')) {
+                                s = s.replaceAll('  ', ' ')
+                            }
+                            ret.other += s
+                        }
+                    }
+                }
+                break
         }
         return ret
     }
@@ -475,6 +529,23 @@ enum ImportSign
                     ret.lat = 'yes'
                     ret.lon = 'yes'
                     ret.mm = line_values[1].trim()
+                }
+                break
+            case ImportSign.MapObject:
+                if (line_values.size() >= 1) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    int i = 0
+                    for (l in line_values) {
+                        i++
+                        if (i > 1) {
+                            String s = l.trim()
+                            while (s.contains('  ')) {
+                                s = s.replaceAll('  ', ' ')
+                            }
+                            ret.other += s
+                        }
+                    }
                 }
                 break
         }

@@ -33,7 +33,7 @@
                                 <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
                                     <label>${message(code:'fc.route')}*:</label>
                                     <br/>
-                                    <g:select from="${Route.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                    <g:select from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
                                 </g:if>
                                 <g:else>
                                     <label>${message(code:'fc.route')}:</label>

@@ -94,7 +94,7 @@ class FlightTest
     
     boolean CanObservationsAdd()
     {
-        if (route.IsObservationSignOk()) {
+        if (RouteTools.IsObservationSignOk(route)) {
             if (!IsObservationSignUsed()) {
                 if (!Test.findByTaskAndObservationTestComplete(task,true)) {
                     return true

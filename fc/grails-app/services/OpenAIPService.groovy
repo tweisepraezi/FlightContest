@@ -4,6 +4,7 @@ import org.springframework.web.context.request.RequestContextHolder
 import groovy.xml.*
 import java.util.zip.*
 import java.net.URLEncoder
+import java.math.*
 
 // https://docs.oracle.com/javase/8/docs/api/java/net/HttpURLConnection.html
 // https://docs.openaip.net/
@@ -46,7 +47,7 @@ class OpenAIPService
     
 
     //--------------------------------------------------------------------------
-    Map WriteAirspaces2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint)
+    Map WriteAirspaces2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean isHidden)
     {
         printstart "WriteAirspaces2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
         
@@ -73,17 +74,37 @@ class OpenAIPService
 						xml.scale 4.24403e-38
 					}
 					xml.LineStyle {
-						xml.color "ffff00ff"
+                        if (isHidden) {
+                            xml.color "ffff7777"
+                        } else {
+                            xml.color "ffff00ff"
+                        }
 						xml.width 1.5
 					}
 					xml.PolyStyle {
-						xml.color "40ff00ff"
+                        if (isHidden) {
+                            xml.color "40ff7777"
+                        } else {
+                            xml.color "40ff00ff"
+                        }
 					}
 				}
 				for (String layer in routeInstance.contestMapAirspacesLayer2.split("\n")) {
 					if (layer && layer.trim()) {
 						String airspace_name = layer.trim()
-                        if (!airspace_name.startsWith(Defs.IGNORE_LINE)) {
+                        boolean ignore_line = false
+                        if (isHidden) {
+                            ignore_line = true
+                            if (airspace_name.startsWith(Defs.IGNORE_LINE)) {
+                                ignore_line = false
+                            }
+                            airspace_name = airspace_name.substring(Defs.IGNORE_LINE.size()).trim()
+                        } else {
+                            if (airspace_name.startsWith(Defs.IGNORE_LINE)) {
+                                ignore_line = true
+                            }
+                        }
+                        if (!ignore_line) {
                             String airspace_text = ""
                             boolean first_style = true
                             for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
@@ -253,13 +274,25 @@ class OpenAIPService
             }
         }
         
-        if (d.icaoClass == 4 && d.type == 0) { // AREA
-            return true
+        boolean is_hidden = false
+        if (d.icaoClass == 4 && d.type == 0) { // AREA (de)
+            is_hidden = true
         }
-        if (d.icaoClass == 8 && d.type == 33) { // FIS
-            return true
+        if (d.icaoClass == 6 && d.type == 10) { // FIR (it)
+            is_hidden = true
         }
-        return false
+        if (d.icaoClass == 8 && d.type == 5) { // FMC (it)
+            is_hidden = true
+        }
+        if (d.icaoClass == 8 && d.type == 10) { // FIR (fr)
+            is_hidden = true
+        }
+        if (d.icaoClass == 8 && d.type == 33) { // FIS (de), SIV (fr)
+            is_hidden = true
+        }
+        println "is_hidden_airspace $is_hidden $d.icaoClass $d.type $d.name"
+        
+        return is_hidden
     }
     
     //--------------------------------------------------------------------------
@@ -305,7 +338,7 @@ class OpenAIPService
     }
     
     //--------------------------------------------------------------------------
-    Map WriteAirports2CSV(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, boolean checkAirport, String contestMapCenterPoints)
+    Map WriteAirports2CSV(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, boolean checkAirport, String contestMapCenterPoints, boolean openaipAirfields, boolean additionalAirports)
     {
         printstart "WriteAirports2CSV ${routeInstance.GetName(isPrint)} -> ${webRootDir + csvFileName}"
         
@@ -327,86 +360,156 @@ class OpenAIPService
         csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_WKT}"
         
         // airports
-        Map ret = call_rest("airports?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
-        if (ret.ok && ret.data) {
-            if (checkAirport) {
-                ok = true
-                for (Map d in ret.data) {
-                    airports_num++
-                    csv_writer << CSV_LINESEPARATOR + line_id
-                    csv_writer << CSV_DELIMITER
-                    csv_writer << d
-                    line_id++
-                }
-            } else {
-                ok = true
-                for (Map d in ret.data) {
-                    if (d.geometry.type == "Point") {
-                        String airport_symbol = ""
-                        String runway_symbol = ""
-                        String runway_heading = ""
-                        if (d.runways) {
-                            for (Map r in d.runways) {
-                                if (r.mainRunway) {
-                                    switch (d.type) {
-                                        case 1:
-                                            airport_symbol = "gliding-small.svg"
-                                            break
-                                        case 2:
-                                            airport_symbol = "af_civil-small.svg"
-                                            break
-                                        case 3:
-                                            airport_symbol = "apt_mil_civil-small.svg"
-                                            break
-                                        case 4:
-                                            airport_symbol = "other-4" + '-' + r.surface.mainComposite
-                                            break
-                                        case 5:
-                                            airport_symbol = "ad_mil-small.svg"
-                                            break
-                                        case 6:
-                                            airport_symbol = "light_aircraft-small.svg"
-                                            break
-                                        case 7:
-                                            airport_symbol = "other-7" + '-' + r.surface.mainComposite
-                                            break
-                                        case 8:
-                                            airport_symbol = "ad_closed-small.svg"
-                                            break
-                                        case 9:
-                                            airport_symbol = "apt-small.svg"
-                                            break
-                                        default:
-                                            airport_symbol = "other-" + d.type + '-' + r.surface.mainComposite
-                                            break
+        if (openaipAirfields) {
+            Map ret = call_rest("airports?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
+            if (ret.ok && ret.data) {
+                if (checkAirport) {
+                    ok = true
+                    for (Map d in ret.data) {
+                        airports_num++
+                        csv_writer << CSV_LINESEPARATOR + line_id
+                        csv_writer << CSV_DELIMITER
+                        csv_writer << d
+                        line_id++
+                    }
+                } else {
+                    ok = true
+                    for (Map d in ret.data) {
+                        if (d.geometry.type == "Point") {
+                            String airport_symbol = ""
+                            String runway_symbol = ""
+                            String runway_heading = ""
+                            if (d.runways) {
+                                for (Map r in d.runways) {
+                                    if (r.mainRunway) {
+                                        switch (d.type) {
+                                            case 1:
+                                                airport_symbol = "gliding-small.svg"
+                                                break
+                                            case 2:
+                                                airport_symbol = "af_civil-small.svg"
+                                                break
+                                            case 3:
+                                                airport_symbol = "apt_mil_civil-small.svg"
+                                                break
+                                            case 4:
+                                                airport_symbol = "other-4" + '-' + r.surface.mainComposite
+                                                break
+                                            case 5:
+                                                airport_symbol = "ad_mil-small.svg"
+                                                break
+                                            case 6:
+                                                airport_symbol = "light_aircraft-small.svg"
+                                                break
+                                            case 7:
+                                                airport_symbol = "other-7" + '-' + r.surface.mainComposite
+                                                break
+                                            case 8:
+                                                airport_symbol = "ad_closed-small.svg"
+                                                break
+                                            case 9:
+                                                airport_symbol = "apt-small.svg"
+                                                break
+                                            case 10:
+                                                airport_symbol = "af_water-large.svg"
+                                                break
+                                            default:
+                                                airport_symbol = "other-" + d.type + '-' + r.surface.mainComposite
+                                                break
+                                        }
+                                        switch (r.surface.mainComposite) { 
+                                            case 0:
+                                            case 1:
+                                                runway_symbol = "runway_paved-small.svg"
+                                                break
+                                            case 2:
+                                                runway_symbol = "runway_unpaved-small.svg"
+                                                break
+                                            default:    
+                                                runway_symbol = "other-" + r.surface.mainComposite
+                                                break
+                                        }
+                                        runway_heading = r.trueHeading
+                                        break
                                     }
-                                    switch (r.surface.mainComposite) { 
-                                        case 0:
-                                        case 1:
-                                            runway_symbol = "runway_paved-small.svg"
-                                            break
-                                        case 2:
-                                            runway_symbol = "runway_unpaved-small.svg"
-                                            break
-                                        default:    
-                                            runway_symbol = "other-" + r.surface.mainComposite
-                                            break
-                                    }
-                                    runway_heading = r.trueHeading
-                                    break
                                 }
                             }
+                            if (airport_symbol) {
+                                airports_num++
+                                csv_writer << CSV_LINESEPARATOR + line_id
+                                csv_writer << CSV_DELIMITER + airport_symbol
+                                csv_writer << CSV_DELIMITER + runway_symbol
+                                csv_writer << CSV_DELIMITER + runway_heading
+                                csv_writer << CSV_DELIMITER
+                                if (d.icaoCode) {
+                                    csv_writer << d.icaoCode
+                                }
+                                csv_writer << CSV_DELIMITER + '"' + d.name + '"'
+                                csv_writer << CSV_DELIMITER + "POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
+                                line_id++
+                            }
                         }
-                        if (airport_symbol) {
+                    }
+                }
+            }
+        }
+        
+        // additional airports
+        if (additionalAirports) {
+            for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                if (coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
+                    String airport_symbol = "af_civil-small.svg"
+                    if (coordmapobject_instance.mapObjectGliderAirfield) {
+                        airport_symbol = "gliding-small.svg"
+                    }
+                    String runway_symbol = "runway_unpaved-small.svg"
+                    if (coordmapobject_instance.mapObjectPavedAirfield) {
+                        runway_symbol = "runway_paved-small.svg"
+                    }
+                    String runway_heading = coordmapobject_instance.gateDirection
+                    airports_num++
+                    csv_writer << CSV_LINESEPARATOR + line_id
+                    csv_writer << CSV_DELIMITER + airport_symbol
+                    csv_writer << CSV_DELIMITER + runway_symbol
+                    csv_writer << CSV_DELIMITER + runway_heading
+                    csv_writer << CSV_DELIMITER
+                    csv_writer << CSV_DELIMITER + '"' + coordmapobject_instance.mapObjectText + '"'
+                    csv_writer << ""
+                    csv_writer << CSV_DELIMITER + "POINT(${coordmapobject_instance.lonMath()} ${coordmapobject_instance.latMath()})"
+                    line_id++
+                }
+            }
+        }
+        
+        // reporting-points
+        if (openaipAirfields) {
+            Map ret = call_rest("reporting-points?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
+            if (ret.ok && ret.data) {
+                if (checkAirport) {
+                    ok = true
+                    for (Map d in ret.data) {
+                        airports_num++
+                        csv_writer << CSV_LINESEPARATOR + line_id
+                        csv_writer << CSV_DELIMITER
+                        csv_writer << d
+                        line_id++
+                    }
+                } else {
+                    ok = true
+                    for (Map d in ret.data) {
+                        if (d.geometry.type == "Point") {
+                            String point_symbol = ""
+                            if (d.compulsory) {
+                                point_symbol = "reporting_point_compulsory-small.svg"
+                            } else {
+                                point_symbol = "reporting_point_request-small.svg"
+                            }
                             airports_num++
                             csv_writer << CSV_LINESEPARATOR + line_id
-                            csv_writer << CSV_DELIMITER + airport_symbol
-                            csv_writer << CSV_DELIMITER + runway_symbol
-                            csv_writer << CSV_DELIMITER + runway_heading
+                            csv_writer << CSV_DELIMITER + point_symbol
                             csv_writer << CSV_DELIMITER
-                            if (d.icaoCode) {
-                                csv_writer << d.icaoCode
-                            }
+                            csv_writer << CSV_DELIMITER
+                            csv_writer << CSV_DELIMITER
                             csv_writer << CSV_DELIMITER + '"' + d.name + '"'
                             csv_writer << CSV_DELIMITER + "POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
                             line_id++
@@ -416,64 +519,30 @@ class OpenAIPService
             }
         }
         
-        // reporting-points
-        ret = call_rest("reporting-points?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
-        if (ret.ok && ret.data) {
-            if (checkAirport) {
-                ok = true
-                for (Map d in ret.data) {
-                    airports_num++
-                    csv_writer << CSV_LINESEPARATOR + line_id
-                    csv_writer << CSV_DELIMITER
-                    csv_writer << d
-                    line_id++
-                }
-            } else {
-                ok = true
+        // obstacles
+        /*
+        if (openaipAirfields) {
+            Map ret = call_rest("obstacles?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
+            if (ret.ok && ret.data) {
                 for (Map d in ret.data) {
                     if (d.geometry.type == "Point") {
                         String point_symbol = ""
-                        if (d.compulsory) {
-                            point_symbol = "reporting_point_compulsory-small.svg"
+                        if (d.osmTags.'generator:method' == 'wind_turbine') {
+                        } else if (d.osmTags.'communication:radio' == 'yes') {
                         } else {
-                            point_symbol = "reporting_point_request-small.svg"
+                            println "XX1 ${d.osmTags}"
                         }
-                        airports_num++
-                        csv_writer << CSV_LINESEPARATOR + line_id
-                        csv_writer << CSV_DELIMITER + point_symbol
-                        csv_writer << CSV_DELIMITER
-                        csv_writer << CSV_DELIMITER
-                        csv_writer << CSV_DELIMITER
-                        csv_writer << CSV_DELIMITER + '"' + d.name + '"'
-                        csv_writer << CSV_DELIMITER + "POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
-                        line_id++
-                    }
-                }
-            }
-        }
-        
-        // obstacles
-        /*
-        ret = call_rest("obstacles?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
-        if (ret.ok && ret.data) {
-            for (Map d in ret.data) {
-                if (d.geometry.type == "Point") {
-                    String point_symbol = ""
-                    if (d.osmTags.'generator:method' == 'wind_turbine') {
-                    } else if (d.osmTags.'communication:radio' == 'yes') {
-                    } else {
-                        println "XX1 ${d.osmTags}"
-                    }
-                    if (point_symbol) {
-                        airports_num++
-                        csv_writer << CSV_LINESEPARATOR + line_id
-                        csv_writer << CSV_DELIMITER + point_symbol
-                        csv_writer << CSV_DELIMITER
-                        csv_writer << CSV_DELIMITER
-                        csv_writer << CSV_DELIMITER
-                        csv_writer << CSV_DELIMITER + '"' + d.name + '"'
-                        csv_writer << CSV_DELIMITER + "POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
-                        line_id++
+                        if (point_symbol) {
+                            airports_num++
+                            csv_writer << CSV_LINESEPARATOR + line_id
+                            csv_writer << CSV_DELIMITER + point_symbol
+                            csv_writer << CSV_DELIMITER
+                            csv_writer << CSV_DELIMITER
+                            csv_writer << CSV_DELIMITER
+                            csv_writer << CSV_DELIMITER + '"' + d.name + '"'
+                            csv_writer << CSV_DELIMITER + "POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
+                            line_id++
+                        }
                     }
                 }
             }
@@ -521,13 +590,13 @@ class OpenAIPService
         
         int airspace_distance = (OsmPrintMapService.AIRPORTAREA_DISTANCE * routeInstance.mapScale * 1.414 / 1000).toInteger() // m
         if (checkAirport) {
-            airspace_distance = 1000 // m
+            airspace_distance = 5000 // m
         }
         
-        return [centerLatitude:   (max_latitude+min_latitude)/2,
-                centerLongitude:  (max_longitude+min_longitude)/2,
-                airspaceDistance: airspace_distance
-               ]
+        BigDecimal center_lat = ((max_latitude+min_latitude)/2).setScale(3, RoundingMode.HALF_EVEN)
+        BigDecimal center_lon = ((max_longitude+min_longitude)/2).setScale(3, RoundingMode.HALF_EVEN)
+        
+        return [centerLatitude: center_lat, centerLongitude: center_lon, airspaceDistance: airspace_distance]
     }
     
     //--------------------------------------------------------------------------

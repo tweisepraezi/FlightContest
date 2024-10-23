@@ -58,6 +58,7 @@ class Route
     Boolean contestMapSecretGates = false                                        // DB-2.21
     Boolean contestMapEnroutePhotos = false                                      // DB-2.21
     Boolean contestMapEnrouteCanvas = false                                      // DB-2.21
+    Boolean contestMapTurnpointSign = false                                      // DB-2.40
     Boolean contestMapGraticule = true                                           // DB-2.21
     Integer contestMapContourLines = Defs.CONTESTMAPCONTOURLINES_100M            // DB-2.21
     Boolean contestMapMunicipalityNames = true                                   // DB-2.21
@@ -66,11 +67,12 @@ class Route
     Boolean contestMapChateaus = true                                            // DB-2.21
     Boolean contestMapPowerlines = false                                         // DB-2.21
     Boolean contestMapWindpowerstations = true                                   // DB-2.21
-    Boolean contestMapSmallRoads = false                                         // DB-2.21
+    Boolean contestMapSmallRoads = false                                         // DB-2.21, UNUSED, since DB-2.40
+    Integer contestMapSmallRoadsGrade = 0                                        // DB-2.40
     Boolean contestMapPeaks = true                                               // DB-2.21
     Boolean contestMapDropShadow = false                                         // DB-2.21
     Boolean contestMapAdditionals = true                                         // DB-2.21
-    Boolean contestMapSpecials = false                                           // DB-2.21
+    Boolean contestMapSpecials = false                                           // DB-2.21, UNUSED, since DB-2.40
     Boolean contestMapAirspaces = false                                          // DB-2.21
     String contestMapAirspacesLayer = ""                                         // DB-2.21, UNUSED, since DB-2.32
     String contestMapAirspacesLayer2 = ""                                        // DB-2.32
@@ -121,11 +123,12 @@ class Route
     String contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.29
     BigDecimal contestMapCenterMoveX4 = 0.0                                      // DB-2.32, NM
     BigDecimal contestMapCenterMoveY4 = 0.0                                      // DB-2.32, NM
-	
+    Boolean contestMapShowMapObjects = false                                     // DB-2.40
+    Long contestMapShowMapObjectsFromRouteID = 0                                 // DB-2.40
     
 	static belongsTo = [contest:Contest]
 
-	static hasMany = [coords:CoordRoute, routelegs:RouteLegCoord, testlegs:RouteLegTest, enroutephotos:CoordEnroutePhoto, enroutecanvas:CoordEnrouteCanvas, uploadjobroutemaps:UploadJobRouteMap]
+	static hasMany = [coords:CoordRoute, routelegs:RouteLegCoord, testlegs:RouteLegTest, enroutephotos:CoordEnroutePhoto, enroutecanvas:CoordEnrouteCanvas, mapobjects:CoordMapObject, uploadjobroutemaps:UploadJobRouteMap]
 
 	static hasOne = [uploadjobroute:UploadJobRoute]                              // DB-2.21
 	
@@ -258,6 +261,12 @@ class Route
         
 		// DB-2.38 compatibility
         contestMapAirspacesLowerLimit(nullable:true,min:0)
+        
+		// DB-2.40 compatibility
+        contestMapShowMapObjects(nullable:true)
+        contestMapShowMapObjectsFromRouteID(nullable:true)
+        contestMapSmallRoadsGrade(nullable:true)
+        contestMapTurnpointSign(nullable:true)
 	}
 
 	static mapping = {
@@ -295,6 +304,11 @@ class Route
         showEnroutePhotos = routeInstance.showEnroutePhotos
         showEnrouteCanvas = routeInstance.showEnrouteCanvas
         semicircleCourseChange = routeInstance.semicircleCourseChange
+        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+            contestMapShowMapObjectsFromRouteID = routeInstance.contestMapShowMapObjectsFromRouteID
+        } else if (routeInstance.mapobjects) {
+            contestMapShowMapObjectsFromRouteID = routeInstance.id
+        }
 
         contestMapAirfields = routeInstance.contestMapAirfields
         contestMapCircle = routeInstance.contestMapCircle
@@ -306,6 +320,7 @@ class Route
         contestMapSecretGates = routeInstance.contestMapSecretGates
         contestMapEnroutePhotos = routeInstance.contestMapEnroutePhotos
         contestMapEnrouteCanvas = routeInstance.contestMapEnrouteCanvas
+        contestMapTurnpointSign = routeInstance.contestMapTurnpointSign
         contestMapGraticule = routeInstance.contestMapGraticule
         contestMapContourLines = routeInstance.contestMapContourLines
         contestMapMunicipalityNames = routeInstance.contestMapMunicipalityNames
@@ -314,11 +329,10 @@ class Route
         contestMapChateaus = routeInstance.contestMapChateaus
         contestMapPowerlines = routeInstance.contestMapPowerlines
         contestMapWindpowerstations = routeInstance.contestMapWindpowerstations
-        contestMapSmallRoads = routeInstance.contestMapSmallRoads
+        contestMapSmallRoadsGrade = routeInstance.contestMapSmallRoadsGrade
         contestMapPeaks = routeInstance.contestMapPeaks
         contestMapDropShadow = routeInstance.contestMapDropShadow
         contestMapAdditionals = routeInstance.contestMapAdditionals
-        contestMapSpecials = routeInstance.contestMapSpecials
         contestMapAirspaces = routeInstance.contestMapAirspaces
         contestMapAirspacesLayer2 = routeInstance.contestMapAirspacesLayer2
         contestMapAirspacesLowerLimit = routeInstance.contestMapAirspacesLowerLimit
@@ -362,6 +376,7 @@ class Route
         contestMapPrintSize4 = routeInstance.contestMapPrintSize4
         contestMapCenterMoveX4 = routeInstance.contestMapCenterMoveX4
         contestMapCenterMoveY4 = routeInstance.contestMapCenterMoveY4
+        contestMapShowMapObjects = routeInstance.contestMapShowMapObjects
         
 		if (!this.save()) {
 			throw new Exception("Route.CopyValues could not save")
@@ -696,61 +711,6 @@ class Route
         turnpointRoute.IsTurnpointPhoto()
     }
     
-    private Map TurnpointSignStatus()
-    {
-        int missingsign_num = 0
-        int doublesign_num = 0
-        int invalidsign_num = 0
-        int unassigned_num = 0
-        if (IsTurnpointSign()) {
-            switch (turnpointRoute) {
-                case TurnpointRoute.AssignPhoto:
-                    List signs = []
-                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:'id'])) {
-                        if (coordroute_instance.type.IsTurnpointSignCoord()) {
-                            if (coordroute_instance.assignedSign == TurnpointSign.None) {
-                                missingsign_num++
-                            } else if (coordroute_instance.assignedSign == TurnpointSign.NoSign) {
-                                // nothing
-                            } else if (coordroute_instance.assignedSign in signs) {
-                                doublesign_num++
-                            }
-                            signs += coordroute_instance.assignedSign
-                        }
-                            
-                    }
-                    break
-                case TurnpointRoute.AssignCanvas:
-                    List signs = []
-                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:'id'])) {
-                        if (coordroute_instance.type.IsTurnpointSignCoord()) {
-                            if (coordroute_instance.assignedSign == TurnpointSign.None) {
-                                missingsign_num++
-                            } else if (!coordroute_instance.assignedSign.canvas) {
-                                invalidsign_num++
-                            } else if (coordroute_instance.assignedSign == TurnpointSign.NoSign) {
-                                // nothing
-                            } else if (coordroute_instance.assignedSign in signs) {
-                                doublesign_num++
-                            }
-                            signs += coordroute_instance.assignedSign
-                        }
-                    }
-                    break
-                case TurnpointRoute.TrueFalsePhoto:
-                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:'id'])) {
-                        if (coordroute_instance.type.IsTurnpointSignCoord()) {
-                            if (coordroute_instance.correctSign == TurnpointCorrect.Unassigned) {
-                                unassigned_num++
-                            }
-                        }
-                    }
-                    break
-            }
-        }
-        return [missingsign_num:missingsign_num, doublesign_num:doublesign_num, invalidsign_num:invalidsign_num, unassigned_num:unassigned_num]
-    }
-    
     boolean AllTurnpointPhotoUploaded()
     {
         if (IsTurnpointSign()) {
@@ -778,58 +738,6 @@ class Route
             }
         }
         return false
-    }
-    
-    boolean IsTurnpointSignOk()
-    {
-        Map turnpointsign_status = TurnpointSignStatus()
-        if (turnpointsign_status.missingsign_num > 0) {
-            if (true) {
-                return false
-            }
-        }
-        if (turnpointsign_status.doublesign_num > 0) {
-            return false
-        }
-        if (turnpointsign_status.invalidsign_num > 0) {
-            return false
-        }
-        if (turnpointsign_status.unassigned_num > 0) {
-            if (true) {
-                return false
-            }
-        }
-        return true
-    }
-    
-    String GetTurnpointSignStatusInfo()
-    {
-        String s = ""
-        if (!IsTurnpointSignOk()) {
-            Map turnpointsign_status = TurnpointSignStatus()
-            if (turnpointsign_status.missingsign_num > 0) {
-                s += "${turnpointsign_status.missingsign_num} ${getMsg('fc.observation.turnpoint.missingsigns')}"
-            }
-            if (turnpointsign_status.doublesign_num > 0) {
-                if (turnpointsign_status.missingsign_num > 0) {
-                    s += ", "
-                }
-                s += "${turnpointsign_status.doublesign_num} ${getMsg('fc.observation.turnpoint.doublesigns')}"
-            }
-            if (turnpointsign_status.invalidsign_num > 0) {
-                if ((turnpointsign_status.missingsign_num > 0) || (turnpointsign_status.doublesign_num > 0)) {
-                    s += ", "
-                }
-                s += "${turnpointsign_status.invalidsign_num} ${getMsg('fc.observation.turnpoint.invalidsigns')}"
-            }
-            if (turnpointsign_status.unassigned_num > 0) {
-                if ((turnpointsign_status.missingsign_num > 0) || (turnpointsign_status.doublesign_num > 0) || (turnpointsign_status.invalidsign_num > 0)) {
-                    s += ", "
-                }
-                s += "${turnpointsign_status.unassigned_num} ${getMsg('fc.observation.turnpoint.unassignedsigns')}"
-            }
-        }
-        return s
     }
     
     boolean IsTurnpointSignUsed()
@@ -876,20 +784,6 @@ class Route
         return false
     }
     
-    private boolean IsEnrouteSignInput(boolean enroutePhoto)
-    {
-        if (enroutePhoto) {
-            if (enroutePhotoRoute.IsEnrouteRouteInput()) {
-                return true
-            }
-        } else {
-            if (enrouteCanvasRoute.IsEnrouteRouteInput()) {
-                return true
-            }
-        }
-        return false
-    }
-    
     boolean IsAnyEnroutePhoto()
     {
         if (CoordEnroutePhoto.countByRoute(this,[sort:"enrouteViewPos"])) {
@@ -916,218 +810,6 @@ class Route
             }
         }
         return false
-    }
-    
-    private Map EnrouteSignStatus(boolean enroutePhoto)
-    {
-        int doublesign_num = 0
-        int unknowncoordtype_num = 0
-        int distancetolong_num = 0
-        int num = 0
-        int min_num = 0
-        int max_num = 0
-        boolean min_error = false
-        boolean max_error = false
-        if (enroutePhoto) {
-            if (IsEnrouteSignInput(true)) {
-                List enroutephoto_names = []
-                for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(this,[sort:"enrouteViewPos"])) {
-                    if (coordenroutephoto_instance.enroutePhotoName in enroutephoto_names) {
-                        doublesign_num++
-                    }
-                    if (coordenroutephoto_instance.type == CoordType.UNKNOWN) {
-                        if (enroutePhotoRoute != EnrouteRoute.InputName) {
-                            unknowncoordtype_num++
-                        }
-                    } else if (!coordenroutephoto_instance.enrouteDistanceOk) {
-                        distancetolong_num++
-                    }
-                    enroutephoto_names += coordenroutephoto_instance.enroutePhotoName
-                }
-                num = CoordEnroutePhoto.countByRoute(this)
-                min_num = contest.minEnroutePhotos
-                if (num < min_num) {
-                    min_error = true
-                }
-                max_num = contest.maxEnroutePhotos
-                if (num > max_num) {
-                    max_error = true
-                }
-            }
-        } else {
-            if (IsEnrouteSignInput(false)) {
-                List signs = []
-                for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(this,[sort:"enrouteViewPos"])) {
-                    if (!contest.enrouteCanvasMultiple) {
-                        if (coordenroutecanvas_instance.enrouteCanvasSign in signs) {
-                            doublesign_num++
-                        }
-                    }
-                    if (coordenroutecanvas_instance.type == CoordType.UNKNOWN) {
-                        if (enrouteCanvasRoute != EnrouteRoute.InputName) {
-                            unknowncoordtype_num++
-                        }
-                    } else if (!coordenroutecanvas_instance.enrouteDistanceOk) {
-                        distancetolong_num++
-                    }
-					if (coordenroutecanvas_instance.enrouteCanvasSign != EnrouteCanvasSign.NoSign) {
-						signs += coordenroutecanvas_instance.enrouteCanvasSign
-					}
-                }
-                num = CoordEnrouteCanvas.countByRoute(this)
-                min_num = contest.minEnrouteCanvas
-                if (num < min_num) {
-                    min_error = true
-                }
-                max_num = contest.maxEnrouteCanvas
-                if (num > max_num) {
-                    max_error = true
-                }
-            }
-        }
-        return [doublesign_num:doublesign_num, unknowncoordtype_num:unknowncoordtype_num, distancetolong_num:distancetolong_num,
-                num:num, min_num:min_num, max_num:max_num, min_error:min_error, max_error:max_error]
-    }
-    
-    boolean IsEnrouteSignOk(boolean enroutePhoto)
-    {
-        Map status = EnrouteSignStatus(enroutePhoto)
-        if ((status.doublesign_num > 0) || (status.unknowncoordtype_num > 0) || (status.distancetolong_num > 0) || status.min_error || status.max_error) {
-            return false
-        }
-        return true
-    }
-    
-    String GetEnrouteSignStatusInfo(boolean enroutePhoto)
-    {
-        Map status = EnrouteSignStatus(enroutePhoto)
-        String s = ""
-        boolean wr_comma = false
-        if (status.doublesign_num > 0) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += "${status.doublesign_num} ${getMsg(get_name(enroutePhoto,'fc.observation.enroute.doublename'))}"
-            wr_comma = true
-        }
-        if (status.unknowncoordtype_num > 0) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += "${status.unknowncoordtype_num} ${getMsg(get_name(enroutePhoto,'fc.observation.enroute.unknowncoordtype'))}"
-            wr_comma = true
-        }
-        if (status.distancetolong_num > 0) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += "${status.distancetolong_num} ${getMsg(get_name(enroutePhoto,'fc.observation.enroute.distancetolong'))}"
-            wr_comma = true
-        }
-        if (status.min_error) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs(get_name(enroutePhoto,'fc.observation.enroute.numerror.min'),[status.min_num])
-            wr_comma = true
-        }
-        if (status.max_error) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs(get_name(enroutePhoto,'fc.observation.enroute.numerror.max'),[status.max_num])
-            wr_comma = true
-        }
-        return s
-    }
-    
-    private Map EnrouteMeasurementStatus(boolean enroutePhoto)
-    {
-        boolean unassigned = false
-        boolean noinput = false
-        boolean noposition = false
-        if (enroutePhoto) {
-            switch (enroutePhotoMeasurement) {
-                case EnrouteMeasurement.None:
-                    // nothing
-                    break
-                case EnrouteMeasurement.Unassigned:
-                    unassigned = true
-                    break
-                case EnrouteMeasurement.Map:
-                    if (!enroutePhotoRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    }
-                    break
-                case EnrouteMeasurement.NMFromTP:
-                case EnrouteMeasurement.mmFromTP:
-                //case EnrouteMeasurement.PosFromTP:
-                    if (!enroutePhotoRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    } else if (!enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
-                        noposition = true
-                    }
-                    break
-            }
-        } else {
-            switch (enrouteCanvasMeasurement) {
-                case EnrouteMeasurement.None:
-                    // nothing
-                    break
-                case EnrouteMeasurement.Unassigned:
-                    unassigned = true
-                    break
-                case EnrouteMeasurement.Map:
-                    if (!enrouteCanvasRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    }
-                    break
-                case EnrouteMeasurement.NMFromTP:
-                case EnrouteMeasurement.mmFromTP:
-                //case EnrouteMeasurement.PosFromTP:
-                    if (!enrouteCanvasRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    } else if (!enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
-                        noposition = true
-                    }
-                    break
-            }
-        }
-        return [unassigned:unassigned, noinput:noinput, noposition:noposition]
-    }
-    
-    boolean IsEnrouteMeasurementOk(boolean enroutePhoto)
-    {
-        Map status = EnrouteMeasurementStatus(enroutePhoto)
-        if (status.unassigned || status.noinput || status.noposition) {
-            return false
-        }
-        return true
-    }
-    
-    String GetEnrouteMeasurementStatusInfo(boolean enroutePhoto)
-    {
-        String s = ""
-        if (!IsEnrouteMeasurementOk(enroutePhoto)) {
-            Map status = EnrouteMeasurementStatus(enroutePhoto)
-            if (status.unassigned) {
-                s += "${getMsg(get_name(enroutePhoto,'fc.observation.enroute.unassigned'))}"
-            } else if (status.noinput) {
-                s += "${getMsg(get_name(enroutePhoto,'fc.observation.enroute.noinput'))}"
-            } else if (status.noposition) {
-                s += "${getMsg(get_name(enroutePhoto,'fc.observation.enroute.noposition'))}"
-            }
-        }
-        return s
-    }
-    
-    private String get_name(boolean enroutePhoto, String startName)
-    {
-        if (enroutePhoto) {
-            return "${startName}.photo"
-        } else {
-            return "${startName}.canvas"
-        }
     }
     
     List GetEnrouteCoordTitles(boolean addUnknown)
@@ -1173,246 +855,12 @@ class Route
         return false
     }
     
-    boolean IsObservationSignOk()
-    {
-        boolean is_observation_sign = false
-        boolean sign_ok = true
-        
-        if (IsTurnpointSign()) {
-            is_observation_sign = true
-            if (!IsTurnpointSignOk()) {
-                sign_ok = false
-            }
-        }
-        
-        if (IsEnrouteSignInput(true)) {
-            is_observation_sign = true
-            if (!IsEnrouteSignOk(true)) {
-                sign_ok = false
-            }
-            if (!IsEnrouteMeasurementOk(true)) {
-                sign_ok = false
-            }
-        }
-        
-        if (IsEnrouteSignInput(false)) {
-            is_observation_sign = true
-            if (!IsEnrouteSignOk(false)) {
-                sign_ok = false
-            }
-            if (!IsEnrouteMeasurementOk(false)) {
-                sign_ok = false
-            }
-        }
-        
-        return is_observation_sign && sign_ok
-    }
-    
     boolean IsObservationSignUsed()
     {
         if (IsTurnpointSignUsed() || IsEnrouteSignUsed(true) || IsEnrouteSignUsed(false)) {
             return true
         }
         return false
-    }
-    
-    private Map RouteStatus()
-    {
-        int photo_num = CoordEnroutePhoto.countByRoute(this)
-        int canavs_num = CoordEnrouteCanvas.countByRoute(this)
-        int leg_num = RouteLegTest.countByRoute(this)
-        
-        List measure_distance_difference = []
-        for (RouteLegTest routelegtest_instance in RouteLegTest.findAllByRoute(this,[sort:'id'])) {
-            CoordRoute coordroute_instance = CoordRoute.findByRouteAndTypeAndTitleNumber(this,routelegtest_instance.endTitle.type,routelegtest_instance.endTitle.number)
-            if (coordroute_instance.measureDistance != routelegtest_instance.legMeasureDistance) {
-                measure_distance_difference += routelegtest_instance.endTitle.titleCode()
-            }
-        }
-        
-        List procedureturn_difference = []
-        RouteLegCoord last_routelegcoord_instance = null
-        for (RouteLegCoord routelegcoord_instance in RouteLegCoord.findAllByRoute(this,[sort:'id'])) {
-            if (routelegcoord_instance.IsProcedureTurn()) {
-                BigDecimal course_change = AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())
-                if (course_change.abs() >= 90) {
-                    CoordRoute coordroute_instance = CoordRoute.findByRouteAndTypeAndTitleNumber(this,routelegcoord_instance.endTitle.type,routelegcoord_instance.endTitle.number)
-                    if (!coordroute_instance.planProcedureTurn) {
-                        procedureturn_difference += last_routelegcoord_instance.endTitle.titleCode()
-                    }
-                }
-            }
-            last_routelegcoord_instance = routelegcoord_instance
-        }
-        
-        boolean min_target_error = false
-        int min_target_num = contest.minEnrouteTargets
-        if (IsEnrouteSignInput(true) || IsEnrouteSignInput(false)) {
-            if (photo_num + canavs_num < min_target_num) {
-                min_target_error = true
-            }
-        }
-        
-        boolean max_target_error = false
-        int max_target_num = contest.maxEnrouteTargets
-        if (IsEnrouteSignInput(true) || IsEnrouteSignInput(false)) {
-            if (photo_num + canavs_num > max_target_num) {
-                max_target_error = true
-            }
-        }
-        
-        boolean min_leg_error = false
-        int min_leg_num = contest.minRouteLegs
-        if (leg_num < min_leg_num) {
-            min_leg_error = true
-        }
-        
-        boolean max_leg_error = false
-        int max_leg_num = contest.maxRouteLegs
-        if (leg_num > max_leg_num) {
-            max_leg_error = true
-        }
-        
-        int circlecenter_num = CoordRoute.countByRouteAndCircleCenter(this, true)
-		
-		List secret_measure_incomplete = []
-		int secret_pos = 0
-		BigDecimal measure_distance = 0
-		boolean secret_error_found = false
-        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id"])) {
-			if (coordroute_instance.type == CoordType.SECRET) {
-				secret_pos++
-				if (!secret_error_found) {
-					if (secret_pos > 1) {
-						if (coordroute_instance.measureDistance) {
-							if (!measure_distance) {
-								secret_measure_incomplete += coordroute_instance.titleCode()
-								secret_error_found = true
-							} else if (measure_distance > coordroute_instance.measureDistance) {
-								secret_measure_incomplete += coordroute_instance.titleCode()
-								secret_error_found = true
-							}
-						} else {
-							if (measure_distance) {
-								secret_measure_incomplete += coordroute_instance.titleCode()
-								secret_error_found = true
-							}
-						}
-					}
-					if (coordroute_instance.measureDistance) {
-						measure_distance = coordroute_instance.measureDistance
-					}
-				}
-			} else {
-				secret_pos = 0
-				measure_distance = 0
-				secret_error_found = false
-			}
-		}
-         
-        return [min_target_num:min_target_num, max_target_num:max_target_num, min_target_error:min_target_error, max_target_error:max_target_error,
-                min_leg_num:min_leg_num, max_leg_num:max_leg_num, min_leg_error:min_leg_error, max_leg_error:max_leg_error,
-                measure_distance_difference:measure_distance_difference, procedureturn_difference:procedureturn_difference, circlecenter_num:circlecenter_num,
-				secret_measure_incomplete:secret_measure_incomplete]
-    }
-    
-    boolean IsRouteOk()
-    {
-        Map status = RouteStatus()
-        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference || 
-		    status.procedureturn_difference || status.circlecenter_num || status.secret_measure_incomplete) {
-            return false
-        }
-        return true
-    }
-    
-    String GetRouteStatusInfo()
-    {
-        Map status = RouteStatus()
-        String s = ""
-        boolean wr_comma = false
-        if (status.circlecenter_num) {
-            if (wr_comma) {
-                s += ", "
-            }
-            s += getMsgArgs('fc.circlecenter.error',[status.circlecenter_num])
-            wr_comma = true
-        } else {
-            if (status.min_leg_error) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.routelegtest.numerror.min',[status.min_leg_num])
-                wr_comma = true
-            }
-            if (status.max_leg_error) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.routelegtest.numerror.max',[status.max_leg_num])
-                wr_comma = true
-            }
-            if (status.measure_distance_difference) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.routelegtest.legmeasuredistance.difference',[status.measure_distance_difference])
-                wr_comma = true
-            }
-            if (status.procedureturn_difference) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.routelegtest.procedureturn.difference',[status.procedureturn_difference])
-                wr_comma = true
-            }
-            if (status.min_target_error) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.observation.enroute.numerror.min',[status.min_target_num])
-                wr_comma = true
-            }
-            if (status.max_target_error) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.observation.enroute.numerror.max',[status.max_target_num])
-                wr_comma = true
-            }
-            if (status.secret_measure_incomplete) {
-                if (wr_comma) {
-                    s += ", "
-                }
-                s += getMsgArgs('fc.route.secretmeasureincomplete',[status.secret_measure_incomplete])
-                wr_comma = true
-            }
-        }
-        return s
-    }
-    
-    static List GetOkPlanningTestTaskRoutes(Contest contestInstance)
-    {
-        List ok_routes = []
-        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"idTitle"])) {
-            if (route_instance.IsRouteOk()) {
-                ok_routes += route_instance
-            }
-        }
-        List ret_routes = []
-        // add unused routes
-        for (Route route_instance in ok_routes) {
-            if (!PlanningTestTask.findByRoute(route_instance,[sort:"id"])) {
-                ret_routes += route_instance
-            }
-        }
-        // add used routes
-        for (Route route_instance in ok_routes) {
-            if (PlanningTestTask.findByRoute(route_instance,[sort:"id"])) {
-                ret_routes += route_instance
-            }
-        }
-        return ret_routes
     }
     
 	String GetPlanningTestTaskRouteName()
@@ -1430,30 +878,6 @@ class Route
         return ret_name
 	}
 	
-    static List GetOkFlightTestRoutes(Contest contestInstance)
-    {
-        List ok_routes = []
-        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"idTitle"])) {
-            if (route_instance.IsRouteOk()) {
-                ok_routes += route_instance
-            }
-        }
-        List ret_routes = []
-        // add unused routes
-        for (Route route_instance in ok_routes) {
-            if (!FlightTest.findByRoute(route_instance,[sort:"id"])) {
-                ret_routes += route_instance
-            }
-        }
-        // add used routes
-        for (Route route_instance in ok_routes) {
-            if (FlightTest.findByRoute(route_instance,[sort:"id"])) {
-                ret_routes += route_instance
-            }
-        }
-        return ret_routes
-    }
-    
 	String GetFlightTestRouteName()
 	{
         String ret_name = ""

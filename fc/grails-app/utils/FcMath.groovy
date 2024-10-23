@@ -398,8 +398,11 @@ class FcMath
     //--------------------------------------------------------------------------
     static BigDecimal toBigDecimal(String stringValue)
     {
-        stringValue = stringValue.replace(',','.')
-        return stringValue.toBigDecimal()
+        if (stringValue) {
+            stringValue = stringValue.replace(',','.')
+            return stringValue.toBigDecimal()
+        }
+        return 0
     }
     
     //--------------------------------------------------------------------------

@@ -324,6 +324,27 @@
                     </table>
                 </div>
             </g:if>
+            <g:if test="${routeInstance.mapobjects}">
+                <br/>
+                <div style="page-break-inside:avoid">
+                    <table class="mapobjectsexport">
+                        <thead>
+                            <tr class="title">
+                                <th>${message(code:'fc.coordroute.export.mapobjects')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="value">
+                                <td>
+                                    <g:each var="coordmapobject_instance" in="${CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])}">
+                                        ${coordmapobject_instance.GetExportMapObject()} <br/>
+                                    </g:each>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </g:if>
             <br/>
             <div style="page-break-inside:avoid">
                 <table class="routecoordgeodata">

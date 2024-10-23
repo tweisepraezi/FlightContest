@@ -42,7 +42,7 @@ class FcTime
             String second2 = ""
             String utc_data_time = ""
             if (second.isBigDecimal()) {
-                second2 = second.toBigDecimal().setScale(0, RoundingMode.HALF_EVEN).toInteger()
+                second2 = second.toBigDecimal().setScale(0, RoundingMode.DOWN).toInteger()
                 if (second2.size() == 1) {
                     second2 = "0" + second2
                 }

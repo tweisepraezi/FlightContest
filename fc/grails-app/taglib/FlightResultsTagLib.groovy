@@ -1302,7 +1302,10 @@ class FlightResultsTagLib
                 if (trackpoint_instance.track != null) {
                     Map leg = AviationMath.calculateLeg(trackpoint_instance.latitude,trackpoint_instance.longitude,last_latitude,last_longitude)
                     int diff_seconds = FcTime.UTCTimeDiffSeconds(last_utc, trackpoint_instance.utc)
-                    BigDecimal ground_speed = leg.dis * 3600 / diff_seconds
+                    BigDecimal ground_speed = 0
+                    if (diff_seconds > 0) {
+                        ground_speed = leg.dis * 3600 / diff_seconds
+                    }
                     outln"""    <td class="distance">${FcMath.RoundTrackpointDistance(leg.dis*GpxService.kmPerNM*1000)}${message(code:'fc.m')}</td>"""
                     outln"""    <td class="truetrack">${trackpoint_instance.track}${message(code:'fc.grad')}</td>"""
                     outln"""    <td class="groundspeed">${FcMath.SpeedStr_Flight(ground_speed)}${message(code:'fc.knot')}</td>"""

@@ -37,7 +37,13 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 
 Creates PDF for print and internet publishing.
 
-Generates OSM-based topographic competition maps.
+Generates OSM-based topographic competition maps:
+* OSM-data of multible regions available (Europe, Chile, expandable)
+* Contour lines from SRTM data can be added
+* Airspaces from OpenAIP data can be added
+* Airfields from OpenAIP data can be added (ICAO symbols)
+* Additional map objects that are not included in the OSM data can be added
+* Additional airfields that are not included in the OpenAIP data can be added
 
 Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?lang=en).
 

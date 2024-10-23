@@ -1275,6 +1275,28 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 40) { // DB-2.40 compatibility
+                            print "    2.40 modifications"
+                            Coord.findAll().each { Coord coord_instance ->
+                                coord_instance.mapObjectType = MapObjectType.None
+                                coord_instance.mapObjectText = ""
+                                coord_instance.mapObjectGliderAirfield = false
+                                coord_instance.mapObjectPavedAirfield = false
+                                coord_instance.save()
+                            }
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.contestMapShowMapObjects = false
+                                route_instance.contestMapShowMapObjectsFromRouteID = 0
+                                if (route_instance.contestMapSmallRoads) {
+                                    route_instance.contestMapSmallRoadsGrade = Defs.CONTESTMAPSMALLROADSGRADE_OLD
+                                } else {
+                                    route_instance.contestMapSmallRoadsGrade = Defs.CONTESTMAPSMALLROADSGRADE_NONE
+                                }
+                                route_instance.contestMapTurnpointSign = false
+                                route_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }
