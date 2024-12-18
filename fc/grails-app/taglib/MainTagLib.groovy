@@ -248,6 +248,7 @@ class MainTagLib
 			outln """  <ul class="nav main">"""
             outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info" >${message(code:'fc.info')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../global/getclientid">${message(code:'fc.getclientid')}</a> </li>"""
             if (BootStrap.global.IsLivePossible()) {
                 outln """    <li> <a href="${p.link}/../../global/livesettings">${message(code:'fc.livesettings')}</a> </li>"""
             }

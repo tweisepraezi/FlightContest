@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.info')}</h2>
                 <div class="block" id="forms" >
-                    <g:form controller="contest">
+                    <g:form controller="global">
                         <g:if test="${url}">
                             <p>${message(code:'fc.uploaded.link',args:["${url}"])}</p>
                         </g:if>

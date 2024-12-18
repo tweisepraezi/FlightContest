@@ -10,7 +10,7 @@ If ($Restart -ne "") {
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc_version = "3.5.0"
+$str_fc_version = "3.6.0"
 $str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"
@@ -42,6 +42,8 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_service_stopping = "Flight Contest stoppt."
     $str_service_stopped = "Flight Contest ist bereits gestoppt."
     $str_service_savedb = "Datenbank sichern"
+    $str_getclientid = "Client-ID ermitteln"
+    $str_clientid = "Client-ID wurde in die Zwischenablage kopiert: "
 } else {
     $str_help = "Help"
     $str_help_url = "http://localhost:8080/fc/docs/help_en.html"
@@ -64,6 +66,8 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_service_stopping = "Flight Contest is stopping."
     $str_service_stopped = "Flight Contest is already stopped."
     $str_service_savedb = "Save database"
+    $str_getclientid = "Get client-id"
+    $str_clientid = "Client-id has been copied to the clipboard: "
 }
 
 # Load assemblies 
@@ -163,6 +167,16 @@ $menu_fcsave = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_fcsave.Text = $str_fcsave
 $menu_fcsave.Add_Click({
     Start-Process $str_fcsave
+})
+
+$menu_getclientid = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_getclientid.Text = $str_getclientid
+$menu_getclientid.Add_Click({
+    $client_id = (Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\SQMClient -Name "MachineID").MachineID
+    $client_id = $client_id.Replace('{','')
+    $client_id = $client_id.Replace('}','')
+    Set-Clipboard -Value $client_id
+    [System.Windows.Forms.MessageBox]::Show($str_clientid + " " + $client_id, $str_fcmanager)
 })
 
 # Evaluation menu entries
@@ -338,6 +352,7 @@ $taskbar_menu_strip.Items.Add($separator2)
 $taskbar_menu_strip.Items.Add($menu_evaluation)
 $taskbar_menu_strip.Items.Add($menu_service)
 $taskbar_menu_strip.Items.Add($separator3)
+$taskbar_menu_strip.Items.Add($menu_getclientid)
 $taskbar_menu_strip.Items.Add($menu_restart)
 $taskbar_menu_strip.Items.Add($menu_exit);
 $taskbar_icon.ContextMenuStrip = $taskbar_menu_strip

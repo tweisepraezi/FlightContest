@@ -26,6 +26,16 @@ class Global
         liveLanguage(nullable:true)
     }
 	
+    static String ClientID = ""
+    static String ConfigServer = ""
+    static String FCMapServer = ""
+    static String OpenAIPServer = ""
+    static String OpenAIPAPIKey = ""
+    static String OpenAIPIgnoreAirspacesStartsWith = ""
+    static String OwnerEMail = ""
+    static String OwnerClub = ""
+    static Integer FCMapCounter = 0
+    
     // --------------------------------------------------------------------------------------------------------------------
 	boolean IsDBNewer()
 	{
@@ -318,76 +328,153 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    String GetClientID()
+    {
+        String client_id = ""
+        def process = ['powershell', '-command', '(get-itemproperty -path HKLM:\\SOFTWARE\\Microsoft\\SQMClient -Name MachineID).MachineID'].execute()
+        client_id = process.text
+        if (client_id) {
+            client_id = client_id.trim()
+        }
+        if (client_id) {
+            client_id = client_id.replace('{','')
+        }
+        if (client_id) {
+            client_id = client_id.replace('}','')
+        }
+        return client_id
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetConfigServer()
+    {
+        if (grailsApplication.config.flightcontest.config.server) {
+            return grailsApplication.config.flightcontest.config.server
+        }
+        return Defs.DEFAULT_CONFIG_SERVER
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean LoadClientConfig()
+    {
+        ClientID = GetClientID()
+        ConfigServer = GetConfigServer()
+        FCMapServer = ""
+        OpenAIPServer = ""
+        OpenAIPAPIKey = ""
+        OpenAIPIgnoreAirspacesStartsWith = ""
+        OwnerEMail = ""
+        OwnerClub = ""
+        
+        // read config server config
+        boolean config_found = false
+        if (ClientID && ConfigServer) {
+            String config_url = ConfigServer + "/" + ClientID + "/" + Defs.CONFIG_NAME
+            def connection = config_url.toURL().openConnection()
+            connection.requestMethod = "GET"
+            connection.doInput = true
+            int response_code = 503
+            try {
+                response_code = connection.responseCode
+            } catch (Exception e) {
+            }
+            if (response_code == 200) {
+                InputStream inputstream_instance = connection.getInputStream()
+                BufferedReader input_reader = inputstream_instance.newReader("UTF-8")
+                String input_data = ""
+                while (true) {
+                    String line = input_reader.readLine()
+                    if (line == null) {
+                        break
+                    }
+                    input_data += line
+                }
+                input_reader.close()
+                inputstream_instance.close()
+                def loaded_data = Eval.me(input_data)
+                if (loaded_data && loaded_data instanceof Map) {
+                    if (loaded_data.fcmap.server) {
+                        FCMapServer = loaded_data.fcmap.server
+                    }
+                    if (loaded_data.openaip.server) {
+                        OpenAIPServer = loaded_data.openaip.server
+                    }
+                    if (loaded_data.openaip.apikey) {
+                        OpenAIPAPIKey = loaded_data.openaip.apikey
+                    }
+                    if (loaded_data.openaip.ignoreAirspacesStartsWith) {
+                        OpenAIPIgnoreAirspacesStartsWith = loaded_data.openaip.ignoreAirspacesStartsWith
+                    }
+                    if (loaded_data.owner.email) {
+                        OwnerEMail = loaded_data.owner.email
+                    }
+                    if (loaded_data.owner.club) {
+                        OwnerClub = loaded_data.owner.club
+                    }
+                    config_found = true
+                }
+            }
+        }
+        
+        // read local config
+        if (grailsApplication.config.flightcontest.maps.fcmap.server) {
+            FCMapServer = grailsApplication.config.flightcontest.maps.fcmap.server
+        }
+        if (grailsApplication.config.flightcontest.maps.openaip.server) {
+            OpenAIPServer = grailsApplication.config.flightcontest.maps.openaip.server
+        }
+        if (grailsApplication.config.flightcontest.maps.openaip.apikey) {
+            OpenAIPAPIKey = grailsApplication.config.flightcontest.maps.openaip.apikey
+        }
+        if (grailsApplication.config.flightcontest.maps.openaip.ignoreAirspacesStartsWith) {
+            OpenAIPIgnoreAirspacesStartsWith = grailsApplication.config.flightcontest.maps.openaip.ignoreAirspacesStartsWith
+        }
+        
+        return config_found
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    void CountFCMap()
+    {
+        // read config server fcmap counter
+        if (ClientID && ConfigServer) {
+            String config_url = ConfigServer + "/" + ClientID + "/" + Defs.FCMAP_COUNTER_NAME
+            def connection = config_url.toURL().openConnection()
+            connection.requestMethod = "GET"
+            connection.doInput = true
+            int response_code = 503
+            try {
+                response_code = connection.responseCode
+            } catch (Exception e) {
+            }
+            if (response_code == 200) {
+                FCMapCounter++
+            }
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPrintServerAPI()
+    {
+        return FCMapServer
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsContestMapDevOptions()
     {
         if (IsDevelopmentEnvironment()) {
             return true
         }
-        if (   grailsApplication.config.flightcontest.contestmap
-            && grailsApplication.config.flightcontest.contestmap.devoptions
-           )
-        {
+        if (grailsApplication.config.flightcontest.maps.fcmap.devoptions) {
             return true
         }
         return false
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    String GetPrintServerAPI()
-    {
-        if (   grailsApplication.config.flightcontest.contestmap
-            && grailsApplication.config.flightcontest.contestmap.printserverapi
-           )
-        {
-            return grailsApplication.config.flightcontest.contestmap.printserverapi
-        }
-        return ""
-    }
-    
-    // --------------------------------------------------------------------------------------------------------------------
-    String GetGMApiKey()
-    {
-        if (   grailsApplication.config.flightcontest.maps
-            && grailsApplication.config.flightcontest.maps.gm_api_key
-           )
-        {
-            return grailsApplication.config.flightcontest.maps.gm_api_key
-        }
-        return ""
-    }
-    
-    // --------------------------------------------------------------------------------------------------------------------
-    String GetMapTilesServer()
-    {
-        if (   grailsApplication.config.flightcontest.maps
-            && grailsApplication.config.flightcontest.maps.tiles_server
-           )
-        {
-            return grailsApplication.config.flightcontest.maps.tiles_server
-        }
-        return "https://tiles.flightcontest.de"
-    }
-    
-    // --------------------------------------------------------------------------------------------------------------------
-    boolean GetMapTilesTMS()
-    {
-        if (   grailsApplication.config.flightcontest.maps
-            && grailsApplication.config.flightcontest.maps.tiles_xyz
-           )
-        {
-            return false
-        }
-        return true
-    }
-    
-    // --------------------------------------------------------------------------------------------------------------------
     boolean IsOpenAIP()
     {
-        if (   grailsApplication.config.flightcontest.openaip
-            && grailsApplication.config.flightcontest.openaip.server
-            && grailsApplication.config.flightcontest.openaip.api
-            && grailsApplication.config.flightcontest.openaip.token
-        ) {
+        if (OpenAIPServer && OpenAIPAPIKey) {
             return true
         }
         return false
@@ -396,37 +483,55 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     String GetOpenAIPAPI()
     {
-        if (   grailsApplication.config.flightcontest.openaip
-            && grailsApplication.config.flightcontest.openaip.server
-            && grailsApplication.config.flightcontest.openaip.api
-        ) {
-            return grailsApplication.config.flightcontest.openaip.server + grailsApplication.config.flightcontest.openaip.api
-        }
-        return ""
+        return OpenAIPServer
     }
     
     // --------------------------------------------------------------------------------------------------------------------
 	String GetOpenAIPToken()
 	{
-        if (   grailsApplication.config.flightcontest.openaip
-            && grailsApplication.config.flightcontest.openaip.token
-           )
-        {
-            return grailsApplication.config.flightcontest.openaip.token
-        }
-        return ""
+        return OpenAIPAPIKey
 	}
 	
     // --------------------------------------------------------------------------------------------------------------------
     String GetOpenAIPIgnoreAirspacesStartsWith()
     {
-        if (   grailsApplication.config.flightcontest.openaip
-            && grailsApplication.config.flightcontest.openaip.ignoreAirspacesStartsWith
+        return OpenAIPIgnoreAirspacesStartsWith
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetGMApiKey()
+    {
+        if (   grailsApplication.config.flightcontest.onlinemap
+            && grailsApplication.config.flightcontest.onlinemap.gm_api_key
            )
         {
-            return grailsApplication.config.flightcontest.openaip.ignoreAirspacesStartsWith
+            return grailsApplication.config.flightcontest.onlinemap.gm_api_key
         }
         return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetMapTilesServer()
+    {
+        if (   grailsApplication.config.flightcontest.onlinemap
+            && grailsApplication.config.flightcontest.onlinemap.tiles_server
+           )
+        {
+            return grailsApplication.config.flightcontest.onlinemap.tiles_server
+        }
+        return "https://tiles.flightcontest.de"
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean GetMapTilesTMS()
+    {
+        if (   grailsApplication.config.flightcontest.onlinemap
+            && grailsApplication.config.flightcontest.onlinemap.tiles_xyz
+           )
+        {
+            return false
+        }
+        return true
     }
     
     // --------------------------------------------------------------------------------------------------------------------

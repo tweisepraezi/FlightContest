@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.5.0,</span>
-<span id="revdate">23.10.2024</span>
+<span id="revnumber">version 3.6.0,</span>
+<span id="revdate">17.12.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -518,7 +518,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#print-styles-foot">CSS settings for signature</a></li>
 <li><a href="#print-styles-tables">CSS settings for tables</a></li>
 <li><a href="#print-styles-samples">Examples</a></li>
-<li><a href="#print-styles-special-old">Replaced CSS properties</a></li>
 </ul>
 </li>
 <li><a href="#contest-properties">Contest properties</a></li>
@@ -530,10 +529,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-landing">Configure information for landing referees.</a></li>
 <li><a href="#configuration-live">Configure live display</a></li>
 <li><a href="#configuration-livetracking">Configure live tracking</a></li>
-<li><a href="#configuration-osmonlinemap">Configure OSM online map</a></li>
-<li><a href="#configuration-osmprint">Configure OSM contest map printing</a></li>
-<li><a href="#configuration-openaip">Configure OpenAIP for airspace display and map printing</a></li>
+<li><a href="#configuration-fcmap">Configure your own map printing server</a></li>
+<li><a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a></li>
+<li><a href="#configuration-onlinemap">Configure OSM online map</a></li>
 <li><a href="#configuration-task-creator">Configure original Task Creator for use</a></li>
+<li><a href="#configuration-configserver">Configure your own configuration server</a></li>
 <li><a href="#configuration-test">Configure test displays</a></li>
 </ul>
 </li>
@@ -706,7 +706,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
 </li>
 <li>
-<p><a href="rules/FAI_precision_flying_rules_2023.pdf" target="_blank" rel="noopener">FAI Precision Flying</a></p>
+<p><a href="rules/FAI_precision_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Precision Flying</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_landing_rules_2024.pdf" target="_blank" rel="noopener">FAI GAC Landing appendix</a></p>
@@ -2445,19 +2445,17 @@ For loading of the csv file of a route construction that has already been starte
 <h3 id="osm-contest-map-configuration">Server configuration</h3>
 <div class="paragraph">
 <p>Generating the competition map requires a <strong>print server</strong>.
-For this purpose, a server operated by the DAeC can be used, whose address is to be requested and set with an installation-dependent configuration in <strong>C:\FCSave\.fc\config.groovy</strong>.:<br>
-<a href="#configuration-osmprint">Configure OSM contest map printing</a><br></p>
-</div>
-<div class="paragraph">
-<p>Alternatively, a separate print server can be set up:<br>
-<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+For this purpose, a server operated by the German Aero Club DAeC can be used, which is accessible after registering the client-id.<br>
+Register your client here: <a href="https://flightcontest.de/register-client" class="bare">https://flightcontest.de/register-client</a>.<br>
+The client-id can be determined with “Extras &#8594; Get client-id” or with the Flight Contest Manager.</p>
 </div>
 <div class="paragraph">
 <p>Map data is only available for installed countries.</p>
 </div>
 <div class="paragraph">
-<p>For the use of airspaces, an <strong>OpenAIP</strong> access with an installation-dependent configuration must be set in <strong>C:\FCSave\.fc\config.groovy</strong>.:<br>
-<a href="#configuration-openaip">Configure OpenAIP for airspace display and map printing</a></p>
+<p><strong>OpenAIP</strong> is used for the use of airspace, for which an API key is included in the client-id registration.
+You can configure your own OpenAIP API key as follows:<br>
+<a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a></p>
 </div>
 <div class="paragraph">
 <p>Airspaces are available worldwide.</p>
@@ -3670,8 +3668,7 @@ Import logger data &#8594; select GPX file &#8594; Import</p>
 <p><a href="#print-styles-title">CSS settings for title</a><br>
 <a href="#print-styles-foot">CSS settings for signature</a><br>
 <a href="#print-styles-tables">CSS settings for tables</a><br>
-<a href="#print-styles-samples">Examples</a><br>
-<a href="#print-styles-special-old">Replaced CSS properties</a></p>
+<a href="#print-styles-samples">Examples</a><br></p>
 </div>
 <div class="sect2">
 <h3 id="print-styles-title">CSS settings for title</h3>
@@ -4085,7 +4082,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 <div class="ulist">
 <ul>
 <li>
-<p>Crew list - reduce lines</p>
+<p>Crew list - make lines smaller</p>
 <div class="literalblock">
 <div class="content">
 <pre>table.crewlist tr.value td { font-size: 90%; }</pre>
@@ -4093,7 +4090,18 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 </div>
 </li>
 <li>
-<p>Crew schedule - reduce lines</p>
+<p>Observation forms - make lines smaller</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.observationturnpointlist tr td { font-size: 70%; }
+table.observationsroutephotolist tr td { font-size: 80%; }
+table.observationsroutecanvaslist tr td { font-size: 70%; }
+table.observationsroutecrewjudgesign tr td { font-size: 30%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Crew timetable - make lines smaller</p>
 <div class="literalblock">
 <div class="content">
 <pre>table.timetablelist tr.value td { font-size: 90%; }</pre>
@@ -4101,7 +4109,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 </div>
 </li>
 <li>
-<p>Referee schedule - reduce lines</p>
+<p>Judge timetable - make lines smaller</p>
 <div class="literalblock">
 <div class="content">
 <pre>table.timetablejudgelist tr.value td { font-size: 90%; }</pre>
@@ -4109,7 +4117,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 </div>
 </li>
 <li>
-<p>Scanned observation forms - resize</p>
+<p>Scanned observation forms - change size</p>
 <div class="literalblock">
 <div class="content">
 <pre>img.scannedobservationtest { width:80%; }</pre>
@@ -4117,7 +4125,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 </div>
 </li>
 <li>
-<p>Scanned Planning Task Forms - Resize</p>
+<p>Scanned planning task forms - change size</p>
 <div class="literalblock">
 <div class="content">
 <pre>img.scannedplanningtest { width:80%; }</pre>
@@ -4125,7 +4133,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 </div>
 </li>
 <li>
-<p>Occupation result - reduce lines</p>
+<p>Crew result - make lines smaller</p>
 <div class="literalblock">
 <div class="content">
 <pre>table.crewresultsummary td { font-size: 70%; }
@@ -4150,7 +4158,7 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 </div>
 </li>
 <li>
-<p>Result list team evaluation - reduce lines</p>
+<p>Result list team evaluation - make lines smaller</p>
 <div class="literalblock">
 <div class="content">
 <pre>table.teamresultlist td { font-size: 90%; }</pre>
@@ -4175,113 +4183,6 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="print-styles-special-old">Replaced CSS properties</h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">property</th>
-<th class="tableblock halign-left valign-top">value</th>
-<th class="tableblock halign-left valign-top">effect</th>
-<th class="tableblock halign-left valign-top">now found in</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---disable-procedureturn</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">route-1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Disable turning loops for this route</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594;routes &#8594; &lt;route-name&gt; &#8594; route-settings &#8594; use turning loops</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">route-1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">in route displays of this route show SCs of the curved route</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594;routes &#8594; &lt;route-name&gt; &#8594; route-settings &#8594; show SCs of curved route in route-maps of this route</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---secret-gatewidth</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
-2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--use a different gate width for SCs in time evaluation for crews of this class (gate width in NM)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; &lt;class-name&gt; &#8594; different gate-width from SC coordinates for this class</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---before-starttime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
-30</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; move forward the start time of planning in the schedule for crews of this class (the numeric value defines the minutes before the regular planning time)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; &lt;class-name&gt; &#8594; advance the planning start time before the regular planning time for this class</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---add-submission</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--beginner<br>
-10</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; extend the latest submission time of the solution sheet in the flight plan for crews of this class (the number value defines the minutes after the regular submission time)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; classes &#8594; &lt;class-name&gt; &#8594; extend the latest solution sheet submission time for this class</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--flightplan</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">hide-distance</p>
-<p class="tableblock">hide-truetrack</p>
-<p class="tableblock">hide-trueheading</p>
-<p class="tableblock">hide-groundspeed</p>
-<p class="tableblock">disable-local-time</p>
-<p class="tableblock">show-elapsed-time</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Leave column "Distance" empty in flight plan</p>
-<p class="tableblock">In the flight plan, leave the "Right course" column empty.</p>
-<p class="tableblock">in the flight plan, leave the column "Right heading" empty</p>
-<p class="tableblock">Leave column "Speed over ground" empty in flight plan</p>
-<p class="tableblock">omit "local time" column in flight plan</p>
-<p class="tableblock">in flight plan print time history in column "flight time</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; tasks &#8594; navigation test &#8594; &lt;navigation test name&gt; &#8594; edit</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--submission</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--display in the flight plan the latest submission time of the solution sheet<br>
-(the value defines the minutes after the FP)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; tasks &#8594; navigation test &#8594; &lt;navigation test name&gt; &#8594; edit &#8594; latest submission time of solution sheet after reaching FP</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---start-tp<br>
---add-num</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">route-1<br>
-TP3 [,TP5]<br>
-1 [,2]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">in the flight plan for crews, increase the turnpoint number by the specified value
-from the specified turnpoint
-(several increases possible; for abbreviated routes, where the competition map of another route is used)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Tasks &#8594; Navigation test &#8594; &lt;Navigation test name&gt; &#8594; Edit &#8594; Increase turnpoint numbers by the specified value from the specified turnpoint in the flight plan for crews<br>
-TP3,TP5:1,2 = increase from TP3 by 1, from TP5 by another 2</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">show curved points in navigation flight results</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Tasks &#8594; Navigation test &#8594; &lt;navigation test name&gt; &#8594; Edit &#8594; Always show SCs of the curved route in the navigation flight result</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--landingresults</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--reduce landing penalty points in overall ranking by specified factor</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Evaluation &#8594; Competition Evaluation &#8594; Competition Evaluation Settings &#8594; Reduce landing penalty points by specified factor</p></td>
-</tr>
-</tbody>
-</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -4316,10 +4217,11 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.</p
 <a href="#configuration-landing">Configure information for landing referees.</a><br>
 <a href="#configuration-live">Configure live display</a><br>
 <a href="#configuration-livetracking">Configure live tracking</a><br>
-<a href="#configuration-osmonlinemap">Configure OSM online map</a><br>
-<a href="#configuration-osmprint">Configure OSM contest map printing</a><br>
-<a href="#configuration-openaip">Configure OpenAIP for airspace display and map printing</a><br>
+<a href="#configuration-fcmap">Configure your own map printing server</a><br>
+<a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a><br>
+<a href="#configuration-onlinemap">Configure OSM online map</a><br>
 <a href="#configuration-task-creator">Configure original Task Creator for use</a><br>
+<a href="#configuration-configserver">Configure your own configuration server</a><br>
 <a href="#configuration-test">Configure test displays</a></p>
 </div>
 <div class="sect2">
@@ -4551,11 +4453,48 @@ To achieve this without copies or FTP upload, use the following configuration:</
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration-osmonlinemap">Configure OSM online map</h3>
+<h3 id="configuration-fcmap">Configure your own map printing server</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
   maps {
+    fcmap {
+      server = "TODO" // Address of the print server for map generation
+    }
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Setting up your own print server:<br>
+<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    openaip {
+      server = "https://api.core.openaip.net/api" // Adress of OpenAIP server
+      apikey = "TODO"                             // API Key
+                                                  // to enable access to the OpenAIP server
+                                                  // Registration at https://www.openaip.net
+      ignoreAirspacesStartsWith = ""              // Airspaces to ignore
+                                                  // (separate several with a comma)
+    }
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-onlinemap">Configure OSM online map</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  onlinemap {
     tiles_server = "TODO" // Address of an alternative OSM tiles server
     tiles_xyz = true      // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
   }
@@ -4565,36 +4504,6 @@ To achieve this without copies or FTP upload, use the following configuration:</
 <div class="paragraph">
 <p>Enables switching of the OSM online map layer 'Flight Contest'
 to an alternative tiles server (instead of <a href="https://tiles.flightcontest.de" class="bare">https://tiles.flightcontest.de</a>).</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="configuration-osmprint">Configure OSM contest map printing</h3>
-<div class="literalblock">
-<div class="content">
-<pre>flightcontest {
-  contestmap {
-    printserverapi = "TODO" // Address of the print server for OSM contest map generation
-  }
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="configuration-openaip">Configure OpenAIP for airspace display and map printing</h3>
-<div class="literalblock">
-<div class="content">
-<pre>flightcontest {
-  openaip {
-    server = "https://api.core.openaip.net" // Adress of OpenAIP server
-    api = "/api"
-    token = "TODO"                          // API Key
-                                            // to enable access to the OpenAIP server
-                                            // Registration at https://www.openaip.net
-    ignoreAirspacesStartsWith = ""          // Airspaces to ignore
-                                            // (separate several with a comma)
-  }
-}</pre>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -4611,9 +4520,21 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
 </div>
 <div class="paragraph">
 <p>Flight Contest is delivered with an integrated Task Creator.
-Specifying this value deactivates the internal Task Creator and switches to the original Task Creator.
+Specifying this value also makes the original task creator available.
 The integrated task creator has a different appearance and has online functions deactivated,
 which prevents a task from being saved in a publicly accessible database.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-configserver">Configure your own configuration server</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  config {
+     server = "TODO" // Address of the configuration server
+  }
+}</pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -4630,8 +4551,10 @@ which prevents a task from being saved in a publicly accessible database.</p>
   observation {
     nobuttons = true // Disables buttons on observation result input
   }
-  contestmap {
-    devoptions = true       // Show additional devoptions in the OSM contest map dialog
+  maps {
+    fcmap {
+      devoptions = true // Show additional devoptions in the OSM contest map dialog
+    }
   }
 }</pre>
 </div>

@@ -9,7 +9,7 @@ class BootStrap {
 	
     static Global global = null 
     static TempData tempData = null
-    
+
     def init = { servletContext ->
 		println "Init..."
 				
@@ -1361,6 +1361,12 @@ class BootStrap {
             }
         }
         
+        if (global.LoadClientConfig()) {
+            println "  Client config loaded."
+        } else {
+            println "  No client config loaded."
+        }
+        
 		// add method getMsg to all domain classes
 		grailsApplication.domainClasses.each { domain_class ->
 			domain_class.metaClass.getMsg = { code ->
@@ -1413,7 +1419,7 @@ class BootStrap {
         String backup_dir_name = "${webroot_dir}${backupName}"
         File backup_dir = new File(backup_dir_name)
         if (backup_dir.exists()) {
-            println "Backup from '${backup_dir_name}'"
+            println "  Backup from '${backup_dir_name}'"
             backup_dir.eachDir { File dir ->
                 String new_dir = "${webroot_dir}${dirName}/${dir.name}"
                 if (dir.renameTo(new_dir)) {
@@ -1423,7 +1429,7 @@ class BootStrap {
                 }
             }
         } else {
-            println "No backup on '${backup_dir_name}'"
+            println "  No backup on '${backup_dir_name}'"
         }
     }
 } 

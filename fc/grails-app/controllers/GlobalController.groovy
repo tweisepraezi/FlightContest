@@ -98,7 +98,7 @@ class GlobalController {
         }
         [globalInstance:BootStrap.global]
     }
-
+    
     def update = {
         fcService.printstart "Update global settings"
         
@@ -293,6 +293,16 @@ class GlobalController {
         }
     }
     
+    def getclientid = {
+    }
+
+    def loadconfig = {
+        gpxService.printstart "Load client config"
+        BootStrap.global.LoadClientConfig()
+        gpxService.printdone "Done."
+        redirect(action:getclientid)
+    }
+
     def start_webmail = {
         fcService.println "Open '${grailsApplication.config.flightcontest.webmail.url}' for '${grailsApplication.config.grails.mail.username}'"
         render(view:"webmail", model:[login_url:         grailsApplication.config.flightcontest.webmail.url,

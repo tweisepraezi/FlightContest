@@ -429,7 +429,7 @@ enum ContestRules
 	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
 	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2023",
+            ruleTitle:"FAI Precision Flying - Edition 2024",
             
 			// General
 			precisionFlying:true,
@@ -568,7 +568,7 @@ enum ContestRules
             useProcedureTurns:true,
             liveTrackingScorecard:"FAI Precision"
 		]
-	), // "FAI Precision Flying - Edition 2023"
+	), // "FAI Precision Flying - Edition 2024"
 
 	R5 ([
             ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
@@ -1577,7 +1577,7 @@ enum ContestRules
         List ret = []
         ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
         ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
-        ret += R4  // FAI Precision Flying - Edition 2023
+        ret += R4  // FAI Precision Flying - Edition 2024
         ret += R6  // FAI Air Rally Flying - Edition 2024
         ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
         ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023

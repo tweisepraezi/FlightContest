@@ -1,6 +1,34 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.6.0
+----------------
+- Konfigurations-Management für Maps- und OpenAIP-Server-Einstellungen hinzugefügt
+    Ein zentraler Server nimmt alle für die Karten-Erzeugung notwendigen Einstellungen vor.
+      Dazu muss die Client-ID der Flight Contest-Installation registriert werden.
+      Die Client-ID wird in "Extras -> Client-ID ermitteln" angezeigt. Hier wird auch das erfolgreiche Laden der Konfiguration angezeigt.
+      Die Client-ID kann auch mit dem Flight Contest Manager ermittelt werden.
+      Registriere deinen Client hier: https://flightcontest.de/register-client.
+      Die Konfiguration wird beim Start des Flight Contest-Dienstes geladen. Sollte zu diesem Zeitpunkt keine Internet verfügbar gewesen sein,
+      kann mit "Extras -> Client-ID ermitteln -> Konfiguration laden" die Konfiguration nach Herstellen der Internet-Verbindung geladen werden.
+    Die Nutzung der Karten-Erzeugung wird auf dem zentralen Server geloggt.
+      Das umfasst IP-Adresse und Zeitpunkt des Aufrufes für eine Client-ID.
+      Diese Informationen werden 400 Tage lang gespeichert, um eine jährliche Abrechnung der Servernutzung zu ermöglichen.
+    Bisher verwendete Konfigurations-Einstellungen in config.groovy sind nicht mehr wirksam.
+      Für die Nutzung eines eigenen OpenAIP-API-Keys sind folgende neue Konfiguationseinstellungen zu verwenden:
+        flightcontest {
+          maps {
+            openaip {
+              server = "https://api.core.openaip.net/api"
+              apikey = "TODO"
+              ignoreAirspacesStartsWith = ""
+            }  
+          }
+        }
+- Bug "Bei Unterbrechung der Kartenerzeugung geht Karten-Projektion verloren" behoben
+- Aktualisierung folgender Regelwerke
+    FAI Precision Flying - Edition 2024
+
 Änderungen 3.5.0
 ----------------
 - OSM-Wettbewerbs-Karte: Integrierte Bearbeitung zusätzlicher Karten-Objekte hinzugefügt

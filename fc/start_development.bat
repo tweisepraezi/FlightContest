@@ -8,7 +8,7 @@ cd %startdir%
 set JAVA_HOME=%basedir%\Java\jdk8u422-b05
 set ASCIIDOCTOR_HOME=%basedir%\AsciiDoctorJ\asciidoctorj-2.5.1
 set GRAILS_HOME=%basedir%\Grails\Grails-2.5.6
-set GRAILS_OPTS=-server -Xmx4096M -Xms768M -Dfile.encoding=UTF-8
+set GRAILS_OPTS=-server -Xmx4096M -Xms768M -Dfile.encoding=UTF-8 -Dgrails.server.port.http=8080
 set FC_DOCS=%startdir%docs
 set FC_OUTPUT_DOCS=%startdir%web-app\docs
 set FC_OUTPUT=%startdir%output

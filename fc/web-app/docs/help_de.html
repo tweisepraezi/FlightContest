@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.5.0,</span>
-<span id="revdate">23.10.2024</span>
+<span id="revnumber">version 3.6.0,</span>
+<span id="revdate">17.12.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -518,7 +518,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#print-styles-foot">CSS-Einstellungen für Unterschrift</a></li>
 <li><a href="#print-styles-tables">CSS-Einstellungen für Tabellen</a></li>
 <li><a href="#print-styles-samples">Beispiele</a></li>
-<li><a href="#print-styles-special-old">Ersetzte CSS-Eigenschaften</a></li>
 </ul>
 </li>
 <li><a href="#contest-properties">Wettbewerbs-Eigenschaften</a></li>
@@ -530,10 +529,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-landing">Information für Lande-Schiedsrichter konfigurieren</a></li>
 <li><a href="#configuration-live">Live-Anzeige konfigurieren</a></li>
 <li><a href="#configuration-livetracking">Live-Tracking konfigurieren</a></li>
-<li><a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a></li>
-<li><a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a></li>
-<li><a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a></li>
+<li><a href="#configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</a></li>
+<li><a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a></li>
+<li><a href="#configuration-onlinemap">OSM-Online-Karte konfigurieren</a></li>
 <li><a href="#configuration-task-creator">Original-Task-Creator für Nutzung konfigurieren</a></li>
+<li><a href="#configuration-configserver">Eigenen Konfigurations-Server konfigurieren</a></li>
 <li><a href="#configuration-test">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
@@ -709,7 +709,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
 </li>
 <li>
-<p><a href="rules/FAI_precision_flying_rules_2023.pdf" target="_blank" rel="noopener">FAI Precision Flying</a></p>
+<p><a href="rules/FAI_precision_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Precision Flying</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_landing_rules_2024.pdf" target="_blank" rel="noopener">FAI GAC Landing appendix</a></p>
@@ -2458,19 +2458,17 @@ Zum Laden der csv-Datei einer bereits gestarteten Strecken-Konstruktion.</p>
 <h3 id="osm-contest-map-configuration">Server-Konfiguration</h3>
 <div class="paragraph">
 <p>Das Erzeugen der Wettbewerbs-Karte benötigt einen <strong>Druck-Server</strong>.
-Dazu kann ein vom DAeC betriebener Server verwendet werden, dessen Adresse zu erfragen und mit einer installationsabhängigen Konfiguration in <strong>C:\FCSave\.fc\config.groovy</strong> einzustellen ist:<br>
-<a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br></p>
-</div>
-<div class="paragraph">
-<p>Alternativ kann ein eigener Druckserver errichtet werden:<br>
-<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+Dazu kann ein vom DAeC betriebener Server verwendet werden, der nach Registrierung der Client-ID erreichbar ist.<br>
+Registriere deinen Client hier: <a href="https://flightcontest.de/register-client" class="bare">https://flightcontest.de/register-client</a>.<br>
+Die Client-ID kann mit "Extras &#8594; Client-ID ermitteln" oder mit dem Flight Contest Manager ermittelt werden.</p>
 </div>
 <div class="paragraph">
 <p>Kartendaten sind nur für installierte Länder verfügbar.</p>
 </div>
 <div class="paragraph">
-<p>Für die Nutzung von Lufträumen ist ein <strong>OpenAIP</strong>-Zugriff mit einer installationsabhängigen Konfiguration in <strong>C:\FCSave\.fc\config.groovy</strong> einzustellen:<br>
-<a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a></p>
+<p>Für die Nutzung von Lufträumen wird <strong>OpenAIP</strong> genutzt, für die ein API-Key mit in der ClientID-Registrierung enthalten ist.
+Ein eigener OpenAIP-API-Key kann folgendermaßen konfiguriert werden:<br>
+<a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a></p>
 </div>
 <div class="paragraph">
 <p>Lufträume sind weltweit verfügbar.</p>
@@ -3686,8 +3684,7 @@ Import Logger-Daten &#8594; GPX-Datei auswählen &#8594; Import</p>
 <p><a href="#print-styles-title">CSS-Einstellungen für Titel</a><br>
 <a href="#print-styles-foot">CSS-Einstellungen für Unterschrift</a><br>
 <a href="#print-styles-tables">CSS-Einstellungen für Tabellen</a><br>
-<a href="#print-styles-samples">Beispiele</a><br>
-<a href="#print-styles-special-old">Ersetzte CSS-Eigenschaften</a></p>
+<a href="#print-styles-samples">Beispiele</a><br></p>
 </div>
 <div class="sect2">
 <h3 id="print-styles-title">CSS-Einstellungen für Titel</h3>
@@ -4109,6 +4106,17 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </div>
 </li>
 <li>
+<p>Beobachtungs-Formulare - Zeilen verkleinern</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.observationturnpointlist tr td { font-size: 70%; }
+table.observationsroutephotolist tr td { font-size: 80%; }
+table.observationsroutecanvaslist tr td { font-size: 70%; }
+table.observationsroutecrewjudgesign tr td { font-size: 30%; }</pre>
+</div>
+</div>
+</li>
+<li>
 <p>Besatzungs-Zeitplan - Zeilen verkleinern</p>
 <div class="literalblock">
 <div class="content">
@@ -4191,113 +4199,6 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="print-styles-special-old">Ersetzte CSS-Eigenschaften</h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Eigenschaft</th>
-<th class="tableblock halign-left valign-top">Wert</th>
-<th class="tableblock halign-left valign-top">Wirkung</th>
-<th class="tableblock halign-left valign-top">jetzt zu finden in</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---disable-procedureturn</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Wendeschleifen für diese Strecke deaktivieren</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Strecken &#8594; &lt;Strecken-Name&gt; &#8594; Strecken-Einstellungen &#8594; Wendeschleifen verwenden</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Strecken &#8594; &lt;Strecken-Name&gt; &#8594; Strecken-Einstellungen &#8594; UZKs der krummen Strecke in Strecken-Karten dieser Strecke anzeigen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---secret-gatewidth</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
-2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">bei Zeitauswertung für Besatzungen dieser Klasse eine andere Gate-Breite für UZKs verwenden (Gate-Breite in NM)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Klassen &#8594; &lt;Klassen-Name&gt; &#8594; Abweichende Tor-Breite von UZK-Koordinaten für diese Klasse</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---before-starttime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
-30</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Zeitplan für Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regulären Planungszeit)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Klassen &#8594; &lt;Klassen-Name&gt; &#8594; Vorverlegung der Planungs-Anfangs-Zeit vor der regulären Planungszeit für diese Klasse</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---add-submission</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
-10</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flupplan für Besatzungen dieser Klasse die späteste Abgabezeit des Lösungsbogens verlängern (der Zahlen-Wert definiert die Minuten nach der regulären Abgabezeit)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Klassen &#8594; &lt;Klassen-Name&gt; &#8594; Verlängerung der spätesten Abgabezeit des Lösungsbogens für diese Klasse</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--flightplan</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">hide-distance</p>
-<p class="tableblock">hide-truetrack</p>
-<p class="tableblock">hide-trueheading</p>
-<p class="tableblock">hide-groundspeed</p>
-<p class="tableblock">disable-local-time</p>
-<p class="tableblock">show-elapsed-time</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan Spalte "Entfernung" leer lassen</p>
-<p class="tableblock">im Flugplan Spalte "Rechtweisender Kurs" leer lassen</p>
-<p class="tableblock">im Flugplan Spalte "Rechtweisender Steuerkurs" leer lassen</p>
-<p class="tableblock">im Flugplan Spalte "Geschwindigkeit über Grund" leer lassen</p>
-<p class="tableblock">im Flugplan Spalte "Ortszeit" weglassen</p>
-<p class="tableblock">im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--submission</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan die späteste Abgabezeit des Lösungsbogens anzeigen<br>
-(der Wert definiert die Minuten nach dem FP)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten &#8594; Späteste Abgabezeit des Lösungsbogens nach Erreichen des FP</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---start-tp<br>
---add-num</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1<br>
-TP3 [,TP5]<br>
-1 [,2]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan für Besatzungen die Wendepunkte-Nummer um den angegebenen Wert
-ab dem angegebenen Wendepunkt erhöhen
-(mehrere Erhöhungen möglich; für abkürzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten &#8594; Wendepunkte-Nummern um den angegebenen Wert ab dem angegebenen Wendepunkt im Flugplan für Besatzungen erhöhen<br>
-TP3,TP5:1,2 = ab TP3 um 1 erhöhen, ab TP5 um weitere 2</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten &#8594; UZKs der krummen Strecke im Navigationsflug-Ergebnis immer anzeigen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--landingresults</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Auswertung &#8594; Wettbewerbs-Auswertung &#8594; Wettbewerbs-Auswertungs-Einstellungen &#8594; Lande-Strafpunkte um angegebenen Faktor reduzieren</p></td>
-</tr>
-</tbody>
-</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -4333,10 +4234,11 @@ zu machen oder diese Datei zu löschen.</p>
 <a href="#configuration-landing">Information für Lande-Schiedsrichter konfigurieren</a><br>
 <a href="#configuration-live">Live-Anzeige konfigurieren</a><br>
 <a href="#configuration-livetracking">Live-Tracking konfigurieren</a><br>
-<a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a><br>
-<a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br>
-<a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a><br>
+<a href="#configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</a><br>
+<a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a><br>
+<a href="#configuration-onlinemap">OSM-Online-Karte konfigurieren</a><br>
 <a href="#configuration-task-creator">Original-Task-Creator für Nutzung konfigurieren</a><br>
+<a href="#configuration-configserver">Eigenen Konfigurations-Server konfigurieren</a><br>
 <a href="#configuration-test">Test-Anzeigen konfigurieren</a></p>
 </div>
 <div class="sect2">
@@ -4568,11 +4470,48 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration-osmonlinemap">OSM-Online-Karte konfigurieren</h3>
+<h3 id="configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
   maps {
+    fcmap {
+       server = "TODO" // Adresse des Druck-Servers für die Karten-Erzeugung
+    }
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Errichtung eines eigenen Druck-Servers:<br>
+<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    openaip {
+      server = "https://api.core.openaip.net/api" // Adresse des OpenAIP-Servers
+      apikey = "TODO"                             // API Key, mit dem der Zugriff
+                                                  // auf den OpenAIP-Server ermöglicht wird
+                                                  // Anmeldung auf https://www.openaip.net
+      ignoreAirspacesStartsWith = ""              // Zu ignorierende Lufträume
+                                                  // (mehrere mit Komma trennen)
+    }
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-onlinemap">OSM-Online-Karte konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  onlinemap {
     tiles_server = "TODO" // Adresse eines alternativen OSM-Tiles-Servers
     tiles_xyz = true      // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
   }
@@ -4582,36 +4521,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <div class="paragraph">
 <p>Ermöglicht Umstellung des OSM-Online-Karten-Layers 'Flight Contest'
 auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightcontest.de" class="bare">https://tiles.flightcontest.de</a>).</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</h3>
-<div class="literalblock">
-<div class="content">
-<pre>flightcontest {
-  contestmap {
-    printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
-  }
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</h3>
-<div class="literalblock">
-<div class="content">
-<pre>flightcontest {
-  openaip {
-    server = "https://api.core.openaip.net" // Adresse des OpenAIP-Servers
-    api = "/api"
-    token = "TODO"                          // API Key, mit dem der Zugriff
-                                            // auf den OpenAIP-Server ermöglicht wird
-                                            // Anmeldung auf https://www.openaip.net
-    ignoreAirspacesStartsWith = ""          // Zu ignorierende Lufträume
-                                            // (mehrere mit Komma trennen)
-  }
-}</pre>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -4628,9 +4537,21 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
 </div>
 <div class="paragraph">
 <p>Flight Contest wird mit einem integrierten Task-Creator ausgeliefert.
-Die Angabe dieses Wertes deaktiviert den internen Task-Creator und schaltet auf den Original-Task-Creator um.
+Die Angabe dieses Wertes macht zusätzlich den Original-Task-Creator verfügbar.
 Der integrierte Task-Creator hat ein abweichendes Aussehen und hat Online-Funktionen deaktivert,
 was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhindert.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-configserver">Eigenen Konfigurations-Server konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  config {
+     server = "TODO" // Adresse des Konfigurations-Servers
+  }
+}</pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -4647,8 +4568,10 @@ was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhi
   observation {
     nobuttons = true // Deaktiviert Schalter bei Beobachtungs-Ergebnis-Eingabe
   }
-  contestmap {
-    devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
+  maps {
+    fcmap {
+       devoptions = true // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
+    }
   }
 }</pre>
 </div>

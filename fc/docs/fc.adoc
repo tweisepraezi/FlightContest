@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.5.0
-:revdate:   23.10.2024
+:revnumber: 3.6.0
+:revdate:   17.12.2024
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -71,7 +71,7 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020^]
 * link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
-* link:rules/FAI_precision_flying_rules_2023.pdf[FAI Precision Flying^]
+* link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
 * link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
 * link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich^]
@@ -1025,15 +1025,14 @@ Darüberhinaus stehen gespeicherte Karten, aus denen eine PDF erzeugt werden kan
 === Server-Konfiguration
 
 Das Erzeugen der Wettbewerbs-Karte benötigt einen *Druck-Server*.
-Dazu kann ein vom DAeC betriebener Server verwendet werden, dessen Adresse zu erfragen und mit einer installationsabhängigen Konfiguration in *C:\FCSave\.fc\config.groovy* einzustellen ist: +
-<<fc.adoc#configuration-osmprint>> +
-
-Alternativ kann ein eigener Druckserver errichtet werden: +
-link:help_fcmaps.html[Flight Contest maps server^]
+Dazu kann ein vom DAeC betriebener Server verwendet werden, der nach Registrierung der Client-ID erreichbar ist. +
+Registriere deinen Client hier: https://flightcontest.de/register-client. +
+Die Client-ID kann mit "Extras -> Client-ID ermitteln" oder mit dem Flight Contest Manager ermittelt werden.
 
 Kartendaten sind nur für installierte Länder verfügbar.
 
-Für die Nutzung von Lufträumen ist ein *OpenAIP*-Zugriff mit einer installationsabhängigen Konfiguration in *C:\FCSave\.fc\config.groovy* einzustellen: +
+Für die Nutzung von Lufträumen wird *OpenAIP* genutzt, für die ein API-Key mit in der ClientID-Registrierung enthalten ist.
+Ein eigener OpenAIP-API-Key kann folgendermaßen konfiguriert werden: +
 <<fc.adoc#configuration-openaip>>
 
 Lufträume sind weltweit verfügbar.
@@ -1538,7 +1537,6 @@ Ermöglicht Einfluß auf das Aussehen des Druckes +
 <<fc.adoc#print-styles-foot>> +
 <<fc.adoc#print-styles-tables>> +
 <<fc.adoc#print-styles-samples>> +
-<<fc.adoc#print-styles-special-old>>
 
 [[print-styles-title]]
 === CSS-Einstellungen für Titel
@@ -1674,6 +1672,13 @@ Tabellen-Klassen:
 
  table.crewlist tr.value td { font-size: 90%; }
 
+** Beobachtungs-Formulare - Zeilen verkleinern
+
+ table.observationturnpointlist tr td { font-size: 70%; }
+ table.observationsroutephotolist tr td { font-size: 80%; }
+ table.observationsroutecanvaslist tr td { font-size: 70%; }
+ table.observationsroutecrewjudgesign tr td { font-size: 30%; }
+
 ** Besatzungs-Zeitplan - Zeilen verkleinern
 
  table.timetablelist tr.value td { font-size: 90%; }
@@ -1719,94 +1724,6 @@ Tabellen-Klassen:
 
  img.landingfield { width:200%; }
  
-[[print-styles-special-old]]
-=== Ersetzte CSS-Eigenschaften
-
-[cols="1,1,1,1", options="header"]
-|===
-|Eigenschaft
-|Wert
-|Wirkung
-|jetzt zu finden in
-|--route +
---disable-procedureturn
-|Strecke-1
-|Wendeschleifen für diese Strecke deaktivieren
-|-> Strecken -> <Strecken-Name> -> Strecken-Einstellungen -> Wendeschleifen verwenden
-|--route +
---show-curved-points
-|Strecke-1
-|in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen
-|-> Strecken -> <Strecken-Name> -> Strecken-Einstellungen -> UZKs der krummen Strecke in Strecken-Karten dieser Strecke anzeigen
-|--class +
---secret-gatewidth
-|Einsteiger +
-2
-|bei Zeitauswertung für Besatzungen dieser Klasse eine andere Gate-Breite für UZKs verwenden (Gate-Breite in NM)
-|-> Klassen -> <Klassen-Name> -> Abweichende Tor-Breite von UZK-Koordinaten für diese Klasse
-|--class +
---before-starttime
-|Einsteiger +
-30
-|im Zeitplan für Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regulären Planungszeit)
-|-> Klassen -> <Klassen-Name> -> Vorverlegung der Planungs-Anfangs-Zeit vor der regulären Planungszeit für diese Klasse
-|--class +
---add-submission
-|Einsteiger +
-10
-|im Flupplan für Besatzungen dieser Klasse die späteste Abgabezeit des Lösungsbogens verlängern (der Zahlen-Wert definiert die Minuten nach der regulären Abgabezeit)
-|-> Klassen -> <Klassen-Name> -> Verlängerung der spätesten Abgabezeit des Lösungsbogens für diese Klasse
-|--flightplan
-|hide-distance
-
-hide-truetrack
-
-hide-trueheading
-
-hide-groundspeed
-
-disable-local-time
-
-show-elapsed-time
-|im Flugplan Spalte "Entfernung" leer lassen
-
-im Flugplan Spalte "Rechtweisender Kurs" leer lassen
-
-im Flugplan Spalte "Rechtweisender Steuerkurs" leer lassen
-
-im Flugplan Spalte "Geschwindigkeit über Grund" leer lassen
-
-im Flugplan Spalte "Ortszeit" weglassen
-
-im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
-|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten
-|--submission
-|20
-|im Flugplan die späteste Abgabezeit des Lösungsbogens anzeigen +
-(der Wert definiert die Minuten nach dem FP)
-|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten -> Späteste Abgabezeit des Lösungsbogens nach Erreichen des FP
-|--route +
---start-tp +
---add-num
-|Strecke-1 +
-TP3 [,TP5] + 
-1 [,2]
-|im Flugplan für Besatzungen die Wendepunkte-Nummer um den angegebenen Wert 
-ab dem angegebenen Wendepunkt erhöhen 
-(mehrere Erhöhungen möglich; für abkürzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)
-|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten -> Wendepunkte-Nummern um den angegebenen Wert ab dem angegebenen Wendepunkt im Flugplan für Besatzungen erhöhen +
-TP3,TP5:1,2 = ab TP3 um 1 erhöhen, ab TP5 um weitere 2
-|--flightresults
-|show-curved-points
-|im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen
-|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten -> UZKs der krummen Strecke im Navigationsflug-Ergebnis immer anzeigen
-|--landingresults
-|0.5
-|Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren
-|-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen -> Lande-Strafpunkte um angegebenen Faktor reduzieren
-|===
-
- 
 <<<
 [[contest-properties]]
 == Wettbewerbs-Eigenschaften
@@ -1831,10 +1748,11 @@ zu machen oder diese Datei zu löschen.
 <<fc.adoc#configuration-landing>> +
 <<fc.adoc#configuration-live>> +
 <<fc.adoc#configuration-livetracking>> +
-<<fc.adoc#configuration-osmonlinemap>> +
-<<fc.adoc#configuration-osmprint>> +
+<<fc.adoc#configuration-fcmap>> +
 <<fc.adoc#configuration-openaip>> +
+<<fc.adoc#configuration-onlinemap>> +
 <<fc.adoc#configuration-task-creator>> +
+<<fc.adoc#configuration-configserver>> +
 <<fc.adoc#configuration-test>>
 
 [[configuration-email]]
@@ -1995,10 +1913,38 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
  }
 
 
-[[configuration-osmonlinemap]]
-=== OSM-Online-Karte konfigurieren
+[[configuration-fcmap]]
+=== Eigenen Karten-Druck-Server konfigurieren
  flightcontest {
    maps {
+     fcmap {
+        server = "TODO" // Adresse des Druck-Servers für die Karten-Erzeugung
+     }
+   }
+ }
+
+Errichtung eines eigenen Druck-Servers: +
+link:help_fcmaps.html[Flight Contest maps server^]
+
+[[configuration-openaip]]
+=== Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren
+ flightcontest {
+   maps {
+     openaip {
+       server = "https://api.core.openaip.net/api" // Adresse des OpenAIP-Servers
+       apikey = "TODO"                             // API Key, mit dem der Zugriff
+                                                   // auf den OpenAIP-Server ermöglicht wird
+                                                   // Anmeldung auf https://www.openaip.net
+       ignoreAirspacesStartsWith = ""              // Zu ignorierende Lufträume
+                                                   // (mehrere mit Komma trennen)
+     }
+   }
+ }
+
+[[configuration-onlinemap]]
+=== OSM-Online-Karte konfigurieren
+ flightcontest {
+   onlinemap {
      tiles_server = "TODO" // Adresse eines alternativen OSM-Tiles-Servers
      tiles_xyz = true      // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
    }
@@ -2007,28 +1953,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 Ermöglicht Umstellung des OSM-Online-Karten-Layers 'Flight Contest'
 auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de).
 
-
-[[configuration-osmprint]]
-=== OSM-Wettbewerbs-Kartendruck konfigurieren
- flightcontest {
-   contestmap {
-     printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
-   }
- }
-
-[[configuration-openaip]]
-=== OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren
- flightcontest {
-   openaip {
-     server = "https://api.core.openaip.net" // Adresse des OpenAIP-Servers
-     api = "/api"
-     token = "TODO"                          // API Key, mit dem der Zugriff
-                                             // auf den OpenAIP-Server ermöglicht wird
-                                             // Anmeldung auf https://www.openaip.net
-     ignoreAirspacesStartsWith = ""          // Zu ignorierende Lufträume
-                                             // (mehrere mit Komma trennen)
-   }
- }
 
 [[configuration-task-creator]]
 === Original-Task-Creator für Nutzung konfigurieren
@@ -2040,9 +1964,17 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
  }
 
 Flight Contest wird mit einem integrierten Task-Creator ausgeliefert.
-Die Angabe dieses Wertes deaktiviert den internen Task-Creator und schaltet auf den Original-Task-Creator um.
+Die Angabe dieses Wertes macht zusätzlich den Original-Task-Creator verfügbar.
 Der integrierte Task-Creator hat ein abweichendes Aussehen und hat Online-Funktionen deaktivert,
 was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhindert.
+
+[[configuration-configserver]]
+=== Eigenen Konfigurations-Server konfigurieren
+ flightcontest {
+   config {
+      server = "TODO" // Adresse des Konfigurations-Servers
+   }
+ }
 
 [[configuration-test]]
 === Test-Anzeigen konfigurieren
@@ -2056,8 +1988,10 @@ was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhi
    observation {
      nobuttons = true // Deaktiviert Schalter bei Beobachtungs-Ergebnis-Eingabe
    }
-   contestmap {
-     devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
+   maps {
+     fcmap {
+        devoptions = true // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
+     }
    }
  }
 

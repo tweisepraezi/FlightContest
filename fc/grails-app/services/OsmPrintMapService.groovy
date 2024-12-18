@@ -884,6 +884,7 @@ class OsmPrintMapService
             )
             if (status.responseCode == 202) {
                 job_started = true
+                BootStrap.global.CountFCMap()
             }
             printdone "responseCode=${status.responseCode}"
         }
@@ -913,6 +914,8 @@ class OsmPrintMapService
             printjobid_writer << contestMapParams.contestMapPrintSize
             printjobid_writer << "\n"
             printjobid_writer << false // contestMapParams.printColorChanges
+            printjobid_writer << "\n"
+            printjobid_writer << map_projection
             printjobid_writer.close()
             printdone ""
             

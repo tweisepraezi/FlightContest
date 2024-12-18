@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.5.0,</span>
-<span id="revdate">23.10.2024</span>
+<span id="revnumber">version 3.6.0,</span>
+<span id="revdate">17.12.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -1308,13 +1308,15 @@ systemctl enable fcmaps_web.service</pre>
 <h2 id="fc-configuration">Configure Flight Contest</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add <code><code>printserverapi</code></code> in <code><code>&#8594; Extras &#8594; Settings &#8594; Config</code></code></p>
+<p>Add <code><code>server</code></code> in <code><code>&#8594; Extras &#8594; Settings &#8594; Config</code></code></p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
-  contestmap {
-    printserverapi = "http://&lt;server-dns-name&gt;:8181/api/beta2/maps"
+  maps {
+    fcmap {
+       server = "http://&lt;server-dns-name&gt;:8181/api/beta2/maps"
+    }
   }
 }</pre>
 </div>

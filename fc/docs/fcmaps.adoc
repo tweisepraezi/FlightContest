@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.5.0
-:revdate:   23.10.2024
+:revnumber: 3.6.0
+:revdate:   17.12.2024
 :nofooter:
 :title-page:
 :toc-title: Table of content
@@ -486,14 +486,16 @@ Check successfully restart
 [[fc-configuration]]
 == Configure Flight Contest
 
-Add ```printserverapi``` in ```-> Extras -> Settings -> Config```
+Add ```server``` in ```-> Extras -> Settings -> Config```
 
  flightcontest {
-   contestmap {
-     printserverapi = "http://<server-dns-name>:8181/api/beta2/maps"
+   maps {
+     fcmap {
+        server = "http://<server-dns-name>:8181/api/beta2/maps"
+     }
    }
  }
-
+ 
 and restart Flight Contest.
 
 Test map generation with ```-> Routes -> <Route> -> OSM Contest Map```.

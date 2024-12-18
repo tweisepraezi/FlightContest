@@ -35,4 +35,13 @@ Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Select-Object 
 Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Where-Object -Property CommandLine -like '*fcmanager.ps1*' | Select-Object ProcessId
 
 
+https://www.reddit.com/r/PowerShell/comments/dg0yi7/device_id_of_laptops/?tl=de&rdt=57148
 
+    powershell (get-itemproperty -path HKLM:\SOFTWARE\Microsoft\SQMClient -Name MachineID).MachineID
+
+    {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
+
+https://stackoverflow.com/questions/29221001/how-do-i-run-a-powershell-command-from-groovy-the-same-way-as-cmd-c-command
+
+    ['powershell', '-command', 'dir'].execute()
+    

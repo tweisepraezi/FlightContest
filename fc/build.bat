@@ -108,6 +108,12 @@ call build_flightcontestmanager.bat
 echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme.txt
 echo.
+call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_en.txt
+echo.
+call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_tracking.txt
+echo.
+call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\FCSetup-NewVersion.txt
+echo.
 
 ::-------------------------------------------------------------------
 :grails
@@ -137,10 +143,6 @@ echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help_en.pdf
 echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help_fcmaps.pdf
-echo.
-call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_tracking.txt
-echo.
-call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_en.txt
 echo.
 
 ::-------------------------------------------------------------------

@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.5.0
-:revdate: 23.10.2024
+:revnumber: 3.6.0
+:revdate: 17.12.2024
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -70,7 +70,7 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)^]
 * link:rules/DE_Navigationsflug_2017_en.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
-* link:rules/FAI_precision_flying_rules_2023.pdf[FAI Precision Flying^]
+* link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
 * link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)^]
 * link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
@@ -1017,15 +1017,14 @@ In addition, saved maps from which a PDF can be generated are also available in 
 === Server configuration
 
 Generating the competition map requires a *print server*.
-For this purpose, a server operated by the DAeC can be used, whose address is to be requested and set with an installation-dependent configuration in *C:\FCSave\.fc\config.groovy*.: +
-<<fc_en.adoc#configuration-osmprint>> +
-
-Alternatively, a separate print server can be set up: +
-link:help_fcmaps.html[Flight Contest maps server^]
+For this purpose, a server operated by the German Aero Club DAeC can be used, which is accessible after registering the client-id. +
+Register your client here: https://flightcontest.de/register-client. +
+The client-id can be determined with “Extras -> Get client-id” or with the Flight Contest Manager.
 
 Map data is only available for installed countries.
 
-For the use of airspaces, an *OpenAIP* access with an installation-dependent configuration must be set in *C:\FCSave\.fc\config.groovy*.: +
+*OpenAIP* is used for the use of airspace, for which an API key is included in the client-id registration.
+You can configure your own OpenAIP API key as follows: +
 <<fc_en.adoc#configuration-openaip>>
 
 Airspaces are available worldwide.
@@ -1529,7 +1528,6 @@ Allows you to influence the appearance of the print +
 <<fc_en.adoc#print-styles-foot>> +
 <<fc_en.adoc#print-styles-tables>> +
 <<fc_en.adoc#print-styles-samples>> +
-<<fc_en.adoc#print-styles-special-old>>
 
 [[print-styles-title]]
 === CSS settings for title
@@ -1661,27 +1659,34 @@ Table classes:
 [[print-styles-samples]]
 === Examples
 
-** Crew list - reduce lines
+** Crew list - make lines smaller
 
  table.crewlist tr.value td { font-size: 90%; }
 
-** Crew schedule - reduce lines
+** Observation forms - make lines smaller
+
+ table.observationturnpointlist tr td { font-size: 70%; }
+ table.observationsroutephotolist tr td { font-size: 80%; }
+ table.observationsroutecanvaslist tr td { font-size: 70%; }
+ table.observationsroutecrewjudgesign tr td { font-size: 30%; }
+
+** Crew timetable - make lines smaller
 
  table.timetablelist tr.value td { font-size: 90%; }
   
-** Referee schedule - reduce lines
+** Judge timetable - make lines smaller
 
  table.timetablejudgelist tr.value td { font-size: 90%; }
   
-** Scanned observation forms - resize
+** Scanned observation forms - change size
 
  img.scannedobservationtest { width:80%; }
  
-** Scanned Planning Task Forms - Resize
+** Scanned planning task forms - change size
   
  img.scannedplanningtest { width:80%; }
  
-** Occupation result - reduce lines
+** Crew result - make lines smaller
  
  table.crewresultsummary td { font-size: 70%; }
  table.planningtaskresultlist tr.value td { font-size: 70%; }
@@ -1698,7 +1703,7 @@ Table classes:
 
  table.resultlist td { font-size: 90%; }
  
-** Result list team evaluation - reduce lines
+** Result list team evaluation - make lines smaller
 
  table.teamresultlist td { font-size: 90%; }
 
@@ -1709,94 +1714,6 @@ Table classes:
 ** Points pressure landing field - change size
 
  img.landingfield { width:200%; }
- 
-[[print-styles-special-old]]
-=== Replaced CSS properties
-
-[cols="1,1,1,1", options="header"]
-|===
-|property
-|value
-|effect
-|now found in
-|--route +
---disable-procedureturn
-|route-1
-|Disable turning loops for this route
-|->routes -> <route-name> -> route-settings -> use turning loops
-|--route +
---show-curved-points
-|route-1
-|in route displays of this route show SCs of the curved route
-|->routes -> <route-name> -> route-settings -> show SCs of curved route in route-maps of this route
-|--class +
---secret-gatewidth
-|--class +
-2
-|--use a different gate width for SCs in time evaluation for crews of this class (gate width in NM)
-|--class -> <class-name> -> different gate-width from SC coordinates for this class
-|--class +
---before-starttime
-|--class +
-30
-|--class -> move forward the start time of planning in the schedule for crews of this class (the numeric value defines the minutes before the regular planning time)
-|--class -> <class-name> -> advance the planning start time before the regular planning time for this class
-|--class +
---add-submission
-|--beginner +
-10
-|--class -> extend the latest submission time of the solution sheet in the flight plan for crews of this class (the number value defines the minutes after the regular submission time)
-|-> classes -> <class-name> -> extend the latest solution sheet submission time for this class
-|--flightplan
-|hide-distance
-
-hide-truetrack
-
-hide-trueheading
-
-hide-groundspeed
-
-disable-local-time
-
-show-elapsed-time
-|Leave column "Distance" empty in flight plan
-
-In the flight plan, leave the "Right course" column empty.
-
-in the flight plan, leave the column "Right heading" empty
-
-Leave column "Speed over ground" empty in flight plan
-
-omit "local time" column in flight plan
-
-in flight plan print time history in column "flight time
-|-> tasks -> navigation test -> <navigation test name> -> edit
-|--submission
-|20
-|--display in the flight plan the latest submission time of the solution sheet +
-(the value defines the minutes after the FP)
-|-> tasks -> navigation test -> <navigation test name> -> edit -> latest submission time of solution sheet after reaching FP
-|--route +
---start-tp +
---add-num
-|route-1 +
-TP3 [,TP5] +
-1 [,2]
-|in the flight plan for crews, increase the turnpoint number by the specified value
-from the specified turnpoint
-(several increases possible; for abbreviated routes, where the competition map of another route is used)
-|-> Tasks -> Navigation test -> <Navigation test name> -> Edit -> Increase turnpoint numbers by the specified value from the specified turnpoint in the flight plan for crews +
-TP3,TP5:1,2 = increase from TP3 by 1, from TP5 by another 2
-|--flightresults
-|show-curved-points
-|show curved points in navigation flight results
-|-> Tasks -> Navigation test -> <navigation test name> -> Edit -> Always show SCs of the curved route in the navigation flight result
-|--landingresults
-|0.5
-|--reduce landing penalty points in overall ranking by specified factor
-|-> Evaluation -> Competition Evaluation -> Competition Evaluation Settings -> Reduce landing penalty points by specified factor
-|===
-
  
 <<<
 [[contest-properties]]
@@ -1821,10 +1738,11 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.
 <<fc_en.adoc#configuration-landing>> +
 <<fc_en.adoc#configuration-live>> +
 <<fc_en.adoc#configuration-livetracking>> +
-<<fc_en.adoc#configuration-osmonlinemap>> +
-<<fc_en.adoc#configuration-osmprint>> +
+<<fc_en.adoc#configuration-fcmap>> +
 <<fc_en.adoc#configuration-openaip>> +
+<<fc_en.adoc#configuration-onlinemap>> +
 <<fc_en.adoc#configuration-task-creator>> +
+<<fc_en.adoc#configuration-configserver>> +
 <<fc_en.adoc#configuration-test>>
 
 [[configuration-email]]
@@ -1984,10 +1902,38 @@ To achieve this without copies or FTP upload, use the following configuration:
    }
  }
 
-[[configuration-osmonlinemap]]
-=== Configure OSM online map
+[[configuration-fcmap]]
+=== Configure your own map printing server
  flightcontest {
    maps {
+     fcmap {
+       server = "TODO" // Address of the print server for map generation
+     }
+   }
+ }
+
+Setting up your own print server: +
+link:help_fcmaps.html[Flight Contest maps server^]
+
+[[configuration-openaip]]
+=== Configure your own OpenAIP API key for airspace display and map printing
+ flightcontest {
+   maps {
+     openaip {
+       server = "https://api.core.openaip.net/api" // Adress of OpenAIP server
+       apikey = "TODO"                             // API Key 
+                                                   // to enable access to the OpenAIP server
+                                                   // Registration at https://www.openaip.net
+       ignoreAirspacesStartsWith = ""              // Airspaces to ignore
+                                                   // (separate several with a comma)
+     }
+   }
+ }
+
+[[configuration-onlinemap]]
+=== Configure OSM online map
+ flightcontest {
+   onlinemap {
      tiles_server = "TODO" // Address of an alternative OSM tiles server
      tiles_xyz = true      // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
    }
@@ -1996,28 +1942,6 @@ To achieve this without copies or FTP upload, use the following configuration:
 Enables switching of the OSM online map layer 'Flight Contest'
 to an alternative tiles server (instead of https://tiles.flightcontest.de).
 
-
-[[configuration-osmprint]]
-=== Configure OSM contest map printing
- flightcontest {
-   contestmap {
-     printserverapi = "TODO" // Address of the print server for OSM contest map generation
-   }
- }
-
-[[configuration-openaip]]
-=== Configure OpenAIP for airspace display and map printing
- flightcontest {
-   openaip {
-     server = "https://api.core.openaip.net" // Adress of OpenAIP server
-     api = "/api"
-     token = "TODO"                          // API Key 
-                                             // to enable access to the OpenAIP server
-                                             // Registration at https://www.openaip.net
-     ignoreAirspacesStartsWith = ""          // Airspaces to ignore
-                                             // (separate several with a comma)
-   }
- }
 
 [[configuration-task-creator]]
 === Configure original Task Creator for use
@@ -2029,9 +1953,17 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
  }
 
 Flight Contest is delivered with an integrated Task Creator.
-Specifying this value deactivates the internal Task Creator and switches to the original Task Creator.
+Specifying this value also makes the original task creator available.
 The integrated task creator has a different appearance and has online functions deactivated,
 which prevents a task from being saved in a publicly accessible database.
+
+[[configuration-configserver]]
+=== Configure your own configuration server
+ flightcontest {
+   config {
+      server = "TODO" // Address of the configuration server
+   }
+ }
 
 [[configuration-test]]
 === Configure test displays
@@ -2045,8 +1977,10 @@ which prevents a task from being saved in a publicly accessible database.
    observation {
      nobuttons = true // Disables buttons on observation result input
    }
-   contestmap {
-     devoptions = true       // Show additional devoptions in the OSM contest map dialog
+   maps {
+     fcmap {
+       devoptions = true // Show additional devoptions in the OSM contest map dialog
+     }
    }
  }
 

@@ -3579,6 +3579,7 @@ class RouteController {
                 boolean print_landscape = printjobid_file_reader.readLine() == 'true'
                 String print_size = printjobid_file_reader.readLine()
                 boolean print_colorchanges = printjobid_file_reader.readLine() == 'true'
+                String map_projection = printjobid_file_reader.readLine()
                 printjobid_file_reader.close()
                 OsmPrintMapJob.schedule(
                     1000*Defs.OSMPRINTMAP_RUNSECONDS,
@@ -3591,7 +3592,7 @@ class RouteController {
                      (Defs.OSMPRINTMAP_PNGFILENAME):png_file_name,
                      (Defs.OSMPRINTMAP_PRINTLANDSCAPE):print_landscape,
                      (Defs.OSMPRINTMAP_PRINTSIZE):print_size,
-                     (Defs.OSMPRINTMAP_PRINTPROJECTION):"",
+                     (Defs.OSMPRINTMAP_PRINTPROJECTION):map_projection,
                      (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):print_colorchanges
                     ]
                 )
