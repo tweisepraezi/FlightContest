@@ -583,10 +583,14 @@ class PrintService
         
         // Print contest map
         try {
+            String print_action = "mapprintable"
+            if (printSize == Defs.CONTESTMAPPRINTSIZE_ANR) {
+                print_action = "mapanrprintable"
+            }
             ITextRenderer renderer = new ITextRenderer();
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/route/mapprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printSize=${printSize}&landscape=${landscape}"
+            String url = "${printparams.baseuri}/route/${print_action}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printSize=${printSize}&landscape=${landscape}"
             String map_file_name = ("file:///" + URLEncoder.encode(mapFileName, "UTF-8")).replaceAll('\\\\','/')
             url += "&mapFileName=${map_file_name}"
             println "Print: $url"
@@ -989,6 +993,23 @@ class PrintService
         
         // Print flightplans
         try {
+            String print_action = "flightplanprintable"
+            String print_params = ""
+            if (task.instance.flighttest.route.corridorWidth) {
+                switch (task.instance.flighttest.flightPlanDesign) {
+                    case FlightPlanDesign.TPList:
+                        print_action = "flightplananrprintable"
+                        print_params = "&tplist=${true}"
+                        break
+                    case FlightPlanDesign.OnlyTimes:
+                        print_action = "flightplananrprintable"
+                        break
+                    case FlightPlanDesign.Map:
+                        print_action = "flightplanmapanrprintable"
+                        print_params = "&crews=${true}"
+                        break
+                }
+            }
             ITextRenderer renderer = new ITextRenderer();
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
@@ -996,7 +1017,7 @@ class PrintService
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
                     if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                        String url = "${printparams.baseuri}/test/flightplanprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+                        String url = "${printparams.baseuri}/test/${print_action}/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}${print_params}"
                         println "Print: $url"
                         renderer.setDocument(url)
                         renderer.layout()
@@ -1234,6 +1255,81 @@ class PrintService
                 catch (Throwable e) {
                     flighttest.message = getMsg('fc.observation.print.error',["$e"])
                     flighttest.error = true
+                }
+            }
+            printdone ""
+            return flighttest
+        } else {
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
+            printerror ret.message
+            return ret
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map printneutralanrplanFlightTest(boolean printResults, Map params, boolean a3, boolean landscape, printparams)
+    {
+        printstart "printneutralanrplanFlightTest results=${printResults}"
+        
+        FlightTest flighttest_instance = FlightTest.get(params.id)
+        if (flighttest_instance) {
+            Map flighttest = ['instance':flighttest_instance]
+            if (printResults) {
+                List test_instances = []
+                BigDecimal last_tas = null
+                for (Test test_instance in flighttest_instance.GetPrintableANRPlanTests()) {
+                    if (last_tas != test_instance.taskTAS) {
+                        test_instances += test_instance
+                    }
+                    last_tas = test_instance.taskTAS
+                }
+                if (test_instances) {
+                    ITextRenderer renderer = new ITextRenderer();
+                    addFonts(renderer)
+                    ByteArrayOutputStream content = new ByteArrayOutputStream()
+                    boolean first_pdf = true
+                    int page = 0
+                    for (Test test_instance in test_instances) {
+                        page++
+                        String url = "${printparams.baseuri}/test/flightplanmapanrprintable/${test_instance.id}?print=1&results=${printResults}&page=${page}&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+                        println "Print: $url"
+                        renderer.setDocument(url)
+                        renderer.layout()
+                        if (first_pdf) {
+                            renderer.createPDF(content,false)
+                            first_pdf = false
+                        } else {
+                            renderer.writeNextDocument(1)
+                        }
+                    }
+                    renderer.finishPDF()
+                    flighttest.content = content.toByteArray()
+                    content.close()
+                }
+            } else {
+                Test test_instance = Test.findByTask(flighttest_instance.task)
+                if (test_instance) {
+                    try {
+                        ITextRenderer renderer = new ITextRenderer();
+                        addFonts(renderer)
+                        ByteArrayOutputStream content = new ByteArrayOutputStream()
+                        String url = "${printparams.baseuri}/test/flightplanmapanrprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+                        println "Print: $url"
+                        renderer.setDocument(url)
+                        renderer.layout()
+                        renderer.createPDF(content,false)
+                        renderer.finishPDF()
+                        flighttest.content = content.toByteArray()
+                        content.close()
+                    }
+                    catch (Throwable e) {
+                        flighttest.message = getMsg('fc.observation.print.error',["$e"])
+                        flighttest.error = true
+                    }
+                } else {
+                    Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
+                    printerror ret.message
+                    return ret
                 }
             }
             printdone ""
@@ -1691,10 +1787,27 @@ class PrintService
         
         // Print flightplan
         try {
+            String print_action = "flightplanprintable"
+            String print_params = ""
+            if (test.instance.flighttestwind.flighttest.route.corridorWidth) {
+                switch (test.instance.flighttestwind.flighttest.flightPlanDesign) {
+                    case FlightPlanDesign.TPList:
+                        print_action = "flightplananrprintable"
+                        print_params = "&tplist=${true}"
+                        break
+                    case FlightPlanDesign.OnlyTimes:
+                        print_action = "flightplananrprintable"
+                        break
+                    case FlightPlanDesign.Map:
+                        print_action = "flightplanmapanrprintable"
+                        print_params = "&crews=${true}"
+                        break
+                }
+            }
             ITextRenderer renderer = new ITextRenderer();
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/flightplanprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            String url = "${printparams.baseuri}/test/${print_action}/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}${print_params}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()

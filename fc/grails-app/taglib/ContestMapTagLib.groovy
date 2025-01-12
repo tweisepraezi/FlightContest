@@ -80,7 +80,18 @@ class ContestMapTagLib
             outln"""        <label>${message(code:'fc.contestmap.savemap.name')}: <input type="text" id="maponlinename_id" name="contestMapPrintName" value="${attrs.r.contestMapPrintName}" size="${attrs.r.contestMapPrintName.size()}" ></input></label>"""
             checkBox("contestMapAllowOverwrite", message(code:'fc.contestmap.savemap.allowoverwrite'), false, attrs)
             outln"""</p>"""
-            outln"""<br/>"""
+            outln"""<p>"""
+            checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), false, attrs)
+            if (attrs.r.defaultOnlineMap) {
+                outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultOnlineMap])})"""
+            }
+            outln"""</p>"""
+            outln"""<p>"""
+            checkBox("contestMapSetDefaultPrintMap", message(code:'fc.contestmap.savemap.defaultprintmap'), false, attrs)
+            if (attrs.r.defaultPrintMap) {
+                outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultPrintMap])})"""
+            }
+            outln"""</p>"""
 		}
 	}
 	

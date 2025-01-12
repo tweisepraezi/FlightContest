@@ -251,6 +251,13 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </p>"""
+        outln"""        <div>"""
+        checkBox("flightTestBadCourseStartLandingSeparatePoints", attrs.i.flightTestBadCourseStartLandingSeparatePoints, 'fc.flighttest.badcoursestartlandingseparatepoints', attrs)
+        if (attrs.i.flightTestBadCourseStartLandingSeparatePoints != attrs.i.contestRule.ruleValues.flightTestBadCourseStartLandingSeparatePoints) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </div>"""
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.landingtolate')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
@@ -262,6 +269,15 @@ class PointsTagLib
         outln"""        </p>"""
         outln"""    </fieldset>"""
         outln"""    <fieldset>"""
+        outln"""        <p>"""
+        outln"""            <label>${message(code:'fc.planningtest.exitroomtolate')}* [${message(code:'fc.points')}]:</label>"""
+        outln"""            <br/>"""
+        outln"""            <input type="text" id="flightTestExitRoomTooLatePoints" name="flightTestExitRoomTooLatePoints" value="${fieldValue(bean:attrs.i,field:'flightTestExitRoomTooLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.flightTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.flightTestExitRoomTooLatePoints) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </p>"""
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.giventolate')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
@@ -326,6 +342,26 @@ class PointsTagLib
         }
         outln"""        </p>"""
         outln"""    </fieldset>"""
+        outln"""</fieldset>"""
+        outln"""<fieldset>"""
+        outln"""        <p>"""
+        outln"""            <label>${message(code:'fc.flighttest.outsidecorridorcorrectsecond')}* [${message(code:'fc.time.s')}]:</label>"""
+        outln"""            <br/>"""
+        outln"""            <input type="text" id="flightTestOutsideCorridorCorrectSecond" name="flightTestOutsideCorridorCorrectSecond" value="${fieldValue(bean:attrs.i,field:'flightTestOutsideCorridorCorrectSecond')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.flightTestOutsideCorridorCorrectSecond != attrs.i.contestRule.ruleValues.flightTestOutsideCorridorCorrectSecond) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </p>"""
+        outln"""        <p>"""
+        outln"""            <label>${message(code:'fc.flighttest.outsidecorridorpointspersecond')}* [${message(code:'fc.points')}]:</label>"""
+        outln"""            <br/>"""
+        outln"""            <input type="text" id="flightTestOutsideCorridorPointsPerSecond" name="flightTestOutsideCorridorPointsPerSecond" value="${fieldValue(bean:attrs.i,field:'flightTestOutsideCorridorPointsPerSecond')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.flightTestOutsideCorridorPointsPerSecond != attrs.i.contestRule.ruleValues.flightTestOutsideCorridorPointsPerSecond) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </p>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
         outln"""    <legend>${message(code:'fc.observationtest')}</legend>"""
@@ -1141,15 +1177,6 @@ class PointsTagLib
             }
             if (attrs.i.printPointsZero || attrs.i.flightTestBadCourseMaxPoints > 0) {
                 outln"""                        <tr class="value">"""
-                outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursecorrectsecond')}</td>"""
-                outln"""                            <td class="value">${attrs.i.flightTestBadCourseCorrectSecond}${message(code:'fc.time.s')}</td>"""
-                if (attrs.i.flightTestBadCourseCorrectSecond != attrs.i.contestRule.ruleValues.flightTestBadCourseCorrectSecond) {
-                    outln"""                        <td class="modify">!</td>"""
-                } else {
-                    outln"""                        <td class="modify"/>"""
-                }
-                outln"""                        </tr>"""
-                outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursemaxpoints')}</td>"""
                 outln"""                            <td class="value">${attrs.i.flightTestBadCourseMaxPoints} ${message(code:'fc.points')}</td>"""
                 if (attrs.i.flightTestBadCourseMaxPoints != attrs.i.contestRule.ruleValues.flightTestBadCourseMaxPoints) {
@@ -1169,12 +1196,38 @@ class PointsTagLib
                     outln"""                        <td class="modify"/>"""
                 }
                 outln"""                        </tr>"""
+                if (attrs.i.flightTestBadCourseStartLandingSeparatePoints || attrs.i.printPointsZero) {
+                    outln"""                        <tr class="value">"""
+                    outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursestartlandingseparatepoints')}</td>"""
+                    if (attrs.i.flightTestBadCourseStartLandingSeparatePoints) {
+                        outln"""                        <td class="value">${message(code:'fc.yes')}</td>"""
+                    } else if (attrs.i.printPointsZero) {
+                        outln"""                        <td class="value">${message(code:'fc.no')}</td>"""
+                    }
+                    if (attrs.i.flightTestBadCourseStartLandingSeparatePoints != attrs.i.contestRule.ruleValues.flightTestBadCourseStartLandingSeparatePoints) {
+                        outln"""                        <td class="modify">!</td>"""
+                    } else {
+                        outln"""                        <td class="modify"/>"""
+                    }
+                    outln"""                        </tr>"""
+                }
             }
             if (attrs.i.printPointsZero || attrs.i.flightTestLandingToLatePoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.landingtolate')}</td>"""
                 outln"""                            <td class="value">${attrs.i.flightTestLandingToLatePoints} ${message(code:'fc.points')}</td>"""
                 if (attrs.i.flightTestLandingToLatePoints != attrs.i.contestRule.ruleValues.flightTestLandingToLatePoints) {
+                    outln"""                        <td class="modify">!</td>"""
+                } else {
+                    outln"""                        <td class="modify"/>"""
+                }
+                outln"""                        </tr>"""
+            }
+            if (attrs.i.printPointsZero || attrs.i.flightTestExitRoomTooLatePoints > 0) {
+                outln"""                        <tr class="value">"""
+                outln"""                            <td class="name">${message(code:'fc.planningtest.exitroomtolate')}</td>"""
+                outln"""                            <td class="value">${attrs.i.flightTestExitRoomTooLatePoints} ${message(code:'fc.points')}</td>"""
+                if (attrs.i.flightTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.flightTestExitRoomTooLatePoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1257,6 +1310,28 @@ class PointsTagLib
                     outln"""                        <td class="modify"/>"""
                 }
                 outln"""                        </tr>"""
+            }
+            if (attrs.i.printPointsZero || attrs.i.flightTestOutsideCorridorCorrectSecond > 0) {
+                outln"""                            <tr class="value">"""
+                outln"""                                <td class="name">${message(code:'fc.flighttest.outsidecorridorcorrectsecond')}</td>"""
+                outln"""                                <td class="value">${attrs.i.flightTestOutsideCorridorCorrectSecond}${message(code:'fc.time.s')}</td>"""
+                if (attrs.i.flightTestOutsideCorridorCorrectSecond != attrs.i.contestRule.ruleValues.flightTestOutsideCorridorCorrectSecond) {
+                    outln"""                            <td class="modify">!</td>"""
+                } else {
+                    outln"""                            <td class="modify"/>"""
+                }
+                outln"""                            </tr>"""
+            }
+            if (attrs.i.printPointsZero || attrs.i.flightTestOutsideCorridorPointsPerSecond > 0) {
+                outln"""                            <tr class="value">"""
+                outln"""                                <td class="name">${message(code:'fc.flighttest.outsidecorridorpointspersecond')}</td>"""
+                outln"""                                <td class="value">${attrs.i.flightTestOutsideCorridorPointsPerSecond} ${message(code:'fc.points')}</td>"""
+                if (attrs.i.flightTestOutsideCorridorPointsPerSecond != attrs.i.contestRule.ruleValues.flightTestOutsideCorridorPointsPerSecond) {
+                    outln"""                            <td class="modify">!</td>"""
+                } else {
+                    outln"""                            <td class="modify"/>"""
+                }
+                outln"""                            </tr>"""
             }
             outln"""                        </tbody>"""
             outln"""                    </table>"""

@@ -12,32 +12,50 @@ class FlightTestTagLib
         outln"""    <div>"""
         checkBox("flightPlanShowTrueTrack", attrs.flighttest.flightPlanShowTrueTrack, 'fc.flighttest.flightplan.showtruetrack', attrs)
         outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("flightPlanShowTrueHeading", attrs.flighttest.flightPlanShowTrueHeading, 'fc.flighttest.flightplan.showtrueheading', attrs)
-        outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("flightPlanShowGroundSpeed", attrs.flighttest.flightPlanShowGroundSpeed, 'fc.flighttest.flightplan.showgroundspeed', attrs)
-        outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("flightPlanShowLocalTime", attrs.flighttest.flightPlanShowLocalTime, 'fc.flighttest.flightplan.showlocaltime', attrs)
-        outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("flightPlanShowElapsedTime", attrs.flighttest.flightPlanShowElapsedTime, 'fc.flighttest.flightplan.showelapsedtime', attrs)
-        outln"""    </div>"""
-        outln"""    <br/>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.flighttest.flightplan.submissionminutes')} [${message(code:'fc.time.min')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="submissionMinutes" name="submissionMinutes" value="${fieldValue(bean:attrs.flighttest,field:'submissionMinutes')}" tabIndex="${attrs.ti[0]++}"/>"""
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.flighttest.flightplan.addtpnum')}</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="flightPlanAddTPNum" name="flightPlanAddTPNum" value="${fieldValue(bean:attrs.flighttest,field:'flightPlanAddTPNum')}" tabIndex="${attrs.ti[0]++}"/>"""
-        outln"""    </p>"""
-        outln"""    <div>"""
-        checkBox("flightResultsShowCurvedPoints", attrs.flighttest.flightResultsShowCurvedPoints, 'fc.flighttest.flightresults.showcurvedpoints', attrs)
-        outln"""    </div>"""
+        if (attrs.flighttest.route.corridorWidth) {
+            outln"""<div>"""
+            checkBox("flightPlanShowLocalTime", attrs.flighttest.flightPlanShowLocalTime, 'fc.flighttest.flightplan.showlocaltime', attrs)
+            outln"""</div>"""
+            outln"""<div>"""
+            outln"""<br/>"""
+            outln"""    <label>${message(code:'fc.test.flightplan.anr')}:"""
+            for (def v in FlightPlanDesign.values()) {
+                if (attrs.flighttest.flightPlanDesign == v) {
+                    outln"""<label><input type="radio" name="flightPlanDesign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+                } else {
+                    outln"""<label><input type="radio" name="flightPlanDesign" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+                }
+            }
+            attrs.ti[0]++
+            outln"""</div>"""
+        } else {
+            outln"""<div>"""
+            checkBox("flightPlanShowTrueHeading", attrs.flighttest.flightPlanShowTrueHeading, 'fc.flighttest.flightplan.showtrueheading', attrs)
+            outln"""</div>"""
+            outln"""<div>"""
+            checkBox("flightPlanShowGroundSpeed", attrs.flighttest.flightPlanShowGroundSpeed, 'fc.flighttest.flightplan.showgroundspeed', attrs)
+            outln"""</div>"""
+            outln"""<div>"""
+            checkBox("flightPlanShowLocalTime", attrs.flighttest.flightPlanShowLocalTime, 'fc.flighttest.flightplan.showlocaltime', attrs)
+            outln"""</div>"""
+            outln"""<div>"""
+            checkBox("flightPlanShowElapsedTime", attrs.flighttest.flightPlanShowElapsedTime, 'fc.flighttest.flightplan.showelapsedtime', attrs)
+            outln"""</div>"""
+            outln"""<br/>"""
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.flighttest.flightplan.submissionminutes')} [${message(code:'fc.time.min')}]:</label>"""
+            outln"""    <br/>"""
+            outln"""    <input type="text" id="submissionMinutes" name="submissionMinutes" value="${fieldValue(bean:attrs.flighttest,field:'submissionMinutes')}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""</p>"""
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.flighttest.flightplan.addtpnum')}</label>"""
+            outln"""    <br/>"""
+            outln"""    <input type="text" id="flightPlanAddTPNum" name="flightPlanAddTPNum" value="${fieldValue(bean:attrs.flighttest,field:'flightPlanAddTPNum')}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""</p>"""
+            outln"""<div>"""
+            checkBox("flightResultsShowCurvedPoints", attrs.flighttest.flightResultsShowCurvedPoints, 'fc.flighttest.flightresults.showcurvedpoints', attrs)
+            outln"""</div>"""
+        }
         outln"""</fieldset>"""
     }
     

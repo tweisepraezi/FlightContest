@@ -564,6 +564,22 @@ class RouteTagLib
             }
             outln"""    </select>"""
             outln"""</p>"""
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.route.printmap.default')}:</label>"""
+            outln"""    <br/>"""
+            outln"""    <select id="defaultPrintMap" name="defaultPrintMap" tabIndex="${attrs.ti[0]++}">"""
+            outln"""        <option></option>"""
+            for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
+                if (map_entry.projection == "3857") {
+                    if (map_entry.title == attrs.route.defaultPrintMap) {
+                        outln"""<option value="${map_entry.title}" selected>${map_entry.title}</option>"""
+                    } else {
+                        outln"""<option value="${map_entry.title}">${map_entry.title}</option>"""
+                    }
+                }
+            }
+            outln"""    </select>"""
+            outln"""</p>"""
         }
     }
     
@@ -868,7 +884,7 @@ class RouteTagLib
         outln"""</fieldset>"""
         
         // Beobachtungen
-        if (attrs.route.turnpointRoute.IsTurnpointSign() || attrs.route.enroutePhotoRoute.IsEnrouteRouteInput()) {
+        if (!attrs.route.corridorWidth && (attrs.route.turnpointRoute.IsTurnpointSign() || attrs.route.enroutePhotoRoute.IsEnrouteRouteInput())) {
             outln"""<fieldset>"""
             String show_coord_observations = "hidden"
             if (attrs.route.showCoordObservations) {
@@ -1183,7 +1199,7 @@ class RouteTagLib
         outln"""</fieldset>"""
         
         // Strecken-Fotos
-        if (attrs.route.enroutePhotoRoute.IsEnrouteRouteInput()) {
+        if (!attrs.route.corridorWidth && attrs.route.enroutePhotoRoute.IsEnrouteRouteInput()) {
             outln"""<fieldset>"""
             String show_enroute_photos = "hidden"
             if (attrs.route.showEnroutePhotos) {
@@ -1302,7 +1318,7 @@ class RouteTagLib
         }
         
         // Strecken-Bodenzeichen
-        if (attrs.route.enrouteCanvasRoute.IsEnrouteRouteInput()) {
+        if (!attrs.route.corridorWidth && attrs.route.enrouteCanvasRoute.IsEnrouteRouteInput()) {
             outln"""<fieldset>"""
             String show_enroute_canvas = "hidden"
             if (attrs.route.showEnrouteCanvas) {

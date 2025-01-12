@@ -159,11 +159,13 @@
                                         <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${coordRouteInstance.maxAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
                                     </p>
                                 </g:if>
-	                            <p>
-	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
-	                                <br/>
-	                                <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="${ti[0]++}"/>
-	                            </p>
+                                <g:if test="${!coordRouteInstance.route.corridorWidth}">
+                                    <p>
+                                        <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="${ti[0]++}"/>
+                                    </p>
+                                </g:if>
 	                            <g:if test="${coordRouteInstance.type.IsRunwayCoord()}">
 	                                <p>
 	                                    <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>

@@ -23,10 +23,10 @@ Powershell-Version ermitteln (Windows 11: 5.1):
     powershell $PSVersionTable
 
 Datei herunterladen:
-    Invoke-WebRequest -Uri "http://download.flightcontest.de/FCSetup-NewVersion.txt" -OutFile "C:\FCSave\FCSetup-NewVersion.txt"
+    Invoke-WebRequest -Uri "http://download.flightcontest.de/FCSetup4-NewVersion.txt" -OutFile "C:\FCSave\FCSetup4-NewVersion.txt"
     
 Dateinhalt herunterladen:
-    $content = Invoke-WebRequest -Uri "http://download.flightcontest.de/FCSetup-NewVersion.txt"
+    $content = Invoke-WebRequest -Uri "http://download.flightcontest.de/FCSetup4-NewVersion.txt"
     Weiterverarbeitung als String: [String]$content
 
 

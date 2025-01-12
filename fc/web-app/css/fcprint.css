@@ -24,12 +24,12 @@ table th, table td {
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.crewtest, table.crewtest th, table.crewtest td {
+table.crewinfo, table.crewinfo th, table.crewinfo td {
     border-style: none;
     vertical-align: top;
 }
 
-table.crewtest td.crew, table.crewtest td.aircraft, table.crewtest td.tas {
+table.crewinfo td.crew, table.crewinfo td.aircraft, table.crewinfo td.tas {
     font-weight: bold;
 }
 
@@ -380,3 +380,144 @@ table.observationsroutecanvasresultlist tr td {
 table.observationsroutecanvasresultlist td.imagename img {
     height: 10px;
 }
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.crewinfoanr {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+table.crewinfoanr td {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+table.crewinfoanr td.crew, table.crewinfoanr td.aircraft, table.crewinfoanr td.tas {
+    font-weight: bold;
+}
+
+div.nocrewinfo {
+    height: 18mm;
+}
+
+table.anr {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+table.anr td {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+img.mapanr {
+    width: 178mm;
+}
+
+div.flightplanstartnumanr {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+div.flightplantasanr {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+table.flightplaninfoanr, table.flightplanlistanr, table.flightplansummaryanr {
+    width: 98mm;
+}
+
+table.flightplaninfoanr td.title {
+    width: 1%;
+    white-space: nowrap;
+}
+
+table.flightplaninfoanr td.space {
+    width: 5mm;
+}
+
+table.flightplaninfoanr td.value {
+    text-align: left;
+}
+
+table.flightplaninfoanr tr.empty {
+    height: 10px;
+}
+
+table.flightplanlistanr th {
+    text-align: center;
+}
+
+table.flightplanlistanr th.tpname {
+    text-align: left;
+}
+
+table.flightplanlistanr td {
+    border: 1px solid black;
+    font-size: 16px;
+    text-align: center;
+}
+
+table.flightplanlistanr td.tpname {
+    text-align: left;
+    font-weight: bold;
+    width: 10mm;
+    padding-left: 1mm;
+}
+
+table.flightplanlistanr td.distance {
+    width: 15mm;
+}
+
+table.flightplanlistanr td.truetrack {
+    width: 10mm;
+}
+
+table.flightplanlistanr td.legtime {
+    width: 15mm;
+}
+
+table.flightplanlistanr td.tptime {
+    width: 15mm;
+}
+
+table.flightplansummaryanr td.title {
+    width: 1%;
+    white-space: nowrap;
+}
+
+table.flightplansummaryanr td.space {
+    width: 5mm;
+}
+
+table.flightplansummaryanr td.value {
+    text-align: left;
+}
+
+table.infoanr, table.infoanr th, table.infoanr td, table.infoanr2, table.infoanr2 th, table.infoanr2 td {
+    border-style: none;
+    white-space: nowrap;
+}
+
+table.infoanr td.title, table.infoanr2 td.title {
+    width: 1%;
+}
+
+table.infoanr2 td.separator {
+    width: 2%;
+}
+
+table.infoanr tr.takeoff td.value {
+    font-weight: bold;
+}
+

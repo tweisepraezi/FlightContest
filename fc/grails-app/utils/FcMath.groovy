@@ -37,6 +37,17 @@ class FcMath
 	}
 
     //--------------------------------------------------------------------------
+	static String DistanceStr1(BigDecimal distanceValue)
+    // NM
+	{
+		if (distanceValue != null) {
+			DecimalFormat df = new DecimalFormat("#0.0")
+			return df.format(distanceValue)
+		}
+		return ""
+	}
+
+    //--------------------------------------------------------------------------
 	static BigDecimal RoundEnrouteDistance(BigDecimal distanceValue)
     // NM
 	{
@@ -240,6 +251,14 @@ class FcMath
         int start_seconds = Seconds(startTime)
         int end_seconds = Seconds(endTime)
         return (end_seconds - start_seconds)/3600
+    }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal TimeDiffSeconds(Date startTime, Date endTime)
+    {
+        int start_seconds = Seconds(startTime)
+        int end_seconds = Seconds(endTime)
+        return end_seconds - start_seconds
     }
     
     //--------------------------------------------------------------------------

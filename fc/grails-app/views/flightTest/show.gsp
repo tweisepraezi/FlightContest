@@ -88,6 +88,10 @@
                             <g:actionSubmit action="printneutralobservation" value="${message(code:'fc.flighttestwind.printneutralobservation')}" tabIndex="${ti[0]++}" />
                             <g:actionSubmit action="printobservationresults" value="${message(code:'fc.flighttestwind.printobservationresults')}" tabIndex="${ti[0]++}" />
                         </g:if>
+                        <g:if test="${flightTestInstance.CanANRPlanPrinted()}">
+                            <g:actionSubmit action="printneutralanrplan" value="${message(code:'fc.flighttestwind.printanrmap')}" tabIndex="${ti[0]++}" />
+                            <g:actionSubmit action="printresultanrplans" value="${message(code:'fc.flighttestwind.printanrmapwithtimes')}" tabIndex="${ti[0]++}" />
+                        </g:if>
                         <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
                             <g:if test="${Test.findByFlighttestwind(flighttestwind_instance)}">
                                 <g:set var="foundTest" value="${true}" />

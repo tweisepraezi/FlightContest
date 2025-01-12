@@ -20,11 +20,15 @@
                         <tbody>
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
-	                            <g:if test="${taskInstance.planningtest}">
-	                                <td><g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/> (${taskInstance.planningtest.planningtesttasks?.size()} ${message(code:'fc.planningtesttask.list')})</td>
-	                            </g:if> <g:else>
-	                                <td><g:if test="${!taskInstance.lockPlanning}"><g:link controller="planningTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.planningtest.add')}</g:link></g:if></td>
-	                            </g:else>
+                                <g:if test="${taskInstance.contest.showPlanningTest}">
+                                    <g:if test="${taskInstance.planningtest}">
+                                        <td><g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/> (${taskInstance.planningtest.planningtesttasks?.size()} ${message(code:'fc.planningtesttask.list')})</td>
+                                    </g:if> <g:else>
+                                        <td><g:if test="${!taskInstance.lockPlanning}"><g:link controller="planningTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.planningtest.add')}</g:link></g:if></td>
+                                    </g:else>
+                                </g:if> <g:else>
+                                    <td/>
+                                </g:else>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetableoverview')}"/></td>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetable')}"/></td>
                                 <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
@@ -225,7 +229,7 @@
                                	<td colspan="${add_col+2}"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}"/></g:if></td>
                                 <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="disablecrew" value="${message(code:'fc.test.disablecrew')}"/></g:if></td>
 								<td><g:actionSubmit action="setpagebreak" value="${message(code:'fc.test.setpagebreak')}"/></td>
-                                <td><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}"/></g:if></td>
+                                <td><g:if test="${!taskInstance.lockPlanning && taskInstance.contest.showPlanningTest}"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}"/></g:if></td>
                                 <td><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.flighttestwind.assign')}"/></g:if></td>
                                 <td colspan="3"><g:actionSubmit action="printflightplans" value="${message(code:'fc.test.flightplan.print')}" /></td>
                                 <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
@@ -235,7 +239,7 @@
                             	<td colspan="${add_col+2}"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="moveend" value="${message(code:'fc.test.moveend')}"/></g:if></td>
                                 <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="enablecrew" value="${message(code:'fc.test.enablecrew')}"/></g:if></td>
 								<td><g:actionSubmit action="resetallpagebreak" value="${message(code:'fc.test.resetpagebreak.all')}"/></td>
-                            	<td><g:actionSubmit action="printplanningtesttask" value="${message(code:'fc.planningtesttask.print')}"/></td>
+                            	<td><g:if test="${taskInstance.contest.showPlanningTest}"><g:actionSubmit action="printplanningtesttask" value="${message(code:'fc.planningtesttask.print')}"/></g:if></td>
                             	<td colspan="3"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}"/></g:if></td>
                             	<td><g:actionSubmit action="exporttimetable_label" value="${message(code:'fc.test.timetable.export.labelprint')}" /></td>
                                 <td/>

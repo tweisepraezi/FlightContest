@@ -69,6 +69,34 @@ class TestController
         }
     }
 
+    def flightplananrprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getflightplanprintableTest(params) 
+        if (test.instance) {
+        	return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startplanning")
+        }
+    }
+
+    def flightplanmapanrprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getflightplanprintableTest(params) 
+        if (test.instance) {
+        	return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startplanning")
+        }
+    }
+
     def printflightplan = {
         Map test = printService.printflightplanTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {

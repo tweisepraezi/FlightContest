@@ -122,17 +122,19 @@ class RoutePointsTools
                 to_lon = coordroute_instance.lonMath()
                 to_name = coordroute_instance.titleCode(params.isPrint)
             } else if (coordroute_instance.type == CoordType.SP) {
-                BigDecimal sp_lat = coordroute_instance.latMath()
-                BigDecimal sp_lon = coordroute_instance.lonMath()
-                String sp_name = coordroute_instance.titleCode(params.isPrint)
-                BigDecimal lat_center = (to_lat+sp_lat)/2
-                BigDecimal lon_center = (to_lon+sp_lon)/2
-                String name = "${to_name}-${sp_name}"
-                BigDecimal distance = AviationMath.calculateLeg(to_lat, to_lon, sp_lat, sp_lon).dis
-                Map new_point = [name:name]
-                new_point += [latcenter:lat_center, loncenter:lon_center]
-                new_point += [radius:distance/2]
-                points += new_point
+                if (to_lat) {
+                    BigDecimal sp_lat = coordroute_instance.latMath()
+                    BigDecimal sp_lon = coordroute_instance.lonMath()
+                    String sp_name = coordroute_instance.titleCode(params.isPrint)
+                    BigDecimal lat_center = (to_lat+sp_lat)/2
+                    BigDecimal lon_center = (to_lon+sp_lon)/2
+                    String name = "${to_name}-${sp_name}"
+                    BigDecimal distance = AviationMath.calculateLeg(to_lat, to_lon, sp_lat, sp_lon).dis
+                    Map new_point = [name:name]
+                    new_point += [latcenter:lat_center, loncenter:lon_center]
+                    new_point += [radius:distance/2]
+                    points += new_point
+                }
             } else if (coordroute_instance.type == CoordType.FP) {
                 fp_lat = coordroute_instance.latMath()
                 fp_lon = coordroute_instance.lonMath()

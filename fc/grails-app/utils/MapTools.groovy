@@ -58,4 +58,14 @@ class MapTools
         return map_list
     }
 
+    // ----------------------------------------------------------------------------------
+    static Map GetMap(String mapName, def servletContext, def session)
+    {
+        for (Map map_entry in GetMapList(servletContext, session)) {
+            if (map_entry.title == mapName) {
+                return map_entry
+            }
+        }
+        return [:]
+    }
 }

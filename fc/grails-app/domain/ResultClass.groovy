@@ -6,7 +6,7 @@ class ResultClass
 	String name
 	String shortName = ""                               // DB-2.8
 	String contestTitle = ""
-	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung
+	ContestRules contestRule = ContestRules.Empty       // Wettbewerbsordnung, empty DB-2.41
     String ruleTitle = ""                               // DB-2.21
 	Boolean precisionFlying = false                     // DB-2.3
     Integer increaseFactor = 0                          // DB-2.13
@@ -65,6 +65,7 @@ class ResultClass
 	int flightTestBadCoursePoints = 200
     Integer flightTestBadCourseMaxPoints = 1000         // DB-2.17
 	int flightTestBadCourseStartLandingPoints = 500
+    Boolean flightTestBadCourseStartLandingSeparatePoints = false // DB-2.41
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
 	Integer flightTestSafetyAndRulesInfringementPoints = 0  // DB-2.3
@@ -73,6 +74,9 @@ class ResultClass
 	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
 	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
     Integer flightTestForbiddenEquipmentPoints = 0      // DB-2.13
+    Integer flightTestExitRoomTooLatePoints = 0         // DB-2.41
+	Integer flightTestOutsideCorridorCorrectSecond = 0  // DB-2.41
+    Integer flightTestOutsideCorridorPointsPerSecond = 0 // DB-2.41
 
     // ObservationTest
     EnrouteValueUnit observationTestEnrouteValueUnit = EnrouteValueUnit.mm // DB-2.13
@@ -304,6 +308,12 @@ class ResultClass
 		
 		// DB-2.35 compatibility
 		contestPrintFooter(nullable:true)
+
+        // DB-2.41 compatibility
+        flightTestBadCourseStartLandingSeparatePoints(nullable:true)
+        flightTestOutsideCorridorCorrectSecond(nullable:true,min:0)
+        flightTestOutsideCorridorPointsPerSecond(nullable:true,min:0)
+        flightTestExitRoomTooLatePoints(nullable:true, min:0)
 	}
 
 	String GetPrintContestTitle()
@@ -604,6 +614,7 @@ class ResultClass
 		flightTestBadCoursePoints = resultClassInstance.flightTestBadCoursePoints
         flightTestBadCourseMaxPoints = resultClassInstance.flightTestBadCourseMaxPoints
 		flightTestBadCourseStartLandingPoints = resultClassInstance.flightTestBadCourseStartLandingPoints
+        flightTestBadCourseStartLandingSeparatePoints = resultClassInstance.flightTestBadCourseStartLandingSeparatePoints
 		flightTestLandingToLatePoints = resultClassInstance.flightTestLandingToLatePoints
 		flightTestGivenToLatePoints = resultClassInstance.flightTestGivenToLatePoints
 		flightTestSafetyAndRulesInfringementPoints = resultClassInstance.flightTestSafetyAndRulesInfringementPoints
@@ -612,6 +623,9 @@ class ResultClass
 		flightTestSafetyEnvelopeOpenedPoints = resultClassInstance.flightTestSafetyEnvelopeOpenedPoints
 		flightTestFrequencyNotMonitoredPoints = resultClassInstance.flightTestFrequencyNotMonitoredPoints
         flightTestForbiddenEquipmentPoints = resultClassInstance.flightTestForbiddenEquipmentPoints
+        flightTestExitRoomTooLatePoints = resultClassInstance.flightTestExitRoomTooLatePoints
+        flightTestOutsideCorridorCorrectSecond = resultClassInstance.flightTestOutsideCorridorCorrectSecond
+        flightTestOutsideCorridorPointsPerSecond = resultClassInstance.flightTestOutsideCorridorPointsPerSecond
 
         observationTestEnrouteValueUnit = resultClassInstance.observationTestEnrouteValueUnit
         observationTestEnrouteCorrectValue = resultClassInstance.observationTestEnrouteCorrectValue

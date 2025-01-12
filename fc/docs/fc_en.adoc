@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.6.0
-:revdate: 17.12.2024
+:revnumber: 4.0.0
+:revdate: 12.01.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -11,8 +11,8 @@ Thomas Weise, German Precision Flying Club
 [[introduction]]
 == Introduction
 
-Flight Contest plans the timed competition sequence of a general aviation powered flight contest
-and evaluates results for planning tests, navigation tests, observations and/or landings.
+Flight Contest is a tool to schedule aviation power flying competitions (Air Rally Flying, Air Navigation Race, Precision Flying)
+and to evaluate planning, navigation, observation and/or landing test results.
 
 Flight Contest has a flexible contest management system. This includes the support of:
 
@@ -33,7 +33,14 @@ Is an open source, multilingual, network-enabled database application based on J
 
 Supports logger data formats GAC, IGC, GPX, KML, KMZ and NMEA 0183 (extensible).
 
-Generates OSM-based topographic A3 and A4 competition maps in TÜK-200 style.
+Generates OSM-based topographic competition maps:
+
+* OSM-data of multible regions available (Europe, Chile, expandable)
+* Contour lines from SRTM data can be added
+* Airspaces from OpenAIP data can be added
+* Airfields from OpenAIP data can be added (ICAO symbols)
+* Additional map objects that are not included in the OSM data can be added
+* Additional airfields that are not included in the OpenAIP data can be added
 
 Creates PDF for print and internet publishing.
 
@@ -45,6 +52,7 @@ Supports special stretching properties:
 * Scenic legs
 * Semicircles
 * Touch-and-go landings
+* Corridors
 
 Provides a live score display (Live Scoring):
 
@@ -58,6 +66,8 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 * Online map display with Open Street Map
 * Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files with optional gpx download
 
+Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?lang=en) for fast route creation.
+
 <<<
 [[manuals]]
 == Operating manuals
@@ -68,13 +78,15 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 == Supported rulesets
 
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)^]
+* link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland (German)^]
 * link:rules/DE_Navigationsflug_2017_en.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_anr_rules_2024.pdf[FAI Air Navigation Race^]
 * link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
 * link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)^]
-* link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
 * link:rules/AT_Motorflug_2023.pdf#page=29[Navigationsflug-Reglement Österreich (German)^]
+* link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
 
 <<<
 [[default-competition]]
@@ -1218,6 +1230,172 @@ and have been entered in the distance coordinates under
 Distance measurement (map) [mm]'.
 
 <<<
+[[anr]]
+== Planning and evaluation of ANR competitions
+
+Only individual parcours are supported for a task.
+This means that only exactly one parcour can be drawn on a map
+and the calculation of all time tables and flight plans for a task is only possible for exactly one parcour. +
+Of course, it is also possible to perform several tasks in succession, in which the crews compete against each other.
+
+<<fc_en.adoc#anr-parcour-construction>> +
+<<fc_en.adoc#anr-planning>> +
+<<fc_en.adoc#anr-crew-results>> +
+<<fc_en.adoc#anr-evaluation>>
+
+[[anr-parcour-construction]]
+=== Parcour construction
+
+. Create competition (Contest -> New Contest)
++
+Choose an ANR contest rule. +
+If required, activate "Contest with classes".
+
+. Create route with TO (Routes -> New Route)
++
+Enter the name of the airfield as the title. +
++
+Add airfield coordinates as TO point. +
+The correctness of the airfield coordinates can be checked using “OSM online map”.
+
+. Create an A4 map with TO for Task Creator
++
+OSM Contest Map -> Show 1. settings +
+Select the option to print in portrait format if necessary +
+Run “Generate (for Task Creator)” +
++
+If OpenAIP access has been configured, run “Determine airspaces around the airport” first if necessary. +
++
+The height of airspaces to be taken into account can be adjusted (4000 feet pre-set). +
+Air spaces that are not to be considered can be commented out with a leading # if necessary. +
+With “KMZ export airspaces”, an export can be made to view the airspaces in Google Earth. +
++
+If OpenAIP access has been configured, airports with ICAO symbols are plotted on the map. +
+Otherwise, airports are drawn on the map from OSM data with a simple airplane symbol. +
++
+Save the generated map "Airfield name (Task Creator)" without further settings with "Save map and switch to the list of maps".
+
+. Construct ANR parcour in the Task Creator
++
+Start Task Creator (Maps -> "Airfield name (Task Creator)" -> Task Creator -> …) +
++
+In the Task Creator that has been started, a “Map Url” is preset to the generated map and can be loaded with “Load”. +
+After activating “Turn Points -> Edit”, double-click to add all checkpoints to the map for the ANR parcour one after the other:
+The first point is to be put on the airfield (TOP). The second point becomes SP. The last point becomes FP. +
+With “Task name -> Save”, the parcour can be saved as a CSV file in the download folder of the computer (enter the task name first). +
++
+The finished parcour is to be exported with “Export FC kml”.
++
+To correct the parcour, start the Task Creator by clicking on “Maps -> Task Creator”,
+load the saved CSV file with “Task name -> Load”, load the “Map Url”, and activate “Turn Points -> Edit”. +
+Now the position of individual checkpoints can be changed, new checkpoints added or checkpoints deleted.
+
+. Import parcour (Routes -> Import FC route)
++
+Select the kml file exported in Task Creator. +
+The imported route appears in the route list. +
+Open it by clicking on the route title.
++
+If you get the error "Coordinates procedure turn differences" press the button "Calculate legs again". +
++
+The route can now be checked for correctness using “OSM online map”. +
++
+If the route includes a semi-circle, it must be converted into a route with semi-circle gates
+(activate route settings "Export semi-circle gates from circle centers", run "GPX export (with semi-circle gates)", and run "Import FC route" again).
+
+. Create an A4 competition map with ANR parcour
++
+OSM Contest Map -> Show 1. settings +
+Deselect checkpoints between SP and FP for printing on the map (-> Turnpoints for printing) +
+Select the option to print in portrait format if necessary +
+Run “Generate” +
++
+The generated map is to be saved with the activated settings “Set this map as the default online map for this route”
+and ‘Set this map as the default print map for this route’ with ‘Save map and switch to the list of maps’. +
++
+The map can now be saved as a PDF for printing (Maps -> Route title -> PDF contest map -> ...).
+
+[[anr-planning]]
+=== Task planning
+
+. Create crews
++
+At least one crew must be defined for the next steps. +
+
+. Plan the task for the parcour
+
+.. Create task
++
+Click on “Tasks -> New Task” +
+Set the first time and the takeoff-intervall +
+Click on "Create" +
+Click on "Planning -> task"
+
+.. Assign the parcour to the task
++
+Click on "[Add Navigation Test]" +
+Select route with ANR parcour +
+If necessary, correct the runway direction and arrival and departure flight times. +
+Click on "Create"
++
+The settings made here can be edited again by clicking on the route name, which replaces the display of “[Add Navigation Test]”. +
+Further settings can also be made here, such as the flight plan design, the display of values in the flight plan and changed values for runway direction and arrival and departure flight times. +
+Furthermore, the classic ANR forms can also be generated here. To do this, a default print map must be assigned to a map that was created with ANR size.
+
+.. Calculate the crew's flight plans
++
+Click on "Select all" +
+Click on "Assign wind" +
+Click on "Calculate timetable"
+
+. Create flight plans and timetables
++
+Click on "Select all" +
+Click on "Print flight plans" +
++
+Different timetables can be generated under “Overview Timetable”, “Crew Timetable” and “Judge Timetable”.
+
+. Protect task against unintentional changes
++
+If required do this by activating the “Lock planning” option in “Task (Settings)”.
+
+[[anr-crew-results]]
+=== Calculate crew results
+-> Results -> task
+
+. Logger evaluation
++
+A logger file can be evaluated by selecting “Crew -> Navigation flight ->...” and then “Import logger data”.
++
+No logger measurement available: Click on “No data” +
+All checkpoint times are given the maximum number of penalty points. The time difference between the SP and FP planned times is evaluated as time outside the corridor.
++
+Logger measurement values are only available after the SP: +
+The TO and SP flyover time is evaluated with the maximum number of penalty points. The time difference between the SP plan time and the first logger measurement is to be evaluated as time outside the corridor.
+This time difference is to be determined manually and assigned to the first checkpoint where logger readings are available.
++
+Logger measurement values end before the FP: +
+The FP flyover time is given the maximum number of penalty points. The time difference between the last logger measurement and the FP plan time is to be considered as time outside the corridor.
+This time difference is to be determined manually and assigned to the FP.
++
+Missing logger measurement values between SP and FP: +
+Missing measurement values are automatically added by interpolation. This means that not every interruption results in penalty points for times outside the corridor.
++
+Flight plan correction: +
+If a crew has postponed their start and flown with a modified flight plan, their flight plan must be adjusted before the logger evaluation.
+To do this, select the affected crew in “Planning -> task” and use “Time +” or “Time -” to make an adjustment by the customizable number of minutes. 
+A locked planning must be unlocked first.
+
+. Landing evaluation
++
+A landing result can be entered under “Crew -> Ldg1 ->...”.
+
+[[anr-evaluation]]
+=== Final evaluation
+
+see <<fc_en.adoc#evaluation>>
+
+<<<
 [[landings]]
 == Landings
 Depending on the selected competition rules, a fixed landing scheme is used.
@@ -1621,11 +1799,18 @@ Table classes:
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 |landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4	
 
-|crewtest||title crew team resultclass aircraft aircrafttype tas
+|crewinfo||title crew team resultclass aircraft aircrafttype tas
+|crewinfoanr||title crew team resultclass aircraft aircrafttype tas
 |crewneutral||title num crew aircraft col
 |info|wind planning submission endcurved landinglatest planninginfo planningignore planningevaluation|title separator value
+|infoanr|planning takeoff sp fp landing empty corridorwidth wind|title value
+|infoanr2|distance duration empty endcurved|title separator value
 |planningtasklist|valuename unit value [#tpname]|tpname distance truetrack trueheading groundspeed legtime
 |flightplanlist|value [#tpname], procedureturn summary|num distance truetrack trueheading groundspeed legtime tpname tptime
+|flightplaninfoanr|outputtime takeoff empty wind|title space value
+|flightplanlistanr|value [#tpname]|tpname distance truetrack legtime tptime
+|flightplanlistanr2|value [#tpname]|tpname distance truetrack legtime tptime
+|flightplansummaryanr|corridorwidth distance duration|title space value
 |observationturnpointlist|title subtitle data|tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse
 |observationsroutephotolist|title subtitle data|name correct inexact false nmfromtp mmfromtp fromlasttp
 |observationsroutecanvaslist|title subtitle data|sign correct inexact false nmfromtp mmfromtp fromlasttp
@@ -1633,7 +1818,7 @@ Table classes:
 
 |planningtaskresultlist|name1 name2 value [#tpname] summary|tpname plantrueheading trueheading penaltytrueheading planlegtime legtime penaltylegtime
 |summary [planningtaskresults]|legpenalties giventolate exitroomtolate otherpenalties penalties|
-|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed
+|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed
 |summary [flightresults]|checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties|
 |flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime procedureturn badcoursenum altitude
 |loggerdatalist|title value tpvalue|time latitude longitude altitude distance truetrack groundspeed info badcourseinfo nobadcourseinfo

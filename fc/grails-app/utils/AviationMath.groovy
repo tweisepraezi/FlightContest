@@ -281,6 +281,44 @@ class AviationMath
     }
 
     //--------------------------------------------------------------------------
+    static Map getCorridorGate(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                               BigDecimal gateLatitude, BigDecimal gateLongitude,
+                               BigDecimal destLatitude, BigDecimal destLongitude,
+                               BigDecimal corridorWidth)
+    // Berechnet Koordinaten eines Gates an Koordinate gate... 
+    // aus einer Etappe von der Koordinate scr... über die Koordinate gate... zur Koordinate dest...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   corridorWidth: Korridor-Breite in NM
+    // Rückgabe: coordLeft.lat, coordLeft.lon, coordRight.lat, coordRight.lon
+    {
+        BigDecimal src_track = calculateLeg(gateLatitude, gateLongitude, srcLatitude, srcLongitude).dir
+        BigDecimal dest_track = calculateLeg(destLatitude, destLongitude, gateLatitude, gateLongitude).dir
+        
+        BigDecimal gate_track = courseChange(src_track, dest_track) / 2 + src_track
+        BigDecimal gate_track2 = gate_track + 90
+        if (gate_track >= 360) {
+            gate_track -= 360
+        }
+        if (gate_track2 >= 360) {
+            gate_track2 -= 360
+        }
+        BigDecimal reverse_gate_track = gate_track2 + 180
+        if (reverse_gate_track >= 360) {
+            reverse_gate_track -= 360
+        }
+        BigDecimal alpha = 180 - courseChange(src_track, gate_track2)
+        BigDecimal sin_alpha = Math.sin( Math.toRadians(alpha) )
+        BigDecimal gate_width = corridorWidth / sin_alpha
+        
+        Map left_coord = getCoordinate(gateLatitude, gateLongitude, reverse_gate_track, gate_width/2)
+        Map right_coord = getCoordinate(gateLatitude, gateLongitude, gate_track2, gate_width/2)
+        
+        // return Map
+        return [coordLeft:left_coord, coordRight:right_coord, gateTrack:gate_track, destTrack:dest_track]
+    }
+
+    //--------------------------------------------------------------------------
     static Map getGateAtDistance(BigDecimal srcLatitude, BigDecimal srcLongitude,
                                  BigDecimal destLatitude, BigDecimal destLongitude,
                                  BigDecimal gateDistance, Float gateWidth)

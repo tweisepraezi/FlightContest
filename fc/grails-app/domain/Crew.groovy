@@ -9,7 +9,7 @@ class Crew
 	Aircraft aircraft
 	Team team                                 // Team, DB-2.0
 	ResultClass resultclass                   // Klasse, DB-2.0
-    BigDecimal tas = 90
+    BigDecimal tas = 80
 
 	int viewpos = 0
     Integer startNum = 0                      // DB-2.2

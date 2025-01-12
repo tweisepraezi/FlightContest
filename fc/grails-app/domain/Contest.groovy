@@ -2,7 +2,6 @@ import java.util.Map;
 
 class Contest 
 {
-	static final String DEFAULT_ORGANIZER = "Deutscher Pr\u00E4zisionsflug-Verein e.V." // DB-2.8
 	static final int PRINTSTYLESIZE = 10000             // DB-2.8
     static final int PRINTFREETEXTSIZE = 10000          // DB-2.8
     static final String DEFAULT_FREETEXTSTYLE = "td { font-size: 1000%; padding-top:1cm; }\ntd#1 { padding-top:2cm; }" // DB-2.8
@@ -24,7 +23,7 @@ class Contest
     TimeZone timeZone2 = TimeZone.getDefault()          // DB-2.21
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
 	boolean resultClasses = false          	            // Klassen, DB-2.0
-	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung, DB-2.0
+	ContestRules contestRule = ContestRules.Empty       // Wettbewerbsordnung, DB-2.0, empty DB-2.41
     Boolean contestRuleForEachClass = false             // Eigene Wettbewerbsordnung für jede Klasse, DB-2.8 
     String ruleTitle = ""                               // DB-2.21
 	Boolean precisionFlying = false                     // DB-2.3
@@ -35,7 +34,7 @@ class Contest
 	boolean aflosUpload = false                         // Nutzung einer geuploadeten AFLOS-Datenbank, DB-2.0 
 	Integer bestOfAnalysisTaskNum = 0                   // Anzahl der Aufgaben, aus denen das beste Ergebnis zu nehmen ist, DB-2.3
 	String printPrefix = ""                             // Prefix for print, DB-2.3
-	String printOrganizer = DEFAULT_ORGANIZER           // DB-2.8
+	String printOrganizer = ""                          // DB-2.8, empty DB-2.41
     String contestUUID = UUID.randomUUID().toString()   // DB-2.10
 
 	// Wettbewerbs-Auswertung
@@ -117,6 +116,7 @@ class Contest
 	int flightTestBadCoursePoints = 200
     Integer flightTestBadCourseMaxPoints = 1000         // DB-2.17
 	int flightTestBadCourseStartLandingPoints = 500
+    Boolean flightTestBadCourseStartLandingSeparatePoints = false // DB-2.41
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
 	Integer flightTestSafetyAndRulesInfringementPoints = 0 // DB-2.3
@@ -125,7 +125,10 @@ class Contest
 	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
 	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
     Integer flightTestForbiddenEquipmentPoints = 0      // DB-2.13
+    Integer flightTestExitRoomTooLatePoints = 0         // DB-2.41
     Integer flightTestSubmissionMinutes                 // DB-2.20
+	Integer flightTestOutsideCorridorCorrectSecond = 0  // DB-2.41
+    Integer flightTestOutsideCorridorPointsPerSecond = 0 // DB-2.41
     
     // ObservationTest
     EnrouteValueUnit observationTestEnrouteValueUnit = EnrouteValueUnit.mm // DB-2.13
@@ -202,6 +205,11 @@ class Contest
     Integer maxEnrouteCanvas = 0                        // DB-2.13
     Integer minEnrouteTargets = 0                       // DB-2.13
     Integer maxEnrouteTargets = 0                       // DB-2.13
+    Boolean anrFlying = false                           // DB-2.41
+    Integer flightTestLastGateNoBadCourseSeconds = 0    // DB-2.41
+    Boolean showPlanningTest = false                    // DB-2.41
+    Boolean activateFlightTestCheckLanding = false      // DB-2.41
+    Boolean showObservationTest = false                 // DB-2.41
     
 	// Crew print settings
 	String printCrewPrintTitle = ""                     // DB-2.3
@@ -621,7 +629,18 @@ class Contest
 
         // DB-2.39 compatibility
         printCrewSortHelp(nullable:true)
-	}
+        
+        // DB-2.41 compatibility
+        anrFlying(nullable:true)
+        flightTestBadCourseStartLandingSeparatePoints(nullable:true)
+        flightTestOutsideCorridorCorrectSecond(nullable:true,min:0)
+        flightTestOutsideCorridorPointsPerSecond(nullable:true,min:0)
+        flightTestExitRoomTooLatePoints(nullable:true,min:0)
+        flightTestLastGateNoBadCourseSeconds(nullable:true,min:0)
+        showPlanningTest(nullable:true)
+        activateFlightTestCheckLanding(nullable:true)
+        showObservationTest(nullable:true)
+    }
 
     static mapping = {
         routes sort:"id"
@@ -677,6 +696,7 @@ class Contest
 				flightTestBadCoursePoints = contestInstance.flightTestBadCoursePoints
                 flightTestBadCourseMaxPoints = contestInstance.flightTestBadCourseMaxPoints
 				flightTestBadCourseStartLandingPoints = contestInstance.flightTestBadCourseStartLandingPoints
+                flightTestBadCourseStartLandingSeparatePoints = contestInstance.flightTestBadCourseStartLandingSeparatePoints
 				flightTestLandingToLatePoints = contestInstance.flightTestLandingToLatePoints
 				flightTestGivenToLatePoints = contestInstance.flightTestGivenToLatePoints
 				flightTestSafetyAndRulesInfringementPoints = contestInstance.flightTestSafetyAndRulesInfringementPoints
@@ -685,6 +705,9 @@ class Contest
 				flightTestSafetyEnvelopeOpenedPoints = contestInstance.flightTestSafetyEnvelopeOpenedPoints
 				flightTestFrequencyNotMonitoredPoints = contestInstance.flightTestFrequencyNotMonitoredPoints
                 flightTestForbiddenEquipmentPoints = contestInstance.flightTestForbiddenEquipmentPoints
+                flightTestExitRoomTooLatePoints = contestInstance.flightTestExitRoomTooLatePoints
+                flightTestOutsideCorridorCorrectSecond = contestInstance.flightTestOutsideCorridorCorrectSecond
+                flightTestOutsideCorridorPointsPerSecond = contestInstance.flightTestOutsideCorridorPointsPerSecond
                 
                 observationTestEnrouteValueUnit = contestInstance.observationTestEnrouteValueUnit
                 observationTestEnrouteCorrectValue = contestInstance.observationTestEnrouteCorrectValue
@@ -761,6 +784,12 @@ class Contest
                 maxEnrouteTargets = contestInstance.maxEnrouteTargets
                 useProcedureTurns = contestInstance.useProcedureTurns
                 liveTrackingScorecard = contestInstance.liveTrackingScorecard
+
+				anrFlying = contestInstance.anrFlying
+                flightTestLastGateNoBadCourseSeconds = contestInstance.flightTestLastGateNoBadCourseSeconds
+                showPlanningTest = contestInstance.showPlanningTest
+                activateFlightTestCheckLanding = contestInstance.activateFlightTestCheckLanding
+                showObservationTest = contestInstance.showObservationTest
                 
                 if (copyCrews) {
                     crewPilotNavigatorDelimiter = contestInstance.crewPilotNavigatorDelimiter

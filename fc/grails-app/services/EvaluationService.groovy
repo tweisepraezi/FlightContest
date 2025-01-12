@@ -22,10 +22,10 @@ class EvaluationService
         // calculate positions
         if (task_instance.contest.resultClasses) {
             for (ResultClass resultclass_instance in ResultClass.findAllByContest(task_instance.contest,[sort:"id"])) {
-                calculatepositions_task(task_instance, [resultclass_instance], null, false) // TODO: GetResultSettings(), ignoreProvisional
+                calculatepositions_task(task_instance, [resultclass_instance], null, false) // TODO_OLD: GetResultSettings(), ignoreProvisional
             }
         } else {
-            calculatepositions_task(task_instance, null, null, false) // TODO: GetResultSettings(), ignoreProvisional
+            calculatepositions_task(task_instance, null, null, false) // TODO_OLD: GetResultSettings(), ignoreProvisional
         }
         
         Map task = [:]

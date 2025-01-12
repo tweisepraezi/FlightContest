@@ -43,6 +43,8 @@ class BootStrap {
 			}
 		}
 
+        // do some corrections here
+        
 		if (db_loaded) {
 			println "  DB ${global.versionMajor}.${global.versionMinor} loaded."
 		} else {
@@ -420,7 +422,7 @@ class BootStrap {
 								contest_instance.imageBottomRightHeight = Contest.IMAGEBOTTOMHEIGHT
 								contest_instance.imageBottomRightText = ""
 								contest_instance.imageBottomTextSize = Contest.IMAGEBOTTOMTEXTSIZE
-								contest_instance.printOrganizer = Contest.DEFAULT_ORGANIZER
+								contest_instance.printOrganizer = ""
 								contest_instance.contestPrintAircraft = true
 								contest_instance.contestPrintTeam = false
 								contest_instance.contestPrintClass = false
@@ -1294,6 +1296,55 @@ class BootStrap {
                                 }
                                 route_instance.contestMapTurnpointSign = false
                                 route_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 41) { // DB-2.41 compatibility
+                            print "    2.41 modifications"
+							Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.anrFlying = false
+								contest_instance.flightTestBadCourseStartLandingSeparatePoints = false
+                                contest_instance.flightTestOutsideCorridorCorrectSecond = 0
+                                contest_instance.flightTestOutsideCorridorPointsPerSecond = 0
+                                contest_instance.flightTestExitRoomTooLatePoints = 0
+                                contest_instance.flightTestLastGateNoBadCourseSeconds = contest_instance.contestRule.ruleValues.flightTestLastGateNoBadCourseSeconds
+                                contest_instance.showPlanningTest = contest_instance.contestRule.ruleValues.showPlanningTest
+                                contest_instance.activateFlightTestCheckLanding = contest_instance.contestRule.ruleValues.activateFlightTestCheckLanding
+                                contest_instance.showObservationTest = contest_instance.contestRule.ruleValues.showObservationTest
+								contest_instance.save()
+							}
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+								resultclass_instance.flightTestBadCourseStartLandingSeparatePoints = false
+                                resultclass_instance.flightTestOutsideCorridorCorrectSecond = 0
+                                resultclass_instance.flightTestOutsideCorridorPointsPerSecond = 0
+                                resultclass_instance.flightTestExitRoomTooLatePoints = 0
+								resultclass_instance.save()
+							}
+							Test.findAll().each { Test test_instance ->
+                                test_instance.flightTestExitRoomTooLate = false
+								test_instance.flightTestBadCourseStart = false
+                                test_instance.flightTestBadCourseLanding = false
+								test_instance.save()
+							}
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.corridorWidth = 0.0
+                                route_instance.defaultPrintMap = ""
+                                route_instance.save()
+                            }
+                            FlightTest.findAll().each { FlightTest flighttest_instance ->
+                                flighttest_instance.flightPlanDesign = FlightPlanDesign.TPList
+                                flighttest_instance.save()
+                            }
+                            CalcResult.findAll().each { CalcResult calcresult_instance ->
+                                calcresult_instance.outsideCorridor = false
+                                calcresult_instance.outsideCorridorSeconds = 0
+                                calcresult_instance.noOutsideCorridor = false
+                                calcresult_instance.save()
+                            }
+							Coord.findAll().each { Coord coord_instance ->
+                                coord_instance.resultOutsideCorridorMeasurement = ""
+                                coord_instance.resultOutsideCorridorSeconds = 0
+                                coord_instance.save()
                             }
                             println " done."
                         }

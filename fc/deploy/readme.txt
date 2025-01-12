@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.0.0
+----------------
+- Planung und Auswertung von ANR-Wettbewerben hinzugefügt
+
 Änderungen 3.6.0
 ----------------
 - Konfigurations-Management für Maps- und OpenAIP-Server-Einstellungen hinzugefügt

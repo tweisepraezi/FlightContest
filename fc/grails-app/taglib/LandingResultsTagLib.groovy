@@ -7,7 +7,7 @@ class LandingResultsTagLib
 	def landingTest1Complete = { attrs, body ->
 		if (attrs.crewResults) {
 			outln"""<tr>"""
-			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing1')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest1Points))+")" else ""}</th>"""
+			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing1')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest1Points))+")" else ""}</th>"""
 			outln"""</tr>"""
 		} else {
         	outln"""<table>"""
@@ -101,7 +101,7 @@ class LandingResultsTagLib
         outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
         outln"""        <tr class="name" id="1">"""
-        outln"""       		<td>${message(code:'fc.landingtest.landing1')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest1Points))+")" else ""}</td>"""
+        outln"""       		<td>${message(code:'fc.landingtest.landing1')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest1Points))+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
@@ -158,7 +158,7 @@ class LandingResultsTagLib
 	def landingTest2Complete = { attrs, body ->
 		if (attrs.crewResults) {
 			outln"""<tr>"""
-			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing2')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest2Points))+")" else ""}</th>"""
+			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing2')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest2Points))+")" else ""}</th>"""
 			outln"""</tr>"""
 		} else {
 	        outln"""<table>"""
@@ -252,7 +252,7 @@ class LandingResultsTagLib
         outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
         outln"""        <tr class="name" id="2">"""
-        outln"""       		<td>${message(code:'fc.landingtest.landing2')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest2Points))+")" else ""}</td>"""
+        outln"""       		<td>${message(code:'fc.landingtest.landing2')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest2Points))+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
@@ -309,7 +309,7 @@ class LandingResultsTagLib
 	def landingTest3Complete = { attrs, body ->
 		if (attrs.crewResults) {
 			outln"""<tr>"""
-			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing3')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest3Points))+")" else ""}</th>"""
+			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing3')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest3Points))+")" else ""}</th>"""
 			outln"""</tr>"""
 		} else {
 			outln"""<table>"""
@@ -404,7 +404,7 @@ class LandingResultsTagLib
         outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
         outln"""        <tr class="name" id="3">"""
-        outln"""       		<td>${message(code:'fc.landingtest.landing3')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest3Points))+")" else ""}</td>"""
+        outln"""       		<td>${message(code:'fc.landingtest.landing3')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest3Points))+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
@@ -461,7 +461,7 @@ class LandingResultsTagLib
 	def landingTest4Complete = { attrs, body ->
 		if (attrs.crewResults) {
 			outln"""<tr>"""
-			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing4')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest4Points))+")" else ""}</th>"""
+			outln"""    <th colspan="4">${message(code:'fc.landingtest.landing4')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest4Points))+")" else ""}</th>"""
 			outln"""</tr>"""
 		} else {
 			outln"""<table>"""
@@ -555,7 +555,7 @@ class LandingResultsTagLib
         outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
         outln"""        <tr class="name" id="4">"""
-        outln"""       		<td>${message(code:'fc.landingtest.landing4')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest4Points))+")" else ""}</td>"""
+        outln"""       		<td>${message(code:'fc.landingtest.landing4')}${if (attrs.t.IsPrecisionLanding()) " ("+message(code:attrs.t.GetPrecisionFlyingLandingText(attrs.t.task.landingTest4Points))+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""

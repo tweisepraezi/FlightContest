@@ -93,6 +93,8 @@ class Coord
     boolean resultProcedureTurnEntered  = false
     boolean resultMinAltitudeMissed     = false
     int resultBadCourseNum              = 0
+    String resultOutsideCorridorMeasurement = ""      // DB-2.41
+    Integer resultOutsideCorridorSeconds = 0          // DB-2.41
     int penaltyCoord                    = 0           // Points
 	
     static transients = ['resultCpTimeInput','latGradDecimal','lonGradDecimal','latMin','lonMin','latSecondDecimal','lonSecondDecimal','enrouteCoordTitle','enrouteLastPhotoName']
@@ -246,6 +248,10 @@ class Coord
         mapObjectText(nullable:true)
         mapObjectGliderAirfield(nullable:true)
         mapObjectPavedAirfield(nullable:true)
+        
+        // DB-2.41 compatibility
+        resultOutsideCorridorMeasurement(nullable:true)
+        resultOutsideCorridorSeconds(nullable:true, min:0)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -263,6 +269,8 @@ class Coord
 		}
 	    resultMinAltitudeMissed     = false
 	    resultBadCourseNum          = 0
+        resultOutsideCorridorMeasurement = ""
+        resultOutsideCorridorSeconds = 0
 	    penaltyCoord                = 0
 	}
 
@@ -327,6 +335,8 @@ class Coord
 	    // resultProcedureTurnEntered = coordInstance.resultProcedureTurnEntered
 	    // resultMinAltitudeMissed = coordInstance.resultMinAltitudeMissed
 	    // resultBadCourseNum = coordInstance.resultBadCourseNum
+        // resultOutsideCorridorMeasurement = coordInstance.resultOutsideCorridorMeasurement
+        // resultOutsideCorridorSeconds = coordInstance.resultOutsideCorridorSeconds
 	    // penaltyCoord = coordInstance.penaltyCoord
 		
 		if (!this.save()) {

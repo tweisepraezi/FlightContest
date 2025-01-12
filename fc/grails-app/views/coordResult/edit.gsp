@@ -136,6 +136,13 @@
 										});
 									</script>
 								</g:else>
+                                <g:if test="${coordResultInstance.type.IsCorridorResultCoord() && coordResultInstance.test.flighttestwind.flighttest.route.corridorWidth}">
+                                    <p>
+                                        <label>${message(code:'fc.outside.edit')}* [${message(code:'fc.time.s')}]:</label>
+                                        <br/>
+                                        <input type="text" id="resultOutsideCorridorMeasurement" name="resultOutsideCorridorMeasurement" value="${fieldValue(bean:coordResultInstance,field:'resultOutsideCorridorMeasurement')}" tabIndex="${ti[0]++}"/>
+                                    </p>
+                                </g:if>
                             </g:if>
                             <g:else>
                                 <table>
@@ -173,6 +180,7 @@
                         <input type="hidden" name="next" value="${params.next}" />
                         <g:if test="${edit_checkpoint}">
                         	<g:if test="${params.next}">
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" tabIndex="${ti[0]++}"/>
                             	<g:actionSubmit action="updatenext" id="updatenext" value="${message(code:'fc.savenext')}" tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:actionSubmit action="updatereturn" id="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>

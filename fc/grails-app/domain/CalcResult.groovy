@@ -23,6 +23,10 @@ class CalcResult // DB-2.12
     Integer badCourseSeconds = 0
     Boolean noBadCourse = false
     
+    Boolean outsideCorridor = false      // DB-2.41
+    Integer outsideCorridorSeconds = 0   // DB-2.41
+    Boolean noOutsideCorridor = false    // DB-2.41
+    
     Boolean hide = false
     Boolean judgeDisabled = false
     
@@ -45,6 +49,11 @@ class CalcResult // DB-2.12
         noBadCourse()
         hide()
         judgeDisabled()
+        
+        // DB-2.41 compatibility
+        outsideCorridor(nullable:true)
+        outsideCorridorSeconds(nullable:true)
+        noOutsideCorridor(nullable:true)
     }
  
     //--------------------------------------------------------------------------

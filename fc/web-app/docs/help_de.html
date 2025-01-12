@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.6.0,</span>
-<span id="revdate">17.12.2024</span>
+<span id="revnumber">version 4.0.0,</span>
+<span id="revdate">12.01.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -486,6 +486,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#planning-test-with-flight-construction">Planungstest mit Streckenkonstruktion</a></li>
 <li><a href="#no-planning-test">Kein Planungstest</a></li>
 <li><a href="#planning-test-hints">Hinweis zur Konfiguration des Planungstests</a></li>
+</ul>
+</li>
+<li><a href="#anr">Planung und Auswertung von ANR-Wettbewerben</a>
+<ul class="sectlevel2">
+<li><a href="#anr-parcour-construction">Parcour konstruieren</a></li>
+<li><a href="#anr-planning">Aufgaben-Planung</a></li>
+<li><a href="#anr-crew-results">Besatzungs-Ergebnisse ermitteln</a></li>
+<li><a href="#anr-evaluation">End-Auswertung</a></li>
 </ul>
 </li>
 <li><a href="#landings">Landungen</a></li>
@@ -562,7 +570,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="introduction">Einleitung</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes der General Aviation
+<p>Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes (Rallyeflug, Air Navigation Race, Präzisionsflug)
 und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus.</p>
 </div>
 <div class="paragraph">
@@ -614,7 +622,29 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).</p>
 </div>
 <div class="paragraph">
-<p>Erzeugt OSM-basierte topographische A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.</p>
+<p>Erstellt OSM-basierte topografische Wettbewerbs-Karten:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OSM-Daten mehrerer Regionen verfügbar (Europa, Chile, erweiterbar)</p>
+</li>
+<li>
+<p>Höhenlinien aus SRTM-Daten können hinzugefügt werden</p>
+</li>
+<li>
+<p>Lufträume aus OpenAIP-Daten können hinzugefügt werden</p>
+</li>
+<li>
+<p>Flugplätze aus OpenAIP-Daten können hinzugefügt werden (ICAO-Symbole)</p>
+</li>
+<li>
+<p>Zusätzliche Kartenobjekte, die nicht in den OSM-Daten enthalten sind, können hinzugefügt werden.</p>
+</li>
+<li>
+<p>Zusätzliche Flugplätze, die nicht in den OpenAIP-Daten enthalten sind, können hinzugefügt werden.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>Erzeugt PDF für Druck und Internet-Veröffentlichung.</p>
@@ -631,13 +661,16 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Unbekannte Zeitkontrollen</p>
 </li>
 <li>
-<p>Krumme Streckenabschnitte</p>
+<p>Landschaftliche Abschnitte</p>
 </li>
 <li>
 <p>Halbkreise</p>
 </li>
 <li>
 <p>Touch &amp; Go-Landungen</p>
+</li>
+<li>
+<p>Korridore</p>
 </li>
 </ul>
 </div>
@@ -673,6 +706,9 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Integration des Rallye Flying Task Creators (<a href="https://www.airrats.cl/taskcreator?lang=de" class="bare">https://www.airrats.cl/taskcreator?lang=de</a>) für die schnelle Erstellung von Strecken.</p>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -703,10 +739,16 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p><a href="rules/DE_Navigationsflug_2020.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland 2020</a></p>
 </li>
 <li>
+<p><a href="rules/DE_ANR_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Air Navigation Race Deutschland</a></p>
+</li>
+<li>
 <p><a href="rules/DE_Navigationsflug_2017.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland 2017</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
+</li>
+<li>
+<p><a href="rules/FAI_anr_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Navigation Race</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_precision_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Precision Flying</a></p>
@@ -718,10 +760,10 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p><a href="rules/CH_Praezisionsflug_2017.pdf" target="_blank" rel="noopener">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft</a></p>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2023.pdf#page=17" target="_blank" rel="noopener">Präzisionsflug-Reglement Österreich</a></p>
+<p><a href="rules/AT_Motorflug_2023.pdf#page=29" target="_blank" rel="noopener">Navigationsflug-Reglement Österreich</a></p>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2023.pdf#page=29" target="_blank" rel="noopener">Navigationsflug-Reglement Österreich</a></p>
+<p><a href="rules/AT_Motorflug_2023.pdf#page=17" target="_blank" rel="noopener">Präzisionsflug-Reglement Österreich</a></p>
 </li>
 </ul>
 </div>
@@ -2973,6 +3015,245 @@ ausgemessen und bei den Strecken-Koordinaten unter
 </div>
 </div>
 <div class="sect1">
+<h2 id="anr">Planung und Auswertung von ANR-Wettbewerben</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Es werden für eine Aufgabe nur Einzel-Parcours unterstützt.
+Das bedeutet, dass auf eine Karte nur genau ein Parcour gezeichnet werden kann
+und die Berechnung aller Zeit- und Flugpläne einer Aufgabe nur für genau einen Parcour möglich ist.<br>
+Mehrere Aufgaben hintereinander, wo die Besatzungen gegeneinander antreten, sind natürlich möglich.</p>
+</div>
+<div class="paragraph">
+<p><a href="#anr-parcour-construction">Parcour konstruieren</a><br>
+<a href="#anr-planning">Aufgaben-Planung</a><br>
+<a href="#anr-crew-results">Besatzungs-Ergebnisse ermitteln</a><br>
+<a href="#anr-evaluation">End-Auswertung</a></p>
+</div>
+<div class="sect2">
+<h3 id="anr-parcour-construction">Parcour konstruieren</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Wettbewerb anlegen (Wettbewerb &#8594; Neuer Wettbewerb)</p>
+<div class="paragraph">
+<p>Eine ANR-Wettbewerbsordnung wählen.<br>
+Bei Bedarf "Wettbewerb mit Klassen" aktivieren.</p>
+</div>
+</li>
+<li>
+<p>Strecke mit TO anlegen (Strecken &#8594; Neue Strecke)</p>
+<div class="paragraph">
+<p>Als Titel den Flugplatz-Namen eintragen.<br></p>
+</div>
+<div class="paragraph">
+<p>Flugplatz-Koordinate als TO-Punkt hinzufügen.<br>
+Die Korrektheit der Flugplatz-Koordinate kann mit "OSM-Online-Karte" geprüft werden.</p>
+</div>
+</li>
+<li>
+<p>A4-Karte mit TO für Task-Creator erzeugen</p>
+<div class="paragraph">
+<p>OSM-Wettbewerbs-Karte &#8594; Zeige 1. Einstellungen<br>
+Ausdruck im Hochformat bei Bedarf wählen<br>
+"Erzeugen (für Task-Creator)" ausführen<br></p>
+</div>
+<div class="paragraph">
+<p>Wurde ein OpenAIP-Zugang konfiguriert, bei Bedarf zuvor "Lufträume um Flughafen ermitteln" durchführen.<br></p>
+</div>
+<div class="paragraph">
+<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt).<br>
+Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden.<br>
+Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google Earth vorgenommen werden.<br></p>
+</div>
+<div class="paragraph">
+<p>Wurde ein OpenAIP-Zugang konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet.<br>
+Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet.<br></p>
+</div>
+<div class="paragraph">
+<p>Die erzeugte Karte "Flugplatz-Name (Task Creator)" ohne weitere Einstellungen mit "Karte speichern und zur Liste der Karten wechseln" speichern.</p>
+</div>
+</li>
+<li>
+<p>ANR-Parcour im Task-Creator konstruieren</p>
+<div class="paragraph">
+<p>Task-Creator starten (Karten &#8594; "Flugplatz-Name (Task Creator)" &#8594; Task-Creator &#8594; …)<br></p>
+</div>
+<div class="paragraph">
+<p>Im gestarteten Task-Creator ist eine "Karten-Url" auf die erzeugte Karte voreingestellt und kann mit "Laden" geladen werden.<br>
+Nach Aktivieren von "Check-Punkte &#8594; Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für den ANR-Parcour nacheinander hinzugefügt werden:
+Der 1. Punkt ist auf den Flupplatz zu setzen (TOP). Der 2. Punkt wird SP. Der letzte Punkt wird FP.<br>
+Mit "Task-Name &#8594; Speichern" kann der Parcour als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben).<br></p>
+</div>
+<div class="paragraph">
+<p>Der fertig konstruierte Parcour ist mit "Export FC kml" zu exportieren.</p>
+</div>
+<div class="paragraph">
+<p>Zur Korrektur des Parcours ist der Task-Creator mir "Karten &#8594; Task-Creator" zu starten,
+die gespeicherte CSV-Datei mit "Task-Name &#8594; Laden" zu laden, die "Karten-Url" zu laden
+und "Check-Punkte &#8594; Bearbeiten" zu aktivieren.<br>
+Jetzt kann die Position einzelner Check-Punkte geändert, neue Check-Punkte hinzugefügt oder Check-Punkte gelöscht werden.</p>
+</div>
+</li>
+<li>
+<p>Import des Parcours (Strecken &#8594; Import FC-Strecke)</p>
+<div class="paragraph">
+<p>Auswahl der im Task-Creator exportierten kml-Datei.<br>
+Die importierte Strecke erscheint in der Strecken-Liste.<br>
+Öffnen durch Klicken auf den Strecken-Titel.</p>
+</div>
+<div class="paragraph">
+<p>Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche "Etappen neu berechnen".<br></p>
+</div>
+<div class="paragraph">
+<p>Die Korrektheit der Strecke kann nun mit OSM-Online-Karte geprüft werden.<br></p>
+</div>
+<div class="paragraph">
+<p>Enthält die Strecke einen Kreisbogen, muss sie in eine Strecke mit Halbkreis-Toren umgewandelt werden
+(Strecken-Einstellung "Halbkreis-Tore aus Kreismittelpunkten exportieren" aktivieren, "GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")</p>
+</div>
+</li>
+<li>
+<p>A4-Wettbewerbs-Karte mit ANR-Parcour erzeugen</p>
+<div class="paragraph">
+<p>Strecke &#8594; OSM-Wettbewerbs-Karte &#8594; Zeige 1. Einstellungen<br>
+Check-Punkte zwischen SP und FP vom Druck auf die Karte abwählen (&#8594; Zu druckende Wendepunkte)<br>
+Ausdruck im Hochformat bei Bedarf wählen<br>
+"Erzeugen" ausführen<br></p>
+</div>
+<div class="paragraph">
+<p>Die erzeugte Karte ist mit der aktivierten Einstellung "Diese Karte als Default-Online-Karte für diese Strecke einstellen"
+und "Diese Karte als Default-Druck-Karte für diese Strecke einstellen" mit "Karte speichern und zur Liste der Karten wechseln" zu speichern.<br></p>
+</div>
+<div class="paragraph">
+<p>Die Karte kann nun als PDF zum Druck gespeichert werden (Karten &#8594; Strecken-Titel &#8594; PDF-Wettbewerbs-Karte &#8594; &#8230;&#8203;)</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="anr-planning">Aufgaben-Planung</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Besatzungen anlegen</p>
+<div class="paragraph">
+<p>Für die weiteren Schritte muss min. eine Besatzung existieren.<br></p>
+</div>
+</li>
+<li>
+<p>Aufgabe zur Durchführung des Parcours planen</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Aufgabe anlegen</p>
+<div class="paragraph">
+<p>"Aufgaben &#8594; Neue Aufgabe" anklicken<br>
+Anfangszeit und Takeoff-Abstand festlegen<br>
+"Erstellen" anklicken<br>
+"Planung &#8594; Aufgabe" anklicken</p>
+</div>
+</li>
+<li>
+<p>Parcour der Aufgabe zuweisen</p>
+<div class="paragraph">
+<p>"[Navigationstest hinzufügen]" anklicken<br>
+Strecke mit dem ANR-Parcour auswählen<br>
+Ggf. Startbahn-Richtung und An- und Abflug-Flugzeiten korrigieren<br>
+"Erstellen" anklicken</p>
+</div>
+<div class="paragraph">
+<p>Die hier gemachten Einstellungen können durch Klick auf den Strecken-Namen, der die Anzeige von "[Navigationstest hinzufügen]" ersetzt, erneut bearbeitet werden.<br>
+Hier können dann auch weitere Einstellungen vorgenommen werden, wie das Flugplan-Design, die Anzeige von Werten im Flugplan und geänderte Werte für Startbahn-Richtung und An- und Abflug-Flugzeiten.<br>
+Weiterhin können hier auch die klassischen ANR-Formulare erzeugt werden. Dazu muss der Strecke des ANR-Parcours eine Default-Druck-Karte auf eine Karte, die mit ANR-Größe erzeugt wurde, zugewiesen sein.</p>
+</div>
+</li>
+<li>
+<p>Zeitplan der Besatzungen berechnen</p>
+<div class="paragraph">
+<p>"Alle auswählen" anklicken<br>
+"Wind zuweisen" anklicken<br>
+"Zeitplan berechnen" anklicken</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Flug- und Zeitpläne erstellen</p>
+<div class="paragraph">
+<p>"Alle auswählen" anklicken<br>
+"Flugpläne drucken"<br></p>
+</div>
+<div class="paragraph">
+<p>Verschiedene Zeitpläne können unter "Übersichts-Zeitplan", "Besatzungs-Zeitplan" und "Schiedsrichter-Zeitplan" erzeugt werden.</p>
+</div>
+</li>
+<li>
+<p>Aufgabe gegen unbeabsichtigte Änderungen schützen</p>
+<div class="paragraph">
+<p>Erfolgt bei Bedarf durch Aktivierung der Option "Planung sperren" in "Aufgabe (Einstellungen)"</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="anr-crew-results">Besatzungs-Ergebnisse ermitteln</h3>
+<div class="paragraph">
+<p>&#8594; Ergebnisse &#8594; Aufgabe</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Logger-Auswertung</p>
+<div class="paragraph">
+<p>Unter "Besatzung &#8594; Navigationsflug &#8594; &#8230;&#8203;" kann eine Logger-Datei mit "Import Logger-Daten" ausgewertet werden.</p>
+</div>
+<div class="paragraph">
+<p>Keine Logger-Meßwerte vorhanden: "Keine Daten" anklicken<br>
+Alle Überflugzeiten werden mit max. Strafpunkten gewertet. Die Zeitdifferenz zwischen SP- und FP-Planzeit wird als Zeit außerhalb des Korridors gewertet.</p>
+</div>
+<div class="paragraph">
+<p>Logger-Meßwerte sind erst nach dem SP vorhanden:<br>
+Die TO- und SP-Überflugzeit wird mit max. Strafpunkten gewertet. Die Zeitdifferenz der SP-Planzeit und des ersten Logger-Meßwertes ist als Zeit außerhalb des Korridors zu werten.
+Diese Zeitdifferenz ist manuell zu ermitteln und dem ersten Check-Punkt, wo Logger-Meßwerte vorhanden sind, zuzuordnen.</p>
+</div>
+<div class="paragraph">
+<p>Logger-Meßwerte enden vor dem FP:<br>
+Die FP-Überflugzeit wird mit max. Strafpunkten gewertet. Die Zeitdifferenz des letzten Logger-Meßwertes und der FP-Planzeit ist als Zeit außerhalb des Korridors zu werten.
+Diese Zeitdifferenz ist manuell zu ermitteln und dem FP zuzuordnen.</p>
+</div>
+<div class="paragraph">
+<p>Fehlende Logger-Meßwerte zwischen SP und FP:<br>
+Durch Interpolation werden fehlende Meßwerte automatisch hinzugefügt. Dadurch führt nicht nicht jede Unterbrechung zu Strafpunkten für Zeiten außerhalb des Korridors.</p>
+</div>
+<div class="paragraph">
+<p>Flugplan-Korrektur:<br>
+Hat eine Besatzung ihren Start verschoben und ist mit einem korrigierten Flugplan geflogen, muss vor der Logger-Auswertung deren Flugplan angepasst werden.
+Dazu in "Planung &#8594; Aufgabe" die betroffene Besatzung auswählen und mit "Zeit +" oder "Zeit -" eine Korrektur um die anpassbare Minutenzahl durchführen.
+Eine gesperrte Planung muss dazu vorher entsperrt werden.</p>
+</div>
+</li>
+<li>
+<p>Landungs-Auswertung</p>
+<div class="paragraph">
+<p>Unter "Besatzung &#8594; Ldg1 &#8594; &#8230;&#8203;" kann ein Landungs-Ergebnis eingegeben werden.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="anr-evaluation">End-Auswertung</h3>
+<div class="paragraph">
+<p>siehe <a href="#evaluation">Auswertungen</a></p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="landings">Landungen</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -3950,7 +4231,12 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">crewtest</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">crewinfo</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title crew team resultclass aircraft aircrafttype tas</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">crewinfoanr</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title crew team resultclass aircraft aircrafttype tas</p></td>
 </tr>
@@ -3965,6 +4251,16 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">title separator value</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">infoanr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">planning takeoff sp fp landing empty corridorwidth wind</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">infoanr2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">distance duration empty endcurved</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title separator value</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">planningtasklist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">valuename unit value [#tpname]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tpname distance truetrack trueheading groundspeed legtime</p></td>
@@ -3973,6 +4269,26 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">flightplanlist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#tpname], procedureturn summary</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">num distance truetrack trueheading groundspeed legtime tpname tptime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightplaninfoanr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">outputtime takeoff empty wind</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title space value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightplanlistanr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#tpname]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname distance truetrack legtime tptime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightplanlistanr2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#tpname]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname distance truetrack legtime tptime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightplansummaryanr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">corridorwidth distance duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title space value</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">observationturnpointlist</p></td>
@@ -4007,7 +4323,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">flightresultlist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname] summary</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">summary [flightresults]</p></td>

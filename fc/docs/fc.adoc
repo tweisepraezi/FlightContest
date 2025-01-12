@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.6.0
-:revdate:   17.12.2024
+:revnumber: 4.0.0
+:revdate:   12.01.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -11,7 +11,7 @@ Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 [[introduction]]
 == Einleitung
 
-Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes der General Aviation 
+Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes (Rallyeflug, Air Navigation Race, Präzisionsflug)
 und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus.
 
 Flight Contest hat ein flexibles Wettbewerbsmanagement. Dazu zählen die Unterstützung:
@@ -33,7 +33,14 @@ Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-S
 
 Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).
 
-Erzeugt OSM-basierte topographische A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.
+Erstellt OSM-basierte topografische Wettbewerbs-Karten:
+
+* OSM-Daten mehrerer Regionen verfügbar (Europa, Chile, erweiterbar)
+* Höhenlinien aus SRTM-Daten können hinzugefügt werden
+* Lufträume aus OpenAIP-Daten können hinzugefügt werden
+* Flugplätze aus OpenAIP-Daten können hinzugefügt werden (ICAO-Symbole)
+* Zusätzliche Kartenobjekte, die nicht in den OSM-Daten enthalten sind, können hinzugefügt werden.
+* Zusätzliche Flugplätze, die nicht in den OpenAIP-Daten enthalten sind, können hinzugefügt werden.
 
 Erzeugt PDF für Druck und Internet-Veröffentlichung.
 
@@ -42,9 +49,10 @@ Versendet E-Mails der Navigationsflug-Karten an die Teilnehmer.
 Unterstützt besondere Streckeneigenschaften:
 
 * Unbekannte Zeitkontrollen
-* Krumme Streckenabschnitte
+* Landschaftliche Abschnitte
 * Halbkreise
 * Touch & Go-Landungen
+* Korridore
 
 Stellt eine Live-Ergebnis-Anzeige (Live Scoring) bereit:
 
@@ -58,6 +66,8 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 * Online-Kartenanzeige mit Open Street Map
 * Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien mit optionalem gpx-Download
 
+Integration des Rallye Flying Task Creators (https://www.airrats.cl/taskcreator?lang=de) für die schnelle Erstellung von Strecken.
+
 <<<
 [[manuals]]
 == Bedienungsanleitungen
@@ -69,13 +79,15 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 == Unterstützte Regelwerke
 
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020^]
+* link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland^]
 * link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_anr_rules_2024.pdf[FAI Air Navigation Race^]
 * link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
 * link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
-* link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich^]
 * link:rules/AT_Motorflug_2023.pdf#page=29[Navigationsflug-Reglement Österreich^]
+* link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich^]
 
 <<<
 [[default-competition]]
@@ -1227,6 +1239,173 @@ ausgemessen und bei den Strecken-Koordinaten unter
 'Entfernungsmessung (Karte) [mm]' eingetragen wurden.
 
 <<<
+[[anr]]
+== Planung und Auswertung von ANR-Wettbewerben
+
+Es werden für eine Aufgabe nur Einzel-Parcours unterstützt.
+Das bedeutet, dass auf eine Karte nur genau ein Parcour gezeichnet werden kann
+und die Berechnung aller Zeit- und Flugpläne einer Aufgabe nur für genau einen Parcour möglich ist. +
+Mehrere Aufgaben hintereinander, wo die Besatzungen gegeneinander antreten, sind natürlich möglich.
+
+<<fc.adoc#anr-parcour-construction>> +
+<<fc.adoc#anr-planning>> +
+<<fc.adoc#anr-crew-results>> +
+<<fc.adoc#anr-evaluation>>
+
+[[anr-parcour-construction]]
+=== Parcour konstruieren
+
+. Wettbewerb anlegen (Wettbewerb -> Neuer Wettbewerb)
++
+Eine ANR-Wettbewerbsordnung wählen. +
+Bei Bedarf "Wettbewerb mit Klassen" aktivieren.
+
+. Strecke mit TO anlegen (Strecken -> Neue Strecke)
++
+Als Titel den Flugplatz-Namen eintragen. +
++
+Flugplatz-Koordinate als TO-Punkt hinzufügen. +
+Die Korrektheit der Flugplatz-Koordinate kann mit "OSM-Online-Karte" geprüft werden.
+
+. A4-Karte mit TO für Task-Creator erzeugen
++
+OSM-Wettbewerbs-Karte -> Zeige 1. Einstellungen +
+Ausdruck im Hochformat bei Bedarf wählen +
+"Erzeugen (für Task-Creator)" ausführen +
++
+Wurde ein OpenAIP-Zugang konfiguriert, bei Bedarf zuvor "Lufträume um Flughafen ermitteln" durchführen. +
++
+Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt). +
+Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden. +
+Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google Earth vorgenommen werden. +
++
+Wurde ein OpenAIP-Zugang konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet. +
+Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet. +
++
+Die erzeugte Karte "Flugplatz-Name (Task Creator)" ohne weitere Einstellungen mit "Karte speichern und zur Liste der Karten wechseln" speichern.
+
+. ANR-Parcour im Task-Creator konstruieren
++
+Task-Creator starten (Karten -> "Flugplatz-Name (Task Creator)" -> Task-Creator -> …) +
++
+Im gestarteten Task-Creator ist eine "Karten-Url" auf die erzeugte Karte voreingestellt und kann mit "Laden" geladen werden. +
+Nach Aktivieren von "Check-Punkte -> Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für den ANR-Parcour nacheinander hinzugefügt werden:
+Der 1. Punkt ist auf den Flupplatz zu setzen (TOP). Der 2. Punkt wird SP. Der letzte Punkt wird FP. +
+Mit "Task-Name -> Speichern" kann der Parcour als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben). +
++
+Der fertig konstruierte Parcour ist mit "Export FC kml" zu exportieren.
++
+Zur Korrektur des Parcours ist der Task-Creator mir "Karten -> Task-Creator" zu starten,
+die gespeicherte CSV-Datei mit "Task-Name -> Laden" zu laden, die "Karten-Url" zu laden
+und "Check-Punkte -> Bearbeiten" zu aktivieren. +
+Jetzt kann die Position einzelner Check-Punkte geändert, neue Check-Punkte hinzugefügt oder Check-Punkte gelöscht werden.
+
+. Import des Parcours (Strecken -> Import FC-Strecke)
++
+Auswahl der im Task-Creator exportierten kml-Datei. +
+Die importierte Strecke erscheint in der Strecken-Liste. +
+Öffnen durch Klicken auf den Strecken-Titel.
++
+Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche "Etappen neu berechnen". +
++
+Die Korrektheit der Strecke kann nun mit OSM-Online-Karte geprüft werden. +
++
+Enthält die Strecke einen Kreisbogen, muss sie in eine Strecke mit Halbkreis-Toren umgewandelt werden
+(Strecken-Einstellung "Halbkreis-Tore aus Kreismittelpunkten exportieren" aktivieren, "GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")
+
+. A4-Wettbewerbs-Karte mit ANR-Parcour erzeugen
++
+Strecke -> OSM-Wettbewerbs-Karte -> Zeige 1. Einstellungen +
+Check-Punkte zwischen SP und FP vom Druck auf die Karte abwählen (-> Zu druckende Wendepunkte) +
+Ausdruck im Hochformat bei Bedarf wählen +
+"Erzeugen" ausführen +
++
+Die erzeugte Karte ist mit der aktivierten Einstellung "Diese Karte als Default-Online-Karte für diese Strecke einstellen"
+und "Diese Karte als Default-Druck-Karte für diese Strecke einstellen" mit "Karte speichern und zur Liste der Karten wechseln" zu speichern. +
++
+Die Karte kann nun als PDF zum Druck gespeichert werden (Karten -> Strecken-Titel -> PDF-Wettbewerbs-Karte -> ...)
+
+[[anr-planning]]
+=== Aufgaben-Planung
+
+. Besatzungen anlegen
++
+Für die weiteren Schritte muss min. eine Besatzung existieren. +
+
+. Aufgabe zur Durchführung des Parcours planen
+
+.. Aufgabe anlegen
++
+"Aufgaben -> Neue Aufgabe" anklicken +
+Anfangszeit und Takeoff-Abstand festlegen +
+"Erstellen" anklicken +
+"Planung -> Aufgabe" anklicken
+
+.. Parcour der Aufgabe zuweisen
++
+"[Navigationstest hinzufügen]" anklicken +
+Strecke mit dem ANR-Parcour auswählen +
+Ggf. Startbahn-Richtung und An- und Abflug-Flugzeiten korrigieren +
+"Erstellen" anklicken
++
+Die hier gemachten Einstellungen können durch Klick auf den Strecken-Namen, der die Anzeige von "[Navigationstest hinzufügen]" ersetzt, erneut bearbeitet werden. +
+Hier können dann auch weitere Einstellungen vorgenommen werden, wie das Flugplan-Design, die Anzeige von Werten im Flugplan und geänderte Werte für Startbahn-Richtung und An- und Abflug-Flugzeiten. +
+Weiterhin können hier auch die klassischen ANR-Formulare erzeugt werden. Dazu muss der Strecke des ANR-Parcours eine Default-Druck-Karte auf eine Karte, die mit ANR-Größe erzeugt wurde, zugewiesen sein.
+
+.. Zeitplan der Besatzungen berechnen
++
+"Alle auswählen" anklicken +
+"Wind zuweisen" anklicken +
+"Zeitplan berechnen" anklicken
+
+. Flug- und Zeitpläne erstellen
++
+"Alle auswählen" anklicken +
+"Flugpläne drucken" +
++
+Verschiedene Zeitpläne können unter "Übersichts-Zeitplan", "Besatzungs-Zeitplan" und "Schiedsrichter-Zeitplan" erzeugt werden.
+
+. Aufgabe gegen unbeabsichtigte Änderungen schützen
++
+Erfolgt bei Bedarf durch Aktivierung der Option "Planung sperren" in "Aufgabe (Einstellungen)"
+
+[[anr-crew-results]]
+=== Besatzungs-Ergebnisse ermitteln
+-> Ergebnisse -> Aufgabe
+
+. Logger-Auswertung
++
+Unter "Besatzung -> Navigationsflug -> ..." kann eine Logger-Datei mit "Import Logger-Daten" ausgewertet werden.
++
+Keine Logger-Meßwerte vorhanden: "Keine Daten" anklicken +
+Alle Überflugzeiten werden mit max. Strafpunkten gewertet. Die Zeitdifferenz zwischen SP- und FP-Planzeit wird als Zeit außerhalb des Korridors gewertet.
++
+Logger-Meßwerte sind erst nach dem SP vorhanden: +
+Die TO- und SP-Überflugzeit wird mit max. Strafpunkten gewertet. Die Zeitdifferenz der SP-Planzeit und des ersten Logger-Meßwertes ist als Zeit außerhalb des Korridors zu werten.
+Diese Zeitdifferenz ist manuell zu ermitteln und dem ersten Check-Punkt, wo Logger-Meßwerte vorhanden sind, zuzuordnen.
++
+Logger-Meßwerte enden vor dem FP: +
+Die FP-Überflugzeit wird mit max. Strafpunkten gewertet. Die Zeitdifferenz des letzten Logger-Meßwertes und der FP-Planzeit ist als Zeit außerhalb des Korridors zu werten.
+Diese Zeitdifferenz ist manuell zu ermitteln und dem FP zuzuordnen.
++
+Fehlende Logger-Meßwerte zwischen SP und FP: +
+Durch Interpolation werden fehlende Meßwerte automatisch hinzugefügt. Dadurch führt nicht nicht jede Unterbrechung zu Strafpunkten für Zeiten außerhalb des Korridors.
++
+Flugplan-Korrektur: +
+Hat eine Besatzung ihren Start verschoben und ist mit einem korrigierten Flugplan geflogen, muss vor der Logger-Auswertung deren Flugplan angepasst werden.
+Dazu in "Planung -> Aufgabe" die betroffene Besatzung auswählen und mit "Zeit +" oder "Zeit -" eine Korrektur um die anpassbare Minutenzahl durchführen. 
+Eine gesperrte Planung muss dazu vorher entsperrt werden.
+
+. Landungs-Auswertung
++
+Unter "Besatzung -> Ldg1 -> ..." kann ein Landungs-Ergebnis eingegeben werden.
+
+[[anr-evaluation]]
+=== End-Auswertung
+
+siehe <<fc.adoc#evaluation>>
+
+<<<
 [[landings]]
 == Landungen
 Je nach ausgewählter Wettbewerbsordnung wird ein festgelegtes Landeschema verwendet.
@@ -1630,11 +1809,18 @@ Tabellen-Klassen:
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 |landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4
 
-|crewtest||title crew team resultclass aircraft aircrafttype tas
+|crewinfo||title crew team resultclass aircraft aircrafttype tas
+|crewinfoanr||title crew team resultclass aircraft aircrafttype tas
 |crewneutral||title num crew aircraft col
 |info|wind planning submission endcurved landinglatest planninginfo planningignore planningevaluation|title separator value
+|infoanr|planning takeoff sp fp landing empty corridorwidth wind|title value
+|infoanr2|distance duration empty endcurved|title separator value
 |planningtasklist|valuename unit value [#tpname]|tpname distance truetrack trueheading groundspeed legtime
 |flightplanlist|value [#tpname], procedureturn summary|num distance truetrack trueheading groundspeed legtime tpname tptime
+|flightplaninfoanr|outputtime takeoff empty wind|title space value
+|flightplanlistanr|value [#tpname]|tpname distance truetrack legtime tptime
+|flightplanlistanr2|value [#tpname]|tpname distance truetrack legtime tptime
+|flightplansummaryanr|corridorwidth distance duration|title space value
 |observationturnpointlist|title subtitle data|tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse
 |observationsroutephotolist|title subtitle data|name correct inexact false nmfromtp mmfromtp fromlasttp
 |observationsroutecanvaslist|title subtitle data|sign correct inexact false nmfromtp mmfromtp fromlasttp
@@ -1642,7 +1828,7 @@ Tabellen-Klassen:
 
 |planningtaskresultlist|name1 name2 value [#tpname] summary|tpname plantrueheading trueheading penaltytrueheading planlegtime legtime penaltylegtime 
 |summary [planningtaskresults]|legpenalties giventolate exitroomtolate otherpenalties penalties|
-|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed 
+|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed 
 |summary [flightresults]|checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties|
 |flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime procedureturn badcoursenum altitude
 |loggerdatalist|title value tpvalue|time latitude longitude altitude distance truetrack groundspeed info badcourseinfo nobadcourseinfo

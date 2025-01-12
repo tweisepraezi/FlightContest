@@ -46,7 +46,9 @@ class GpxService
     final static BigDecimal CONTESTMAP_TPCANVAS_TRACK = 90 // Grad
     final static BigDecimal CONTESTMAP_TPCANVAS_DISTANCE = 0.7 // NM
     final static BigDecimal CONTESTMAP_TPNAME_DISTANCE = 1.1 // NM
+    final static BigDecimal CONTESTMAP_TPNAME_ANR_DISTANCE = 0.7 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DISTANCE = 1 // NM
+    final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_ANR_DISTANCE = 0.5 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DIRECTION = 0 // Grad
     final static BigDecimal CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE = 1.1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE = 1.1 // NM
@@ -777,11 +779,11 @@ class GpxService
         gpx_writer.writeLine(XMLHEADER)
         if (contestMapParams) {
             xml.gpx(version:GPXVERSION, creator:GPXCREATOR_CONTESTMAP) {
-                gpx_route(routeInstance, null, xml, params, contestMapParams)
+                gpx_route_contestmap(routeInstance, null, xml, params, contestMapParams)
             }
         } else {
             xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
-                gpx_route(routeInstance, null, xml, params, [:])
+                gpx_route(routeInstance, null, xml, params)
             }
         }
         gpx_writer.close()
@@ -1173,6 +1175,24 @@ class GpxService
                 }
                 start_value = false
             }
+            if (it.extensions.flightcontest.outsidecorridor) {
+                boolean print_warning = false
+                if (it.extensions.flightcontest.outsidecorridor.text() == "yes") {
+                    points[points.size()-1].color = COLOR_ERROR
+                } else {
+                    points[points.size()-1].color = COLOR_WARNING
+                    print_warning = isPrint
+                }
+                if (it.extensions.flightcontest.outsidecorridor.'@duration'[0]) {
+                    String outsidecorridor_duration = it.extensions.flightcontest.outsidecorridor.'@duration'[0].toString()
+                    if (outsidecorridor_duration) {
+                        points[points.size()-1].name += getMsg("fc.offlinemap.outsidecorridor.seconds.2", [outsidecorridor_duration], isPrint) // Text ohne Umlaute
+                        if (print_warning) {
+                            points[points.size()-1].name += "*"
+                        }
+                    }
+                }
+            }
             if (it.extensions.flightcontest.badcourse) {
                 boolean print_warning = false
                 if (it.extensions.flightcontest.badcourse.text() == "yes") {
@@ -1181,11 +1201,16 @@ class GpxService
                     points[points.size()-1].color = COLOR_WARNING
                     print_warning = isPrint
                 }
-                String badcourse_duration = it.extensions.flightcontest.badcourse.'@duration'[0].toString()
-                if (badcourse_duration != "null") {
-                    points[points.size()-1].name += getMsg("fc.offlinemap.badcourse.seconds", [badcourse_duration], isPrint)
-                    if (print_warning) {
-                        points[points.size()-1].name += "*"
+                if (it.extensions.flightcontest.badcourse.'@duration'[0]) {
+                    String badcourse_duration = it.extensions.flightcontest.badcourse.'@duration'[0].toString()
+                    if (badcourse_duration) {
+                        if (points[points.size()-1].name) {
+                            points[points.size()-1].name += ", "
+                        }
+                        points[points.size()-1].name += getMsg("fc.offlinemap.badcourse.seconds", [badcourse_duration], isPrint) // Text ohne Umlaute
+                        if (print_warning) {
+                            points[points.size()-1].name += "*"
+                        }
                     }
                 }
             }
@@ -1200,7 +1225,7 @@ class GpxService
                 if (points[points.size()-1].name) {
                     points[points.size()-1].name += ", "
                 }
-                points[points.size()-1].name += getMsg("fc.offlinemap.badprocedureturn",isPrint)
+                points[points.size()-1].name += getMsg("fc.offlinemap.badprocedureturn",isPrint) // Text ohne Umlaute
                 if (print_warning) {
                     points[points.size()-1].name += "*"
                 }
@@ -1217,7 +1242,7 @@ class GpxService
                 if (points[points.size()-1].name) {
                     points[points.size()-1].name += ", "
                 }
-                points[points.size()-1].name += getMsg("fc.offlinemap.badgate",[badgate_name],isPrint)
+                points[points.size()-1].name += getMsg("fc.offlinemap.badgate",[badgate_name],isPrint)  // Text ohne Umlaute
                 if (print_warning) {
                     points[points.size()-1].name += "*"
                 }
@@ -1254,7 +1279,7 @@ class GpxService
                     badgate_color = COLOR_WARNING
                     print_warning = isPrint
                 }
-                String badgate_name = getMsg("fc.offlinemap.badgate",[it.extensions.flightcontest.gatenotfound.'@name'[0]],isPrint)
+                String badgate_name = getMsg("fc.offlinemap.badgate",[it.extensions.flightcontest.gatenotfound.'@name'[0]],isPrint) // Text ohne Umlaute
                 if (print_warning) {
                     badgate_name += "*"
                 }
@@ -1513,6 +1538,17 @@ class GpxService
         def gpx = new XmlParser().parse(gpx_reader)
         if (gpx.trk.size() == 1) { // only 1 track allowed
             gpx.trk.trkseg.trkpt.each { p ->
+                if (p.extensions.flightcontest.outsidecorridor && p.extensions.flightcontest.outsidecorridor.'@duration'[0]) {
+                    String duration = p.extensions.flightcontest.outsidecorridor.'@duration'[0]
+                    Map new_point = [name:getMsg("fc.offlinemap.outsidecorridor.seconds", [duration], false)] // false - no Print
+                    new_point += [latcenter:p.'@lat', loncenter:p.'@lon', radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_ERRORPOINT]
+                    if (p.extensions.flightcontest.outsidecorridor.text() == "yes") {
+                        new_point += [error:true]
+                    } else {
+                        new_point += [warning:true]
+                    }
+                    points += new_point
+                }
                 if (p.extensions.flightcontest.badcourse && p.extensions.flightcontest.badcourse.'@duration'[0]) {
                     String duration = p.extensions.flightcontest.badcourse.'@duration'[0]
                     Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [duration], false)] // false - no Print
@@ -1616,9 +1652,9 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void gpx_route(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams = [:])
+    private void gpx_route(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params)
     {
-        printstart "gpx_route $params $contestMapParams"
+        printstart "gpx_route $params"
         
         boolean wr_enroutesign = params.wrEnrouteSign
         if (params.wrEnrouteSign && testInstance) {
@@ -1647,12 +1683,12 @@ class GpxService
         Map contest_map_rect = [:]
         BigDecimal center_latitude = null
         BigDecimal center_longitude = null
-        boolean show_runway = false
-        if (wr_enroutesign || contestMapParams) {
+        if (wr_enroutesign) {
             xml.extensions {
                 xml.flightcontest {
                     if (wr_enroutesign) {
                         xml.observationsettings(
+                            routetitle: routeInstance.title,
                             turnpoint: routeInstance.turnpointRoute,
                             turnpointmapmeasurement: getYesNo(routeInstance.turnpointMapMeasurement),
                             turnpointprintstyle: routeInstance.turnpointPrintStyle,
@@ -1665,7 +1701,8 @@ class GpxService
                             enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
                             useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
 							mapscale: routeInstance.mapScale,
-							altitudeaboveground: routeInstance.altitudeAboveGround
+							altitudeaboveground: routeInstance.altitudeAboveGround,
+                            corridorwidth: routeInstance.corridorWidth
                         )
                         xml.mapsettings(
                             contestmapairfields: routeInstance.contestMapAirfields,
@@ -1756,201 +1793,12 @@ class GpxService
                             }
                         }
                     }
-                    if (contestMapParams) {
-                        BigDecimal min_latitude = null
-                        BigDecimal min_longitude = null
-                        BigDecimal max_latitude = null
-                        BigDecimal max_longitude = null
-                        boolean min_one_center_point = false
-                        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
-                                    min_one_center_point = true
-                                    break
-                                }
-                            }
-                        }
-                        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                                if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
-                                    BigDecimal lat = coordroute_instance.latMath()
-                                    BigDecimal lon = coordroute_instance.lonMath()
-                                    if (min_latitude == null || lat < min_latitude) {
-                                        min_latitude = lat
-                                    }
-                                    if (min_longitude == null || lon < min_longitude) {
-                                        min_longitude = lon
-                                    }
-                                    if (max_latitude == null || lat > max_latitude) {
-                                        max_latitude = lat
-                                    }
-                                    if (max_longitude == null || lon > max_longitude) {
-                                        max_longitude = lon
-                                    }
-                                }
-                            }
-                        }
-                        
-                        contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, CONTESTMAP_MARGIN_DISTANCE)
-                        min_latitude = contest_map_rect.latmin
-                        min_longitude = contest_map_rect.lonmin
-                        max_latitude = contest_map_rect.latmax
-                        max_longitude = contest_map_rect.lonmax
-                        center_latitude = (max_latitude+min_latitude)/2
-                        center_longitude = (max_longitude+min_longitude)/2
-                        if (contestMapParams.contestMapCenterMoveY) {
-                            if (contestMapParams.contestMapCenterMoveY > 0) {
-                                center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 180, contestMapParams.contestMapCenterMoveY).lat
-                            } else {
-                                center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 0, -contestMapParams.contestMapCenterMoveY).lat
-                            }
-                        }
-                        if (contestMapParams.contestMapCenterMoveX) {
-                            if (contestMapParams.contestMapCenterMoveX > 0) {
-                                center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 270, contestMapParams.contestMapCenterMoveX).lon
-                            } else {
-                                center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
-                            }
-                        }
-                        
-                        xml.contestmap(
-                            min_latitude: min_latitude,
-                            min_longitude: min_longitude,
-                            max_latitude: max_latitude,
-                            max_longitude: max_longitude,
-                            center_latitude: center_latitude,
-                            center_longitude: center_longitude,
-                            center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
-                            center_graticule_longitude: GetRoundedDecimalGrad(center_longitude)
-                        )
-                    }
                 }
             }
         }
         
-        // tracks
-        if (contestMapParams) {
-            if (show_runway) {
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type.IsRunwayCoord()) {
-                        xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                            xml.name "${coordroute_instance.titleMediaCode(media)}"
-                            xml.sym "airport"
-                            xml.type ""
-                        }
-                    }
-                }
-            } else if (contestMapParams.contestMapLeg || contestMapParams.contestMapCurvedLeg) {
-                CoordRoute last_coordroute_instance = null
-                CoordRoute start_coordroute_instance = null
-                CoordRoute center_coordroute_instance = null
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (center_coordroute_instance) { // semicircle
-                        List semicircle_coords = AviationMath.getSemicircle(
-                            center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
-                            start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
-                            routeInstance.semicircleCourseChange
-                        )
-                        if (semicircle_coords.size() > 2) {
-                            xml.rte {
-                                xml.name "${start_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
-                                int semicircle_coord_pos = 0
-                                for (Map semicircle_coord in semicircle_coords) {
-                                    if (semicircle_coord_pos == 1) {
-                                        Map track_coords = AviationMath.getTrack2Circle(
-                                            semicircle_coords[0].lat, semicircle_coords[0].lon,
-                                            semicircle_coords[1].lat, semicircle_coords[1].lon,
-                                            CONTESTMAP_TPCIRCLE_RADIUS
-                                        )
-                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
-                                        //xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
-                                    }
-                                    if (semicircle_coord_pos > 0) {
-                                        xml.rtept(lat:semicircle_coord.lat, lon:semicircle_coord.lon) {
-                                            // xml.ele altitude_meter
-                                        }
-                                    }
-                                    semicircle_coord_pos++
-                                }
-                                Map track_coords = AviationMath.getTrack2Circle(
-                                    semicircle_coords[semicircle_coord_pos-1].lat, semicircle_coords[semicircle_coord_pos-1].lon,
-                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                    CONTESTMAP_TPCIRCLE_RADIUS
-                                )
-                                //xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
-                                xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
-                            }
-                        }
-                        start_coordroute_instance = null
-                        center_coordroute_instance = null
-                        last_coordroute_instance = null // no leg line
-                    } else if (coordroute_instance.circleCenter) {
-                        start_coordroute_instance = last_coordroute_instance
-                        center_coordroute_instance = coordroute_instance
-                    }
-                    if (coordroute_instance.type.IsContestMapCoord()) { // no secret and runway points
-                        if (last_coordroute_instance) {
-                            if (coordroute_instance.endCurved) {
-                                if (contestMapParams.contestMapCurvedLeg && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
-                                    xml.rte {
-                                        xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
-                                        boolean run = false
-                                        CoordRoute last_coordroute_instance2 = null
-                                        for (CoordRoute coordroute_instance2 in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                                            if (coordroute_instance2 == last_coordroute_instance) {
-                                                run = true
-                                            }
-                                            if (run) {
-                                                if (last_coordroute_instance2) {
-                                                    if (last_coordroute_instance2 == last_coordroute_instance) { // first track
-                                                        Map track_coords = AviationMath.getTrack2Circle(
-                                                            last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
-                                                            coordroute_instance2.latMath(), coordroute_instance2.lonMath(),
-                                                            CONTESTMAP_TPCIRCLE_RADIUS
-                                                        )
-                                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
-                                                    } else if (coordroute_instance2 == coordroute_instance) { // last track
-                                                        Map track_coords = AviationMath.getTrack2Circle(
-                                                            last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
-                                                            coordroute_instance2.latMath(), coordroute_instance2.lonMath(),
-                                                            CONTESTMAP_TPCIRCLE_RADIUS
-                                                        )
-                                                        xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
-                                                    } else { // middle track
-                                                        xml.rtept(lat:coordroute_instance2.latMath(), lon:coordroute_instance2.lonMath())
-                                                    }
-                                                }
-                                                last_coordroute_instance2 = coordroute_instance2
-                                            }
-                                            if (last_coordroute_instance2 == coordroute_instance) {
-                                                run = false
-                                            }
-                                        }
-                                    }
-                                }
-                            } else if (contestMapParams.contestMapLeg) {
-                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
-                                    Map track_coords = AviationMath.getTrack2Circle(
-                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                        CONTESTMAP_TPCIRCLE_RADIUS
-                                    )
-                                    xml.rte {
-                                        xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
-                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
-                                        xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
-                                    }
-                                }
-                            }
-                        }
-                        last_coordroute_instance = coordroute_instance
-                    } else if (!coordroute_instance.type.IsCpCheckCoord()) {
-                        last_coordroute_instance = null
-                    }
-                }
-            }
-        } else {
+        // legs
+        if (!routeInstance.corridorWidth) { // default legs
             long restart_id = 0
             xml.rte {
                 xml.extensions {
@@ -2050,307 +1898,133 @@ class GpxService
                     }
                 }
             }
+        } else { // corridor legs
+            xml.rte { // right leg
+                xml.extensions {
+                    xml.flightcontest {
+                        xml.route(number:1)
+                    }
+                }
+                xml.name getMsg('fc.kmz.legs.right',is_print)
+                CoordRoute last_last_coordroute_instance = null
+                CoordRoute last_coordroute_instance = null
+                boolean first = true
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsCorridorCoord()) {
+                        if (last_coordroute_instance) {
+                            if (first) {
+                                Map start_gate = AviationMath.getGate(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                    routeInstance.corridorWidth
+                                )
+                                BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
+                                    xml.name last_coordroute_instance.titleMediaCode(media)
+                                    xml.ele altitude_meter
+                                }
+                            }
+                        }
+                        if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
+                            Map gate = AviationMath.getCorridorGate(
+                                last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
+                                last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                routeInstance.corridorWidth
+                            )
+                            BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                xml.name last_coordroute_instance.titleMediaCode(media)
+                                xml.ele altitude_meter
+                            }
+                        }
+                        if (last_coordroute_instance) {
+                            first = false
+                            switch (coordroute_instance.type) {
+                                case CoordType.FP:
+                                    Map gate = AviationMath.getGate(
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                        routeInstance.corridorWidth
+                                    )
+                                    BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                        xml.name coordroute_instance.titleMediaCode(media)
+                                        xml.ele altitude_meter
+                                    }
+                                    break
+                            }
+                        }
+                        last_last_coordroute_instance = last_coordroute_instance
+                        last_coordroute_instance = coordroute_instance
+                    }
+                }
+            }
+            xml.rte { // left leg
+                xml.extensions {
+                    xml.flightcontest {
+                        xml.route(number:2)
+                    }
+                }
+                xml.name getMsg('fc.kmz.legs.left',is_print)
+                CoordRoute last_last_coordroute_instance = null
+                CoordRoute last_coordroute_instance = null
+                boolean first = true
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsCorridorCoord()) {
+                        if (last_coordroute_instance) {
+                            if (first) {
+                                Map start_gate = AviationMath.getGate(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                    routeInstance.corridorWidth
+                                )
+                                BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
+                                    xml.name last_coordroute_instance.titleMediaCode(media)
+                                    xml.ele altitude_meter
+                                }
+                            }
+                        }
+                        if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
+                            Map gate = AviationMath.getCorridorGate(
+                                last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
+                                last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                routeInstance.corridorWidth
+                            )
+                            BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                xml.name last_coordroute_instance.titleMediaCode(media)
+                                xml.ele altitude_meter
+                            }
+                        }
+                        if (last_coordroute_instance) {
+                            first = false
+                            switch (coordroute_instance.type) {
+                                case CoordType.FP:
+                                    Map gate = AviationMath.getGate(
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                        routeInstance.corridorWidth
+                                    )
+                                    BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        xml.name coordroute_instance.titleMediaCode(media)
+                                        xml.ele altitude_meter
+                                    }
+                                    break
+                            }
+                        }
+                        last_last_coordroute_instance = last_coordroute_instance
+                        last_coordroute_instance = coordroute_instance
+                    }
+                }
+            }
         }
         
-        if (contestMapParams) {
-            // circles
-            if (contestMapParams.contestMapCircle) {
-                CoordRoute last_coordroute_instance = null
-                CoordRoute last_last_coordroute_instance = null
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type.IsContestMapCoord()) {
-                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
-                            List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_TPCIRCLE_RADIUS)
-                            xml.rte {
-                                // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.name "Circle ${coordroute_instance.titleMediaCode(media)}"
-                                for (Map circle_coord in circle_coords) {
-                                    xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
-                                        // xml.ele altitude_meter
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    last_last_coordroute_instance = last_coordroute_instance 
-                    last_coordroute_instance = coordroute_instance
-                }
-            }
-            
-            // procedure turns
-            if (contestMapParams.contestMapProcedureTurn && routeInstance.useProcedureTurns) {
-                CoordRoute last_coordroute_instance = null
-                CoordRoute last_coordroute_instance2 = null
-                CoordRoute last_last_coordroute_instance = null
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
-                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
-                            List circle_coords = AviationMath.getProcedureTurnCircle(
-                                last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
-                                last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                CONTESTMAP_TPCIRCLE_RADIUS,
-                                CONTESTMAP_PROCEDURETURN_DISTANCE
-                            )
-                            xml.rte {
-                                // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.name "Procedure turn ${last_coordroute_instance.titleMediaCode(media)}"
-                                for (Map circle_coord in circle_coords) {
-                                    xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
-                                        // xml.ele altitude_meter
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    last_last_coordroute_instance = last_coordroute_instance 
-                    last_coordroute_instance = coordroute_instance
-                }
-            }
-            
-            // TP names
-            if (contestMapParams.contestMapTpName) {
-                CoordRoute last_coordroute_instance = null
-                CoordRoute last_coordroute_instance2 = null
-                CoordRoute last_last_coordroute_instance = null
-                CoordRoute to_coordroute_instance = null
-                CoordRoute ildg_coordroute_instance = null
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type.IsContestMapCoord()) {
-                        if (last_coordroute_instance && last_last_coordroute_instance) {
-                            if (!coordroute_instance.type.IsEnrouteStartCoord()) {
-                                if (last_coordroute_instance.type.IsEnrouteStartCoord()) { // iSP
-                                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
-                                        Map tp_coord = AviationMath.getOrthogonalTitlePoint(
-                                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                            last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                            center_latitude, center_longitude,
-                                            CONTESTMAP_TPNAME_DISTANCE
-                                        )
-                                        xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                            xml.name last_coordroute_instance.titleMediaCode(media)
-                                            xml.sym "empty.png"
-                                            xml.type ""
-                                        }
-                                    }
-                                } else { // TP
-                                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
-                                        BigDecimal distancevalue_procedureturn = CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE
-                                        if (coordroute_instance.endCurved) {
-                                            distancevalue_procedureturn = CONTESTMAP_TPNAME_DISTANCE
-                                        } else if (!routeInstance.useProcedureTurns) {
-                                            distancevalue_procedureturn = CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE
-                                        }
-                                        Map tp_coord = AviationMath.getTitlePoint(
-                                            last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
-                                            last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                            CONTESTMAP_TPNAME_DISTANCE, distancevalue_procedureturn
-                                        )
-                                        xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                            xml.name last_coordroute_instance.titleMediaCode(media)
-                                            xml.sym "empty.png"
-                                            xml.type ""
-                                        }
-                                    }
-                                }
-                            }
-                            if (coordroute_instance.type.IsEnrouteFinishCoord()) { // FP, iFP
-                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
-                                    Map tp_coord = AviationMath.getOrthogonalTitlePoint(
-                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                        center_latitude, center_longitude,
-                                        CONTESTMAP_TPNAME_DISTANCE
-                                    )
-                                    xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                        xml.name coordroute_instance.titleMediaCode(media)
-                                        xml.sym "empty.png"
-                                        xml.type ""
-                                    }
-                                }
-                            }
-                        } else if (last_coordroute_instance && last_coordroute_instance.type.IsEnrouteStartCoord()) { // SP
-                            if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
-                                Map tp_coord = AviationMath.getOrthogonalTitlePoint(
-                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                    last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                    center_latitude, center_longitude,
-                                    CONTESTMAP_TPNAME_DISTANCE
-                                )
-                                xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                    xml.name last_coordroute_instance.titleMediaCode(media)
-                                    xml.sym "empty.png"
-                                    xml.type ""
-                                }
-                            }
-                        }
-                        last_last_coordroute_instance = last_coordroute_instance 
-                        last_coordroute_instance = coordroute_instance
-                    } else if (coordroute_instance.type.IsRunwayCoord()) {
-                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
-                            boolean print_runway_coord = true
-                            switch (coordroute_instance.type) {
-                                case CoordType.TO:
-                                    to_coordroute_instance = coordroute_instance
-                                    break
-                                case CoordType.iLDG:
-                                    ildg_coordroute_instance = coordroute_instance
-                                    break
-                                case CoordType.LDG:
-                                    if (to_coordroute_instance) {
-                                        Map leg = AviationMath.calculateLeg(to_coordroute_instance.latMath(),to_coordroute_instance.lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
-                                        if (leg.dis < CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE) {
-                                            print_runway_coord = false
-                                        }
-                                    }
-                                    break
-                                case CoordType.iTO:
-                                    if (ildg_coordroute_instance) {
-                                        Map leg = AviationMath.calculateLeg(ildg_coordroute_instance.latMath(),ildg_coordroute_instance.lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
-                                        if (leg.dis < CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE) {
-                                            print_runway_coord = false
-                                        }
-                                    }
-                                    break
-                            }
-                            if (print_runway_coord) {
-                                Map tp_coord = AviationMath.getCoordinate(
-                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                    CONTESTMAP_TPNAME_RUNWAY_DIRECTION,
-                                    CONTESTMAP_TPNAME_RUNWAY_DISTANCE
-                                )
-                                xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                    xml.name coordroute_instance.titleMediaCode(media)
-                                    xml.sym "empty.png"
-                                    xml.type ""
-                                }
-                            }
-                        }
-                    } else if (contestMapParams.contestMapSecretGates && coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
-                        BigDecimal distance_value = coordroute_instance.gatewidth2
-                        if (distance_value < CONTESTMAP_TPNAME_DISTANCE) {
-                            distance_value = CONTESTMAP_TPNAME_DISTANCE
-                        }
-                        Map tp_coord = AviationMath.getOrthogonalTitlePoint(
-                            last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
-                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                            center_latitude, center_longitude,
-                            distance_value
-                        )
-                        xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                            xml.name coordroute_instance.titleMediaCode(media)
-                            xml.sym "empty.png"
-                            xml.type ""
-                        }
-                    }
-                    last_coordroute_instance2 = coordroute_instance
-                }
-            }
-            
-            // Gates unbekannter Zeitkontrollen
-            if (contestMapParams.contestMapSecretGates) {
-                CoordRoute last_coordroute_instance = null
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
-                        Float gate_width = null
-                        if (testInstance) {
-                            gate_width = testInstance.GetSecretGateWidth()
-                        }
-                        if (!gate_width) {
-                            gate_width = coordroute_instance.gatewidth2
-                        }
-                        Map gate = AviationMath.getGate(
-                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                            gate_width
-                        )
-                        xml.rte {
-                            wr_gate(coordroute_instance, gate_width, 0, xml, task_instance, wr_photoimage)
-                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                            xml.name coordroute_instance.titleMediaCode(media)
-                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
-                                // xml.ele altitude_meter
-                            }
-                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
-                                // xml.ele altitude_meter
-                            }
-                        }
-                    }
-                    last_coordroute_instance = coordroute_instance
-                }
-            }
-            
-            // Circle center
-			if (contestMapParams.contestMapCircle) {
-				for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-					if (coordroute_instance.circleCenter) {
-						List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_CIRCLECENTER_RADIUS)
-						xml.rte {
-							// BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-							xml.name "Circle ${coordroute_instance.titleMediaCode(media)}"
-							for (Map circle_coord in circle_coords) {
-								xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
-									// xml.ele altitude_meter
-								}
-							}
-						}
-					}
-				}
-			}
-            
-            // CoordEnroutePhoto
-            if (contestMapParams.contestMapEnroutePhotos) {
-                for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutephoto_instance.title()+',')) {
-                        Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutephoto_instance)
-                        if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
-                            xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
-                                xml.name ""
-                                xml.sym "fcphoto.png"
-                                xml.type coordenroutephoto_instance.enroutePhotoName
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // CoordEnrouteCanvas
-            if (contestMapParams.contestMapEnrouteCanvas) {
-                for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutecanvas_instance.title()+',')) {
-                        Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutecanvas_instance)
-                        if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
-                            xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
-                                xml.name ""
-                                xml.sym "${coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()}.png"
-                                xml.type ""
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Turnpoint sign
-            if (contestMapParams.contestMapTurnpointSign) {
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type.IsTurnpointSignCoord()) {
-                        if (coordroute_instance.assignedSign.imagePngName) {
-                                Map sign_coord = AviationMath.getCoordinate(
-                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_TPCANVAS_TRACK, CONTESTMAP_TPCANVAS_DISTANCE
-                                )
-                                xml.wpt(lat:sign_coord.lat, lon:sign_coord.lon) {
-                                    xml.name ""
-                                    xml.sym "${coordroute_instance.assignedSign.toString().toLowerCase()}.png"
-                                    xml.type ""
-                                }
-                        }
-                    }
-                }
-            }
-            
-        } else {
-            // gates
+        // gates
+        if (!routeInstance.corridorWidth) { // default gates
             CoordRoute last_coordroute_instance = null
             CoordRoute start_coordroute_instance = null
             CoordRoute center_coordroute_instance = null
@@ -2626,62 +2300,223 @@ class GpxService
                     last_semicircle_coord = null
                 }
             }
-            
-            // procedure turns
-            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.useProcedureTurns) {
-                last_coordroute_instance = null
-                CoordRoute last_last_coordroute_instance = null
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
-                        List circle_coords = AviationMath.getProcedureTurnCircle(
-                            last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
-                            last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                            0,
-                            CONTESTMAP_PROCEDURETURN_DISTANCE
-                        )
-                        xml.rte {
-                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                            xml.name "Procedure turn ${last_coordroute_instance.titleMediaCode(media)}"
-                            for (Map circle_coord in circle_coords) {
-                                xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
+        } else { // corridor gates
+            CoordRoute last_last_coordroute_instance = null
+            CoordRoute last_coordroute_instance = null
+            boolean first = true
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsRunwayCoord() || coordroute_instance.type.IsCorridorCoord()) {
+                
+                    if (last_coordroute_instance && last_coordroute_instance.type.IsCpCheckCoord() && coordroute_instance.type.IsCpCheckCoord()) {
+                        if (first) {
+                            Map start_gate = AviationMath.getGate(
+                                coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                routeInstance.corridorWidth
+                            )
+                            xml.rte {
+                                wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
+                                //BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                xml.name last_coordroute_instance.titleMediaCode(media)
+                                xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                                xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
                                     // xml.ele altitude_meter
                                 }
                             }
                         }
                     }
-                    last_last_coordroute_instance = last_coordroute_instance 
+                    
+                    switch (coordroute_instance.type) {
+                        case CoordType.TO:
+                            if (testInstance) {
+                                Map gate = AviationMath.getGate(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    testInstance.flighttestwind.TODirection, 
+                                    testInstance.flighttestwind.TOOffset,
+                                    testInstance.flighttestwind.TOOrthogonalOffset,
+                                    coordroute_instance.gatewidth2
+                                )
+                                xml.rte {
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                }
+                            } else {
+                                Map gate = AviationMath.getGate(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    coordroute_instance.gateDirection, 
+                                    0,
+                                    0,
+                                    coordroute_instance.gatewidth2
+                                )
+                                xml.rte {
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                }
+                            }
+                            break
+                        case CoordType.LDG:
+                            if (testInstance) {
+                                Map gate = AviationMath.getGate(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    testInstance.flighttestwind.LDGDirection, 
+                                    testInstance.flighttestwind.LDGOffset,
+                                    testInstance.flighttestwind.LDGOrthogonalOffset,
+                                    coordroute_instance.gatewidth2
+                                )
+                                xml.rte {
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                }
+                            } else {
+                                Map gate = AviationMath.getGate(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    coordroute_instance.gateDirection, 
+                                    0,
+                                    0,
+                                    coordroute_instance.gatewidth2
+                                )
+                                xml.rte {
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                }
+                            }
+                            break
+                    }
+                    if (last_last_coordroute_instance && last_coordroute_instance && last_last_coordroute_instance.type.IsCpCheckCoord() && last_coordroute_instance.type.IsCpCheckCoord() && coordroute_instance.type.IsCpCheckCoord()) { // standard gate
+                        boolean write_gate = false
+                        boolean show_curved_point = params.gpxExport || routeInstance.showCurvedPoints
+                        if (show_curved_point || !last_coordroute_instance.HideSecret(curved_point_ids)) {
+                            write_gate = true
+                        }
+                        if (last_coordroute_instance.ignoreGate && routeInstance.showCurvedPoints) {
+                            write_gate = false
+                        }
+                        Map gate = AviationMath.getCorridorGate(
+                            last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
+                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                            routeInstance.corridorWidth
+                        )
+                        xml.rte {
+                            wr_gate(last_coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage, null, null, false)
+                            // BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                            if (write_gate) {
+                                xml.name last_coordroute_instance.titleMediaCode(media)
+                                xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                                xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                            }
+                        }
+                    }
+                    if (last_coordroute_instance && last_coordroute_instance.type.IsCpCheckCoord()) {
+                        first = false
+                        switch (coordroute_instance.type) {
+                            case CoordType.FP:
+                                Map gate = AviationMath.getGate(
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                    routeInstance.corridorWidth
+                                )
+                                xml.rte {
+                                    wr_gate(coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage, null, null, false)
+                                    // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                        // xml.ele altitude_meter
+                                    }
+                                }
+                                break
+                        }
+                    }
+                    last_last_coordroute_instance = last_coordroute_instance
                     last_coordroute_instance = coordroute_instance
                 }
             }
-            
         }
         
-        // Important points
-        if (!contestMapParams) {
+        // procedure turns
+        if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.useProcedureTurns && !routeInstance.corridorWidth) {
+            CoordRoute last_coordroute_instance = null
+            CoordRoute last_last_coordroute_instance = null
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                if (coordroute_instance.type.IsRunwayCoord()) {
-                    xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                        xml.sym "airport"
+                if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                    List circle_coords = AviationMath.getProcedureTurnCircle(
+                        last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
+                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                        0,
+                        CONTESTMAP_PROCEDURETURN_DISTANCE
+                    )
+                    xml.rte {
+                        // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                        xml.name "Procedure turn ${last_coordroute_instance.titleMediaCode(media)}"
+                        for (Map circle_coord in circle_coords) {
+                            xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
+                                // xml.ele altitude_meter
+                            }
+                        }
                     }
-                } else if (coordroute_instance.type.IsEnrouteStartCoord()) {
-                    xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                        xml.sym "start"
-                    }
-                } else if (coordroute_instance.type.IsEnrouteFinishCoord()) {
-                    xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                        xml.sym "finish"
-                    }
-                } else if (coordroute_instance.circleCenter) {
-                    xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                        xml.sym "circle_red"
-                    }
+                }
+                last_last_coordroute_instance = last_coordroute_instance 
+                last_coordroute_instance = coordroute_instance
+            }
+        }
+            
+        // Important points
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            if (coordroute_instance.type.IsRunwayCoord()) {
+                xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                    xml.sym "airport"
+                }
+            } else if (coordroute_instance.type.IsEnrouteStartCoord()) {
+                xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                    xml.sym "start"
+                }
+            } else if (coordroute_instance.type.IsEnrouteFinishCoord()) {
+                xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                    xml.sym "finish"
+                }
+            } else if (coordroute_instance.circleCenter) {
+                xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                    xml.sym "circle_red"
                 }
             }
         }
                         
         // CoordEnroutePhoto
-        if (wr_enroutesign && routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
+        if (wr_enroutesign && routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition() && !routeInstance.corridorWidth) {
             for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                 xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
                     xml.extensions {
@@ -2709,7 +2544,7 @@ class GpxService
         }
         
         // CoordEnrouteCanvas
-        if (wr_enroutesign && routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
+        if (wr_enroutesign && routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition() && !routeInstance.corridorWidth) {
             for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                 xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
                     xml.extensions {
@@ -2770,7 +2605,920 @@ class GpxService
                     view_pos++
                 }
             }
-            if (routeInstance.exportSemicircleGates) {
+            if (routeInstance.exportSemicircleGates && !routeInstance.corridorWidth) {
+                int circle_pos = 1
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRouteAndCircleCenter(routeInstance,true,[sort:'id'])) {
+                    xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                        xml.extensions {
+                            xml.flightcontest {
+                                xml.mapobject(
+                                    type:              MapObjectType.CircleCenter,
+                                    viewpos:           view_pos,
+                                    text:              "Circle-${circle_pos}",
+                                    directionairfield: 0,
+                                    gliderairfield:    getYesNo(false),
+                                    pavedairfield:     getYesNo(false)
+                                )
+                            }
+                        }
+                        xml.name MapObjectType.CircleCenter
+                        //xml.sym MapObjectType.CircleCenter.imageShortName
+                    }
+                    view_pos++
+                    circle_pos++
+                }
+            }
+        }
+        
+        printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private void gpx_route_contestmap(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams)
+    {
+        printstart "gpx_route_contestmap $params $contestMapParams"
+        
+        boolean wr_enroutesign = params.wrEnrouteSign
+        if (params.wrEnrouteSign && testInstance) {
+            wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
+        }
+        boolean wr_photoimage = false
+        if (params.wrPhotoImage) {
+            wr_photoimage = true
+        }
+        List curved_point_ids = routeInstance.GetCurvedPointIds()
+        Media media = Media.Screen
+        boolean is_print = false
+        if (params.isTracking) {
+            media = Media.Tracking
+            is_print = true
+        } else if (params.isPrint) {
+            media = Media.Print
+            is_print = true
+        }
+        Task task_instance = null
+        if (params.taskInstance) {
+            task_instance = params.taskInstance
+        }
+
+        // observation settings & enroute signs without position
+        Map contest_map_rect = [:]
+        BigDecimal center_latitude = null
+        BigDecimal center_longitude = null
+        xml.extensions {
+            xml.flightcontest {
+                if (wr_enroutesign) {
+                    xml.observationsettings(
+                        routetitle: routeInstance.title,
+                        turnpoint: routeInstance.turnpointRoute,
+                        turnpointmapmeasurement: getYesNo(routeInstance.turnpointMapMeasurement),
+                        turnpointprintstyle: routeInstance.turnpointPrintStyle,
+                        turnpointprintpositionmaker: getYesNo(routeInstance.turnpointPrintPositionMaker),
+                        enroutephoto: routeInstance.enroutePhotoRoute,
+                        enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
+                        enroutephotoprintstyle: routeInstance.enroutePhotoPrintStyle,
+                        enroutephotoprintpositionmarker: getYesNo(routeInstance.enroutePhotoPrintPositionMaker),
+                        enroutecanvas: routeInstance.enrouteCanvasRoute,
+                        enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
+                        useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
+                        mapscale: routeInstance.mapScale,
+                        altitudeaboveground: routeInstance.altitudeAboveGround,
+                        corridorwidth: routeInstance.corridorWidth
+                    )
+                    xml.mapsettings(
+                        contestmapairfields: routeInstance.contestMapAirfields,
+                        contestmapcircle: getYesNo(routeInstance.contestMapCircle),
+                        contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
+                        contestmapleg: getYesNo(routeInstance.contestMapLeg),
+                        contestmapcurvedleg: getYesNo(routeInstance.contestMapCurvedLeg),
+                        contestmapcurvedlegpoints: routeInstance.contestMapCurvedLegPoints,
+                        contestmaptpname: getYesNo(routeInstance.contestMapTpName),
+                        contestmapsecretgates: getYesNo(routeInstance.contestMapSecretGates),
+                        contestmapenroutephotos: getYesNo(routeInstance.contestMapEnroutePhotos),
+                        contestmapenroutecanvas: getYesNo(routeInstance.contestMapEnrouteCanvas),
+                        contestmapturnpointsign: getYesNo(routeInstance.contestMapTurnpointSign),
+                        contestmapgraticule: getYesNo(routeInstance.contestMapGraticule),
+                        contestmapcontourlines: routeInstance.contestMapContourLines,
+                        contestmapmunicipalitynames: getYesNo(routeInstance.contestMapMunicipalityNames),
+                        contestmapchurches: getYesNo(routeInstance.contestMapChurches),
+                        contestmapcastles: getYesNo(routeInstance.contestMapCastles),
+                        contestmapchateaus: getYesNo(routeInstance.contestMapChateaus),
+                        contestmappowerlines: getYesNo(routeInstance.contestMapPowerlines),
+                        contestmapwindpowerstations: getYesNo(routeInstance.contestMapWindpowerstations),
+                        contestmapsmallroadsgrade: routeInstance.contestMapSmallRoadsGrade,
+                        contestmappeaks: getYesNo(routeInstance.contestMapPeaks),
+                        contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
+                        contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
+                        contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
+                        contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
+                        contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
+                        contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
+                        contestmaptitle1: routeInstance.contestMapFirstTitle,
+                        contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,
+                        contestmapcenterhorizontalpos1: routeInstance.contestMapCenterHorizontalPos,
+                        contestmapcenterpoints1: routeInstance.contestMapCenterPoints,
+                        contestmapprintpoints1: routeInstance.contestMapPrintPoints,
+                        contestmapprintlandscape1: getYesNo(routeInstance.contestMapPrintLandscape),
+                        contestmapprintsize1: routeInstance.contestMapPrintSize,
+                        contestmapcentermovex1: routeInstance.contestMapCenterMoveX,
+                        contestmapcentermovey1: routeInstance.contestMapCenterMoveY,
+                        contestmapshowoptions2: getYesNo(routeInstance.contestMapShowSecondOptions),
+                        contestmaptitle2: routeInstance.contestMapSecondTitle,
+                        contestmapcenterverticalpos2: routeInstance.contestMapCenterVerticalPos2,
+                        contestmapcenterhorizontalpos2: routeInstance.contestMapCenterHorizontalPos2,
+                        contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
+                        contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
+                        contestmapprintlandscape2: getYesNo(routeInstance.contestMapPrintLandscape2),
+                        contestmapprintsize2: routeInstance.contestMapPrintSize2,
+                        contestmapcentermovex2: routeInstance.contestMapCenterMoveX2,
+                        contestmapcentermovey2: routeInstance.contestMapCenterMoveY2,
+                        contestmapshowoptions3: getYesNo(routeInstance.contestMapShowThirdOptions),
+                        contestmaptitle3: routeInstance.contestMapThirdTitle,
+                        contestmapcenterverticalpos3: routeInstance.contestMapCenterVerticalPos3,
+                        contestmapcenterhorizontalpos3: routeInstance.contestMapCenterHorizontalPos3,
+                        contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
+                        contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
+                        contestmapprintlandscape3: getYesNo(routeInstance.contestMapPrintLandscape3),
+                        contestmapprintsize3: routeInstance.contestMapPrintSize3,
+                        contestmapcentermovex3: routeInstance.contestMapCenterMoveX3,
+                        contestmapcentermovey3: routeInstance.contestMapCenterMoveY3,
+                        contestmapshowoptions4: getYesNo(routeInstance.contestMapShowForthOptions),
+                        contestmaptitle4: routeInstance.contestMapForthTitle,
+                        contestmapcenterverticalpos4: routeInstance.contestMapCenterVerticalPos4,
+                        contestmapcenterhorizontalpos4: routeInstance.contestMapCenterHorizontalPos4,
+                        contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
+                        contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
+                        contestmapprintlandscape4: getYesNo(routeInstance.contestMapPrintLandscape4),
+                        contestmapprintsize4: routeInstance.contestMapPrintSize4,
+                        contestmapcentermovex4: routeInstance.contestMapCenterMoveX4,
+                        contestmapcentermovey4: routeInstance.contestMapCenterMoveY4
+                    )
+                    if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
+                        xml.enroutephotosigns {
+                            for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                                xml.enroutephotosign(
+                                    photoname: coordenroutephoto_instance.enroutePhotoName,
+                                    viewpos: coordenroutephoto_instance.enrouteViewPos
+                                )
+                            }
+                        }
+                    }
+                    if (routeInstance.enrouteCanvasRoute == EnrouteRoute.InputName) {
+                        xml.enroutecanvassigns {
+                            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                                xml.enroutecanvassign(
+                                    canvasname: coordenroutecanvas_instance.enrouteCanvasSign,
+                                    viewpos: coordenroutecanvas_instance.enrouteViewPos
+                                )
+                            }
+                        }
+                    }
+                }
+                BigDecimal min_latitude = null
+                BigDecimal min_longitude = null
+                BigDecimal max_latitude = null
+                BigDecimal max_longitude = null
+                boolean min_one_center_point = false
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                            min_one_center_point = true
+                            break
+                        }
+                    }
+                }
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                        if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                            BigDecimal lat = coordroute_instance.latMath()
+                            BigDecimal lon = coordroute_instance.lonMath()
+                            if (min_latitude == null || lat < min_latitude) {
+                                min_latitude = lat
+                            }
+                            if (min_longitude == null || lon < min_longitude) {
+                                min_longitude = lon
+                            }
+                            if (max_latitude == null || lat > max_latitude) {
+                                max_latitude = lat
+                            }
+                            if (max_longitude == null || lon > max_longitude) {
+                                max_longitude = lon
+                            }
+                        }
+                    }
+                }
+                
+                contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, CONTESTMAP_MARGIN_DISTANCE)
+                min_latitude = contest_map_rect.latmin
+                min_longitude = contest_map_rect.lonmin
+                max_latitude = contest_map_rect.latmax
+                max_longitude = contest_map_rect.lonmax
+                center_latitude = (max_latitude+min_latitude)/2
+                center_longitude = (max_longitude+min_longitude)/2
+                if (contestMapParams.contestMapCenterMoveY) {
+                    if (contestMapParams.contestMapCenterMoveY > 0) {
+                        center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 180, contestMapParams.contestMapCenterMoveY).lat
+                    } else {
+                        center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 0, -contestMapParams.contestMapCenterMoveY).lat
+                    }
+                }
+                if (contestMapParams.contestMapCenterMoveX) {
+                    if (contestMapParams.contestMapCenterMoveX > 0) {
+                        center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 270, contestMapParams.contestMapCenterMoveX).lon
+                    } else {
+                        center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
+                    }
+                }
+                
+                xml.contestmap(
+                    min_latitude: min_latitude,
+                    min_longitude: min_longitude,
+                    max_latitude: max_latitude,
+                    max_longitude: max_longitude,
+                    center_latitude: center_latitude,
+                    center_longitude: center_longitude,
+                    center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
+                    center_graticule_longitude: GetRoundedDecimalGrad(center_longitude)
+                )
+            }
+        }
+        
+        // tracks
+        if (contestMapParams.contestMapLeg || contestMapParams.contestMapCurvedLeg) {
+            if (!routeInstance.corridorWidth) { // default track
+                CoordRoute last_coordroute_instance = null
+                CoordRoute start_coordroute_instance = null
+                CoordRoute center_coordroute_instance = null
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (center_coordroute_instance) { // semicircle
+                        List semicircle_coords = AviationMath.getSemicircle(
+                            center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
+                            start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
+                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                            routeInstance.semicircleCourseChange
+                        )
+                        if (semicircle_coords.size() > 2) {
+                            xml.rte {
+                                xml.name "${start_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
+                                int semicircle_coord_pos = 0
+                                for (Map semicircle_coord in semicircle_coords) {
+                                    if (semicircle_coord_pos == 1) {
+                                        Map track_coords = AviationMath.getTrack2Circle(
+                                            semicircle_coords[0].lat, semicircle_coords[0].lon,
+                                            semicircle_coords[1].lat, semicircle_coords[1].lon,
+                                            CONTESTMAP_TPCIRCLE_RADIUS
+                                        )
+                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
+                                        //xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
+                                    }
+                                    if (semicircle_coord_pos > 0) {
+                                        xml.rtept(lat:semicircle_coord.lat, lon:semicircle_coord.lon) {
+                                            // xml.ele altitude_meter
+                                        }
+                                    }
+                                    semicircle_coord_pos++
+                                }
+                                Map track_coords = AviationMath.getTrack2Circle(
+                                    semicircle_coords[semicircle_coord_pos-1].lat, semicircle_coords[semicircle_coord_pos-1].lon,
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                    CONTESTMAP_TPCIRCLE_RADIUS
+                                )
+                                //xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
+                                xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
+                            }
+                        }
+                        start_coordroute_instance = null
+                        center_coordroute_instance = null
+                        last_coordroute_instance = null // no leg line
+                    } else if (coordroute_instance.circleCenter) {
+                        start_coordroute_instance = last_coordroute_instance
+                        center_coordroute_instance = coordroute_instance
+                    }
+                    if (coordroute_instance.type.IsContestMapCoord()) { // no secret and runway points
+                        if (last_coordroute_instance) {
+                            if (coordroute_instance.endCurved) {
+                                if (contestMapParams.contestMapCurvedLeg && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                                    xml.rte {
+                                        xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
+                                        boolean run = false
+                                        CoordRoute last_coordroute_instance2 = null
+                                        for (CoordRoute coordroute_instance2 in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                                            if (coordroute_instance2 == last_coordroute_instance) {
+                                                run = true
+                                            }
+                                            if (run) {
+                                                if (last_coordroute_instance2) {
+                                                    if (last_coordroute_instance2 == last_coordroute_instance) { // first track
+                                                        Map track_coords = AviationMath.getTrack2Circle(
+                                                            last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
+                                                            coordroute_instance2.latMath(), coordroute_instance2.lonMath(),
+                                                            CONTESTMAP_TPCIRCLE_RADIUS
+                                                        )
+                                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
+                                                    } else if (coordroute_instance2 == coordroute_instance) { // last track
+                                                        Map track_coords = AviationMath.getTrack2Circle(
+                                                            last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
+                                                            coordroute_instance2.latMath(), coordroute_instance2.lonMath(),
+                                                            CONTESTMAP_TPCIRCLE_RADIUS
+                                                        )
+                                                        xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
+                                                    } else { // middle track
+                                                        xml.rtept(lat:coordroute_instance2.latMath(), lon:coordroute_instance2.lonMath())
+                                                    }
+                                                }
+                                                last_coordroute_instance2 = coordroute_instance2
+                                            }
+                                            if (last_coordroute_instance2 == coordroute_instance) {
+                                                run = false
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if (contestMapParams.contestMapLeg) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                                    Map track_coords = AviationMath.getTrack2Circle(
+                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                        CONTESTMAP_TPCIRCLE_RADIUS
+                                    )
+                                    xml.rte {
+                                        xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
+                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
+                                        xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
+                                    }
+                                }
+                            }
+                        }
+                        last_coordroute_instance = coordroute_instance
+                    } else if (!coordroute_instance.type.IsCpCheckCoord()) {
+                        last_coordroute_instance = null
+                    }
+                }
+            } else { // corridor track
+                xml.rte { // left track
+                    xml.extensions {
+                        xml.flightcontest {
+                            xml.route(number:1)
+                        }
+                    }
+                    xml.name routeInstance.title.encodeAsHTML()
+                    CoordRoute last_last_coordroute_instance = null
+                    CoordRoute last_coordroute_instance = null
+                    boolean first = true
+                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                        if (coordroute_instance.type.IsCorridorCoord()) {
+                            if (last_coordroute_instance) {
+                                if (first) {
+                                    Map start_gate = AviationMath.getGate(
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                        routeInstance.corridorWidth
+                                    )
+                                    BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
+                                        xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.ele altitude_meter
+                                    }
+                                }
+                            }
+                            if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
+                                Map gate = AviationMath.getCorridorGate(
+                                    last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    routeInstance.corridorWidth
+                                )
+                                BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                    xml.name last_coordroute_instance.titleMediaCode(media)
+                                    xml.ele altitude_meter
+                                }
+                            }
+                            if (last_coordroute_instance) {
+                                first = false
+                                switch (coordroute_instance.type) {
+                                    case CoordType.FP:
+                                        Map gate = AviationMath.getGate(
+                                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                            coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                            routeInstance.corridorWidth
+                                        )
+                                        BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                        xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                            xml.name coordroute_instance.titleMediaCode(media)
+                                            xml.ele altitude_meter
+                                        }
+                                        break
+                                }
+                            }
+                            last_last_coordroute_instance = last_coordroute_instance
+                            last_coordroute_instance = coordroute_instance
+                        }
+                    }
+                }
+                xml.rte { // right track
+                    xml.extensions {
+                        xml.flightcontest {
+                            xml.route(number:2)
+                        }
+                    }
+                    xml.name routeInstance.title.encodeAsHTML()
+                    CoordRoute last_last_coordroute_instance = null
+                    CoordRoute last_coordroute_instance = null
+                    boolean first = true
+                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                        if (coordroute_instance.type.IsCorridorCoord()) {
+                            if (last_coordroute_instance) {
+                                if (first) {
+                                    Map start_gate = AviationMath.getGate(
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                        routeInstance.corridorWidth
+                                    )
+                                    BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
+                                        xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.ele altitude_meter
+                                    }
+                                }
+                            }
+                            if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
+                                Map gate = AviationMath.getCorridorGate(
+                                    last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    routeInstance.corridorWidth
+                                )
+                                BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                    xml.name last_coordroute_instance.titleMediaCode(media)
+                                    xml.ele altitude_meter
+                                }
+                            }
+                            if (last_coordroute_instance) {
+                                first = false
+                                switch (coordroute_instance.type) {
+                                    case CoordType.FP:
+                                        Map gate = AviationMath.getGate(
+                                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                            coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                            routeInstance.corridorWidth
+                                        )
+                                        BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                        xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                            xml.name coordroute_instance.titleMediaCode(media)
+                                            xml.ele altitude_meter
+                                        }
+                                        break
+                                }
+                            }
+                            last_last_coordroute_instance = last_coordroute_instance
+                            last_coordroute_instance = coordroute_instance
+                        }
+                    }
+                }
+            }
+        }
+        
+        // circles
+        if (contestMapParams.contestMapCircle && !routeInstance.corridorWidth) {
+            CoordRoute last_coordroute_instance = null
+            CoordRoute last_last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsContestMapCoord()) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                        List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_TPCIRCLE_RADIUS)
+                        xml.rte {
+                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.name "Circle ${coordroute_instance.titleMediaCode(media)}"
+                            for (Map circle_coord in circle_coords) {
+                                xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                            }
+                        }
+                    }
+                }
+                last_last_coordroute_instance = last_coordroute_instance 
+                last_coordroute_instance = coordroute_instance
+            }
+        }
+        
+        // procedure turns
+        if (contestMapParams.contestMapProcedureTurn && routeInstance.useProcedureTurns && !routeInstance.corridorWidth) {
+            CoordRoute last_coordroute_instance = null
+            CoordRoute last_coordroute_instance2 = null
+            CoordRoute last_last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                        List circle_coords = AviationMath.getProcedureTurnCircle(
+                            last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
+                            last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                            CONTESTMAP_TPCIRCLE_RADIUS,
+                            CONTESTMAP_PROCEDURETURN_DISTANCE
+                        )
+                        xml.rte {
+                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.name "Procedure turn ${last_coordroute_instance.titleMediaCode(media)}"
+                            for (Map circle_coord in circle_coords) {
+                                xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                            }
+                        }
+                    }
+                }
+                last_last_coordroute_instance = last_coordroute_instance 
+                last_coordroute_instance = coordroute_instance
+            }
+        }
+        
+        // TP names
+        BigDecimal contestmap_tpname_distance = CONTESTMAP_TPNAME_DISTANCE
+        BigDecimal contestmap_tpname_runway_distance = CONTESTMAP_TPNAME_RUNWAY_DISTANCE
+        if (routeInstance.corridorWidth) {
+            contestmap_tpname_distance = CONTESTMAP_TPNAME_ANR_DISTANCE
+            contestmap_tpname_runway_distance = CONTESTMAP_TPNAME_RUNWAY_ANR_DISTANCE
+        }
+        if (contestMapParams.contestMapTpName) {
+            CoordRoute last_coordroute_instance = null
+            CoordRoute last_coordroute_instance2 = null
+            CoordRoute last_last_coordroute_instance = null
+            CoordRoute to_coordroute_instance = null
+            CoordRoute ildg_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsContestMapCoord()) {
+                    if (last_coordroute_instance && last_last_coordroute_instance) {
+                        if (!coordroute_instance.type.IsEnrouteStartCoord()) {
+                            if (last_coordroute_instance.type.IsEnrouteStartCoord()) { // iSP
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                                    Map tp_coord = AviationMath.getOrthogonalTitlePoint(
+                                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                        center_latitude, center_longitude,
+                                        contestmap_tpname_distance
+                                    )
+                                    xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                        xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.sym "empty.png"
+                                        xml.type ""
+                                    }
+                                }
+                            } else { // TP
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                                    BigDecimal distancevalue_procedureturn = CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE
+                                    if (coordroute_instance.endCurved) {
+                                        distancevalue_procedureturn = contestmap_tpname_distance
+                                    } else if (!routeInstance.useProcedureTurns) {
+                                        distancevalue_procedureturn = CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE
+                                    }
+                                    Map tp_coord = AviationMath.getTitlePoint(
+                                        last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
+                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                        contestmap_tpname_distance, distancevalue_procedureturn
+                                    )
+                                    xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                        xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.sym "empty.png"
+                                        xml.type ""
+                                    }
+                                }
+                            }
+                        }
+                        if (coordroute_instance.type.IsEnrouteFinishCoord()) { // FP, iFP
+                            if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                                Map tp_coord = AviationMath.getOrthogonalTitlePoint(
+                                    last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                    center_latitude, center_longitude,
+                                    contestmap_tpname_distance
+                                )
+                                xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.sym "empty.png"
+                                    xml.type ""
+                                }
+                            }
+                        }
+                    } else if (last_coordroute_instance && last_coordroute_instance.type.IsEnrouteStartCoord()) { // SP
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                            Map tp_coord = AviationMath.getOrthogonalTitlePoint(
+                                coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                center_latitude, center_longitude,
+                                contestmap_tpname_distance
+                            )
+                            xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                xml.name last_coordroute_instance.titleMediaCode(media)
+                                xml.sym "empty.png"
+                                xml.type ""
+                            }
+                        }
+                    }
+                    last_last_coordroute_instance = last_coordroute_instance 
+                    last_coordroute_instance = coordroute_instance
+                } else if (coordroute_instance.type.IsRunwayCoord()) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                        boolean print_runway_coord = true
+                        switch (coordroute_instance.type) {
+                            case CoordType.TO:
+                                to_coordroute_instance = coordroute_instance
+                                break
+                            case CoordType.iLDG:
+                                ildg_coordroute_instance = coordroute_instance
+                                break
+                            case CoordType.LDG:
+                                if (to_coordroute_instance) {
+                                    Map leg = AviationMath.calculateLeg(to_coordroute_instance.latMath(),to_coordroute_instance.lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
+                                    if (leg.dis < CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE) {
+                                        print_runway_coord = false
+                                    }
+                                }
+                                break
+                            case CoordType.iTO:
+                                if (ildg_coordroute_instance) {
+                                    Map leg = AviationMath.calculateLeg(ildg_coordroute_instance.latMath(),ildg_coordroute_instance.lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
+                                    if (leg.dis < CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE) {
+                                        print_runway_coord = false
+                                    }
+                                }
+                                break
+                        }
+                        if (print_runway_coord) {
+                            Map tp_coord = AviationMath.getCoordinate(
+                                coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                CONTESTMAP_TPNAME_RUNWAY_DIRECTION,
+                                contestmap_tpname_runway_distance
+                            )
+                            xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                xml.name coordroute_instance.titleMediaCode(media)
+                                xml.sym "empty.png"
+                                xml.type ""
+                            }
+                        }
+                    }
+                } else if (contestMapParams.contestMapSecretGates && coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
+                    BigDecimal distance_value = coordroute_instance.gatewidth2
+                    if (distance_value < contestmap_tpname_distance) {
+                        distance_value = contestmap_tpname_distance
+                    }
+                    Map tp_coord = AviationMath.getOrthogonalTitlePoint(
+                        last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
+                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                        center_latitude, center_longitude,
+                        distance_value
+                    )
+                    xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                        xml.name coordroute_instance.titleMediaCode(media)
+                        xml.sym "empty.png"
+                        xml.type ""
+                    }
+                }
+                last_coordroute_instance2 = coordroute_instance
+            }
+        }
+        
+        // Start- und Ende-Gates
+        if (routeInstance.corridorWidth) {
+            CoordRoute last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (last_coordroute_instance) {
+                    if (last_coordroute_instance.type == CoordType.SP) {
+                        Map gate = AviationMath.getGate(
+                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                            routeInstance.corridorWidth
+                        )
+                        xml.rte {
+                            wr_gate(coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage)
+                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.name coordroute_instance.titleMediaCode(media)
+                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                // xml.ele altitude_meter
+                            }
+                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                // xml.ele altitude_meter
+                            }
+                        }
+                    }
+                    if (coordroute_instance.type == CoordType.FP) {
+                        Map gate = AviationMath.getGate(
+                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                            routeInstance.corridorWidth
+                        )
+                        xml.rte {
+                            wr_gate(coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage)
+                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.name coordroute_instance.titleMediaCode(media)
+                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                // xml.ele altitude_meter
+                            }
+                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                // xml.ele altitude_meter
+                            }
+                        }
+                    }
+                }
+                last_coordroute_instance = coordroute_instance
+            }
+        }
+        
+        // Gates unbekannter Zeitkontrollen
+        if (contestMapParams.contestMapSecretGates && !routeInstance.corridorWidth) {
+            CoordRoute last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
+                    Float gate_width = null
+                    if (testInstance) {
+                        gate_width = testInstance.GetSecretGateWidth()
+                    }
+                    if (!gate_width) {
+                        gate_width = coordroute_instance.gatewidth2
+                    }
+                    Map gate = AviationMath.getGate(
+                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                        gate_width
+                    )
+                    xml.rte {
+                        wr_gate(coordroute_instance, gate_width, 0, xml, task_instance, wr_photoimage)
+                        // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                        xml.name coordroute_instance.titleMediaCode(media)
+                        xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                            // xml.ele altitude_meter
+                        }
+                        xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                            // xml.ele altitude_meter
+                        }
+                    }
+                }
+                last_coordroute_instance = coordroute_instance
+            }
+        }
+        
+        // Circle center
+        if (contestMapParams.contestMapCircle && !routeInstance.corridorWidth) {
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.circleCenter) {
+                    List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_CIRCLECENTER_RADIUS)
+                    xml.rte {
+                        // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                        xml.name "Circle ${coordroute_instance.titleMediaCode(media)}"
+                        for (Map circle_coord in circle_coords) {
+                            xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
+                                // xml.ele altitude_meter
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // CoordEnroutePhoto
+        if (contestMapParams.contestMapEnroutePhotos && !routeInstance.corridorWidth) {
+            for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutephoto_instance.title()+',')) {
+                    Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutephoto_instance)
+                    if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
+                        xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
+                            xml.name ""
+                            xml.sym "fcphoto.png"
+                            xml.type coordenroutephoto_instance.enroutePhotoName
+                        }
+                    }
+                }
+            }
+        }
+        
+        // CoordEnrouteCanvas
+        if (contestMapParams.contestMapEnrouteCanvas && !routeInstance.corridorWidth) {
+            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutecanvas_instance.title()+',')) {
+                    Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutecanvas_instance)
+                    if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
+                        xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
+                            xml.name ""
+                            xml.sym "${coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()}.png"
+                            xml.type ""
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Turnpoint sign
+        if (contestMapParams.contestMapTurnpointSign && !routeInstance.corridorWidth) {
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                    if (coordroute_instance.assignedSign.imagePngName) {
+                            Map sign_coord = AviationMath.getCoordinate(
+                                coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_TPCANVAS_TRACK, CONTESTMAP_TPCANVAS_DISTANCE
+                            )
+                            xml.wpt(lat:sign_coord.lat, lon:sign_coord.lon) {
+                                xml.name ""
+                                xml.sym "${coordroute_instance.assignedSign.toString().toLowerCase()}.png"
+                                xml.type ""
+                            }
+                    }
+                }
+            }
+        }
+        
+        // CoordEnroutePhoto
+        if (wr_enroutesign && routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition() && !routeInstance.corridorWidth) {
+            for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
+                    xml.extensions {
+                        xml.flightcontest {
+                            xml.enroutephotosign(
+                                photoname:      coordenroutephoto_instance.enroutePhotoName,
+                                viewpos:        coordenroutephoto_instance.enrouteViewPos,
+                                type:           coordenroutephoto_instance.type,
+                                number:         coordenroutephoto_instance.titleNumber,
+                                dist:           coordenroutephoto_instance.enrouteDistance,
+                                measuredist:    coordenroutephoto_instance.measureDistance,
+                                orthogonaldist: coordenroutephoto_instance.enrouteOrthogonalDistance
+                            )
+                            if (wr_photoimage && coordenroutephoto_instance.imagecoord) {
+                                xml.enroutephotoimage(observationpositiontop: coordenroutephoto_instance.observationPositionTop, observationpositionleft: coordenroutephoto_instance.observationPositionLeft) {
+                                    xml.imagedata Base64.getEncoder().encodeToString(coordenroutephoto_instance.imagecoord.imageData)
+                                }
+                            }
+                        }
+                    }
+                    xml.name coordenroutephoto_instance.enroutePhotoName
+                    xml.sym "scenic area"
+                }
+            }
+        }
+        
+        // CoordEnrouteCanvas
+        if (wr_enroutesign && routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition() && !routeInstance.corridorWidth) {
+            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
+                    xml.extensions {
+                        xml.flightcontest {
+                            xml.enroutecanvassign(
+                                canvasname:     coordenroutecanvas_instance.enrouteCanvasSign,
+                                viewpos:        coordenroutecanvas_instance.enrouteViewPos,
+                                type:           coordenroutecanvas_instance.type,
+                                number:         coordenroutecanvas_instance.titleNumber,
+                                dist:           coordenroutecanvas_instance.enrouteDistance,
+                                measuredist:    coordenroutecanvas_instance.measureDistance,
+                                orthogonaldist: coordenroutecanvas_instance.enrouteOrthogonalDistance
+                            )
+                        }
+                    }
+                    xml.name coordenroutecanvas_instance.enrouteCanvasSign
+                    xml.sym coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()
+                }
+            }
+        }
+        
+        // MapObjects
+        if (params.gpxExport) {
+            int view_pos = 1
+            List coordmapobject_instances = []
+            if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                Route route_instance_from = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                if (route_instance_from) {
+                    coordmapobject_instances += CoordMapObject.findAllByRoute(route_instance_from,[sort:"enrouteViewPos"])
+                }
+            }
+            if (routeInstance.mapobjects) {
+                coordmapobject_instances += CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])
+            }
+            if (coordmapobject_instances) {
+                for (CoordMapObject coordmapobject_instance in coordmapobject_instances) {
+                    xml.wpt(lat:coordmapobject_instance.latMath(), lon:coordmapobject_instance.lonMath()) {
+                        xml.extensions {
+                            xml.flightcontest {
+                                xml.mapobject(
+                                    type:              coordmapobject_instance.mapObjectType,
+                                    viewpos:           view_pos,
+                                    text:              coordmapobject_instance.mapObjectText,
+                                    directionairfield: coordmapobject_instance.gateDirection,
+                                    gliderairfield:    getYesNo(coordmapobject_instance.mapObjectGliderAirfield),
+                                    pavedairfield:     getYesNo(coordmapobject_instance.mapObjectPavedAirfield)
+                                )
+                                if (coordmapobject_instance.imagecoord) {
+                                    xml.mapobjectimage() {
+                                        xml.imagedata Base64.getEncoder().encodeToString(coordmapobject_instance.imagecoord.imageData)
+                                    }
+                                }
+                            }
+                        }
+                        xml.name coordmapobject_instance.mapObjectType
+                        //xml.sym coordmapobject_instance.mapObjectType.imageShortName
+                    }
+                    view_pos++
+                }
+            }
+            if (routeInstance.exportSemicircleGates && !routeInstance.corridorWidth) {
                 int circle_pos = 1
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRouteAndCircleCenter(routeInstance,true,[sort:'id'])) {
                     xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
@@ -2945,7 +3693,7 @@ class GpxService
             
             List calc_results = []
             if (testInstance.IsLoggerResult()) {
-                println "Cache calc results"
+                // println "Cache calc results"
                 for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
                     String title_code = ""
                     CoordType coord_type = CoordType.UNKNOWN
@@ -2977,17 +3725,20 @@ class GpxService
                                            badCourse: calcresult_instance.badCourse,
                                            badCourseSeconds: calcresult_instance.badCourseSeconds,
                                            noBadCourse: calcresult_instance.noBadCourse,
+                                           outsideCorridor: calcresult_instance.outsideCorridor,
+                                           outsideCorridorSeconds: calcresult_instance.outsideCorridorSeconds,
+                                           noOutsideCorridor: calcresult_instance.noOutsideCorridor,
                                            judgeDisabled: calcresult_instance.judgeDisabled,
                                            hide: calcresult_instance.hide,
                                            runway: is_runway
                                           ]
                     calc_results += new_calc_result
                 }
-                println "${calc_results.size()} calc results found"
+                //println "${calc_results.size()} calc results found"
             }
             
             // write xml
-            println "Write xml"
+            //println "Write xml"
             xml.trk {
                 xml.name testInstance.crew.startNum
                 xml.trkseg {
@@ -3003,7 +3754,7 @@ class GpxService
 							start_time = FcTime.UTCAddSeconds(params.showUtc, -120)
 						}
                         end_time = FcTime.UTCAddSeconds(params.showUtc, 120)
-                        println "Show track points ${start_time}...${end_time}"
+                        //println "Show track points ${start_time}...${end_time}"
                     }
                     for (Map p in track_points) {
                         
@@ -3012,7 +3763,7 @@ class GpxService
                             utc = FcTime.UTCReplaceDate(p.utc, params.gpxDate)
                             if (params.gpxEndTime) {
                                 if (utc > params.gpxEndTime) {
-                                    println "Track points cut off: ${utc}"
+                                    //println "Track points cut off: ${utc}"
                                     break
                                 }
                             }
@@ -3024,7 +3775,7 @@ class GpxService
                         }
                         if (end_time) {
                             if (utc >= end_time) {
-                                println "Track points cut off: ${end_time}"
+                                //println "Track points cut off: ${end_time}"
                                 break
                             }
                         }
@@ -3043,15 +3794,27 @@ class GpxService
                                 }
                                 if (calc_result.utc == utc) {
                                     last_calc_result_pos = calc_result_pos
-                                    println "Write extension for calc result $utc"
-                                    if (observationsign_used && !calc_result.badCourse && !calc_result.badTurn && !calc_result.gateMissed && !calc_result.gateNotFound && calc_result.coordType.IsEnrouteSignCoord()) { // cache enroute photo / canvas data
+                                    //println "Write extension for calc result $utc"
+                                    if (observationsign_used && !calc_result.outsideCorridor && !calc_result.badCourse && !calc_result.badTurn && !calc_result.gateMissed && !calc_result.gateNotFound && calc_result.coordType.IsEnrouteSignCoord()) { // cache enroute photo / canvas data
                                         enroute_points = RoutePointsTools.GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber, false)
                                         enroute_point_pos = 0
                                         from_tp = [titleCode:calc_result.titleCode, latitude:calc_result.latitude, longitude:calc_result.longitude]
                                     }
                                     xml.extensions {
                                         xml.flightcontest {
-                                            if (calc_result.badCourse) {
+                                            if (calc_result.outsideCorridor) {
+                                                if (!calc_result.judgeDisabled && !calc_result.hide) {
+                                                    String v = "yes"
+                                                    if (calc_result.noOutsideCorridor) {
+                                                        v = "no"
+                                                    }
+                                                    if (calc_result.outsideCorridorSeconds) {
+                                                        xml.outsidecorridor(duration:calc_result.outsideCorridorSeconds, v)
+                                                    } else {
+                                                        xml.outsidecorridor(v)
+                                                    }
+                                                }
+                                            } else if (calc_result.badCourse) {
                                                 if (!calc_result.judgeDisabled && !calc_result.hide) {
                                                     String v = "yes"
                                                     if (calc_result.noBadCourse) {
@@ -3210,7 +3973,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    Map SendFTP2(Object configFlightContest, String baseDir, String sourceURL, String destFileName) // TODO: getMsg
+    Map SendFTP2(Object configFlightContest, String baseDir, String sourceURL, String destFileName) // TODO_OLD: getMsg
     {
         printstart "SendFTP2 ${configFlightContest.ftp.host}:${configFlightContest.ftp.port}:${sourceURL}"
         Map ret = [error:false, message:'']

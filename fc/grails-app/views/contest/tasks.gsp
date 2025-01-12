@@ -15,17 +15,21 @@
             <g:if test="${contestInstance}">
                 <table>
                     <thead>
+                        <g:set var="colspan_num" value="${5}"/>
+                        <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
+                            <g:set var="colspan_num" value="${colspan_num+1}"/>
+                        </g:if>
+                        <g:if test="${contestInstance.showPlanningTest}">
+                            <g:set var="colspan_num" value="${colspan_num+1}"/>
+                        </g:if>
                         <tr>
-                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
-                                <th colspan="7" class="table-head">${message(code:'fc.task.tasks')}</th>
-                            </g:if>
-                            <g:else>
-                                <th colspan="6" class="table-head">${message(code:'fc.task.tasks')}</th>
-                            </g:else>
+                            <th colspan="${colspan_num}" class="table-head">${message(code:'fc.task.tasks')}</th>
                         </tr>
                         <tr>
                             <th>${message(code:'fc.task')}</th>
-                            <th>${message(code:'fc.planningtest')}</th>
+                            <g:if test="${contestInstance.showPlanningTest}">
+                                <th>${message(code:'fc.planningtest')}</th>
+                            </g:if>
                             <th>${message(code:'fc.flighttest')}</th>
                             <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
                                 <th>${message(code:'fc.livetracking')}</th>
@@ -40,11 +44,13 @@
                             <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                 <td><g:task var="${task_instance}" link="${createLink(controller:'task',action:'edit')}" /></td>
                                 
-                                <g:if test="${task_instance.planningtest}">
-                                    <td><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
-                                </g:if> <g:else>
-                                    <td class="add"><g:if test="${!task_instance.lockPlanning}"><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></g:if></td>
-                                </g:else>
+                                <g:if test="${contestInstance.showPlanningTest}">
+                                    <g:if test="${task_instance.planningtest}">
+                                        <td><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
+                                    </g:if> <g:else>
+                                        <td class="add"><g:if test="${!task_instance.lockPlanning}"><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></g:if></td>
+                                    </g:else>
+                                </g:if>
 
                                 <g:if test="${task_instance.flighttest}">
                                     <td><g:flighttest var="${task_instance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>

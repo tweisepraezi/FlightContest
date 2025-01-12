@@ -27,8 +27,10 @@ class Route
 	Integer mapScale = 200000                                                    // DB-2.21
 	Integer altitudeAboveGround = 400                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
     String defaultOnlineMap = ""                                                 // DB-2.37
+    String defaultPrintMap = ""                                                  // DB-2.41
     Boolean exportSemicircleGates = false                                        // DB-2.26
     Integer semicircleCourseChange = 5                                           // DB-2.37
+    BigDecimal corridorWidth = 0.0                                               // DB-2.41, NM
     
     Boolean showCoords = true                                                    // DB-2.30
     Boolean showCoordObservations = false                                        // DB-2.30
@@ -267,6 +269,10 @@ class Route
         contestMapShowMapObjectsFromRouteID(nullable:true)
         contestMapSmallRoadsGrade(nullable:true)
         contestMapTurnpointSign(nullable:true)
+        
+        // DB-2.41 compatibility
+        corridorWidth(nullable:true,min:0.0)
+        defaultPrintMap(nullable:true)
 	}
 
 	static mapping = {
@@ -304,6 +310,7 @@ class Route
         showEnroutePhotos = routeInstance.showEnroutePhotos
         showEnrouteCanvas = routeInstance.showEnrouteCanvas
         semicircleCourseChange = routeInstance.semicircleCourseChange
+        corridorWidth = routeInstance.corridorWidth
         if (routeInstance.contestMapShowMapObjectsFromRouteID) {
             contestMapShowMapObjectsFromRouteID = routeInstance.contestMapShowMapObjectsFromRouteID
         } else if (routeInstance.mapobjects) {
@@ -703,11 +710,17 @@ class Route
     
     boolean IsTurnpointSign()
     {
+        if (corridorWidth) {
+            return false
+        }
         turnpointRoute.IsTurnpointSign()
     }
     
     boolean IsTurnpointPhoto()
     {
+        if (corridorWidth) {
+            return false
+        }
         turnpointRoute.IsTurnpointPhoto()
     }
     
@@ -750,6 +763,9 @@ class Route
     
     boolean CanTurnpointSignModify()
     {
+        if (corridorWidth) {
+            return false
+        }
         if (turnpointRoute.IsTurnpointSign() && !IsTurnpointSignUsed()) {
             return true
         }
@@ -758,6 +774,9 @@ class Route
     
     boolean IsEnrouteSign(boolean enroutePhoto)
     {
+        if (corridorWidth) {
+            return false
+        }
         if (enroutePhoto) {
             if (enroutePhotoRoute.IsEnrouteRouteInput() && enroutePhotoMeasurement.IsEnrouteMeasurement()) {
                 return true
@@ -772,6 +791,9 @@ class Route
      
     boolean CanEnrouteSignModify(boolean enroutePhoto)
     {
+        if (corridorWidth) {
+            return false
+        }
         if (enroutePhoto) {
             if (enroutePhotoRoute.IsEnrouteRouteInput() && IsRouteComplete() && !IsEnrouteSignUsed(enroutePhoto)) {
                 return true
@@ -886,6 +908,9 @@ class Route
 		} else {
             ret_name = idName()
 		}
+        if (corridorWidth) {
+            ret_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+        }
         int used_num = FlightTest.findAllByRoute(this,[sort:"id"]).size()
         if (used_num) {
             ret_name += " [${getMsgArgs('fc.route.usednum',[used_num])}]"
@@ -1111,7 +1136,16 @@ class Route
                     } else {
                         center_points = coordroute_instance.title() 
                     }
-                    if (!coordroute_instance.type.IsRunwayCoord() || coordroute_instance.type == CoordType.TO) {
+                    
+                    if (corridorWidth) {
+                        if ((coordroute_instance.type.IsCorridorCoord() && !coordroute_instance.type.IsCorridorNoCheckCoord()) || coordroute_instance.type == CoordType.TO) {
+                            if (print_points) {
+                                print_points += ",${coordroute_instance.title()}"
+                            } else {
+                                print_points = coordroute_instance.title() 
+                            }
+                        }
+                    } else if (!coordroute_instance.type.IsRunwayCoord() || coordroute_instance.type == CoordType.TO) {
                         if (print_points) {
                             print_points += ",${coordroute_instance.title()}"
                         } else {

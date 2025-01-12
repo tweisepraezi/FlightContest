@@ -242,6 +242,39 @@ enum CoordType
         return false
     }
     
+    boolean IsCorridorCoord()
+    {
+		switch(this) {
+			case CoordType.SP:
+			case CoordType.TP:
+			case CoordType.SECRET:
+			case CoordType.FP:
+				return true
+		}
+		return false
+    }
+    
+    boolean IsCorridorResultCoord()
+    {
+		switch(this) {
+			case CoordType.TP:
+			case CoordType.SECRET:
+			case CoordType.FP:
+				return true
+		}
+		return false
+    }
+    
+    boolean IsCorridorNoCheckCoord()
+    {
+		switch(this) {
+			case CoordType.TP:
+			case CoordType.SECRET:
+				return true
+		}
+		return false
+    }
+    
     boolean IsEnrouteStartCoord()
     {
         switch(this) {

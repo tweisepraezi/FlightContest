@@ -15,7 +15,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="${7+add_col}" class="table-head">${message(code:'fc.map.list')}</th>
+                        <th colspan="${8+add_col}" class="table-head">${message(code:'fc.map.list')}</th>
                         <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#osm-contest-map-maps" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
@@ -26,12 +26,14 @@
                         <th>${message(code:'fc.map.download.zip')}</th>
                         <th>${message(code:'fc.map.rename.short')}</th>
                         <th>${message(code:'fc.map.delete')}</th>
+                        <th>${message(code:'fc.map.routes')}</th>
                         <th/>
                     </tr>
                     <g:if test="${add_col}">
                         <th/>
                         <th>${message(code:'fc.map.taskcreator.intern')}</th>
                         <th>${message(code:'fc.map.taskcreator.extern')}</th>
+                        <th/>
                         <th/>
                         <th/>
                         <th/>
@@ -68,6 +70,19 @@
                             <td><a href="${createLink(controller:'map',action:'rename_question',params:[name:map_entry.name,title:map_entry.title])}">${message(code:'fc.map.here')}</a></td>
                             <g:set var="areyousure" value="${message(code:'fc.map.delete.map')} - ${message(code:'fc.areyousure')}"/>
                             <td><a href="${createLink(controller:'map',action:'delete',params:[name:map_entry.name,title:map_entry.title])}" onclick="return confirm('${map_entry.title} - ${areyousure}');" >${message(code:'fc.map.here')}</a></td>
+                            <td>
+                                <g:each var="route_instance" in="${Route.findAllByContest(contestInstance)}">
+                                    <g:if test="${map_entry.title == route_instance.defaultOnlineMap || map_entry.title == route_instance.defaultPrintMap}">
+                                        <g:if test="${map_entry.title == route_instance.defaultOnlineMap}">
+                                            <g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" /> (${message(code:'fc.route.onlinemap.default')})
+                                        </g:if>
+                                        <g:else>
+                                            <g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" /> (${message(code:'fc.route.printmap.default')})
+                                        </g:else>
+                                        <br/>
+                                    </g:if>
+                                </g:each>
+                            </td>
                             <td/>
                         </tr>
                     </g:each>

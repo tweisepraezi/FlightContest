@@ -184,7 +184,7 @@ class Defs
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
-    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 13"
+    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 14"
     static final String ROUTEEXPORT_SETTINGS                           = "settings"
     static final String ROUTEEXPORT_MAPSETTINGS                        = "mapsettings"
     static final String ROUTEEXPORT_TURNPOINTS                         = "turnpoints"

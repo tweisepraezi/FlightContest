@@ -5,7 +5,7 @@ class ResultsTagLib
     
     // --------------------------------------------------------------------------------------------------------------------
     def crewTestPrintable = { attrs, body ->
-        outln"""<table class="crewtest">"""
+        outln"""<table class="crewinfo">"""
         outln"""    <tbody>"""
         outln"""        <tr>"""
         outln"""            <td class="title">${message(code:'fc.crew')}:</td><td class="crew">${attrs.t.crew.name}</td>"""

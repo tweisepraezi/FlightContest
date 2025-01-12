@@ -6,12 +6,21 @@ class FlightResultsTagLib
     // --------------------------------------------------------------------------------------------------------------------
     def flightTestResults = { attrs, body ->
         if (CoordResult.countByTest(attrs.t)) {
+			Route route_instance = attrs.t.task.flighttest.route
+            boolean show_outside = false
+            if (route_instance.corridorWidth) {
+                show_outside = true
+            }
             boolean check_secretpoints = attrs.t.IsFlightTestCheckSecretPoints()
             outln"""<div>"""
             outln"""    <table>"""
             outln"""        <thead>"""
             outln"""            <tr>"""
-            outln"""                <th colspan="9" class="table-head">${message(code:'fc.flightresults.coordresultlist')}</th>"""
+            if (show_outside) {
+                outln"""            <th colspan="10" class="table-head">${message(code:'fc.flightresults.coordresultlist')}</th>"""
+            } else {
+                outln"""            <th colspan="9" class="table-head">${message(code:'fc.flightresults.coordresultlist')}</th>"""
+            }
             outln"""            </tr>"""
             outln"""            <tr>"""
             outln"""                <th>${message(code:'fc.number')}</th>"""
@@ -20,6 +29,9 @@ class FlightResultsTagLib
             //outln"""              <th>${message(code:'fc.latitude')}</th>"""
             //outln"""              <th>${message(code:'fc.longitude')}</th>"""
             outln"""                <th>${message(code:'fc.cptime')}</th>"""
+            if (show_outside) {
+                outln"""            <th>${message(code:'fc.outside')}</th>"""
+            }
             outln"""                <th>${message(code:'fc.badcoursenum')}</th>"""
             outln"""                <th>${message(code:'fc.altitude')}</th>"""
             outln"""            </tr>"""
@@ -27,9 +39,9 @@ class FlightResultsTagLib
             outln"""        <tbody>"""
             int leg_no = 0
             int penalty_coord_summary = 0
+            int penalty_outsidecorridor_summary = 0
             int penalty_badcourse_summary = 0
             int penalty_altitude_summary = 0
-			Route route_instance = attrs.t.task.flighttest.route
             CoordResult last_coordresult_instance = null
             for(CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
                 if (!coordresult_instance.ignoreGate) {
@@ -106,6 +118,13 @@ class FlightResultsTagLib
                     //outln"""          <td>${coordresult_instance.latName()}</td>"""
                     //outln"""          <td>${coordresult_instance.lonName()}</td>"""
                     outln"""            <td>${FcMath.TimeStr(coordresult_instance.planCpTime)}</td>"""
+                    if (show_outside) {
+                        if (coordresult_instance.type.IsCorridorResultCoord()) {
+                            outln"""    <td>-</td>"""
+                        } else {
+                            outln"""    <td/>"""
+                        }
+                    }
                     if (coordresult_instance.type.IsBadCourseCheckCoord()) {
                         outln"""        <td>0</td>"""
                     } else {
@@ -141,6 +160,23 @@ class FlightResultsTagLib
                         } else {
                             outln"""    <td>${FcMath.TimeStr(coordresult_instance.resultCpTime)}</td>"""
                         }
+                        if (show_outside) {
+                            if (coordresult_instance.type.IsCorridorResultCoord()) {
+                                String s = ""
+                                if (coordresult_instance.resultOutsideCorridorMeasurement) {
+                                    s += "${coordresult_instance.resultOutsideCorridorMeasurement}${message(code:'fc.time.s')}"
+                                } else {
+                                    s += "-"
+                                }
+                                if (coordresult_instance.resultOutsideCorridorSeconds) {
+                                    outln"""<td class="errors">${s}</td>"""
+                                } else {
+                                    outln"""<td>${s}</td>"""
+                                }
+                            } else {
+                                outln"""    <td/>"""
+                            }
+                        }
                         if (coordresult_instance.type.IsBadCourseCheckCoord()) {
                             if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
                                 outln"""<td>${coordresult_instance.resultBadCourseNum}</td>"""
@@ -167,6 +203,13 @@ class FlightResultsTagLib
                         }
                     } else {
                         outln"""        <td>${message(code:'fc.unknown')}</td>"""
+                        if (show_outside) {
+                            if (coordresult_instance.type.IsCorridorResultCoord()) {
+                                outln"""    <td>${message(code:'fc.unknown')}</td>"""
+                            } else {
+                                outln"""    <td/>"""
+                            }
+                        }
                         if (coordresult_instance.type.IsBadCourseCheckCoord()) {
                             outln"""    <td>${message(code:'fc.unknown')}</td>"""
                         } else {
@@ -205,8 +248,23 @@ class FlightResultsTagLib
                         } else {
                             outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                         }
-                        
-                        
+                        if (show_outside) {
+                            if (coordresult_instance.type.IsCorridorResultCoord()) {
+                                if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
+                                    int outsidecorridor_penalties = coordresult_instance.resultOutsideCorridorSeconds*attrs.t.GetFlightTestOutsideCorridorPointsPerSecond()
+                                    penalty_outsidecorridor_summary += outsidecorridor_penalties
+                                    String points_class = "points"
+                                    if (!coordresult_instance.resultOutsideCorridorSeconds) {
+                                        points_class = "zeropoints"
+                                    }
+                                    outln"""<td class="${points_class}">${outsidecorridor_penalties} ${message(code:'fc.points')}</td>"""
+                                } else {
+                                    outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                                }
+                            } else {
+                                outln"""<td/>"""
+                            }
+                        }
                         if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
                             if (coordresult_instance.type.IsBadCourseCheckCoord()) {
                                 if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
@@ -228,6 +286,13 @@ class FlightResultsTagLib
                         }
                     } else {
                         outln"""        <td>${message(code:'fc.unknown')}</td>"""
+                        if (show_outside) {
+                            if (coordresult_instance.type.IsCorridorResultCoord()) {
+                                outln"""    <td>${message(code:'fc.unknown')}</td>"""
+                            } else {
+                                outln"""    <td/>"""
+                            }
+                        }
                         if (coordresult_instance.type.IsBadCourseCheckCoord()) {
                             outln"""    <td>${message(code:'fc.unknown')}</td>"""
                         } else {
@@ -270,6 +335,9 @@ class FlightResultsTagLib
             //outln"""              <td/>"""
             //outln"""              <td/>"""
             outln"""                <td>${penalty_coord_summary} ${message(code:'fc.points')}</td>"""
+            if (show_outside) {
+                outln"""             <td>${penalty_outsidecorridor_summary} ${message(code:'fc.points')}</td>"""
+            }
             outln"""                <td>${penalty_badcourse_summary} ${message(code:'fc.points')}</td>"""
             outln"""                <td>${penalty_altitude_summary} ${message(code:'fc.points')}</td>"""
             outln"""        </tfoot>"""
@@ -281,7 +349,11 @@ class FlightResultsTagLib
     // --------------------------------------------------------------------------------------------------------------------
     def flightTestLoggerResults = { attrs, body ->
         if (attrs.t.IsLoggerResult()) {
-            
+
+            boolean show_outside = false
+            if (attrs.t.flighttestwind.flighttest.route.corridorWidth) {
+                show_outside = true
+            }
             boolean notfound_message = false
             for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(attrs.t.loggerResult,[sort:'utc'])) {
                 if (calcresult_instance.coordTitle) {
@@ -320,7 +392,11 @@ class FlightResultsTagLib
             outln"""            <th>${message(code:'fc.longitude')}</th>"""
             outln"""            <th>${message(code:'fc.altitude')}</th>"""
             outln"""            <th>${message(code:'fc.task.disabledcheckpoints.notfound')}</th>"""
-            outln"""            <th>${message(code:'fc.flighttest.procedureturnnotflown.short2')}</th>"""
+            if (show_outside) {
+                outln"""        <th>${message(code:'fc.outside')}</th>"""
+            } else {
+                outln"""        <th>${message(code:'fc.flighttest.procedureturnnotflown.short2')}</th>"""
+            }
             outln"""            <th>${message(code:'fc.task.disabledcheckpoints.badcourse')}</th>"""
             if (show_judgeactions) {
                 outln"""        <th></th>"""
@@ -338,9 +414,12 @@ class FlightResultsTagLib
                     if (calcresult_instance.badCourse && !calcresult_instance.badCourseSeconds) {
                         show_point = false
                     }
+                    if (calcresult_instance.outsideCorridor && !calcresult_instance.outsideCorridorSeconds) {
+                        show_point = false
+                    }
                 }
                 if (show_point) {
-                    wr_calcresult(calcresult_instance, leg_no, attrs.t.task.contest.timeZone, show_judgeactions, to_utc)
+                    wr_calcresult(calcresult_instance, leg_no, attrs.t.task.contest, show_judgeactions, to_utc, show_outside)
 					to_utc = ""
                 }
 				if (calcresult_instance.coordTitle) {
@@ -388,7 +467,7 @@ class FlightResultsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private void wr_calcresult(CalcResult calcresultInstance, int legNo, String timeZone, boolean showJudgeActions, String lastUtc)
+    private void wr_calcresult(CalcResult calcresultInstance, int legNo, Contest contestInstance, boolean showJudgeActions, String lastUtc, boolean showOutside)
     {
         String show_class = ""
         if (calcresultInstance.hide) {
@@ -419,6 +498,12 @@ class FlightResultsTagLib
             } else {
                 show_class = "errors"
             }
+        } else if (calcresultInstance.outsideCorridorSeconds) {
+            if (calcresultInstance.noOutsideCorridor) {
+                show_class = "warnings"
+            } else {
+                show_class = "errors"
+            }
         }
         outln"""    <tr class="${(legNo % 2) == 0 ? 'odd' : ''}">"""
         if (calcresultInstance.coordTitle) {
@@ -426,7 +511,7 @@ class FlightResultsTagLib
         } else {
             outln"""    <td class="${show_class}">-</td>"""
         }
-        outln"""        <td class="${show_class}">${calcresultInstance.GetLocalTime(timeZone)}</td>"""
+        outln"""        <td class="${show_class}">${calcresultInstance.GetLocalTime(contestInstance.timeZone)}</td>"""
         outln"""        <td class="${show_class}">${calcresultInstance.latitude}${message(code:'fc.grad')}</td>"""
         outln"""        <td class="${show_class}">${calcresultInstance.longitude}${message(code:'fc.grad')}</td>"""
         outln"""        <td class="${show_class}">${calcresultInstance.altitude}${message(code:'fc.foot')}</td>"""
@@ -445,14 +530,30 @@ class FlightResultsTagLib
         } else {
             outln"""    <td class="${show_class}">-</td>"""
         }
-        if (calcresultInstance.badTurn) {
-            String badturn_msg = message(code:'fc.yes')
-            if (calcresultInstance.noBadTurn) {
-                badturn_msg = message(code:'fc.no')
+        if (showOutside) {
+            if (calcresultInstance.outsideCorridor) {
+                String outside_corridor_msg = message(code:'fc.yes')
+                if (calcresultInstance.noOutsideCorridor) {
+                    outside_corridor_msg = message(code:'fc.no')
+                }
+                if (calcresultInstance.outsideCorridorSeconds) {
+                    outln"""<td class="${show_class}">${outside_corridor_msg} (${calcresultInstance.outsideCorridorSeconds}${message(code:'fc.time.s')})</td>"""
+                } else {
+                    outln"""<td class="${show_class}">${outside_corridor_msg}</td>"""
+                }
+            } else {
+                outln"""    <td class="${show_class}">-</td>"""
             }
-            outln"""    <td class="${show_class}">${badturn_msg}</td>"""
         } else {
-            outln"""    <td class="${show_class}">-</td>"""
+            if (calcresultInstance.badTurn) {
+                String badturn_msg = message(code:'fc.yes')
+                if (calcresultInstance.noBadTurn) {
+                    badturn_msg = message(code:'fc.no')
+                }
+                outln"""    <td class="${show_class}">${badturn_msg}</td>"""
+            } else {
+                outln"""    <td class="${show_class}">-</td>"""
+            }
         }
         if (calcresultInstance.badCourse) {
             String badcourse_msg = message(code:'fc.yes')
@@ -517,10 +618,10 @@ class FlightResultsTagLib
             outln"""    </tr>"""
             outln"""</thead>"""
             outln"""<tbody>"""
-            Integer penalty_coord_summary = 0
-            Integer penalty_procedureturn_summary = 0
-            Integer penalty_badcourse_summary = 0
-            Integer penalty_altitude_summary = 0
+            int penalty_coord_summary = 0
+            int penalty_procedureturn_summary = 0
+            int penalty_badcourse_summary = 0
+            int penalty_altitude_summary = 0
             boolean check_secretpoints = attrs.t.IsFlightTestCheckSecretPoints()
             CoordResult last_coordresult_instance = null
             for( CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
@@ -725,10 +826,10 @@ class FlightResultsTagLib
             outln"""        <td>${attrs.t.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
-        if (attrs.t.flightTestBadCourseStartLanding) {
+        if (attrs.t.flightTestExitRoomTooLate) {
             outln"""    <tr>"""
-            outln"""        <td class="detailtitle">${message(code:'fc.flighttest.badcoursestartlanding')}:</td>"""
-            outln"""        <td>${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.planningtest.exitroomtolate')}:</td>"""
+            outln"""        <td>${attrs.t.GetFlightTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
         if (attrs.t.flightTestGivenTooLate) {
@@ -736,6 +837,27 @@ class FlightResultsTagLib
             outln"""        <td class="detailtitle">${message(code:'fc.flighttest.giventolate')}:</td>"""
             outln"""        <td>${attrs.t.GetFlightTestGivenToLatePoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
+        }
+        if (!attrs.t.GetFlightTestBadCourseStartLandingSeparatePoints()) {
+            if (attrs.t.flightTestBadCourseStartLanding) {
+                outln"""    <tr>"""
+                outln"""        <td class="detailtitle">${message(code:'fc.flighttest.badcoursestartlanding')}:</td>"""
+                outln"""        <td>${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+                outln"""    </tr>"""
+            }
+        } else {
+            if (attrs.t.flightTestBadCourseStart) {
+                outln"""    <tr>"""
+                outln"""        <td class="detailtitle">${message(code:'fc.flighttest.badcoursestart')}:</td>"""
+                outln"""        <td>${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+                outln"""    </tr>"""
+            }
+            if (attrs.t.flightTestBadCourseLanding) {
+                outln"""    <tr>"""
+                outln"""        <td class="detailtitle">${message(code:'fc.flighttest.badcourselanding')}:</td>"""
+                outln"""        <td>${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+                outln"""    </tr>"""
+            }
         }
         if (attrs.t.flightTestSafetyAndRulesInfringement) {
             outln"""    <tr>"""
@@ -797,11 +919,18 @@ class FlightResultsTagLib
 	def flightTestPrintable = { attrs, body ->
 		if (CoordResult.countByTest(attrs.t)) {
             Route route_instance = attrs.t.flighttestwind.flighttest.route
+            boolean show_outside = false
+            if (route_instance.corridorWidth) {
+                show_outside = true
+            }
 			outln"""<table class="flightresultlist">"""
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.tpname')}</th>"""
 			outln"""			<th colspan="3">${message(code:'fc.cptime')}</th>"""
+            if (show_outside) {
+                outln"""        <th>${message(code:'fc.outside.short')}</th>"""
+            }
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
 			}
@@ -817,6 +946,9 @@ class FlightResultsTagLib
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
 			outln"""			<th>${message(code:'fc.points')}</th>"""
+            if (show_outside) {
+                outln"""		<th/>"""
+            }
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
                 outln"""		<th/>"""
 			}
@@ -829,10 +961,11 @@ class FlightResultsTagLib
 			outln"""		</tr>"""
 			outln"""	</thead>"""
 			outln"""	<tbody>"""
-			Integer penalty_coord_summary = 0
-			Integer	penalty_procedureturn_summary = 0
-			Integer	penalty_badcourse_summary = 0
-			Integer penalty_altitude_summary = 0
+			int penalty_coord_summary = 0
+            int penalty_outsidecorridor_summary = 0
+			int	penalty_procedureturn_summary = 0
+			int	penalty_badcourse_summary = 0
+			int penalty_altitude_summary = 0
 			boolean check_secretpoints = attrs.t.IsFlightTestCheckSecretPoints()
             List curved_point_ids = attrs.t.GetCurvedPointIds()
             boolean show_curved_point = attrs.t.task.flighttest.flightResultsShowCurvedPoints
@@ -867,6 +1000,24 @@ class FlightResultsTagLib
         					} else {
         						outln"""<td class="penaltycp">-</td>"""
         					}
+                        }
+                        if (show_outside) {
+                            if (last_coordresult_instance.type.IsCorridorResultCoord()) {
+                                if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
+                                    int outsidecorridor_penalties = last_coordresult_instance.resultOutsideCorridorSeconds*attrs.t.GetFlightTestOutsideCorridorPointsPerSecond()
+                                    penalty_outsidecorridor_summary += outsidecorridor_penalties
+                                    String s = """<td class="penaltyoutsidecorridor">${outsidecorridor_penalties}"""
+                                    if (last_coordresult_instance.resultOutsideCorridorMeasurement) {
+                                        s += """ (${last_coordresult_instance.resultOutsideCorridorMeasurement}${message(code:'fc.time.s')})"""
+                                    }
+                                    s += """</td>"""
+                                    outln s
+                                } else {
+                                    outln"""<td class="penaltyoutsidecorridor">-</td>"""
+                                }
+                            } else {
+                                outln"""<td class="penaltyoutsidecorridor"/>"""
+                            }
                         }
     					if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
     						if (coordresult_instance.planProcedureTurn) {
@@ -962,6 +1113,24 @@ class FlightResultsTagLib
         					outln"""<td class="penaltycp">-</td>"""
         				}
                     }
+                    if (show_outside) {
+                        if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
+                            if (last_coordresult_instance.type.IsCorridorResultCoord()) {
+                                int outsidecorridor_penalties = last_coordresult_instance.resultOutsideCorridorSeconds*attrs.t.GetFlightTestOutsideCorridorPointsPerSecond()
+                                penalty_outsidecorridor_summary += outsidecorridor_penalties
+                                String s = """<td class="penaltyoutsidecorridor">${outsidecorridor_penalties}"""
+                                if (last_coordresult_instance.resultOutsideCorridorMeasurement) {
+                                    s += """ (${last_coordresult_instance.resultOutsideCorridorMeasurement}${message(code:'fc.time.s')})"""
+                                }
+                                s += """</td>"""
+                                outln s
+                            } else {
+                                outln"""<td class="penaltyoutsidecorridor"/>"""
+                            }
+                        } else {
+                            outln"""<td class="penaltyoutsidecorridor"/>"""
+                        }
+                    }
     				if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
     					outln"""	<td class="penaltyprocedureturn"/>"""
     				}
@@ -1012,6 +1181,9 @@ class FlightResultsTagLib
 			outln"""		<tr class="summary">"""
             outln"""	        <td class="tpname" colspan="3">${message(code:'fc.test.results.summary')}</td>"""
 			outln"""			<td class="penaltycp">${penalty_coord_summary}</td>"""
+            if (show_outside) {
+                outln"""        <td class="penaltyoutsidecorridor">${penalty_outsidecorridor_summary}</td>"""
+            }
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
 				outln"""		<td class="penaltyprocedureturn">${penalty_procedureturn_summary}</td>"""
 			}
@@ -1041,15 +1213,33 @@ class FlightResultsTagLib
             outln"""	    <td>${message(code:'fc.flighttest.landingtolate')}: ${attrs.t.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>"""
             outln"""	</tr>"""
         }
-        if (attrs.t.flightTestBadCourseStartLanding) {
-        	outln"""	<tr class="badcoursestartlanding">"""
-         	outln"""		<td>${message(code:'fc.flighttest.badcoursestartlanding')}: ${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
-        	outln"""	</tr>"""
+        if (attrs.t.flightTestExitRoomTooLate) {
+            outln"""    <tr class="frequencynotmonitored">"""
+            outln"""        <td>${message(code:'fc.planningtest.exitroomtolate')}: ${attrs.t.GetFlightTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
         }
         if (attrs.t.flightTestGivenTooLate) {
         	outln"""	<tr class="giventolate">"""
             outln"""		<td>${message(code:'fc.flighttest.giventolate')}: ${attrs.t.GetFlightTestGivenToLatePoints()} ${message(code:'fc.points')}</td>"""
         	outln"""	</tr>"""
+        }
+        if (!attrs.t.GetFlightTestBadCourseStartLandingSeparatePoints()) {
+            if (attrs.t.flightTestBadCourseStartLanding) {
+                outln"""	<tr class="badcoursestartlanding">"""
+                outln"""		<td>${message(code:'fc.flighttest.badcoursestartlanding')}: ${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+                outln"""	</tr>"""
+            }
+        } else {
+            if (attrs.t.flightTestBadCourseStart) {
+                outln"""	<tr class="badcoursestartlanding">"""
+                outln"""		<td>${message(code:'fc.flighttest.badcoursestart')}: ${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+                outln"""	</tr>"""
+            }
+            if (attrs.t.flightTestBadCourseLanding) {
+                outln"""	<tr class="badcoursestartlanding">"""
+                outln"""		<td>${message(code:'fc.flighttest.badcourselanding')}: ${attrs.t.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>"""
+                outln"""	</tr>"""
+            }
         }
         if (attrs.t.flightTestSafetyAndRulesInfringement) {
             outln"""	<tr class="safetyandrulesinfringement">"""
@@ -1101,12 +1291,19 @@ class FlightResultsTagLib
     // --------------------------------------------------------------------------------------------------------------------
 	def flightTestMeasurementPrintable = { attrs, body ->
 		if (CoordResult.countByTest(attrs.t)) {
+            boolean show_outside = false
+            if (attrs.t.flighttestwind.flighttest.route.corridorWidth) {
+                show_outside = true
+            }
 			outln"""<br/>"""
 			outln"""<table class="flightmeasurementlist">"""
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.tpname')}</th>"""
 			outln"""			<th colspan="2">${message(code:'fc.cptime')}</th>"""
+            if (show_outside) {
+                outln"""        <th>${message(code:'fc.outside.short')}</th>"""
+            }
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
 			}
@@ -1121,6 +1318,9 @@ class FlightResultsTagLib
 			outln"""			<th/>"""
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
+            if (show_outside) {
+                outln"""		<th/>"""
+            }
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
 				outln"""		<th/>"""
 			}
@@ -1147,6 +1347,24 @@ class FlightResultsTagLib
     					} else {
     						outln"""<td class="cptime">${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
     					}
+                        if (show_outside) {
+                            if (last_coordresult_instance.type.IsCorridorResultCoord()) {
+                                if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
+                                    String s = """<td class="outsidecorridor">"""
+                                    if (last_coordresult_instance.resultOutsideCorridorMeasurement) {
+                                        s += """${last_coordresult_instance.resultOutsideCorridorMeasurement}${message(code:'fc.time.s')}"""
+                                    } else {
+                                        s += "-"
+                                    }
+                                    s += """</td>"""
+                                    outln s
+                                } else {
+                                    outln"""<td class="outsidecorridor">-</td>"""
+                                }
+                            } else {
+                                outln"""<td class="outsidecorridor"/>"""
+                            }
+                        }
     					if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
     						if (coordresult_instance.planProcedureTurn) {
     							if (coordresult_instance.resultProcedureTurnEntered) {
@@ -1199,6 +1417,24 @@ class FlightResultsTagLib
     				} else {
     					outln"""	<td class="cptime">${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
     				}
+                    if (show_outside) {
+                        if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
+                            if (last_coordresult_instance.type.IsCorridorResultCoord()) {
+                                String s = """<td class="outsidecorridor">"""
+                                if (last_coordresult_instance.resultOutsideCorridorMeasurement) {
+                                    s += """${last_coordresult_instance.resultOutsideCorridorMeasurement}${message(code:'fc.time.s')}"""
+                                } else {
+                                    s += "-"
+                                }
+                                s += """</td>"""
+                                outln s
+                            } else {
+                                outln"""<td class="outsidecorridor"/>"""
+                            }
+                        } else {
+                            outln"""<td class="outsidecorridor"/>"""
+                        }
+                    }
     				if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
     					outln"""	<td class="procedureturn"/>"""
     				}
@@ -1283,13 +1519,15 @@ class FlightResultsTagLib
             outln"""        </tr>"""
             outln"""    </thead>"""
             outln"""    <tbody>"""
-            int bc_sec = 0
+            int badcourse_sec = 0
+            int outside_sec = 0
             String last_utc = ""
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
             TrackPoint.findAllByLoggerdata(attrs.t.loggerData,[sort:"id"]).each { TrackPoint trackpoint_instance ->
-                Map r = GetLoggerResult(logger_result,trackpoint_instance.utc,bc_sec)
-                bc_sec = r.bcsec
+                Map r = get_logger_result(logger_result, trackpoint_instance.utc, badcourse_sec, outside_sec)
+                badcourse_sec = r.badcourseSec
+                outside_sec = r.outsideSec
                 outln"""    <tr class="${r.trclass}">"""
                 if (trackpoint_instance.interpolated) {
                     outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone)} i</td>"""
@@ -1326,25 +1564,52 @@ class FlightResultsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private Map GetLoggerResult(LoggerResult loggerResult, String utc, int bcSec)
+    private Map get_logger_result(LoggerResult loggerResult, String utc, int badcourseSec, int outsideSec)
     {
-        Map ret = [info:'', trclass:'value', tdclass:'info', bcsec:0]
+        Map ret = [info:'', trclass:'value', tdclass:'info', badcourseSec:0, outsideSec:outsideSec]
         if (loggerResult) {
             CalcResult calcresult_instance = CalcResult.findByLoggerresultAndUtc(loggerResult,utc,[sort:'utc'])
             if (calcresult_instance) {
+                if (calcresult_instance.coordTitle) {
+                    if (ret.outsideSec) {
+                        ret.outsideSec++
+                    }
+                }
+                if (calcresult_instance.badCourse) {
+                    if (calcresult_instance.badCourseSeconds) {
+                        badcourseSec = 0
+                    }
+                    badcourseSec++
+                    ret.badcourseSec = badcourseSec 
+                    if (ret.outsideSec) {
+                        ret.outsideSec++
+                    }
+                }
+                if (calcresult_instance.outsideCorridor) {
+                    if (calcresult_instance.outsideCorridorSeconds) {
+                        outsideSec = 0
+                    }
+                    outsideSec++
+                    ret.outsideSec = outsideSec 
+                }
+                
                 if (calcresult_instance.coordTitle) {
                     ret.info = calcresult_instance.coordTitle.titlePrintCode()
                     ret.trclass = "tpvalue"
                     return ret
                 }
                 if (calcresult_instance.badCourse) {
-                    if (calcresult_instance.badCourseSeconds) {
-                        bcSec = 0
-                    }
-                    bcSec++
-                    ret.bcsec = bcSec 
-                    ret.info = "BC ${bcSec}${message(code:'fc.time.s')}"
+                    ret.info = "BC ${badcourseSec}${message(code:'fc.time.s')}"
                     if (calcresult_instance.noBadCourse) {
+                        ret.tdclass = "nobadcourseinfo"
+                    } else {
+                        ret.tdclass = "badcourseinfo"
+                    }
+                    return ret
+                }
+                if (calcresult_instance.outsideCorridor) {
+                    ret.info = "Out ${outsideSec}${message(code:'fc.time.s')}"
+                    if (calcresult_instance.noOutsideCorridor) {
                         ret.tdclass = "nobadcourseinfo"
                     } else {
                         ret.tdclass = "badcourseinfo"

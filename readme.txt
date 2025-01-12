@@ -5,7 +5,7 @@ Deutscher Praezisionsflug-Verein e.V. (German Precision Flying Club)
 
 https://flightcontest.de
 
-Flight Contest is a Tool to schedule general aviation power flying competitions and to evaluate planning, navigation, observation and/or landing test results.
+Flight Contest is a tool to schedule aviation power flying competitions (Air Rally Flying, Air Navigation Race, Precision Flying) and to evaluate planning, navigation, observation and/or landing test results.
 
 Flight Contest features flexible competition management, particularly supporting
 * differing competition rules and regulations (FAI, Germany, Switzerland, Austria, expandable; adjustment of individual evaluation details (points) possible, should the need arise)
@@ -26,12 +26,13 @@ Supports special route features:
 * Scenic legs
 * Semicircles
 * Touch-and-go landings
+* Corridors
 
 Supports GAC, IGC, GPX, KML, KMZ and NMEA-0183 logger data formats (expandable).
 
 Provides integrated map viewers for navigation flights, routes and logger files:
 * Offline map display for navigation flight evaluation
-* Fast offline map display near a selected turnpoint
+* Fast offline map display near a selected checkpoint
 * Online map display with Open Street Map
 * Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files with optional gpx download
 
@@ -45,7 +46,7 @@ Generates OSM-based topographic competition maps:
 * Additional map objects that are not included in the OSM data can be added
 * Additional airfields that are not included in the OpenAIP data can be added
 
-Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?lang=en).
+Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?lang=en) for fast route creation.
 
 Emailing of crew result to participants.
 

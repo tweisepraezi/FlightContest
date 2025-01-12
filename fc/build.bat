@@ -112,7 +112,7 @@ call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_en.txt
 echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_tracking.txt
 echo.
-call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\FCSetup-NewVersion.txt
+call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\FCSetup4-NewVersion.txt
 echo.
 
 ::-------------------------------------------------------------------

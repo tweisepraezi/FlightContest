@@ -33,10 +33,12 @@
 	                        </table>
 	                        <fieldset>
 	                            <g:set var="route_data" value="${routeInstance.GetRouteData()}" />
-	                            <div>
-	                                <g:checkBox name="contestMapCircle" value="${routeInstance.contestMapCircle}" tabIndex="${ti[0]++}" />
-	                                <label>${message(code:'fc.contestmap.contestmapcircle')}</label>
-	                            </div>
+                                <g:if test="${!routeInstance.corridorWidth}">
+                                    <div>
+                                        <g:checkBox name="contestMapCircle" value="${routeInstance.contestMapCircle}" tabIndex="${ti[0]++}" />
+                                        <label>${message(code:'fc.contestmap.contestmapcircle')}</label>
+                                    </div>
+		                        </g:if>
 	                            <g:if test="${route_data.procedureturn_num && routeInstance.useProcedureTurns}">
 		                            <div>
 		                                <g:checkBox name="contestMapProcedureTurn" value="${routeInstance.contestMapProcedureTurn}" tabIndex="${ti[0]++}" />

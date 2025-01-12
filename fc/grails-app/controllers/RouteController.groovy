@@ -35,7 +35,7 @@ class RouteController {
             //session.routeReturnAction = actionName
             //session.routeReturnController = controllerName
             //session.routeReturnID = params.id
-            return [routeInstanceList:route_list]
+            return [routeInstanceList:route_list, contestInstance:session.lastContest]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -212,7 +212,11 @@ class RouteController {
     }
 
     def selectfcroute = {
-        return [:]
+        if (session?.lastContest) {
+            return [contestInstance:session.lastContest]
+        } else {
+            return [:]
+        }
     }
     
     def importfcroute = {
@@ -221,15 +225,19 @@ class RouteController {
     
     def importfcroute2 = {
         def file = request.getFile('routefile')
-        Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file)
+        BigDecimal corridor_width = 0
+        if (params.corridorWidth && params.corridorWidth.isBigDecimal()) {
+            corridor_width = params.corridorWidth.toBigDecimal()
+        }
+        Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, corridor_width, file)
         if (!import_route.found) {
-            import_route = fcService.importFcRoute(RouteFileTools.KML_EXTENSION, session.lastContest, file)
+            import_route = fcService.importFcRoute(RouteFileTools.KML_EXTENSION, session.lastContest, corridor_width, file)
         }
         if (!import_route.found) {
-            import_route = fcService.importFcRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, file)
+            import_route = fcService.importFcRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, corridor_width, file)
         }
         if (!import_route.found) {
-            import_route = fcService.importFcRoute("", session.lastContest, file)
+            import_route = fcService.importFcRoute("", session.lastContest, corridor_width, file)
         }
         flash.error = import_route.error
         flash.message = import_route.message
@@ -254,6 +262,10 @@ class RouteController {
     def importfileroute2 = {
         def file = request.getFile('routefile')
 		String secretcoursechange = params?.secretcoursechange.replace(',','.')
+        BigDecimal corridor_width = 0
+        if (params.corridorWidth && params.corridorWidth.isBigDecimal()) {
+            corridor_width = params.corridorWidth.toBigDecimal()
+        }
         Map import_params = [foldername:params?.foldername,
                              readplacemarks:params?.readplacemarks == 'on',
                              firstcoordto:params?.firstcoordto == 'on',
@@ -281,21 +293,21 @@ class RouteController {
                              autosecret:params?.autosecret == 'on',
 							 secretcoursechange:secretcoursechange.isBigDecimal()?secretcoursechange.toBigDecimal():1.5,
                             ]
-        Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file, import_params)
+        Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, corridor_width, file, import_params)
         if (!import_route.found) {
-            import_route = fcService.importFileRoute(RouteFileTools.KML_EXTENSION, session.lastContest, file, import_params)
+            import_route = fcService.importFileRoute(RouteFileTools.KML_EXTENSION, session.lastContest, corridor_width, file, import_params)
         }
         if (!import_route.found) {
-            import_route = fcService.importFileRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, file, import_params)
+            import_route = fcService.importFileRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, corridor_width, file, import_params)
         }
         if (!import_route.found) {
-            import_route = fcService.importFileRoute(RouteFileTools.REF_EXTENSION, session.lastContest, file, import_params)
+            import_route = fcService.importFileRoute(RouteFileTools.REF_EXTENSION, session.lastContest, corridor_width, file, import_params)
         }
         if (!import_route.found) {
-            import_route = fcService.importFileRoute(RouteFileTools.TXT_EXTENSION, session.lastContest, file, import_params)
+            import_route = fcService.importFileRoute(RouteFileTools.TXT_EXTENSION, session.lastContest, corridor_width, file, import_params)
         }
         if (!import_route.found) {
-            import_route = fcService.importFileRoute("", session.lastContest, file, import_params)
+            import_route = fcService.importFileRoute("", session.lastContest, corridor_width, file, import_params)
         }
         flash.error = import_route.error
         flash.message = import_route.message
@@ -1724,19 +1736,19 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
-                                                                    routeTitle: route.instance.GetOSMRouteName1() + " (Task Creator)",
-                                                                    routeId: route.instance.id,
-                                                                    webRootDir: webroot_dir,
-                                                                    gpxFileName: webroot_dir + route_gpx_file_name,
-                                                                    pngFileName: webroot_dir + map_png_file_name,
-                                                                    graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                    contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                    mapScale: route.instance.mapScale,
-                                                                    contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos,
-                                                                    taskCreator: true
-                                                                   ] + contestmap_params)
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName1() + " (Task Creator)",
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos,
+                                                                 taskCreator: true
+                                                                ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 1, route.instance.contestMapFirstTitle + " (Task Creator)")
                                 gpxService.printdone ""
@@ -1979,19 +1991,19 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
-                                                                    routeTitle: route.instance.GetOSMRouteName2() + " (Task Creator)",
-                                                                    routeId: route.instance.id,
-                                                                    webRootDir: webroot_dir,
-                                                                    gpxFileName: webroot_dir + route_gpx_file_name,
-                                                                    pngFileName: webroot_dir + map_png_file_name,
-                                                                    graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                    contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                    mapScale: route.instance.mapScale,
-                                                                    contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2,
-                                                                    taskCreator: true
-                                                                   ] + contestmap_params)
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName2() + " (Task Creator)",
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2,
+                                                                 taskCreator: true
+                                                                ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 2, route.instance.contestMapSecondTitle + " (Task Creator)")
                                 gpxService.printdone ""
@@ -2234,19 +2246,19 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
-                                                                    routeTitle: route.instance.GetOSMRouteName3() + " (Task Creator)",
-                                                                    routeId: route.instance.id,
-                                                                    webRootDir: webroot_dir,
-                                                                    gpxFileName: webroot_dir + route_gpx_file_name,
-                                                                    pngFileName: webroot_dir + map_png_file_name,
-                                                                    graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                    contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                    mapScale: route.instance.mapScale,
-                                                                    contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3,
-                                                                    taskCreator: true
-                                                                   ] + contestmap_params)
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName3() + " (Task Creator)",
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3,
+                                                                 taskCreator: true
+                                                                ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 3, route.instance.contestMapThirdTitle + " (Task Creator)")
                                 gpxService.printdone ""
@@ -2489,19 +2501,19 @@ class RouteController {
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
-                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
-                                                                    routeTitle: route.instance.GetOSMRouteName4() + " (Task Creator)",
-                                                                    routeId: route.instance.id,
-                                                                    webRootDir: webroot_dir,
-                                                                    gpxFileName: webroot_dir + route_gpx_file_name,
-                                                                    pngFileName: webroot_dir + map_png_file_name,
-                                                                    graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                    contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                    mapScale: route.instance.mapScale,
-                                                                    contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
-                                                                    contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4,
-                                                                    taskCreator: true
-                                                                   ] + contestmap_params)
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName4() + " (Task Creator)",
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4,
+                                                                 taskCreator: true
+                                                                ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 4, route.instance.contestMapForthTitle + " (Task Creator)")
                                 gpxService.printdone ""
@@ -3306,19 +3318,19 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             String route_title = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} (Task Creator)"
-                            Map r = osmPrintMapService.PrintOSM(  [ contestTitle: session.lastContest.title,
-                                                                    routeTitle: route_title,
-                                                                    routeId: route.instance.id,
-                                                                    webRootDir: webroot_dir,
-                                                                    gpxFileName: webroot_dir + route_gpx_file_name,
-                                                                    pngFileName: webroot_dir + map_png_file_name,
-                                                                    graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                    contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                    mapScale: route.instance.mapScale,
-                                                                    contestMapCenterHorizontalPos: HorizontalPos.Center,
-                                                                    contestMapCenterVerticalPos: VerticalPos.Center,
-                                                                    taskCreator: true
-                                                                   ] + contestmap_params)
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route_title,
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: HorizontalPos.Center,
+                                                                 contestMapCenterVerticalPos: VerticalPos.Center,
+                                                                 taskCreator: true
+                                                                ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 0, route_title)
                                 gpxService.printdone ""
@@ -3704,6 +3716,14 @@ class RouteController {
                             copy_file_to_folder(map_folder_name, png_file_name + "info", info_file_name)
                             copy_file_to_folder(map_folder_name, tif_file_name2, tif_file_name)
                             gpxService.printdone ""
+                            if (params.contestMapSetDefaultOnlineMap) {
+                                route.instance.defaultOnlineMap = params.contestMapPrintName
+                                route.instance.save()
+                            }
+                            if (params.contestMapSetDefaultPrintMap) {
+                                route.instance.defaultPrintMap = params.contestMapPrintName
+                                route.instance.save()
+                            }
                             flash.message = message(code:'fc.contestmap.savemap.done',args:[png_file_name])
                             redirect(action:'mapdiscard',id:params.id,params:[gotoMapList:true])
                         } else {
@@ -3759,6 +3779,14 @@ class RouteController {
                             copy_file_to_folder(map_folder_name, png_file_name + "info", info_file_name)
                             copy_file_to_folder(map_folder_name, tif_file_name2, tif_file_name)
                             gpxService.printdone ""
+                            if (params.contestMapSetDefaultOnlineMap) {
+                                route.instance.defaultOnlineMap = params.contestMapPrintName
+                                route.instance.save()
+                            }
+                            if (params.contestMapSetDefaultPrintMap) {
+                                route.instance.defaultPrintMap = params.contestMapPrintName
+                                route.instance.save()
+                            }
                             flash.message = message(code:'fc.contestmap.savemap.done',args:[png_file_name])
                             redirect(action:'mapdiscard',id:params.id)
                         } else {
@@ -3882,6 +3910,16 @@ class RouteController {
             session.printLanguage = params.lang
         }
         return [contestInstance:session.lastContest, mapFileName:params.mapFileName]
+    }
+    
+    def mapanrprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        String map_name = params.mapFileName.substring(params.mapFileName.lastIndexOf('/')+1)
+        map_name = map_name.substring(0,map_name.lastIndexOf('.'))
+        return [contestInstance:session.lastContest, mapFileName:params.mapFileName, mapName:map_name]
     }
     
     def mapdeletelink = {

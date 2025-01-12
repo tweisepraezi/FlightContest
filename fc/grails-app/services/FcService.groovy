@@ -636,6 +636,7 @@ class FcService
     {
         Contest contest_instance = new Contest()
 		contest_instance.title = getPrintMsg('fc.contest.new.title')
+        contest_instance.printOrganizer = getPrintMsg('fc.contest.new.organizer')
         contest_instance.properties = params
         contest_instance.liveTrackingContestDate = FcTime.GetDateStr(new Date())
         return ['instance':contest_instance,'created':true]
@@ -680,6 +681,10 @@ class FcService
     Map saveContest(Map params)
     {
         Contest contest_instance = new Contest(params)
+        
+        if (contest_instance.contestRule == ContestRules.Empty) {
+			return ['instance':contest_instance, 'message':getMsg('fc.contestrule.notselected')]
+        }
         
 		setContestRulePoints(contest_instance, contest_instance.contestRule)
         setContestRuleDefaults(contest_instance, contest_instance.contestRule, true)
@@ -816,6 +821,7 @@ class FcService
 		toInstance.flightTestBadCoursePoints = contestRule.ruleValues.flightTestBadCoursePoints
 		toInstance.flightTestBadCourseMaxPoints = contestRule.ruleValues.flightTestBadCourseMaxPoints
 		toInstance.flightTestBadCourseStartLandingPoints = contestRule.ruleValues.flightTestBadCourseStartLandingPoints
+		toInstance.flightTestBadCourseStartLandingSeparatePoints = contestRule.ruleValues.flightTestBadCourseStartLandingSeparatePoints
 		toInstance.flightTestLandingToLatePoints = contestRule.ruleValues.flightTestLandingToLatePoints
 		toInstance.flightTestGivenToLatePoints = contestRule.ruleValues.flightTestGivenToLatePoints
 		toInstance.flightTestSafetyAndRulesInfringementPoints = contestRule.ruleValues.flightTestSafetyAndRulesInfringementPoints
@@ -824,6 +830,9 @@ class FcService
 		toInstance.flightTestSafetyEnvelopeOpenedPoints = contestRule.ruleValues.flightTestSafetyEnvelopeOpenedPoints
 		toInstance.flightTestFrequencyNotMonitoredPoints = contestRule.ruleValues.flightTestFrequencyNotMonitoredPoints
         toInstance.flightTestForbiddenEquipmentPoints = contestRule.ruleValues.flightTestForbiddenEquipmentPoints
+        toInstance.flightTestExitRoomTooLatePoints = contestRule.ruleValues.flightTestExitRoomTooLatePoints
+        toInstance.flightTestOutsideCorridorCorrectSecond = contestRule.ruleValues.flightTestOutsideCorridorCorrectSecond
+        toInstance.flightTestOutsideCorridorPointsPerSecond = contestRule.ruleValues.flightTestOutsideCorridorPointsPerSecond
 		
         // ObservationTest
         toInstance.observationTestEnrouteValueUnit = contestRule.ruleValues.observationTestEnrouteValueUnit
@@ -899,6 +908,7 @@ class FcService
             }
         }
         
+        contestInstance.anrFlying = contestRule.ruleValues.anrFlying
         contestInstance.flightPlanShowLegDistance = contestRule.ruleValues.flightPlanShowLegDistance
         contestInstance.flightPlanShowTrueTrack = contestRule.ruleValues.flightPlanShowTrueTrack
         contestInstance.flightPlanShowTrueHeading = contestRule.ruleValues.flightPlanShowTrueHeading
@@ -923,6 +933,10 @@ class FcService
         contestInstance.maxEnrouteTargets = contestRule.ruleValues.maxEnrouteTargets
         contestInstance.useProcedureTurns = contestRule.ruleValues.useProcedureTurns
         contestInstance.liveTrackingScorecard = contestRule.ruleValues.liveTrackingScorecard
+        contestInstance.flightTestLastGateNoBadCourseSeconds = contestRule.ruleValues.flightTestLastGateNoBadCourseSeconds
+        contestInstance.showPlanningTest = contestRule.ruleValues.showPlanningTest
+        contestInstance.activateFlightTestCheckLanding = contestRule.ruleValues.activateFlightTestCheckLanding
+        contestInstance.showObservationTest = contestRule.ruleValues.showObservationTest
         
         if (!newContest) {
             for (long route_id in routes_with_disabled_procedureturns) {
@@ -982,6 +996,7 @@ class FcService
         values += [flightTestBadCoursePoints:fromInstance.flightTestBadCoursePoints]
         values += [flightTestBadCourseMaxPoints:fromInstance.flightTestBadCourseMaxPoints]
         values += [flightTestBadCourseStartLandingPoints:fromInstance.flightTestBadCourseStartLandingPoints]
+        values += [flightTestBadCourseStartLandingSeparatePoints:fromInstance.flightTestBadCourseStartLandingSeparatePoints]
         values += [flightTestLandingToLatePoints:fromInstance.flightTestLandingToLatePoints]
         values += [flightTestGivenToLatePoints:fromInstance.flightTestGivenToLatePoints]
         values += [flightTestSafetyAndRulesInfringementPoints:fromInstance.flightTestSafetyAndRulesInfringementPoints]
@@ -990,6 +1005,9 @@ class FcService
         values += [flightTestSafetyEnvelopeOpenedPoints:fromInstance.flightTestSafetyEnvelopeOpenedPoints]
         values += [flightTestFrequencyNotMonitoredPoints:fromInstance.flightTestFrequencyNotMonitoredPoints]
         values += [flightTestForbiddenEquipmentPoints:fromInstance.flightTestForbiddenEquipmentPoints]
+        values += [flightTestExitRoomTooLatePoints:fromInstance.flightTestExitRoomTooLatePoints]
+        values += [flightTestOutsideCorridorCorrectSecond:fromInstance.flightTestOutsideCorridorCorrectSecond]
+        values += [flightTestOutsideCorridorPointsPerSecond:fromInstance.flightTestOutsideCorridorPointsPerSecond]
         
         // ObservationTest
         values += [observationTestEnrouteValueUnit:fromInstance.observationTestEnrouteValueUnit]
@@ -1058,6 +1076,7 @@ class FcService
     {
         Map values = [:]
         
+        values += [anrFlying:fromInstance.anrFlying]
         values += [flightPlanShowLegDistance:fromInstance.flightPlanShowLegDistance]
         values += [flightPlanShowTrueTrack:fromInstance.flightPlanShowTrueTrack]
         values += [flightPlanShowTrueHeading:fromInstance.flightPlanShowTrueHeading]
@@ -1082,6 +1101,10 @@ class FcService
         values += [maxEnrouteTargets:fromInstance.maxEnrouteTargets]
         values += [useProcedureTurns:fromInstance.useProcedureTurns]
         values += [liveTrackingScorecard:fromInstance.liveTrackingScorecard]
+        values += [flightTestLastGateNoBadCourseSeconds:fromInstance.flightTestLastGateNoBadCourseSeconds]
+        values += [showPlanningTest:fromInstance.showPlanningTest]
+        values += [activateFlightTestCheckLanding:fromInstance.activateFlightTestCheckLanding]
+        values += [showObservationTest:fromInstance.showObservationTest]
         
         return values
     }
@@ -1134,6 +1157,7 @@ class FcService
         if (fromInstance.flightTestBadCoursePoints != oldContestRuleValues.flightTestBadCoursePoints) {return true}
         if (fromInstance.flightTestBadCourseMaxPoints != oldContestRuleValues.flightTestBadCourseMaxPoints) {return true}
         if (fromInstance.flightTestBadCourseStartLandingPoints != oldContestRuleValues.flightTestBadCourseStartLandingPoints) {return true}
+        if (fromInstance.flightTestBadCourseStartLandingSeparatePoints != oldContestRuleValues.flightTestBadCourseStartLandingSeparatePoints) {return true}
         if (fromInstance.flightTestLandingToLatePoints != oldContestRuleValues.flightTestLandingToLatePoints) {return true}
         if (fromInstance.flightTestGivenToLatePoints != oldContestRuleValues.flightTestGivenToLatePoints) {return true}
         if (fromInstance.flightTestSafetyAndRulesInfringementPoints != oldContestRuleValues.flightTestSafetyAndRulesInfringementPoints) {return true}
@@ -1142,6 +1166,9 @@ class FcService
         if (fromInstance.flightTestSafetyEnvelopeOpenedPoints != oldContestRuleValues.flightTestSafetyEnvelopeOpenedPoints) {return true}
         if (fromInstance.flightTestFrequencyNotMonitoredPoints != oldContestRuleValues.flightTestFrequencyNotMonitoredPoints) {return true}
         if (fromInstance.flightTestForbiddenEquipmentPoints != oldContestRuleValues.flightTestForbiddenEquipmentPoints) {return true}
+        if (fromInstance.flightTestExitRoomTooLatePoints != oldContestRuleValues.flightTestExitRoomTooLatePoints) {return true}
+        if (fromInstance.flightTestOutsideCorridorCorrectSecond != oldContestRuleValues.flightTestOutsideCorridorCorrectSecond) {return true}
+        if (fromInstance.flightTestOutsideCorridorPointsPerSecond != oldContestRuleValues.flightTestOutsideCorridorPointsPerSecond) {return true}
         
         // ObservationTest
         if (fromInstance.observationTestEnrouteValueUnit != oldContestRuleValues.observationTestEnrouteValueUnit) {return true}
@@ -1225,6 +1252,10 @@ class FcService
         if (fromInstance.maxEnrouteTargets != oldContestRuleValues.maxEnrouteTargets) {return true}
         if (fromInstance.useProcedureTurns != oldContestRuleValues.useProcedureTurns) {return true}
         if (fromInstance.liveTrackingScorecard != oldContestRuleValues.liveTrackingScorecard) {return true}
+        if (fromInstance.flightTestLastGateNoBadCourseSeconds != oldContestRuleValues.flightTestLastGateNoBadCourseSeconds) {return true}
+        if (fromInstance.showPlanningTest != oldContestRuleValues.showPlanningTest) {return true}
+        if (fromInstance.activateFlightTestCheckLanding != oldContestRuleValues.activateFlightTestCheckLanding) {return true}
+        if (fromInstance.showObservationTest != oldContestRuleValues.showObservationTest) {return true}
         
         return false
     }
@@ -3070,7 +3101,7 @@ class FcService
 			GregorianCalendar testing_time = new GregorianCalendar()
 			testing_time.setTime(testInstance.testingTime)
 			calculate_test_time(testInstance, taskInstance, testing_time, null, true)
-			calculate_coordresult(testInstance)
+			calculate_coordresults_test(testInstance)
 			taskInstance.timetableModified = true
 			taskInstance.save()
         }
@@ -3092,7 +3123,7 @@ class FcService
 					testing_time.setTime(test_instance.testingTime)
 					calculate_test_time(test_instance, taskInstance, testing_time, null, calculateTimes)
 					if (calculateTimes) {
-						calculate_coordresult(test_instance)
+						calculate_coordresults_test(test_instance)
 					}
 					taskInstance.timetableModified = true
 					taskInstance.save()
@@ -3774,7 +3805,7 @@ class FcService
             testInstance.crewResultsModified = true
             testInstance.save()
             
-            calculate_coordresult(testInstance)
+            calculate_coordresults_test(testInstance)
 			
 			taskInstance.timetableModified = true
 			taskInstance.save()
@@ -4520,6 +4551,7 @@ class FcService
 		if (!params.shortName) {
 			resultclass_instance.shortName = resultclass_instance.GetDefaultShortName()
 		}
+        resultclass_instance.contestRule = contestInstance.contestRule
 		setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
 		
         if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
@@ -4616,6 +4648,7 @@ class FcService
                 }
             }
             
+            BigDecimal old_corridorwidth = route_instance.corridorWidth
             route_instance.showCoords = params.showCoords == "on"
             route_instance.showCoordObservations = params.showCoordObservations == "on"
             route_instance.showResultLegs = params.showResultLegs == "on"
@@ -4623,6 +4656,15 @@ class FcService
             route_instance.showEnroutePhotos = params.showEnroutePhotos == "on"
             route_instance.showEnrouteCanvas = params.showEnrouteCanvas == "on"
             route_instance.properties = params
+            if (params.corridorWidth && params.corridorWidth.replace(',','.').isBigDecimal()) {
+                route_instance.corridorWidth = params.corridorWidth.replace(',','.').toBigDecimal()
+            }
+            if (!old_corridorwidth && route_instance.corridorWidth) {
+                route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
+                route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
+                route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
+                route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
+            }
             
             if(!route_instance.hasErrors() && route_instance.save()) {
                 return ['instance':route_instance,'saved':true,'message':getMsg('fc.updated',["${route_instance.name()}"])]
@@ -4647,6 +4689,9 @@ class FcService
         route_instance.enroutePhotoRoute = route_instance.enroutePhotoMeasurement.GetEnrouteRoute()
         route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
         route_instance.enrouteCanvasRoute = route_instance.enrouteCanvasMeasurement.GetEnrouteRoute()
+        if (contestInstance.anrFlying) {
+            route_instance.corridorWidth = 0.5
+        }
         return ['instance':route_instance]
     }
     
@@ -4662,12 +4707,21 @@ class FcService
             route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
         }
         
-        if (noObservations) {
+        if (params.corridorWidth && params.corridorWidth.replace(',','.').isBigDecimal()) {
+            route_instance.corridorWidth = params.corridorWidth.replace(',','.').toBigDecimal()
+        }
+        if (noObservations || route_instance.corridorWidth) {
             route_instance.turnpointRoute = TurnpointRoute.None
             route_instance.enroutePhotoRoute = EnrouteRoute.None
             route_instance.enrouteCanvasRoute = EnrouteRoute.None
             route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
             route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
+        }
+        if (route_instance.corridorWidth) {
+            route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
+            route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
+            route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
+            route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
         }
         
         String error_messages = ""
@@ -4897,7 +4951,7 @@ class FcService
         String webroot_dir = servletContext.getRealPath("/")
         
         // read file
-        Map reader = import_fc_route(fileExtension, contestInstance, webroot_dir + "testdata/" + originalFileName)
+        Map reader = import_fc_route(fileExtension, contestInstance, 0, webroot_dir + "testdata/" + originalFileName)
         
         if (!reader.valid) {
             ret.error = true
@@ -4922,7 +4976,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importFcRoute(String fileExtension, Contest contestInstance, def file)
+    Map importFcRoute(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, def file)
     {
         Map ret = [found: false, error: false, message: ""]
         
@@ -4935,7 +4989,7 @@ class FcService
             ret.error = true
             ret.message = getMsg('fc.route.fcfileimport.nofile')
         } else {
-            printstart "importFcRoute '$original_filename'"
+            printstart "importFcRoute '$original_filename' corridorWidth=$corridorWidth"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -4949,7 +5003,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_fc_route(fileExtension, contestInstance, webroot_dir + upload_filename)
+                Map reader = import_fc_route(fileExtension, contestInstance, corridorWidth, webroot_dir + upload_filename)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -4974,12 +5028,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_fc_route(String fileExtension, Contest contestInstance, String loadFileName)
+    private Map import_fc_route(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, String loadFileName)
     {
-        printstart "import_fc_route '$loadFileName'"
+        printstart "import_fc_route '$loadFileName' corridorWidth=$corridorWidth"
         
         // read file
-        Map reader = RouteFileTools.ReadFcRouteFile(fileExtension, contestInstance, loadFileName)
+        Map reader = RouteFileTools.ReadFcRouteFile(fileExtension, contestInstance, corridorWidth, loadFileName)
         
         // calculate legs
         if (reader.valid && !reader.errors && reader.route) {
@@ -5003,7 +5057,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importFileRoute(String fileExtension, Contest contestInstance, def file, Map importParams)
+    Map importFileRoute(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, def file, Map importParams)
     {
         Map ret = [found: false, error: false, message: ""]
         
@@ -5016,7 +5070,7 @@ class FcService
             ret.error = true
             ret.message = getMsg('fc.route.fileimport.nofile')
         } else {
-            printstart "importFileRoute '$original_filename'"
+            printstart "importFileRoute '$original_filename' corridorWidth=$corridorWidth"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -5030,7 +5084,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_file_route(fileExtension, contestInstance, webroot_dir + upload_filename, original_filename, importParams)
+                Map reader = import_file_route(fileExtension, contestInstance, corridorWidth, webroot_dir + upload_filename, original_filename, importParams)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5055,12 +5109,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_file_route(String fileExtension, Contest contestInstance, String loadFileName, String originalFileName, Map importParams)
+    private Map import_file_route(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, String loadFileName, String originalFileName, Map importParams)
     {
         printstart "import_file_route '$loadFileName' $importParams"
         
         // read file
-        Map reader = RouteFileTools.ReadRouteFile(fileExtension, contestInstance, loadFileName, originalFileName, importParams)
+        Map reader = RouteFileTools.ReadRouteFile(fileExtension, contestInstance, corridorWidth, loadFileName, originalFileName, importParams)
         
         // calculate legs
         if (reader.valid && !reader.errors && reader.route) {
@@ -5484,13 +5538,19 @@ class FcService
     {
         printstart "importResults"
         
+        boolean is_corridor = false
+        if (testInstance.flighttestwind.flighttest.route.corridorWidth) {
+            is_corridor = true
+        }
+        
         // Import CheckPoints
         printstart "Import check points"
         int checkpoint_errors = 0
         int height_errors = 0
         int badcourse_seconds = 0
         int course_errors = 0
-        CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
+        int outsidecorridor_errors = 0
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
             if (!coordresult_instance.ignoreGate) {
                 boolean found = false
                 for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
@@ -5517,7 +5577,7 @@ class FcService
                         if (coordresult_instance.planProcedureTurn) {
                             coordresult_instance.resultProcedureTurnEntered = true
                         }
-                        calculateCoordResultInstance(coordresult_instance,true,false)
+                        calculate_coordresult(coordresult_instance, true, false)
                         
                         // calculate verify values
                         if (!calcresult_instance.judgeDisabled) {
@@ -5545,7 +5605,7 @@ class FcService
                     if (coordresult_instance.planProcedureTurn) {
                         coordresult_instance.resultProcedureTurnEntered = true
                     }
-                    calculateCoordResultInstance(coordresult_instance,true,false)
+                    calculate_coordresult(coordresult_instance, true, false)
                     
                     // calculate verify values
                     checkpoint_errors++
@@ -5567,11 +5627,19 @@ class FcService
         printstart "Import error points"
         for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
             
+			// Outside corridor
+			if (calcresult_instance.outsideCorridorSeconds && !calcresult_instance.judgeDisabled) {
+                println "OutsideCorridor found (${calcresult_instance.utc}, ${calcresult_instance.outsideCorridorSeconds}s)"
+                if (process_errorpoints_outsidecorridor(testInstance, calcresult_instance.outsideCorridorSeconds, calcresult_instance.GetUTCTime())) {
+                    outsidecorridor_errors++
+                }
+			}
+            
 			// Bad Course
 			if (calcresult_instance.badCourse && calcresult_instance.badCourseSeconds && !calcresult_instance.judgeDisabled) {
                 if (calcresult_instance.badCourseSeconds > testInstance.GetFlightTestBadCourseCorrectSecond()) {
                     println "BadCourse found (${calcresult_instance.utc}, ${calcresult_instance.badCourseSeconds}s)"
-    				if (processAflosErrorPointBadCourse(testInstance, calcresult_instance.badCourseSeconds, calcresult_instance.GetUTCTime())) {
+    				if (process_errorpoints_badcourse(testInstance, calcresult_instance.badCourseSeconds, calcresult_instance.GetUTCTime())) {
     					course_errors++
     				}
                 } else {
@@ -5581,7 +5649,7 @@ class FcService
 			
 			//  Bad Turn
     		if (calcresult_instance.badTurn && !calcresult_instance.judgeDisabled) {
-    			processAflosErrorPointBadTurn(testInstance, calcresult_instance.GetUTCTime())
+    			process_errorpoints_badturn(testInstance, calcresult_instance.GetUTCTime())
                 println "BadTurn found (${calcresult_instance.utc})."
     		}
     	}
@@ -5606,7 +5674,7 @@ class FcService
         testInstance.save()
 
         printdone ""
-        return checkpoint_errors || height_errors || course_errors
+        return checkpoint_errors || height_errors || course_errors || outsidecorridor_errors
     }
 
     //--------------------------------------------------------------------------
@@ -5621,7 +5689,53 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private boolean processAflosErrorPointBadCourse(Test testInstance, int badCourseSeconds, String badCourseStartTimeUTC)
+    private boolean process_errorpoints_outsidecorridor(Test testInstance, int outsideCorridorSeconds, String outsideCorridorStartTimeUTC)
+    {
+    	boolean outsidecorridor_error = false
+    	Contest contest_instance = testInstance.task.contest
+    	
+        Date outsidecorridor_starttime = Date.parse("HH:mm:ss", outsideCorridorStartTimeUTC)
+        GregorianCalendar outsidecorridor_startcalendar = new GregorianCalendar()
+        outsidecorridor_startcalendar.setTime(outsidecorridor_starttime)
+        
+        Date timezone_date = Date.parse("HH:mm",contest_instance.timeZone)
+        GregorianCalendar timezone_calendar = new GregorianCalendar()
+        timezone_calendar.setTime(timezone_date)
+        
+        outsidecorridor_startcalendar.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
+		if (contest_instance.timeZone.startsWith("-")) {
+			outsidecorridor_startcalendar.add(Calendar.MINUTE, -timezone_calendar.get(Calendar.MINUTE))
+		} else {
+        	outsidecorridor_startcalendar.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
+		}
+        
+        GregorianCalendar outsidecorridor_endcalendar = outsidecorridor_startcalendar.clone()
+        outsidecorridor_endcalendar.add(Calendar.SECOND, outsideCorridorSeconds)
+            
+    	outsidecorridor_error = true
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
+            if (coordresult_instance.type.IsCorridorCoord()) {
+                if (coordresult_instance.resultCpTime != Date.parse("HH:mm","02:00")) { // Messung
+                    if (outsidecorridor_endcalendar.getTime() <= coordresult_instance.resultCpTime) {
+                        if (coordresult_instance.resultOutsideCorridorMeasurement) {
+                            coordresult_instance.resultOutsideCorridorMeasurement += ","
+                        }
+                        coordresult_instance.resultOutsideCorridorMeasurement += outsideCorridorSeconds
+                        if (outsideCorridorSeconds > testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
+                            coordresult_instance.resultOutsideCorridorSeconds += outsideCorridorSeconds - testInstance.GetFlightTestOutsideCorridorCorrectSecond()
+                        }
+                        coordresult_instance.save()
+                        println "  added to ${coordresult_instance.title()} ${coordresult_instance.resultOutsideCorridorSeconds}s"
+                        break
+                    }
+                }
+			}
+        }
+        return outsidecorridor_error
+    }
+    
+    //--------------------------------------------------------------------------
+    private boolean process_errorpoints_badcourse(Test testInstance, int badCourseSeconds, String badCourseStartTimeUTC)
     {
     	boolean course_error = false
     	Contest contest_instance = testInstance.task.contest
@@ -5681,7 +5795,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private void processAflosErrorPointBadTurn(Test testInstance, String badTurnTimeUTC)
+    private void process_errorpoints_badturn(Test testInstance, String badTurnTimeUTC)
     {
         Contest contest_instance = testInstance.task.contest
         
@@ -5757,14 +5871,20 @@ class FcService
     //--------------------------------------------------------------------------
     private void set_noflightresults(Test testInstance)
     {
+        boolean is_corridor = false
+        if (testInstance.flighttestwind.flighttest.route.corridorWidth) {
+            is_corridor = true
+        }
+        
         // remove old calc results
         if (testInstance.IsLoggerResult()) {
-            CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:"id"]).each { CalcResult calcresult_instance ->
+            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:"id"])) {
                 calcresult_instance.delete()
             }
         }
         
-        CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
+        CoordResult last_coordresult_instance = null
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
             // reset results
             coordresult_instance.ResetResults(true) // true - with procedure turn
             
@@ -5774,10 +5894,19 @@ class FcService
                 coordresult_instance.resultProcedureTurnEntered = true
                 coordresult_instance.resultProcedureTurnNotFlown = true
             }
-            calculateCoordResultInstance(coordresult_instance,true,false)
+            if (is_corridor && last_coordresult_instance && coordresult_instance.type.IsCorridorResultCoord()) {
+                coordresult_instance.resultOutsideCorridorMeasurement = ""
+                coordresult_instance.resultOutsideCorridorSeconds = FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, coordresult_instance.planCpTime)
+                if (coordresult_instance.resultOutsideCorridorSeconds > testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
+                    coordresult_instance.resultOutsideCorridorSeconds -= testInstance.GetFlightTestOutsideCorridorCorrectSecond()
+                }
+            }
+            calculate_coordresult(coordresult_instance, true, false)
             
             // save results
             coordresult_instance.save()
+            
+            last_coordresult_instance = coordresult_instance
         }
         
         testInstance.flightTestModified = true
@@ -5908,6 +6037,9 @@ class FcService
                 if (params.maxAltitudeAboveGround) {
                     coordroute_instance.maxAltitudeAboveGround = params.maxAltitudeAboveGround.toInteger()
 			    }
+                if (coordroute_instance.route.corridorWidth) {
+                    // RouteFileTools.SetCorridorWidthFlags(coordroute_instance)
+                }
     
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
                     calculateAllLegMeasureDistances(coordroute_instance.route)
@@ -5978,7 +6110,7 @@ class FcService
                 if (params.correctSign) {
                     coordroute_instance.correctSign = TurnpointCorrect.(params.correctSign)
                 }
-    
+
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
                     Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
                     printdone ret.message
@@ -6187,6 +6319,9 @@ class FcService
             coordroute_instance.maxAltitudeAboveGround = params.maxAltitudeAboveGround.toInteger()
         }
         coordroute_instance.route = route_instance
+        if (route_instance.corridorWidth) {
+            RouteFileTools.SetCorridorWidthFlags(coordroute_instance)
+        }
 		calculateLegMeasureDistance(coordroute_instance, true)
 		
 		// calculate coordTrueTrack/coordMeasureDistance
@@ -10604,7 +10739,7 @@ class FcService
 			// recalculate CoordResult
             CoordResult last_coordresult_instance = null
 			CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
-				calculateCoordResultInstance(coordresult_instance,false,true)
+				calculate_coordresult(coordresult_instance, false, true)
 				if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
 					testInstance.flightTestTakeoffMissed = false
 				}
@@ -10767,17 +10902,38 @@ class FcService
                     set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, false) // no noBadCourse
                 }
     		}
+    		if (coordresult_instance.resultOutsideCorridorSeconds) {
+                if (testInstance.GetFlightTestOutsideCorridorPointsPerSecond() == 0) {
+                    // no penalties
+                    set_calcresult_nooutsidecorridor(testInstance, last_coordresult_instance, coordresult_instance, true) // noOutsideCorridor
+                } else {
+                    testInstance.flightTestCheckPointPenalties += coordresult_instance.GetOutsideCorridorPenalties()
+                    set_calcresult_nooutsidecorridor(testInstance, last_coordresult_instance, coordresult_instance, false) // no noOutsideCorridor
+                }
+    		}
 			last_coordresult_instance = coordresult_instance
     	}
     	testInstance.flightTestPenalties = testInstance.flightTestCheckPointPenalties
         if (testInstance.flightTestTakeoffMissed) {
             testInstance.flightTestPenalties += testInstance.GetFlightTestTakeoffMissedPoints()
         }
-        if (testInstance.flightTestBadCourseStartLanding) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+        if (!testInstance.GetFlightTestBadCourseStartLandingSeparatePoints()) {
+            if (testInstance.flightTestBadCourseStartLanding) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+            }
+        } else {
+            if (testInstance.flightTestBadCourseStart) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+            }
+            if (testInstance.flightTestBadCourseLanding) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+            }
         }
         if (testInstance.flightTestLandingTooLate) {
             testInstance.flightTestPenalties += testInstance.GetFlightTestLandingToLatePoints()
+        }
+        if (testInstance.flightTestExitRoomTooLate) {
+            testInstance.flightTestPenalties += testInstance.GetFlightTestExitRoomTooLatePoints()
         }
         if (testInstance.flightTestGivenTooLate) {
             testInstance.flightTestPenalties += testInstance.GetFlightTestGivenToLatePoints()
@@ -11118,6 +11274,32 @@ class FcService
                             }
                         }
                         calcresult_instance.noBadCourse = no_bad_course
+                        calcresult_instance.save()
+                    }
+                    if (calcresult_local_time >= coordresultInstance.GetResultLocalTime()) {
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    private void set_calcresult_nooutsidecorridor(Test testInstance, CoordResult lastCoordresultInstance, CoordResult coordresultInstance, boolean noOutsideCorridor)
+    {
+        if (testInstance.loggerResult) {
+            boolean no_outside_corridor = noOutsideCorridor
+            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
+                if (calcresult_instance.outsideCorridor) {
+                    String calcresult_local_time = calcresult_instance.GetLocalTime(testInstance.task.contest.timeZone)
+                    if (calcresult_local_time > lastCoordresultInstance.GetResultLocalTime()) {
+                        if (calcresult_instance.outsideCorridorSeconds) {
+                            no_outside_corridor = noOutsideCorridor
+                            if (calcresult_instance.outsideCorridorSeconds <= testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
+                                no_outside_corridor = true
+                            }
+                        }
+                        calcresult_instance.noOutsideCorridor = no_outside_corridor
                         calcresult_instance.save()
                     }
                     if (calcresult_local_time >= coordresultInstance.GetResultLocalTime()) {
@@ -11863,7 +12045,7 @@ class FcService
                             testing_time.setTime(test_instance.testingTime)
                             Task task_instance = test_instance.task
                             calculate_test_time(test_instance, task_instance, testing_time, null, true)
-                            calculate_coordresult(test_instance)
+                            calculate_coordresults_test(test_instance)
                             task_instance.timetableModified = true
                             task_instance.save()
                         }
@@ -12568,12 +12750,34 @@ class FcService
                 }
             }
 
+            boolean is_corridor = false
+            if (coordresult_instance.test.flighttestwind.flighttest.route.corridorWidth) {
+                is_corridor = true
+            }
             params.resultAltitude = Languages.GetLanguageDecimal(showLanguage, params.resultAltitude)
             
             coordresult_instance.properties = params
 			coordresult_instance.resultCpTimeInput = params.resultCpTimeInput
+            
+            if (is_corridor) {
+                if (params.resultOutsideCorridorMeasurement) {
+                    coordresult_instance.resultOutsideCorridorMeasurement = params.resultOutsideCorridorMeasurement
+                    coordresult_instance.resultOutsideCorridorSeconds = 0
+                    for (String s in params.resultOutsideCorridorMeasurement.split(',')) {
+                        if (s && s.isInteger()) {
+                            int outside_corridor_seconds = s.toInteger()
+                            if (outside_corridor_seconds > coordresult_instance.test.GetFlightTestOutsideCorridorCorrectSecond()) {
+                                coordresult_instance.resultOutsideCorridorSeconds += outside_corridor_seconds - coordresult_instance.test.GetFlightTestOutsideCorridorCorrectSecond()
+                            }
+                        }
+                    }
+                } else {
+                    coordresult_instance.resultOutsideCorridorMeasurement = ""
+                    coordresult_instance.resultOutsideCorridorSeconds = 0
+                }
+            }
 				
-            Map ret = calculateCoordResultInstance(coordresult_instance,false,false)
+            Map ret = calculate_coordresult(coordresult_instance, false, false)
             if (ret)
             {
                 return ret
@@ -12702,9 +12906,9 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map calculateCoordResultInstance(CoordResult coordResultInstance, boolean calculateUTC, boolean recalculatePenalties)
+    private Map calculate_coordresult(CoordResult coordResultInstance, boolean calculateUTC, boolean recalculatePenalties)
     {
-		println "calculateCoordResultInstance: '${coordResultInstance.title()}' (${coordResultInstance.mark}) '$coordResultInstance.resultCpTimeInput'"
+		println "calculate_coordresult '${coordResultInstance.title()}' (${coordResultInstance.mark}) '$coordResultInstance.resultCpTimeInput'"
 		
 		coordResultInstance.penaltyCoord = 0
 		
@@ -12791,7 +12995,7 @@ class FcService
 				if (test_instance.IsFlightTestCheckLanding()) {
 					if (coordResultInstance.resultCpNotFound) {
 						// LDG nicht gemessen
-						coordResultInstance.penaltyCoord = test_instance.GetFlightTestTakeoffMissedPoints()
+						coordResultInstance.penaltyCoord = test_instance.GetFlightTestLandingToLatePoints()
 						coordResultInstance.resultEntered = true
 					} else {
 						// LDG-Punkteauswertung
@@ -13369,7 +13573,7 @@ class FcService
 
 					if (!test_instance.timeCalculated) {
 						calculate_test_time(test_instance, taskInstance, start_time, last_arrival_time, true)
-						calculate_coordresult(test_instance)
+						calculate_coordresults_test(test_instance)
 						calculated_crew_num++
 					} else { // set start_time with last calculateted crew
 						start_time.setTime(test_instance.testingTime)
@@ -13648,7 +13852,7 @@ class FcService
 	}
 	
 	//--------------------------------------------------------------------------
-	private BigDecimal FuncTime(BigDecimal tasValue, Wind windValue, BigDecimal trueTrackValue, BigDecimal distValue, String calculatorValue) // TODO: FuncTime
+	private BigDecimal FuncTime(BigDecimal tasValue, Wind windValue, BigDecimal trueTrackValue, BigDecimal distValue, String calculatorValue) // TODO_OLD: FuncTime
 	// return hours
 	{
 		Map wind = [direction:windValue.direction,speed:windValue.speed]
@@ -13744,9 +13948,9 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    private void calculate_coordresult(Test testInstance)
+    private void calculate_coordresults_test(Test testInstance)
     {
-		printstart "calculate_coordresult: ${testInstance.crew.name}"
+		printstart "calculate_coordresults_test ${testInstance.crew.name}"
 		
         // remove all coordResultInstances
 		printstart "Remove all CoordResult instances"
@@ -13959,6 +14163,7 @@ class FcService
         Map p = [:]
         p.title = title
 		p.printPrefix = printPrefix
+        p.printOrganizer = "Demo"
 		p.resultClasses = resultclasses
 		p.teamCrewNum = teamCrewNum
 		p.contestRule = contestRule
@@ -14410,7 +14615,7 @@ class FcService
 	                coordresult_instance.resultBadCourseNum = crewResult.givenValues[j].badCourseNum
 	            }
 	            if (calculate) {
-	                calculateCoordResultInstance(coordresult_instance,false,false)
+	                calculate_coordresult(coordresult_instance,false,false)
 	                coordresult_instance.resultProcedureTurnEntered = true
 	                coordresult_instance.save()
 	            }
@@ -14447,7 +14652,7 @@ class FcService
 			                coordresult_instance.resultBadCourseNum = correction_value.badCourseNum
 			            }
 			            if (calculate) {
-			                calculateCoordResultInstance(coordresult_instance,false,false)
+			                calculate_coordresult(coordresult_instance,false,false)
 			                coordresult_instance.save()
 			            }
 					}
@@ -14456,7 +14661,10 @@ class FcService
 		}
         testInstance.flightTestTakeoffMissed = crewResult.flightTestTakeoffMissed
         testInstance.flightTestBadCourseStartLanding = crewResult.flightTestBadCourseStartLanding
+        testInstance.flightTestBadCourseStart = crewResult.flightTestBadCourseStart
+        testInstance.flightTestBadCourseLanding = crewResult.flightTestBadCourseLanding
         testInstance.flightTestLandingTooLate = crewResult.flightTestLandingTooLate
+        testInstance.flightTestExitRoomTooLate = crewResult.flightTestExitRoomTooLate
         testInstance.flightTestGivenTooLate = crewResult.flightTestGivenTooLate
         testInstance.flightTestSafetyAndRulesInfringement = crewResult.flightTestSafetyAndRulesInfringement
         testInstance.flightTestInstructionsNotFollowed = crewResult.flightTestInstructionsNotFollowed
@@ -14662,7 +14870,7 @@ class FcService
     					
     					if (!test_instance.timeCalculated) {
     						calculate_test_time(test_instance, task_instance, start_time, last_arrival_time, true)
-    						calculate_coordresult(test_instance)
+    						calculate_coordresults_test(test_instance)
     						last_arrival_time = test_instance.arrivalTime
     					}
     				}

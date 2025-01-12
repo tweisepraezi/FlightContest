@@ -175,7 +175,7 @@ class FlightTestController {
         } else if (flighttest.content) {
             printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
         } else {
-            redirect(action:listplanning,id:flighttest.instance.id)
+            redirect(action:'show',id:flighttest.instance.id)
         }
     }
     
@@ -191,7 +191,39 @@ class FlightTestController {
         } else if (flighttest.content) {
             printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
         } else {
-            redirect(action:listplanning,id:flighttest.instance.id)
+            redirect(action:'show',id:flighttest.instance.id)
+        }
+    }
+
+    def printneutralanrplan = {
+        def flighttest = printService.printneutralanrplanFlightTest(false,params,false,false,GetPrintParams())
+        if (!flighttest.instance) {
+            flash.message = flighttest.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (flighttest.error) {
+            flash.message = flighttest.message
+            flash.error = true
+            redirect(action:"show",id:flighttest.instance.id)
+        } else if (flighttest.content) {
+            printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"anrplan-task${flighttest.instance.task.idTitle}",true,false,false)
+        } else {
+            redirect(action:'show',id:flighttest.instance.id)
+        }
+    }
+    
+    def printresultanrplans = {
+        def flighttest = printService.printneutralanrplanFlightTest(true,params,false,false,GetPrintParams())
+        if (!flighttest.instance) {
+            flash.message = flighttest.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (flighttest.error) {
+            flash.message = flighttest.message
+            flash.error = true
+            redirect(action:"show",id:flighttest.instance.id)
+        } else if (flighttest.content) {
+            printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"anrplan-task${flighttest.instance.task.idTitle}",true,false,false)
+        } else {
+            redirect(action:'show',id:flighttest.instance.id)
         }
     }
 

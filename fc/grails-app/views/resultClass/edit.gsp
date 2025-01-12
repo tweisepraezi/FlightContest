@@ -43,7 +43,7 @@
 	                                <label>${message(code:'fc.contestrule')}*:</label>
 	                                <a href="/fc/docs/help_${session.showLanguage}.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
 	                                <br/>
-	                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="${ti[0]++}"/>
+	                                <g:select from="${ContestRules.GetContestRules(false)}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="${ti[0]++}"/>
 	                            </p>
 	                        </g:if>
                             <p>

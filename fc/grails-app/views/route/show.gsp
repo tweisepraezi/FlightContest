@@ -32,6 +32,15 @@
                                     <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
+                                <g:if test="${routeInstance.corridorWidth}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.corridorwidth')}:</td>
+                                        <td colspan="2" style="white-space: nowrap;">
+                                            ${FcMath.DistanceStr(routeInstance.corridorWidth)}${message(code:'fc.mile')}
+                                        </td>
+                                        <td colspan="2"/>
+                                    </tr>
+                                </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.scale')}:</td>
                                     <td>1:${fieldValue(bean:routeInstance, field:'mapScale')}</td>
@@ -40,6 +49,11 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.route.onlinemap.default')}:</td>
                                     <td>${fieldValue(bean:routeInstance, field:'defaultOnlineMap')}</td>
+                                    <td colspan="3"/>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.route.printmap.default')}:</td>
+                                    <td>${fieldValue(bean:routeInstance, field:'defaultPrintMap')}</td>
                                     <td colspan="3"/>
                                 </tr>
                                 <tr>
@@ -110,36 +124,38 @@
                                         </td>
                                     </tr>
                                 </g:if>
-                                <tr>
-                                    <g:set var="info" value=""/>
-                                    <td class="detailtitle">${message(code:'fc.observation.turnpoint')}:</td>
-                                    <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.turnpointRoute.code)}<br/>${message(code:'fc.observation.measurement')}: <g:if test="${routeInstance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
-                                    <td class="errors">${info = route_status.turnpointSignStatusInfo}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
-                                    <td>
-                                        <g:if test="${upload_job_status == UploadJobStatus.Done || map_links}">
-                                            <a href="/fc/route/routelinks/${routeInstance.id}">...</a>
-                                        </g:if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <g:set var="info" value=""/>
-                                    <g:set var="info2" value=""/>
-                                    <td class="detailtitle">${message(code:'fc.observation.enroute.photo')}:</td>
-                                    <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enroutePhotoRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enroutePhotoMeasurement.code)}</td>
-                                    <td class="errors">${info = route_status.enrouteSignPhotoStatusInfo}<br/>${info2 = route_status.enrouteMeasurementPhotoInfo}</td>
-                                    <td style="width:1%;"><g:if test="${info || info2}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <g:set var="info" value=""/>
-                                    <g:set var="info2" value=""/>
-                                    <td class="detailtitle">${message(code:'fc.observation.enroute.canvas')}:</td>
-                                    <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enrouteCanvasRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enrouteCanvasMeasurement.code)}</td>
-                                    <td class="errors">${info = route_status.enrouteSignCanvasStatusInfo}<br/>${info2 = route_status.enrouteMeasurementCanvasInfo}</td>
-                                    <td style="width:1%;"><g:if test="${info || info2}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
-                                    <td/>
-                                </tr>
+                                <g:if test="${!routeInstance.corridorWidth}">
+                                    <tr>
+                                        <g:set var="info" value=""/>
+                                        <td class="detailtitle">${message(code:'fc.observation.turnpoint')}:</td>
+                                        <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.turnpointRoute.code)}<br/>${message(code:'fc.observation.measurement')}: <g:if test="${routeInstance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
+                                        <td class="errors">${info = route_status.turnpointSignStatusInfo}</td>
+                                        <td style="width:1%;"><g:if test="${info}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                        <td>
+                                            <g:if test="${upload_job_status == UploadJobStatus.Done || map_links}">
+                                                <a href="/fc/route/routelinks/${routeInstance.id}">...</a>
+                                            </g:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <g:set var="info" value=""/>
+                                        <g:set var="info2" value=""/>
+                                        <td class="detailtitle">${message(code:'fc.observation.enroute.photo')}:</td>
+                                        <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enroutePhotoRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enroutePhotoMeasurement.code)}</td>
+                                        <td class="errors">${info = route_status.enrouteSignPhotoStatusInfo}<br/>${info2 = route_status.enrouteMeasurementPhotoInfo}</td>
+                                        <td style="width:1%;"><g:if test="${info || info2}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                        <td/>
+                                    </tr>
+                                    <tr>
+                                        <g:set var="info" value=""/>
+                                        <g:set var="info2" value=""/>
+                                        <td class="detailtitle">${message(code:'fc.observation.enroute.canvas')}:</td>
+                                        <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enrouteCanvasRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enrouteCanvasMeasurement.code)}</td>
+                                        <td class="errors">${info = route_status.enrouteSignCanvasStatusInfo}<br/>${info2 = route_status.enrouteMeasurementCanvasInfo}</td>
+                                        <td style="width:1%;"><g:if test="${info || info2}"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                        <td/>
+                                    </tr>
+                                </g:if>
                                 <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.general.livetrackingscorecard')}:</td>
@@ -147,27 +163,29 @@
                                         <td colspan="3"/>
                                     </tr>
                                 </g:if>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.procedureturns')}:</td>
-                                    <td colspan="2" style="white-space: nowrap;">
-                                        <g:if test="${route_data.procedureturn_num}"><g:if test="${route_useprocedureturns}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
-                                    </td>
-                                    <td colspan="2"/>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.curvedlegs')}:</td>
-                                    <td colspan="2" style="white-space: nowrap;">
-                                        <g:if test="${route_data.curved_num}">${message(code:'fc.yes')} (${route_data.curved_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
-                                    </td>
-                                    <td colspan="2"/>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.secretpoints')}:</td>
-                                    <td colspan="2" style="white-space: nowrap;">
-                                        <g:if test="${route_data.secret_num}">${message(code:'fc.yes')} (${route_data.secret_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
-                                    </td>
-                                    <td colspan="2"/>
-                                </tr>
+                                <g:if test="${!routeInstance.corridorWidth}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.procedureturns')}:</td>
+                                        <td colspan="2" style="white-space: nowrap;">
+                                            <g:if test="${route_data.procedureturn_num}"><g:if test="${route_useprocedureturns}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
+                                        </td>
+                                        <td colspan="2"/>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.curvedlegs')}:</td>
+                                        <td colspan="2" style="white-space: nowrap;">
+                                            <g:if test="${route_data.curved_num}">${message(code:'fc.yes')} (${route_data.curved_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
+                                        </td>
+                                        <td colspan="2"/>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.secretpoints')}:</td>
+                                        <td colspan="2" style="white-space: nowrap;">
+                                            <g:if test="${route_data.secret_num}">${message(code:'fc.yes')} (${route_data.secret_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
+                                        </td>
+                                        <td colspan="2"/>
+                                    </tr>
+                                </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.distance.to2ldg')}:</td>
                                     <td colspan="2" style="white-space: nowrap;">
@@ -300,7 +318,7 @@
 	                            </tfoot>
 	                        </table>
 	                    </g:if>
-                        <g:if test="${routeInstance.CanEnrouteSignModify(true) || (routeInstance.enroutePhotoRoute.IsEnrouteRouteInput() && routeInstance.AllEnroutePhotoUploaded())}">
+                        <g:if test="${routeInstance.CanEnrouteSignModify(true) || (!routeInstance.corridorWidth && routeInstance.enroutePhotoRoute.IsEnrouteRouteInput() && routeInstance.AllEnroutePhotoUploaded())}">
                             <g:set var="is_any_enroue_photo" value="${routeInstance.IsAnyEnroutePhoto()}"/>
                             <table>
                                 <tfoot>

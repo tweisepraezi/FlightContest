@@ -877,7 +877,7 @@ class DemoContestStandardService
     List test1Crew() {
        [[startNum:3, name:"Besatzung 3", email:"crew3.fc@localhost", mark:"",team:[name:"Deutschland"],tas:85,contestPenalties:218,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
         [startNum:18,name:"Besatzung 18",email:"crew18.fc@localhost",mark:"",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-        [startNum:19,name:"Besatzung 19",email:"crew19.fc@localhost",mark:"",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+        [startNum:19,name:"Besatzung 19",email:"crew19.fc@localhost",mark:"",team:[name:"Deutschland"],tas:80,contestPenalties:768,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
         [startNum:11,name:"Besatzung 11",email:"crew11.fc@localhost",mark:"",team:[name:"Schweiz"],    tas:70,contestPenalties:384,contestPosition:4,noContestPosition:false,aircraft:[registration:"D-EAAB",type:"",colour:""]],
         [startNum:13,name:"Besatzung 13",email:"crew13.fc@localhost",mark:"",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
        ]
@@ -1714,7 +1714,7 @@ class DemoContestStandardService
         planCpTime:"12:49:33",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38.64160'",resultLongitude:"E 014\u00b0 08.33550'",resultAltitude:1687,
         resultCpTime:"12:49:46",
-        resultCpNotFound:false,resultBadCourseNum:0,
+        resultCpNotFound:false,resultBadCourseNum:1,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
@@ -2101,10 +2101,10 @@ class DemoContestStandardService
         flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:21,planningTestPenalties:21,
-        flightTestCheckPointPenalties:337,flightTestPenalties:337,
+        flightTestCheckPointPenalties:537,flightTestPenalties:537,
         observationTestRoutePhotoPenalties:120,observationTestTurnPointPhotoPenalties:0,
         observationTestGroundTargetPenalties:10,observationTestPenalties:130,landingTestPenalties:80,
-        taskPenalties:568,taskPosition:5
+        taskPenalties:768,taskPosition:5
        ],
        [crew:[name:"Besatzung 11"],viewpos:1,taskTAS:70,
         flighttestwind:[wind:[direction:300,speed:15]],
@@ -2162,7 +2162,7 @@ class DemoContestStandardService
     List test2Crew() {
       [[startNum:3, name:"Besatzung 3", email:"crew3.fc@localhost", mark:"",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:58, classPosition:2,noClassPosition:false,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
        [startNum:18,name:"Besatzung 18",email:"crew18.fc@localhost",mark:"",team:[name:"Deutschland"],resultclass:[name:"Tourist",   shortName:"T",contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-       [startNum:19,name:"Besatzung 19",email:"crew19.fc@localhost",mark:"",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,noClassPosition:false,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+       [startNum:19,name:"Besatzung 19",email:"crew19.fc@localhost",mark:"",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:558,classPosition:3,noClassPosition:false,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
        [startNum:11,name:"Besatzung 11",email:"crew11.fc@localhost",mark:"",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   shortName:"T",contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
        [startNum:13,name:"Besatzung 13",email:"crew13.fc@localhost",mark:"",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,noClassPosition:false,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
       ]
@@ -2328,10 +2328,10 @@ class DemoContestStandardService
         flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:21,planningTestPenalties:21,
-        flightTestCheckPointPenalties:337,flightTestPenalties:337,
+        flightTestCheckPointPenalties:537,flightTestPenalties:537,
         observationTestRoutePhotoPenalties:120,observationTestTurnPointPhotoPenalties:0,
         observationTestGroundTargetPenalties:10,observationTestPenalties:130,landingTestPenalties:80,
-        taskPenalties:358,taskPosition:3
+        taskPenalties:558,taskPosition:3
        ],
        [crew:[name:"Besatzung 11"],viewpos:1,taskTAS:70,
         flighttestwind:[wind:[direction:300,speed:15]],

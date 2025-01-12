@@ -49,4 +49,12 @@ class CoordResult extends Coord
         }
         return 0
     }
+    
+    int GetOutsideCorridorPenalties() {
+        if (resultOutsideCorridorSeconds) {
+            int outsidecorridor_penalties = resultOutsideCorridorSeconds * test.GetFlightTestOutsideCorridorPointsPerSecond()
+            return outsidecorridor_penalties
+        }
+        return 0
+    }
 }

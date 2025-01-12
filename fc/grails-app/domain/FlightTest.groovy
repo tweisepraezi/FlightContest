@@ -27,6 +27,7 @@ class FlightTest
     Integer submissionMinutes = 0                 // DB-2.20
     String flightPlanAddTPNum = ""                // DB-2.20
     Boolean flightResultsShowCurvedPoints = false // DB-2.20
+    FlightPlanDesign flightPlanDesign = FlightPlanDesign.TPList // DB-2.41
 	
 	static belongsTo = [task:Task]
 
@@ -56,6 +57,9 @@ class FlightTest
         submissionMinutes(nullable:true)
         flightPlanAddTPNum(nullable:true)
         flightResultsShowCurvedPoints(nullable:true)
+        
+        // DB-2.41 compatibility
+        flightPlanDesign(nullable:true)
 	}
 
 	static mapping = {
@@ -94,6 +98,9 @@ class FlightTest
     
     boolean CanObservationsAdd()
     {
+        if (route.corridorWidth) {
+            return false
+        }
         if (RouteTools.IsObservationSignOk(route)) {
             if (!IsObservationSignUsed()) {
                 if (!Test.findByTaskAndObservationTestComplete(task,true)) {
@@ -108,6 +115,24 @@ class FlightTest
     {
         if (IsObservationSignUsed()) {
             if (!Test.findByTaskAndObservationTestComplete(task,true)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    List GetPrintableANRPlanTests()
+    {
+        return Test.findAllByTaskAndDisabledCrewAndTimeCalculated(task, false, true, [sort:'taskTAS'])
+    }
+    
+    boolean CanANRPlanPrinted()
+    {
+        if (!route.corridorWidth) {
+            return false
+        }
+        if (route.defaultPrintMap) {
+            if (GetPrintableANRPlanTests()) {
                 return true
             }
         }

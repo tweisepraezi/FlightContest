@@ -51,7 +51,10 @@ class Test
 	boolean flightTestCheckPointsComplete = false
 	boolean flightTestTakeoffMissed = false
 	boolean flightTestBadCourseStartLanding = false
+    Boolean flightTestBadCourseStart = false               // DB-2.41
+    Boolean flightTestBadCourseLanding = false             // DB-2.41
 	boolean flightTestLandingTooLate = false
+    Boolean flightTestExitRoomTooLate = false              // DB-2.41
     boolean flightTestGivenTooLate = false
 	Boolean flightTestSafetyAndRulesInfringement = false   // DB-2.3
 	Boolean flightTestInstructionsNotFollowed = false      // DB-2.3
@@ -316,6 +319,11 @@ class Test
         
         // DB-2.36 compatibility
         taskResultsTime(nullable:true)
+        
+        // DB-2.41 compatibility
+        flightTestExitRoomTooLate(nullable:true)
+        flightTestBadCourseStart(nullable:true)
+        flightTestBadCourseLanding(nullable:true)
     }
 
 	static mapping = {
@@ -345,7 +353,10 @@ class Test
 		flightTestCheckPointsComplete = false
 		flightTestTakeoffMissed = false
 		flightTestBadCourseStartLanding = false
+        flightTestBadCourseStart = false
+        flightTestBadCourseLanding = false
 		flightTestLandingTooLate = false
+        flightTestExitRoomTooLate = false
 		flightTestGivenTooLate = false
 		flightTestSafetyAndRulesInfringement = false
 		flightTestInstructionsNotFollowed = false
@@ -1052,7 +1063,7 @@ class Test
         return ret
     }
     
-    boolean IsPrecisionFlying()
+    boolean IsPrecisionLanding()
     {
         if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
             if (crew.resultclass) {
@@ -1300,6 +1311,16 @@ class Test
 		return task.contest.flightTestBadCourseStartLandingPoints
 	}
 	
+	boolean GetFlightTestBadCourseStartLandingSeparatePoints()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestBadCourseStartLandingSeparatePoints
+			}
+		}
+		return task.contest.flightTestBadCourseStartLandingSeparatePoints
+	}
+	
 	int GetFlightTestLandingToLatePoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -1380,6 +1401,36 @@ class Test
         return task.contest.flightTestForbiddenEquipmentPoints
     }
     
+    int GetFlightTestExitRoomTooLatePoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.flightTestExitRoomTooLatePoints
+            }
+        }
+        return task.contest.flightTestExitRoomTooLatePoints
+    }
+    
+	int GetFlightTestOutsideCorridorCorrectSecond()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestOutsideCorridorCorrectSecond
+			}
+		}
+		return task.contest.flightTestOutsideCorridorCorrectSecond
+	}
+	
+	int GetFlightTestOutsideCorridorPointsPerSecond()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestOutsideCorridorPointsPerSecond
+			}
+		}
+		return task.contest.flightTestOutsideCorridorPointsPerSecond
+	}
+	
     EnrouteValueUnit GetObservationTestEnrouteValueUnit()
     {
         if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {

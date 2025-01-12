@@ -144,17 +144,35 @@
                                             </div>
                                         </g:if>
                                     </g:if>
-		                        	<g:if test="${testInstance.GetFlightTestBadCourseStartLandingPoints() > 0}">
-				                        <div>
-			        	                	<g:checkBox name="flightTestBadCourseStartLanding" value="${testInstance.flightTestBadCourseStartLanding}" tabIndex="${ti[0]++}"/>
-											<label>${message(code:'fc.flighttest.badcoursestartlanding')}</label>
-			    	                    </div>
-			    	                </g:if>
+                                    <g:if test="${testInstance.GetFlightTestExitRoomTooLatePoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestExitRoomTooLate" value="${testInstance.flightTestExitRoomTooLate}" tabIndex="${ti[0]++}"/>
+                                            <label>${message(code:'fc.planningtest.exitroomtolate')}</label>
+                                        </div>
+                                    </g:if>
 		                        	<g:if test="${testInstance.GetFlightTestGivenToLatePoints() > 0}">
 				                        <div>
 			        	                	<g:checkBox name="flightTestGivenTooLate" value="${testInstance.flightTestGivenTooLate}" tabIndex="${ti[0]++}"/>
 											<label>${message(code:'fc.flighttest.giventolate')}</label>
 			    	                    </div>
+			    	                </g:if>
+		                        	<g:if test="${testInstance.GetFlightTestBadCourseStartLandingPoints() > 0}">
+                                        <g:if test="${!testInstance.GetFlightTestBadCourseStartLandingSeparatePoints()}">
+                                            <div>
+                                                <g:checkBox name="flightTestBadCourseStartLanding" value="${testInstance.flightTestBadCourseStartLanding}" tabIndex="${ti[0]++}"/>
+                                                <label>${message(code:'fc.flighttest.badcoursestartlanding')}</label>
+                                            </div>
+                                        </g:if>
+                                        <g:else>
+                                            <div>
+                                                <g:checkBox name="flightTestBadCourseStart" value="${testInstance.flightTestBadCourseStart}" tabIndex="${ti[0]++}"/>
+                                                <label>${message(code:'fc.flighttest.badcoursestart')}</label>
+                                            </div>
+                                            <div>
+                                                <g:checkBox name="flightTestBadCourseLanding" value="${testInstance.flightTestBadCourseLanding}" tabIndex="${ti[0]++}"/>
+                                                <label>${message(code:'fc.flighttest.badcourselanding')}</label>
+                                            </div>
+                                        </g:else>
 			    	                </g:if>
                                     <g:if test="${testInstance.GetFlightTestSafetyAndRulesInfringementPoints() > 0}">
                                         <div>
@@ -218,11 +236,11 @@
                                         <td>${testInstance.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>
                                     </tr>
                                 </g:if>
-                                <g:if test="${testInstance.flightTestBadCourseStartLanding}">
-                                	<tr>
-                                    	<td class="detailtitle">${message(code:'fc.flighttest.badcoursestartlanding')}:</td>
-                                        <td>${testInstance.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>
-                                	</tr>
+                                <g:if test="${testInstance.flightTestExitRoomTooLate}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.planningtest.exitroomtolate')}:</td>
+                                        <td>${testInstance.GetFlightTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
                                 </g:if>
                                 <g:if test="${testInstance.flightTestGivenTooLate}">
                                 	<tr>
@@ -230,6 +248,28 @@
                                         <td>${testInstance.GetFlightTestGivenToLatePoints()} ${message(code:'fc.points')}</td>
                                 	</tr>
                                 </g:if>
+                                <g:if test="${!testInstance.GetFlightTestBadCourseStartLandingSeparatePoints()}">
+                                    <g:if test="${testInstance.flightTestBadCourseStartLanding}">
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.flighttest.badcoursestartlanding')}:</td>
+                                            <td>${testInstance.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>
+                                        </tr>
+                                    </g:if>
+                                </g:if>
+                                <g:else>
+                                    <g:if test="${testInstance.flightTestBadCourseStart}">
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.flighttest.badcoursestart')}:</td>
+                                            <td>${testInstance.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>
+                                        </tr>
+                                    </g:if>
+                                    <g:if test="${testInstance.flightTestBadCourseLanding}">
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.flighttest.badcourselanding')}:</td>
+                                            <td>${testInstance.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>
+                                        </tr>
+                                    </g:if>
+                                </g:else>
                                 <g:if test="${testInstance.flightTestSafetyAndRulesInfringement}">
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.flighttest.safetyandrulesinfringement')}:</td>

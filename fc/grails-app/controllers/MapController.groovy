@@ -17,7 +17,7 @@ class MapController {
             session.flighttestReturnAction = actionName
             session.flighttestReturnController = controllerName
             session.flighttestReturnID = params.id
-            return [mapList:MapTools.GetMapList(servletContext, session)]
+            return [mapList:MapTools.GetMapList(servletContext, session), contestInstance:session?.lastContest]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')

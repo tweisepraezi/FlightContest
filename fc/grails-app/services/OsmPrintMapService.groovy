@@ -102,6 +102,7 @@ class OsmPrintMapService
     final static int SCALEBAR_TITLE_FONT_SIZE = 8
     
     final static int TP_FONT_SIZE = 16
+    final static int TP_ANR_FONT_SIZE = 10
     
     final static BigDecimal FRAME_STROKE_WIDTH = 1
     final static BigDecimal TRACK_STROKE_WIDTH = 0.75
@@ -273,6 +274,7 @@ class OsmPrintMapService
         int min_print_height = 0 // mm
         boolean alternate_pos = false
         String paper_size = ""
+        int tp_font_size = TP_FONT_SIZE
         switch (contestMapParams.contestMapPrintSize) {
             case Defs.CONTESTMAPPRINTSIZE_A4:
                 paper_size = "A4"
@@ -319,6 +321,7 @@ class OsmPrintMapService
                 paper_size = "ANR"
                 print_width = ANR_LONG
                 print_height = ANR_SHORT
+                tp_font_size = TP_ANR_FONT_SIZE
                 break
             case Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA:
                 paper_size = "T/O"
@@ -500,7 +503,7 @@ class OsmPrintMapService
             "Layer": "tracks"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${TP_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true'>[name]</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${tp_font_size}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true'>[name]</TextSymbolizer>",
             "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",

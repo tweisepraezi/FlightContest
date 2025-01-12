@@ -108,8 +108,18 @@
                                 <input type="text" id="secretcoursechange" name="secretcoursechange" value="1.5" maxlength="5" size="2" tabIndex="${ti[0]++}"/>
 								<label>${message(code:'fc.grad')}</label>
                             </div>
-                            <br/>
                         </p>
+                        <g:if test="${contestInstance.anrFlying}" >
+                            <div>
+                                <label>${message(code:'fc.corridorwidth')}:</label>
+                                <input type="text" id="corridorWidth" name="corridorWidth" value="0.5" tabIndex="${ti[0]++}"/>
+                                <label>${message(code:'fc.mile')}</label>
+                            </div>
+                            <br/>
+                        </g:if>
+                        <g:else>
+                            <input type="hidden" id="corridorWidth" name="corridorWidth" value="0.0" tabIndex="${ti[0]++}"/>
+                        </g:else>
                         <g:actionSubmit action="importfileroute2" value="${message(code:'fc.import')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:uploadForm>

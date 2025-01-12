@@ -550,6 +550,8 @@ class RouteTools
 		int secret_pos = 0
 		BigDecimal measure_distance = 0
 		boolean secret_error_found = false
+        List corridor_tpflags_errors = []
+        List gatewidth_errors = []
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
 			if (coordroute_instance.type == CoordType.SECRET) {
 				secret_pos++
@@ -579,7 +581,32 @@ class RouteTools
 				measure_distance = 0
 				secret_error_found = false
 			}
+            if (routeInstance.corridorWidth) {
+                if (coordroute_instance.type.IsCorridorCoord()) {
+                    if (coordroute_instance.type.IsCorridorNoCheckCoord()) {
+                        if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck) {
+                            corridor_tpflags_errors += coordroute_instance.titleCode()
+                        }
+                    }
+                }
+            } else {
+                if (!coordroute_instance.gatewidth2) {
+                    gatewidth_errors += coordroute_instance.titleCode()
+                }
+            }
 		}
+            
+        boolean corridor_error = false
+        if (routeInstance.contest.anrFlying) {
+            if (!routeInstance.corridorWidth) {
+                corridor_error = true
+            }
+        } else {
+            if (routeInstance.corridorWidth) {
+                corridor_error = true
+            }
+        }
+        
          
         return [target_num:                  target_num, 
                 min_target_num:              min_target_num,
@@ -601,14 +628,17 @@ class RouteTools
                 measure_distance_difference: measure_distance_difference,
                 procedureturn_difference:    procedureturn_difference,
                 circlecenter_num:            circlecenter_num,
-				secret_measure_incomplete:   secret_measure_incomplete
+				secret_measure_incomplete:   secret_measure_incomplete,
+                corridor_error:              corridor_error,
+                corridor_tpflags_errors:     corridor_tpflags_errors,
+                gatewidth_errors:            gatewidth_errors
                ]
     }
     
     //--------------------------------------------------------------------------
     private static boolean is_route_usuable(Map status)
     {
-        if (status.route_empty || status.route_incomplete || status.measure_distance_difference || status.procedureturn_difference || status.circlecenter_num || status.secret_measure_incomplete) {
+        if (status.route_empty || status.route_incomplete || status.measure_distance_difference || status.procedureturn_difference || status.circlecenter_num || status.secret_measure_incomplete || status.corridor_error || status.gatewidth_errors) {
             return false
         }
         return true
@@ -619,7 +649,7 @@ class RouteTools
     {
         if (!is_route_usuable(status)) {
             return false
-        } else if (status.min_target_error || status.max_target_error || status.min_canvas_error || status.max_canvas_error || status.min_leg_error || status.max_leg_error) {
+        } else if (status.min_target_error || status.max_target_error || status.min_canvas_error || status.max_canvas_error || status.min_leg_error || status.max_leg_error || status.corridor_tpflags_errors) {
             return false
         }
         return true
@@ -713,6 +743,31 @@ class RouteTools
                         s += ", "
                     }
                     s += routeInstance.getMsgArgs('fc.route.secretmeasureincomplete',[status.secret_measure_incomplete])
+                    wr_comma = true
+                }
+                if (status.corridor_error) {
+                    if (wr_comma) {
+                        s += ", "
+                    }
+                    if (routeInstance.contest.anrFlying) {
+                        s += routeInstance.getMsgArgs('fc.route.corridorwidthmissing',[])
+                    } else {
+                        s += routeInstance.getMsgArgs('fc.route.corridorwidtherror',[])
+                    }
+                    wr_comma = true
+                }
+                if (status.corridor_tpflags_errors) {
+                    if (wr_comma) {
+                        s += ", "
+                    }
+                    s += routeInstance.getMsgArgs('fc.route.corridortpflagserrors',[status.corridor_tpflags_errors])
+                    wr_comma = true
+                }
+                if (status.gatewidth_errors) {
+                    if (wr_comma) {
+                        s += ", "
+                    }
+                    s += routeInstance.getMsgArgs('fc.route.gatewidtherrors',[status.gatewidth_errors])
                     wr_comma = true
                 }
             }

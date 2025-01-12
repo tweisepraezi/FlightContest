@@ -139,20 +139,22 @@
 		                        <fieldset>
 		                            <legend>${taskclass_instance.resultclass.name}</legend>
 		                            <p>
-		                                <div>
-			                               	<g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_PlanningTestRun}" value="${taskclass_instance.planningTestRun}" />
-		    	                            <label>${message(code:'fc.planningtest')}</label>
-		                                </div>
-	                                    <div style="margin-left:20px">
-	                                        <div>
-	                                            <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_PlanningTestDistanceMeasure}" value="${taskclass_instance.planningTestDistanceMeasure}" />
-	                                            <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
-	                                        </div>
-	                                        <div>
-	                                            <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_PlanningTestDirectionMeasure}" value="${taskclass_instance.planningTestDirectionMeasure}" />
-	                                            <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
-	                                        </div>
-	                                    </div>
+                                        <g:if test="${taskInstance.contest.showPlanningTest}">
+                                            <div>
+                                                <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_PlanningTestRun}" value="${taskclass_instance.planningTestRun}" />
+                                                <label>${message(code:'fc.planningtest')}</label>
+                                            </div>
+                                            <div style="margin-left:20px">
+                                                <div>
+                                                    <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_PlanningTestDistanceMeasure}" value="${taskclass_instance.planningTestDistanceMeasure}" />
+                                                    <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
+                                                </div>
+                                                <div>
+                                                    <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_PlanningTestDirectionMeasure}" value="${taskclass_instance.planningTestDirectionMeasure}" />
+                                                    <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+                                                </div>
+                                            </div>
+                                        </g:if>
 		                                <div>
 			                               	<g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_FlightTestRun}" value="${taskclass_instance.flightTestRun}" />
 		    	                            <label>${message(code:'fc.flighttest')}</label>
@@ -171,24 +173,26 @@
                                                 <label>${message(code:'fc.task.flighttestchecklanding')}</label>
                                             </div>
                                         </div>
-		                                <div>
-			                               	<g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestRun}" value="${taskclass_instance.observationTestRun}" />
-		    	                            <label>${message(code:'fc.observationtest')}</label>
-		                                </div>
-                                        <div style="margin-left:20px">
-	                                        <div>
-	                                            <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestTurnpointRun}" value="${taskclass_instance.observationTestTurnpointRun}" />
-	                                            <label>${message(code:'fc.observationtest.turnpoints')}</label>
-	                                        </div>
-	                                        <div>
-	                                            <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestEnroutePhotoRun}" value="${taskclass_instance.observationTestEnroutePhotoRun}" />
-	                                            <label>${message(code:'fc.observationtest.enroutephotos')}</label>
-	                                        </div>
-	                                        <div>
-	                                            <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestEnrouteCanvasRun}" value="${taskclass_instance.observationTestEnrouteCanvasRun}" />
-	                                            <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
-	                                        </div>
-                                        </div>
+                                        <g:if test="${taskInstance.contest.showObservationTest}">
+                                            <div>
+                                                <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestRun}" value="${taskclass_instance.observationTestRun}" />
+                                                <label>${message(code:'fc.observationtest')}</label>
+                                            </div>
+                                            <div style="margin-left:20px">
+                                                <div>
+                                                    <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestTurnpointRun}" value="${taskclass_instance.observationTestTurnpointRun}" />
+                                                    <label>${message(code:'fc.observationtest.turnpoints')}</label>
+                                                </div>
+                                                <div>
+                                                    <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestEnroutePhotoRun}" value="${taskclass_instance.observationTestEnroutePhotoRun}" />
+                                                    <label>${message(code:'fc.observationtest.enroutephotos')}</label>
+                                                </div>
+                                                <div>
+                                                    <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestEnrouteCanvasRun}" value="${taskclass_instance.observationTestEnrouteCanvasRun}" />
+                                                    <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
+                                                </div>
+                                            </div>
+                                        </g:if>
 		                                <div>
 			                               	<g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_LandingTestRun}" value="${taskclass_instance.landingTestRun}" />
 		    	                            <label>${message(code:'fc.landingtest')}</label>
@@ -228,20 +232,22 @@
                     	<g:else>
 	                        <fieldset>
 	                            <p>
-	                                <div>
-		                               	<g:checkBox name="planningTestRun" value="${taskInstance.planningTestRun}" />
-	    	                            <label>${message(code:'fc.planningtest')}</label>
-	                                </div>
-                                    <div style="margin-left:20px">
-	                                    <div>
-	                                        <g:checkBox name="planningTestDistanceMeasure" value="${taskInstance.planningTestDistanceMeasure}" />
-	                                        <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
-	                                    </div>
-	                                    <div>
-	                                        <g:checkBox name="planningTestDirectionMeasure" value="${taskInstance.planningTestDirectionMeasure}" />
-	                                        <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
-	                                    </div>
-                                    </div>
+                                    <g:if test="${taskInstance.contest.showPlanningTest}">
+                                        <div>
+                                            <g:checkBox name="planningTestRun" value="${taskInstance.planningTestRun}" />
+                                            <label>${message(code:'fc.planningtest')}</label>
+                                        </div>
+                                        <div style="margin-left:20px">
+                                            <div>
+                                                <g:checkBox name="planningTestDistanceMeasure" value="${taskInstance.planningTestDistanceMeasure}" />
+                                                <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
+                                            </div>
+                                            <div>
+                                                <g:checkBox name="planningTestDirectionMeasure" value="${taskInstance.planningTestDirectionMeasure}" />
+                                                <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+                                            </div>
+                                        </div>
+                                    </g:if>
 	                                <div>
 		                               	<g:checkBox name="flightTestRun" value="${taskInstance.flightTestRun}" />
 	    	                            <label>${message(code:'fc.flighttest')}</label>
@@ -260,24 +266,26 @@
                                             <label>${message(code:'fc.task.flighttestchecklanding')}</label>
                                         </div>
                                     </div>
-	                                <div>
-		                               	<g:checkBox name="observationTestRun" value="${taskInstance.observationTestRun}" />
-	    	                            <label>${message(code:'fc.observationtest')}</label>
-	                                </div>
-                                    <div style="margin-left:20px">
-	                                    <div>
-	                                        <g:checkBox name="observationTestTurnpointRun" value="${taskInstance.observationTestTurnpointRun}" />
-	                                        <label>${message(code:'fc.observationtest.turnpoints')}</label>
-	                                    </div>
-	                                    <div>
-	                                        <g:checkBox name="observationTestEnroutePhotoRun" value="${taskInstance.observationTestEnroutePhotoRun}" />
-	                                        <label>${message(code:'fc.observationtest.enroutephotos')}</label>
-	                                    </div>
-	                                    <div>
-	                                        <g:checkBox name="observationTestEnrouteCanvasRun" value="${taskInstance.observationTestEnrouteCanvasRun}" />
-	                                        <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
-	                                    </div>
-                                    </div>
+                                    <g:if test="${taskInstance.contest.showObservationTest}">
+                                        <div>
+                                            <g:checkBox name="observationTestRun" value="${taskInstance.observationTestRun}" />
+                                            <label>${message(code:'fc.observationtest')}</label>
+                                        </div>
+                                        <div style="margin-left:20px">
+                                            <div>
+                                                <g:checkBox name="observationTestTurnpointRun" value="${taskInstance.observationTestTurnpointRun}" />
+                                                <label>${message(code:'fc.observationtest.turnpoints')}</label>
+                                            </div>
+                                            <div>
+                                                <g:checkBox name="observationTestEnroutePhotoRun" value="${taskInstance.observationTestEnroutePhotoRun}" />
+                                                <label>${message(code:'fc.observationtest.enroutephotos')}</label>
+                                            </div>
+                                            <div>
+                                                <g:checkBox name="observationTestEnrouteCanvasRun" value="${taskInstance.observationTestEnrouteCanvasRun}" />
+                                                <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
+                                            </div>
+                                        </div>
+                                    </g:if>
 	                                <div>
 		                               	<g:checkBox name="landingTestRun" value="${taskInstance.landingTestRun}" />
 	    	                            <label>${message(code:'fc.landingtest')}</label>
