@@ -648,9 +648,9 @@ class CalcService
                     no_outside_corridor = true
                 }
                 if (no_outside_corridor) {
-                    println "  Outside corridor (No): ${calc_result.utc} (${calc_result.outsideCorridorSeconds}s)"
+                    println "Outside corridor (No): ${calc_result.utc} (${calc_result.outsideCorridorSeconds}s)"
                 } else {
-                    println "  Outside corridor (Yes): ${calc_result.utc} (${calc_result.outsideCorridorSeconds}s)"
+                    println "Outside corridor (Yes): ${calc_result.utc} (${calc_result.outsideCorridorSeconds}s)"
                 }
             }
             calc_result.noOutsideCorridor = no_outside_corridor
@@ -841,6 +841,7 @@ class CalcService
                                             gateLatitude:gate.coord.lat,
                                             gateLongitude:gate.coord.lon,
                                             gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:ignore_bad_course,
                                             procedureTurn:false,
                                             additionalGate:false]
@@ -872,6 +873,7 @@ class CalcService
                                             gateLatitude:gate.coord.lat,
                                             gateLongitude:gate.coord.lon,
                                             gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:ignore_bad_course,
                                             procedureTurn:false,
                                             additionalGate:false]
@@ -904,6 +906,7 @@ class CalcService
                                             gateLatitude:gate.coord.lat,
                                             gateLongitude:gate.coord.lon,
                                             gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:ignore_bad_course,
                                             procedureTurn:false,
                                             additionalGate:false]
@@ -933,6 +936,7 @@ class CalcService
                                             gateLatitude:last_coordroute_instance.latMath(),
                                             gateLongitude:last_coordroute_instance.lonMath(),
                                             gateAltitude:last_coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:ignore_bad_course,
                                             procedureTurn:false,
                                             additionalGate:false
@@ -1006,6 +1010,7 @@ class CalcService
                                             gateLatitude:coordroute_instance.latMath(),
                                             gateLongitude:coordroute_instance.lonMath(),
                                             gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:ignore_bad_course,
                                             procedureTurn:procedure_turn,
                                             additionalGate:false
@@ -1054,6 +1059,7 @@ class CalcService
                                             gateLatitude:last_coordroute_instance.latMath(),
                                             gateLongitude:last_coordroute_instance.lonMath(),
                                             gateAltitude:last_coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:false,
                                             procedureTurn:false,
                                             additionalGate:false
@@ -1090,6 +1096,7 @@ class CalcService
                                             gateLatitude:gate.coord.lat,
                                             gateLongitude:gate.coord.lon,
                                             gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:false,
                                             procedureTurn:false,
                                             additionalGate:false]
@@ -1121,6 +1128,7 @@ class CalcService
                                             gateLatitude:gate.coord.lat,
                                             gateLongitude:gate.coord.lon,
                                             gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:false,
                                             ignoreBadCourse:false,
                                             procedureTurn:false,
                                             additionalGate:false]
@@ -1156,6 +1164,7 @@ class CalcService
                                             gateLatitude:last_coordroute_instance.latMath(),
                                             gateLongitude:last_coordroute_instance.lonMath(),
                                             gateAltitude:last_coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                            ignoreGate:last_coordroute_instance.ignoreGate,
                                             ignoreBadCourse:ignore_bad_course,
                                             procedureTurn:false,
                                             additionalGate:false
@@ -1195,6 +1204,7 @@ class CalcService
                                                 gateLatitude:coordroute_instance.latMath(),
                                                 gateLongitude:coordroute_instance.lonMath(),
                                                 gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
+                                                ignoreGate:false,
                                                 ignoreBadCourse:ignore_bad_course,
                                                 procedureTurn:false,
                                                 additionalGate:false
@@ -1354,6 +1364,7 @@ class CalcService
                         gateLatitude:lastCoordRouteInstance.latMath(),
                         gateLongitude:lastCoordRouteInstance.lonMath(),
                         gateAltitude:lastCoordRouteInstance.GetMinAltitudeAboveGround(lastCoordRouteInstance.route.altitudeAboveGround),
+                        ignoreGate:false,
                         ignoreBadCourse:false,
                         procedureTurn:false,
                         additionalGate:true
@@ -1382,6 +1393,7 @@ class CalcService
                                     gateTrack:g.gateTrack,
                                     gateUtc:gate_utc,
                                     gateFlyBy:gate_flyby,
+                                    ignoreGate:false,
                                     ignoreBadCourse:g.ignoreBadCourse,
                                     procedureTurn:g.procedureTurn
                                    ]
@@ -1400,7 +1412,7 @@ class CalcService
         Map ret = [firstGate:[:], lastGate:[:]]
         Map new_gate = [:]
         for (Map g in gateList) {
-            if (!g.additionalGate && g.coordType.IsCorridorCoord() /*&& !g.coordType.IsCorridorNoCheckCoord()*/ ) {
+            if (!g.additionalGate && g.coordType.IsCorridorCoord() && !g.ignoreGate) {
                 String gate_utc = ""
                 for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresultAndGateNotFound(testInstance.loggerResult,false,[sort:'utc'])) {
                     if (calcresult_instance.IsCoordTitleEqual(g.coordType, g.coordTypeNumber)) {

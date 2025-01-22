@@ -73,12 +73,16 @@
                             <td>
                                 <g:each var="route_instance" in="${Route.findAllByContest(contestInstance)}">
                                     <g:if test="${map_entry.title == route_instance.defaultOnlineMap || map_entry.title == route_instance.defaultPrintMap}">
-                                        <g:if test="${map_entry.title == route_instance.defaultOnlineMap}">
-                                            <g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" /> (${message(code:'fc.route.onlinemap.default')})
-                                        </g:if>
-                                        <g:else>
-                                            <g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" /> (${message(code:'fc.route.printmap.default')})
-                                        </g:else>
+                                        <g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" />
+                                        <g:if test="${map_entry.title == route_instance.defaultOnlineMap && map_entry.title == route_instance.defaultPrintMap}">
+                                            (${message(code:'fc.route.onlinemap.default')}, ${message(code:'fc.route.printmap.default')})
+                                        </g:if>    
+                                        <g:elseif test="${map_entry.title == route_instance.defaultOnlineMap}">
+                                            (${message(code:'fc.route.onlinemap.default')})
+                                        </g:elseif>
+                                        <g:elseif test="${map_entry.title == route_instance.defaultPrintMap}">
+                                            (${message(code:'fc.route.printmap.default')})
+                                        </g:elseif>
                                         <br/>
                                     </g:if>
                                 </g:each>

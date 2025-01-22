@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.0.0
-:revdate: 12.01.2025
+:revnumber: 4.0.1
+:revdate: 22.01.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -1310,8 +1310,7 @@ Deselect checkpoints between SP and FP for printing on the map (-> Turnpoints fo
 Select the option to print in portrait format if necessary +
 Run “Generate” +
 +
-The generated map is to be saved with the activated settings “Set this map as the default online map for this route”
-and ‘Set this map as the default print map for this route’ with ‘Save map and switch to the list of maps’. +
+The generated map is to be saved with ‘Save map and switch to the list of maps’. +
 +
 The map can now be saved as a PDF for printing (Maps -> Route title -> PDF contest map -> ...).
 

@@ -57,4 +57,53 @@ class CoordResult extends Coord
         }
         return 0
     }
+    
+    long GetNextCoordResultID()
+    {
+        boolean start_found = false
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(this.test,[sort:"id"]) ) {
+            if (true || coordresult_instance.type.IsTurnpointSignCoord()) {
+                if (start_found) {
+                    return coordresult_instance.id
+                }
+                if (coordresult_instance.id == this.id) {
+                    start_found = true
+                }
+            }
+        }
+        return 0
+    }
+	
+    long GetPrevCoordResultID()
+    {
+        boolean start_found = false
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(this.test,[sort:"id", order:'desc']) ) {
+            if (true || coordresult_instance.type.IsTurnpointSignCoord()) {
+                if (start_found) {
+                    return coordresult_instance.id
+                }
+                if (coordresult_instance.id == this.id) {
+                    start_found = true
+                }
+            }
+        }
+        return 0
+    }
+    
+    int GetCooordResultNo()
+    {
+        int coord_no = 0
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(this.test,[sort:"id"]) ) {
+            if (true || coordresult_instance.type.IsTurnpointSignCoord()) {
+                if (coordresult_instance.planProcedureTurn) {
+                    coord_no++
+                }
+                coord_no++
+                if (coordresult_instance.id == this.id) {
+                    return coord_no
+                }
+            }
+        }
+        return 0
+    }
 }

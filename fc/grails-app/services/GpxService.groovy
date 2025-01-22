@@ -867,7 +867,7 @@ class GpxService
     Map ConvertTest2PrintMap(Test testInstance, String gpxFileName, String pngFileName) 
     {
         printstart "ConvertTest2PrintMap"
-        Map ret = ConvertTest2GPX(testInstance,gpxFileName, [isPrint:true, showPoints:false, wrEnrouteSign:false, gpxExport:false])
+        Map ret = ConvertTest2GPX(testInstance,gpxFileName, [isPrint:true, showPoints:false, wrEnrouteSign:false, gpxExport:false, hideDisabledPoints:true])
         if (ret.ok && ret.track) {
             printstart "Generate ${pngFileName} from ${gpxFileName}"
             
@@ -1166,7 +1166,10 @@ class GpxService
                 y = (lon2_nm / lon_nm * max_y).toInteger()
             }
             if ((last_x != x) || (last_y != y)) {
-                points += [source:"flight", start:start_value, x:x, y:y, name:'', name_down:false, color:'', info:getPointInfo(latitude_math, longitude_math, altitude, utc, timeZone, coordPresentation, "")]
+                points += [source:"flight", start:start_value, x:x, y:y, name:'', name_down:false, color:'',
+                           lat:latitude_math, lon:longitude_math,
+                           info:getPointInfo(latitude_math, longitude_math, altitude, utc, timeZone, coordPresentation, "")
+                          ]
                 if (x > points_max_x) {
                     points_max_x = x
                 }
@@ -1283,7 +1286,9 @@ class GpxService
                 if (print_warning) {
                     badgate_name += "*"
                 }
-                points += [source:"gatenotfound", start:start_value, x:x1, y:y1, name:badgate_name, name_down:false, color:badgate_color, info:'']
+                points += [source:"gatenotfound", start:start_value, x:x1, y:y1, name:badgate_name, name_down:false, color:badgate_color,
+                           lat:null, lon:null, info:''
+                          ]
             }
             last_x = x
             last_y = y
@@ -1328,7 +1333,10 @@ class GpxService
                     y = (lon2_nm / lon_nm * max_y).toInteger()
                 }
                 if (start_value) {
-                    points += [source:"route", start:start_value, x:x, y:y, name:gate_name, name_down:false, color:'', info:getPointInfo(latitude_math, longitude_math, altitude, "", timeZone, coordPresentation, gate_name)]
+                    points += [source:"route", start:start_value, x:x, y:y, name:gate_name, name_down:false, color:'',
+                               lat:latitude_math, lon:longitude_math,
+                               info:getPointInfo(latitude_math, longitude_math, altitude, "", timeZone, coordPresentation, gate_name)
+                              ]
                 } else {
                     if (portrait) {
                         if (is_gate && (y < last_y)) {
@@ -1339,7 +1347,10 @@ class GpxService
                             points[points.size()-1].name_down = true
                         }
                     }
-                    points += [source:"route", start:start_value, x:x, y:y, name:'', name_down:false, color:'', info:getPointInfo(latitude_math, longitude_math, altitude, "", timeZone, coordPresentation, gate_name)]
+                    points += [source:"route", start:start_value, x:x, y:y, name:'', name_down:false, color:'',
+                               lat:latitude_math, lon:longitude_math,
+                               info:getPointInfo(latitude_math, longitude_math, altitude, "", timeZone, coordPresentation, gate_name)
+                              ]
                 }
                 if (x > points_max_x) {
                     points_max_x = x
@@ -1458,6 +1469,8 @@ class GpxService
                    name:      point.name, 
                    name_down: point.name_down, 
                    color:     point.color,
+                   lat:       point.lat,
+                   lon:       point.lon,
                    info:      point.info
                   )
             }
@@ -1509,7 +1522,8 @@ class GpxService
                 show_points += GetShowPoints(gpxFileName, params.wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
-                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false, showCoord:params.showCoord])
+                show_points = RoutePointsTools.GetShowPointsNearRunways(route_instance,[isPrint:params.isPrint])
+                show_points += RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false, showCoord:params.showCoord])
             }
         }
         
@@ -2866,7 +2880,7 @@ class GpxService
                                         Map track_coords = AviationMath.getTrack2Circle(
                                             semicircle_coords[0].lat, semicircle_coords[0].lon,
                                             semicircle_coords[1].lat, semicircle_coords[1].lon,
-                                            CONTESTMAP_TPCIRCLE_RADIUS
+                                            start_coordroute_instance.gatewidth2 / 2 // CONTESTMAP_TPCIRCLE_RADIUS
                                         )
                                         xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
                                         //xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
@@ -2881,7 +2895,7 @@ class GpxService
                                 Map track_coords = AviationMath.getTrack2Circle(
                                     semicircle_coords[semicircle_coord_pos-1].lat, semicircle_coords[semicircle_coord_pos-1].lon,
                                     coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                    CONTESTMAP_TPCIRCLE_RADIUS
+                                    coordroute_instance.gatewidth2 / 2 // CONTESTMAP_TPCIRCLE_RADIUS
                                 )
                                 //xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
                                 xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
@@ -2912,14 +2926,14 @@ class GpxService
                                                         Map track_coords = AviationMath.getTrack2Circle(
                                                             last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
                                                             coordroute_instance2.latMath(), coordroute_instance2.lonMath(),
-                                                            CONTESTMAP_TPCIRCLE_RADIUS
+                                                            last_coordroute_instance2.gatewidth2 / 2 // CONTESTMAP_TPCIRCLE_RADIUS
                                                         )
                                                         xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
                                                     } else if (coordroute_instance2 == coordroute_instance) { // last track
                                                         Map track_coords = AviationMath.getTrack2Circle(
                                                             last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
                                                             coordroute_instance2.latMath(), coordroute_instance2.lonMath(),
-                                                            CONTESTMAP_TPCIRCLE_RADIUS
+                                                            last_coordroute_instance2.gatewidth2 / 2 // CONTESTMAP_TPCIRCLE_RADIUS
                                                         )
                                                         xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
                                                     } else { // middle track
@@ -2936,15 +2950,20 @@ class GpxService
                                 }
                             } else if (contestMapParams.contestMapLeg) {
                                 if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
-                                    Map track_coords = AviationMath.getTrack2Circle(
+                                    Map track_coords_start = AviationMath.getTrack2Circle(
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                        CONTESTMAP_TPCIRCLE_RADIUS
+                                        last_coordroute_instance.gatewidth2 / 2 // CONTESTMAP_TPCIRCLE_RADIUS
+                                    )
+                                    Map track_coords_end = AviationMath.getTrack2Circle(
+                                        last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                        coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                        coordroute_instance.gatewidth2 / 2 // CONTESTMAP_TPCIRCLE_RADIUS
                                     )
                                     xml.rte {
                                         xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
-                                        xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
-                                        xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
+                                        xml.rtept(lat:track_coords_start.srcLat, lon:track_coords_start.srcLon)
+                                        xml.rtept(lat:track_coords_end.destLat, lon:track_coords_end.destLon)
                                     }
                                 }
                             }
@@ -3080,14 +3099,14 @@ class GpxService
             }
         }
         
-        // circles
+        // turnpoint circles
         if (contestMapParams.contestMapCircle && !routeInstance.corridorWidth) {
             CoordRoute last_coordroute_instance = null
             CoordRoute last_last_coordroute_instance = null
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                 if (coordroute_instance.type.IsContestMapCoord()) {
                     if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
-                        List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_TPCIRCLE_RADIUS)
+                        List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), coordroute_instance.gatewidth2 / 2) // CONTESTMAP_TPCIRCLE_RADIUS
                         xml.rte {
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name "Circle ${coordroute_instance.titleMediaCode(media)}"
@@ -3116,8 +3135,8 @@ class GpxService
                             last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                             coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                            CONTESTMAP_TPCIRCLE_RADIUS,
-                            CONTESTMAP_PROCEDURETURN_DISTANCE
+                            last_coordroute_instance.gatewidth2 / 2, // CONTESTMAP_TPCIRCLE_RADIUS
+                            last_coordroute_instance.gatewidth2 // CONTESTMAP_PROCEDURETURN_DISTANCE
                         )
                         xml.rte {
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
@@ -3671,7 +3690,7 @@ class GpxService
     private boolean gpx_track(Test testInstance, MarkupBuilder xml, Map params)
     // Return true: data found
     {
-        printstart "gpx_track"
+        printstart "gpx_track $params"
         
         boolean found = false
         List track_points = []
@@ -3816,14 +3835,20 @@ class GpxService
                                                 }
                                             } else if (calc_result.badCourse) {
                                                 if (!calc_result.judgeDisabled && !calc_result.hide) {
+                                                    boolean show_result = true
                                                     String v = "yes"
                                                     if (calc_result.noBadCourse) {
                                                         v = "no"
+                                                        if (params.hideDisabledPoints) {
+                                                            show_result = false
+                                                        }
                                                     }
-                                                    if (calc_result.badCourseSeconds) {
-                                                        xml.badcourse(duration:calc_result.badCourseSeconds, v)
-                                                    } else {
-                                                        xml.badcourse(v)
+                                                    if (show_result) {
+                                                        if (calc_result.badCourseSeconds) {
+                                                            xml.badcourse(duration:calc_result.badCourseSeconds, v)
+                                                        } else {
+                                                            xml.badcourse(v)
+                                                        }
                                                     }
                                                 }
                                             } else if (calc_result.badTurn) {
@@ -3836,30 +3861,42 @@ class GpxService
                                                 }
                                             } else if (calc_result.gateMissed) {
                                                 if (!calc_result.judgeDisabled && !calc_result.hide) {
+                                                    boolean show_result = true
                                                     String v = "yes"
                                                     if (calc_result.noGateMissed) {
                                                         v = "no"
+                                                        if (params.hideDisabledPoints) {
+                                                            show_result = false
+                                                        }
                                                     }
-                                                    if (params.showCoord) {
-                                                        if (params.showCoord == calc_result.titleCode) {
+                                                    if (show_result) {
+                                                        if (params.showCoord) {
+                                                            if (params.showCoord == calc_result.titleCode) {
+                                                                xml.badgate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway), v)
+                                                            }
+                                                        } else {
                                                             xml.badgate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway), v)
                                                         }
-                                                    } else {
-                                                        xml.badgate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway), v)
                                                     }
                                                 }
                                             } else if (calc_result.gateNotFound) {
                                                 if (!calc_result.judgeDisabled && !calc_result.hide) {
+                                                    boolean show_result = true
                                                     String v = "yes"
                                                     if (calc_result.noGateMissed) {
                                                         v = "no"
+                                                        if (params.hideDisabledPoints) {
+                                                            show_result = false
+                                                        }
                                                     }
-                                                    if (params.showCoord) {
-                                                        if (params.showCoord == calc_result.titleCode) {
+                                                    if (show_result) {
+                                                        if (params.showCoord) {
+                                                            if (params.showCoord == calc_result.titleCode) {
+                                                                xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
+                                                            }
+                                                        } else {
                                                             xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
                                                         }
-                                                    } else {
-                                                        xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
                                                     }
                                                 }
                                             } else {

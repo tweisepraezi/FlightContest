@@ -103,7 +103,7 @@
                             </div>
                             <br/>
                             <div>
-                                <g:checkBox name="autosecret" value="${autosecret}" checked= "${contestInstance.precisionFlying}" tabIndex="${ti[0]++}"/>
+                                <g:checkBox name="autosecret" value="${autosecret}" checked= "${contestInstance.precisionFlying && !contestInstance.anrFlying}" tabIndex="${ti[0]++}"/>
                                 <label>${message(code:'fc.route.fileimport.autosecret')}</label>
                                 <input type="text" id="secretcoursechange" name="secretcoursechange" value="1.5" maxlength="5" size="2" tabIndex="${ti[0]++}"/>
 								<label>${message(code:'fc.grad')}</label>

@@ -1,6 +1,14 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.0.1
+----------------
+- ANR-Wettbewerbs-Karte: Verwendete Korridor-Breite in NM wird jetzt unten rechts gedruckt.
+- OSM-Wettbewerbs-Karte: Wendepunkt-Kreise werden jetzt mit dem Durchmesser der Tor-Breite gedruckt (vorher 1 NM).
+- Offline-Viewer: Entfernungsmessung hinzugefügt. Start erfolgt mit Shift-Klick auf einem Tor.
+    Mit einem folgendem Shift-Klick kann die gemessene Entfernung mit einer Linie in die Darstellung gezeichnet werden.
+- Bug "Punkteberechnung im landschaftlichen Streckenabschnitt fehlerhaft" behoben
+
 Änderungen 4.0.0
 ----------------
 - Planung und Auswertung von ANR-Wettbewerben hinzugefügt

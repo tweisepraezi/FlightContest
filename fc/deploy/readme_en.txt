@@ -1,6 +1,14 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.0.1
+-------------
+- ANR competition map: The corridor width in NM is now printed in the bottom right corner.
+- OSM Contest Map: Turnpoint circles are now printed with the diameter of the gate width (previously 1 NM).
+- Offline viewer: Distance measurement added. Start with shift-click on a gate.
+    With a subsequent shift-click, the measured distance can be drawn into the display with a line.
+- Bug "Incorrect points calculation in scenic route legs" fixed
+
 Changes 4.0.0
 -------------
 - Planning and evaluation of ANR competitions added

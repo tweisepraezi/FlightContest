@@ -96,6 +96,7 @@ class OsmPrintMapService
     final static int BOTTOM_TEXT_FONT_SIZE = 8
     final static int BOTTOM_TEXT_YPOS = 2 // mm
     final static int BOTTOM_TEXT_YPOS2 = 5 // mm
+    final static int BOTTOM_TEXT_YPOS3 = 8 // mm
     
     final static int SCALEBAR_YPOS_TOP = 6
     final static String SCALEBAR_TITLE = "5 NM"
@@ -478,6 +479,16 @@ class OsmPrintMapService
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SCALEBAR_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${SCALEBAR_TITLE}'</TextSymbolizer>",
                 "WellKnownText": "POINT(${text_xpos_right} ${scalbar_text_ypos})"
             },"""
+            int ypos_corridor_width = BOTTOM_TEXT_YPOS3
+            if (!contestMapParams.contestMapContourLines) {
+                ypos_corridor_width = BOTTOM_TEXT_YPOS2
+            }
+            if (contestMapParams.contestMapCorridorWidth) {
+                user_text += """{
+                    "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.corridorwidth',true)} ${FcMath.DistanceStr(contestMapParams.contestMapCorridorWidth)}${getMsg('fc.mile',true)}'</TextSymbolizer>",
+                    "WellKnownText": "POINT(${text_xpos_right} ${ypos_corridor_width})"
+                },"""
+            }
             if (contestMapParams.contestMapContourLines) {
                 user_text += """{
                     "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.contestmapcontourlines',true)} ${contestMapParams.contestMapContourLines}${getMsg('fc.contestmap.contestmapcontourlines.unit',true)}'</TextSymbolizer>",
@@ -919,6 +930,8 @@ class OsmPrintMapService
             printjobid_writer << false // contestMapParams.printColorChanges
             printjobid_writer << "\n"
             printjobid_writer << map_projection
+            printjobid_writer << "\n"
+            printjobid_writer << FcMath.EnrouteExportDistanceStr(contestMapParams.contestMapCorridorWidth)
             printjobid_writer.close()
             printdone ""
             
@@ -950,6 +963,7 @@ class OsmPrintMapService
                  (Defs.OSMPRINTMAP_PRINTLANDSCAPE):contestMapParams.contestMapPrintLandscape,
                  (Defs.OSMPRINTMAP_PRINTSIZE):contestMapParams.contestMapPrintSize,
                  (Defs.OSMPRINTMAP_PRINTPROJECTION):map_projection,
+                 (Defs.OSMPRINTMAP_PRINTCORRIDORWIDTH):FcMath.EnrouteExportDistanceStr(contestMapParams.contestMapCorridorWidth),
                  (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):false // contestMapParams.printColorChanges
                 ]
             )
@@ -978,7 +992,7 @@ class OsmPrintMapService
     }
 
     //--------------------------------------------------------------------------
-    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String fileIdFileName, String pngFileName, boolean printLandscape, String printSize, String printProjection, boolean printColorChanges)
+    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String fileIdFileName, String pngFileName, boolean printLandscape, String printSize, String printProjection, String corridorWidth, boolean printColorChanges)
     {
         printstart "BackgroundJob ${actionName} ${jobId}"
         
@@ -1103,6 +1117,9 @@ class OsmPrintMapService
                             info_file_writer << "Width:       ${img_width}px\n"
                             info_file_writer << "Landscape:   ${printLandscape}\n"
                             info_file_writer << "Size:        ${printSize}\n"
+                            if (corridorWidth != '0.0') {
+                                info_file_writer << "Corridor:    ${corridorWidth}NM\n"
+                            }
                             info_file_writer.close()
                         } catch (Exception e) {
                             println e.getMessage()

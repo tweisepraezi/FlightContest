@@ -56,6 +56,9 @@
     <body>
         <h2>${routeInstance.printName()}</h2>
         <g:form>
+            <g:if test="${routeInstance.corridorWidth}">
+                <p>${message(code:'fc.corridorwidth')}: ${FcMath.DistanceStr(routeInstance.corridorWidth)}${message(code:'fc.mile')}</p>
+            </g:if>
             <table class="routetpcoords">
                 <thead>
                     <tr class="title">

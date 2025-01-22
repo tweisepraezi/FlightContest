@@ -291,7 +291,7 @@
                         <tr class="empty">
                             <td colnum="3"> </td>
                         </tr>
-                        <g:if test="${end_curved}">
+                        <g:if test="${end_curved && testInstance.task.flighttest.flightPlanShowTrueTrack}">
                             <tr class="endcurved">
                                 <td class="title">${message(code:'fc.endcurved')}</td>
                                 <td class="separator"></td>

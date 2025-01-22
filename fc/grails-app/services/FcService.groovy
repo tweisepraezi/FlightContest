@@ -5887,26 +5887,29 @@ class FcService
         for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
             // reset results
             coordresult_instance.ResetResults(true) // true - with procedure turn
-            
-            // calculate results
-            coordresult_instance.resultCpNotFound = true
-            if (coordresult_instance.planProcedureTurn) {
-                coordresult_instance.resultProcedureTurnEntered = true
-                coordresult_instance.resultProcedureTurnNotFlown = true
-            }
-            if (is_corridor && last_coordresult_instance && coordresult_instance.type.IsCorridorResultCoord()) {
-                coordresult_instance.resultOutsideCorridorMeasurement = ""
-                coordresult_instance.resultOutsideCorridorSeconds = FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, coordresult_instance.planCpTime)
-                if (coordresult_instance.resultOutsideCorridorSeconds > testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
-                    coordresult_instance.resultOutsideCorridorSeconds -= testInstance.GetFlightTestOutsideCorridorCorrectSecond()
+
+            if (!coordresult_instance.ignoreGate) {
+                
+                // calculate results
+                coordresult_instance.resultCpNotFound = true
+                if (coordresult_instance.planProcedureTurn) {
+                    coordresult_instance.resultProcedureTurnEntered = true
+                    coordresult_instance.resultProcedureTurnNotFlown = true
                 }
+                if (is_corridor && last_coordresult_instance && coordresult_instance.type.IsCorridorResultCoord()) {
+                    coordresult_instance.resultOutsideCorridorSeconds = FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, coordresult_instance.planCpTime)
+                    coordresult_instance.resultOutsideCorridorMeasurement = coordresult_instance.resultOutsideCorridorSeconds.toString()
+                    if (coordresult_instance.resultOutsideCorridorSeconds > testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
+                        coordresult_instance.resultOutsideCorridorSeconds -= testInstance.GetFlightTestOutsideCorridorCorrectSecond()
+                    }
+                }
+                calculate_coordresult(coordresult_instance, true, false)
+                
+                last_coordresult_instance = coordresult_instance
             }
-            calculate_coordresult(coordresult_instance, true, false)
             
             // save results
             coordresult_instance.save()
-            
-            last_coordresult_instance = coordresult_instance
         }
         
         testInstance.flightTestModified = true
@@ -10739,20 +10742,22 @@ class FcService
 			// recalculate CoordResult
             CoordResult last_coordresult_instance = null
 			CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
-				calculate_coordresult(coordresult_instance, false, true)
-				if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
-					testInstance.flightTestTakeoffMissed = false
-				}
-				if (testInstance.IsFlightTestCheckLanding()) {
-					testInstance.flightTestLandingTooLate = false
-				}
-                int last_badcoursenum = coordresult_instance.resultBadCourseNum
-                coordresult_instance.resultBadCourseNum = get_calcresult_badcoursenum(testInstance, last_coordresult_instance, coordresult_instance) 
-				coordresult_instance.save()
-                if (last_badcoursenum && !coordresult_instance.resultBadCourseNum) {
-                    set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
+                if (!coordresult_instance.ignoreGate) {
+                    calculate_coordresult(coordresult_instance, false, true)
+                    if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
+                        testInstance.flightTestTakeoffMissed = false
+                    }
+                    if (testInstance.IsFlightTestCheckLanding()) {
+                        testInstance.flightTestLandingTooLate = false
+                    }
+                    int last_badcoursenum = coordresult_instance.resultBadCourseNum
+                    coordresult_instance.resultBadCourseNum = get_calcresult_badcoursenum(testInstance, last_coordresult_instance, coordresult_instance) 
+                    coordresult_instance.save()
+                    if (last_badcoursenum && !coordresult_instance.resultBadCourseNum) {
+                        set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
+                    }
+                    last_coordresult_instance = coordresult_instance 
                 }
-                last_coordresult_instance = coordresult_instance 
 			}
             
             // recalculate TurnpointData
@@ -10847,7 +10852,7 @@ class FcService
 				} else {
                     set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
 				}
-    		} else {
+    		} else if (!coordresult_instance.ignoreGate) {
 				switch(coordresult_instance.type) {
 					case CoordType.TO:
 						if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {

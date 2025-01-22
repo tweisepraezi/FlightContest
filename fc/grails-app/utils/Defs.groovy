@@ -73,6 +73,7 @@ class Defs
     static final String OSMPRINTMAP_PRINTSIZE                          = "PrintSize"
     static final String OSMPRINTMAP_PRINTPROJECTION                    = "PrintProjection"
     static final String OSMPRINTMAP_PRINTCOLORCHANGES                  = "PrintColorChanges"
+    static final String OSMPRINTMAP_PRINTCORRIDORWIDTH                 = "PrintCorridorWidth"
     static final String OSMPRINTMAP_ERR_EXTENSION                      = ".err"
     
     static final String TurnpointID_TimeCheck                          = "timecheck_"

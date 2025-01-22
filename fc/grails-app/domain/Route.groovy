@@ -642,16 +642,25 @@ class Route
         return upload_links
     }
 
-    boolean IsIntermediateRunway()
+    Map IsIntermediateLanding()
     {
+        Map ret = [isLanding:false, isRunway:false]
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,,[sort:"id"])) {
             switch (coordroute_instance.type) {
+                case CoordType.iFP:
+                    ret.isLanding = true
+                    break
                 case CoordType.iLDG:
                 case CoordType.iTO:
-                    return true
+                    ret.isRunway = true
+                    ret.isLanding = true
+                    return ret
+                case CoordType.iSP:
+                    ret.isLanding = true
+                    return ret
             }
         }
-        return false
+        return ret
     }
     
     boolean IsIntermediateSP()

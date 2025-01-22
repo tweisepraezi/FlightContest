@@ -80,7 +80,7 @@
                         <fieldset id="intermediateRunway" hidden >
                             <legend>${message(code:'fc.runway.intermediate')}</legend>
                             <p>
-                                <label>${message(code:'fc.runway.direction.itoildg')} [${message(code:'fc.grad')}]:</label>
+                                <label>${message(code:'fc.runway.direction.ildg')} [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${fieldValue(bean:flightTestInstance,field:'iTOiLDGDirection')}" tabIndex="${ti[0]++}"/>
                             </p>
@@ -91,7 +91,7 @@
                                 <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestInstance,field:'iLDGDurationFormula')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.runway.duration.ildg2isp')}*:</label>
+                                <label>${message(code:'fc.runway.duration.2isp')}*:</label>
                                 <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
                                 <input type="text" id="iTODurationFormula" name="iTODurationFormula" value="${fieldValue(bean:flightTestInstance,field:'iTODurationFormula')}" tabIndex="${ti[0]++}"/>

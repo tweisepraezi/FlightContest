@@ -81,17 +81,19 @@ class ContestMapTagLib
             checkBox("contestMapAllowOverwrite", message(code:'fc.contestmap.savemap.allowoverwrite'), false, attrs)
             outln"""</p>"""
             outln"""<p>"""
-            checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), false, attrs)
+            checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), true, attrs)
             if (attrs.r.defaultOnlineMap) {
                 outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultOnlineMap])})"""
             }
             outln"""</p>"""
-            outln"""<p>"""
-            checkBox("contestMapSetDefaultPrintMap", message(code:'fc.contestmap.savemap.defaultprintmap'), false, attrs)
-            if (attrs.r.defaultPrintMap) {
-                outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultPrintMap])})"""
+            if (attrs.PrintSize == Defs.CONTESTMAPPRINTSIZE_ANR) {
+                outln"""<p>"""
+                checkBox("contestMapSetDefaultPrintMap", message(code:'fc.contestmap.savemap.defaultprintmap'), true, attrs)
+                if (attrs.r.defaultPrintMap) {
+                    outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultPrintMap])})"""
+                }
+                outln"""</p>"""
             }
-            outln"""</p>"""
 		}
 	}
 	

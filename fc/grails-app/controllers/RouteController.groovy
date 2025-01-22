@@ -958,6 +958,7 @@ class RouteController {
             boolean fetch_button = false // abrufen
             boolean print_button = false // drucken
             boolean discard_button = false // verwerfen
+            String print_size = ""
             String webroot_dir = servletContext.getRealPath("/")
             String printjobid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + route.instance.id + ".txt"
             String printfileid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + route.instance.id + ".txt"
@@ -996,7 +997,7 @@ class RouteController {
                 LineNumberReader printfileid_reader = new File(printfileid_filename).newReader()
                 printfileid_reader.readLine()
                 printfileid_reader.readLine()
-                printfileid_reader.readLine()
+                print_size = printfileid_reader.readLine()
                 route.instance.contestMapPrintName = printfileid_reader.readLine()
                 printfileid_reader.close()
             } else if (new File(printfileid_errorfilename).exists()) { // Job ends not successful
@@ -1007,7 +1008,7 @@ class RouteController {
             // quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
             
             // set return action
-            return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map]
+            return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map, PrintSize:print_size]
         } else {
             flash.message = task.message
             redirect(action:'show',id:params.id)
@@ -1049,6 +1050,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1176,6 +1178,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1303,6 +1306,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1430,6 +1434,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1557,6 +1562,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1684,6 +1690,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1812,6 +1819,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1939,6 +1947,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2067,6 +2076,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2194,6 +2204,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2322,6 +2333,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2449,6 +2461,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2590,6 +2603,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2730,6 +2744,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2870,6 +2885,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3010,6 +3026,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3137,6 +3154,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3265,6 +3283,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3592,6 +3611,7 @@ class RouteController {
                 String print_size = printjobid_file_reader.readLine()
                 boolean print_colorchanges = printjobid_file_reader.readLine() == 'true'
                 String map_projection = printjobid_file_reader.readLine()
+                String map_corridorwidth = printjobid_file_reader.readLine()
                 printjobid_file_reader.close()
                 OsmPrintMapJob.schedule(
                     1000*Defs.OSMPRINTMAP_RUNSECONDS,
@@ -3605,6 +3625,7 @@ class RouteController {
                      (Defs.OSMPRINTMAP_PRINTLANDSCAPE):print_landscape,
                      (Defs.OSMPRINTMAP_PRINTSIZE):print_size,
                      (Defs.OSMPRINTMAP_PRINTPROJECTION):map_projection,
+                     (Defs.OSMPRINTMAP_PRINTCORRIDORWIDTH):map_corridorwidth,
                      (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):print_colorchanges
                     ]
                 )

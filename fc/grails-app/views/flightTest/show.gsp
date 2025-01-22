@@ -39,6 +39,7 @@
                         <g:editFlightTest flighttest="${flightTestInstance}" ti="${ti}"/>
                         <fieldset>
                             <p>
+                                <g:set var="intermediate_landing" value="${flightTestInstance.route.IsIntermediateLanding()}"/>
                                 <label>${message(code:'fc.flighttestwind.list')}:</label>
                                 <br/>
                                 <table>
@@ -49,10 +50,12 @@
                                             <th>${message(code:'fc.runway.duration.to2sp')}</th>
                                             <th>${message(code:'fc.runway.direction.ldg')}</th>
                                             <th>${message(code:'fc.runway.duration.fp2ldg')}</th>
-                                            <g:if test="${flightTestInstance.route.IsIntermediateRunway()}">
-                                                <th>${message(code:'fc.runway.direction.itoildg')}</th>
+                                            <g:if test="${intermediate_landing.isRunway}">
+                                                <th>${message(code:'fc.runway.direction.ildg')}</th>
                                                 <th>${message(code:'fc.runway.duration.ifp2ildg')}</th>
-                                                <th>${message(code:'fc.runway.duration.ildg2isp')}</th>
+                                            </g:if>
+                                            <g:if test="${intermediate_landing.isLanding}">
+                                                <th>${message(code:'fc.runway.duration.2isp')}</th>
                                             </g:if>
                                         </tr>
                                     </thead>
@@ -64,9 +67,11 @@
                                                 <td>${fieldValue(bean:flighttestwind_instance,field:'TODurationFormula')}</td>
                                                 <td>${fieldValue(bean:flighttestwind_instance,field:'LDGDirection')}${message(code:'fc.grad')}</td>
                                                 <td>${fieldValue(bean:flighttestwind_instance,field:'LDGDurationFormula')}</td>
-                                                <g:if test="${flightTestInstance.route.IsIntermediateRunway()}">
+                                                <g:if test="${intermediate_landing.isRunway}">
                                                     <td>${fieldValue(bean:flighttestwind_instance,field:'iTOiLDGDirection')}${message(code:'fc.grad')}</td>
                                                     <td>${fieldValue(bean:flighttestwind_instance,field:'iLDGDurationFormula')}</td>
+                                                </g:if>
+                                                <g:if test="${intermediate_landing.isLanding}">
                                                     <td>${fieldValue(bean:flighttestwind_instance,field:'iTODurationFormula')}</td>
                                                 </g:if>
                                             </tr>
@@ -89,7 +94,9 @@
                             <g:actionSubmit action="printobservationresults" value="${message(code:'fc.flighttestwind.printobservationresults')}" tabIndex="${ti[0]++}" />
                         </g:if>
                         <g:if test="${flightTestInstance.CanANRPlanPrinted()}">
-                            <g:actionSubmit action="printneutralanrplan" value="${message(code:'fc.flighttestwind.printanrmap')}" tabIndex="${ti[0]++}" />
+                            <g:if test="${flightTestInstance.route.defaultPrintMap}">
+                                <g:actionSubmit action="printneutralanrplan" value="${message(code:'fc.flighttestwind.printanrmap')}" tabIndex="${ti[0]++}" />
+                            </g:if>
                             <g:actionSubmit action="printresultanrplans" value="${message(code:'fc.flighttestwind.printanrmapwithtimes')}" tabIndex="${ti[0]++}" />
                         </g:if>
                         <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">

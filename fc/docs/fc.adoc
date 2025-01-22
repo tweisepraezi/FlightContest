@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.0.0
-:revdate:   12.01.2025
+:revnumber: 4.0.1
+:revdate:   22.01.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -1320,8 +1320,7 @@ Check-Punkte zwischen SP und FP vom Druck auf die Karte abwählen (-> Zu drucken
 Ausdruck im Hochformat bei Bedarf wählen +
 "Erzeugen" ausführen +
 +
-Die erzeugte Karte ist mit der aktivierten Einstellung "Diese Karte als Default-Online-Karte für diese Strecke einstellen"
-und "Diese Karte als Default-Druck-Karte für diese Strecke einstellen" mit "Karte speichern und zur Liste der Karten wechseln" zu speichern. +
+Die erzeugte Karte ist mit "Karte speichern und zur Liste der Karten wechseln" zu speichern. +
 +
 Die Karte kann nun als PDF zum Druck gespeichert werden (Karten -> Strecken-Titel -> PDF-Wettbewerbs-Karte -> ...)
 

@@ -72,6 +72,9 @@ class FlightResultsTagLib
                         }
                         outln"""        <td/>"""
                         outln"""        <td/>"""
+                        if (show_outside) {
+                            outln"""    <td/>"""
+                        }
                         outln"""    </tr>"""
                         outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                         outln"""        <td/>"""
@@ -95,6 +98,9 @@ class FlightResultsTagLib
                         }
                         outln"""        <td/>"""
                         outln"""        <td/>"""
+                        if (show_outside) {
+                            outln"""    <td/>"""
+                        }
                         outln"""    </tr>"""
                     }
                     leg_no++
@@ -525,6 +531,9 @@ class FlightResultsTagLib
             }
             if (calcresultInstance.gateNotFound) {
                 gatemissed_msg += " (${message(code:'fc.task.disabledcheckpoints.gatenotfound')})"
+            }
+            if (calcresultInstance.coordTitle.type.IsRunwayCoord() && (calcresultInstance.gateFlyBy || calcresultInstance.gateNotFound)) {
+                gatemissed_msg += """ <a href="${createLink(controller:'flightTestWind',action:'edit',params:[id:calcresultInstance.loggerresult.test.flighttestwind.id])}">${message(code:'fc.map.here')}</a>"""
             }
             outln"""    <td class="${show_class}">${gatemissed_msg}</td>"""
         } else {

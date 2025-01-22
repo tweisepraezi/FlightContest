@@ -71,27 +71,30 @@
 								</g:else>
                             </p>
                         </fieldset>
-                        <g:if test="${flightTestWindInstance.flighttest.route.IsIntermediateRunway()}">
+                        <g:set var="intermediate_landing" value="${flightTestWindInstance.flighttest.route.IsIntermediateLanding()}"/>
+                        <g:if test="${intermediate_landing.isLanding}">
                             <fieldset>
                                 <legend>${message(code:'fc.runway.intermediate')}</legend>
-	                            <p>
-	                                <label>${message(code:'fc.runway.direction.itoildg')} [${message(code:'fc.grad')}]:</label>
-	                                <br/>
-	                                <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${flightTestWindInstance.iTOiLDGDirection}" tabIndex="${ti[0]++}"/>
-	                            </p>
+                                <g:if test="${intermediate_landing.isRunway}">
+                                    <p>
+                                        <label>${message(code:'fc.runway.direction.ildg')} [${message(code:'fc.grad')}]:</label>
+                                        <br/>
+                                        <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${flightTestWindInstance.iTOiLDGDirection}" tabIndex="${ti[0]++}"/>
+                                    </p>
+                                    <p>
+                                        <label>${message(code:'fc.runway.duration.ifp2ildg')}*:</label>
+                                        <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                        <br/>
+                                        <g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">
+                                            <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'iLDGDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'iLDGDurationFormula')}" tabIndex="${ti[0]++}"/>
+                                        </g:else>
+                                    </p>
+                                </g:if>
                                 <p>
-                                    <label>${message(code:'fc.runway.duration.ifp2ildg')}*:</label>
-                                    <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                    <br/>
-                                    <g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">
-                                        <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'iLDGDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
-                                    </g:if>
-                                    <g:else>
-                                        <input type="text" id="iLDGDurationFormula" name="iLDGDurationFormula" value="${fieldValue(bean:flightTestWindInstance,field:'iLDGDurationFormula')}" tabIndex="${ti[0]++}"/>
-                                    </g:else>
-                                </p>
-                                <p>
-                                    <label>${message(code:'fc.runway.duration.ildg2isp')}*:</label>
+                                    <label>${message(code:'fc.runway.duration.2isp')}*:</label>
                                     <a href="/fc/docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                     <br/>
                                     <g:if test="${flightTestWindInstance.flighttest.task.lockPlanning}">

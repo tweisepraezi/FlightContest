@@ -2316,9 +2316,9 @@ class TestController
                 if (params.addShowTimeValue && params.addShowTimeValue.isInteger()) {
                     show_utc = FcTime.UTCAddSeconds(show_utc, 60*params.addShowTimeValue.toInteger())
                 }
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc, hideDisabledPoints:false])
             } else {
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:false])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:false, hideDisabledPoints:false])
             }
             if (converter.ok && converter.track) {
                 gpxService.printdone ""

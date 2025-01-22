@@ -131,10 +131,8 @@ class FlightTest
         if (!route.corridorWidth) {
             return false
         }
-        if (route.defaultPrintMap) {
-            if (GetPrintableANRPlanTests()) {
-                return true
-            }
+        if (GetPrintableANRPlanTests()) {
+            return true
         }
         return false
     }
