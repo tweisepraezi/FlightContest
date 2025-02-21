@@ -779,119 +779,119 @@ class FcService
 		println "setContestRulePoints '${contestRule.ruleValues.ruleTitle}'"
 		
 		// General
-        toInstance.ruleTitle = contestRule.ruleValues.ruleTitle
-		toInstance.precisionFlying = contestRule.ruleValues.precisionFlying
-        toInstance.increaseFactor = contestRule.ruleValues.increaseFactor
-        toInstance.printLandingCalculatorValues = contestRule.ruleValues.printLandingCalculatorValues
-        toInstance.printPointsGeneral = contestRule.ruleValues.printPointsGeneral
-		toInstance.printPointsPlanningTest = contestRule.ruleValues.printPointsPlanningTest
-		toInstance.printPointsFlightTest = contestRule.ruleValues.printPointsFlightTest
-        toInstance.printPointsObservationTest = contestRule.ruleValues.printPointsObservationTest
-		toInstance.printPointsLandingTest1 = contestRule.ruleValues.printPointsLandingTest1
-		toInstance.printPointsLandingTest2 = contestRule.ruleValues.printPointsLandingTest2
-		toInstance.printPointsLandingTest3 = contestRule.ruleValues.printPointsLandingTest3
-		toInstance.printPointsLandingTest4 = contestRule.ruleValues.printPointsLandingTest4
-        toInstance.printPointsLandingField = contestRule.ruleValues.printPointsLandingField
-        toInstance.landingFieldImageName = contestRule.ruleValues.landingFieldImageName
-        toInstance.printPointsTurnpointSign = contestRule.ruleValues.printPointsTurnpointSign
-        toInstance.printPointsEnrouteCanvas = contestRule.ruleValues.printPointsEnrouteCanvas
+        toInstance.ruleTitle                                            = contestRule.ruleValues.ruleTitle
+		toInstance.precisionFlying                                      = contestRule.ruleValues.precisionFlying
+        toInstance.increaseFactor                                       = contestRule.ruleValues.increaseFactor
+        toInstance.printLandingCalculatorValues                         = contestRule.ruleValues.printLandingCalculatorValues
+        toInstance.printPointsGeneral                                   = contestRule.ruleValues.printPointsGeneral
+		toInstance.printPointsPlanningTest                              = contestRule.ruleValues.printPointsPlanningTest
+		toInstance.printPointsFlightTest                                = contestRule.ruleValues.printPointsFlightTest
+        toInstance.printPointsObservationTest                           = contestRule.ruleValues.printPointsObservationTest
+		toInstance.printPointsLandingTest1                              = contestRule.ruleValues.printPointsLandingTest1
+		toInstance.printPointsLandingTest2                              = contestRule.ruleValues.printPointsLandingTest2
+		toInstance.printPointsLandingTest3                              = contestRule.ruleValues.printPointsLandingTest3
+		toInstance.printPointsLandingTest4                              = contestRule.ruleValues.printPointsLandingTest4
+        toInstance.printPointsLandingField                              = contestRule.ruleValues.printPointsLandingField
+        toInstance.landingFieldImageName                                = contestRule.ruleValues.landingFieldImageName
+        toInstance.printPointsTurnpointSign                             = contestRule.ruleValues.printPointsTurnpointSign
+        toInstance.printPointsEnrouteCanvas                             = contestRule.ruleValues.printPointsEnrouteCanvas
         
 		// PlanningTest
-		toInstance.planningTestDirectionCorrectGrad = contestRule.ruleValues.planningTestDirectionCorrectGrad
-		toInstance.planningTestDirectionPointsPerGrad = contestRule.ruleValues.planningTestDirectionPointsPerGrad
-		toInstance.planningTestTimeCorrectSecond = contestRule.ruleValues.planningTestTimeCorrectSecond
-		toInstance.planningTestTimePointsPerSecond = contestRule.ruleValues.planningTestTimePointsPerSecond
-		toInstance.planningTestMaxPoints = contestRule.ruleValues.planningTestMaxPoints
-		toInstance.planningTestPlanTooLatePoints = contestRule.ruleValues.planningTestPlanTooLatePoints
-		toInstance.planningTestExitRoomTooLatePoints = contestRule.ruleValues.planningTestExitRoomTooLatePoints
-        toInstance.planningTestForbiddenCalculatorsPoints = contestRule.ruleValues.planningTestForbiddenCalculatorsPoints
+		toInstance.planningTestDirectionCorrectGrad                     = contestRule.ruleValues.planningTestDirectionCorrectGrad
+		toInstance.planningTestDirectionPointsPerGrad                   = contestRule.ruleValues.planningTestDirectionPointsPerGrad
+		toInstance.planningTestTimeCorrectSecond                        = contestRule.ruleValues.planningTestTimeCorrectSecond
+		toInstance.planningTestTimePointsPerSecond                      = contestRule.ruleValues.planningTestTimePointsPerSecond
+		toInstance.planningTestMaxPoints                                = contestRule.ruleValues.planningTestMaxPoints
+		toInstance.planningTestPlanTooLatePoints                        = contestRule.ruleValues.planningTestPlanTooLatePoints
+		toInstance.planningTestExitRoomTooLatePoints                    = contestRule.ruleValues.planningTestExitRoomTooLatePoints
+        toInstance.planningTestForbiddenCalculatorsPoints               = contestRule.ruleValues.planningTestForbiddenCalculatorsPoints
         
 		// FlightTest
-		toInstance.flightTestTakeoffMissedPoints = contestRule.ruleValues.flightTestTakeoffMissedPoints
-		toInstance.flightTestTakeoffCorrectSecond = contestRule.ruleValues.flightTestTakeoffCorrectSecond
-		toInstance.flightTestTakeoffCheckSeconds = contestRule.ruleValues.flightTestTakeoffCheckSeconds
-		toInstance.flightTestTakeoffPointsPerSecond = contestRule.ruleValues.flightTestTakeoffPointsPerSecond
-		toInstance.flightTestCptimeCorrectSecond = contestRule.ruleValues.flightTestCptimeCorrectSecond
-		toInstance.flightTestCptimePointsPerSecond = contestRule.ruleValues.flightTestCptimePointsPerSecond
-		toInstance.flightTestCptimeMaxPoints = contestRule.ruleValues.flightTestCptimeMaxPoints
-		toInstance.flightTestCpNotFoundPoints = contestRule.ruleValues.flightTestCpNotFoundPoints
-		toInstance.flightTestProcedureTurnNotFlownPoints = contestRule.ruleValues.flightTestProcedureTurnNotFlownPoints
-		toInstance.flightTestMinAltitudeMissedPoints = contestRule.ruleValues.flightTestMinAltitudeMissedPoints
-		toInstance.flightTestBadCourseCorrectSecond = contestRule.ruleValues.flightTestBadCourseCorrectSecond
-		toInstance.flightTestBadCoursePoints = contestRule.ruleValues.flightTestBadCoursePoints
-		toInstance.flightTestBadCourseMaxPoints = contestRule.ruleValues.flightTestBadCourseMaxPoints
-		toInstance.flightTestBadCourseStartLandingPoints = contestRule.ruleValues.flightTestBadCourseStartLandingPoints
-		toInstance.flightTestBadCourseStartLandingSeparatePoints = contestRule.ruleValues.flightTestBadCourseStartLandingSeparatePoints
-		toInstance.flightTestLandingToLatePoints = contestRule.ruleValues.flightTestLandingToLatePoints
-		toInstance.flightTestGivenToLatePoints = contestRule.ruleValues.flightTestGivenToLatePoints
-		toInstance.flightTestSafetyAndRulesInfringementPoints = contestRule.ruleValues.flightTestSafetyAndRulesInfringementPoints
-		toInstance.flightTestInstructionsNotFollowedPoints = contestRule.ruleValues.flightTestInstructionsNotFollowedPoints
-		toInstance.flightTestFalseEnvelopeOpenedPoints = contestRule.ruleValues.flightTestFalseEnvelopeOpenedPoints
-		toInstance.flightTestSafetyEnvelopeOpenedPoints = contestRule.ruleValues.flightTestSafetyEnvelopeOpenedPoints
-		toInstance.flightTestFrequencyNotMonitoredPoints = contestRule.ruleValues.flightTestFrequencyNotMonitoredPoints
-        toInstance.flightTestForbiddenEquipmentPoints = contestRule.ruleValues.flightTestForbiddenEquipmentPoints
-        toInstance.flightTestExitRoomTooLatePoints = contestRule.ruleValues.flightTestExitRoomTooLatePoints
-        toInstance.flightTestOutsideCorridorCorrectSecond = contestRule.ruleValues.flightTestOutsideCorridorCorrectSecond
-        toInstance.flightTestOutsideCorridorPointsPerSecond = contestRule.ruleValues.flightTestOutsideCorridorPointsPerSecond
+		toInstance.flightTestTakeoffMissedPoints                        = contestRule.ruleValues.flightTestTakeoffMissedPoints
+		toInstance.flightTestTakeoffCorrectSecond                       = contestRule.ruleValues.flightTestTakeoffCorrectSecond
+		toInstance.flightTestTakeoffCheckSeconds                        = contestRule.ruleValues.flightTestTakeoffCheckSeconds
+		toInstance.flightTestTakeoffPointsPerSecond                     = contestRule.ruleValues.flightTestTakeoffPointsPerSecond
+		toInstance.flightTestCptimeCorrectSecond                        = contestRule.ruleValues.flightTestCptimeCorrectSecond
+		toInstance.flightTestCptimePointsPerSecond                      = contestRule.ruleValues.flightTestCptimePointsPerSecond
+		toInstance.flightTestCptimeMaxPoints                            = contestRule.ruleValues.flightTestCptimeMaxPoints
+		toInstance.flightTestCpNotFoundPoints                           = contestRule.ruleValues.flightTestCpNotFoundPoints
+		toInstance.flightTestProcedureTurnNotFlownPoints                = contestRule.ruleValues.flightTestProcedureTurnNotFlownPoints
+		toInstance.flightTestMinAltitudeMissedPoints                    = contestRule.ruleValues.flightTestMinAltitudeMissedPoints
+		toInstance.flightTestBadCourseCorrectSecond                     = contestRule.ruleValues.flightTestBadCourseCorrectSecond
+		toInstance.flightTestBadCoursePoints                            = contestRule.ruleValues.flightTestBadCoursePoints
+		toInstance.flightTestBadCourseMaxPoints                         = contestRule.ruleValues.flightTestBadCourseMaxPoints
+		toInstance.flightTestBadCourseStartLandingPoints                = contestRule.ruleValues.flightTestBadCourseStartLandingPoints
+		toInstance.flightTestBadCourseStartLandingSeparatePoints        = contestRule.ruleValues.flightTestBadCourseStartLandingSeparatePoints
+		toInstance.flightTestLandingToLatePoints                        = contestRule.ruleValues.flightTestLandingToLatePoints
+		toInstance.flightTestGivenToLatePoints                          = contestRule.ruleValues.flightTestGivenToLatePoints
+		toInstance.flightTestSafetyAndRulesInfringementPoints           = contestRule.ruleValues.flightTestSafetyAndRulesInfringementPoints
+		toInstance.flightTestInstructionsNotFollowedPoints              = contestRule.ruleValues.flightTestInstructionsNotFollowedPoints
+		toInstance.flightTestFalseEnvelopeOpenedPoints                  = contestRule.ruleValues.flightTestFalseEnvelopeOpenedPoints
+		toInstance.flightTestSafetyEnvelopeOpenedPoints                 = contestRule.ruleValues.flightTestSafetyEnvelopeOpenedPoints
+		toInstance.flightTestFrequencyNotMonitoredPoints                = contestRule.ruleValues.flightTestFrequencyNotMonitoredPoints
+        toInstance.flightTestForbiddenEquipmentPoints                   = contestRule.ruleValues.flightTestForbiddenEquipmentPoints
+        toInstance.flightTestExitRoomTooLatePoints                      = contestRule.ruleValues.flightTestExitRoomTooLatePoints
+        toInstance.flightTestOutsideCorridorCorrectSecond               = contestRule.ruleValues.flightTestOutsideCorridorCorrectSecond
+        toInstance.flightTestOutsideCorridorPointsPerSecond             = contestRule.ruleValues.flightTestOutsideCorridorPointsPerSecond
 		
         // ObservationTest
-        toInstance.observationTestEnrouteValueUnit = contestRule.ruleValues.observationTestEnrouteValueUnit
-        toInstance.observationTestEnrouteCorrectValue = contestRule.ruleValues.observationTestEnrouteCorrectValue
-        toInstance.observationTestEnrouteInexactValue = contestRule.ruleValues.observationTestEnrouteInexactValue
-        toInstance.observationTestEnrouteInexactPoints = contestRule.ruleValues.observationTestEnrouteInexactPoints
-        toInstance.observationTestEnrouteNotFoundPoints = contestRule.ruleValues.observationTestEnrouteNotFoundPoints
-        toInstance.observationTestEnrouteFalsePoints = contestRule.ruleValues.observationTestEnrouteFalsePoints
-        toInstance.observationTestTurnpointNotFoundPoints = contestRule.ruleValues.observationTestTurnpointNotFoundPoints
-        toInstance.observationTestTurnpointFalsePoints = contestRule.ruleValues.observationTestTurnpointFalsePoints
+        toInstance.observationTestEnrouteValueUnit                      = contestRule.ruleValues.observationTestEnrouteValueUnit
+        toInstance.observationTestEnrouteCorrectValue                   = contestRule.ruleValues.observationTestEnrouteCorrectValue
+        toInstance.observationTestEnrouteInexactValue                   = contestRule.ruleValues.observationTestEnrouteInexactValue
+        toInstance.observationTestEnrouteInexactPoints                  = contestRule.ruleValues.observationTestEnrouteInexactPoints
+        toInstance.observationTestEnrouteNotFoundPoints                 = contestRule.ruleValues.observationTestEnrouteNotFoundPoints
+        toInstance.observationTestEnrouteFalsePoints                    = contestRule.ruleValues.observationTestEnrouteFalsePoints
+        toInstance.observationTestTurnpointNotFoundPoints               = contestRule.ruleValues.observationTestTurnpointNotFoundPoints
+        toInstance.observationTestTurnpointFalsePoints                  = contestRule.ruleValues.observationTestTurnpointFalsePoints
                 
 		// LandingTest
-		toInstance.landingTest1MaxPoints = contestRule.ruleValues.landingTest1MaxPoints
-		toInstance.landingTest1NoLandingPoints = contestRule.ruleValues.landingTest1NoLandingPoints
-		toInstance.landingTest1OutsideLandingPoints = contestRule.ruleValues.landingTest1OutsideLandingPoints
-		toInstance.landingTest1RollingOutsidePoints = contestRule.ruleValues.landingTest1RollingOutsidePoints
-		toInstance.landingTest1PowerInBoxPoints = contestRule.ruleValues.landingTest1PowerInBoxPoints
-		toInstance.landingTest1GoAroundWithoutTouchingPoints = contestRule.ruleValues.landingTest1GoAroundWithoutTouchingPoints
-		toInstance.landingTest1GoAroundInsteadStopPoints = contestRule.ruleValues.landingTest1GoAroundInsteadStopPoints
-		toInstance.landingTest1AbnormalLandingPoints = contestRule.ruleValues.landingTest1AbnormalLandingPoints
-		toInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints = contestRule.ruleValues.landingTest1NotAllowedAerodynamicAuxiliariesPoints
-		toInstance.landingTest1PenaltyCalculator = contestRule.ruleValues.landingTest1PenaltyCalculator
+		toInstance.landingTest1MaxPoints                                = contestRule.ruleValues.landingTest1.MaxPoints
+		toInstance.landingTest1NoLandingPoints                          = contestRule.ruleValues.landingTest1.NoLandingPoints
+		toInstance.landingTest1OutsideLandingPoints                     = contestRule.ruleValues.landingTest1.OutsideLandingPoints
+		toInstance.landingTest1RollingOutsidePoints                     = contestRule.ruleValues.landingTest1.RollingOutsidePoints
+		toInstance.landingTest1PowerInBoxPoints                         = contestRule.ruleValues.landingTest1.PowerInBoxPoints
+		toInstance.landingTest1GoAroundWithoutTouchingPoints            = contestRule.ruleValues.landingTest1.GoAroundWithoutTouchingPoints
+		toInstance.landingTest1GoAroundInsteadStopPoints                = contestRule.ruleValues.landingTest1.GoAroundInsteadStopPoints
+		toInstance.landingTest1AbnormalLandingPoints                    = contestRule.ruleValues.landingTest1.AbnormalLandingPoints
+		toInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest1.NotAllowedAerodynamicAuxiliariesPoints
+		toInstance.landingTest1PenaltyCalculator                        = contestRule.ruleValues.landingTest1.PenaltyCalculator
 	
-		toInstance.landingTest2MaxPoints = contestRule.ruleValues.landingTest2MaxPoints
-		toInstance.landingTest2NoLandingPoints = contestRule.ruleValues.landingTest2NoLandingPoints
-		toInstance.landingTest2OutsideLandingPoints = contestRule.ruleValues.landingTest2OutsideLandingPoints
-		toInstance.landingTest2RollingOutsidePoints = contestRule.ruleValues.landingTest2RollingOutsidePoints
-		toInstance.landingTest2PowerInBoxPoints = contestRule.ruleValues.landingTest2PowerInBoxPoints
-		toInstance.landingTest2GoAroundWithoutTouchingPoints = contestRule.ruleValues.landingTest2GoAroundWithoutTouchingPoints
-		toInstance.landingTest2GoAroundInsteadStopPoints = contestRule.ruleValues.landingTest2GoAroundInsteadStopPoints
-		toInstance.landingTest2AbnormalLandingPoints = contestRule.ruleValues.landingTest2AbnormalLandingPoints
-		toInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints = contestRule.ruleValues.landingTest2NotAllowedAerodynamicAuxiliariesPoints
-		toInstance.landingTest2PowerInAirPoints = contestRule.ruleValues.landingTest2PowerInAirPoints
-		toInstance.landingTest2PenaltyCalculator = contestRule.ruleValues.landingTest2PenaltyCalculator
+		toInstance.landingTest2MaxPoints                                = contestRule.ruleValues.landingTest2.MaxPoints
+		toInstance.landingTest2NoLandingPoints                          = contestRule.ruleValues.landingTest2.NoLandingPoints
+		toInstance.landingTest2OutsideLandingPoints                     = contestRule.ruleValues.landingTest2.OutsideLandingPoints
+		toInstance.landingTest2RollingOutsidePoints                     = contestRule.ruleValues.landingTest2.RollingOutsidePoints
+		toInstance.landingTest2PowerInBoxPoints                         = contestRule.ruleValues.landingTest2.PowerInBoxPoints
+		toInstance.landingTest2GoAroundWithoutTouchingPoints            = contestRule.ruleValues.landingTest2.GoAroundWithoutTouchingPoints
+		toInstance.landingTest2GoAroundInsteadStopPoints                = contestRule.ruleValues.landingTest2.GoAroundInsteadStopPoints
+		toInstance.landingTest2AbnormalLandingPoints                    = contestRule.ruleValues.landingTest2.AbnormalLandingPoints
+		toInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest2.NotAllowedAerodynamicAuxiliariesPoints
+		toInstance.landingTest2PowerInAirPoints                         = contestRule.ruleValues.landingTest2.PowerInAirPoints
+		toInstance.landingTest2PenaltyCalculator                        = contestRule.ruleValues.landingTest2.PenaltyCalculator
 		
-		toInstance.landingTest3MaxPoints = contestRule.ruleValues.landingTest3MaxPoints
-		toInstance.landingTest3NoLandingPoints = contestRule.ruleValues.landingTest3NoLandingPoints
-		toInstance.landingTest3OutsideLandingPoints = contestRule.ruleValues.landingTest3OutsideLandingPoints
-		toInstance.landingTest3RollingOutsidePoints = contestRule.ruleValues.landingTest3RollingOutsidePoints
-		toInstance.landingTest3PowerInBoxPoints = contestRule.ruleValues.landingTest3PowerInBoxPoints
-		toInstance.landingTest3GoAroundWithoutTouchingPoints = contestRule.ruleValues.landingTest3GoAroundWithoutTouchingPoints
-		toInstance.landingTest3GoAroundInsteadStopPoints = contestRule.ruleValues.landingTest3GoAroundInsteadStopPoints
-		toInstance.landingTest3AbnormalLandingPoints = contestRule.ruleValues.landingTest3AbnormalLandingPoints
-		toInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints = contestRule.ruleValues.landingTest3NotAllowedAerodynamicAuxiliariesPoints
-		toInstance.landingTest3PowerInAirPoints = contestRule.ruleValues.landingTest3PowerInAirPoints
-		toInstance.landingTest3FlapsInAirPoints = contestRule.ruleValues.landingTest3FlapsInAirPoints
-		toInstance.landingTest3PenaltyCalculator = contestRule.ruleValues.landingTest3PenaltyCalculator
+		toInstance.landingTest3MaxPoints                                = contestRule.ruleValues.landingTest3.MaxPoints
+		toInstance.landingTest3NoLandingPoints                          = contestRule.ruleValues.landingTest3.NoLandingPoints
+		toInstance.landingTest3OutsideLandingPoints                     = contestRule.ruleValues.landingTest3.OutsideLandingPoints
+		toInstance.landingTest3RollingOutsidePoints                     = contestRule.ruleValues.landingTest3.RollingOutsidePoints
+		toInstance.landingTest3PowerInBoxPoints                         = contestRule.ruleValues.landingTest3.PowerInBoxPoints
+		toInstance.landingTest3GoAroundWithoutTouchingPoints            = contestRule.ruleValues.landingTest3.GoAroundWithoutTouchingPoints
+		toInstance.landingTest3GoAroundInsteadStopPoints                = contestRule.ruleValues.landingTest3.GoAroundInsteadStopPoints
+		toInstance.landingTest3AbnormalLandingPoints                    = contestRule.ruleValues.landingTest3.AbnormalLandingPoints
+		toInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest3.NotAllowedAerodynamicAuxiliariesPoints
+		toInstance.landingTest3PowerInAirPoints                         = contestRule.ruleValues.landingTest3.PowerInAirPoints
+		toInstance.landingTest3FlapsInAirPoints                         = contestRule.ruleValues.landingTest3.FlapsInAirPoints
+		toInstance.landingTest3PenaltyCalculator                        = contestRule.ruleValues.landingTest3.PenaltyCalculator
 		
-		toInstance.landingTest4MaxPoints = contestRule.ruleValues.landingTest4MaxPoints
-		toInstance.landingTest4NoLandingPoints = contestRule.ruleValues.landingTest4NoLandingPoints
-		toInstance.landingTest4OutsideLandingPoints = contestRule.ruleValues.landingTest4OutsideLandingPoints
-		toInstance.landingTest4RollingOutsidePoints = contestRule.ruleValues.landingTest4RollingOutsidePoints
-		toInstance.landingTest4PowerInBoxPoints = contestRule.ruleValues.landingTest4PowerInBoxPoints
-		toInstance.landingTest4GoAroundWithoutTouchingPoints = contestRule.ruleValues.landingTest4GoAroundWithoutTouchingPoints
-		toInstance.landingTest4GoAroundInsteadStopPoints = contestRule.ruleValues.landingTest4GoAroundInsteadStopPoints
-		toInstance.landingTest4AbnormalLandingPoints = contestRule.ruleValues.landingTest4AbnormalLandingPoints
-		toInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints = contestRule.ruleValues.landingTest4NotAllowedAerodynamicAuxiliariesPoints
-		toInstance.landingTest4TouchingObstaclePoints = contestRule.ruleValues.landingTest4TouchingObstaclePoints
-		toInstance.landingTest4PenaltyCalculator = contestRule.ruleValues.landingTest4PenaltyCalculator
+		toInstance.landingTest4MaxPoints                                = contestRule.ruleValues.landingTest4.MaxPoints
+		toInstance.landingTest4NoLandingPoints                          = contestRule.ruleValues.landingTest4.NoLandingPoints
+		toInstance.landingTest4OutsideLandingPoints                     = contestRule.ruleValues.landingTest4.OutsideLandingPoints
+		toInstance.landingTest4RollingOutsidePoints                     = contestRule.ruleValues.landingTest4.RollingOutsidePoints
+		toInstance.landingTest4PowerInBoxPoints                         = contestRule.ruleValues.landingTest4.PowerInBoxPoints
+		toInstance.landingTest4GoAroundWithoutTouchingPoints            = contestRule.ruleValues.landingTest4.GoAroundWithoutTouchingPoints
+		toInstance.landingTest4GoAroundInsteadStopPoints                = contestRule.ruleValues.landingTest4.GoAroundInsteadStopPoints
+		toInstance.landingTest4AbnormalLandingPoints                    = contestRule.ruleValues.landingTest4.AbnormalLandingPoints
+		toInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest4.NotAllowedAerodynamicAuxiliariesPoints
+		toInstance.landingTest4TouchingObstaclePoints                   = contestRule.ruleValues.landingTest4.TouchingObstaclePoints
+		toInstance.landingTest4PenaltyCalculator                        = contestRule.ruleValues.landingTest4.PenaltyCalculator
 	}
 	
     //--------------------------------------------------------------------------
@@ -908,35 +908,35 @@ class FcService
             }
         }
         
-        contestInstance.anrFlying = contestRule.ruleValues.anrFlying
-        contestInstance.flightPlanShowLegDistance = contestRule.ruleValues.flightPlanShowLegDistance
-        contestInstance.flightPlanShowTrueTrack = contestRule.ruleValues.flightPlanShowTrueTrack
-        contestInstance.flightPlanShowTrueHeading = contestRule.ruleValues.flightPlanShowTrueHeading
-        contestInstance.flightPlanShowGroundSpeed = contestRule.ruleValues.flightPlanShowGroundSpeed
-        contestInstance.flightPlanShowLocalTime = contestRule.ruleValues.flightPlanShowLocalTime
-        contestInstance.flightPlanShowElapsedTime = contestRule.ruleValues.flightPlanShowElapsedTime
-        contestInstance.flightTestSubmissionMinutes = contestRule.ruleValues.flightTestSubmissionMinutes
-        contestInstance.minRouteLegs = contestRule.ruleValues.minRouteLegs
-        contestInstance.maxRouteLegs = contestRule.ruleValues.maxRouteLegs
-        contestInstance.scGateWidth = contestRule.ruleValues.scGateWidth
-        contestInstance.unsuitableStartNum = contestRule.ruleValues.unsuitableStartNum
-        contestInstance.turnpointRule = contestRule.ruleValues.turnpointRule
-        contestInstance.turnpointMapMeasurement = contestRule.ruleValues.turnpointMapMeasurement
-        contestInstance.enroutePhotoRule = contestRule.ruleValues.enroutePhotoRule
-        contestInstance.enrouteCanvasRule = contestRule.ruleValues.enrouteCanvasRule
-        contestInstance.enrouteCanvasMultiple = contestRule.ruleValues.enrouteCanvasMultiple
-        contestInstance.minEnroutePhotos = contestRule.ruleValues.minEnroutePhotos
-        contestInstance.maxEnroutePhotos = contestRule.ruleValues.maxEnroutePhotos
-        contestInstance.minEnrouteCanvas = contestRule.ruleValues.minEnrouteCanvas
-        contestInstance.maxEnrouteCanvas = contestRule.ruleValues.maxEnrouteCanvas
-        contestInstance.minEnrouteTargets = contestRule.ruleValues.minEnrouteTargets
-        contestInstance.maxEnrouteTargets = contestRule.ruleValues.maxEnrouteTargets
-        contestInstance.useProcedureTurns = contestRule.ruleValues.useProcedureTurns
-        contestInstance.liveTrackingScorecard = contestRule.ruleValues.liveTrackingScorecard
-        contestInstance.flightTestLastGateNoBadCourseSeconds = contestRule.ruleValues.flightTestLastGateNoBadCourseSeconds
-        contestInstance.showPlanningTest = contestRule.ruleValues.showPlanningTest
-        contestInstance.activateFlightTestCheckLanding = contestRule.ruleValues.activateFlightTestCheckLanding
-        contestInstance.showObservationTest = contestRule.ruleValues.showObservationTest
+        contestInstance.anrFlying                               = contestRule.ruleValues.anrFlying
+        contestInstance.flightPlanShowLegDistance               = contestRule.ruleValues.flightPlanShowLegDistance
+        contestInstance.flightPlanShowTrueTrack                 = contestRule.ruleValues.flightPlanShowTrueTrack
+        contestInstance.flightPlanShowTrueHeading               = contestRule.ruleValues.flightPlanShowTrueHeading
+        contestInstance.flightPlanShowGroundSpeed               = contestRule.ruleValues.flightPlanShowGroundSpeed
+        contestInstance.flightPlanShowLocalTime                 = contestRule.ruleValues.flightPlanShowLocalTime
+        contestInstance.flightPlanShowElapsedTime               = contestRule.ruleValues.flightPlanShowElapsedTime
+        contestInstance.flightTestSubmissionMinutes             = contestRule.ruleValues.flightTestSubmissionMinutes
+        contestInstance.minRouteLegs                            = contestRule.ruleValues.minRouteLegs
+        contestInstance.maxRouteLegs                            = contestRule.ruleValues.maxRouteLegs
+        contestInstance.scGateWidth                             = contestRule.ruleValues.scGateWidth
+        contestInstance.unsuitableStartNum                      = contestRule.ruleValues.unsuitableStartNum
+        contestInstance.turnpointRule                           = contestRule.ruleValues.turnpointRule
+        contestInstance.turnpointMapMeasurement                 = contestRule.ruleValues.turnpointMapMeasurement
+        contestInstance.enroutePhotoRule                        = contestRule.ruleValues.enroutePhotoRule
+        contestInstance.enrouteCanvasRule                       = contestRule.ruleValues.enrouteCanvasRule
+        contestInstance.enrouteCanvasMultiple                   = contestRule.ruleValues.enrouteCanvasMultiple
+        contestInstance.minEnroutePhotos                        = contestRule.ruleValues.minEnroutePhotos
+        contestInstance.maxEnroutePhotos                        = contestRule.ruleValues.maxEnroutePhotos
+        contestInstance.minEnrouteCanvas                        = contestRule.ruleValues.minEnrouteCanvas
+        contestInstance.maxEnrouteCanvas                        = contestRule.ruleValues.maxEnrouteCanvas
+        contestInstance.minEnrouteTargets                       = contestRule.ruleValues.minEnrouteTargets
+        contestInstance.maxEnrouteTargets                       = contestRule.ruleValues.maxEnrouteTargets
+        contestInstance.useProcedureTurns                       = contestRule.ruleValues.useProcedureTurns
+        contestInstance.liveTrackingScorecard                   = contestRule.ruleValues.liveTrackingScorecard
+        contestInstance.flightTestLastGateNoBadCourseSeconds    = contestRule.ruleValues.flightTestLastGateNoBadCourseSeconds
+        contestInstance.showPlanningTest                        = contestRule.ruleValues.showPlanningTest
+        contestInstance.activateFlightTestCheckLanding          = contestRule.ruleValues.activateFlightTestCheckLanding
+        contestInstance.showObservationTest                     = contestRule.ruleValues.showObservationTest
         
         if (!newContest) {
             for (long route_id in routes_with_disabled_procedureturns) {
@@ -14928,10 +14928,10 @@ class FcService
                     case ".png":
                         png_found = true
                         break
-                    case ".pngw":
+                    case ".png${Defs.MAP_PNG_WORLD_FILE_SUFFIX}":
                         pngw_found = true
                         break
-                    case ".pnginfo":
+                    case ".png${Defs.MAP_PNG_INFO_FILE_SUFFIX}":
                         pnginfo_found = true
                         break
                 }

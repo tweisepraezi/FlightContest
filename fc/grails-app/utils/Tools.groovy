@@ -279,4 +279,17 @@ class Tools {
 		return ""
 	}
 	
+	// --------------------------------------------------------------------------------------------------------------------
+	static String GetMapnikString(String strValue) {
+		if (strValue) {
+			if (strValue.contains('"')) {
+				strValue = strValue.replace('"',"")
+			}
+			if (strValue.contains("'")) {
+				strValue = strValue.replace("'","")
+			}
+			return strValue
+		}
+		return ""
+	}
 }

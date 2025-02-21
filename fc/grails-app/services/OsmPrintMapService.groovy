@@ -338,12 +338,12 @@ class OsmPrintMapService
         }
         print_width -= 2*MARGIN
         print_height -= 2*MARGIN
+        BigDecimal print_width_nm = print_scale * print_width / Route.mmPerNM
+        BigDecimal print_height_nm = print_scale * print_height / Route.mmPerNM
+        Map rect_width = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+        Map rect_height = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
         
         if (contestMapParams.contestMapCenterHorizontalPos != HorizontalPos.Center || contestMapParams.contestMapCenterVerticalPos != VerticalPos.Center) {
-            BigDecimal print_width_nm = print_scale * print_width / Route.mmPerNM
-            BigDecimal print_height_nm = print_scale * print_height / Route.mmPerNM
-            Map rect_width = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
-            Map rect_height = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
             switch (contestMapParams.contestMapCenterHorizontalPos) {
                 case HorizontalPos.Left:
                     contestMapParams.centerLongitude = rect_width.lonmax
@@ -377,11 +377,13 @@ class OsmPrintMapService
         int scalbar_text_ypos = scalebar_ypos - 3   // 3mm nach unten
         
         //...........................................................................................
-        String map_region = ""
+        String region_style = "" // printmaps_webservice_capabilities.json -> ConfigStyles -> Name, printmaps_buildservice.yaml -> styles -> name
         String mapdata_date = ""
         printstart "Get service capabilities"
         Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
         if (status.responseCode == 200) {
+
+            // check full page
             for (def config_style in status.json.ConfigStyles) {
                 if (config_style.Name.startsWith('region-')) {
                     if (!contestMapParams.contestMapDevStyle || config_style.Name.endsWith('-dev')) {
@@ -389,16 +391,36 @@ class OsmPrintMapService
                         BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
                         BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                         BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
-                        if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
-                            map_region = config_style.Name
+                        if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                            region_style = config_style.Name
                             mapdata_date = config_style.Date
                             break
                         }
                     }
                 }
             }
-            if (map_region) {
-                printdone "${map_region} ${mapdata_date}"
+            
+            // check center page
+            if (!region_style) {
+                for (def config_style in status.json.ConfigStyles) {
+                    if (config_style.Name.startsWith('region-')) {
+                        if (!contestMapParams.contestMapDevStyle || config_style.Name.endsWith('-dev')) {
+                            BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
+                            BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
+                            BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
+                            BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                            if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
+                                region_style = config_style.Name
+                                mapdata_date = config_style.Date
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (region_style) {
+                printdone "${region_style} ${mapdata_date}"
             } else {
                 printerror ""
                 ret.message = getMsg('fc.contestmap.noregionerror', [contestMapParams.centerLatitude, contestMapParams.centerLongitude], false)
@@ -658,6 +680,7 @@ class OsmPrintMapService
                             first_style = false
                         }
                         airspace_text = airspace_text.trim()
+                        airspace_text = Tools.GetMapnikString(airspace_text)
                         airspaces_lines += """,{
                             "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
                             "SRS": "+init=${ATTR_INPUT_SRS}",
@@ -749,7 +772,7 @@ class OsmPrintMapService
         int img_height = 0
         
         //...........................................................................................
-        if (map_region) {
+        if (region_style) {
             printstart "Create job"
             status = CallPrintServer("/metadata", [HEADER_CONTENTTYPE,HEADER_ACCEPT], "POST", DataType.JSON,
             """{
@@ -763,7 +786,7 @@ class OsmPrintMapService
                         "PrintHeight": ${print_height},
                         "Latitude": ${contestMapParams.centerLatitude},
                         "Longitude": ${contestMapParams.centerLongitude},
-                        "Style": "${map_region}",
+                        "Style": "${region_style}",
                         "Projection": "${map_projection}",
                         "HideLayers": "${hide_layers}",
                         "UserObjects": [
@@ -789,6 +812,8 @@ class OsmPrintMapService
             }
             if (status.responseCode == 201) {
                 printjob_id = status.json.Data.ID
+            } else {
+                ret.message = getMsg('fc.contestmap.invalidprintjobdata', [], false)
             }
         }
     
@@ -857,31 +882,42 @@ class OsmPrintMapService
                 printstart "Upload mapobjects"
                 FileUpload("/upload/${printjob_id}", mapobjects_file_name)
                 printdone ""
-				gpxService.DeleteFile(mapobjects_file_name)
             }
             if (mapobjects_symbol_filenames) {
                 for (String symbol_filename in mapobjects_symbol_filenames) {
                     printstart "Upload symbols"
                     FileUpload("/upload/${printjob_id}", symbol_filename)
                     printdone ""
-                    gpxService.DeleteFile(symbol_filename)
                 }
             }
             if (airspaces_file_name) {
                 printstart "Upload airspaces"
                 FileUpload("/upload/${printjob_id}", airspaces_file_name)
                 printdone ""
-				if (BootStrap.global.IsOpenAIP()) {
-					gpxService.DeleteFile(airspaces_file_name)
-				}
             }
             if (airports_file_name) {
                 printstart "Upload airports"
                 FileUpload("/upload/${printjob_id}", airports_file_name)
                 printdone ""
-				if (BootStrap.global.IsOpenAIP()) {
-					gpxService.DeleteFile(airports_file_name)
-				}
+            }
+        }
+        
+        if (mapobjects_file_name) {
+            gpxService.DeleteFile(mapobjects_file_name)
+        }
+        if (mapobjects_symbol_filenames) {
+            for (String symbol_filename in mapobjects_symbol_filenames) {
+                gpxService.DeleteFile(symbol_filename)
+            }
+        }
+        if (airspaces_file_name) {
+            if (BootStrap.global.IsOpenAIP()) {
+                gpxService.DeleteFile(airspaces_file_name)
+            }
+        }
+        if (airports_file_name) {
+            if (BootStrap.global.IsOpenAIP()) {
+                gpxService.DeleteFile(airports_file_name)
             }
         }
         
@@ -899,6 +935,8 @@ class OsmPrintMapService
             if (status.responseCode == 202) {
                 job_started = true
                 BootStrap.global.CountFCMap()
+            } else {
+                ret.message = getMsg('fc.contestmap.printjobnotstarted', [status.responseCode], false)
             }
             printdone "responseCode=${status.responseCode}"
         }
@@ -1051,11 +1089,11 @@ class OsmPrintMapService
                     
                         String download_zip_file_name = "${pngFileName}.zip"
                         String unpacked_png_file_name = "${pngFileName}.png"
-                        String world_file_name = "${pngFileName}w"
-                        String info_file_name = "${pngFileName}info"
+                        String world_file_name = "${pngFileName}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                        String info_file_name = "${pngFileName}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                         String tif_file_name = "${pngFileName.substring(0,pngFileName.lastIndexOf('.'))}.tif"
                         String warped_tif_file_name = "${pngFileName.substring(0,pngFileName.lastIndexOf('.'))}.warped.tif"
-                        String warped_png_file_name = "${pngFileName}.warped.png"
+                        String warped_png_file_name = "${pngFileName}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
                         
                         // Write download_zip_file_name
                         printstart "Write ${download_zip_file_name}"

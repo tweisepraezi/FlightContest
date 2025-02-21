@@ -24,7 +24,7 @@
         <StyleName>roads-small-grade5</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -44,7 +44,7 @@
         <StyleName>roads-small-grade4</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -64,7 +64,7 @@
         <StyleName>roads-small-grade3</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -84,7 +84,7 @@
         <StyleName>roads-small-grade2</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -104,7 +104,7 @@
         <StyleName>roads-small-grade1</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -124,7 +124,7 @@
 		<StyleName>landuse</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,way_area,landuse,leisure,"natural",wetland,leaf_type,amenity,crop,orchard FROM planet_osm_polygon ORDER BY (CASE WHEN landuse='forest' THEN 0 ELSE 1 END) asc) AS landuse </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -191,7 +191,7 @@
 		<StyleName>landuse-over-hillshade</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,landuse,"natural",leaf_type,amenity,building,power FROM planet_osm_polygon) AS landuse </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -258,7 +258,7 @@
 		<StyleName>waterway-lines</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,"CEMT",intermittent,motorboat,tunnel,waterway FROM planet_osm_line) AS water </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -314,7 +314,7 @@
 		<StyleName>water-polygons</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,"CEMT",motorboat,"natural",landuse,leisure,waterway,intermittent,way_area FROM planet_osm_polygon) AS water </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -361,7 +361,7 @@
 		<StyleName>landuse-over-water</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,"natural",wetland FROM planet_osm_polygon) AS landuse </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -449,7 +449,7 @@
 		<StyleName>tunnels-fill</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,tracktype,oneway,attraction,sport,leisure,surface FROM planet_osm_line WHERE (tunnel = 'yes') AND (highway IS NOT NULL OR attraction='summer_toboggan' OR leisure='track')) AS roads </Parameter> 
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -474,7 +474,7 @@
         <StyleName>roads-residential</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -493,7 +493,7 @@
 		<StyleName>buildings</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,building,leisure,railway,amenity,aeroway FROM planet_osm_polygon WHERE (building IS NOT NULL AND building != 'no') OR (aeroway = 'terminal')) AS buildings </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -527,7 +527,7 @@
 		<StyleName>areas</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,landuse,leisure,way_area FROM planet_osm_polygon) AS area </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -555,7 +555,7 @@
         <StyleName>contours20</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
-            <Parameter name="dbname">contours_eu</Parameter>
+            <Parameter name="dbname">contours_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -583,7 +583,7 @@
 		<StyleName>contours50</StyleName>
 		<Datasource>
             <Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
-			<Parameter name="dbname">contours_eu</Parameter>
+			<Parameter name="dbname">contours_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -611,7 +611,7 @@
         <StyleName>contours100</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
-            <Parameter name="dbname">contours_eu</Parameter>
+            <Parameter name="dbname">contours_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -656,7 +656,7 @@
 		<StyleName>borders</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,boundary,admin_level,name FROM planet_osm_line WHERE boundary IN ('administrative') AND admin_level IN ('0', '1', '2', '3')) AS borders </Parameter> <!-- Flight Contest -->
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -693,7 +693,7 @@
 		<StyleName>railways-lowzoom</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,railway,"service",tunnel FROM railways) AS railways</Parameter>
-			<Parameter name="dbname">lowzoom_eu</Parameter>
+			<Parameter name="dbname">lowzoom_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -733,7 +733,7 @@
 		<StyleName>airports-line-fill</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,aeroway FROM planet_osm_line WHERE aeroway IS NOT NULL) AS airports_line</Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -845,7 +845,7 @@
 		<StyleName>roads-fill</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -933,7 +933,7 @@
 		<StyleName>bridges-fill</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,surface,tracktype,layer,name,railway,oneway,leisure,sport,attraction FROM planet_osm_line WHERE (bridge != 'no') AND (highway IS NOT NULL OR railway = 'tram' OR leisure='track' OR attraction='summer_toboggan') AND (layer IS NULL OR layer &lt;= '1')) AS roads </Parameter> 
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -942,7 +942,7 @@
 		<StyleName>bridges-fill</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,surface,tracktype,layer,name,railway,oneway,leisure,sport,attraction FROM planet_osm_line WHERE (bridge != 'no') AND (highway IS NOT NULL OR railway = 'tram' OR leisure='track' OR attraction='summer_toboggan') AND (layer = '2')) AS roads </Parameter> 
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -951,7 +951,7 @@
 		<StyleName>bridges-fill</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,surface,tracktype,layer,name,railway,oneway,leisure,sport,attraction FROM planet_osm_line WHERE (bridge != 'no') AND (highway IS NOT NULL OR railway = 'tram' OR leisure='track' OR attraction='summer_toboggan') AND (layer &gt; '2')) AS roads </Parameter> 
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -971,7 +971,7 @@
 		<StyleName>powerlines</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,power,voltage FROM planet_osm_line) AS powerlines </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -990,7 +990,7 @@
 		<StyleName>powertowers</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,power FROM planet_osm_point WHERE power IN ('tower','pole')) AS powertowers </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1015,7 +1015,7 @@
         <StyleName>text-natural-areas-lowzoom</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
-            <Parameter name="dbname">lowzoom_eu</Parameter>
+            <Parameter name="dbname">lowzoom_it</Parameter>
             &postgis-settings;
         </Datasource>
 	</Layer>
@@ -1060,7 +1060,7 @@
 		<StyleName>text-water-lowzoom</StyleName>
 		<Datasource>
             <Parameter name="table">(SELECT way,' '&#124;&#124;name&#124;&#124;' ' AS name,lake_area FROM lakelabels WHERE label='lakeaxis' OR label='bayaxis' OR label='straitaxis') AS lakelabels </Parameter>
-			<Parameter name="dbname">lowzoom_eu</Parameter>
+			<Parameter name="dbname">lowzoom_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1081,7 +1081,7 @@
 		<StyleName>symbols-stations</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,name,railway,train,subway,station,direction FROM planet_osm_point WHERE (railway='station' OR railway='halt') AND ((direction IS NULL) OR direction SIMILAR TO '[0-9]+')) AS names</Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1100,7 +1100,7 @@
 		<StyleName>symbols-peaks</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,"natural",name,ele,"summit:cross",otm_isolation::INTEGER FROM planet_osm_point WHERE ("natural" = 'peak' or "natural" = 'volcano') ORDER BY otm_isolation::INTEGER DESC) AS symbols </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1119,7 +1119,7 @@
         <StyleName>symbols-churches</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -1144,7 +1144,7 @@
         <StyleName>symbols-castles</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -1163,7 +1163,7 @@
         <StyleName>windpowerstations</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -1171,7 +1171,7 @@
         <StyleName>windpowerstations</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -1190,7 +1190,7 @@
 		<StyleName>symbols-2</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1198,7 +1198,7 @@
 		<StyleName>symbols-2</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1217,7 +1217,7 @@
 		<StyleName>text-glacier-lowzoom</StyleName>
 		<Datasource>
             <Parameter name="table">(SELECT way,name,lake_area FROM lakelabels WHERE label='glacieraxis') AS lakelabels </Parameter>
-			<Parameter name="dbname">lowzoom_eu</Parameter>
+			<Parameter name="dbname">lowzoom_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1236,7 +1236,7 @@
 		<StyleName>text-roads-ref</StyleName>
 		<Datasource>
 			<Parameter name="table">(SELECT way,highway,ref FROM planet_osm_line WHERE (ST_Length(way)::integer &gt; 1000) AND ref IS NOT NULL) AS roads </Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1307,7 +1307,7 @@
 		<Datasource>
 			<Parameter name="table">(SELECT way,admin_level,name,capital,'('&#124;&#124;substring(ele from '^[\d]+')&#124;&#124;')' as ele,place,population::INTEGER FROM planet_osm_point WHERE (population IS NULL OR population SIMILAR TO '[[:digit:]]+') AND place IN ('city','town','village','suburb','hamlet','isolated_dwelling','locality') ORDER BY (CASE WHEN place='city' THEN 0 WHEN place='town' THEN 1 WHEN place='village' THEN 2 ELSE 3 END) ASC, (CASE WHEN population IS NUll THEN 0 WHEN population similar to '[[:digit:]]+' THEN population::integer ELSE 0 END) DESC
 		  ) AS names</Parameter>
-			<Parameter name="dbname">gis_eu</Parameter>
+			<Parameter name="dbname">gis_it</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
@@ -1332,7 +1332,7 @@
         <StyleName>airports-name</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,aeroway,way_area,name,icao FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>
@@ -1357,7 +1357,7 @@
         <StyleName>airports-icao</StyleName>
         <Datasource>
             <Parameter name="table">(SELECT way,aeroway,way_area,name,icao FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
-            <Parameter name="dbname">gis_eu</Parameter>
+            <Parameter name="dbname">gis_it</Parameter>
             &postgis-settings;
         </Datasource>
     </Layer>

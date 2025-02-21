@@ -9,7 +9,7 @@ class FlightTestWind
     BigDecimal TOOrthogonalOffset = 0.0                    // DB-2.12, Positionsabweichung quer zur Startbahn, NM
     
     BigDecimal LDGDirection = 0.0                          // DB-2.12, Richtung der Startbahn, Grad
-    BigDecimal LDGOffset = 0.0                             // DB-2.12, Positionsabweichung längs zur Startbahn, NM
+    BigDecimal LDGOffset = -0.03                           // DB-2.12, Positionsabweichung längs zur Startbahn, NM
     BigDecimal LDGOrthogonalOffset = 0.0                   // DB-2.12, Positionsabweichung quer zur Startbahn, NM
 
     BigDecimal iTOiLDGDirection = 0.0                      // DB-2.12, Richtung der Startbahn, Grad

@@ -159,7 +159,7 @@
                                         <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${coordRouteInstance.maxAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
                                     </p>
                                 </g:if>
-                                <g:if test="${!coordRouteInstance.route.corridorWidth}">
+                                <g:if test="${!coordRouteInstance.route.corridorWidth || coordRouteInstance.type.IsRunwayCoord()}">
                                     <p>
                                         <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
                                         <br/>

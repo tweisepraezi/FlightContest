@@ -1098,8 +1098,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1226,8 +1226,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1354,8 +1354,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1482,8 +1482,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1610,8 +1610,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}l"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1738,8 +1738,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}l"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1867,8 +1867,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}l"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1995,8 +1995,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}l"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2124,8 +2124,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}l"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2252,8 +2252,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}l"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2381,8 +2381,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2509,8 +2509,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2651,8 +2651,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2792,8 +2792,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2933,8 +2933,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -3074,8 +3074,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -3202,8 +3202,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -3331,8 +3331,8 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
-                            String world_file_name = "${map_png_file_name}w"
-                            String info_file_name = "${map_png_file_name}info"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -3665,10 +3665,10 @@ class RouteController {
                 String map_png_file_name = printfileid_reader.readLine()
                 printfileid_reader.close()
                 String unpacked_png_file_name = "${map_png_file_name}.png"
-                String warped_png_file_name = "${map_png_file_name}.warped.png"
-                String warped_png_file_name_xml = "${map_png_file_name}.warped.png.aux.xml"
-                String world_file_name = "${map_png_file_name}w"
-                String info_file_name = "${map_png_file_name}info"
+                String warped_png_file_name = "${map_png_file_name}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
+                String warped_png_file_name_xml = "${map_png_file_name}${Defs.MAP_PNG_WARP_FILE_SUFFIX}.aux.xml"
+                String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                 String map_zip_file_name = map_png_file_name + ".zip"
                 String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                 String warped_tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.warped.tif"
@@ -3713,8 +3713,8 @@ class RouteController {
                 if (printfileid_file.exists()) {
                     LineNumberReader printfileid_file_reader = printfileid_file.newReader()
                     String map_png_file_name = printfileid_file_reader.readLine()
-                    String world_file_name = "${map_png_file_name}w"
-                    String info_file_name = "${map_png_file_name}info"
+                    String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                    String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                     String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                     String vrt_file_name = "${tif_file_name}.vrt"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'
@@ -3722,7 +3722,7 @@ class RouteController {
                     printfileid_file_reader.close()
                     if (params.contestMapPrintName) {
                         String png_file_name = "${params.contestMapPrintName}.png"
-                        String warped_png_file_name = "${params.contestMapPrintName}.warped.png"
+                        String warped_png_file_name = "${params.contestMapPrintName}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
                         String tif_file_name2 = "${params.contestMapPrintName}.tif"
                         String map_folder_name = "${webroot_dir}${Defs.ROOT_FOLDER_MAP}/${route.instance.contest.contestUUID}/"
                         File map_folder = new File(map_folder_name)
@@ -3732,9 +3732,9 @@ class RouteController {
                         if (!new File(map_folder_name + png_file_name).exists() || params.contestMapAllowOverwrite) {
                             gpxService.printstart "Copy ${png_file_name} to ${map_folder_name}"
                             copy_file_to_folder(map_folder_name, png_file_name, map_png_file_name)
-                            copy_file_to_folder(map_folder_name, warped_png_file_name, map_png_file_name + ".warped.png")
-                            copy_file_to_folder(map_folder_name, png_file_name + "w", world_file_name)
-                            copy_file_to_folder(map_folder_name, png_file_name + "info", info_file_name)
+                            copy_file_to_folder(map_folder_name, warped_png_file_name, map_png_file_name + Defs.MAP_PNG_WARP_FILE_SUFFIX)
+                            copy_file_to_folder(map_folder_name, png_file_name + Defs.MAP_PNG_WORLD_FILE_SUFFIX, world_file_name)
+                            copy_file_to_folder(map_folder_name, png_file_name + Defs.MAP_PNG_INFO_FILE_SUFFIX, info_file_name)
                             copy_file_to_folder(map_folder_name, tif_file_name2, tif_file_name)
                             gpxService.printdone ""
                             if (params.contestMapSetDefaultOnlineMap) {
@@ -3776,8 +3776,8 @@ class RouteController {
                 if (printfileid_file.exists()) {
                     LineNumberReader printfileid_file_reader = printfileid_file.newReader()
                     String map_png_file_name = printfileid_file_reader.readLine()
-                    String world_file_name = "${map_png_file_name}w"
-                    String info_file_name = "${map_png_file_name}info"
+                    String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                    String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                     String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                     String vrt_file_name = "${tif_file_name}.vrt"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'
@@ -3785,7 +3785,7 @@ class RouteController {
                     printfileid_file_reader.close()
                     if (params.contestMapPrintName) {
                         String png_file_name = "${params.contestMapPrintName}.png"
-                        String warped_png_file_name = "${params.contestMapPrintName}.warped.png"
+                        String warped_png_file_name = "${params.contestMapPrintName}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
                         String tif_file_name2 = "${params.contestMapPrintName}.tif"
                         String map_folder_name = "${webroot_dir}${Defs.ROOT_FOLDER_MAP}/${route.instance.contest.contestUUID}/"
                         File map_folder = new File(map_folder_name)
@@ -3795,9 +3795,9 @@ class RouteController {
                         if (!new File(map_folder_name + png_file_name).exists() || params.contestMapAllowOverwrite) {
                             gpxService.printstart "Copy ${png_file_name} to ${map_folder_name}"
                             copy_file_to_folder(map_folder_name, png_file_name, map_png_file_name)
-                            copy_file_to_folder(map_folder_name, warped_png_file_name, map_png_file_name + ".warped.png")
-                            copy_file_to_folder(map_folder_name, png_file_name + "w", world_file_name)
-                            copy_file_to_folder(map_folder_name, png_file_name + "info", info_file_name)
+                            copy_file_to_folder(map_folder_name, warped_png_file_name, map_png_file_name + Defs.MAP_PNG_WARP_FILE_SUFFIX)
+                            copy_file_to_folder(map_folder_name, png_file_name + Defs.MAP_PNG_WORLD_FILE_SUFFIX, world_file_name)
+                            copy_file_to_folder(map_folder_name, png_file_name + Defs.MAP_PNG_INFO_FILE_SUFFIX, info_file_name)
                             copy_file_to_folder(map_folder_name, tif_file_name2, tif_file_name)
                             gpxService.printdone ""
                             if (params.contestMapSetDefaultOnlineMap) {
@@ -3840,8 +3840,8 @@ class RouteController {
                 if (printfileid_file.exists()) {
                     LineNumberReader printfileid_file_reader = printfileid_file.newReader()
                     String map_png_file_name = printfileid_file_reader.readLine()
-                    String world_file_name = "${map_png_file_name}w"
-                    String info_file_name = "${map_png_file_name}info"
+                    String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                    String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                     String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                     String vrt_file_name = "${tif_file_name}.vrt"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'

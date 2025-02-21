@@ -2,1994 +2,1215 @@ import java.util.List;
 
 enum ContestRules 
 {
-	R1 ([
-            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020",
+    R6 ([
+            ruleTitle:"FAI Air Rally Flying - Edition 2024",         // FAI-RF
             
-			// General
-			precisionFlying:false,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:false,
-			printPointsFlightTest:true,
-            printPointsObservationTest:true,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:false,
-			printPointsLandingTest3:false,
-			printPointsLandingTest4:false,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/de_nav.jpg',
-            printPointsTurnpointSign:false,
-            printPointsEnrouteCanvas:false,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
+            // General
+            precisionFlying:false,                                   // FAI-RF
+            increaseFactor:0,                                        // FAI-RF
+            printPointsGeneral:false,                                // FAI-RF
+            printPointsPlanningTest:false,                           // FAI-RF
+            printPointsFlightTest:true,                              // FAI-RF
+            printPointsObservationTest:true,                         // FAI-RF
+            printPointsLandingTest1:true,                            // FAI-RF
+            printPointsLandingTest2:false,                           // FAI-RF
+            printPointsLandingTest3:false,                           // FAI-RF
+            printPointsLandingTest4:false,                           // FAI-RF
+            printPointsLandingField:true,                            // FAI-RF
+            landingFieldImageName:'images/landingfield/fai_rally.jpg', // FAI-RF
+            printPointsTurnpointSign:false,                          // FAI-RF
+            printPointsEnrouteCanvas:true,                           // FAI-RF
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // FAI-RF
+            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",      // FAI-RF
             
-			// PlanningTest
-			planningTestDirectionCorrectGrad:2,
-			planningTestDirectionPointsPerGrad:2,
-			planningTestTimeCorrectSecond:2,
-			planningTestTimePointsPerSecond:3,
-			planningTestMaxPoints:100,
-			planningTestPlanTooLatePoints:50,
-			planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
-		
-			// FlightTest
-			flightTestTakeoffCorrectSecond:60,                   // 4
-			flightTestTakeoffCheckSeconds:true,
-			flightTestTakeoffPointsPerSecond:3,                  // 4
-            flightTestTakeoffMissedPoints:100,                   // 4
-			flightTestCptimeCorrectSecond:2,                     // 4
-			flightTestCptimePointsPerSecond:3,                   // 4
-			flightTestCptimeMaxPoints:100,                       // 4
-			flightTestCpNotFoundPoints:100,                      // 4
-			flightTestProcedureTurnNotFlownPoints:0,
-			flightTestMinAltitudeMissedPoints:200,               // 4
-			flightTestBadCourseCorrectSecond:5,                  // 3.3.6
-			flightTestBadCoursePoints:100,                       // 4
-            flightTestBadCourseMaxPoints:1000,                   // 4
-			flightTestBadCourseStartLandingPoints:200,           // 4
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-			flightTestLandingToLatePoints:200,                   // 4
-			flightTestGivenToLatePoints:300,                     // 4
-			flightTestSafetyAndRulesInfringementPoints:0,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:400,            // 4
-			flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-		
+            // PlanningTest
+            planningTestDirectionCorrectGrad:2,                      // FAI-RF -
+            planningTestDirectionPointsPerGrad:2,                    // FAI-RF -
+            planningTestTimeCorrectSecond:5,                         // FAI-RF -
+            planningTestTimePointsPerSecond:1,                       // FAI-RF -
+            planningTestMaxPoints:200,                               // FAI-RF -
+            planningTestPlanTooLatePoints:50,                        // FAI-RF -
+            planningTestExitRoomTooLatePoints:100,                   // FAI-RF -
+            planningTestForbiddenCalculatorsPoints:0,                // FAI-RF -
+        
+            // FlightTest
+            flightTestTakeoffCorrectSecond:60,                       // FAI-RF A4.1
+            flightTestTakeoffCheckSeconds:true,                      // FAI-RF A4.1
+            flightTestTakeoffPointsPerSecond:3,                      // FAI-RF A4.1
+            flightTestTakeoffMissedPoints:100,                       // FAI-RF A4.1
+            flightTestCptimeCorrectSecond:2,                         // FAI-RF A4.2
+            flightTestCptimePointsPerSecond:3,                       // FAI-RF A4.2
+            flightTestCptimeMaxPoints:100,                           // FAI-RF A4.2
+            flightTestCpNotFoundPoints:100,                          // FAI-RF A4.4
+            flightTestProcedureTurnNotFlownPoints:0,                 // FAI-RF -
+            flightTestMinAltitudeMissedPoints:200,                   // FAI-RF A4.4
+            flightTestBadCourseCorrectSecond:5,                      // FAI-RF A4.5
+            flightTestBadCoursePoints:100,                           // FAI-RF A4.5
+            flightTestBadCourseMaxPoints:1000,                       // FAI-RF A4.5
+            flightTestBadCourseStartLandingPoints:200,               // FAI-RF A4.4
+            flightTestBadCourseStartLandingSeparatePoints:false,     // FAI-RF
+			flightTestOutsideCorridorCorrectSecond:0,                // FAI-RF -
+			flightTestOutsideCorridorPointsPerSecond:0,              // FAI-RF -
+            flightTestLandingToLatePoints:0,                         // FAI-RF -
+            flightTestGivenToLatePoints:300,                         // FAI-RF A4.7
+            flightTestSafetyAndRulesInfringementPoints:600,          // FAI-RF A4.4
+            flightTestInstructionsNotFollowedPoints:0,               // FAI-RF
+            flightTestFalseEnvelopeOpenedPoints:0,                   // FAI-RF
+            flightTestSafetyEnvelopeOpenedPoints:400,                // FAI-RF A4.4
+            flightTestFrequencyNotMonitoredPoints:200,               // FAI-RF A4.8
+            flightTestForbiddenEquipmentPoints:0,                    // FAI-RF
+            flightTestExitRoomTooLatePoints:0,                       // FAI-RF -
+
             // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,           // 4
-            observationTestTurnpointFalsePoints:100,             // 4
-            observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // 4
-            observationTestEnrouteCorrectValue:0.5f,             // 4
-            observationTestEnrouteInexactValue:1.0f,             // 4
-            observationTestEnrouteInexactPoints:15,              // 4
-            observationTestEnrouteNotFoundPoints:30,             // 4
-            observationTestEnrouteFalsePoints:50,                // 4
+            observationTestTurnpointNotFoundPoints:50,               // FAI-RF A4.3
+            observationTestTurnpointFalsePoints:100,                 // FAI-RF A4.3
+            observationTestEnrouteValueUnit:EnrouteValueUnit.NM,     // FAI-RF A4.3
+            observationTestEnrouteCorrectValue:0.5f,                 // FAI-RF A4.3
+            observationTestEnrouteInexactValue:1.0f,                 // FAI-RF A4.3
+            observationTestEnrouteInexactPoints:15,                  // FAI-RF A4.3
+            observationTestEnrouteNotFoundPoints:30,                 // FAI-RF A4.3
+            observationTestEnrouteFalsePoints:50,                    // FAI-RF A4.3
             
-			// LandingTest
-			landingTest1MaxPoints:300,                           // 4
-			landingTest1NoLandingPoints:300,                     // 4
-			landingTest1OutsideLandingPoints:200,                // 4
-			landingTest1RollingOutsidePoints:200,                // 4
-			landingTest1PowerInBoxPoints:50,                     // 4
-			landingTest1GoAroundWithoutTouchingPoints:200,       // 4
-			landingTest1GoAroundInsteadStopPoints:200,           // 4
-			landingTest1AbnormalLandingPoints:150,               // 4
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
-		
-			landingTest2MaxPoints:300,                           // 4
-			landingTest2NoLandingPoints:300,                     // 4
-			landingTest2OutsideLandingPoints:200,                // 4
-			landingTest2RollingOutsidePoints:200,                // 4
-			landingTest2PowerInBoxPoints:50,                     // 4
-			landingTest2GoAroundWithoutTouchingPoints:200,       // 4
-			landingTest2GoAroundInsteadStopPoints:200,           // 4
-			landingTest2AbnormalLandingPoints:150,               // 4
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:0,
-			landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
-			
-			landingTest3MaxPoints:300,                           // 4
-			landingTest3NoLandingPoints:300,                     // 4
-			landingTest3OutsideLandingPoints:200,                // 4
-			landingTest3RollingOutsidePoints:200,                // 4
-			landingTest3PowerInBoxPoints:50,                     // 4
-			landingTest3GoAroundWithoutTouchingPoints:200,       // 4
-			landingTest3GoAroundInsteadStopPoints:200,           // 4
-			landingTest3AbnormalLandingPoints:150,               // 4
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:0,
-			landingTest3FlapsInAirPoints:0,
-			landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
-			
-			landingTest4MaxPoints:300,                           // 4
-			landingTest4NoLandingPoints:300,                     // 4
-			landingTest4OutsideLandingPoints:200,                // 4
-			landingTest4RollingOutsidePoints:200,                // 4
-			landingTest4PowerInBoxPoints:50,                     // 4
-			landingTest4GoAroundWithoutTouchingPoints:200,       // 4
-			landingTest4GoAroundInsteadStopPoints:200,           // 4
-			landingTest4AbnormalLandingPoints:150,               // 4
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:0,
-			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
-            
+            // LandingTest
+            landingTest1:ContestRulesLanding.FAI_RF.data,            // FAI-RF
+            landingTest2:ContestRulesLanding.FAI_RF.data,            // FAI-RF
+            landingTest3:ContestRulesLanding.FAI_RF.data,            // FAI-RF
+            landingTest4:ContestRulesLanding.FAI_RF.data,            // FAI-RF
+
             // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:45,
-            showPlanningTest:false,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
+            anrFlying:false,                                         // FAI-RF
+            flightTestLastGateNoBadCourseSeconds:45,                 // FAI-RF A3.1.9 defines 45s
+            showPlanningTest:false,                                  // FAI-RF 
+            activateFlightTestCheckLanding:true,                     // FAI-RF 
+            showObservationTest:true,                                // FAI-RF 
 
             // Defaults
-            flightPlanShowLegDistance:false,
-            flightPlanShowTrueTrack:false,
-            flightPlanShowTrueHeading:false,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:false,
-            flightPlanShowElapsedTime:true,
-            flightTestSubmissionMinutes:20,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.TrueFalsePhoto,          // 3.4.6
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.NMFromTP,               // 3.4.8
-            enrouteCanvasRule:EnrouteRule.NMFromTP,              // 3.4.8
-            enrouteCanvasMultiple:true,
-            minRouteLegs:10,                                     // 3.1
-            maxRouteLegs:16,                                     // 3.1
-            minEnroutePhotos:15,                                 // 3.4.1
-            maxEnroutePhotos:20,                                 // 3.4.1
-            minEnrouteCanvas:0,                                  // 3.4.1
-            maxEnrouteCanvas:5,                                  // 3.4.1
-            minEnrouteTargets:10,                                // (3.4.1)
-            maxEnrouteTargets:25,                                // (3.4.1)
-            useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally"
+            flightPlanShowLegDistance:false,                         // FAI-RF
+            flightPlanShowTrueTrack:false,                           // FAI-RF
+            flightPlanShowTrueHeading:false,                         // FAI-RF
+            flightPlanShowGroundSpeed:true,                          // FAI-RF
+            flightPlanShowLocalTime:false,                           // FAI-RF
+            flightPlanShowElapsedTime:true,                          // FAI-RF
+            flightTestSubmissionMinutes:20,                          // FAI-RF
+            scGateWidth:1.0f,                                        // FAI-RF
+            unsuitableStartNum:"13",                                 // FAI-RF
+            turnpointRule:TurnpointRule.TrueFalsePhoto,              // FAI-RF A3.4.4
+            turnpointMapMeasurement:false,                           // FAI-RF
+            enroutePhotoRule:EnrouteRule.NMFromTP,                   // FAI-RF
+            enrouteCanvasRule:EnrouteRule.NMFromTP,                  // FAI-RF
+            enrouteCanvasMultiple:true,                              // FAI-RF
+            minRouteLegs:10,                                         // FAI-RF A3.1.2
+            maxRouteLegs:16,                                         // FAI-RF A3.1.2
+            minEnroutePhotos:15,                                     // FAI-RF A3.4.3
+            maxEnroutePhotos:20,                                     // FAI-RF A3.4.3
+            minEnrouteCanvas:0,                                      // FAI-RF
+            maxEnrouteCanvas:5,                                      // FAI-RF A3.4.6
+            minEnrouteTargets:15,                                    // FAI-RF
+            maxEnrouteTargets:25,                                    // FAI-RF
+            useProcedureTurns:false,                                 // FAI-RF -
+            liveTrackingScorecard:"FAI Air Rally"                    // FAI-RF
+        ]                                                            // FAI-RF
+    ), // "FAI Air Rally Flying - Edition 2024"
+
+	R1 ([
+            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020", // DE-RF
+            
+			// General
+			precisionFlying:false,                                   // DE-RF
+            increaseFactor:0,                                        // DE-RF
+            printPointsGeneral:false,                                // DE-RF
+			printPointsPlanningTest:false,                           // DE-RF
+			printPointsFlightTest:true,                              // DE-RF
+            printPointsObservationTest:true,                         // DE-RF
+			printPointsLandingTest1:true,                            // DE-RF
+			printPointsLandingTest2:false,                           // DE-RF
+			printPointsLandingTest3:false,                           // DE-RF
+			printPointsLandingTest4:false,                           // DE-RF
+            printPointsLandingField:true,                            // DE-RF
+            landingFieldImageName:'images/landingfield/de_nav.jpg',  // DE-RF
+            printPointsTurnpointSign:false,                          // DE-RF
+            printPointsEnrouteCanvas:true,                           // DE-RF
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // DE-RF
+            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",      // DE-RF
+            
+			// PlanningTest
+			planningTestDirectionCorrectGrad:2,                      // DE-RF -
+			planningTestDirectionPointsPerGrad:2,                    // DE-RF -
+			planningTestTimeCorrectSecond:5,                         // DE-RF -
+			planningTestTimePointsPerSecond:1,                       // DE-RF -
+			planningTestMaxPoints:200,                               // DE-RF -
+			planningTestPlanTooLatePoints:50,                        // DE-RF -
+			planningTestExitRoomTooLatePoints:100,                   // DE-RF -
+            planningTestForbiddenCalculatorsPoints:0,                // DE-RF -
+		
+			// FlightTest
+			flightTestTakeoffCorrectSecond:60,                       // DE-RF 4
+			flightTestTakeoffCheckSeconds:true,                      // DE-RF
+            flightTestTakeoffMissedPoints:100,                       // DE-RF 4
+			flightTestTakeoffPointsPerSecond:3,                      // DE-RF 4
+			flightTestCptimeCorrectSecond:2,                         // DE-RF 4
+			flightTestCptimePointsPerSecond:3,                       // DE-RF 4
+			flightTestCptimeMaxPoints:100,                           // DE-RF 4
+			flightTestCpNotFoundPoints:100,                          // DE-RF 4
+			flightTestProcedureTurnNotFlownPoints:0,                 // DE-RF -
+			flightTestMinAltitudeMissedPoints:200,                   // DE-RF 4
+			flightTestBadCourseCorrectSecond:5,                      // DE-RF 3.3.6
+			flightTestBadCoursePoints:100,                           // DE-RF 4
+            flightTestBadCourseMaxPoints:1000,                       // DE-RF 4
+			flightTestBadCourseStartLandingPoints:200,               // DE-RF 4
+            flightTestBadCourseStartLandingSeparatePoints:false,     // DE-RF
+			flightTestOutsideCorridorCorrectSecond:0,                // DE-RF -
+			flightTestOutsideCorridorPointsPerSecond:0,              // DE-RF -
+			flightTestLandingToLatePoints:200,                       // DE-RF 4
+			flightTestGivenToLatePoints:300,                         // DE-RF 4
+			flightTestSafetyAndRulesInfringementPoints:0,            // DE-RF
+			flightTestInstructionsNotFollowedPoints:0,               // DE-RF
+			flightTestFalseEnvelopeOpenedPoints:0,                   // DE-RF
+			flightTestSafetyEnvelopeOpenedPoints:400,                // DE-RF 4
+			flightTestFrequencyNotMonitoredPoints:0,                 // DE-RF
+            flightTestForbiddenEquipmentPoints:0,                    // DE-RF
+            flightTestExitRoomTooLatePoints:0,                       // DE-RF -
+		
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // DE-RF 4
+            observationTestTurnpointFalsePoints:100,                 // DE-RF 4
+            observationTestEnrouteValueUnit:EnrouteValueUnit.NM,     // DE-RF 4
+            observationTestEnrouteCorrectValue:0.5f,                 // DE-RF 4
+            observationTestEnrouteInexactValue:1.0f,                 // DE-RF 4
+            observationTestEnrouteInexactPoints:15,                  // DE-RF 4
+            observationTestEnrouteNotFoundPoints:30,                 // DE-RF 4
+            observationTestEnrouteFalsePoints:50,                    // DE-RF 4
+            
+			// LandingTest
+            landingTest1:ContestRulesLanding.DE_RF_ANR.data,         // DE-RF
+            landingTest2:ContestRulesLanding.DE_RF_ANR.data,         // DE-RF
+            landingTest3:ContestRulesLanding.DE_RF_ANR.data,         // DE-RF
+            landingTest4:ContestRulesLanding.DE_RF_ANR.data,         // DE-RF
+
+            // Defaults (other)
+            anrFlying:false,                                         // DE-RF
+            flightTestLastGateNoBadCourseSeconds:45,                 // DE-RF
+            showPlanningTest:false,                                  // DE-RF
+            activateFlightTestCheckLanding:true,                     // DE-RF
+            showObservationTest:true,                                // DE-RF
+
+            // Defaults
+            flightPlanShowLegDistance:false,                         // DE-RF
+            flightPlanShowTrueTrack:false,                           // DE-RF
+            flightPlanShowTrueHeading:false,                         // DE-RF
+            flightPlanShowGroundSpeed:true,                          // DE-RF
+            flightPlanShowLocalTime:false,                           // DE-RF
+            flightPlanShowElapsedTime:true,                          // DE-RF
+            flightTestSubmissionMinutes:20,                          // DE-RF
+            scGateWidth:1.0f,                                        // DE-RF
+            unsuitableStartNum:"13",                                 // DE-RF
+            turnpointRule:TurnpointRule.TrueFalsePhoto,              // DE-RF 3.4.6
+            turnpointMapMeasurement:false,                           // DE-RF
+            enroutePhotoRule:EnrouteRule.NMFromTP,                   // DE-RF 3.4.8
+            enrouteCanvasRule:EnrouteRule.NMFromTP,                  // DE-RF 3.4.8
+            enrouteCanvasMultiple:true,                              // DE-RF
+            minRouteLegs:10,                                         // DE-RF 3.1
+            maxRouteLegs:16,                                         // DE-RF 3.1
+            minEnroutePhotos:15,                                     // DE-RF 3.4.1
+            maxEnroutePhotos:20,                                     // DE-RF 3.4.1
+            minEnrouteCanvas:0,                                      // DE-RF 3.4.1
+            maxEnrouteCanvas:5,                                      // DE-RF 3.4.1
+            minEnrouteTargets:10,                                    // DE-RF (3.4.1)
+            maxEnrouteTargets:25,                                    // DE-RF (3.4.1)
+            useProcedureTurns:false,                                 // DE-RF -
+            liveTrackingScorecard:"FAI Air Rally"                    // DE-RF
 		]
 	), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020"
 
-	R2 ([
-            ruleTitle:"Wettbewerbsordnung Pr\u00E4zisionsflug Deutschland - Ausgabe 2005",
-            
-			// General
-			precisionFlying:true,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:true,
-			printPointsFlightTest:true,
-            printPointsObservationTest:true,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:true,
-			printPointsLandingTest3:true,
-			printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/de_precision.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
-            
-			// PlanningTest
-			planningTestDirectionCorrectGrad:2,
-			planningTestDirectionPointsPerGrad:2,
-			planningTestTimeCorrectSecond:5,
-			planningTestTimePointsPerSecond:1,
-			planningTestMaxPoints:350,
-			planningTestPlanTooLatePoints:50,
-			planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
-		
-			// FlightTest
-			flightTestTakeoffCorrectSecond:60,
-			flightTestTakeoffCheckSeconds:false,
-			flightTestTakeoffPointsPerSecond:0,
-            flightTestTakeoffMissedPoints:200,
-			flightTestCptimeCorrectSecond:2,
-			flightTestCptimePointsPerSecond:3,
-			flightTestCptimeMaxPoints:200,
-			flightTestCpNotFoundPoints:200,
-			flightTestProcedureTurnNotFlownPoints:200,
-			flightTestMinAltitudeMissedPoints:500,
-			flightTestBadCourseCorrectSecond:5,
-			flightTestBadCoursePoints:200,
-            flightTestBadCourseMaxPoints:0,
-			flightTestBadCourseStartLandingPoints:200,
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-			flightTestLandingToLatePoints:200,
-			flightTestGivenToLatePoints:100,
-			flightTestSafetyAndRulesInfringementPoints:0,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:0,
-			flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,
-            observationTestTurnpointFalsePoints:100,
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,
-            observationTestEnrouteCorrectValue:5.0f,
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,
-            observationTestEnrouteFalsePoints:30,
-            
-			// LandingTest
-			landingTest1MaxPoints:400,
-			landingTest1NoLandingPoints:200,
-			landingTest1OutsideLandingPoints:200,
-			landingTest1RollingOutsidePoints:200,
-			landingTest1PowerInBoxPoints:50,
-			landingTest1GoAroundWithoutTouchingPoints:0,
-			landingTest1GoAroundInsteadStopPoints:0,
-			landingTest1AbnormalLandingPoints:150,
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}",
-            
-			landingTest2MaxPoints:200,
-			landingTest2NoLandingPoints:150,
-			landingTest2OutsideLandingPoints:150,
-			landingTest2RollingOutsidePoints:150,
-			landingTest2PowerInBoxPoints:50,
-			landingTest2GoAroundWithoutTouchingPoints:0,
-			landingTest2GoAroundInsteadStopPoints:0,
-			landingTest2AbnormalLandingPoints:150,
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:200,
-			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return null;}}}",
-			
-			landingTest3MaxPoints:200,
-			landingTest3NoLandingPoints:150,
-			landingTest3OutsideLandingPoints:150,
-			landingTest3RollingOutsidePoints:150,
-			landingTest3PowerInBoxPoints:50,
-			landingTest3GoAroundWithoutTouchingPoints:0,
-			landingTest3GoAroundInsteadStopPoints:0,
-			landingTest3AbnormalLandingPoints:150,
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:200,
-			landingTest3FlapsInAirPoints:200,
-			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return null;}}}",
-			
-			landingTest4MaxPoints:400,
-			landingTest4NoLandingPoints:200,
-			landingTest4OutsideLandingPoints:200,
-			landingTest4RollingOutsidePoints:200,
-			landingTest4PowerInBoxPoints:50,
-			landingTest4GoAroundWithoutTouchingPoints:0,
-			landingTest4GoAroundInsteadStopPoints:0,
-			landingTest4AbnormalLandingPoints:150,
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:400,
-			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}",
-            
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // like Precision
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignCanvas,
-            turnpointMapMeasurement:true,
-            enroutePhotoRule:EnrouteRule.Map,
-            enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:0,
-            maxRouteLegs:8,
-            minEnroutePhotos:8,
-            maxEnroutePhotos:10,
-            minEnrouteCanvas:8,
-            maxEnrouteCanvas:15,
-            minEnrouteTargets:16,
-            maxEnrouteTargets:25,
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-		]
-	), // "Wettbewerbsordnung Pr\u00E4zisionsflug Deutschland - Ausgabe 2005"
-
-	R3 ([
-            ruleTitle:"FAI Air Rally Flying - Unlimited - Edition 2016",
-            
-			// General
-			precisionFlying:false,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:false,
-			printPointsFlightTest:true,
-            printPointsObservationTest:true,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:false,
-			printPointsLandingTest3:false,
-			printPointsLandingTest4:false,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/fai_rally.jpg',
-            printPointsTurnpointSign:false,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
-            
-			// PlanningTest
-			planningTestDirectionCorrectGrad:2,
-			planningTestDirectionPointsPerGrad:2,
-			planningTestTimeCorrectSecond:5,
-			planningTestTimePointsPerSecond:1,
-			planningTestMaxPoints:350,
-			planningTestPlanTooLatePoints:50,
-			planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
-		
-			// FlightTest
-			flightTestTakeoffCorrectSecond:60,
-			flightTestTakeoffCheckSeconds:true,
-			flightTestTakeoffPointsPerSecond:3,
-            flightTestTakeoffMissedPoints:100,
-			flightTestCptimeCorrectSecond:2,
-			flightTestCptimePointsPerSecond:3,
-			flightTestCptimeMaxPoints:100,
-			flightTestCpNotFoundPoints:100,
-			flightTestProcedureTurnNotFlownPoints:0,
-			flightTestMinAltitudeMissedPoints:200,
-			flightTestBadCourseCorrectSecond:5,
-			flightTestBadCoursePoints:200,
-            flightTestBadCourseMaxPoints:0,
-			flightTestBadCourseStartLandingPoints:200,
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-			flightTestLandingToLatePoints:0,
-			flightTestGivenToLatePoints:300,
-			flightTestSafetyAndRulesInfringementPoints:600,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:100,
-			flightTestSafetyEnvelopeOpenedPoints:300,
-			flightTestFrequencyNotMonitoredPoints:200,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,
-            observationTestTurnpointFalsePoints:100,
-            observationTestEnrouteValueUnit:EnrouteValueUnit.NM,
-            observationTestEnrouteCorrectValue:0.5f,
-            observationTestEnrouteInexactValue:1.0f,
-            observationTestEnrouteInexactPoints:15,
-            observationTestEnrouteNotFoundPoints:30,
-            observationTestEnrouteFalsePoints:50,
-            
-			// LandingTest
-			landingTest1MaxPoints:300,
-			landingTest1NoLandingPoints:300,
-			landingTest1OutsideLandingPoints:200,
-			landingTest1RollingOutsidePoints:200,
-			landingTest1PowerInBoxPoints:50,
-			landingTest1GoAroundWithoutTouchingPoints:200,
-			landingTest1GoAroundInsteadStopPoints:200,
-			landingTest1AbnormalLandingPoints:150,
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}",
-		
-			landingTest2MaxPoints:300,
-			landingTest2NoLandingPoints:300,
-			landingTest2OutsideLandingPoints:200,
-			landingTest2RollingOutsidePoints:200,
-			landingTest2PowerInBoxPoints:50,
-			landingTest2GoAroundWithoutTouchingPoints:200,
-			landingTest2GoAroundInsteadStopPoints:200,
-			landingTest2AbnormalLandingPoints:150,
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:0,
-			landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}",
-			
-			landingTest3MaxPoints:300,
-			landingTest3NoLandingPoints:300,
-			landingTest3OutsideLandingPoints:200,
-			landingTest3RollingOutsidePoints:200,
-			landingTest3PowerInBoxPoints:50,
-			landingTest3GoAroundWithoutTouchingPoints:200,
-			landingTest3GoAroundInsteadStopPoints:200,
-			landingTest3AbnormalLandingPoints:150,
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:0,
-			landingTest3FlapsInAirPoints:0,
-			landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}",
-			
-			landingTest4MaxPoints:300,
-			landingTest4NoLandingPoints:300,
-			landingTest4OutsideLandingPoints:200,
-			landingTest4RollingOutsidePoints:200,
-			landingTest4PowerInBoxPoints:50,
-			landingTest4GoAroundWithoutTouchingPoints:200,
-			landingTest4GoAroundInsteadStopPoints:200,
-			landingTest4AbnormalLandingPoints:150,
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:0,
-			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}",
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:45,
-            showPlanningTest:false,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.TrueFalsePhoto,
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.NMFromTP,
-            enrouteCanvasRule:EnrouteRule.NMFromTP,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:10,
-            maxRouteLegs:16,
-            minEnroutePhotos:15,
-            maxEnroutePhotos:20,
-            minEnrouteCanvas:0,
-            maxEnrouteCanvas:5,
-            minEnrouteTargets:15,
-            maxEnrouteTargets:20,
-            useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally"
-		]
-	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
-
-	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2024",
-            
-			// General
-			precisionFlying:true,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:true,
-			printPointsFlightTest:true,
-            printPointsObservationTest:true,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:true,
-			printPointsLandingTest3:true,
-			printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
-            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
-            
-			// PlanningTest
-			planningTestDirectionCorrectGrad:2,                   // A10.1.1
-			planningTestDirectionPointsPerGrad:2,                 // A10.1.1
-			planningTestTimeCorrectSecond:5,                      // A10.1.1
-			planningTestTimePointsPerSecond:1,                    // A10.1.1
-			planningTestMaxPoints:200,                            // A10.1.1
-			planningTestPlanTooLatePoints:50,                     // A10.1.1
-			planningTestExitRoomTooLatePoints:100,                // A10.1.1
-            planningTestForbiddenCalculatorsPoints:0,
-		
-			// FlightTest
-            flightTestTakeoffCorrectSecond:60,                    // A10.1.2
-            flightTestTakeoffCheckSeconds:false,
-            flightTestTakeoffPointsPerSecond:0,
-			flightTestTakeoffMissedPoints:200,                    // A10.1.2
-			flightTestCptimeCorrectSecond:2,                      // A10.1.3
-			flightTestCptimePointsPerSecond:3,                    // A10.1.3
-			flightTestCptimeMaxPoints:100,                        // A10.1.3
-			flightTestCpNotFoundPoints:100,                       // A10.1.3
-			flightTestProcedureTurnNotFlownPoints:200,            // A10.1.4
-			flightTestMinAltitudeMissedPoints:500,                // A10.1.5
-			flightTestBadCourseCorrectSecond:5,                   // A2.2.13
-			flightTestBadCoursePoints:200,                        // A10.1.6
-            flightTestBadCourseMaxPoints:0,
-			flightTestBadCourseStartLandingPoints:200,            // A10.1.6
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-			flightTestLandingToLatePoints:200,                    // A10.1.6
-			flightTestGivenToLatePoints:100,                      // A10.1.7
-			flightTestSafetyAndRulesInfringementPoints:0,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:0,
-			flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,            // A10.2.1
-            observationTestTurnpointFalsePoints:100,              // A10.2.1
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,  // A10.2.1
-            observationTestEnrouteCorrectValue:5.0f,              // A10.2.1
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,              // A10.2.1
-            observationTestEnrouteFalsePoints:30,                 // A10.2.1
-            
-			// LandingTest
-			landingTest1MaxPoints:400,                            // Landing 6.2.1
-			landingTest1NoLandingPoints:300,                      // Landing 6.2.1
-			landingTest1OutsideLandingPoints:300,                 // Landing 6.2.1
-			landingTest1RollingOutsidePoints:200,                 // Landing 6.2.1
-			landingTest1PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest1GoAroundWithoutTouchingPoints:0,
-			landingTest1GoAroundInsteadStopPoints:0,
-			landingTest1AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
-		
-			landingTest2MaxPoints:200,                            // Landing 6.2.1
-			landingTest2NoLandingPoints:200,                      // Landing 6.2.1
-			landingTest2OutsideLandingPoints:200,                 // Landing 6.2.1
-			landingTest2RollingOutsidePoints:150,                 // Landing 6.2.1
-			landingTest2PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest2GoAroundWithoutTouchingPoints:0,
-			landingTest2GoAroundInsteadStopPoints:0,
-			landingTest2AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:200,                     // Landing 6.2.1
-			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
-			
-			landingTest3MaxPoints:200,                            // Landing 6.2.1
-			landingTest3NoLandingPoints:200,                      // Landing 6.2.1
-			landingTest3OutsideLandingPoints:200,                 // Landing 6.2.1
-			landingTest3RollingOutsidePoints:150,                 // Landing 6.2.1
-			landingTest3PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest3GoAroundWithoutTouchingPoints:0,
-			landingTest3GoAroundInsteadStopPoints:0,
-			landingTest3AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:200,                     // Landing 6.2.1
-			landingTest3FlapsInAirPoints:200,                     // Landing 6.2.1
-			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
-			
-			landingTest4MaxPoints:400,                            // Landing 6.2.1
-			landingTest4NoLandingPoints:300,                      // Landing 6.2.1
-			landingTest4OutsideLandingPoints:300,                 // Landing 6.2.1
-			landingTest4RollingOutsidePoints:200,                 // Landing 6.2.1
-			landingTest4PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest4GoAroundWithoutTouchingPoints:0,
-			landingTest4GoAroundInsteadStopPoints:0,
-			landingTest4AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:400,               // Landing 6.2.1
-			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // A2.2.13, defines 0.5NM around gate
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignCanvas,
-            turnpointMapMeasurement:true,
-            enroutePhotoRule:EnrouteRule.Map,
-            enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:0,
-            maxRouteLegs:8,                                       // A2.2.3
-            minEnroutePhotos:8,                                   // A3.2
-            maxEnroutePhotos:10,                                  // A3.2
-            minEnrouteCanvas:8,                                   // A3.2
-            maxEnrouteCanvas:15,                                  // A3.2
-            minEnrouteTargets:16,                                 // A3.2
-            maxEnrouteTargets:25,                                 // A3.2
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-		]
-	), // "FAI Precision Flying - Edition 2024"
-
-	R5 ([
-            ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
-            
-			// General
-			precisionFlying:true,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:true,
-			printPointsFlightTest:true,
-            printPointsObservationTest:true,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:true,
-			printPointsLandingTest3:true,
-			printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/ch_precision.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
-            
-			// PlanningTest
-			planningTestDirectionCorrectGrad:2,                     // Anhang 5.1
-			planningTestDirectionPointsPerGrad:2,                   // Anhang 5.1
-			planningTestTimeCorrectSecond:5,                        // Anhang 5.1
-			planningTestTimePointsPerSecond:1,                      // Anhang 5.1
-			planningTestMaxPoints:200,                              // Anhang 5.1
-			planningTestPlanTooLatePoints:50,                       // Anhang 5.1
-			planningTestExitRoomTooLatePoints:100,                  // Anhang 5.1
-            planningTestForbiddenCalculatorsPoints:0,
-		
-			// FlightTest
-			flightTestTakeoffCorrectSecond:60,                      // Anhang 5.2
-			flightTestTakeoffCheckSeconds:false,
-			flightTestTakeoffPointsPerSecond:0,
-            flightTestTakeoffMissedPoints:200,                      // Anhang 5.2
-			flightTestCptimeCorrectSecond:2,                        // Anhang 5.2
-			flightTestCptimePointsPerSecond:3,                      // Anhang 5.2
-			flightTestCptimeMaxPoints:100,                          // Anhang 5.2
-			flightTestCpNotFoundPoints:100,                         // Anhang 5.2
-			flightTestProcedureTurnNotFlownPoints:200,              // Anhang 5.2
-			flightTestMinAltitudeMissedPoints:500,                  // Anhang 5.2
-			flightTestBadCourseCorrectSecond:5,                     // 4.7.15
-			flightTestBadCoursePoints:200,                          // Anhang 5.2
-            flightTestBadCourseMaxPoints:0,
-			flightTestBadCourseStartLandingPoints:200,              // Anhang 5.2
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-			flightTestLandingToLatePoints:200,                      // Anhang 5.2
-			flightTestGivenToLatePoints:100,                        // Anhang 5.2
-			flightTestSafetyAndRulesInfringementPoints:0,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:0,
-			flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,              // Anhang 5.3
-            observationTestTurnpointFalsePoints:100,                // Anhang 5.3
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,    // Anhang 5.3
-            observationTestEnrouteCorrectValue:5.0f,                // Anhang 5.3
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,                // Anhang 5.3
-            observationTestEnrouteFalsePoints:30,                   // Anhang 5.3
-            
-			// LandingTest
-			landingTest1MaxPoints:400,                              // Anhang 5.4
-			landingTest1NoLandingPoints:300,                        // Anhang 5.4
-			landingTest1OutsideLandingPoints:300,                   // Anhang 5.4
-			landingTest1RollingOutsidePoints:200,                   // Anhang 5.4
-			landingTest1PowerInBoxPoints:50,                        // Anhang 5.4
-			landingTest1GoAroundWithoutTouchingPoints:0,
-			landingTest1GoAroundInsteadStopPoints:0,
-			landingTest1AbnormalLandingPoints:200,                  // Anhang 5.4
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:200, // Anhang 5.4
-			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Anhang 2
-		
-			landingTest2MaxPoints:200,                              // Anhang 5.4
-			landingTest2NoLandingPoints:200,                        // Anhang 5.4
-			landingTest2OutsideLandingPoints:200,                   // Anhang 5.4
-			landingTest2RollingOutsidePoints:150,                   // Anhang 5.4
-			landingTest2PowerInBoxPoints:50,                        // Anhang 5.4
-			landingTest2GoAroundWithoutTouchingPoints:0,
-			landingTest2GoAroundInsteadStopPoints:0,
-			landingTest2AbnormalLandingPoints:200,                  // Anhang 5.4
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:200, // Anhang 5.4
-			landingTest2PowerInAirPoints:200,                       // Anhang 5.4
-			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Anhang 2
-			
-			landingTest3MaxPoints:200,                              // Anhang 5.4
-			landingTest3NoLandingPoints:200,                        // Anhang 5.4
-			landingTest3OutsideLandingPoints:200,                   // Anhang 5.4
-			landingTest3RollingOutsidePoints:150,                   // Anhang 5.4
-			landingTest3PowerInBoxPoints:50,                        // Anhang 5.4
-			landingTest3GoAroundWithoutTouchingPoints:0,
-			landingTest3GoAroundInsteadStopPoints:0,
-			landingTest3AbnormalLandingPoints:200,                  // Anhang 5.4
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:200, // Anhang 5.4			
-			landingTest3PowerInAirPoints:200,                       // Anhang 5.4
-			landingTest3FlapsInAirPoints:200,                       // Anhang 5.4
-			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Anhang 2
-			
-			landingTest4MaxPoints:400,                              // Anhang 5.4
-			landingTest4NoLandingPoints:300,                        // Anhang 5.4
-			landingTest4OutsideLandingPoints:300,                   // Anhang 5.4
-			landingTest4RollingOutsidePoints:200,                   // Anhang 5.4
-			landingTest4PowerInBoxPoints:50,                        // Anhang 5.4
-			landingTest4GoAroundWithoutTouchingPoints:0,
-			landingTest4GoAroundInsteadStopPoints:0,
-			landingTest4AbnormalLandingPoints:200,                  // Anhang 5.4
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:200, // Anhang 5.4
-			landingTest4TouchingObstaclePoints:400,                 // Anhang 5.4
-			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Anhang 2
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // 4.7.15 defines 800m after gate passing
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignCanvas,
-            turnpointMapMeasurement:true,
-            enroutePhotoRule:EnrouteRule.Map,
-            enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:5,                                         // 4.7.12
-            maxRouteLegs:8,                                         // 4.7.12
-            minEnroutePhotos:8,                                     // 4.8.1
-            maxEnroutePhotos:10,                                    // 4.8.1
-            minEnrouteCanvas:8,                                     // 4.8.1
-            maxEnrouteCanvas:15,                                    // 4.8.1
-            minEnrouteTargets:16,                                   // 4.8.1
-            maxEnrouteTargets:25,                                   // 4.8.1
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-		]
-	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
-
-    R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2024",
-            
-            // General
-            precisionFlying:false,
-            increaseFactor:0,
-            printPointsGeneral:false,
-            printPointsPlanningTest:false,
-            printPointsFlightTest:true,
-            printPointsObservationTest:true,
-            printPointsLandingTest1:true,
-            printPointsLandingTest2:false,
-            printPointsLandingTest3:false,
-            printPointsLandingTest4:false,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/fai_rally.jpg',
-            printPointsTurnpointSign:false,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
-            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
-            
-            // PlanningTest
-            planningTestDirectionCorrectGrad:2,
-            planningTestDirectionPointsPerGrad:2,
-            planningTestTimeCorrectSecond:2,
-            planningTestTimePointsPerSecond:3,
-            planningTestMaxPoints:350,
-            planningTestPlanTooLatePoints:50,
-            planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
-        
-            // FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // A4.1
-            flightTestTakeoffCheckSeconds:true,                  // A4.1
-            flightTestTakeoffPointsPerSecond:3,                  // A4.1
-            flightTestTakeoffMissedPoints:100,                   // A4.1
-            flightTestCptimeCorrectSecond:2,                     // A4.2
-            flightTestCptimePointsPerSecond:3,                   // A4.2
-            flightTestCptimeMaxPoints:100,                       // A4.2
-            flightTestCpNotFoundPoints:100,                      // A4.4
-            flightTestProcedureTurnNotFlownPoints:0,
-            flightTestMinAltitudeMissedPoints:200,               // A4.4
-            flightTestBadCourseCorrectSecond:5,                  // A4.5
-            flightTestBadCoursePoints:100,                       // A4.5
-            flightTestBadCourseMaxPoints:1000,                   // A4.5
-            flightTestBadCourseStartLandingPoints:200,           // A4.4
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-            flightTestLandingToLatePoints:0,
-            flightTestGivenToLatePoints:300,                     // A4.7
-            flightTestSafetyAndRulesInfringementPoints:600,      // A4.4
-            flightTestInstructionsNotFollowedPoints:0,
-            flightTestFalseEnvelopeOpenedPoints:0,
-            flightTestSafetyEnvelopeOpenedPoints:400,            // A4.4
-            flightTestFrequencyNotMonitoredPoints:200,           // A4.8
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,           // A4.3
-            observationTestTurnpointFalsePoints:100,             // A4.3
-            observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // A4.3
-            observationTestEnrouteCorrectValue:0.5f,             // A4.3
-            observationTestEnrouteInexactValue:1.0f,             // A4.3
-            observationTestEnrouteInexactPoints:15,              // A4.3
-            observationTestEnrouteNotFoundPoints:30,             // A4.3
-            observationTestEnrouteFalsePoints:50,                // A4.3
-            
-            // LandingTest
-            landingTest1MaxPoints:300,                           // A4.6 - Landing 6.1
-            landingTest1NoLandingPoints:300,                     // A4.6 - Landing 6.1
-            landingTest1OutsideLandingPoints:200,                // A4.6 - Landing 6.1
-            landingTest1RollingOutsidePoints:200,                // A4.6 - Landing 6.1
-            landingTest1PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
-            landingTest1GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
-            landingTest1GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
-            landingTest1AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
-            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
-        
-            landingTest2MaxPoints:300,                           // A4.6 - Landing 6.1
-            landingTest2NoLandingPoints:300,                     // A4.6 - Landing 6.1
-            landingTest2OutsideLandingPoints:200,                // A4.6 - Landing 6.1
-            landingTest2RollingOutsidePoints:200,                // A4.6 - Landing 6.1
-            landingTest2PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
-            landingTest2GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
-            landingTest2GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
-            landingTest2AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
-            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest2PowerInAirPoints:0,
-            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
-            
-            landingTest3MaxPoints:300,                           // A4.6 - Landing 6.1
-            landingTest3NoLandingPoints:300,                     // A4.6 - Landing 6.1
-            landingTest3OutsideLandingPoints:200,                // A4.6 - Landing 6.1
-            landingTest3RollingOutsidePoints:200,                // A4.6 - Landing 6.1
-            landingTest3PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
-            landingTest3GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
-            landingTest3GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
-            landingTest3AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
-            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest3PowerInAirPoints:0,
-            landingTest3FlapsInAirPoints:0,
-            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
-            
-            landingTest4MaxPoints:300,                           // A4.6 - Landing 6.1
-            landingTest4NoLandingPoints:300,                     // A4.6 - Landing 6.1
-            landingTest4OutsideLandingPoints:200,                // A4.6 - Landing 6.1
-            landingTest4RollingOutsidePoints:200,                // A4.6 - Landing 6.1
-            landingTest4PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
-            landingTest4GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
-            landingTest4GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
-            landingTest4AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
-            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest4TouchingObstaclePoints:0,
-            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:45,              // A3.1.9 defines 45s
-            showPlanningTest:false,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:false,
-            flightPlanShowTrueTrack:false,
-            flightPlanShowTrueHeading:false,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:false,
-            flightPlanShowElapsedTime:true,
-            flightTestSubmissionMinutes:20,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.None,
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.NMFromTP,
-            enrouteCanvasRule:EnrouteRule.NMFromTP,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:10,                                     // A3.1.2
-            maxRouteLegs:16,                                     // A3.1.2
-            minEnroutePhotos:15,                                 // A3.4.3
-            maxEnroutePhotos:20,                                 // A3.4.3
-            minEnrouteCanvas:0,
-            maxEnrouteCanvas:5,                                  // A3.4.6
-            minEnrouteTargets:15,
-            maxEnrouteTargets:25,
-            useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally"
-        ]
-    ), // "FAI Air Rally Flying - Edition 2024"
-
-    R7 ([
-            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023",
-            
-            // General
-            precisionFlying:true,
-            increaseFactor:20,                                   // 4.1
-            printPointsGeneral:true,
-            printPointsPlanningTest:true,
-            printPointsFlightTest:true,
-            printPointsObservationTest:true,
-            printPointsLandingTest1:true,
-            printPointsLandingTest2:true,
-            printPointsLandingTest3:true,
-            printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/at_precision_landing1.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
-            printLandingCalculatorValues:"C,A,I,II,III",
-            
-            // PlanningTest
-            planningTestDirectionCorrectGrad:2,                  // 4.5
-            planningTestDirectionPointsPerGrad:2,                // 4.5
-            planningTestTimeCorrectSecond:5,                     // 4.5
-            planningTestTimePointsPerSecond:1,                   // 4.5
-            planningTestMaxPoints:350,                           // 4.5
-            planningTestPlanTooLatePoints:50,                    // 4.5
-            planningTestExitRoomTooLatePoints:100,               // 4.5
-            planningTestForbiddenCalculatorsPoints:300,          // 4.5
-        
-            // FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // 4.5
-            flightTestTakeoffCheckSeconds:false,                 // 4.5
-            flightTestTakeoffPointsPerSecond:0,                  // 4.5
-            flightTestTakeoffMissedPoints:200,                   // 4.5
-            flightTestCptimeCorrectSecond:2,                     // 4.5
-            flightTestCptimePointsPerSecond:3,                   // 4.5
-            flightTestCptimeMaxPoints:100,                       // 4.5
-            flightTestCpNotFoundPoints:100,                      // 4.5
-            flightTestProcedureTurnNotFlownPoints:200,           // 4.5
-            flightTestMinAltitudeMissedPoints:500,               // 4.5
-            flightTestBadCourseCorrectSecond:5,                  // 4.5
-            flightTestBadCoursePoints:200,                       // 4.5
-            flightTestBadCourseMaxPoints:0,
-            flightTestBadCourseStartLandingPoints:200,           // 4.5
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-            flightTestLandingToLatePoints:200,                   // 4.5
-            flightTestGivenToLatePoints:100,                     // 4.5
-            flightTestSafetyAndRulesInfringementPoints:0,
-            flightTestInstructionsNotFollowedPoints:0,
-            flightTestFalseEnvelopeOpenedPoints:0,
-            flightTestSafetyEnvelopeOpenedPoints:0,
-            flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,           // 4.5
-            observationTestTurnpointFalsePoints:100,             // 4.5
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm, // 4.5
-            observationTestEnrouteCorrectValue:5.0f,             // 4.5
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,             // 4.5
-            observationTestEnrouteFalsePoints:30,                // 4.5
-            
-            // LandingTest
-            landingTest1MaxPoints:100,                           // 4.5
-            landingTest1NoLandingPoints:100,
-            landingTest1OutsideLandingPoints:100,
-            landingTest1RollingOutsidePoints:0,
-            landingTest1PowerInBoxPoints:50,                     // 4.5
-            landingTest1GoAroundWithoutTouchingPoints:0,
-            landingTest1GoAroundInsteadStopPoints:0,
-            landingTest1AbnormalLandingPoints:100,               // 4.5
-            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}", // 4.5
-        
-            landingTest2MaxPoints:200,                           // 4.5
-            landingTest2NoLandingPoints:200,
-            landingTest2OutsideLandingPoints:200,
-            landingTest2RollingOutsidePoints:0,
-            landingTest2PowerInBoxPoints:50,                     // 4.5
-            landingTest2GoAroundWithoutTouchingPoints:0,
-            landingTest2GoAroundInsteadStopPoints:0,
-            landingTest2AbnormalLandingPoints:100,               // 4.5
-            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest2PowerInAirPoints:100,                    // 4.5
-            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}", // 4.5
-            
-            landingTest3MaxPoints:200,                           // 4.5
-            landingTest3NoLandingPoints:200,
-            landingTest3OutsideLandingPoints:200,
-            landingTest3RollingOutsidePoints:0,
-            landingTest3PowerInBoxPoints:50,                     // 4.5
-            landingTest3GoAroundWithoutTouchingPoints:0,
-            landingTest3GoAroundInsteadStopPoints:0,
-            landingTest3AbnormalLandingPoints:100,               // 4.5
-            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest3PowerInAirPoints:100,                    // 4.5
-            landingTest3FlapsInAirPoints:100,                    // 4.5
-            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}", // 4.5
-            
-            landingTest4MaxPoints:200,                           // 4.5
-            landingTest4NoLandingPoints:200,
-            landingTest4OutsideLandingPoints:200,
-            landingTest4RollingOutsidePoints:0,
-            landingTest4PowerInBoxPoints:50,                     // 4.5
-            landingTest4GoAroundWithoutTouchingPoints:0,
-            landingTest4GoAroundInsteadStopPoints:0,
-            landingTest4AbnormalLandingPoints:100,               // 4.5
-            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest4TouchingObstaclePoints:100,              // 4.5
-            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}", // 4.5
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // 4.2.2j defines 0.5NM
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignCanvas,
-            turnpointMapMeasurement:true,
-            enroutePhotoRule:EnrouteRule.Map,
-            enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:0,
-            maxRouteLegs:8,                                      // 4.2.2c
-            minEnroutePhotos:8,                                  // 4.3.a
-            maxEnroutePhotos:10,                                 // 4.3.a
-            minEnrouteCanvas:5,                                  // 4.3.a
-            maxEnrouteCanvas:8,                                  // 4.3.a
-            minEnrouteTargets:13,                                // 4.3.a
-            maxEnrouteTargets:18,                                // 4.3.a
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-        ]
-    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023"
-
-    R8 ([
-            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023",
-            
-            // General
-            precisionFlying:true,
-            increaseFactor:20,                                   // 4.1
-            printPointsGeneral:true,
-            printPointsPlanningTest:true,
-            printPointsFlightTest:true,
-            printPointsObservationTest:true,
-            printPointsLandingTest1:true,
-            printPointsLandingTest2:true,
-            printPointsLandingTest3:true,
-            printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/at_precision_landing2.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
-            printLandingCalculatorValues:"C,B,A,-5,5,I,II,III,IV,V,VI",
-            
-            // PlanningTest
-            planningTestDirectionCorrectGrad:2,                  // 4.5
-            planningTestDirectionPointsPerGrad:2,                // 4.5
-            planningTestTimeCorrectSecond:5,                     // 4.5
-            planningTestTimePointsPerSecond:1,                   // 4.5
-            planningTestMaxPoints:350,                           // 4.5
-            planningTestPlanTooLatePoints:50,                    // 4.5
-            planningTestExitRoomTooLatePoints:100,               // 4.5
-            planningTestForbiddenCalculatorsPoints:300,          // 4.5
-        
-            // FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // 4.5
-            flightTestTakeoffCheckSeconds:false,                 // 4.5
-            flightTestTakeoffPointsPerSecond:0,                  // 4.5
-            flightTestTakeoffMissedPoints:200,                   // 4.5
-            flightTestCptimeCorrectSecond:2,                     // 4.5
-            flightTestCptimePointsPerSecond:3,                   // 4.5
-            flightTestCptimeMaxPoints:100,                       // 4.5
-            flightTestCpNotFoundPoints:100,                      // 4.5
-            flightTestProcedureTurnNotFlownPoints:200,           // 4.5
-            flightTestMinAltitudeMissedPoints:500,               // 4.5
-            flightTestBadCourseCorrectSecond:5,                  // 4.5
-            flightTestBadCoursePoints:200,                       // 4.5
-            flightTestBadCourseMaxPoints:0,
-            flightTestBadCourseStartLandingPoints:200,           // 4.5
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-            flightTestLandingToLatePoints:200,                   // 4.5
-            flightTestGivenToLatePoints:100,                     // 4.5
-            flightTestSafetyAndRulesInfringementPoints:0,
-            flightTestInstructionsNotFollowedPoints:0,
-            flightTestFalseEnvelopeOpenedPoints:0,
-            flightTestSafetyEnvelopeOpenedPoints:0,
-            flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,           // 4.5
-            observationTestTurnpointFalsePoints:100,             // 4.5
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm, // 4.5
-            observationTestEnrouteCorrectValue:5.0f,             // 4.5
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,             // 4.5
-            observationTestEnrouteFalsePoints:30,                // 4.5
-            
-            // LandingTest
-            landingTest1MaxPoints:100,                           // 4.5
-            landingTest1NoLandingPoints:100,
-            landingTest1OutsideLandingPoints:100,
-            landingTest1RollingOutsidePoints:0,
-            landingTest1PowerInBoxPoints:50,                     // 4.5
-            landingTest1GoAroundWithoutTouchingPoints:0,
-            landingTest1GoAroundInsteadStopPoints:0,
-            landingTest1AbnormalLandingPoints:100,               // 4.5
-            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}", // 4.5
-        
-            landingTest2MaxPoints:200,                           // 4.5
-            landingTest2NoLandingPoints:200,
-            landingTest2OutsideLandingPoints:200,
-            landingTest2RollingOutsidePoints:0,
-            landingTest2PowerInBoxPoints:50,                     // 4.5
-            landingTest2GoAroundWithoutTouchingPoints:0,
-            landingTest2GoAroundInsteadStopPoints:0,
-            landingTest2AbnormalLandingPoints:100,               // 4.5
-            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest2PowerInAirPoints:100,                    // 4.5
-            landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}", // 4.5
-            
-            landingTest3MaxPoints:200,                           // 4.5
-            landingTest3NoLandingPoints:200,
-            landingTest3OutsideLandingPoints:200,
-            landingTest3RollingOutsidePoints:0,
-            landingTest3PowerInBoxPoints:50,                     // 4.5
-            landingTest3GoAroundWithoutTouchingPoints:0,
-            landingTest3GoAroundInsteadStopPoints:0,
-            landingTest3AbnormalLandingPoints:100,               // 4.5
-            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest3PowerInAirPoints:100,                    // 4.5
-            landingTest3FlapsInAirPoints:100,                    // 4.5
-            landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}", // 4.5
-            
-            landingTest4MaxPoints:200,                           // 4.5
-            landingTest4NoLandingPoints:200,
-            landingTest4OutsideLandingPoints:200,
-            landingTest4RollingOutsidePoints:0,
-            landingTest4PowerInBoxPoints:50,                     // 4.5
-            landingTest4GoAroundWithoutTouchingPoints:0,
-            landingTest4GoAroundInsteadStopPoints:0,
-            landingTest4AbnormalLandingPoints:100,               // 4.5
-            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest4TouchingObstaclePoints:100,              // 4.5
-            landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}", // 4.5
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // 4.2.2j defines 0.5NM
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignCanvas,
-            turnpointMapMeasurement:true,
-            enroutePhotoRule:EnrouteRule.Map,
-            enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:0,
-            maxRouteLegs:8,                                      // 4.2.2c
-            minEnroutePhotos:8,                                  // 4.3a
-            maxEnroutePhotos:10,                                 // 4.3a
-            minEnrouteCanvas:5,                                  // 4.3a
-            maxEnrouteCanvas:8,                                  // 4.3a
-            minEnrouteTargets:13,                                // 4.3a
-            maxEnrouteTargets:18,                                // 4.3a
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-        ]
-    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023"
-
-    R9 ([
-            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023",
-            
-            // General
-            precisionFlying:true,
-            increaseFactor:20,                                   // 4.1
-            printPointsGeneral:true,
-            printPointsPlanningTest:true,
-            printPointsFlightTest:true,
-            printPointsObservationTest:true,
-            printPointsLandingTest1:true,
-            printPointsLandingTest2:true,
-            printPointsLandingTest3:true,
-            printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/at_precision_landing3.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
-            printLandingCalculatorValues:"-20,-10,-1,1,10,20,30",
-            
-            // PlanningTest
-            planningTestDirectionCorrectGrad:2,                  // 4.5
-            planningTestDirectionPointsPerGrad:2,                // 4.5
-            planningTestTimeCorrectSecond:5,                     // 4.5
-            planningTestTimePointsPerSecond:1,                   // 4.5
-            planningTestMaxPoints:350,                           // 4.5
-            planningTestPlanTooLatePoints:50,                    // 4.5
-            planningTestExitRoomTooLatePoints:100,               // 4.5
-            planningTestForbiddenCalculatorsPoints:300,          // 4.5
-        
-            // FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // 4.5
-            flightTestTakeoffCheckSeconds:false,
-            flightTestTakeoffPointsPerSecond:0,
-            flightTestTakeoffMissedPoints:200,                   // 4.5
-            flightTestCptimeCorrectSecond:2,                     // 4.5
-            flightTestCptimePointsPerSecond:3,                   // 4.5
-            flightTestCptimeMaxPoints:100,                       // 4.5
-            flightTestCpNotFoundPoints:100,                      // 4.5
-            flightTestProcedureTurnNotFlownPoints:200,           // 4.5
-            flightTestMinAltitudeMissedPoints:500,               // 4.5
-            flightTestBadCourseCorrectSecond:5,                  // 4.5
-            flightTestBadCoursePoints:200,                       // 4.5
-            flightTestBadCourseMaxPoints:0,
-            flightTestBadCourseStartLandingPoints:200,           // 4.5
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-            flightTestLandingToLatePoints:200,                   // 4.5
-            flightTestGivenToLatePoints:100,                     // 4.5
-            flightTestSafetyAndRulesInfringementPoints:0,
-            flightTestInstructionsNotFollowedPoints:0,
-            flightTestFalseEnvelopeOpenedPoints:0,
-            flightTestSafetyEnvelopeOpenedPoints:0,
-            flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,           // 4.5
-            observationTestTurnpointFalsePoints:100,             // 4.5
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm, // 4.5
-            observationTestEnrouteCorrectValue:5.0f,             // 4.5
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,             // 4.5
-            observationTestEnrouteFalsePoints:30,                // 4.5
-            
-            // LandingTest
-            landingTest1MaxPoints:100,                           // 4.5
-            landingTest1NoLandingPoints:100,
-            landingTest1OutsideLandingPoints:100,
-            landingTest1RollingOutsidePoints:0,
-            landingTest1PowerInBoxPoints:50,                     // 4.5
-            landingTest1GoAroundWithoutTouchingPoints:0,
-            landingTest1GoAroundInsteadStopPoints:0,
-            landingTest1AbnormalLandingPoints:100,               // 4.5
-            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}", // 4.5
-        
-            landingTest2MaxPoints:200,                           // 4.5
-            landingTest2NoLandingPoints:200,
-            landingTest2OutsideLandingPoints:200,
-            landingTest2RollingOutsidePoints:0,
-            landingTest2PowerInBoxPoints:50,                     // 4.5
-            landingTest2GoAroundWithoutTouchingPoints:0,
-            landingTest2GoAroundInsteadStopPoints:0,
-            landingTest2AbnormalLandingPoints:100,               // 4.5
-            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest2PowerInAirPoints:100,                    // 4.5
-            landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}", // 4.5
-            
-            landingTest3MaxPoints:200,                           // 4.5
-            landingTest3NoLandingPoints:200,
-            landingTest3OutsideLandingPoints:200,
-            landingTest3RollingOutsidePoints:0,
-            landingTest3PowerInBoxPoints:50,                     // 4.5
-            landingTest3GoAroundWithoutTouchingPoints:0,
-            landingTest3GoAroundInsteadStopPoints:0,
-            landingTest3AbnormalLandingPoints:100,               // 4.5
-            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest3PowerInAirPoints:100,                    // 4.5
-            landingTest3FlapsInAirPoints:100,                    // 4.5
-            landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}", // 4.5
-            
-            landingTest4MaxPoints:200,                           // 4.5
-            landingTest4NoLandingPoints:200,
-            landingTest4OutsideLandingPoints:200,
-            landingTest4RollingOutsidePoints:0,
-            landingTest4PowerInBoxPoints:50,                     // 4.5
-            landingTest4GoAroundWithoutTouchingPoints:0,
-            landingTest4GoAroundInsteadStopPoints:0,
-            landingTest4AbnormalLandingPoints:100,               // 4.5
-            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest4TouchingObstaclePoints:100,              // 4.5
-            landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}", // 4.5
-
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // 4.2.2j defines 0.5NM
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignCanvas,
-            turnpointMapMeasurement:true,
-            enroutePhotoRule:EnrouteRule.Map,
-            enrouteCanvasRule:EnrouteRule.Map,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:0,
-            maxRouteLegs:8,                                      // 4.2.2c
-            minEnroutePhotos:8,                                  // 4.3a
-            maxEnroutePhotos:10,                                 // 4.3a
-            minEnrouteCanvas:5,                                  // 4.3a
-            maxEnrouteCanvas:8,                                  // 4.3a
-            minEnrouteTargets:13,                                // 4.3a
-            maxEnrouteTargets:18,                                // 4.3a
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-        ]
-    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023"
-
     R10 ([
-            ruleTitle:"Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023",
+            ruleTitle:"Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023", // AT-RF
             
             // General
-            precisionFlying:false,
-            increaseFactor:0,
-            printPointsGeneral:false,
-            printPointsPlanningTest:false,
-            printPointsFlightTest:true,
-            printPointsObservationTest:true,
-            printPointsLandingTest1:true,
-            printPointsLandingTest2:false,
-            printPointsLandingTest3:false,
-            printPointsLandingTest4:false,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/at_nav.jpg',
-            printPointsTurnpointSign:true,
-            printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
-            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
+            precisionFlying:false,                                   // AT-RF
+            increaseFactor:0,                                        // AT-RF
+            printPointsGeneral:false,                                // AT-RF
+            printPointsPlanningTest:false,                           // AT-RF
+            printPointsFlightTest:true,                              // AT-RF
+            printPointsObservationTest:true,                         // AT-RF
+            printPointsLandingTest1:true,                            // AT-RF
+            printPointsLandingTest2:false,                           // AT-RF
+            printPointsLandingTest3:false,                           // AT-RF
+            printPointsLandingTest4:false,                           // AT-RF
+            printPointsLandingField:true,                            // AT-RF
+            landingFieldImageName:'images/landingfield/at_nav.jpg',  // AT-RF
+            printPointsTurnpointSign:true,                           // AT-RF
+            printPointsEnrouteCanvas:false,                          // AT-RF
+            printIgnoreEnrouteCanvas:[],                             // AT-RF
+            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",      // AT-RF
             
             // PlanningTest
-            planningTestDirectionCorrectGrad:2,
-            planningTestDirectionPointsPerGrad:2,
-            planningTestTimeCorrectSecond:5,
-            planningTestTimePointsPerSecond:1,
-            planningTestMaxPoints:350,
-            planningTestPlanTooLatePoints:50,
-            planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
+            planningTestDirectionCorrectGrad:2,                      // AT-RF -
+            planningTestDirectionPointsPerGrad:2,                    // AT-RF -
+            planningTestTimeCorrectSecond:5,                         // AT-RF -
+            planningTestTimePointsPerSecond:1,                       // AT-RF -
+            planningTestMaxPoints:200,                               // AT-RF -
+            planningTestPlanTooLatePoints:50,                        // AT-RF -
+            planningTestExitRoomTooLatePoints:100,                   // AT-RF -
+            planningTestForbiddenCalculatorsPoints:0,                // AT-RF -
         
             // FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // 5.3a
-            flightTestTakeoffCheckSeconds:true,                  // 5.3a
-            flightTestTakeoffPointsPerSecond:3,                  // 5.3a
-            flightTestTakeoffMissedPoints:100,                   // 5.3a
-            flightTestCptimeCorrectSecond:2,                     // 5.3b
-            flightTestCptimePointsPerSecond:3,                   // 5.3b
-            flightTestCptimeMaxPoints:100,                       // 5.3b
-            flightTestCpNotFoundPoints:100,                      // 5.3b, 5.3d
-            flightTestProcedureTurnNotFlownPoints:0,
-            flightTestMinAltitudeMissedPoints:200,               // 5.3d
-            flightTestBadCourseCorrectSecond:5,                  // 5.3d
-            flightTestBadCoursePoints:100,                       // 5.3d
-            flightTestBadCourseMaxPoints:0,
-            flightTestBadCourseStartLandingPoints:200,           // 5.3d
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-            flightTestLandingToLatePoints:300,                   // 5.3h
-            flightTestGivenToLatePoints:300,                     // 5.3f
-            flightTestSafetyAndRulesInfringementPoints:600,      // 5.3d
-            flightTestInstructionsNotFollowedPoints:0,
-            flightTestFalseEnvelopeOpenedPoints:0,
-            flightTestSafetyEnvelopeOpenedPoints:400,            // 5.3i
-            flightTestFrequencyNotMonitoredPoints:200,           // 5.3g
-            flightTestForbiddenEquipmentPoints:600,              // 5.3d
-            flightTestExitRoomTooLatePoints:0,
+            flightTestTakeoffCorrectSecond:60,                       // AT-RF 5.3a
+            flightTestTakeoffCheckSeconds:true,                      // AT-RF 5.3a
+            flightTestTakeoffPointsPerSecond:3,                      // AT-RF 5.3a
+            flightTestTakeoffMissedPoints:100,                       // AT-RF 5.3a
+            flightTestCptimeCorrectSecond:2,                         // AT-RF 5.3b
+            flightTestCptimePointsPerSecond:3,                       // AT-RF 5.3b
+            flightTestCptimeMaxPoints:100,                           // AT-RF 5.3b
+            flightTestCpNotFoundPoints:100,                          // AT-RF 5.3b, 5.3d
+            flightTestProcedureTurnNotFlownPoints:0,                 // AT-RF -
+            flightTestMinAltitudeMissedPoints:200,                   // AT-RF 5.3d
+            flightTestBadCourseCorrectSecond:5,                      // AT-RF 5.3d
+            flightTestBadCoursePoints:100,                           // AT-RF 5.3d
+            flightTestBadCourseMaxPoints:0,                          // AT-RF 
+            flightTestBadCourseStartLandingPoints:200,               // AT-RF 5.3d
+            flightTestBadCourseStartLandingSeparatePoints:false,     // AT-RF 
+			flightTestOutsideCorridorCorrectSecond:0,                // AT-RF - 
+			flightTestOutsideCorridorPointsPerSecond:0,              // AT-RF - 
+            flightTestLandingToLatePoints:300,                       // AT-RF 5.3h
+            flightTestGivenToLatePoints:300,                         // AT-RF 5.3f
+            flightTestSafetyAndRulesInfringementPoints:600,          // AT-RF 5.3d
+            flightTestInstructionsNotFollowedPoints:0,               // AT-RF 
+            flightTestFalseEnvelopeOpenedPoints:0,                   // AT-RF 
+            flightTestSafetyEnvelopeOpenedPoints:400,                // AT-RF 5.3i
+            flightTestFrequencyNotMonitoredPoints:200,               // AT-RF 5.3g
+            flightTestForbiddenEquipmentPoints:600,                  // AT-RF 5.3d
+            flightTestExitRoomTooLatePoints:0,                       // AT-RF -
 
             // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,           // 5.3c
-            observationTestTurnpointFalsePoints:100,             // 5.3c
-            observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // 5.3c
-            observationTestEnrouteCorrectValue:0.5f,             // 5.3c
-            observationTestEnrouteInexactValue:1.0f,             // 5.3c
-            observationTestEnrouteInexactPoints:15,              // 5.3c
-            observationTestEnrouteNotFoundPoints:30,             // 5.3c
-            observationTestEnrouteFalsePoints:50,                // 5.3c
+            observationTestTurnpointNotFoundPoints:50,               // AT-RF 5.3c
+            observationTestTurnpointFalsePoints:100,                 // AT-RF 5.3c
+            observationTestEnrouteValueUnit:EnrouteValueUnit.NM,     // AT-RF 5.3c
+            observationTestEnrouteCorrectValue:0.5f,                 // AT-RF 5.3c
+            observationTestEnrouteInexactValue:1.0f,                 // AT-RF 5.3c
+            observationTestEnrouteInexactPoints:15,                  // AT-RF 5.3c
+            observationTestEnrouteNotFoundPoints:30,                 // AT-RF 5.3c
+            observationTestEnrouteFalsePoints:50,                    // AT-RF 5.3c
             
             // LandingTest
-            landingTest1MaxPoints:300,                           // 5.3e
-            landingTest1NoLandingPoints:300,                     // 5.3e
-            landingTest1OutsideLandingPoints:200,                // 5.3e
-            landingTest1RollingOutsidePoints:200,                // 5.3e
-            landingTest1PowerInBoxPoints:50,                     // 5.3e
-            landingTest1GoAroundWithoutTouchingPoints:200,       // 5.3e
-            landingTest1GoAroundInsteadStopPoints:200,           // 5.3e
-            landingTest1AbnormalLandingPoints:150,               // 5.3e
-            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 5.3e
-        
-            landingTest2MaxPoints:300,                           // 5.3e
-            landingTest2NoLandingPoints:300,                     // 5.3e
-            landingTest2OutsideLandingPoints:200,                // 5.3e
-            landingTest2RollingOutsidePoints:200,                // 5.3e
-            landingTest2PowerInBoxPoints:50,                     // 5.3e
-            landingTest2GoAroundWithoutTouchingPoints:200,       // 5.3e
-            landingTest2GoAroundInsteadStopPoints:200,           // 5.3e
-            landingTest2AbnormalLandingPoints:150,               // 5.3e
-            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest2PowerInAirPoints:0,
-            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 5.3e
-            
-            landingTest3MaxPoints:300,                           // 5.3e
-            landingTest3NoLandingPoints:300,                     // 5.3e
-            landingTest3OutsideLandingPoints:200,                // 5.3e
-            landingTest3RollingOutsidePoints:200,                // 5.3e
-            landingTest3PowerInBoxPoints:50,                     // 5.3e
-            landingTest3GoAroundWithoutTouchingPoints:200,       // 5.3e
-            landingTest3GoAroundInsteadStopPoints:200,           // 5.3e
-            landingTest3AbnormalLandingPoints:150,               // 5.3e
-            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest3PowerInAirPoints:0,
-            landingTest3FlapsInAirPoints:0,
-            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 5.3e
-            
-            landingTest4MaxPoints:300,                           // 5.3e
-            landingTest4NoLandingPoints:300,                     // 5.3e
-            landingTest4OutsideLandingPoints:200,                // 5.3e
-            landingTest4RollingOutsidePoints:200,                // 5.3e
-            landingTest4PowerInBoxPoints:50,                     // 5.3e
-            landingTest4GoAroundWithoutTouchingPoints:200,       // 5.3e
-            landingTest4GoAroundInsteadStopPoints:200,           // 5.3e
-            landingTest4AbnormalLandingPoints:150,               // 5.3e
-            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest4TouchingObstaclePoints:0,
-            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 5.3e
+            landingTest1:ContestRulesLanding.AT_RF.data,             // AT-RF
+            landingTest2:ContestRulesLanding.AT_RF.data,             // AT-RF
+            landingTest3:ContestRulesLanding.AT_RF.data,             // AT-RF
+            landingTest4:ContestRulesLanding.AT_RF.data,             // AT-RF
 
             // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:45,
-            showPlanningTest:false,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
+            anrFlying:false,                                         // AT-RF
+            flightTestLastGateNoBadCourseSeconds:45,                 // AT-RF
+            showPlanningTest:false,                                  // AT-RF
+            activateFlightTestCheckLanding:true,                     // AT-RF
+            showObservationTest:true,                                // AT-RF 
 
             // Defaults
-            flightPlanShowLegDistance:false,
-            flightPlanShowTrueTrack:false,
-            flightPlanShowTrueHeading:false,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:false,
-            flightPlanShowElapsedTime:true,
-            flightTestSubmissionMinutes:20,
-            scGateWidth:1.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.None,
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.NMFromTP,
-            enrouteCanvasRule:EnrouteRule.NMFromTP,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:11,                                     // 5.2.5b, 5.2.5c
-            maxRouteLegs:16,                                     // 5.2.5b, 5.2.5c
-            minEnroutePhotos:12,                                 // 5.2.5b
-            maxEnroutePhotos:20,                                 // 5.2.5b
-            minEnrouteCanvas:0,                                  // 5.2.5a
-            maxEnrouteCanvas:5,                                  // 5.2.5a
-            minEnrouteTargets:12,                                // 5.2.5d
-            maxEnrouteTargets:20,                                // 5.2.5d
-            useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally"
+            flightPlanShowLegDistance:false,                         // AT-RF
+            flightPlanShowTrueTrack:false,                           // AT-RF
+            flightPlanShowTrueHeading:false,                         // AT-RF
+            flightPlanShowGroundSpeed:true,                          // AT-RF
+            flightPlanShowLocalTime:false,                           // AT-RF
+            flightPlanShowElapsedTime:true,                          // AT-RF
+            flightTestSubmissionMinutes:20,                          // AT-RF
+            scGateWidth:1.0f,                                        // AT-RF
+            unsuitableStartNum:"13",                                 // AT-RF
+            turnpointRule:TurnpointRule.TrueFalsePhoto,              // AT-RF 5.2.5c
+            turnpointMapMeasurement:false,                           // AT-RF
+            enroutePhotoRule:EnrouteRule.NMFromTP,                   // AT-RF
+            enrouteCanvasRule:EnrouteRule.NMFromTP,                  // AT-RF 
+            enrouteCanvasMultiple:true,                              // AT-RF 
+            minRouteLegs:11,                                         // AT-RF 5.2.5b, 5.2.5c
+            maxRouteLegs:16,                                         // AT-RF 5.2.5b, 5.2.5c
+            minEnroutePhotos:12,                                     // AT-RF 5.2.5b
+            maxEnroutePhotos:20,                                     // AT-RF 5.2.5b
+            minEnrouteCanvas:0,                                      // AT-RF 5.2.5a
+            maxEnrouteCanvas:5,                                      // AT-RF 5.2.5a
+            minEnrouteTargets:12,                                    // AT-RF 5.2.5d
+            maxEnrouteTargets:20,                                    // AT-RF 5.2.5d
+            useProcedureTurns:false,                                 // AT-RF -
+            liveTrackingScorecard:"FAI Air Rally"                    // AT-RF 
         ]
     ), // "Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023"
 
-    R11 ([
-            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017",
-            
-            // General
-            precisionFlying:false,
-            increaseFactor:0,
-            printPointsGeneral:false,
-            printPointsPlanningTest:true,
-            printPointsFlightTest:true,
-            printPointsObservationTest:true,
-            printPointsLandingTest1:true,
-            printPointsLandingTest2:false,
-            printPointsLandingTest3:false,
-            printPointsLandingTest4:false,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/de_nav2017*.jpg',
-            printPointsTurnpointSign:false,
-            printPointsEnrouteCanvas:false,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"F,E,A,B,C,D",
-            
-            // PlanningTest
-            planningTestDirectionCorrectGrad:2,                  // 4.1.1
-            planningTestDirectionPointsPerGrad:2,                // 4.1.1
-            planningTestTimeCorrectSecond:5,                     // 4.1.1
-            planningTestTimePointsPerSecond:1,                   // 4.1.1
-            planningTestMaxPoints:200,                           // 4.1.1
-            planningTestPlanTooLatePoints:50,                    // 4.1.1
-            planningTestExitRoomTooLatePoints:100,               // 4.1.1
-            planningTestForbiddenCalculatorsPoints:0,
-        
-            // FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // 4.1.2
-            flightTestTakeoffCheckSeconds:false,
-            flightTestTakeoffPointsPerSecond:0,
-            flightTestTakeoffMissedPoints:200,                   // 4.1.2
-            flightTestCptimeCorrectSecond:2,                     // 4.1.3
-            flightTestCptimePointsPerSecond:1,                   // 4.1.3
-            flightTestCptimeMaxPoints:200,                       // 4.1.3
-            flightTestCpNotFoundPoints:200,                      // 4.1.3
-            flightTestProcedureTurnNotFlownPoints:200,           // 4.1.4
-            flightTestMinAltitudeMissedPoints:500,               // 4.1.5
-            flightTestBadCourseCorrectSecond:5,                  // 3.2.9
-            flightTestBadCoursePoints:200,                       // 4.1.6
-            flightTestBadCourseMaxPoints:0,
-            flightTestBadCourseStartLandingPoints:500,           // 4.1.6
-            flightTestBadCourseStartLandingSeparatePoints:false,
-			flightTestOutsideCorridorCorrectSecond:0,
-			flightTestOutsideCorridorPointsPerSecond:0,
-            flightTestLandingToLatePoints:200,                   // 4.1.6
-            flightTestGivenToLatePoints:100,                     // 4.1.6
-            flightTestSafetyAndRulesInfringementPoints:0,
-            flightTestInstructionsNotFollowedPoints:0,
-            flightTestFalseEnvelopeOpenedPoints:0,
-            flightTestSafetyEnvelopeOpenedPoints:0,
-            flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:0,
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:40,           // 4.2
-            observationTestTurnpointFalsePoints:80,              // 4.2
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm, // 4.2
-            observationTestEnrouteCorrectValue:5.0f,             // 4.2
-            observationTestEnrouteInexactValue:10.0f,            // 4.2
-            observationTestEnrouteInexactPoints:10,              // 4.2
-            observationTestEnrouteNotFoundPoints:20,             // 4.2
-            observationTestEnrouteFalsePoints:40,                // 4.2
-            
-            // LandingTest
-            landingTest1MaxPoints:300,                           // 4.3
-            landingTest1NoLandingPoints:300,                     // 4.3
-            landingTest1OutsideLandingPoints:200,                // 4.3
-            landingTest1RollingOutsidePoints:200,                // 4.3
-            landingTest1PowerInBoxPoints:100,                    // 4.3
-            landingTest1GoAroundWithoutTouchingPoints:200,       // 4.3
-            landingTest1GoAroundInsteadStopPoints:200,           // 4.3
-            landingTest1AbnormalLandingPoints:200,               // 4.3
-            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
-        
-            landingTest2MaxPoints:300,                           // 4.3
-            landingTest2NoLandingPoints:300,                     // 4.3
-            landingTest2OutsideLandingPoints:200,                // 4.3
-            landingTest2RollingOutsidePoints:200,                // 4.3
-            landingTest2PowerInBoxPoints:100,                    // 4.3
-            landingTest2GoAroundWithoutTouchingPoints:200,       // 4.3
-            landingTest2GoAroundInsteadStopPoints:200,           // 4.3
-            landingTest2AbnormalLandingPoints:200,               // 4.3
-            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest2PowerInAirPoints:0,
-            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
-            
-            landingTest3MaxPoints:300,                           // 4.3
-            landingTest3NoLandingPoints:300,                     // 4.3
-            landingTest3OutsideLandingPoints:200,                // 4.3
-            landingTest3RollingOutsidePoints:200,                // 4.3
-            landingTest3PowerInBoxPoints:100,                    // 4.3
-            landingTest3GoAroundWithoutTouchingPoints:200,       // 4.3
-            landingTest3GoAroundInsteadStopPoints:200,           // 4.3
-            landingTest3AbnormalLandingPoints:200,               // 4.3
-            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest3PowerInAirPoints:0,
-            landingTest3FlapsInAirPoints:0,
-            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
-            
-            landingTest4MaxPoints:300,                           // 4.3
-            landingTest4NoLandingPoints:300,                     // 4.3
-            landingTest4OutsideLandingPoints:200,                // 4.3
-            landingTest4RollingOutsidePoints:200,                // 4.3
-            landingTest4PowerInBoxPoints:100,                    // 4.3
-            landingTest4GoAroundWithoutTouchingPoints:200,       // 4.3
-            landingTest4GoAroundInsteadStopPoints:200,           // 4.3
-            landingTest4AbnormalLandingPoints:200,               // 4.3
-            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest4TouchingObstaclePoints:0,
-            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
-            
-            // Defaults (other)
-            anrFlying:false,
-            flightTestLastGateNoBadCourseSeconds:10,              // like Precision
-            showPlanningTest:true,
-            activateFlightTestCheckLanding:true,
-            showObservationTest:true,
-
-            // Defaults
-            flightPlanShowLegDistance:true,
-            flightPlanShowTrueTrack:true,
-            flightPlanShowTrueHeading:true,
-            flightPlanShowGroundSpeed:true,
-            flightPlanShowLocalTime:true,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:2.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignTrueFalse,
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.MapOrMeasurement,
-            enrouteCanvasRule:EnrouteRule.None,
-            enrouteCanvasMultiple:true,
-            minRouteLegs:0,
-            maxRouteLegs:8,                                      // 3.2.3
-            minEnroutePhotos:0,
-            maxEnroutePhotos:20,
-            minEnrouteCanvas:0,
-            maxEnrouteCanvas:15,
-            minEnrouteTargets:0,
-            maxEnrouteTargets:35,
-            useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision"
-        ]
-    ), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017"
-
 	R12 ([
-            ruleTitle:"FAI Air Navigation Race - Edition 2024",
+            ruleTitle:"FAI Air Navigation Race - Edition 2024",      // FAI-ANR
             
 			// General
-			precisionFlying:true,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:false,
-			printPointsFlightTest:true,
-            printPointsObservationTest:false,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:true,
-			printPointsLandingTest3:true,
-			printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg',
-            printPointsTurnpointSign:false,
-            printPointsEnrouteCanvas:false,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
+			precisionFlying:true,                                    // FAI-ANR Precison landings
+            increaseFactor:0,                                        // FAI-ANR
+            printPointsGeneral:false,                                // FAI-ANR
+			printPointsPlanningTest:false,                           // FAI-ANR
+			printPointsFlightTest:true,                              // FAI-ANR
+            printPointsObservationTest:false,                        // FAI-ANR
+			printPointsLandingTest1:true,                            // FAI-ANR
+			printPointsLandingTest2:true,                            // FAI-ANR
+			printPointsLandingTest3:true,                            // FAI-ANR
+			printPointsLandingTest4:true,                            // FAI-ANR
+            printPointsLandingField:true,                            // FAI-ANR
+            landingFieldImageName:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg', // FAI-ANR
+            printPointsTurnpointSign:false,                          // FAI-ANR
+            printPointsEnrouteCanvas:false,                          // FAI-ANR
+            printIgnoreEnrouteCanvas:[],                             // FAI-ANR
+            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",         // FAI-ANR
             
 			// PlanningTest
-			planningTestDirectionCorrectGrad:2,
-			planningTestDirectionPointsPerGrad:2,
-			planningTestTimeCorrectSecond:5,
-			planningTestTimePointsPerSecond:1,
-			planningTestMaxPoints:200,
-			planningTestPlanTooLatePoints:50,
-			planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
+			planningTestDirectionCorrectGrad:2,                      // FAI-ANR -
+			planningTestDirectionPointsPerGrad:2,                    // FAI-ANR -
+			planningTestTimeCorrectSecond:5,                         // FAI-ANR -
+			planningTestTimePointsPerSecond:1,                       // FAI-ANR -
+			planningTestMaxPoints:200,                               // FAI-ANR -
+			planningTestPlanTooLatePoints:50,                        // FAI-ANR -
+			planningTestExitRoomTooLatePoints:100,                   // FAI-ANR -
+            planningTestForbiddenCalculatorsPoints:0,                // FAI-ANR -
 		
 			// FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // A8.1.2
-            flightTestTakeoffCheckSeconds:false,                 // A8.1.2
-            flightTestTakeoffPointsPerSecond:0,                  // A8.1.2
-			flightTestTakeoffMissedPoints:200,                   // A8.1.2
-			flightTestCptimeCorrectSecond:2,                     // A8.1.3
-			flightTestCptimePointsPerSecond:3,                   // A8.1.3
-			flightTestCptimeMaxPoints:200,                       // A8.1.3
-			flightTestCpNotFoundPoints:200,                      // A8.1.3
-			flightTestProcedureTurnNotFlownPoints:0,
-			flightTestMinAltitudeMissedPoints:500,               // A8.1.4
-			flightTestBadCourseCorrectSecond:5,
-			flightTestBadCoursePoints:200,                       // A8.1.5
-            flightTestBadCourseMaxPoints:400,                    // A8.1.5
-			flightTestBadCourseStartLandingPoints:200,           // A8.1.5
-            flightTestBadCourseStartLandingSeparatePoints:true,  // A8.1.5
-			flightTestOutsideCorridorCorrectSecond:5,            // A8.1.6
-			flightTestOutsideCorridorPointsPerSecond:3,          // A8.1.6
-			flightTestLandingToLatePoints:0,
-			flightTestGivenToLatePoints:0,
-			flightTestSafetyAndRulesInfringementPoints:0,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:0,
-			flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:100,                 // A8.1.1
+            flightTestTakeoffCorrectSecond:60,                       // FAI-ANR A8.1.2
+            flightTestTakeoffCheckSeconds:false,                     // FAI-ANR A8.1.2
+            flightTestTakeoffPointsPerSecond:0,                      // FAI-ANR A8.1.2
+			flightTestTakeoffMissedPoints:200,                       // FAI-ANR A8.1.2
+			flightTestCptimeCorrectSecond:2,                         // FAI-ANR A8.1.3
+			flightTestCptimePointsPerSecond:3,                       // FAI-ANR A8.1.3
+			flightTestCptimeMaxPoints:200,                           // FAI-ANR A8.1.3
+			flightTestCpNotFoundPoints:200,                          // FAI-ANR A8.1.3
+			flightTestProcedureTurnNotFlownPoints:0,                 // FAI-ANR -
+			flightTestMinAltitudeMissedPoints:500,                   // FAI-ANR A8.1.4
+			flightTestBadCourseCorrectSecond:5,                      // FAI-ANR 
+			flightTestBadCoursePoints:200,                           // FAI-ANR A8.1.5
+            flightTestBadCourseMaxPoints:400,                        // FAI-ANR A8.1.5
+			flightTestBadCourseStartLandingPoints:200,               // FAI-ANR A8.1.5
+            flightTestBadCourseStartLandingSeparatePoints:true,      // FAI-ANR A8.1.5
+			flightTestOutsideCorridorCorrectSecond:5,                // FAI-ANR A8.1.6
+			flightTestOutsideCorridorPointsPerSecond:3,              // FAI-ANR A8.1.6
+			flightTestLandingToLatePoints:0,                         // FAI-ANR -
+			flightTestGivenToLatePoints:0,                           // FAI-ANR -
+			flightTestSafetyAndRulesInfringementPoints:0,            // FAI-ANR
+			flightTestInstructionsNotFollowedPoints:0,               // FAI-ANR
+			flightTestFalseEnvelopeOpenedPoints:0,                   // FAI-ANR
+			flightTestSafetyEnvelopeOpenedPoints:0,                  // FAI-ANR
+			flightTestFrequencyNotMonitoredPoints:0,                 // FAI-ANR
+            flightTestForbiddenEquipmentPoints:0,                    // FAI-ANR
+            flightTestExitRoomTooLatePoints:100,                     // FAI-ANR A8.1.1
 
             // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,
-            observationTestTurnpointFalsePoints:100,
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,
-            observationTestEnrouteCorrectValue:5.0f,
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,
-            observationTestEnrouteFalsePoints:30,
+            observationTestTurnpointNotFoundPoints:50,               // FAI-ANR -
+            observationTestTurnpointFalsePoints:100,                 // FAI-ANR -
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // FAI-ANR -
+            observationTestEnrouteCorrectValue:5.0f,                 // FAI-ANR -
+            observationTestEnrouteInexactValue:0.0f,                 // FAI-ANR -
+            observationTestEnrouteInexactPoints:0,                   // FAI-ANR -
+            observationTestEnrouteNotFoundPoints:20,                 // FAI-ANR -
+            observationTestEnrouteFalsePoints:30,                    // FAI-ANR -
             
 			// LandingTest
-			landingTest1MaxPoints:400,                            // Landing 6.2.1
-			landingTest1NoLandingPoints:300,                      // Landing 6.2.1
-			landingTest1OutsideLandingPoints:300,                 // Landing 6.2.1
-			landingTest1RollingOutsidePoints:200,                 // Landing 6.2.1
-			landingTest1PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest1GoAroundWithoutTouchingPoints:0,
-			landingTest1GoAroundInsteadStopPoints:0,
-			landingTest1AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
-		
-			landingTest2MaxPoints:200,                            // Landing 6.2.1
-			landingTest2NoLandingPoints:200,                      // Landing 6.2.1
-			landingTest2OutsideLandingPoints:200,                 // Landing 6.2.1
-			landingTest2RollingOutsidePoints:150,                 // Landing 6.2.1
-			landingTest2PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest2GoAroundWithoutTouchingPoints:0,
-			landingTest2GoAroundInsteadStopPoints:0,
-			landingTest2AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:200,                     // Landing 6.2.1
-			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
-			
-			landingTest3MaxPoints:200,                            // Landing 6.2.1
-			landingTest3NoLandingPoints:200,                      // Landing 6.2.1
-			landingTest3OutsideLandingPoints:200,                 // Landing 6.2.1
-			landingTest3RollingOutsidePoints:150,                 // Landing 6.2.1
-			landingTest3PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest3GoAroundWithoutTouchingPoints:0,
-			landingTest3GoAroundInsteadStopPoints:0,
-			landingTest3AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:200,                     // Landing 6.2.1
-			landingTest3FlapsInAirPoints:200,                     // Landing 6.2.1
-			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
-			
-			landingTest4MaxPoints:400,                            // Landing 6.2.1
-			landingTest4NoLandingPoints:300,                      // Landing 6.2.1
-			landingTest4OutsideLandingPoints:300,                 // Landing 6.2.1
-			landingTest4RollingOutsidePoints:200,                 // Landing 6.2.1
-			landingTest4PowerInBoxPoints:50,                      // Landing 6.2.1
-			landingTest4GoAroundWithoutTouchingPoints:0,
-			landingTest4GoAroundInsteadStopPoints:0,
-			landingTest4AbnormalLandingPoints:200,                // Landing 6.2.1
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:400,               // Landing 6.2.1
-			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
+            landingTest1:ContestRulesLanding.FAI_PF_ANR_NORMAL.data, // FAI-ANR
+            landingTest2:ContestRulesLanding.FAI_PF_ANR_IDLE.data,   // FAI-ANR
+            landingTest3:ContestRulesLanding.FAI_PF_ANR_IDLE_NO_FLAPS.data, // FAI-ANR
+            landingTest4:ContestRulesLanding.FAI_PF_ANR_OBSTACLE.data, // FAI-ANR
 
             // Defaults (other)
-            anrFlying:true,
-            flightTestLastGateNoBadCourseSeconds:10,              // like Precision
-            showPlanningTest:false,
-            activateFlightTestCheckLanding:false,
-            showObservationTest:false,
+            anrFlying:true,                                          // FAI-ANR 
+            flightTestLastGateNoBadCourseSeconds:10,                 // FAI-ANR like Precision
+            showPlanningTest:false,                                  // FAI-ANR 
+            activateFlightTestCheckLanding:false,                    // FAI-ANR 
+            showObservationTest:false,                               // FAI-ANR 
 
-            // Defaults
-            flightPlanShowLegDistance:false,
-            flightPlanShowTrueTrack:false,
-            flightPlanShowTrueHeading:false,
-            flightPlanShowGroundSpeed:false,
-            flightPlanShowLocalTime:false,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:0.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.None,
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.None,
-            enrouteCanvasRule:EnrouteRule.None,
-            enrouteCanvasMultiple:false,
-            minRouteLegs:0,
-            maxRouteLegs:11,
-            minEnroutePhotos:0,
-            maxEnroutePhotos:0,
-            minEnrouteCanvas:0,
-            maxEnrouteCanvas:0,
-            minEnrouteTargets:0,
-            maxEnrouteTargets:0,
-            useProcedureTurns:false,
-            liveTrackingScorecard:"FAI ANR"
+            // Defaults                                              // FAI-ANR
+            flightPlanShowLegDistance:false,                         // FAI-ANR
+            flightPlanShowTrueTrack:false,                           // FAI-ANR
+            flightPlanShowTrueHeading:false,                         // FAI-ANR
+            flightPlanShowGroundSpeed:false,                         // FAI-ANR
+            flightPlanShowLocalTime:false,                           // FAI-ANR
+            flightPlanShowElapsedTime:false,                         // FAI-ANR
+            flightTestSubmissionMinutes:null,                        // FAI-ANR
+            scGateWidth:0.0f,                                        // FAI-ANR
+            unsuitableStartNum:"13",                                 // FAI-ANR
+            turnpointRule:TurnpointRule.None,                        // FAI-ANR -
+            turnpointMapMeasurement:false,                           // FAI-ANR -
+            enroutePhotoRule:EnrouteRule.None,                       // FAI-ANR -
+            enrouteCanvasRule:EnrouteRule.None,                      // FAI-ANR -
+            enrouteCanvasMultiple:true,                              // FAI-ANR -
+            minRouteLegs:0,                                          // FAI-ANR
+            maxRouteLegs:11,                                         // FAI-ANR
+            minEnroutePhotos:0,                                      // FAI-ANR -
+            maxEnroutePhotos:0,                                      // FAI-ANR -
+            minEnrouteCanvas:0,                                      // FAI-ANR -
+            maxEnrouteCanvas:0,                                      // FAI-ANR -
+            minEnrouteTargets:0,                                     // FAI-ANR -
+            maxEnrouteTargets:0,                                     // FAI-ANR -
+            useProcedureTurns:false,                                 // FAI-ANR -
+            liveTrackingScorecard:"FAI ANR"                          // FAI-ANR 
 		]
 	), // "FAI Air Navigation Race - Edition 2024"
 
 	R13 ([
-            ruleTitle:"Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2025",
+            ruleTitle:"Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2025", // DE-ANR
             
 			// General
-			precisionFlying:true,
-            increaseFactor:0,
-            printPointsGeneral:false,
-			printPointsPlanningTest:false,
-			printPointsFlightTest:true,
-            printPointsObservationTest:false,
-			printPointsLandingTest1:true,
-			printPointsLandingTest2:true,
-			printPointsLandingTest3:true,
-			printPointsLandingTest4:true,
-            printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg',
-            printPointsTurnpointSign:false,
-            printPointsEnrouteCanvas:false,
-            printIgnoreEnrouteCanvas:[],
-            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
+			precisionFlying:false,                                   // DE-ANR
+            increaseFactor:0,                                        // DE-ANR
+            printPointsGeneral:false,                                // DE-ANR
+			printPointsPlanningTest:false,                           // DE-ANR
+			printPointsFlightTest:true,                              // DE-ANR
+            printPointsObservationTest:false,                        // DE-ANR
+			printPointsLandingTest1:true,                            // DE-ANR
+			printPointsLandingTest2:false,                           // DE-ANR
+			printPointsLandingTest3:false,                           // DE-ANR
+			printPointsLandingTest4:false,                           // DE-ANR
+            printPointsLandingField:true,                            // DE-ANR
+            landingFieldImageName:'images/landingfield/de_nav.jpg',  // DE-ANR
+            printPointsTurnpointSign:false,                          // DE-ANR
+            printPointsEnrouteCanvas:false,                          // DE-ANR
+            printIgnoreEnrouteCanvas:[],                             // DE-ANR
+            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",      // DE-ANR
             
 			// PlanningTest
-			planningTestDirectionCorrectGrad:2,
-			planningTestDirectionPointsPerGrad:2,
-			planningTestTimeCorrectSecond:5,
-			planningTestTimePointsPerSecond:1,
-			planningTestMaxPoints:200,
-			planningTestPlanTooLatePoints:50,
-			planningTestExitRoomTooLatePoints:100,
-            planningTestForbiddenCalculatorsPoints:0,
+			planningTestDirectionCorrectGrad:2,                      // DE-ANR -
+			planningTestDirectionPointsPerGrad:2,                    // DE-ANR -
+			planningTestTimeCorrectSecond:5,                         // DE-ANR -
+			planningTestTimePointsPerSecond:1,                       // DE-ANR -
+			planningTestMaxPoints:200,                               // DE-ANR -
+			planningTestPlanTooLatePoints:50,                        // DE-ANR -
+			planningTestExitRoomTooLatePoints:100,                   // DE-ANR -
+            planningTestForbiddenCalculatorsPoints:0,                // DE-ANR -
 		
 			// FlightTest
-            flightTestTakeoffCorrectSecond:60,                   // 3.
-            flightTestTakeoffCheckSeconds:false,                 // 3.
-            flightTestTakeoffPointsPerSecond:0,                  // 3.
-			flightTestTakeoffMissedPoints:200,                   // 3.
-			flightTestCptimeCorrectSecond:2,                     // 3.
-			flightTestCptimePointsPerSecond:3,                   // 3.
-			flightTestCptimeMaxPoints:200,                       // 3.
-			flightTestCpNotFoundPoints:200,                      // 3.
-			flightTestProcedureTurnNotFlownPoints:0,
-			flightTestMinAltitudeMissedPoints:500,               // 3.
-			flightTestBadCourseCorrectSecond:5,
-			flightTestBadCoursePoints:200,                       // 3.
-            flightTestBadCourseMaxPoints:400,                    // 3.
-			flightTestBadCourseStartLandingPoints:200,           // 3.
-            flightTestBadCourseStartLandingSeparatePoints:true,  // 3.
-			flightTestOutsideCorridorCorrectSecond:5,            // 3.
-			flightTestOutsideCorridorPointsPerSecond:3,          // 3.
-			flightTestLandingToLatePoints:0,
-			flightTestGivenToLatePoints:0,
-			flightTestSafetyAndRulesInfringementPoints:0,
-			flightTestInstructionsNotFollowedPoints:0,
-			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:0,
-			flightTestFrequencyNotMonitoredPoints:0,
-            flightTestForbiddenEquipmentPoints:0,
-            flightTestExitRoomTooLatePoints:100,                 // 3.
-
-            // ObservationTest
-            observationTestTurnpointNotFoundPoints:50,
-            observationTestTurnpointFalsePoints:100,
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,
-            observationTestEnrouteCorrectValue:5.0f,
-            observationTestEnrouteInexactValue:0.0f,
-            observationTestEnrouteInexactPoints:0,
-            observationTestEnrouteNotFoundPoints:20,
-            observationTestEnrouteFalsePoints:30,
+            flightTestTakeoffCorrectSecond:60,                       // DE-ANR 3
+            flightTestTakeoffCheckSeconds:false,                     // DE-ANR 3
+            flightTestTakeoffPointsPerSecond:0,                      // DE-ANR 3
+			flightTestTakeoffMissedPoints:200,                       // DE-ANR 3
+			flightTestCptimeCorrectSecond:2,                         // DE-ANR 3
+			flightTestCptimePointsPerSecond:3,                       // DE-ANR 3
+			flightTestCptimeMaxPoints:200,                           // DE-ANR 3
+			flightTestCpNotFoundPoints:200,                          // DE-ANR 3
+			flightTestProcedureTurnNotFlownPoints:0,                 // DE-ANR -
+			flightTestMinAltitudeMissedPoints:500,                   // DE-ANR 3
+			flightTestBadCourseCorrectSecond:5,                      // DE-ANR
+			flightTestBadCoursePoints:200,                           // DE-ANR 3
+            flightTestBadCourseMaxPoints:400,                        // DE-ANR 3
+			flightTestBadCourseStartLandingPoints:200,               // DE-ANR 3
+            flightTestBadCourseStartLandingSeparatePoints:true,      // DE-ANR 3
+			flightTestOutsideCorridorCorrectSecond:5,                // DE-ANR 3
+			flightTestOutsideCorridorPointsPerSecond:3,              // DE-ANR 3
+			flightTestLandingToLatePoints:0,                         // DE-ANR -
+			flightTestGivenToLatePoints:0,                           // DE-ANR -
+			flightTestSafetyAndRulesInfringementPoints:0,            // DE-ANR
+			flightTestInstructionsNotFollowedPoints:0,               // DE-ANR
+			flightTestFalseEnvelopeOpenedPoints:0,                   // DE-ANR -
+			flightTestSafetyEnvelopeOpenedPoints:0,                  // DE-ANR
+			flightTestFrequencyNotMonitoredPoints:0,                 // DE-ANR
+            flightTestForbiddenEquipmentPoints:0,                    // DE-ANR
+            flightTestExitRoomTooLatePoints:100,                     // DE-ANR 3
+                                                                    
+            // ObservationTest                                      
+            observationTestTurnpointNotFoundPoints:50,               // DE-ANR -
+            observationTestTurnpointFalsePoints:100,                 // DE-ANR -
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // DE-ANR -
+            observationTestEnrouteCorrectValue:5.0f,                 // DE-ANR -
+            observationTestEnrouteInexactValue:0.0f,                 // DE-ANR -
+            observationTestEnrouteInexactPoints:0,                   // DE-ANR -
+            observationTestEnrouteNotFoundPoints:20,                 // DE-ANR -
+            observationTestEnrouteFalsePoints:30,                    // DE-ANR -
+                                                                    
+			// LandingTest                                          
+            landingTest1:ContestRulesLanding.DE_RF_ANR.data,         // DE-ANR
+            landingTest2:ContestRulesLanding.DE_RF_ANR.data,         // DE-ANR
+            landingTest3:ContestRulesLanding.DE_RF_ANR.data,         // DE-ANR
+            landingTest4:ContestRulesLanding.DE_RF_ANR.data,         // DE-ANR
             
-			// LandingTest
-			landingTest1MaxPoints:400,                            // Landing
-			landingTest1NoLandingPoints:300,                      // Landing
-			landingTest1OutsideLandingPoints:300,                 // Landing
-			landingTest1RollingOutsidePoints:200,                 // Landing
-			landingTest1PowerInBoxPoints:50,                      // Landing
-			landingTest1GoAroundWithoutTouchingPoints:0,
-			landingTest1GoAroundInsteadStopPoints:0,
-			landingTest1AbnormalLandingPoints:200,                // Landing
-			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
-		
-			landingTest2MaxPoints:200,                            // Landing
-			landingTest2NoLandingPoints:200,                      // Landing
-			landingTest2OutsideLandingPoints:200,                 // Landing
-			landingTest2RollingOutsidePoints:150,                 // Landing
-			landingTest2PowerInBoxPoints:50,                      // Landing
-			landingTest2GoAroundWithoutTouchingPoints:0,
-			landingTest2GoAroundInsteadStopPoints:0,
-			landingTest2AbnormalLandingPoints:200,                // Landing
-			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:200,                     // Landing
-			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
-			
-			landingTest3MaxPoints:200,                            // Landing
-			landingTest3NoLandingPoints:200,                      // Landing
-			landingTest3OutsideLandingPoints:200,                 // Landing
-			landingTest3RollingOutsidePoints:150,                 // Landing
-			landingTest3PowerInBoxPoints:50,                      // Landing
-			landingTest3GoAroundWithoutTouchingPoints:0,
-			landingTest3GoAroundInsteadStopPoints:0,
-			landingTest3AbnormalLandingPoints:200,                // Landing
-			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:200,                     // Landing
-			landingTest3FlapsInAirPoints:200,                     // Landing
-			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
-			
-			landingTest4MaxPoints:400,                            // Landing
-			landingTest4NoLandingPoints:300,                      // Landing
-			landingTest4OutsideLandingPoints:300,                 // Landing
-			landingTest4RollingOutsidePoints:200,                 // Landing
-			landingTest4PowerInBoxPoints:50,                      // Landing
-			landingTest4GoAroundWithoutTouchingPoints:0,
-			landingTest4GoAroundInsteadStopPoints:0,
-			landingTest4AbnormalLandingPoints:200,                // Landing
-			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:400,               // Landing
-			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
-
             // Defaults (other)
-            anrFlying:true,
-            flightTestLastGateNoBadCourseSeconds:10,              // like Precision
-            showPlanningTest:false,
-            activateFlightTestCheckLanding:false,
-            showObservationTest:false,
+            anrFlying:true,                                          // DE-ANR
+            flightTestLastGateNoBadCourseSeconds:10,                 // DE-ANR
+            showPlanningTest:false,                                  // DE-ANR
+            activateFlightTestCheckLanding:false,                    // DE-ANR
+            showObservationTest:false,                               // DE-ANR
 
             // Defaults
-            flightPlanShowLegDistance:false,
-            flightPlanShowTrueTrack:false,
-            flightPlanShowTrueHeading:false,
-            flightPlanShowGroundSpeed:false,
-            flightPlanShowLocalTime:false,
-            flightPlanShowElapsedTime:false,
-            flightTestSubmissionMinutes:null,
-            scGateWidth:0.0f,
-            unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.None,
-            turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.None,
-            enrouteCanvasRule:EnrouteRule.None,
-            enrouteCanvasMultiple:false,
-            minRouteLegs:0,
-            maxRouteLegs:11,
-            minEnroutePhotos:0,
-            maxEnroutePhotos:0,
-            minEnrouteCanvas:0,
-            maxEnrouteCanvas:0,
-            minEnrouteTargets:0,
-            maxEnrouteTargets:0,
-            useProcedureTurns:false,
-            liveTrackingScorecard:"FAI ANR"
+            flightPlanShowLegDistance:false,                         // DE-ANR
+            flightPlanShowTrueTrack:false,                           // DE-ANR
+            flightPlanShowTrueHeading:false,                         // DE-ANR
+            flightPlanShowGroundSpeed:false,                         // DE-ANR
+            flightPlanShowLocalTime:false,                           // DE-ANR
+            flightPlanShowElapsedTime:false,                         // DE-ANR
+            flightTestSubmissionMinutes:null,                        // DE-ANR
+            scGateWidth:0.0f,                                        // DE-ANR
+            unsuitableStartNum:"13",                                 // DE-ANR
+            turnpointRule:TurnpointRule.None,                        // DE-ANR -
+            turnpointMapMeasurement:false,                           // DE-ANR -
+            enroutePhotoRule:EnrouteRule.None,                       // DE-ANR -
+            enrouteCanvasRule:EnrouteRule.None,                      // DE-ANR -
+            enrouteCanvasMultiple:true,                              // DE-ANR -
+            minRouteLegs:0,                                          // DE-ANR
+            maxRouteLegs:11,                                         // DE-ANR
+            minEnroutePhotos:0,                                      // DE-ANR -
+            maxEnroutePhotos:0,                                      // DE-ANR -
+            minEnrouteCanvas:0,                                      // DE-ANR -
+            maxEnrouteCanvas:0,                                      // DE-ANR -
+            minEnrouteTargets:0,                                     // DE-ANR -
+            maxEnrouteTargets:0,                                     // DE-ANR -
+            useProcedureTurns:false,                                 // DE-ANR -
+            liveTrackingScorecard:"FAI ANR"                          // DE-ANR
 		]
 	), // "Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2025"
+
+	R4 ([
+            ruleTitle:"FAI Precision Flying - Edition 2024",         // FAI-PF
+            
+			// General
+			precisionFlying:true,                                    // FAI-PF Precison landings
+            increaseFactor:0,                                        // FAI-PF
+            printPointsGeneral:false,                                // FAI-PF
+			printPointsPlanningTest:true,                            // FAI-PF
+			printPointsFlightTest:true,                              // FAI-PF
+            printPointsObservationTest:true,                         // FAI-PF
+			printPointsLandingTest1:true,                            // FAI-PF
+			printPointsLandingTest2:true,                            // FAI-PF
+			printPointsLandingTest3:true,                            // FAI-PF
+			printPointsLandingTest4:true,                            // FAI-PF
+            printPointsLandingField:true,                            // FAI-PF
+            landingFieldImageName:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg', // FAI-PF
+            printPointsTurnpointSign:true,                           // FAI-PF
+            printPointsEnrouteCanvas:true,                           // FAI-PF
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // FAI-PF
+            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",         // FAI-PF
+            
+			// PlanningTest
+			planningTestDirectionCorrectGrad:2,                      // FAI-PF A10.1.1
+			planningTestDirectionPointsPerGrad:2,                    // FAI-PF A10.1.1
+			planningTestTimeCorrectSecond:5,                         // FAI-PF A10.1.1
+			planningTestTimePointsPerSecond:1,                       // FAI-PF A10.1.1
+			planningTestMaxPoints:200,                               // FAI-PF A10.1.1
+			planningTestPlanTooLatePoints:50,                        // FAI-PF A10.1.1
+			planningTestExitRoomTooLatePoints:100,                   // FAI-PF A10.1.1
+            planningTestForbiddenCalculatorsPoints:0,                // FAI-PF 
+		
+			// FlightTest
+            flightTestTakeoffCorrectSecond:60,                       // FAI-PF A10.1.2
+            flightTestTakeoffCheckSeconds:false,                     // FAI-PF 
+            flightTestTakeoffPointsPerSecond:0,                      // FAI-PF 
+			flightTestTakeoffMissedPoints:200,                       // FAI-PF A10.1.2
+			flightTestCptimeCorrectSecond:2,                         // FAI-PF A10.1.3
+			flightTestCptimePointsPerSecond:3,                       // FAI-PF A10.1.3
+			flightTestCptimeMaxPoints:100,                           // FAI-PF A10.1.3
+			flightTestCpNotFoundPoints:100,                          // FAI-PF A10.1.3
+			flightTestProcedureTurnNotFlownPoints:200,               // FAI-PF A10.1.4
+			flightTestMinAltitudeMissedPoints:500,                   // FAI-PF A10.1.5
+			flightTestBadCourseCorrectSecond:5,                      // FAI-PF A2.2.13
+			flightTestBadCoursePoints:200,                           // FAI-PF A10.1.6
+            flightTestBadCourseMaxPoints:0,                          // FAI-PF 
+			flightTestBadCourseStartLandingPoints:200,               // FAI-PF A10.1.6
+            flightTestBadCourseStartLandingSeparatePoints:false,     // FAI-PF 
+			flightTestOutsideCorridorCorrectSecond:0,                // FAI-PF - 
+			flightTestOutsideCorridorPointsPerSecond:0,              // FAI-PF - 
+			flightTestLandingToLatePoints:200,                       // FAI-PF A10.1.6
+			flightTestGivenToLatePoints:100,                         // FAI-PF A10.1.7
+			flightTestSafetyAndRulesInfringementPoints:0,            // FAI-PF 
+			flightTestInstructionsNotFollowedPoints:0,               // FAI-PF 
+			flightTestFalseEnvelopeOpenedPoints:0,                   // FAI-PF 
+			flightTestSafetyEnvelopeOpenedPoints:0,                  // FAI-PF 
+			flightTestFrequencyNotMonitoredPoints:0,                 // FAI-PF 
+            flightTestForbiddenEquipmentPoints:0,                    // FAI-PF 
+            flightTestExitRoomTooLatePoints:0,                       // FAI-PF - planningTestExitRoomTooLatePoints
+
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // FAI-PF A10.2.1
+            observationTestTurnpointFalsePoints:100,                 // FAI-PF A10.2.1
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // FAI-PF A10.2.1
+            observationTestEnrouteCorrectValue:5.0f,                 // FAI-PF A10.2.1
+            observationTestEnrouteInexactValue:0.0f,                 // FAI-PF 
+            observationTestEnrouteInexactPoints:0,                   // FAI-PF 
+            observationTestEnrouteNotFoundPoints:20,                 // FAI-PF A10.2.1
+            observationTestEnrouteFalsePoints:30,                    // FAI-PF A10.2.1
+            
+			// LandingTest
+            landingTest1:ContestRulesLanding.FAI_PF_ANR_NORMAL.data, // FAI-PF
+            landingTest2:ContestRulesLanding.FAI_PF_ANR_IDLE.data,   // FAI-PF
+            landingTest3:ContestRulesLanding.FAI_PF_ANR_IDLE_NO_FLAPS.data, // FAI-PF
+            landingTest4:ContestRulesLanding.FAI_PF_ANR_OBSTACLE.data, // FAI-PF
+            
+            // Defaults (other)
+            anrFlying:false,                                         // FAI-PF
+            flightTestLastGateNoBadCourseSeconds:10,                 // FAI-PF A2.2.13, defines 0.5NM around gate
+            showPlanningTest:true,                                   // FAI-PF 
+            activateFlightTestCheckLanding:true,                     // FAI-PF 
+            showObservationTest:true,                                // FAI-PF 
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // FAI-PF 
+            flightPlanShowTrueTrack:true,                            // FAI-PF 
+            flightPlanShowTrueHeading:true,                          // FAI-PF 
+            flightPlanShowGroundSpeed:true,                          // FAI-PF
+            flightPlanShowLocalTime:true,                            // FAI-PF
+            flightPlanShowElapsedTime:false,                         // FAI-PF
+            flightTestSubmissionMinutes:null,                        // FAI-PF
+            scGateWidth:1.0f,                                        // FAI-PF
+            unsuitableStartNum:"13",                                 // FAI-PF
+            turnpointRule:TurnpointRule.AssignCanvas,                // FAI-PF
+            turnpointMapMeasurement:true,                            // FAI-PF
+            enroutePhotoRule:EnrouteRule.Map,                        // FAI-PF
+            enrouteCanvasRule:EnrouteRule.Map,                       // FAI-PF
+            enrouteCanvasMultiple:true,                              // FAI-PF
+            minRouteLegs:0,                                          // FAI-PF
+            maxRouteLegs:8,                                          // FAI-PF A2.2.3
+            minEnroutePhotos:8,                                      // FAI-PF A3.2
+            maxEnroutePhotos:10,                                     // FAI-PF A3.2
+            minEnrouteCanvas:8,                                      // FAI-PF A3.2
+            maxEnrouteCanvas:15,                                     // FAI-PF A3.2
+            minEnrouteTargets:16,                                    // FAI-PF A3.2
+            maxEnrouteTargets:25,                                    // FAI-PF A3.2
+            useProcedureTurns:true,                                  // FAI-PF 
+            liveTrackingScorecard:"FAI Precision"                    // FAI-PF 
+		]
+	), // "FAI Precision Flying - Edition 2024"
+
+    R11 ([
+            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017", // DE-PF
+            
+            // General
+            precisionFlying:false,                                   // DE-PF
+            increaseFactor:0,                                        // DE-PF
+            printPointsGeneral:false,                                // DE-PF
+            printPointsPlanningTest:true,                            // DE-PF
+            printPointsFlightTest:true,                              // DE-PF
+            printPointsObservationTest:true,                         // DE-PF
+            printPointsLandingTest1:true,                            // DE-PF
+            printPointsLandingTest2:false,                           // DE-PF
+            printPointsLandingTest3:false,                           // DE-PF
+            printPointsLandingTest4:false,                           // DE-PF
+            printPointsLandingField:true,                            // DE-PF
+            landingFieldImageName:'images/landingfield/de_nav2017*.jpg', // DE-PF
+            printPointsTurnpointSign:false,                          // DE-PF
+            printPointsEnrouteCanvas:false,                          // DE-PF
+            printIgnoreEnrouteCanvas:[],                             // DE-PF
+            printLandingCalculatorValues:"F,E,A,B,C,D",              // DE-PF
+            
+            // PlanningTest
+            planningTestDirectionCorrectGrad:2,                      // DE-PF 4.1.1
+            planningTestDirectionPointsPerGrad:2,                    // DE-PF 4.1.1
+            planningTestTimeCorrectSecond:5,                         // DE-PF 4.1.1
+            planningTestTimePointsPerSecond:1,                       // DE-PF 4.1.1
+            planningTestMaxPoints:200,                               // DE-PF 4.1.1
+            planningTestPlanTooLatePoints:50,                        // DE-PF 4.1.1
+            planningTestExitRoomTooLatePoints:100,                   // DE-PF 4.1.1
+            planningTestForbiddenCalculatorsPoints:0,                // DE-PF
+        
+            // FlightTest
+            flightTestTakeoffCorrectSecond:60,                       // DE-PF 4.1.2
+            flightTestTakeoffCheckSeconds:false,                     // DE-PF
+            flightTestTakeoffPointsPerSecond:0,                      // DE-PF
+            flightTestTakeoffMissedPoints:200,                       // DE-PF 4.1.2
+            flightTestCptimeCorrectSecond:2,                         // DE-PF 4.1.3
+            flightTestCptimePointsPerSecond:1,                       // DE-PF 4.1.3
+            flightTestCptimeMaxPoints:200,                           // DE-PF 4.1.3
+            flightTestCpNotFoundPoints:200,                          // DE-PF 4.1.3
+            flightTestProcedureTurnNotFlownPoints:200,               // DE-PF 4.1.4
+            flightTestMinAltitudeMissedPoints:500,                   // DE-PF 4.1.5
+            flightTestBadCourseCorrectSecond:5,                      // DE-PF 3.2.9
+            flightTestBadCoursePoints:200,                           // DE-PF 4.1.6
+            flightTestBadCourseMaxPoints:0,                          // DE-PF
+            flightTestBadCourseStartLandingPoints:500,               // DE-PF 4.1.6
+            flightTestBadCourseStartLandingSeparatePoints:false,     // DE-PF
+			flightTestOutsideCorridorCorrectSecond:0,                // DE-PF -
+			flightTestOutsideCorridorPointsPerSecond:0,              // DE-PF -
+            flightTestLandingToLatePoints:200,                       // DE-PF 4.1.6
+            flightTestGivenToLatePoints:100,                         // DE-PF 4.1.6
+            flightTestSafetyAndRulesInfringementPoints:0,            // DE-PF
+            flightTestInstructionsNotFollowedPoints:0,               // DE-PF
+            flightTestFalseEnvelopeOpenedPoints:0,                   // DE-PF
+            flightTestSafetyEnvelopeOpenedPoints:0,                  // DE-PF
+            flightTestFrequencyNotMonitoredPoints:0,                 // DE-PF
+            flightTestForbiddenEquipmentPoints:0,                    // DE-PF
+            flightTestExitRoomTooLatePoints:0,                       // DE-PF - planningTestExitRoomTooLatePoints
+
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:40,               // DE-PF 4.2
+            observationTestTurnpointFalsePoints:80,                  // DE-PF 4.2
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // DE-PF 4.2
+            observationTestEnrouteCorrectValue:5.0f,                 // DE-PF 4.2
+            observationTestEnrouteInexactValue:10.0f,                // DE-PF 4.2
+            observationTestEnrouteInexactPoints:10,                  // DE-PF 4.2
+            observationTestEnrouteNotFoundPoints:20,                 // DE-PF 4.2
+            observationTestEnrouteFalsePoints:40,                    // DE-PF 4.2
+            
+            // LandingTest
+            landingTest1:ContestRulesLanding.DE_PF.data,             // DE-PF
+            landingTest2:ContestRulesLanding.DE_PF.data,             // DE-PF
+            landingTest3:ContestRulesLanding.DE_PF.data,             // DE-PF
+            landingTest4:ContestRulesLanding.DE_PF.data,             // DE-PF
+            
+            // Defaults (other)
+            anrFlying:false,                                         // DE-PF
+            flightTestLastGateNoBadCourseSeconds:10,                 // DE-PF 
+            showPlanningTest:true,                                   // DE-PF
+            activateFlightTestCheckLanding:true,                     // DE-PF
+            showObservationTest:true,                                // DE-PF
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // DE-PF
+            flightPlanShowTrueTrack:true,                            // DE-PF
+            flightPlanShowTrueHeading:true,                          // DE-PF
+            flightPlanShowGroundSpeed:true,                          // DE-PF
+            flightPlanShowLocalTime:true,                            // DE-PF
+            flightPlanShowElapsedTime:false,                         // DE-PF
+            flightTestSubmissionMinutes:null,                        // DE-PF
+            scGateWidth:2.0f,                                        // DE-PF
+            unsuitableStartNum:"13",                                 // DE-PF
+            turnpointRule:TurnpointRule.AssignTrueFalse,             // DE-PF
+            turnpointMapMeasurement:false,                           // DE-PF
+            enroutePhotoRule:EnrouteRule.MapOrMeasurement,           // DE-PF
+            enrouteCanvasRule:EnrouteRule.None,                      // DE-PF
+            enrouteCanvasMultiple:true,                              // DE-PF
+            minRouteLegs:0,                                          // DE-PF
+            maxRouteLegs:8,                                          // DE-PF 3.2.3
+            minEnroutePhotos:0,                                      // DE-PF
+            maxEnroutePhotos:20,                                     // DE-PF
+            minEnrouteCanvas:0,                                      // DE-PF
+            maxEnrouteCanvas:15,                                     // DE-PF
+            minEnrouteTargets:0,                                     // DE-PF
+            maxEnrouteTargets:35,                                    // DE-PF
+            useProcedureTurns:true,                                  // DE-PF
+            liveTrackingScorecard:"FAI Precision"                    // DE-PF
+        ]
+    ), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017"
+
+	R5 ([
+            ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017", // CH-PF
+            
+			// General
+			precisionFlying:true,                                    // CH-PF Precison landings
+            increaseFactor:0,                                        // CH-PF
+            printPointsGeneral:false,                                // CH-PF
+			printPointsPlanningTest:true,                            // CH-PF
+			printPointsFlightTest:true,                              // CH-PF
+            printPointsObservationTest:true,                         // CH-PF
+			printPointsLandingTest1:true,                            // CH-PF
+			printPointsLandingTest2:true,                            // CH-PF
+			printPointsLandingTest3:true,                            // CH-PF
+			printPointsLandingTest4:true,                            // CH-PF
+            printPointsLandingField:true,                            // CH-PF
+            landingFieldImageName:'images/landingfield/ch_precision.jpg', // CH-PF
+            printPointsTurnpointSign:true,                           // CH-PF
+            printPointsEnrouteCanvas:true,                           // CH-PF
+            printIgnoreEnrouteCanvas:[],                             // CH-PF
+            printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",         // CH-PF
+            
+			// PlanningTest
+			planningTestDirectionCorrectGrad:2,                      // CH-PF Anhang 5.1
+			planningTestDirectionPointsPerGrad:2,                    // CH-PF Anhang 5.1
+			planningTestTimeCorrectSecond:5,                         // CH-PF Anhang 5.1
+			planningTestTimePointsPerSecond:1,                       // CH-PF Anhang 5.1
+			planningTestMaxPoints:200,                               // CH-PF Anhang 5.1
+			planningTestPlanTooLatePoints:50,                        // CH-PF Anhang 5.1
+			planningTestExitRoomTooLatePoints:100,                   // CH-PF Anhang 5.1
+            planningTestForbiddenCalculatorsPoints:0,                // CH-PF
+		
+			// FlightTest
+			flightTestTakeoffCorrectSecond:60,                       // CH-PF Anhang 5.2
+			flightTestTakeoffCheckSeconds:false,                     // CH-PF
+			flightTestTakeoffPointsPerSecond:0,                      // CH-PF
+            flightTestTakeoffMissedPoints:200,                       // CH-PF Anhang 5.2
+			flightTestCptimeCorrectSecond:2,                         // CH-PF Anhang 5.2
+			flightTestCptimePointsPerSecond:3,                       // CH-PF Anhang 5.2
+			flightTestCptimeMaxPoints:100,                           // CH-PF Anhang 5.2
+			flightTestCpNotFoundPoints:100,                          // CH-PF Anhang 5.2
+			flightTestProcedureTurnNotFlownPoints:200,               // CH-PF Anhang 5.2
+			flightTestMinAltitudeMissedPoints:500,                   // CH-PF Anhang 5.2
+			flightTestBadCourseCorrectSecond:5,                      // CH-PF 4.7.15
+			flightTestBadCoursePoints:200,                           // CH-PF Anhang 5.2
+            flightTestBadCourseMaxPoints:0,                          // CH-PF
+			flightTestBadCourseStartLandingPoints:200,               // CH-PF Anhang 5.2
+            flightTestBadCourseStartLandingSeparatePoints:false,     // CH-PF
+			flightTestOutsideCorridorCorrectSecond:0,                // CH-PF -
+			flightTestOutsideCorridorPointsPerSecond:0,              // CH-PF -
+			flightTestLandingToLatePoints:200,                       // CH-PF Anhang 5.2
+			flightTestGivenToLatePoints:100,                         // CH-PF Anhang 5.2
+			flightTestSafetyAndRulesInfringementPoints:0,            // CH-PF
+			flightTestInstructionsNotFollowedPoints:0,               // CH-PF
+			flightTestFalseEnvelopeOpenedPoints:0,                   // CH-PF
+			flightTestSafetyEnvelopeOpenedPoints:0,                  // CH-PF
+			flightTestFrequencyNotMonitoredPoints:0,                 // CH-PF
+            flightTestForbiddenEquipmentPoints:0,                    // CH-PF
+            flightTestExitRoomTooLatePoints:0,                       // CH-PF - planningTestExitRoomTooLatePoints
+
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // CH-PF Anhang 5.3
+            observationTestTurnpointFalsePoints:100,                 // CH-PF Anhang 5.3
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // CH-PF Anhang 5.3
+            observationTestEnrouteCorrectValue:5.0f,                 // CH-PF Anhang 5.3
+            observationTestEnrouteInexactValue:0.0f,                 // CH-PF
+            observationTestEnrouteInexactPoints:0,                   // CH-PF
+            observationTestEnrouteNotFoundPoints:20,                 // CH-PF Anhang 5.3
+            observationTestEnrouteFalsePoints:30,                    // CH-PF Anhang 5.3
+            
+			// LandingTest
+            landingTest1:ContestRulesLanding.CH_PF_NORMAL.data,      // CH-PF
+            landingTest2:ContestRulesLanding.CH_PF_IDLE.data,        // CH-PF
+            landingTest3:ContestRulesLanding.CH_PF_IDLE_NO_FLAPS.data, // CH-PF
+            landingTest4:ContestRulesLanding.CH_PF_OBSTACLE.data,    // CH-PF
+            
+            // Defaults (other)
+            anrFlying:false,                                         // CH-PF
+            flightTestLastGateNoBadCourseSeconds:10,                 // CH-PF 4.7.15 defines 800m after gate passing
+            showPlanningTest:true,                                   // CH-PF
+            activateFlightTestCheckLanding:true,                     // CH-PF
+            showObservationTest:true,                                // CH-PF
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // CH-PF
+            flightPlanShowTrueTrack:true,                            // CH-PF
+            flightPlanShowTrueHeading:true,                          // CH-PF
+            flightPlanShowGroundSpeed:true,                          // CH-PF
+            flightPlanShowLocalTime:true,                            // CH-PF
+            flightPlanShowElapsedTime:false,                         // CH-PF
+            flightTestSubmissionMinutes:null,                        // CH-PF
+            scGateWidth:1.0f,                                        // CH-PF
+            unsuitableStartNum:"13",                                 // CH-PF
+            turnpointRule:TurnpointRule.AssignCanvas,                // CH-PF
+            turnpointMapMeasurement:true,                            // CH-PF
+            enroutePhotoRule:EnrouteRule.Map,                        // CH-PF
+            enrouteCanvasRule:EnrouteRule.Map,                       // CH-PF
+            enrouteCanvasMultiple:true,                              // CH-PF
+            minRouteLegs:5,                                          // CH-PF 4.7.12
+            maxRouteLegs:8,                                          // CH-PF 4.7.12
+            minEnroutePhotos:8,                                      // CH-PF 4.8.1
+            maxEnroutePhotos:10,                                     // CH-PF 4.8.1
+            minEnrouteCanvas:8,                                      // CH-PF 4.8.1
+            maxEnrouteCanvas:15,                                     // CH-PF 4.8.1
+            minEnrouteTargets:16,                                    // CH-PF 4.8.1
+            maxEnrouteTargets:25,                                    // CH-PF 4.8.1
+            useProcedureTurns:true,                                  // CH-PF
+            liveTrackingScorecard:"FAI Precision"                    // CH-PF
+		]
+	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
+
+    R7 ([
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023", // AT-PF1
+            
+            // General
+            precisionFlying:true,                                    // AT-PF1 Precison landings
+            increaseFactor:20,                                       // AT-PF1 4.1
+            printPointsGeneral:true,                                 // AT-PF1
+            printPointsPlanningTest:true,                            // AT-PF1
+            printPointsFlightTest:true,                              // AT-PF1
+            printPointsObservationTest:true,                         // AT-PF1
+            printPointsLandingTest1:true,                            // AT-PF1
+            printPointsLandingTest2:true,                            // AT-PF1
+            printPointsLandingTest3:true,                            // AT-PF1
+            printPointsLandingTest4:true,                            // AT-PF1
+            printPointsLandingField:true,                            // AT-PF1
+            landingFieldImageName:'images/landingfield/at_precision_landing1.jpg', // AT-PF1
+            printPointsTurnpointSign:true,                           // AT-PF1
+            printPointsEnrouteCanvas:true,                           // AT-PF1
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // AT-PF1
+            printLandingCalculatorValues:"C,A,I,II,III",             // AT-PF1
+            
+            // PlanningTest
+            planningTestDirectionCorrectGrad:2,                      // AT-PF1 4.5
+            planningTestDirectionPointsPerGrad:2,                    // AT-PF1 4.5
+            planningTestTimeCorrectSecond:5,                         // AT-PF1 4.5
+            planningTestTimePointsPerSecond:1,                       // AT-PF1 4.5
+            planningTestMaxPoints:350,                               // AT-PF1 4.5
+            planningTestPlanTooLatePoints:50,                        // AT-PF1 4.5
+            planningTestExitRoomTooLatePoints:100,                   // AT-PF1 4.5
+            planningTestForbiddenCalculatorsPoints:300,              // AT-PF1 4.5
+        
+            // FlightTest
+            flightTestTakeoffCorrectSecond:60,                       // AT-PF1 4.5
+            flightTestTakeoffCheckSeconds:false,                     // AT-PF1 4.5
+            flightTestTakeoffPointsPerSecond:0,                      // AT-PF1 4.5
+            flightTestTakeoffMissedPoints:200,                       // AT-PF1 4.5
+            flightTestCptimeCorrectSecond:2,                         // AT-PF1 4.5
+            flightTestCptimePointsPerSecond:3,                       // AT-PF1 4.5
+            flightTestCptimeMaxPoints:100,                           // AT-PF1 4.5
+            flightTestCpNotFoundPoints:100,                          // AT-PF1 4.5
+            flightTestProcedureTurnNotFlownPoints:200,               // AT-PF1 4.5
+            flightTestMinAltitudeMissedPoints:500,                   // AT-PF1 4.5
+            flightTestBadCourseCorrectSecond:5,                      // AT-PF1 4.5
+            flightTestBadCoursePoints:200,                           // AT-PF1 4.5
+            flightTestBadCourseMaxPoints:0,                          // AT-PF1
+            flightTestBadCourseStartLandingPoints:200,               // AT-PF1 4.5
+            flightTestBadCourseStartLandingSeparatePoints:false,     // AT-PF1
+			flightTestOutsideCorridorCorrectSecond:0,                // AT-PF1 -
+			flightTestOutsideCorridorPointsPerSecond:0,              // AT-PF1 -
+            flightTestLandingToLatePoints:200,                       // AT-PF1 4.5
+            flightTestGivenToLatePoints:100,                         // AT-PF1 4.5
+            flightTestSafetyAndRulesInfringementPoints:0,            // AT-PF1
+            flightTestInstructionsNotFollowedPoints:0,               // AT-PF1
+            flightTestFalseEnvelopeOpenedPoints:0,                   // AT-PF1
+            flightTestSafetyEnvelopeOpenedPoints:0,                  // AT-PF1
+            flightTestFrequencyNotMonitoredPoints:0,                 // AT-PF1
+            flightTestForbiddenEquipmentPoints:0,                    // AT-PF1
+            flightTestExitRoomTooLatePoints:0,                       // AT-PF1 - planningTestExitRoomTooLatePoints
+
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // AT-PF1 4.5
+            observationTestTurnpointFalsePoints:100,                 // AT-PF1 4.5
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // AT-PF1 4.5
+            observationTestEnrouteCorrectValue:5.0f,                 // AT-PF1 4.5
+            observationTestEnrouteInexactValue:0.0f,                 // AT-PF1
+            observationTestEnrouteInexactPoints:0,                   // AT-PF1
+            observationTestEnrouteNotFoundPoints:20,                 // AT-PF1 4.5
+            observationTestEnrouteFalsePoints:30,                    // AT-PF1 4.5
+            
+            // LandingTest
+            landingTest1:ContestRulesLanding.AT_PF1_NORMAL.data,     // AT-PF1
+            landingTest2:ContestRulesLanding.AT_PF1_IDLE.data,       // AT-PF1
+            landingTest3:ContestRulesLanding.AT_PF1_IDLE_NO_FLAPS.data, // AT-PF1
+            landingTest4:ContestRulesLanding.AT_PF1_OBSTACLE.data,   // AT-PF1
+            
+            // Defaults (other)
+            anrFlying:false,                                         // AT-PF1
+            flightTestLastGateNoBadCourseSeconds:10,                 // AT-PF1 4.2.2j defines 0.5NM
+            showPlanningTest:true,                                   // AT-PF1
+            activateFlightTestCheckLanding:true,                     // AT-PF1
+            showObservationTest:true,                                // AT-PF1
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // AT-PF1
+            flightPlanShowTrueTrack:true,                            // AT-PF1
+            flightPlanShowTrueHeading:true,                          // AT-PF1
+            flightPlanShowGroundSpeed:true,                          // AT-PF1
+            flightPlanShowLocalTime:true,                            // AT-PF1
+            flightPlanShowElapsedTime:false,                         // AT-PF1
+            flightTestSubmissionMinutes:null,                        // AT-PF1
+            scGateWidth:1.0f,                                        // AT-PF1
+            unsuitableStartNum:"13",                                 // AT-PF1
+            turnpointRule:TurnpointRule.AssignCanvas,                // AT-PF1
+            turnpointMapMeasurement:true,                            // AT-PF1
+            enroutePhotoRule:EnrouteRule.Map,                        // AT-PF1
+            enrouteCanvasRule:EnrouteRule.Map,                       // AT-PF1
+            enrouteCanvasMultiple:true,                              // AT-PF1
+            minRouteLegs:0,                                          // AT-PF1
+            maxRouteLegs:8,                                          // AT-PF1 4.2.2c
+            minEnroutePhotos:8,                                      // AT-PF1 4.3.a
+            maxEnroutePhotos:10,                                     // AT-PF1 4.3.a
+            minEnrouteCanvas:5,                                      // AT-PF1 4.3.a
+            maxEnrouteCanvas:8,                                      // AT-PF1 4.3.a
+            minEnrouteTargets:13,                                    // AT-PF1 4.3.a
+            maxEnrouteTargets:18,                                    // AT-PF1 4.3.a
+            useProcedureTurns:true,                                  // AT-PF1
+            liveTrackingScorecard:"FAI Precision"                    // AT-PF1
+        ]
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023"
+
+    R8 ([
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023", // AT-PF2
+            
+            // General
+            precisionFlying:true,                                    // AT-PF2 Precison landings
+            increaseFactor:20,                                       // AT-PF2 4.1
+            printPointsGeneral:true,                                 // AT-PF2
+            printPointsPlanningTest:true,                            // AT-PF2
+            printPointsFlightTest:true,                              // AT-PF2
+            printPointsObservationTest:true,                         // AT-PF2
+            printPointsLandingTest1:true,                            // AT-PF2
+            printPointsLandingTest2:true,                            // AT-PF2
+            printPointsLandingTest3:true,                            // AT-PF2
+            printPointsLandingTest4:true,                            // AT-PF2
+            printPointsLandingField:true,                            // AT-PF2
+            landingFieldImageName:'images/landingfield/at_precision_landing2.jpg', // AT-PF2
+            printPointsTurnpointSign:true,                           // AT-PF2
+            printPointsEnrouteCanvas:true,                           // AT-PF2
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // AT-PF2
+            printLandingCalculatorValues:"C,B,A,-5,5,I,II,III,IV,V,VI", // AT-PF2
+            
+            // PlanningTest
+            planningTestDirectionCorrectGrad:2,                      // AT-PF2 4.5
+            planningTestDirectionPointsPerGrad:2,                    // AT-PF2 4.5
+            planningTestTimeCorrectSecond:5,                         // AT-PF2 4.5
+            planningTestTimePointsPerSecond:1,                       // AT-PF2 4.5
+            planningTestMaxPoints:350,                               // AT-PF2 4.5
+            planningTestPlanTooLatePoints:50,                        // AT-PF2 4.5
+            planningTestExitRoomTooLatePoints:100,                   // AT-PF2 4.5
+            planningTestForbiddenCalculatorsPoints:300,              // AT-PF2 4.5
+        
+            // FlightTest
+            flightTestTakeoffCorrectSecond:60,                       // AT-PF2 4.5
+            flightTestTakeoffCheckSeconds:false,                     // AT-PF2 4.5
+            flightTestTakeoffPointsPerSecond:0,                      // AT-PF2 4.5
+            flightTestTakeoffMissedPoints:200,                       // AT-PF2 4.5
+            flightTestCptimeCorrectSecond:2,                         // AT-PF2 4.5
+            flightTestCptimePointsPerSecond:3,                       // AT-PF2 4.5
+            flightTestCptimeMaxPoints:100,                           // AT-PF2 4.5
+            flightTestCpNotFoundPoints:100,                          // AT-PF2 4.5
+            flightTestProcedureTurnNotFlownPoints:200,               // AT-PF2 4.5
+            flightTestMinAltitudeMissedPoints:500,                   // AT-PF2 4.5
+            flightTestBadCourseCorrectSecond:5,                      // AT-PF2 4.5
+            flightTestBadCoursePoints:200,                           // AT-PF2 4.5
+            flightTestBadCourseMaxPoints:0,                          // AT-PF2
+            flightTestBadCourseStartLandingPoints:200,               // AT-PF2 4.5
+            flightTestBadCourseStartLandingSeparatePoints:false,     // AT-PF2
+			flightTestOutsideCorridorCorrectSecond:0,                // AT-PF2 -
+			flightTestOutsideCorridorPointsPerSecond:0,              // AT-PF2 -
+            flightTestLandingToLatePoints:200,                       // AT-PF2 4.5
+            flightTestGivenToLatePoints:100,                         // AT-PF2 4.5
+            flightTestSafetyAndRulesInfringementPoints:0,            // AT-PF2
+            flightTestInstructionsNotFollowedPoints:0,               // AT-PF2
+            flightTestFalseEnvelopeOpenedPoints:0,                   // AT-PF2
+            flightTestSafetyEnvelopeOpenedPoints:0,                  // AT-PF2
+            flightTestFrequencyNotMonitoredPoints:0,                 // AT-PF2
+            flightTestForbiddenEquipmentPoints:0,                    // AT-PF2
+            flightTestExitRoomTooLatePoints:0,                       // AT-PF2 - planningTestExitRoomTooLatePoints
+
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // AT-PF2 4.5
+            observationTestTurnpointFalsePoints:100,                 // AT-PF2 4.5
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // AT-PF2 4.5
+            observationTestEnrouteCorrectValue:5.0f,                 // AT-PF2 4.5
+            observationTestEnrouteInexactValue:0.0f,                 // AT-PF2
+            observationTestEnrouteInexactPoints:0,                   // AT-PF2
+            observationTestEnrouteNotFoundPoints:20,                 // AT-PF2 4.5
+            observationTestEnrouteFalsePoints:30,                    // AT-PF2 4.5
+            
+            // LandingTest
+            landingTest1:ContestRulesLanding.AT_PF2_NORMAL.data,     // AT-PF2
+            landingTest2:ContestRulesLanding.AT_PF2_IDLE.data,       // AT-PF2
+            landingTest3:ContestRulesLanding.AT_PF2_IDLE_NO_FLAPS.data, // AT-PF2
+            landingTest4:ContestRulesLanding.AT_PF2_OBSTACLE.data,   // AT-PF2
+            
+            // Defaults (other)
+            anrFlying:false,                                         // AT-PF2
+            flightTestLastGateNoBadCourseSeconds:10,                 // AT-PF2 4.2.2j defines 0.5NM
+            showPlanningTest:true,                                   // AT-PF2
+            activateFlightTestCheckLanding:true,                     // AT-PF2
+            showObservationTest:true,                                // AT-PF2
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // AT-PF2
+            flightPlanShowTrueTrack:true,                            // AT-PF2
+            flightPlanShowTrueHeading:true,                          // AT-PF2
+            flightPlanShowGroundSpeed:true,                          // AT-PF2
+            flightPlanShowLocalTime:true,                            // AT-PF2
+            flightPlanShowElapsedTime:false,                         // AT-PF2
+            flightTestSubmissionMinutes:null,                        // AT-PF2
+            scGateWidth:1.0f,                                        // AT-PF2
+            unsuitableStartNum:"13",                                 // AT-PF2
+            turnpointRule:TurnpointRule.AssignCanvas,                // AT-PF2
+            turnpointMapMeasurement:true,                            // AT-PF2
+            enroutePhotoRule:EnrouteRule.Map,                        // AT-PF2
+            enrouteCanvasRule:EnrouteRule.Map,                       // AT-PF2
+            enrouteCanvasMultiple:true,                              // AT-PF2
+            minRouteLegs:0,                                          // AT-PF2
+            maxRouteLegs:8,                                          // AT-PF2 4.2.2c
+            minEnroutePhotos:8,                                      // AT-PF2 4.3a
+            maxEnroutePhotos:10,                                     // AT-PF2 4.3a
+            minEnrouteCanvas:5,                                      // AT-PF2 4.3a
+            maxEnrouteCanvas:8,                                      // AT-PF2 4.3a
+            minEnrouteTargets:13,                                    // AT-PF2 4.3a
+            maxEnrouteTargets:18,                                    // AT-PF2 4.3a
+            useProcedureTurns:true,                                  // AT-PF2
+            liveTrackingScorecard:"FAI Precision"                    // AT-PF2
+        ]
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023"
+
+    R9 ([
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023", // AT-PF3
+            
+            // General
+            precisionFlying:true,                                    // AT-PF3 Precison landings
+            increaseFactor:20,                                       // AT-PF3 4.1
+            printPointsGeneral:true,                                 // AT-PF3
+            printPointsPlanningTest:true,                            // AT-PF3
+            printPointsFlightTest:true,                              // AT-PF3
+            printPointsObservationTest:true,                         // AT-PF3
+            printPointsLandingTest1:true,                            // AT-PF3
+            printPointsLandingTest2:true,                            // AT-PF3
+            printPointsLandingTest3:true,                            // AT-PF3
+            printPointsLandingTest4:true,                            // AT-PF3
+            printPointsLandingField:true,                            // AT-PF3
+            landingFieldImageName:'images/landingfield/at_precision_landing3.jpg', // AT-PF3
+            printPointsTurnpointSign:true,                           // AT-PF3
+            printPointsEnrouteCanvas:true,                           // AT-PF3
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // AT-PF3
+            printLandingCalculatorValues:"-20,-10,-1,1,10,20,30",    // AT-PF3
+            
+            // PlanningTest
+            planningTestDirectionCorrectGrad:2,                      // AT-PF3 4.5
+            planningTestDirectionPointsPerGrad:2,                    // AT-PF3 4.5
+            planningTestTimeCorrectSecond:5,                         // AT-PF3 4.5
+            planningTestTimePointsPerSecond:1,                       // AT-PF3 4.5
+            planningTestMaxPoints:350,                               // AT-PF3 4.5
+            planningTestPlanTooLatePoints:50,                        // AT-PF3 4.5
+            planningTestExitRoomTooLatePoints:100,                   // AT-PF3 4.5
+            planningTestForbiddenCalculatorsPoints:300,              // AT-PF3 4.5
+        
+            // FlightTest
+            flightTestTakeoffCorrectSecond:60,                       // AT-PF3 4.5
+            flightTestTakeoffCheckSeconds:false,                     // AT-PF3
+            flightTestTakeoffPointsPerSecond:0,                      // AT-PF3
+            flightTestTakeoffMissedPoints:200,                       // AT-PF3 4.5
+            flightTestCptimeCorrectSecond:2,                         // AT-PF3 4.5
+            flightTestCptimePointsPerSecond:3,                       // AT-PF3 4.5
+            flightTestCptimeMaxPoints:100,                           // AT-PF3 4.5
+            flightTestCpNotFoundPoints:100,                          // AT-PF3 4.5
+            flightTestProcedureTurnNotFlownPoints:200,               // AT-PF3 4.5
+            flightTestMinAltitudeMissedPoints:500,                   // AT-PF3 4.5
+            flightTestBadCourseCorrectSecond:5,                      // AT-PF3 4.5
+            flightTestBadCoursePoints:200,                           // AT-PF3 4.5
+            flightTestBadCourseMaxPoints:0,                          // AT-PF3
+            flightTestBadCourseStartLandingPoints:200,               // AT-PF3 4.5
+            flightTestBadCourseStartLandingSeparatePoints:false,     // AT-PF3
+			flightTestOutsideCorridorCorrectSecond:0,                // AT-PF3 -
+			flightTestOutsideCorridorPointsPerSecond:0,              // AT-PF3 -
+            flightTestLandingToLatePoints:200,                       // AT-PF3 4.5
+            flightTestGivenToLatePoints:100,                         // AT-PF3 4.5
+            flightTestSafetyAndRulesInfringementPoints:0,            // AT-PF3
+            flightTestInstructionsNotFollowedPoints:0,               // AT-PF3
+            flightTestFalseEnvelopeOpenedPoints:0,                   // AT-PF3
+            flightTestSafetyEnvelopeOpenedPoints:0,                  // AT-PF3
+            flightTestFrequencyNotMonitoredPoints:0,                 // AT-PF3
+            flightTestForbiddenEquipmentPoints:0,                    // AT-PF3
+            flightTestExitRoomTooLatePoints:0,                       // AT-PF3 - planningTestExitRoomTooLatePoints
+
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // AT-PF3 4.5
+            observationTestTurnpointFalsePoints:100,                 // AT-PF3 4.5
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm,     // AT-PF3 4.5
+            observationTestEnrouteCorrectValue:5.0f,                 // AT-PF3 4.5
+            observationTestEnrouteInexactValue:0.0f,                 // AT-PF3
+            observationTestEnrouteInexactPoints:0,                   // AT-PF3
+            observationTestEnrouteNotFoundPoints:20,                 // AT-PF3 4.5
+            observationTestEnrouteFalsePoints:30,                    // AT-PF3 4.5
+            
+            // LandingTest
+            landingTest1:ContestRulesLanding.AT_PF3_NORMAL.data,     // AT-PF3
+            landingTest2:ContestRulesLanding.AT_PF3_IDLE.data,       // AT-PF3
+            landingTest3:ContestRulesLanding.AT_PF3_IDLE_NO_FLAPS.data, // AT-PF3
+            landingTest4:ContestRulesLanding.AT_PF3_OBSTACLE.data,   // AT-PF3
+            
+            // Defaults (other)
+            anrFlying:false,                                         // AT-PF3
+            flightTestLastGateNoBadCourseSeconds:10,                 // AT-PF3 4.2.2j defines 0.5NM
+            showPlanningTest:true,                                   // AT-PF3
+            activateFlightTestCheckLanding:true,                     // AT-PF3
+            showObservationTest:true,                                // AT-PF3
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // AT-PF3
+            flightPlanShowTrueTrack:true,                            // AT-PF3
+            flightPlanShowTrueHeading:true,                          // AT-PF3
+            flightPlanShowGroundSpeed:true,                          // AT-PF3
+            flightPlanShowLocalTime:true,                            // AT-PF3
+            flightPlanShowElapsedTime:false,                         // AT-PF3
+            flightTestSubmissionMinutes:null,                        // AT-PF3
+            scGateWidth:1.0f,                                        // AT-PF3
+            unsuitableStartNum:"13",                                 // AT-PF3
+            turnpointRule:TurnpointRule.AssignCanvas,                // AT-PF3
+            turnpointMapMeasurement:true,                            // AT-PF3
+            enroutePhotoRule:EnrouteRule.Map,                        // AT-PF3
+            enrouteCanvasRule:EnrouteRule.Map,                       // AT-PF3
+            enrouteCanvasMultiple:true,                              // AT-PF3
+            minRouteLegs:0,                                          // AT-PF3
+            maxRouteLegs:8,                                          // AT-PF3 4.2.2c
+            minEnroutePhotos:8,                                      // AT-PF3 4.3a
+            maxEnroutePhotos:10,                                     // AT-PF3 4.3a
+            minEnrouteCanvas:5,                                      // AT-PF3 4.3a
+            maxEnrouteCanvas:8,                                      // AT-PF3 4.3a
+            minEnrouteTargets:13,                                    // AT-PF3 4.3a
+            maxEnrouteTargets:18,                                    // AT-PF3 4.3a
+            useProcedureTurns:true,                                  // AT-PF3
+            liveTrackingScorecard:"FAI Precision"                    // AT-PF3
+        ]
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023"
     
     Empty([ruleTitle:''])
 
@@ -2006,17 +1227,17 @@ enum ContestRules
         if (withEmpty) {
             ret += Empty
         }
-        ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
-        ret += R13 // Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2025
-        ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
-        ret += R6  // FAI Air Rally Flying - Edition 2024
-        ret += R12 // FAI Air Navigation Race - Edition 2024
-        ret += R4  // FAI Precision Flying - Edition 2024
-        ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
-        ret += R10 // Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023
-        ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023
-        ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023
-        ret += R9  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023
+        ret += R1  // DE-RF   Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
+        ret += R13 // DE-ANR  Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2025
+        ret += R11 // DE-PF   Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
+        ret += R6  // FAI-RF  FAI Air Rally Flying - Edition 2024
+        ret += R12 // FAI-ANR FAI Air Navigation Race - Edition 2024
+        ret += R4  // FAI-PF  FAI Precision Flying - Edition 2024
+        ret += R5  // CH-PF   Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
+        ret += R10 // AT-RF   Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023
+        ret += R7  // AT-PF   Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023
+        ret += R8  // AT-PF   Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023
+        ret += R9  // AT-PF   Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023
         return ret
     }
     

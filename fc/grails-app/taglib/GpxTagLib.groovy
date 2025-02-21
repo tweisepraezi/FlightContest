@@ -500,7 +500,7 @@ class GpxTagLib
             outln"""for (let i in onlinemap_names_array) {"""
             outln"""    var onlinemap_name = onlinemap_names_array[i];"""
             outln"""    xhttp.onload = function() {load_onlinemap_info(this);}"""
-            outln"""    xhttp.open("GET", onlinemap_name + "info", false);"""
+            outln"""    xhttp.open("GET", onlinemap_name + "${Defs.MAP_PNG_INFO_FILE_SUFFIX}", false);"""
             outln"""    xhttp.send();"""
             outln"""    function load_onlinemap_info(infoData) {"""
             outln"""        var top = 0;"""

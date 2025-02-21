@@ -51,12 +51,20 @@ class OpenAIPService
     {
         printstart "WriteAirspaces2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
         
+        String map_folder_name = webRootDir + Defs.ROOT_FOLDER_MAP + "\\" + routeInstance.contest.contestUUID
+        File map_folder = new File(map_folder_name)
+        if (!map_folder.exists()) {
+            map_folder.mkdir()
+        }
+        
+        String airspaces_filename = map_folder_name + "\\" + Defs.MAP_AIRSPACES_FILE
         String kml_file_name = kmzFileName + ".kml"
         
         printstart "Generate '${webRootDir + kml_file_name}'"
         
 		boolean all_airspaces_written = true
 		String missing_airspaces = ""
+        List new_airspaces = []
 		
         BufferedWriter kml_writer = null
         CharArrayWriter kml_data = null
@@ -128,24 +136,35 @@ class OpenAIPService
                                 airspace_text = airspace_name
                             }   
                             airspace_text = airspace_text.trim()
-                            Map ret = [:]
-                            if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
-                                String search_id = airspace_name.substring(3)
-                                ret = call_rest("airspaces?id=${search_id}", "GET", 200, "", "items")
+                            
+                            // get airspace from cache
+                            Map ret = get_airspace_from_cache(airspaces_filename, airspace_name) // get airspace from cache
+                            if (ret.ok && ret.coordinates) {
+                                write_airspace(xml, airspace_name, airspace_text, "airspace", ret.coordinates)
                             } else {
-                                String search_name = URLEncoder.encode(airspace_name, "UTF-8")
-                                ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items")
-                            }
-                            if (ret.ok && ret.data) {
-                                String airspace_coordinates = ret.data.geometry.coordinates.toString()
-                                airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
-                                write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
-                            } else {
-                                all_airspaces_written = false
-                                if (missing_airspaces) {
-                                    missing_airspaces += ", "
+                                // get airspace from OpenAIP
+                                ret = [:]
+                                if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
+                                    String search_id = airspace_name.substring(3)
+                                    println "Get airspace $search_id from OpenAIP"
+                                    ret = call_rest("airspaces?id=${search_id}", "GET", 200, "", "items")
+                                } else {
+                                    String search_name = URLEncoder.encode(airspace_name, "UTF-8")
+                                    println "Get airspace '$search_name' from OpenAIP"
+                                    ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items")
                                 }
-                                missing_airspaces += airspace_name
+                                if (ret.ok && ret.data) {
+                                    String airspace_coordinates = ret.data.geometry.coordinates.toString()
+                                    airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
+                                    write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
+                                    new_airspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
+                                } else {
+                                    all_airspaces_written = false
+                                    if (missing_airspaces) {
+                                        missing_airspaces += ", "
+                                    }
+                                    missing_airspaces += airspace_name
+                                }
                             }
                         }
 					}
@@ -157,12 +176,73 @@ class OpenAIPService
 		printdone "${kml_file.size()} bytes"
 		write_kmz(webRootDir, kmzFileName, kml_file_name)
 		DeleteFile(webRootDir + kml_file_name)
+        
+        if (new_airspaces) {
+            write_airspaces_to_cache(airspaces_filename, new_airspaces)
+        }
 
         printdone ""
         
         return [ok:all_airspaces_written, missingAirspaces:missing_airspaces]
     }
 
+    //--------------------------------------------------------------------------
+    private void write_airspaces_to_cache(String airspacesFilename, List newAirspaces) // TODO
+    {
+        String new_filename = airspacesFilename + ".new.kml"
+        
+		def kml_file = new File(new_filename)
+		def kml_writer = kml_file.newWriter("UTF-8")
+        
+        MarkupBuilder xml = new MarkupBuilder(kml_writer)
+        kml_writer.writeLine(XMLHEADER)
+		xml.kml(xmlns:"http://www.opengis.net/kml/2.2",'xmlns:gx':"http://www.google.com/kml/ext/2.2",'xmlns:kml':"http://www.opengis.net/kml/2.2",'xmlns:atom':"http://www.w3.org/2005/Atom") {
+            xml.Document {
+				xml.name "Airspaces"
+				xml.Style(id:"airspace") {
+					xml.IconStyle {
+						xml.scale 4.24403e-38
+					}
+                    boolean isHidden = false
+					xml.LineStyle {
+                        if (isHidden) {
+                            xml.color "ffff7777"
+                        } else {
+                            xml.color "ffff00ff"
+                        }
+						xml.width 1.5
+					}
+					xml.PolyStyle {
+                        if (isHidden) {
+                            xml.color "40ff7777"
+                        } else {
+                            xml.color "40ff00ff"
+                        }
+					}
+				}
+                
+                File kml_read_file = new File(airspacesFilename)
+                if (kml_read_file.exists()) {
+                    def kml_reader = new FileReader(kml_read_file)
+                    def read_kml = new XmlParser().parse(kml_reader)
+                    def folders = read_kml.Document.Folder
+                    for (folder in folders) {
+                        write_airspace(xml, folder.name[0].text(), folder.description[0].text(), "airspace", folder.Placemark.Polygon.outerBoundaryIs.LinearRing.coordinates[0].text())
+                    }
+                    kml_reader.close()
+                }
+                
+                for (Map new_airspace in newAirspaces) {
+                    write_airspace(xml, new_airspace.airspaceName, new_airspace.airspaceText, new_airspace.airspaceStyle, new_airspace.airspaceCoordinates)
+                }
+			}
+		}
+        kml_writer.close()
+        
+        DeleteFile(airspacesFilename)
+        kml_file.renameTo(new File(airspacesFilename))
+    }
+    
     //--------------------------------------------------------------------------
     private void write_airspace(MarkupBuilder xml, String airspaceName, String airspaceText, String airspaceStyle, String airspaceCoordinates)
     {
@@ -210,6 +290,26 @@ class OpenAIPService
         }
         zipOutputStream.closeEntry()
         kml_file_input_stream.close()
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map get_airspace_from_cache(String airspacesFilename, String airspaceName)
+    {
+        File kml_file = new File(airspacesFilename)
+        if (kml_file.exists()) {
+            def kml_reader = new FileReader(kml_file)
+
+            def kml = new XmlParser().parse(kml_reader)
+            def folders = kml.Document.Folder
+            
+            for (folder in folders) {
+                if (folder.name[0].text() == airspaceName) {
+                    return [ok:true, coordinates:folder.Placemark.Polygon.outerBoundaryIs.LinearRing.coordinates[0].text()]
+                }
+            }
+            kml_reader.close()
+        }
+        return [ok:false, coordinates:""]
     }
     
     //--------------------------------------------------------------------------

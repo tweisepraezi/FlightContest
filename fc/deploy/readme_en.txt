@@ -1,6 +1,22 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.0.2
+-------------
+- OSM Contest Map: Airspace OpenAIP queries are now saved in the contest.
+    This considerably speeds up the start of map generation for follow-up orders.
+    The boundaries of retrieved airspaces can be displayed in the map menu under the 'Airspaces' entry.    
+- Logger evaluation: When adjusting the runway with "Wind (Move runway)", the following actions are now available there:
+    "Offline map (T/O)" - Display logger data with route at T/O point
+    "Offline map (LDG)" - Display logger data with route at LDG point
+    "Recalculate logger data again" - calculates the penalty points with the moved runway immediately
+    The position deviation of the LDG point along the runway is now preset to -0.03NM to avoid an identical position with a T/O point.
+- Bug "Penalty points for landings are not configured correctly in the German ANR rules" fixed
+- Bug "Gate width of T/O and LDG of a used route cannot be changed with ANR rules" fixed
+- Bug "When map regions overlap, the OSM Contest Map is not always printed completely" fixed
+- Bug "Non-ANR formats can be selected for the route default print map" fixed
+- Bug "OSM competition map cannot be printed if airspace name contains a quotation mark" fixed
+
 Changes 4.0.1
 -------------
 - ANR competition map: The corridor width in NM is now printed in the bottom right corner.

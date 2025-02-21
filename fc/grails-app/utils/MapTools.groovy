@@ -1,24 +1,24 @@
 class MapTools
 {
     // ----------------------------------------------------------------------------------
-    static List GetMapList(def servletContext, def session)
+    static List GetMapList(def servletContext, def session, boolean printMap = false)
     {
         def map_list = []
         String map_folder_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/"
         File map_folder = new File(map_folder_name)
         if (map_folder.exists()) {
             map_folder.traverse { File file ->
-                if (file.name.endsWith('.png') && !file.name.endsWith('.warped.png')) {
-                    Map map_entry = [name:"",title:"", localref:"",top:0,bottom:0,right:0,left:0,projection:"",landscape:false,size:"",tif:false]
+                if (file.name.endsWith('.png') && !file.name.endsWith(Defs.MAP_PNG_WARP_FILE_SUFFIX)) {
+                    Map map_entry = [name:"",title:"", titlecode:'', localref:"",top:0,bottom:0,right:0,left:0,projection:"",landscape:false,size:"",tif:false]
                     map_entry.name = file.name
                     map_entry.title = file.name.substring(0,file.name.size()-4)
-                    //map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}.warped.png"
+                    //map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
                     map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}.png"
                     File map_tif = new File("${map_folder_name}${map_entry.title}.tif")
                     if (map_tif.exists()) {
                         map_entry.tif = true
                     }
-                    File map_info = new File("${map_folder_name}${file.name}info")
+                    File map_info = new File("${map_folder_name}${file.name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}")
                     if (map_info.exists()) {
                         LineNumberReader map_info_reader = map_info.newReader()
                         while (true) {
@@ -51,6 +51,15 @@ class MapTools
                         }
                         map_info_reader.close()
                     }
+                    if (!printMap || map_entry.size == "ANR") {
+                        map_list += map_entry
+                    }
+                } else if (file.name == Defs.MAP_AIRSPACES_FILE) {
+                    Map map_entry = [name:"",title:"", localref:"",top:0,bottom:0,right:0,left:0,projection:"",landscape:false,size:"",tif:false]
+                    map_entry.name = file.name
+                    map_entry.title = file.name.substring(0,file.name.size()-4)
+                    map_entry.titlecode = "fc.map.airspaces"
+                    map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${Defs.MAP_AIRSPACES_FILE}"
                     map_list += map_entry
                 }
             }

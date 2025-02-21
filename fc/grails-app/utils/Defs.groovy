@@ -31,6 +31,11 @@ class Defs
     static final String ROOT_FOLDER_MAP                                = "map" // FC OnlineMap
     static final String ROOT_FOLDER_MAPBACKUP                          = "../../../map-backup"
     
+    static final String MAP_PNG_WORLD_FILE_SUFFIX                      = "w"
+    static final String MAP_PNG_INFO_FILE_SUFFIX                       = "info"
+    static final String MAP_PNG_WARP_FILE_SUFFIX                       = ".warped.png"
+    static final String MAP_AIRSPACES_FILE                             = "airspaces.kml"
+    
     static final String LIVE_STYLESHEET                                = "fclive.css" // Live-Anzeige-Stylesheet
     static final String LIVE_FILENAME                                  = "fclive.htm"
     static final int LIVE_UPLOADSECONDS                                = 60 // Live-Anzeige-Upload-Zeit in Sekunden

@@ -88,15 +88,15 @@ class MapController {
     def download_pngzip = {
         if (session?.lastContest) {
             String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.name}"
-            String world_file_name = "${map_png_file_name}w"
-            String info_file_name = "${map_png_file_name}info"
+            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
             String png_file_name = "Map.png"
             String map_zip_file_name = map_png_file_name + ".zip"
             gpxService.printstart "Write ${map_zip_file_name}"
             ZipOutputStream zip_stream = new ZipOutputStream(new FileOutputStream(map_zip_file_name))
             write_file_to_zip(zip_stream, png_file_name, map_png_file_name)
-            write_file_to_zip(zip_stream, png_file_name + "w", world_file_name)
-            write_file_to_zip(zip_stream, png_file_name + "info", info_file_name)
+            write_file_to_zip(zip_stream, png_file_name + Defs.MAP_PNG_WORLD_FILE_SUFFIX, world_file_name)
+            write_file_to_zip(zip_stream, png_file_name + Defs.MAP_PNG_INFO_FILE_SUFFIX, info_file_name)
             zip_stream.close()
             gpxService.printdone ""
             gpxService.printstart "Download PNGZIP"
@@ -119,11 +119,11 @@ class MapController {
             ZipOutputStream zip_stream = new ZipOutputStream(new FileOutputStream(map_zip_file_name))
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
                 String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${map_entry.name}"
-                String world_file_name = "${map_png_file_name}w"
-                String info_file_name = "${map_png_file_name}info"
+                String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                 write_file_to_zip(zip_stream, map_entry.name,          map_png_file_name)
-                write_file_to_zip(zip_stream, map_entry.name + "w",    world_file_name)
-                write_file_to_zip(zip_stream, map_entry.name + "info", info_file_name)
+                write_file_to_zip(zip_stream, map_entry.name + Defs.MAP_PNG_WORLD_FILE_SUFFIX, world_file_name)
+                write_file_to_zip(zip_stream, map_entry.name + Defs.MAP_PNG_INFO_FILE_SUFFIX, info_file_name)
             }
             zip_stream.close()
             gpxService.printdone ""
@@ -142,7 +142,7 @@ class MapController {
     def download_pdf = {
         if (session?.lastContest) {
             String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.name}"
-            String info_file_name = "${map_png_file_name}info"
+            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
             boolean print_landscape = params.landscape == "true"
             String print_size = params.size
             gpxService.printstart "Generate PDF (Landscape: $print_landscape, Size:$print_size)"
@@ -163,6 +163,20 @@ class MapController {
         }
     }
     
+    def download = {
+        if (session?.lastContest) {
+            String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.name}"
+            gpxService.printstart "Download ${params.name}"
+            String map_file_name = params.name // (params.title + '.png').replace(' ',"_")
+            response.setContentType("application/octet-stream")
+            response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
+            gpxService.Download(map_png_file_name, map_file_name, response.outputStream)
+            gpxService.printdone ""
+        } else {
+            redirect(controller:'contest',action:'start')
+        }
+    }
+    
     def rename_question = {
         if (session?.lastContest) {
             String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.name}"
@@ -176,11 +190,11 @@ class MapController {
         if (session?.lastContest) {
             if (params.MapRenameNewName && params.name != params.MapRenameNewName) {
                 String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.name}.png"
-                String world_file_name = "${map_png_file_name}w"
-                String info_file_name = "${map_png_file_name}info"
+                String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                 String new_map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.MapRenameNewName}.png"
-                String new_world_file_name = "${new_map_png_file_name}w"
-                String new_info_file_name = "${new_map_png_file_name}info"
+                String new_world_file_name = "${new_map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                String new_info_file_name = "${new_map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
                 if (new File(new_map_png_file_name).exists()) {
                     flash.message = message(code:'fc.map.rename.error', args:[params.MapRenameNewName])
                     flash.error = true
@@ -201,8 +215,8 @@ class MapController {
     def delete = {
         if (session?.lastContest) {
             String map_png_file_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${session.lastContest.contestUUID}/${params.name}"
-            String world_file_name = "${map_png_file_name}w"
-            String info_file_name = "${map_png_file_name}info"
+            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
             gpxService.DeleteFile(map_png_file_name)
             gpxService.DeleteFile(world_file_name)
             gpxService.DeleteFile(info_file_name)
@@ -250,15 +264,17 @@ class MapController {
 	
     private void write_file_to_zip(ZipOutputStream zipOutputStream, String zipFileName, String fileName)
     {
-        byte[] buffer = new byte[1024]
-        FileInputStream file_input_stream = new FileInputStream(fileName)
-        zipOutputStream.putNextEntry(new ZipEntry(zipFileName))
-        int length
-        while ((length = file_input_stream.read(buffer)) > 0) {
-            zipOutputStream.write(buffer, 0, length)
+        if (new File(fileName).exists()) {
+            byte[] buffer = new byte[1024]
+            FileInputStream file_input_stream = new FileInputStream(fileName)
+            zipOutputStream.putNextEntry(new ZipEntry(zipFileName))
+            int length
+            while ((length = file_input_stream.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, length)
+            }
+            zipOutputStream.closeEntry()
+            file_input_stream.close()
         }
-        zipOutputStream.closeEntry()
-        file_input_stream.close()
     }
     
 	Map GetPrintParams() {

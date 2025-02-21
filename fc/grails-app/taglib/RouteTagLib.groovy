@@ -569,7 +569,7 @@ class RouteTagLib
             outln"""    <br/>"""
             outln"""    <select id="defaultPrintMap" name="defaultPrintMap" tabIndex="${attrs.ti[0]++}">"""
             outln"""        <option></option>"""
-            for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
+            for (Map map_entry in MapTools.GetMapList(servletContext, session, true)) { // true - printMap
                 if (map_entry.projection == "3857") {
                     if (map_entry.title == attrs.route.defaultPrintMap) {
                         outln"""<option value="${map_entry.title}" selected>${map_entry.title}</option>"""

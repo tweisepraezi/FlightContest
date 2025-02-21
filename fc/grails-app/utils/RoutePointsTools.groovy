@@ -7,7 +7,7 @@ class RoutePointsTools
 {
     final static Float GPXSHOWPPOINT_RADIUS_CHECKPOINT  = 2.0f   // Anzeigeradius um Checkpunkt in NM
     final static Float GPXSHOWPPOINT_RADIUS_ERRORPOINT  = 2.0f   // Anzeigeradius um Fehlerpunkt in NM
-    final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD    = 2.0f   // Anzeigeradius um Flugplatz in NM
+    final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD    = 0.2f   // Anzeigeradius um Flugplatz in NM
     final static Float GPXSHOWPPOINT_RADIUS_ENROUTESIGN = 2.0f   // Anzeigeradius um Strecken-Objekt in NM
     final static int GPXSHOWPPOINT_SCALE                = 4      // Nachkommastellen für Koordinaten
     

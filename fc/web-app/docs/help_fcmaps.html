@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.0.1,</span>
-<span id="revdate">22.01.2025</span>
+<span id="revnumber">version 4.0.2,</span>
+<span id="revdate">21.02.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -843,22 +843,22 @@ wget http://download.geofabrik.de/europe-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Create database <strong>gis2</strong></p>
+<p>Create database <strong>gis_new</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>dropdb gis2
-createdb gis2
-psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
+<pre>dropdb gis_new
+createdb gis_new
+psql -d gis_new -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)<br>
+<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis_new)<br>
 (Germany, Austria, Switzerland, Poland, Czech Republic, Slovakia, Hungary, parts of France, parts of Denmark)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
+<pre>osm2pgsql -d gis_new --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -870,8 +870,8 @@ psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 <div class="literalblock">
 <div class="content">
 <pre>cd ~/fcmaps/otm-dev/mapnik/tools/
-psql gis2 &lt; arealabel.sql
-psql gis2 &lt; stationdirection.sql</pre>
+psql gis_new &lt; arealabel.sql
+psql gis_new &lt; stationdirection.sql</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -879,9 +879,9 @@ psql gis2 &lt; stationdirection.sql</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql gis2 &lt; viewpointdirection.sql
-psql gis2 &lt; pitchicon.sql
-psql -d gis2 -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
+<pre>psql gis_new &lt; viewpointdirection.sql
+psql gis_new &lt; pitchicon.sql
+psql -d gis_new -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
 bash update_lowzoom.sh</pre>
 </div>
 </div>
@@ -889,16 +889,16 @@ bash update_lowzoom.sh</pre>
 <p>Wait&#8230;&#8203; (20h)</p>
 </div>
 <div class="paragraph">
-<p>Activate new databases <strong>gis</strong> and <strong>lowzoom</strong></p>
+<p>Activate new databases <strong>gis_eu</strong> and <strong>lowzoom_eu</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>dropdb gisold
-dropdb lowzoomold
-psql -d postgres -c 'ALTER DATABASE gis RENAME TO gisold;'
-psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
-psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
-psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'</pre>
+<pre>dropdb gisold_eu
+dropdb lowzoomold_eu
+psql -d postgres -c 'ALTER DATABASE gis_eu RENAME TO gisold_eu;'
+psql -d postgres -c 'ALTER DATABASE gis_new RENAME TO gis_eu;'
+psql -d postgres -c 'ALTER DATABASE lowzoom_eu RENAME TO lowzoomold_eu;'
+psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom_eu;'</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1061,12 +1061,12 @@ http://viewfinderpanoramas.org/dem3/L34.zip</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Create database <strong>contours2</strong></p>
+<p>Create database <strong>contours_new</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>createdb contours2
-psql -d contours2 -c 'CREATE EXTENSION postgis;'</pre>
+<pre>createdb contours_new
+psql -d contours_new -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1074,20 +1074,20 @@ psql -d contours2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d contours2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
+<pre>osm2pgsql -d contours_new --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Wait&#8230;&#8203; (4h)</p>
 </div>
 <div class="paragraph">
-<p>Activate new database <strong>contours</strong></p>
+<p>Activate new database <strong>contours_eu</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>dropdb contoursold
-psql -d postgres -c 'ALTER DATABASE contours RENAME TO contoursold;'
-psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'</pre>
+<pre>dropdb contoursold_eu
+psql -d postgres -c 'ALTER DATABASE contours_eu RENAME TO contoursold_eu;'
+psql -d postgres -c 'ALTER DATABASE contours_new RENAME TO contours_eu;'</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1115,7 +1115,7 @@ psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>gis: 107GB, contours: 56GB, lowzoom: 152MB</p>
+<p>gis_eu: 107GB, contours_eu: 56GB, lowzoom_eu: 152MB</p>
 </div>
 <div class="paragraph">
 <p>Display free disk space</p>

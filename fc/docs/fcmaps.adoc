@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.0.1
-:revdate:   22.01.2025
+:revnumber: 4.0.2
+:revdate:   21.02.2025
 :nofooter:
 :title-page:
 :toc-title: Table of content
@@ -206,42 +206,42 @@ Download data (Europe)
  mkdir osm && cd osm
  wget http://download.geofabrik.de/europe-latest.osm.pbf
 
-Create database *gis2*
+Create database *gis_new*
 
- dropdb gis2
- createdb gis2
- psql -d gis2 -c 'CREATE EXTENSION postgis;'
+ dropdb gis_new
+ createdb gis_new
+ psql -d gis_new -c 'CREATE EXTENSION postgis;'
 
-Load OSM data into OSM database (~/data/osm/*.pbf -> gis2) +
+Load OSM data into OSM database (~/data/osm/*.pbf -> gis_new) +
 (Germany, Austria, Switzerland, Poland, Czech Republic, Slovakia, Hungary, parts of France, parts of Denmark)
 
- osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
+ osm2pgsql -d gis_new --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
 
 Wait... (37h)
 
 Preprocessing
 
  cd ~/fcmaps/otm-dev/mapnik/tools/
- psql gis2 < arealabel.sql
- psql gis2 < stationdirection.sql
+ psql gis_new < arealabel.sql
+ psql gis_new < stationdirection.sql
 
 Wait... (10min)
 
- psql gis2 < viewpointdirection.sql
- psql gis2 < pitchicon.sql
- psql -d gis2 -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
+ psql gis_new < viewpointdirection.sql
+ psql gis_new < pitchicon.sql
+ psql -d gis_new -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
  bash update_lowzoom.sh
 
 Wait... (20h)
 
-Activate new databases *gis* and *lowzoom*
+Activate new databases *gis_eu* and *lowzoom_eu*
 
- dropdb gisold
- dropdb lowzoomold
- psql -d postgres -c 'ALTER DATABASE gis RENAME TO gisold;'
- psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
- psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
- psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'
+ dropdb gisold_eu
+ dropdb lowzoomold_eu
+ psql -d postgres -c 'ALTER DATABASE gis_eu RENAME TO gisold_eu;'
+ psql -d postgres -c 'ALTER DATABASE gis_new RENAME TO gis_eu;'
+ psql -d postgres -c 'ALTER DATABASE lowzoom_eu RENAME TO lowzoomold_eu;'
+ psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom_eu;'
  
 Change date
 
@@ -337,22 +337,22 @@ Old
  http://viewfinderpanoramas.org/dem3/M34.zip
  http://viewfinderpanoramas.org/dem3/L34.zip
 
-Create database *contours2*
+Create database *contours_new*
  
- createdb contours2
- psql -d contours2 -c 'CREATE EXTENSION postgis;'
+ createdb contours_new
+ psql -d contours_new -c 'CREATE EXTENSION postgis;'
  
 Load contour data into contour database (all generated pbf files must be loaded together in one step)
 
- osm2pgsql -d contours2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
+ osm2pgsql -d contours_new --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
 
 Wait... (4h)
 
-Activate new database *contours*
+Activate new database *contours_eu*
 
- dropdb contoursold
- psql -d postgres -c 'ALTER DATABASE contours RENAME TO contoursold;'
- psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'
+ dropdb contoursold_eu
+ psql -d postgres -c 'ALTER DATABASE contours_eu RENAME TO contoursold_eu;'
+ psql -d postgres -c 'ALTER DATABASE contours_new RENAME TO contours_eu;'
 
 Check database size
 
@@ -367,7 +367,7 @@ Find out database size
 
  psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
 
-gis: 107GB, contours: 56GB, lowzoom: 152MB
+gis_eu: 107GB, contours_eu: 56GB, lowzoom_eu: 152MB
  
 Display free disk space
  

@@ -1,6 +1,22 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.0.2
+----------------
+- OSM-Wettbewerbs-Karte: Luftraum-OpenAIP-Abfragen werden jetzt im Wettbewerb gespeichert.
+    Das beschleunigt den Start der Kartenerzeugung für Folge-Aufträge erheblich.
+    Die Grenzen abgerufener Lufträume können im Karten-Menü unter dem Eintrag 'Lufträume' zur Anzeige gebracht werden.    
+- Logger-Auswertung: Bei der Anpassung der Startbahn mit "Wind (Startbahn verschieben)" stehen dort jetzt folgende Aktionen zur Verfügung:
+    "Offline-Karte (T/O)" - Logger-Daten mit Strecke am T/O-Punkt anzeigen
+    "Offline-Karte (LDG)" - Logger-Daten mit Strecke am LDG-Punkt anzeigen
+    "Logger-Daten erneut kalkulieren" - berechnet sofort die Strafpunkte mit der verschobenen Startbahn
+    Die Positionsabweichung des LDG-Punktes längs zur Startbahn wird nun mit -0.03NM voreingestellt, damit eine identische Position mit T/O-Punkt vermieden wird.
+- Bug "Strafpunkte für Landungen sind im deutschen ANR-Regelwerk nicht korrekt konfiguriert" behoben
+- Bug "Tor-Breite von T/O und LDG einer verwendeten Strecke bei ANR-Regelwerk nicht änderbar" behoben
+- Bug "Bei überlappenden Karten-Regionen wird die OSM-Wettbewerbs-Karte nicht immer vollständig gedruckt" behoben
+- Bug "Bei der Strecken-Default-Druck-Karte können Nicht-ANR-Formate ausgewählt werden" behoben
+- Bug "OSM-Wettbewerbs-Karte kann nicht gedruckt werden, wenn Luftraum-Name ein Anführungszeichen enthält" behoben
+
 Änderungen 4.0.1
 ----------------
 - ANR-Wettbewerbs-Karte: Verwendete Korridor-Breite in NM wird jetzt unten rechts gedruckt.

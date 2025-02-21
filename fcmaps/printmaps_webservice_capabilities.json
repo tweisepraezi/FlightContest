@@ -21,41 +21,41 @@
     },
     "ConfigStyles": [
         {
-            "Name": "fcmaps",
+            "Name": "region-cl",
             "ShortDescription": "FlightContest maps",
-            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style, Bottom(Lat):-42.0;Top(Lat):-29.0;Left(Lon):-74.0;Right(Lon):-69.0;",
             "Release": "3.5.0",
-            "Date": "01-Jul-2024",
+            "Date": "01-Oct-2024",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
         },
         {
-            "Name": "fcmaps-dev",
+            "Name": "region-cl-dev",
             "ShortDescription": "FlightContest maps",
-            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style, Bottom(Lat):-42.0;Top(Lat):-29.0;Left(Lon):-74.0;Right(Lon):-69.0;",
             "Release": "3.5.0",
-            "Date": "01-Jul-2024",
+            "Date": "01-Oct-2024",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
         },
         {
-            "Name": "fcmaps-latlon",
+            "Name": "region-it-dev",
             "ShortDescription": "FlightContest maps",
-            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style, Bottom(Lat):36.3;Top(Lat):43.0;Left(Lon):8.0;Right(Lon):18.4;",
             "Release": "3.5.0",
-            "Date": "01-Jul-2024",
+            "Date": "01-Feb-2025",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
         },
         {
-            "Name": "fcmaps-latlon-dev",
+            "Name": "region-it",
             "ShortDescription": "FlightContest maps",
-            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style, Bottom(Lat):36.3;Top(Lat):43.0;Left(Lon):8.0;Right(Lon):18.4;",
             "Release": "3.5.0",
-            "Date": "01-Jul-2024",
+            "Date": "01-Feb-2025",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
@@ -81,21 +81,21 @@
             "Layers": ""
         },
         {
-            "Name": "region-cl",
+            "Name": "fcmaps-latlon",
             "ShortDescription": "FlightContest maps",
-            "LongDescription": "FlightContest maps, based on OpenTopoMap style, Bottom(Lat):-42.0;Top(Lat):-29.0;Left(Lon):-74.0;Right(Lon):-69.0;",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
             "Release": "3.5.0",
-            "Date": "01-Oct-2024",
+            "Date": "01-Jul-2024",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
         },
         {
-            "Name": "region-cl-dev",
+            "Name": "fcmaps-latlon-dev",
             "ShortDescription": "FlightContest maps",
-            "LongDescription": "FlightContest maps, based on OpenTopoMap style, Bottom(Lat):-42.0;Top(Lat):-29.0;Left(Lon):-74.0;Right(Lon):-69.0;",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
             "Release": "3.5.0",
-            "Date": "01-Oct-2024",
+            "Date": "01-Jul-2024",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""

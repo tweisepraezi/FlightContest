@@ -696,6 +696,10 @@ class RouteFileTools
             route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
             route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
             route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
+            route_instance.enroutePhotoRoute = EnrouteRoute.Unassigned
+            route_instance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
+            route_instance.enrouteCanvasRoute = EnrouteRoute.Unassigned
+            route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
             init_corridorwidth_flags = true
         }
         if (!route_instance.save()) {
@@ -980,6 +984,10 @@ class RouteFileTools
                                 route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
                                 route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
                                 route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
+                                route_instance.enroutePhotoRoute = EnrouteRoute.Unassigned
+                                route_instance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
+                                route_instance.enrouteCanvasRoute = EnrouteRoute.Unassigned
+                                route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
                                 init_corridorwidth_flags = true
                             }
                             route_instance.save()
@@ -1999,6 +2007,10 @@ class RouteFileTools
                     route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
                     route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
                     route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
+                    route_instance.enroutePhotoRoute = EnrouteRoute.Unassigned
+                    route_instance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
+                    route_instance.enrouteCanvasRoute = EnrouteRoute.Unassigned
+                    route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
                     init_corridorwidth_flags = true
                 }
                 route_instance.save()

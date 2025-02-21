@@ -19,6 +19,9 @@
                     <g:form method="post" params="${['flighttestwindReturnAction':flighttestwindReturnAction,'flighttestwindReturnController':flighttestwindReturnController,'flighttestwindReturnID':flighttestwindReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
                         <g:set var="flighttestwind_used" value="${Test.findByFlighttestwind(flightTestWindInstance)}"/>
+                        <g:set var="test_instance" value="${Test.get(flighttestwindReturnID)}"/>
+                        <g:set var="is_loggerdata" value="${test_instance && !test_instance.flightTestComplete && test_instance.IsLoggerData()}"/>
+                        <g:set var="is_showmappossible" value="${test_instance && test_instance.IsShowMapPossible()}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -153,6 +156,15 @@
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
                         <g:if test="${!flighttestwind_used && !flightTestWindInstance.flighttest.task.lockPlanning}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:if test="${flighttestwindReturnAction == "flightresults"}">
+                            <g:if test="${is_showmappossible}">
+                                <g:actionSubmit action="showofflinemap_to" value="${message(code:'fc.offlinemap.to')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="showofflinemap_ldg" value="${message(code:'fc.offlinemap.ldg')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:if test="${is_loggerdata}">
+                                <g:actionSubmit action="recalculateresults" value="${message(code:'fc.flightresults.recalculate.loggerdata')}" tabIndex="${ti[0]++}"/>
+                            </g:if>
                         </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
