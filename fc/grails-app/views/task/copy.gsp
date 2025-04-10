@@ -244,16 +244,16 @@
 	                   	</g:else>
                         <fieldset>
                             <label>${message(code:'fc.landingtest.landing1')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="95"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="95"/>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing2')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="96"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="96"/>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing3')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="97"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="97"/>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing4')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="98"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="98"/>
                         </fieldset>
                         <fieldset>
                             <p>

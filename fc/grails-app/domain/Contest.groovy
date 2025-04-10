@@ -141,6 +141,9 @@ class Contest
     Integer observationTestTurnpointFalsePoints = 80    // DB-2.13
             
 	// LandingTest
+    String landingTest1LongRuleTitle = ""               // DB-2.42
+    String landingTest1ShortRuleTitle = ""              // DB-2.42
+    String landingTest1AirfieldImageNames = ""          // DB-2.42
 	int landingTest1MaxPoints = 300                     // DB-2.0
 	int landingTest1NoLandingPoints = 300               // DB-2.0
 	int landingTest1OutsideLandingPoints = 200          // DB-2.0
@@ -151,7 +154,11 @@ class Contest
 	int landingTest1AbnormalLandingPoints = 150         // DB-2.0
 	Integer landingTest1NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	String landingTest1PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
+    String landingTest1PrintCalculatorValues = ""       // DB-2.42
 
+    String landingTest2LongRuleTitle = ""               // DB-2.42
+    String landingTest2ShortRuleTitle = ""              // DB-2.42
+    String landingTest2AirfieldImageNames = ""          // DB-2.42
 	int landingTest2MaxPoints = 300                     // DB-2.0
 	int landingTest2NoLandingPoints = 300               // DB-2.0
 	int landingTest2OutsideLandingPoints = 200          // DB-2.0
@@ -163,7 +170,11 @@ class Contest
 	Integer landingTest2NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	int landingTest2PowerInAirPoints = 200              // DB-2.0
 	String landingTest2PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
+    String landingTest2PrintCalculatorValues = ""       // DB-2.42
 	
+    String landingTest3LongRuleTitle = ""               // DB-2.42
+    String landingTest3ShortRuleTitle = ""              // DB-2.42
+    String landingTest3AirfieldImageNames = ""          // DB-2.42
 	int landingTest3MaxPoints = 300                     // DB-2.0
 	int landingTest3NoLandingPoints = 300               // DB-2.0
 	int landingTest3OutsideLandingPoints = 200          // DB-2.0
@@ -176,7 +187,11 @@ class Contest
 	int landingTest3PowerInAirPoints = 200              // DB-2.0
 	int landingTest3FlapsInAirPoints = 200              // DB-2.0
 	String landingTest3PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
+    String landingTest3PrintCalculatorValues = ""       // DB-2.42
 	
+    String landingTest4LongRuleTitle = ""               // DB-2.42
+    String landingTest4ShortRuleTitle = ""              // DB-2.42
+    String landingTest4AirfieldImageNames = ""          // DB-2.42
 	int landingTest4MaxPoints = 300                     // DB-2.0
 	int landingTest4NoLandingPoints = 300               // DB-2.0
 	int landingTest4OutsideLandingPoints = 200          // DB-2.0
@@ -188,6 +203,7 @@ class Contest
 	Integer landingTest4NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	int landingTest4TouchingObstaclePoints = 400        // DB-2.0
 	String landingTest4PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
+    String landingTest4PrintCalculatorValues = ""       // DB-2.42
 	
     // Defaults
     Integer minRouteLegs = 0                            // DB-2.13
@@ -253,10 +269,10 @@ class Contest
 	Boolean printPointsLandingTest3 = true              // DB-2.3
 	Boolean printPointsLandingTest4 = true              // DB-2.3
     Boolean printPointsLandingField = true              // DB-2.13
-    String landingFieldImageName = ""                   // DB-2.13
+    String landingFieldImageName = ""                   // DB-2.13, UNUSED, since DB-2.42
     Boolean printPointsTurnpointSign = false            // DB-2.13
     Boolean printPointsEnrouteCanvas = false            // DB-2.13
-    String printLandingCalculatorValues = ""            // DB-2.8
+    String printLandingCalculatorValues = ""            // DB-2.8, UNUSED, since DB-2.42
 	Boolean printPointsZero = false                     // DB-2.3
 	Boolean printPointsLandscape = false                // DB-2.3
 	Boolean printPointsA3 = false                       // DB-2.3
@@ -640,6 +656,24 @@ class Contest
         showPlanningTest(nullable:true)
         activateFlightTestCheckLanding(nullable:true)
         showObservationTest(nullable:true)
+
+        // DB-2.42 compatibility
+        landingTest1LongRuleTitle(nullable:true)
+        landingTest1ShortRuleTitle(nullable:true)
+        landingTest1AirfieldImageNames(nullable:true)
+        landingTest1PrintCalculatorValues(nullable:true)
+        landingTest2LongRuleTitle(nullable:true)
+        landingTest2ShortRuleTitle(nullable:true)
+        landingTest2AirfieldImageNames(nullable:true)
+        landingTest2PrintCalculatorValues(nullable:true)
+        landingTest3LongRuleTitle(nullable:true)
+        landingTest3ShortRuleTitle(nullable:true)
+        landingTest3AirfieldImageNames(nullable:true)
+        landingTest3PrintCalculatorValues(nullable:true)
+        landingTest4LongRuleTitle(nullable:true)
+        landingTest4ShortRuleTitle(nullable:true)
+        landingTest4AirfieldImageNames(nullable:true)
+        landingTest4PrintCalculatorValues(nullable:true)
     }
 
     static mapping = {
@@ -667,11 +701,10 @@ class Contest
                 contestRule = contestInstance.contestRule
                 contestRuleForEachClass = contestInstance.contestRuleForEachClass
                 ruleTitle = contestInstance.ruleTitle
+                printOrganizer = contestInstance.printOrganizer
                 
 				precisionFlying = contestInstance.precisionFlying
                 increaseFactor = contestInstance.increaseFactor
-                landingFieldImageName = contestInstance.landingFieldImageName
-                printLandingCalculatorValues = contestInstance.printLandingCalculatorValues
 				
 				planningTestDirectionCorrectGrad = contestInstance.planningTestDirectionCorrectGrad 
 				planningTestDirectionPointsPerGrad = contestInstance.planningTestDirectionPointsPerGrad
@@ -718,6 +751,9 @@ class Contest
                 observationTestTurnpointNotFoundPoints = contestInstance.observationTestTurnpointNotFoundPoints
                 observationTestTurnpointFalsePoints = contestInstance.observationTestTurnpointFalsePoints
 				
+                landingTest1LongRuleTitle = contestInstance.landingTest1LongRuleTitle
+                landingTest1ShortRuleTitle = contestInstance.landingTest1ShortRuleTitle
+                landingTest1AirfieldImageNames = contestInstance.landingTest1AirfieldImageNames
 				landingTest1MaxPoints = contestInstance.landingTest1MaxPoints
 				landingTest1NoLandingPoints = contestInstance.landingTest1NoLandingPoints
 				landingTest1OutsideLandingPoints = contestInstance.landingTest1OutsideLandingPoints
@@ -728,8 +764,11 @@ class Contest
 				landingTest1AbnormalLandingPoints = contestInstance.landingTest1AbnormalLandingPoints
 				landingTest1NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints
 				landingTest1PenaltyCalculator = contestInstance.landingTest1PenaltyCalculator
+                landingTest1PrintCalculatorValues = contestInstance.landingTest1PrintCalculatorValues
 				
-				
+                landingTest2LongRuleTitle = contestInstance.landingTest2LongRuleTitle
+                landingTest2ShortRuleTitle = contestInstance.landingTest2ShortRuleTitle
+                landingTest2AirfieldImageNames = contestInstance.landingTest2AirfieldImageNames
 				landingTest2MaxPoints = contestInstance.landingTest2MaxPoints
 				landingTest2NoLandingPoints = contestInstance.landingTest2NoLandingPoints
 				landingTest2OutsideLandingPoints = contestInstance.landingTest2OutsideLandingPoints
@@ -741,7 +780,11 @@ class Contest
 				landingTest2NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints
 				landingTest2PowerInAirPoints = contestInstance.landingTest2PowerInAirPoints
 				landingTest2PenaltyCalculator = contestInstance.landingTest2PenaltyCalculator
+                landingTest2PrintCalculatorValues = contestInstance.landingTest2PrintCalculatorValues
 				
+                landingTest3LongRuleTitle = contestInstance.landingTest3LongRuleTitle
+                landingTest3ShortRuleTitle = contestInstance.landingTest3ShortRuleTitle
+                landingTest3AirfieldImageNames = contestInstance.landingTest3AirfieldImageNames
 				landingTest3MaxPoints = contestInstance.landingTest3MaxPoints
 				landingTest3NoLandingPoints = contestInstance.landingTest3NoLandingPoints
 				landingTest3OutsideLandingPoints = contestInstance.landingTest3OutsideLandingPoints
@@ -754,7 +797,11 @@ class Contest
 				landingTest3PowerInAirPoints = contestInstance.landingTest3PowerInAirPoints
 				landingTest3FlapsInAirPoints = contestInstance.landingTest3FlapsInAirPoints
 				landingTest3PenaltyCalculator = contestInstance.landingTest3PenaltyCalculator
+                landingTest3PrintCalculatorValues = contestInstance.landingTest3PrintCalculatorValues
 				
+                landingTest4LongRuleTitle = contestInstance.landingTest4LongRuleTitle
+                landingTest4ShortRuleTitle = contestInstance.landingTest4ShortRuleTitle
+                landingTest4AirfieldImageNames = contestInstance.landingTest4AirfieldImageNames
 				landingTest4MaxPoints = contestInstance.landingTest4MaxPoints
 				landingTest4NoLandingPoints = contestInstance.landingTest4NoLandingPoints
 				landingTest4OutsideLandingPoints = contestInstance.landingTest4OutsideLandingPoints
@@ -766,6 +813,7 @@ class Contest
 				landingTest4NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 				landingTest4TouchingObstaclePoints = contestInstance.landingTest4TouchingObstaclePoints
 				landingTest4PenaltyCalculator = contestInstance.landingTest4PenaltyCalculator
+                landingTest4PrintCalculatorValues = contestInstance.landingTest4PrintCalculatorValues
                 
                 minRouteLegs = contestInstance.minRouteLegs
                 maxRouteLegs = contestInstance.maxRouteLegs

@@ -44,7 +44,7 @@ class MapController {
     }
     
     def start_taskcreator_extern = {
-        String task_creator_url = grailsApplication.config.flightcontest.taskcreator.url
+        String task_creator_url = BootStrap.global.GetTaskCreatorExternURL()
         if (task_creator_url.contains('?')) {
             task_creator_url += "&"
         } else {

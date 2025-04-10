@@ -17,6 +17,31 @@ class OpenAIPService
     final static String ALL_DATA = "*"
 
 	final static String XMLHEADER = "<?xml version='1.0' encoding='UTF-8'?>"
+    
+    // Airfields
+    final static String AIRFIELD_ID_PREAFIX = "id_"
+    final static String AIRFIELD_NAME = "name"
+    final static String AIRFIELD_ICAO = "icao"
+    final static String AIRFIELD_TYPE = "type"
+    final static String AIRFIELD_TYPE_GLIDING_SMALL = "gliding-small"
+    final static String AIRFIELD_TYPE_AF_CIVIL_SMALL = "af-civil-small"
+    final static String AIRFIELD_TYPE_APT_MIL_CIVIL_SMALL = "apt-mil-civil-small"
+    final static String AIRFIELD_TYPE_AD_MIL_SMALL = "ad-mil-small"
+    final static String AIRFIELD_TYPE_LIGHT_AIRCRAFT_SMALL = "light-aircraft-small"
+    final static String AIRFIELD_TYPE_AD_CLOSED_SMALL = "ad-closed-small"
+    final static String AIRFIELD_TYPE_APT_SMALL = "apt-small"
+    final static String AIRFIELD_TYPE_AF_WATER_LARGE = "af-water-large"
+    final static String AIRFIELD_TYPE_REPORTING_POINT_COMPULSORY_SMALL = "reporting-point-compulsory-small"
+    final static String AIRFIELD_TYPE_REPORTING_POINT_REQUEST_SMALL = "reporting-point-request-small"
+    final static String AIRFIELD_TYPE_OTHER = "other-"
+    final static String AIRFIELD_RUNWAY = "runway"
+    final static String AIRFIELD_RUNWAY_PAVED_SMALL = "paved-small"
+    final static String AIRFIELD_RUNWAY_UNPAVED_SMALL = "unpaved-small"
+    final static String AIRFIELD_RUNWAY_OTHER = "other-"
+    final static String AIRFIELD_HEADING = "heading"
+    final static String AIRFIELD_WKT = "wkt"
+    final static String AIRFIELD_DATA_SEPARATOR = ","
+    final static String AIRFIELD_DATA_KEY_VALUE_SEPARATOR = ":"
 
     // CSV files
     final static String CSV_DELIMITER = ";"
@@ -443,14 +468,149 @@ class OpenAIPService
     }
     
     //--------------------------------------------------------------------------
-    Map WriteAirports2CSV(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, boolean checkAirport, String contestMapCenterPoints, boolean openaipAirfields, boolean additionalAirports)
+    Map GetAirfieldsAirportarea(Route routeInstance, String contestMapCenterPoints)
     {
-        printstart "WriteAirports2CSV ${routeInstance.GetName(isPrint)} -> ${webRootDir + csvFileName}"
+        printstart "GetAirfieldsAirportarea ${routeInstance.name()}"
+
+        boolean ok = false
+        int airfields_num = 0
+        
+        Map airportarea = get_airportarea(routeInstance, contestMapCenterPoints, false)
+        if (airportarea) {
+            println "Center (Lat Lon): ${airportarea.centerLatitude} ${airportarea.centerLongitude}, Distance ${airportarea.airspaceDistance}m"
+
+            String airfields = ""
+            
+            // Airfields
+            Map ret = call_rest("airports?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
+            if (ret.ok && ret.data) {
+                ok = true
+                
+                for (Map d in ret.data) {
+                    if (d.geometry.type == "Point") {
+                        String airfield_type = ""
+                        String runway_type = ""
+                        String runway_heading = ""
+                        if (d.runways) {
+                            for (Map r in d.runways) {
+                                if (r.mainRunway) {
+                                    switch (d.type) {
+                                        case 1:
+                                            airfield_type = AIRFIELD_TYPE_GLIDING_SMALL
+                                            break
+                                        case 2:
+                                            airfield_type = AIRFIELD_TYPE_AF_CIVIL_SMALL
+                                            break
+                                        case 3:
+                                            airfield_type = AIRFIELD_TYPE_APT_MIL_CIVIL_SMALL
+                                            break
+                                        case 5:
+                                            airfield_type = AIRFIELD_TYPE_AD_MIL_SMALL
+                                            break
+                                        case 6:
+                                            airfield_type = AIRFIELD_TYPE_LIGHT_AIRCRAFT_SMALL
+                                            break
+                                        case 8:
+                                            airfield_type = AIRFIELD_TYPE_AD_CLOSED_SMALL
+                                            break
+                                        case 9:
+                                            airfield_type = AIRFIELD_TYPE_APT_SMALL
+                                            break
+                                        case 10:
+                                            airfield_type = AIRFIELD_TYPE_AF_WATER_LARGE
+                                            break
+                                        default:
+                                            airfield_type = AIRFIELD_TYPE_OTHER + d.type + '-' + r.surface.mainComposite
+                                            break
+                                    }
+                                    switch (r.surface.mainComposite) { 
+                                        case 0:
+                                        case 1:
+                                            runway_type = AIRFIELD_RUNWAY_PAVED_SMALL
+                                            break
+                                        case 2:
+                                            runway_type = AIRFIELD_RUNWAY_UNPAVED_SMALL
+                                            break
+                                        default:    
+                                            runway_type = AIRFIELD_RUNWAY_OTHER + r.surface.mainComposite
+                                            break
+                                    }
+                                    runway_heading = r.trueHeading
+                                    break
+                                }
+                            }
+                        }
+                        if (airfield_type) {
+                            airfields_num++
+                            if (airfields) {
+                                airfields += "\n"
+                            }
+                            airfields += "${AIRFIELD_ID_PREAFIX}${d._id}"
+                            airfields += ",${AIRFIELD_NAME}:${d.name}"
+                            if (d.icaoCode) {
+                                airfields += ",${AIRFIELD_ICAO}:${d.icaoCode}"
+                            }
+                            airfields += ",${AIRFIELD_TYPE}:${airfield_type}"
+                            airfields += ",${AIRFIELD_RUNWAY}:${runway_type}"
+                            airfields += ",${AIRFIELD_HEADING}:${runway_heading}"
+                            airfields += ",${AIRFIELD_WKT}:POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
+                        }
+                    }
+                }
+            }
+            
+            // Reporting points
+            ret = call_rest("reporting-points?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
+            if (ret.ok && ret.data) {
+                for (Map d in ret.data) {
+                    if (d.geometry.type == "Point") {
+                        String point_type = ""
+                        if (d.compulsory) {
+                            point_type = AIRFIELD_TYPE_REPORTING_POINT_COMPULSORY_SMALL
+                        } else {
+                            point_type = AIRFIELD_TYPE_REPORTING_POINT_REQUEST_SMALL
+                        }
+                        if (point_type) {
+                            airfields_num++
+                            if (airfields) {
+                                airfields += "\n"
+                            }
+                            airfields += "${AIRFIELD_ID_PREAFIX}${d._id}"
+                            airfields += ",${AIRFIELD_NAME}:${d.name}"
+                            airfields += ",${AIRFIELD_TYPE}:${point_type}"
+                            airfields += ",${AIRFIELD_WKT}:POINT(${d.geometry.coordinates[0]} ${d.geometry.coordinates[1]})"
+                        }
+                    }
+                }
+            }
+                
+            if (airfields) {
+                routeInstance.contestMapAirfieldsData = airfields
+                routeInstance.save()
+            }
+            
+            if (ok) {
+                printdone "$airfields_num airfields found."
+            } else {
+                printerror ""
+            }
+            
+        } else {
+            printerror ""
+        }
+        
+        return [ok:ok, airfieldsnum:airfields_num]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map WriteAirfields2CSV(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, String contestMapCenterPoints, boolean openaipAirfields, boolean additionalAirfields)
+    {
+        printstart "WriteAirfields2CSV ${routeInstance.GetName(isPrint)} -> ${webRootDir + csvFileName}"
         
         boolean ok = false
-        int airports_num = 0
+        int airfields_num = 0
 
-        Map airportarea = get_airportarea(routeInstance, contestMapCenterPoints, checkAirport)
+        Map airportarea = get_airportarea(routeInstance, contestMapCenterPoints, false)
         if (airportarea) {
             println "Center (Lat Lon): ${airportarea.centerLatitude} ${airportarea.centerLongitude}, Distance ${airportarea.airspaceDistance}m"
         }
@@ -469,6 +629,174 @@ class OpenAIPService
         
         if (airportarea) {
             
+            // Airfields and reporting points
+            if (openaipAirfields) {
+                for (String airfield_date in routeInstance.contestMapAirfieldsData.split("\n")) {
+                    if (airfield_date && airfield_date.trim()) {
+                        String airfield_date2 = airfield_date.trim()
+                        if (!airfield_date2.startsWith(Defs.IGNORE_LINE)) {
+                            String airfield_id = ""
+                            String airfield_name = ""
+                            String airfield_icao = ""
+                            String airfield_symbol = ""
+                            String runway_symbol = ""
+                            String runway_heading = ""
+                            String airfield_wkt = ""
+                            for (String airfield_date3 in Tools.Split(airfield_date2, AIRFIELD_DATA_SEPARATOR)) {
+                                List airfield_values = Tools.Split(airfield_date3.trim(), AIRFIELD_DATA_KEY_VALUE_SEPARATOR)
+                                if (airfield_values.size() == 1) {
+                                    airfield_id = airfield_values[0].trim().substring(AIRFIELD_ID_PREAFIX.size())
+                                } else if (airfield_values.size() == 2) {
+                                    switch (airfield_values[0].trim()) {
+                                        case AIRFIELD_NAME:
+                                            airfield_name = airfield_values[1].trim()
+                                            break
+                                        case AIRFIELD_ICAO:
+                                            airfield_icao = airfield_values[1].trim()
+                                            break
+                                        case AIRFIELD_WKT:
+                                            airfield_wkt = airfield_values[1].trim()
+                                            break
+                                        case AIRFIELD_HEADING:
+                                            runway_heading = airfield_values[1].trim()
+                                            break
+                                        case AIRFIELD_TYPE:
+                                            switch (airfield_values[1].trim()) {
+                                                case AIRFIELD_TYPE_GLIDING_SMALL:
+                                                    airfield_symbol = "gliding-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_AF_CIVIL_SMALL:
+                                                    airfield_symbol = "af_civil-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_APT_MIL_CIVIL_SMALL:
+                                                    airfield_symbol = "apt_mil_civil-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_AD_MIL_SMALL:
+                                                    airfield_symbol = "ad_mil-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_LIGHT_AIRCRAFT_SMALL:
+                                                    airfield_symbol = "light_aircraft-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_AD_CLOSED_SMALL:
+                                                    airfield_symbol = "ad_closed-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_APT_SMALL:
+                                                    airfield_symbol = "apt-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_AF_WATER_LARGE:
+                                                    airfield_symbol = "af_water-large.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_REPORTING_POINT_COMPULSORY_SMALL:
+                                                    airfield_symbol = "reporting_point_compulsory-small.svg"
+                                                    break
+                                                case AIRFIELD_TYPE_REPORTING_POINT_REQUEST_SMALL:
+                                                    airfield_symbol = "reporting_point_request-small.svg"
+                                                    break
+                                                default:
+                                                    airfield_symbol = airfield_values[1].trim()
+                                                    break
+                                            }
+                                            break
+                                        case AIRFIELD_RUNWAY:
+                                            switch (airfield_values[1].trim()) {
+                                                case AIRFIELD_RUNWAY_PAVED_SMALL:
+                                                    runway_symbol = "runway_paved-small.svg"
+                                                    break
+                                                case AIRFIELD_RUNWAY_UNPAVED_SMALL:
+                                                    runway_symbol = "runway_unpaved-small.svg"
+                                                    break
+                                                default:
+                                                    runway_symbol = airfield_values[1].trim()
+                                                    break
+                                            }
+                                            break
+                                    }
+                                }
+                            }
+                            if (airfield_id) {
+                                ok = true
+                                airfields_num++
+                                csv_writer << CSV_LINESEPARATOR + airfield_id
+                                csv_writer << CSV_DELIMITER + airfield_symbol
+                                csv_writer << CSV_DELIMITER + runway_symbol
+                                csv_writer << CSV_DELIMITER + runway_heading
+                                csv_writer << CSV_DELIMITER + airfield_icao
+                                csv_writer << CSV_DELIMITER + '"' + airfield_name + '"'
+                                csv_writer << CSV_DELIMITER + airfield_wkt
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Additional airfields
+            if (additionalAirfields) {
+                for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                    if (coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
+                        String airport_symbol = "af_civil-small.svg"
+                        if (coordmapobject_instance.mapObjectGliderAirfield) {
+                            airport_symbol = "gliding-small.svg"
+                        }
+                        String runway_symbol = "runway_unpaved-small.svg"
+                        if (coordmapobject_instance.mapObjectPavedAirfield) {
+                            runway_symbol = "runway_paved-small.svg"
+                        }
+                        String runway_heading = coordmapobject_instance.gateDirection
+                        ok = true
+                        airfields_num++
+                        csv_writer << CSV_LINESEPARATOR + line_id
+                        csv_writer << CSV_DELIMITER + airport_symbol
+                        csv_writer << CSV_DELIMITER + runway_symbol
+                        csv_writer << CSV_DELIMITER + runway_heading
+                        csv_writer << CSV_DELIMITER
+                        csv_writer << CSV_DELIMITER + '"' + coordmapobject_instance.mapObjectText + '"'
+                        csv_writer << ""
+                        csv_writer << CSV_DELIMITER + "POINT(${coordmapobject_instance.lonMath()} ${coordmapobject_instance.latMath()})"
+                        line_id++
+                    }
+                }
+            }
+        }
+        
+        csv_writer.close()
+
+        if (ok) {
+            printdone "${airfields_num} airports found."
+        } else {
+            printerror ""
+        }
+        
+        return [ok:ok, airfieldsnum:airfields_num]
+    }
+        
+    //--------------------------------------------------------------------------
+    Map WriteAirfieldsOld2CSV(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, boolean checkAirport, String contestMapCenterPoints, boolean openaipAirfields, boolean additionalAirfields)
+    {
+        printstart "WriteAirfieldsOld2CSV ${routeInstance.GetName(isPrint)} -> ${webRootDir + csvFileName}"
+        
+        boolean ok = false
+        int airfields_num = 0
+
+        Map airportarea = get_airportarea(routeInstance, contestMapCenterPoints, checkAirport)
+        if (airportarea) {
+            println "Center (Lat Lon): ${airportarea.centerLatitude} ${airportarea.centerLongitude}, Distance ${airportarea.airspaceDistance}m"
+        }
+            
+        int line_id = 1
+        
+        File csv_file = new File(webRootDir + csvFileName)
+        Writer csv_writer = csv_file.newWriter("UTF-8",false)
+        csv_writer << "id"
+        csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_TYPE}"
+        csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_RUNWAY}"
+        csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_HEADING}"
+        csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_ICAO}"
+        csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_NAME}"
+        csv_writer << "${CSV_DELIMITER}${CSV_AIRPORT_WKT}"
+        
+        if (airportarea) {                        ok = true
+
+            
             // airports
             if (openaipAirfields) {
                 Map ret = call_rest("airports?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
@@ -476,14 +804,13 @@ class OpenAIPService
                     if (checkAirport) {
                         ok = true
                         for (Map d in ret.data) {
-                            airports_num++
+                            airfields_num++
                             csv_writer << CSV_LINESEPARATOR + line_id
                             csv_writer << CSV_DELIMITER
                             csv_writer << d
                             line_id++
                         }
                     } else {
-                        ok = true
                         for (Map d in ret.data) {
                             if (d.geometry.type == "Point") {
                                 String airport_symbol = ""
@@ -545,7 +872,7 @@ class OpenAIPService
                                     }
                                 }
                                 if (airport_symbol) {
-                                    airports_num++
+                                    airfields_num++
                                     csv_writer << CSV_LINESEPARATOR + line_id
                                     csv_writer << CSV_DELIMITER + airport_symbol
                                     csv_writer << CSV_DELIMITER + runway_symbol
@@ -564,8 +891,8 @@ class OpenAIPService
                 }
             }
             
-            // additional airports
-            if (additionalAirports) {
+            // additional airfields
+            if (additionalAirfields) {
                 for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                     if (coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
                         String airport_symbol = "af_civil-small.svg"
@@ -577,7 +904,7 @@ class OpenAIPService
                             runway_symbol = "runway_paved-small.svg"
                         }
                         String runway_heading = coordmapobject_instance.gateDirection
-                        airports_num++
+                        airfields_num++
                         csv_writer << CSV_LINESEPARATOR + line_id
                         csv_writer << CSV_DELIMITER + airport_symbol
                         csv_writer << CSV_DELIMITER + runway_symbol
@@ -598,7 +925,7 @@ class OpenAIPService
                     if (checkAirport) {
                         ok = true
                         for (Map d in ret.data) {
-                            airports_num++
+                            airfields_num++
                             csv_writer << CSV_LINESEPARATOR + line_id
                             csv_writer << CSV_DELIMITER
                             csv_writer << d
@@ -614,7 +941,7 @@ class OpenAIPService
                                 } else {
                                     point_symbol = "reporting_point_request-small.svg"
                                 }
-                                airports_num++
+                                airfields_num++
                                 csv_writer << CSV_LINESEPARATOR + line_id
                                 csv_writer << CSV_DELIMITER + point_symbol
                                 csv_writer << CSV_DELIMITER
@@ -643,7 +970,7 @@ class OpenAIPService
                                 println "XX1 ${d.osmTags}"
                             }
                             if (point_symbol) {
-                                airports_num++
+                                airfields_num++
                                 csv_writer << CSV_LINESEPARATOR + line_id
                                 csv_writer << CSV_DELIMITER + point_symbol
                                 csv_writer << CSV_DELIMITER
@@ -663,12 +990,12 @@ class OpenAIPService
         csv_writer.close()
 
         if (ok) {
-            printdone "${airports_num} airports found."
+            printdone "${airfields_num} airports found."
         } else {
             printerror ""
         }
         
-        return [ok:ok, airportsnum:airports_num]
+        return [ok:ok, airfieldsnum:airfields_num]
     }
         
     //--------------------------------------------------------------------------

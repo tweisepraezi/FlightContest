@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.0.2
-:revdate:   21.02.2025
+:revnumber: 4.1.0
+:revdate:   10.04.2025
 :nofooter:
 :title-page:
 :toc-title: Table of content
@@ -217,22 +217,17 @@ Load OSM data into OSM database (~/data/osm/*.pbf -> gis_new) +
 
  osm2pgsql -d gis_new --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
 
-Wait... (37h)
+Wait... (24h)
 
 Preprocessing
 
- cd ~/fcmaps/otm-dev/mapnik/tools/
+ cd ~/fcmaps/osmtools/
  psql gis_new < arealabel.sql
  psql gis_new < stationdirection.sql
-
-Wait... (10min)
-
  psql gis_new < viewpointdirection.sql
  psql gis_new < pitchicon.sql
  psql -d gis_new -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
- bash update_lowzoom.sh
-
-Wait... (20h)
+ bash create_lowzoom_new.sh
 
 Activate new databases *gis_eu* and *lowzoom_eu*
 
@@ -241,7 +236,7 @@ Activate new databases *gis_eu* and *lowzoom_eu*
  psql -d postgres -c 'ALTER DATABASE gis_eu RENAME TO gisold_eu;'
  psql -d postgres -c 'ALTER DATABASE gis_new RENAME TO gis_eu;'
  psql -d postgres -c 'ALTER DATABASE lowzoom_eu RENAME TO lowzoomold_eu;'
- psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom_eu;'
+ psql -d postgres -c 'ALTER DATABASE lowzoom_new RENAME TO lowzoom_eu;'
  
 Change date
 
@@ -252,7 +247,7 @@ Restart server
 
 Check database size
 
- psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
+ psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"
  
 === Contour data
 
@@ -261,6 +256,11 @@ Download all necessary SRTM tiles, see http://www.viewfinderpanoramas.org/Covera
  cd ~/data
  mkdir srtm
  cd ~/data/srtm
+ 
+Create folder (for Germany)
+ 
+ mkdir germany
+ cd germany
  nano list.txt
 
 Insert the following (for Germany)
@@ -276,26 +276,25 @@ Save it and continue with
 
  wget -i list.txt
 
-Move zip files to folder germany and unpack all
+Unpack all
 
- mkdir germany && mv N*.zip germany && mv M*.zip germany && mv L*.zip germany
- for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; done
+ for zipfile in *.zip; do unzip -j -o "$zipfile" -d unpacked; done
  
 Fill all voids (*.hgt -> *.hgt.tif)
 
- for hgtfile in germany/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
+ for hgtfile in unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
 
 Merge into one huge tif (*.hgt.tif -> raw.tif)
 
- gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o germany/unpacked/raw.tif germany/unpacked/*.hgt.tif
+ gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o unpacked/raw.tif unpacked/*.hgt.tif
 
 Convert into Mercator projection, interpolate and shrink (raw.tif -> 90.tif)
 
- gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 germany/unpacked/raw.tif germany/unpacked/90.tif
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 unpacked/raw.tif unpacked/90.tif
 
-Create 10m contour data (90.tif -> lon*.pbf) (high memory consumption)
+Create 10m contour data (90.tif -> lon*.pbf) (high memory consumption) (change --start-node-id and --start-way-id for additional contour lines in database)
 
- phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf germany/unpacked/90.tif
+ phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf unpacked/90.tif
  
  tif: 14844 x 23256 points, Lon 6...18°, Lat 44...56°
 
@@ -303,7 +302,7 @@ Wait... (4h)
 
 Do these steps for other countries (with different folders and ids). Because of memory consumption of phyghtmap only max. 6 zip files.
 
-France (node-id=3000000000)
+France (start-node-id=3000000000)
 
  http://viewfinderpanoramas.org/dem3/M30.zip
  http://viewfinderpanoramas.org/dem3/M31.zip
@@ -314,29 +313,6 @@ France (node-id=3000000000)
   
  tif: 14844 x 21493 points, Lon -6...6°, Lat 40...52°
 
-South Africa (node-id=2000000000)
-
- http://viewfinderpanoramas.org/dem3/SG33.zip
- http://viewfinderpanoramas.org/dem3/SG34.zip
- http://viewfinderpanoramas.org/dem3/SG35.zip
- http://viewfinderpanoramas.org/dem3/SG36.zip
- http://viewfinderpanoramas.org/dem3/SH33.zip
- http://viewfinderpanoramas.org/dem3/SH34.zip
- http://viewfinderpanoramas.org/dem3/SH35.zip
- http://viewfinderpanoramas.org/dem3/SH36.zip
- http://viewfinderpanoramas.org/dem3/SI33.zip
- http://viewfinderpanoramas.org/dem3/SI34.zip
- http://viewfinderpanoramas.org/dem3/SI35.zip
- 
- Lon 14...36°, Lat -35...-24°
-
-Old
-
- http://viewfinderpanoramas.org/dem3/N31.zip
- http://viewfinderpanoramas.org/dem3/N34.zip
- http://viewfinderpanoramas.org/dem3/M34.zip
- http://viewfinderpanoramas.org/dem3/L34.zip
-
 Create database *contours_new*
  
  createdb contours_new
@@ -344,7 +320,7 @@ Create database *contours_new*
  
 Load contour data into contour database (all generated pbf files must be loaded together in one step)
 
- osm2pgsql -d contours_new --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
+ osm2pgsql -d contours_new --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style lon*.pbf
 
 Wait... (4h)
 
@@ -356,7 +332,7 @@ Activate new database *contours_eu*
 
 Check database size
 
- psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
+ psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"
  
 [[configure-server]]
 == Configure server
@@ -365,7 +341,7 @@ Check database size
 
 Find out database size
 
- psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
+ psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"
 
 gis_eu: 107GB, contours_eu: 56GB, lowzoom_eu: 152MB
  

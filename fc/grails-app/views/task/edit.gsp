@@ -321,34 +321,34 @@
                         <fieldset>
                             <label>${message(code:'fc.landingtest.landing1')}:</label>
 							<g:if test="${taskInstance.lockPlanning}">
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" disabled tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" disabled tabIndex="${ti[0]++}"/>
 							</g:if>
 							<g:else>
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="${ti[0]++}"/>
 							</g:else>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing2')}:</label>
 							<g:if test="${taskInstance.lockPlanning}">
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" disabled tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" disabled tabIndex="${ti[0]++}"/>
 							</g:if>
 							<g:else>
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="${ti[0]++}"/>
 							</g:else>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing3')}:</label>
 							<g:if test="${taskInstance.lockPlanning}">
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" disabled tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" disabled tabIndex="${ti[0]++}"/>
 							</g:if>
 							<g:else>
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="${ti[0]++}"/>
 							</g:else>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing4')}:</label>
 							<g:if test="${taskInstance.lockPlanning}">
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" disabled tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" disabled tabIndex="${ti[0]++}"/>
 							</g:if>
 							<g:else>
-								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="${ti[0]++}"/>
+								<g:select from="${[1,2,3,4]}" optionValue="${{taskInstance.GetLandingPointsText(it)}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="${ti[0]++}"/>
 							</g:else>
                         </fieldset>
                         <fieldset>

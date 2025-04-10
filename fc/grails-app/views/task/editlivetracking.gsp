@@ -25,7 +25,12 @@
                                 <input type="date" id="liveTrackingNavigationTaskDate" name="liveTrackingNavigationTaskDate" value="${fieldValue(bean:taskInstance,field:'liveTrackingNavigationTaskDate')}" min="${taskInstance.contest.liveTrackingContestDate}" tabIndex="${ti[0]++}"/>
                                 <g:if test="${!taskInstance.liveTrackingNavigationTaskID && taskInstance.IsFlightTestRun()}" >
                                     <div>
-                                        <g:checkBox name="setLiveTrackingNavigationTaskDate" value="${taskInstance.setLiveTrackingNavigationTaskDate}" tabIndex="${ti[0]++}"/>
+                                        <g:if test="${BootStrap.global.IsDevelopmentEnvironment()}">
+                                            <g:checkBox name="setLiveTrackingNavigationTaskDate" value="${false}" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:checkBox name="setLiveTrackingNavigationTaskDate" value="${taskInstance.setLiveTrackingNavigationTaskDate}" tabIndex="${ti[0]++}"/>
+                                        </g:else>
                                         <label>${message(code:'fc.livetracking.navigationtaskdate.setactualdate')}</label>
                                     </div>
                                 </g:if>

@@ -52,11 +52,18 @@
                                 <g:set var="title" value="${message(code:map_entry.title)}"/>
                             </g:else>
                             <td>${title}</td>
-                            <g:if test="${map_entry.projection == "4326"}">
-                                <td><a href="${createLink(controller:'map',action:'start_taskcreator_intern',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a></td>
+                            <g:if test="${map_entry.projection == "4326" || (map_entry.projection == "3857" && BootStrap.global.IsDevelopmentEnvironment())}">
+                                <td>
+                                    <a href="${createLink(controller:'map',action:'start_taskcreator_intern',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a>
+                                    <g:if test="${map_entry.projection == "3857" && BootStrap.global.IsDevelopmentEnvironment()}" >(Dev)</g:if>
+                                </td>
                                 <g:if test="${add_col}">
-                                    <td><a href="${createLink(controller:'map',action:'start_taskcreator_extern',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a></td>
+                                    <td>
+                                        <a href="${createLink(controller:'map',action:'start_taskcreator_extern',params:[localref:map_entry.localref,top:map_entry.top,bottom:map_entry.bottom,right:map_entry.right,left:map_entry.left])}" target="_blank">${message(code:'fc.map.here')}</a>
+                                        <g:if test="${map_entry.projection == "3857" && BootStrap.global.IsDevelopmentEnvironment()}" >(Dev)</g:if>
+                                    </td>
                                 </g:if>
+                                
                             </g:if>
                             <g:else>
                                 <td/>

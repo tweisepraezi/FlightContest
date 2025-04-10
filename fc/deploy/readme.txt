@@ -1,6 +1,28 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.0
+----------------
+- Wettbewerbspunkte bearbeiten: Möglichkeit der Übernahme der Landepunkte einer anderen Wettbewerbsordung hinzugefügt
+- Wettbewerbspunkte bearbeiten: "Alle Ergebnisse neu berechnen" hinzugefügt
+    Änderungen der Strafpunkte führen jetzt nicht mehr dazu, dass die Strafpunkte aller Ergebnisse sofort neu berechnet werden.
+    Dazu ist diese Funktion explizit aufzurufen.
+- OSM-Wettbewerbs-Karte: Flugplatz-OpenAIP-Abfragen werden jetzt in Strecke gespeichert.
+    Mit "Flugplätze um Flughafen suchen" sind die Flugplätze vor dem Druck zu ermitteln.
+    Mit # beginnende Flugplätze werden bei der Kartenerzeugung ignoriert.
+- OSM-Wettbewerbs-Karte: "Erzeugen (nur T/O)" hinzugefügt.
+    Druckt Karte mit T/O-Punkt aber ohne weitere Wendepunkte.
+- Interner Task-Creator: Seiten-Leitfaden hinzugefügt.
+    Die ausgewählte Seitengröße (A3, A4, ...)  und Orientierung (Hochformat oder Querformat W) 
+    wird um den Mittelpunkt aller vorhandenen Check- und Plotting-Punkte angezeigt. 
+    Um eine Seite vor der Streckeneingabe festzulegen, zuerst den Takeoff- und einen Plotting-Punkt eingeben.
+- Wählbarer Aufruf des internen und externen Task-Creators im Karten-Menü hinzugefügt.
+- Bug "OSM-Wettbewerbs-Karte kann bei ANR-Regelwerk nicht gedruckt werden, wenn nur der Punkt T/O vorhanden ist" behoben
+- Bug "Google-Earth-Darstellung im internen Task-Creator funktioniert nicht mehr" behoben
+- Bug "Live-Tracking-Contest kann nicht angelegt werden" behoben
+- Bug "OpenAIP-Layer in OSM-Online-Karte funktioniert nicht mehr" behoben
+- Hilfe-Kapitel "Durch Installation beschädigte 'Flight Contest'-Datenbank wiederherstellen" hinzugefügt
+
 Änderungen 4.0.2
 ----------------
 - OSM-Wettbewerbs-Karte: Luftraum-OpenAIP-Abfragen werden jetzt im Wettbewerb gespeichert.
@@ -95,7 +117,7 @@
   Der Bodenzeichen-Platzhalter * muss vor Nutzung in einem Wettbewerb durch das gewünschte Bodenzeichen ersetzt werden.
 - Neue Strecke: Schaltfläche "Ohne Beobachtungen erstellen" hinzugefügt
 - Übersichts-Zeitplan: Bei Seitenumbrüchen zur Bildung von Gruppen werden Planungs-, Takeoff- und Lande-Zeiten je Gruppe gedruckt.
-- Integrierter Task-Creator: Bug "Bei der magnetische Deklination wurde Ost mit West vertauscht" behoben.
+- Interner Task-Creator: Bug "Bei der magnetische Deklination wurde Ost mit West vertauscht" behoben.
 
 Änderungen 3.4.7
 ----------------
@@ -115,7 +137,7 @@
 
 Änderungen 3.4.6
 ----------------
-- Integrierter Task-Creator: Deutsche und spanische Benutzeroberfläche hinzugefügt.
+- Interner Task-Creator: Deutsche und spanische Benutzeroberfläche hinzugefügt.
   Unter "Extras -> Einstellungen" kann die gewünschte Sprache eingestellt werden.
 - Flight Contest Manager: Flight Contest startet mit Firefox, wenn dieser vorhanden ist, auch wenn er nicht der Standard-Browser ist.
 - Bug "PDF-Wettbewerbs-Karte kann nicht erzeugt werden, wenn der Karten-Titel Umlaute enthält" behoben
@@ -125,7 +147,7 @@
 - Karten-Menüpunkt "Alle Wettbewerbs-Karten exportieren" hinzugefügt
 - Karten-Import zeigt jetzt eine Fehlermeldung an, wenn die zu importierende(n) Karte(n) bereits im Karten-Menü vorhanden sind.
     Eine bestehende Karte muss erst gelöscht werden, bevor sie neu importiert werden kann.
-- Integrierter Task-Creator: 'Sync map url'-Schaltfläche hinzugefügt.
+- Interner Task-Creator: 'Sync map url'-Schaltfläche hinzugefügt.
     Nach dem Laden eines Task, der auf einem anderen Computer erstellt worden ist, zeigt die Map-URL auf Karten eines anderen Wettbewerbs.
     Mit dieser Schaltfläche wird die Map-URL auf den aktuellen Wettbewerb angepasst.
 - Die zu berücksichtigende Luftraum-Höhe wird jetzt beim Strecken-Export/Import und Strecken-Kopie mit transportiert.
@@ -172,13 +194,11 @@
     Markiert Teams mit !, die gleich zum Vorgänger des Vorgängers sind.
 - Bug "Tor-Richtung am Halbkreis-Ende im Konstruktions-Modus fehlerhaft" behoben
 - Spracheinstellung für Task-Creator in "Extras -> Einstellungen" hinzugefügt (Deutsch, Englisch, Spanisch)
-    Diese Einstellung wirkt nur im Original-Task-Creator vollständig.
-    Der integrierte Task-Creator arbeitet nur in Englisch.
     
 Änderungen 3.4.2
 ----------------
-- Bei Konfiguration des Original-Task-Creators werden zusätzliche Links neben den Links zum integrierten Task-Creator angezeigt.
-- Integrierter Task-Creator: 'Addons RL' und 'SUAs Url' hinzugefügt
+- Bei Konfiguration des externen Task-Creators werden zusätzliche Links neben den Links zum internen Task-Creator angezeigt.
+- Interner Task-Creator: 'Addons RL' und 'SUAs Url' hinzugefügt
 - OSM-Wettbewerbs-Karte: 'Lufträume um Flughafen ermitteln' hinzugefügt
     Dabei werden standardmäßig Lufträume, die unter 4000ft liegen, berücksichtigt (anpassbar).
     'KMZ-Export-Lufträume' enthält jetzt auch die Namen der Lufträume.
@@ -188,7 +208,7 @@
 
 Änderungen 3.4.1
 ----------------
-- Integrierter Task-Creator: Fehlermeldungen bei Eingabe des Task-Namens beseitigt
+- Interner Task-Creator: Fehlermeldungen bei Eingabe des Task-Namens beseitigt
 - Strecken: Verbesserte Fehlermeldung bei Halbkreis-Mittelpunkten einschl. Hilfetext
 - Kartenerzeugung: AirportArea-Name um Strecken-Titel erweitert
 - Karten: Bug "Import einer Karten-zip stürzt ab" beseitigt
@@ -216,7 +236,7 @@
     Sind mehrere lokale Karten vorhanden, kann zwischen diesen umgeschaltet werden.
     Die Default-Karte kann in den 'Strecken-Einstellungen' festgelegt werden.
     Für den Task-Creator erzeugte Karten können hier nicht angezeigt werden, da diese Karten eine andere Karten-Projektion nutzen.
-- Integrierter Task-Creator zur Strecken-Konstruktion hinzugefügt
+- Interner Task-Creator zur Strecken-Konstruktion hinzugefügt
     Basiert auf https://www.airrats.cl/taskcreator?lang=en von Carlos Rocca.
     Start des Task-Creators über "..." einer gepeicherten Karte für eine neue Aufgabe:
       Hier ist die "Map Url" im Task-Creator voreingestellt und kann mit "Load" geladen werden.

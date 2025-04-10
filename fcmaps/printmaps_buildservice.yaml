@@ -42,24 +42,15 @@ styles:
 - name: region-cl
   xmlpath: ../otm/mapnik
   xmlfile: region-cl.xml
-- name: region-cl-dev
-  xmlpath: ../otm-dev/mapnik
-  xmlfile: region-cl.xml
+- name: region-za
+  xmlpath: ../otm/mapnik
+  xmlfile: region-za.xml
 - name: region-it
   xmlpath: ../otm/mapnik
-  xmlfile: region-it.xml
-- name: region-it-dev
-  xmlpath: ../otm-dev/mapnik
   xmlfile: region-it.xml
 - name: region-eu
   xmlpath: ../otm/mapnik
   xmlfile: region-eu.xml
-- name: region-eu-dev
-  xmlpath: ../otm-dev/mapnik
-  xmlfile: region-eu.xml
-- name: fcmaps-latlon
+- name: region-dev
   xmlpath: ../otm/mapnik
-  xmlfile: fcmaps-latlon.xml
-- name: fcmaps-latlon-dev
-  xmlpath: ../otm-dev/mapnik
-  xmlfile: fcmaps-latlon.xml
+  xmlfile: region-dev.xml

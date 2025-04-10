@@ -35,38 +35,29 @@ class TrackerService
             return ret
         }
         
-        BigDecimal latitude2
-        BigDecimal longitude2
+        BigDecimal latitude
+        BigDecimal longitude
         for (Route route_instance in Route.findAllByContest(contest_instance,[sort:"idTitle"])) {
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
                 if (coordroute_instance.type == CoordType.TO) {
-                    latitude2 = coordroute_instance.latMath()
-                    longitude2 = coordroute_instance.lonMath()
+                    latitude = coordroute_instance.latMath()
+                    longitude = coordroute_instance.lonMath()
                     break
                 }
             }
-            if (latitude2 || longitude2) {
+            if (latitude || longitude) {
                 break
             }
         }
-        if (!latitude2 || !longitude2) {
+        if (!latitude || !longitude) {
 			Map ret = ['instance':contest_instance, 'created':false, 'message':getMsg('fc.livetracking.contestcoords.notexists')]
 			printerror ret
             return ret
         }
         
-		Integer contest_id = 0
-        Map ret3 = call_rest("contests/", "GET", 200, "", ALL_DATA)
-		if (ret3.ok && ret3.data) {
-            for (Map contest in ret3.data) {
-				if (contest.name == contest_instance.title) {
-					contest_id = contest.id
-				}
-			}
-		}
-		
-		if (contest_id) {
-			Map ret = ['instance':contest_instance, 'created':false, 'message':getMsg('fc.livetracking.contestcreate.exists',[contest_instance.title, contest_id])]
+        Map contest_data = get_contest(contest_instance.title)
+		if (contest_data) {
+			Map ret = ['instance':contest_instance, 'created':false, 'message':getMsg('fc.livetracking.contestcreate.exists',[contest_instance.title, contest_data.id])]
 			printerror ret
 			return ret
         }
@@ -97,8 +88,7 @@ class TrackerService
         json_builder {
             name contest_instance.title
             time_zone time_zone2
-            latitude latitude2
-            longitude longitude2
+            location "${latitude},${longitude}"
             start_time FcTime.UTCGetDateTime(contest_instance.liveTrackingContestDate, start_local_time, contest_instance.timeZone)
             finish_time FcTime.UTCGetDateTime(contest_instance.liveTrackingContestDate, end_local_time, contest_instance.timeZone)
         }
@@ -129,21 +119,15 @@ class TrackerService
         String contest_date = ""
         String contest_visibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE
         String time_zone = ""
-        Map ret3 = call_rest("contests/", "GET", 200, "", ALL_DATA)
-		if (ret3.ok && ret3.data) {
-            for (Map contest in ret3.data) {
-				if (contest.name == contest_instance.title) {
-					contest_id = contest.id
-                    if (contest.start_time.size() >= 10) {
-                        contest_date = contest.start_time.substring(0,10)
-                    }
-                    contest_visibility = contest.share_string.toLowerCase()
-                    time_zone = contest.time_zone
-					break
-				}
-			}
+        Map contest = get_contest(contest_instance.title)
+		if (contest) {
+            contest_id = contest.id
+            if (contest.start_time.size() >= 10) {
+                contest_date = contest.start_time.substring(0,10)
+            }
+            contest_visibility = contest.share_string.toLowerCase()
+            time_zone = contest.time_zone
 		}
-		
 		if (contest_id) {
 			contest_instance.liveTrackingContestID = contest_id
             contest_instance.liveTrackingContestDate = contest_date
@@ -160,6 +144,31 @@ class TrackerService
 			return ret
 			
 		}
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map get_contest(String contestName)
+    {
+        String next = ""
+        while (true) {
+            String cursor = ""
+            if (next) {
+                cursor = "?cursor=${next}"
+            }
+            Map ret = call_rest("contests/${cursor}", "GET", 200, "", ALL_DATA)
+            if (ret.ok && ret.data) {
+                for (Map contest in ret.data.results) {
+                    if (contest.name == contestName) {
+                        return contest
+                    }
+                }
+                next = ret.data.next
+            }
+            if (!next) {
+                return [:]
+            }
+        }
+        return [:]
     }
     
     //--------------------------------------------------------------------------
@@ -2656,16 +2665,28 @@ class TrackerService
     }
     
     //--------------------------------------------------------------------------
-    private Map call_rest(String funcURL, String requestMethod, int successfulResponseCode, String outputData, String retDataKey)
+    List GetScorecards()
+    {
+        List scorecards = []
+        Map ret = call_rest("scorecards/", "GET", 200, "", ALL_DATA)
+        if (ret.ok && ret.data) {
+            for (Map scorecard in ret.data) {
+                scorecards += scorecard.shortcut_name
+            }
+        }
+        return scorecards
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map call_rest(String funcURL, String requestMethod, int successfulResponseCode, String outputData, String retDataKey, boolean showLog = true)
     {
         Map ret = [responseCode:null, data:null, ok:false, errorMsg:""]
         
-        boolean show_log = true
         int max_output_size = 0 // 2000
         
         String url_path = "${BootStrap.global.GetLiveTrackingAPI()}/${funcURL}"
         
-        if (show_log) {
+        if (showLog) {
             printstart "${requestMethod} ${url_path}"
         }
             
@@ -2679,7 +2700,7 @@ class TrackerService
             connection.doInput = true
     
             if (outputData) {
-                if (show_log) {
+                if (showLog) {
                     if (max_output_size && outputData.size() > max_output_size) {
                         println "${outputData.substring(0, max_output_size)}..."
                     } else {
@@ -2692,7 +2713,7 @@ class TrackerService
                 os.close()
             }
             
-            if (show_log) {
+            if (showLog) {
                 if (connection.responseCode == successfulResponseCode) {
                     println "responseCode=${connection.responseCode} Ok."
                 } else {
@@ -2708,7 +2729,7 @@ class TrackerService
                     BufferedReader input_reader = inputstream_instance.newReader("UTF-8")
                     def input_data = new JsonSlurper().parse(input_reader)
                     if (input_data) {
-                        if (show_log) {
+                        if (showLog) {
                             println "Json data: ${input_data}"
                         }
                         if (retDataKey == ALL_DATA) {
@@ -2719,7 +2740,7 @@ class TrackerService
                     }
                     input_reader.close()
                     inputstream_instance.close()
-                    if (show_log) {
+                    if (showLog) {
                         if (connection.responseCode == successfulResponseCode) {
                             println "responseCode2=${ret.responseCode} ${ret.data} Ok."
                         } else {
@@ -2743,12 +2764,12 @@ class TrackerService
                 inputstream_instance.close()
             }
             
-            if (show_log) {
+            if (showLog) {
                 printdone ""
             }
         } catch (Exception e) {
             ret.errorMsg += "Exception ${e.message}"
-            if (show_log) {
+            if (showLog) {
                 printerror "Exception ${e.message}"
             }
         }

@@ -814,7 +814,7 @@ class Test
 
     String GetSpecialTestTitle(boolean isPrint)
     {
-        String print_title = GetMsg('fc.specialresults',isPrint)
+        String print_title = get_msg('fc.specialresults',isPrint)
         if (task.contest.resultClasses) {
             if (crew.resultclass) {
                 TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
@@ -1063,33 +1063,11 @@ class Test
         return ret
     }
     
-    boolean IsPrecisionLanding()
-    {
-        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
-            if (crew.resultclass) {
-                return crew.resultclass.precisionFlying
-            }
-            return false
-        }
-        return task.contest.precisionFlying
-    }
-    
     Integer GetIncreaseFactor()
     {
         return crew.GetIncreaseFactor()
     }
     
-    String GetPrintLandingCalculatorValues()
-    {
-        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
-            if (crew.resultclass) {
-                return crew.resultclass.printLandingCalculatorValues
-            }
-            return ""
-        }
-        return task.contest.printLandingCalculatorValues
-    }
-
 	int GetPlanningTestDirectionCorrectGrad()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -1511,17 +1489,43 @@ class Test
         return task.contest.observationTestTurnpointFalsePoints
     }
     
-    String GetPrecisionFlyingLandingText(int landingTestPoints)
+    String GetLandingShortTitle(int landingTestPoints, boolean isPrint)
     {
+        String short_rule_title = GetLandingTestShortRuleTitle(landingTestPoints)
+        if (short_rule_title) {
+            short_rule_title = " (" + short_rule_title + ")"
+        }
         switch (landingTestPoints) {
-            case 1: return "fc.landingtest.landing1.precision"
-            case 2: return "fc.landingtest.landing2.precision"
-            case 3: return "fc.landingtest.landing3.precision"
-            case 4: return "fc.landingtest.landing4.precision"
+            case 1: return get_msg('fc.landingtest.landing1',isPrint) + short_rule_title
+            case 2: return get_msg('fc.landingtest.landing2',isPrint) + short_rule_title
+            case 3: return get_msg('fc.landingtest.landing3',isPrint) + short_rule_title
+            case 4: return get_msg('fc.landingtest.landing4',isPrint) + short_rule_title
         }
         return ""
     }
     
+    String GetLandingTestLongRuleTitle(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1LongRuleTitle()
+            case 2: return GetLandingTest2LongRuleTitle()
+            case 3: return GetLandingTest3LongRuleTitle()
+            case 4: return GetLandingTest4LongRuleTitle()
+        }
+        return ""
+    }
+    
+    String GetLandingTestShortRuleTitle(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1ShortRuleTitle()
+            case 2: return GetLandingTest2ShortRuleTitle()
+            case 3: return GetLandingTest3ShortRuleTitle()
+            case 4: return GetLandingTest4ShortRuleTitle()
+        }
+        return ""
+    }
+
     int GetLandingTestMaxPoints(int landingTestPoints)
     {
         switch (landingTestPoints) {
@@ -1665,6 +1669,26 @@ class Test
         return ""
     }
     
+	private String GetLandingTest1LongRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest1LongRuleTitle
+			}
+		}
+		return task.contest.landingTest1LongRuleTitle
+	}
+	
+	private String GetLandingTest1ShortRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest1ShortRuleTitle
+			}
+		}
+		return task.contest.landingTest1ShortRuleTitle
+	}
+	
 	private int GetLandingTest1MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -1780,6 +1804,26 @@ class Test
 		return task.contest.landingTest1PenaltyCalculator
 	}
 
+	private String GetLandingTest2LongRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest2LongRuleTitle
+			}
+		}
+		return task.contest.landingTest2LongRuleTitle
+	}
+	
+	private String GetLandingTest2ShortRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest2ShortRuleTitle
+			}
+		}
+		return task.contest.landingTest2ShortRuleTitle
+	}
+	
 	private int GetLandingTest2MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -1900,6 +1944,26 @@ class Test
 		return task.contest.landingTest2PenaltyCalculator
 	}
 
+	private String GetLandingTest3LongRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest3LongRuleTitle
+			}
+		}
+		return task.contest.landingTest3LongRuleTitle
+	}
+	
+	private String GetLandingTest3ShortRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest3ShortRuleTitle
+			}
+		}
+		return task.contest.landingTest3ShortRuleTitle
+	}
+	
 	private int GetLandingTest3MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -2025,6 +2089,26 @@ class Test
 		return task.contest.landingTest3PenaltyCalculator
 	}
 
+	private String GetLandingTest4LongRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest4LongRuleTitle
+			}
+		}
+		return task.contest.landingTest4LongRuleTitle
+	}
+	
+	private String GetLandingTest4ShortRuleTitle()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest4ShortRuleTitle
+			}
+		}
+		return task.contest.landingTest4ShortRuleTitle
+	}
+	
 	private int GetLandingTest4MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -2214,22 +2298,22 @@ class Test
 		String result_type = ""
 		switch (resultType) {
 			case ResultType.Planningtask:
-				result_type = "${GetMsg('fc.planningresults',isPrint)}"
+				result_type = "${get_msg('fc.planningresults',isPrint)}"
 				break
 			case ResultType.Flight:
-				result_type = "${GetMsg('fc.flightresults',isPrint)}"
+				result_type = "${get_msg('fc.flightresults',isPrint)}"
 				break
 			case ResultType.Observation:
-				result_type = "${GetMsg('fc.observationresults',isPrint)}"
+				result_type = "${get_msg('fc.observationresults',isPrint)}"
 				break
 			case ResultType.Landing:
-				result_type = "${GetMsg('fc.landingresults',isPrint)}"
+				result_type = "${get_msg('fc.landingresults',isPrint)}"
 				break
 			case ResultType.Special:	
 				result_type = "${GetSpecialTestTitle(isPrint)}"
 				break
 			case ResultType.Crew:
-				result_type = "${GetMsg('fc.crewresults',isPrint)}"
+				result_type = "${get_msg('fc.crewresults',isPrint)}"
 				break
 		}
         String ret = "${GetStartNum()} - "
@@ -2241,14 +2325,14 @@ class Test
         } else {
             ret += "${task.name()}"
         }
-        ret += " - ${result_type} (${GetMsg('fc.version',isPrint)} ${result_version})"
+        ret += " - ${result_type} (${get_msg('fc.version',isPrint)} ${result_version})"
         if (provisional) {
-            ret += " [${GetMsg('fc.provisional',isPrint)}]"
+            ret += " [${get_msg('fc.provisional',isPrint)}]"
         }
         return ret
 	}
 	
-    private String GetMsg(String msgID, boolean isPrint)
+    private String get_msg(String msgID, boolean isPrint)
     {
         if (isPrint) {
             return getPrintMsg(msgID)
@@ -2760,12 +2844,12 @@ class Test
 
     String GetObservationTestEnrouteCorrectValueStr(boolean isPrint)
     {
-        return FcMath.EnrouteValueStr(GetObservationTestEnrouteCorrectValue()) + GetMsg(GetObservationTestEnrouteValueUnit().code,isPrint)
+        return FcMath.EnrouteValueStr(GetObservationTestEnrouteCorrectValue()) + get_msg(GetObservationTestEnrouteValueUnit().code,isPrint)
     }
     
     String GetObservationTestEnrouteInexactValueStr(boolean isPrint)
     {
-        return FcMath.EnrouteValueStr(GetObservationTestEnrouteInexactValue()) + GetMsg(GetObservationTestEnrouteValueUnit().code,isPrint)
+        return FcMath.EnrouteValueStr(GetObservationTestEnrouteInexactValue()) + get_msg(GetObservationTestEnrouteValueUnit().code,isPrint)
     }
     
     Map GetEnrouteDistanceNM(BigDecimal distanceNM)

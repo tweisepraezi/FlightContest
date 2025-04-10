@@ -538,7 +538,16 @@ class RouteTagLib
         //outln"""    <p class="group">${message(code:'fc.livetracking')}</p>"""
         outln"""    <label>${message(code:'fc.general.livetrackingscorecard')}:</label>"""
         outln"""    <br/>"""
-        outln"""    <input type="text" id="liveTrackingScorecard" name="liveTrackingScorecard" value="${fieldValue(bean:attrs.route,field:'liveTrackingScorecard')}" tabIndex="${attrs.ti[0]++}"/>"""
+        //outln"""    <input type="text" id="liveTrackingScorecard" name="liveTrackingScorecard" value="${fieldValue(bean:attrs.route,field:'liveTrackingScorecard')}" tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""    <select name="liveTrackingScorecard" tabIndex="${attrs.ti[0]++}">"""
+        for (String scorecard in Defs.LIVETRACKING_SCORECARDS) {
+            if (scorecard == attrs.route.liveTrackingScorecard) {
+                outln"""<option value="${scorecard}" selected>${scorecard}</option>"""
+            } else {
+                outln"""<option value="${scorecard}">${scorecard}</option>"""
+            }
+        }
+        outln"""    </select>"""
         outln"""</p>"""
         outln"""</fieldset>"""
     }

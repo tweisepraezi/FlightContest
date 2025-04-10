@@ -386,15 +386,29 @@ class OsmPrintMapService
             // check full page
             for (def config_style in status.json.ConfigStyles) {
                 if (config_style.Name.startsWith('region-')) {
-                    if (!contestMapParams.contestMapDevStyle || config_style.Name.endsWith('-dev')) {
-                        BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
-                        BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
-                        BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
-                        BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
-                        if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
-                            region_style = config_style.Name
-                            mapdata_date = config_style.Date
-                            break
+                    if (contestMapParams.contestMapDevStyle) {
+                        if (config_style.Name == 'region-dev') {
+                            BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
+                            BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
+                            BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
+                            BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                            if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                                region_style = config_style.Name
+                                mapdata_date = config_style.Date
+                                break
+                            }
+                        }
+                    } else {
+                        if (config_style.Name != 'region-dev') {
+                            BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
+                            BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
+                            BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
+                            BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                            if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                                region_style = config_style.Name
+                                mapdata_date = config_style.Date
+                                break
+                            }
                         }
                     }
                 }
@@ -404,15 +418,29 @@ class OsmPrintMapService
             if (!region_style) {
                 for (def config_style in status.json.ConfigStyles) {
                     if (config_style.Name.startsWith('region-')) {
-                        if (!contestMapParams.contestMapDevStyle || config_style.Name.endsWith('-dev')) {
-                            BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
-                            BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
-                            BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
-                            BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
-                            if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
-                                region_style = config_style.Name
-                                mapdata_date = config_style.Date
-                                break
+                        if (contestMapParams.contestMapDevStyle) {
+                            if (config_style.Name == 'region-dev') {
+                                BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
+                                BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
+                                BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
+                                BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                                if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                                    region_style = config_style.Name
+                                    mapdata_date = config_style.Date
+                                    break
+                                }
+                            }
+                        } else {
+                            if (config_style.Name != 'region-dev') {
+                                BigDecimal lat_bottom = get_value(config_style.LongDescription, 'Bottom(Lat):')
+                                BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
+                                BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
+                                BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                                if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                                    region_style = config_style.Name
+                                    mapdata_date = config_style.Date
+                                    break
+                                }
                             }
                         }
                     }
@@ -712,7 +740,7 @@ class OsmPrintMapService
         String uuid = UUID.randomUUID().toString()
         Route route_instance = Route.get(contestMapParams.routeId)
         String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-        openAIPService.WriteAirports2CSV(route_instance, contestMapParams.webRootDir, file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", openaip_airfields, contestMapParams.contestMapAdditionals)
+        openAIPService.WriteAirfields2CSV(route_instance, contestMapParams.webRootDir, file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", openaip_airfields, contestMapParams.contestMapAdditionals)
         airports_file_name = contestMapParams.webRootDir + file_name
         String airports_short_file_name = airports_file_name.substring(airports_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
         if (contestMapParams.taskCreator) {

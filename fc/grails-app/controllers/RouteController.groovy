@@ -220,7 +220,7 @@ class RouteController {
     }
     
     def importfcroute = {
-        redirect(action:selectfcroute)
+        redirect(action:'selectfcroute')
     }
     
     def importfcroute2 = {
@@ -854,15 +854,33 @@ class RouteController {
         }
     }
     
-	def csvexportairports_route = {
+    def getairfields_airportarea_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            kmlService.printstart "csvexportairports_route"
+            save_map_settings(route.instance, params)
+			Map ret = openAIPService.GetAirfieldsAirportarea(route.instance, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+            if (ret.ok) {
+                flash.message = message(code:'fc.contestmap.contestmapgetairfields.airportarea.done',args:[ret.airfieldsnum])
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapgetairfields.airportarea.notfound',args:[])
+            }
+            redirect(action:'mapexportquestion',id:params.id)
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+    }
+    
+	def csvexport_airfields_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            kmlService.printstart "csvexport_airfields_route"
             save_map_settings(route.instance, params)
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
+			Map ret = openAIPService.WriteAirfields2CSV(route.instance, webroot_dir, upload_csv_file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -872,7 +890,7 @@ class RouteController {
                 kmlService.printdone ""
             } else {
                 flash.error = true
-                flash.message = message(code:'fc.contestmap.contestmapairports.csvexport.notfound')
+                flash.message = message(code:'fc.contestmap.contestmapairfields.csvexport.notfound')
                 kmlService.DeleteFile(upload_csv_file_name)
                 kmlService.printerror flash.message
 				redirect(action:'mapexportquestion',id:params.id)
@@ -884,15 +902,15 @@ class RouteController {
         }
 	}
 
-	def csvexportairports_check_route = {
+	def csvexportold_airfields_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            kmlService.printstart "csvexportairports_check_route"
+            kmlService.printstart "csvexportold_airfields_route"
             save_map_settings(route.instance, params)
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirports2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
+			Map ret = openAIPService.WriteAirfieldsOld2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -902,7 +920,37 @@ class RouteController {
                 kmlService.printdone ""
             } else {
                 flash.error = true
-                flash.message = message(code:'fc.contestmap.contestmapairports.csvexport.notfound')
+                flash.message = message(code:'fc.contestmap.contestmapairfields.csvexport.notfound')
+                kmlService.DeleteFile(upload_csv_file_name)
+                kmlService.printerror flash.message
+				redirect(action:'mapexportquestion',id:params.id)
+            }
+			
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+	}
+
+	def csvexport_check_airfields_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            kmlService.printstart "csvexport_check_airfields_route"
+            save_map_settings(route.instance, params)
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
+			Map ret = openAIPService.WriteAirfieldsOld2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
+            if (ret.ok) {
+                String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_csv_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_csv_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapairfields.csvexport.notfound')
                 kmlService.DeleteFile(upload_csv_file_name)
                 kmlService.printerror flash.message
 				redirect(action:'mapexportquestion',id:params.id)
@@ -938,6 +986,24 @@ class RouteController {
             if (params.contestMapShowMapObjects) {
                 route.instance.contestMapShowMapObjects = params.contestMapShowMapObjects == "true"
             }
+            if (params.contestMapShowAirfields) {
+                route.instance.contestMapShowAirfields = params.contestMapShowAirfields == "true"
+            }
+            if (params.contestMapShowAirspaces) {
+                route.instance.contestMapShowAirspaces = params.contestMapShowAirspaces == "true"
+            }
+            if (params.contestMapShowFirstOptions) {
+                route.instance.contestMapShowFirstOptions = params.contestMapShowFirstOptions == "true"
+            }
+            if (params.contestMapShowSecondOptions) {
+                route.instance.contestMapShowSecondOptions = params.contestMapShowSecondOptions == "true"
+            }
+            if (params.contestMapShowThirdOptions) {
+                route.instance.contestMapShowThirdOptions = params.contestMapShowThirdOptions == "true"
+            }
+            if (params.contestMapShowForthOptions) {
+                route.instance.contestMapShowForthOptions = params.contestMapShowForthOptions == "true"
+            }
             route.instance.save()
         }
         render(text: "")
@@ -949,7 +1015,7 @@ class RouteController {
             route.instance.SetAllContestMapPoints()
             
             if (BootStrap.global.IsDevelopmentEnvironment()) {
-                route.instance.contestMapDevStyle = true
+                //route.instance.contestMapDevStyle = true
             }
             
             // calculate show_mode
@@ -1111,6 +1177,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -1239,6 +1306,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -1367,6 +1435,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -1495,6 +1564,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -1623,6 +1693,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -1751,6 +1822,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos,
@@ -1758,6 +1830,135 @@ class RouteController {
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 1, route.instance.contestMapFirstTitle + " (Task Creator)")
+                                gpxService.printdone ""
+                                flash.message = message(code:'fc.contestmap.job.started',args:[])
+                                redirect(action:'mapexportquestion', id:params.id)
+                            } else {
+                                gpxService.DeleteFile(printjob_filename)
+                                if (r.message) {
+                                    flash.message = r.message
+                                } else {
+                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                }
+                                gpxService.printdone ""
+                                flash.error = true
+                                redirect(action:'mapexportquestion', id:params.id)
+                            }
+                            gpxService.DeleteFile(map_png_file_name)
+                            gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
+                            gpxService.DeleteFile(tif_file_name)
+                            gpxService.DeleteFile(vrt_file_name)
+                            gpxService.DeleteFile(map_graticule_file_name)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    }
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(route_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def mapgenerate_takeoff = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRoute(params) 
+            if (route.instance) {
+                route.instance.contestMapEdition++
+                save_map_settings(route.instance, params)
+                gpxService.printstart "Export map '${route.instance.name()}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
+                                         contestMapCircle:false,
+                                         contestMapProcedureTurn:false,
+                                         contestMapLeg:false,
+                                         contestMapCurvedLeg:false,
+                                         contestMapCurvedLegPoints:false,
+                                         contestMapTpName:true,
+                                         contestMapSecretGates:false,
+                                         contestMapEnroutePhotos:false,
+                                         contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
+                                         contestMapGraticule:route.instance.contestMapGraticule,
+                                         contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
+                                         contestMapAirfields:route.instance.contestMapAirfields,
+                                         contestMapChurches:route.instance.contestMapChurches,
+                                         contestMapCastles:route.instance.contestMapCastles,
+                                         contestMapChateaus:route.instance.contestMapChateaus,
+                                         contestMapPowerlines:route.instance.contestMapPowerlines,
+                                         contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
+                                         contestMapPeaks:route.instance.contestMapPeaks,
+                                         contestMapDropShadow:route.instance.contestMapDropShadow,
+                                         contestMapAdditionals:route.instance.contestMapAdditionals,
+                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints,
+                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
+                                         contestMapDevStyle:route.instance.contestMapDevStyle,
+                                        ]
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
+                if (converter.ok) {
+                    if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP) {
+                        gpxService.printdone ""
+                        session.gpxviewerReturnAction = 'show'
+                        session.gpxviewerReturnController = controllerName
+                        session.gpxviewerReturnID = params.id
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
+                        String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                        gpxService.Download(webroot_dir + route_gpx_file_name, route_file_name, response.outputStream)
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP) {
+                        String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+                        File printjob_file = new File(printjob_filename)
+                        if (printjob_file.exists()) {
+                            flash.message = message(code:'fc.contestmap.previousjobrunningerror',args:[])
+                            redirect(action:'mapexportquestion', id:params.id)
+                        } else {
+                            BufferedWriter printjob_writer = printjob_file.newWriter()
+                            printjob_writer << route.instance.id
+                            printjob_writer.close()
+                            String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
+                            String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
+                            String vrt_file_name = "${tif_file_name}.vrt"
+                            String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName1(),
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
+                                                                ] + contestmap_params)
+                            if (r.ok) {
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 1, route.instance.contestMapFirstTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1880,6 +2081,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -2008,6 +2210,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2,
@@ -2015,6 +2218,135 @@ class RouteController {
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 2, route.instance.contestMapSecondTitle + " (Task Creator)")
+                                gpxService.printdone ""
+                                flash.message = message(code:'fc.contestmap.job.started',args:[])
+                                redirect(action:'mapexportquestion', id:params.id)
+                            } else {
+                                gpxService.DeleteFile(printjob_filename)
+                                if (r.message) {
+                                    flash.message = r.message
+                                } else {
+                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                }
+                                gpxService.printdone ""
+                                flash.error = true
+                                redirect(action:'mapexportquestion', id:params.id)
+                            }
+                            gpxService.DeleteFile(map_png_file_name)
+                            gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
+                            gpxService.DeleteFile(tif_file_name)
+                            gpxService.DeleteFile(vrt_file_name)
+                            gpxService.DeleteFile(map_graticule_file_name)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    }
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(route_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def mapgenerate_takeoff2 = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRoute(params) 
+            if (route.instance) {
+                route.instance.contestMapEdition++
+                save_map_settings(route.instance, params)
+                gpxService.printstart "Export map '${route.instance.name()}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
+                                         contestMapCircle:false,
+                                         contestMapProcedureTurn:false,
+                                         contestMapLeg:false,
+                                         contestMapCurvedLeg:false,
+                                         contestMapCurvedLegPoints:false,
+                                         contestMapTpName:true,
+                                         contestMapSecretGates:false,
+                                         contestMapEnroutePhotos:false,
+                                         contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
+                                         contestMapGraticule:route.instance.contestMapGraticule,
+                                         contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
+                                         contestMapAirfields:route.instance.contestMapAirfields,
+                                         contestMapChurches:route.instance.contestMapChurches,
+                                         contestMapCastles:route.instance.contestMapCastles,
+                                         contestMapChateaus:route.instance.contestMapChateaus,
+                                         contestMapPowerlines:route.instance.contestMapPowerlines,
+                                         contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
+                                         contestMapPeaks:route.instance.contestMapPeaks,
+                                         contestMapDropShadow:route.instance.contestMapDropShadow,
+                                         contestMapAdditionals:route.instance.contestMapAdditionals,
+                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints2,
+                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize2,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
+                                         contestMapDevStyle:route.instance.contestMapDevStyle,
+                                        ]
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
+                if (converter.ok) {
+                    if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP) {
+                        gpxService.printdone ""
+                        session.gpxviewerReturnAction = 'show'
+                        session.gpxviewerReturnController = controllerName
+                        session.gpxviewerReturnID = params.id
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
+                        String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                        gpxService.Download(webroot_dir + route_gpx_file_name, route_file_name, response.outputStream)
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP) {
+                        String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+                        File printjob_file = new File(printjob_filename)
+                        if (printjob_file.exists()) {
+                            flash.message = message(code:'fc.contestmap.previousjobrunningerror',args:[])
+                            redirect(action:'mapexportquestion', id:params.id)
+                        } else {
+                            BufferedWriter printjob_writer = printjob_file.newWriter()
+                            printjob_writer << route.instance.id
+                            printjob_writer.close()
+                            String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
+                            String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
+                            String vrt_file_name = "${tif_file_name}.vrt"
+                            String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName2(),
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
+                                                                ] + contestmap_params)
+                            if (r.ok) {
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 2, route.instance.contestMapSecondTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -2137,6 +2469,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -2265,6 +2598,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3,
@@ -2272,6 +2606,135 @@ class RouteController {
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 3, route.instance.contestMapThirdTitle + " (Task Creator)")
+                                gpxService.printdone ""
+                                flash.message = message(code:'fc.contestmap.job.started',args:[])
+                                redirect(action:'mapexportquestion', id:params.id)
+                            } else {
+                                gpxService.DeleteFile(printjob_filename)
+                                if (r.message) {
+                                    flash.message = r.message
+                                } else {
+                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                }
+                                gpxService.printdone ""
+                                flash.error = true
+                                redirect(action:'mapexportquestion', id:params.id)
+                            }
+                            gpxService.DeleteFile(map_png_file_name)
+                            gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
+                            gpxService.DeleteFile(tif_file_name)
+                            gpxService.DeleteFile(vrt_file_name)
+                            gpxService.DeleteFile(map_graticule_file_name)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    }
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(route_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def mapgenerate_takeoff3 = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRoute(params) 
+            if (route.instance) {
+                route.instance.contestMapEdition++
+                save_map_settings(route.instance, params)
+                gpxService.printstart "Export map '${route.instance.name()}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
+                                         contestMapCircle:false,
+                                         contestMapProcedureTurn:false,
+                                         contestMapLeg:false,
+                                         contestMapCurvedLeg:false,
+                                         contestMapCurvedLegPoints:false,
+                                         contestMapTpName:true,
+                                         contestMapSecretGates:false,
+                                         contestMapEnroutePhotos:false,
+                                         contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
+                                         contestMapGraticule:route.instance.contestMapGraticule,
+                                         contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
+                                         contestMapAirfields:route.instance.contestMapAirfields,
+                                         contestMapChurches:route.instance.contestMapChurches,
+                                         contestMapCastles:route.instance.contestMapCastles,
+                                         contestMapChateaus:route.instance.contestMapChateaus,
+                                         contestMapPowerlines:route.instance.contestMapPowerlines,
+                                         contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
+                                         contestMapPeaks:route.instance.contestMapPeaks,
+                                         contestMapDropShadow:route.instance.contestMapDropShadow,
+                                         contestMapAdditionals:route.instance.contestMapAdditionals,
+                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints3,
+                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize3,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
+                                         contestMapDevStyle:route.instance.contestMapDevStyle,
+                                        ]
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
+                if (converter.ok) {
+                    if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP) {
+                        gpxService.printdone ""
+                        session.gpxviewerReturnAction = 'show'
+                        session.gpxviewerReturnController = controllerName
+                        session.gpxviewerReturnID = params.id
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
+                        String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                        gpxService.Download(webroot_dir + route_gpx_file_name, route_file_name, response.outputStream)
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP) {
+                        String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+                        File printjob_file = new File(printjob_filename)
+                        if (printjob_file.exists()) {
+                            flash.message = message(code:'fc.contestmap.previousjobrunningerror',args:[])
+                            redirect(action:'mapexportquestion', id:params.id)
+                        } else {
+                            BufferedWriter printjob_writer = printjob_file.newWriter()
+                            printjob_writer << route.instance.id
+                            printjob_writer.close()
+                            String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
+                            String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
+                            String vrt_file_name = "${tif_file_name}.vrt"
+                            String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName3(),
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
+                                                                ] + contestmap_params)
+                            if (r.ok) {
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 3, route.instance.contestMapThirdTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -2394,6 +2857,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -2522,6 +2986,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4,
@@ -2529,6 +2994,135 @@ class RouteController {
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, false, 4, route.instance.contestMapForthTitle + " (Task Creator)")
+                                gpxService.printdone ""
+                                flash.message = message(code:'fc.contestmap.job.started',args:[])
+                                redirect(action:'mapexportquestion', id:params.id)
+                            } else {
+                                gpxService.DeleteFile(printjob_filename)
+                                if (r.message) {
+                                    flash.message = r.message
+                                } else {
+                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                }
+                                gpxService.printdone ""
+                                flash.error = true
+                                redirect(action:'mapexportquestion', id:params.id)
+                            }
+                            gpxService.DeleteFile(map_png_file_name)
+                            gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
+                            gpxService.DeleteFile(tif_file_name)
+                            gpxService.DeleteFile(vrt_file_name)
+                            gpxService.DeleteFile(map_graticule_file_name)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    }
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(route_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def mapgenerate_takeoff4 = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRoute(params) 
+            if (route.instance) {
+                route.instance.contestMapEdition++
+                save_map_settings(route.instance, params)
+                gpxService.printstart "Export map '${route.instance.name()}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
+                                         contestMapCircle:false,
+                                         contestMapProcedureTurn:false,
+                                         contestMapLeg:false,
+                                         contestMapCurvedLeg:false,
+                                         contestMapCurvedLegPoints:false,
+                                         contestMapTpName:true,
+                                         contestMapSecretGates:false,
+                                         contestMapEnroutePhotos:false,
+                                         contestMapEnrouteCanvas:false,
+                                         contestMapTurnpointSign:false,
+                                         contestMapGraticule:route.instance.contestMapGraticule,
+                                         contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
+                                         contestMapAirfields:route.instance.contestMapAirfields,
+                                         contestMapChurches:route.instance.contestMapChurches,
+                                         contestMapCastles:route.instance.contestMapCastles,
+                                         contestMapChateaus:route.instance.contestMapChateaus,
+                                         contestMapPowerlines:route.instance.contestMapPowerlines,
+                                         contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
+                                         contestMapPeaks:route.instance.contestMapPeaks,
+                                         contestMapDropShadow:route.instance.contestMapDropShadow,
+                                         contestMapAdditionals:route.instance.contestMapAdditionals,
+                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints4,
+                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize4,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
+                                         contestMapDevStyle:route.instance.contestMapDevStyle,
+                                        ]
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
+                if (converter.ok) {
+                    if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP) {
+                        gpxService.printdone ""
+                        session.gpxviewerReturnAction = 'show'
+                        session.gpxviewerReturnController = controllerName
+                        session.gpxviewerReturnID = params.id
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
+                        String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                        gpxService.Download(webroot_dir + route_gpx_file_name, route_file_name, response.outputStream)
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP) {
+                        String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+                        File printjob_file = new File(printjob_filename)
+                        if (printjob_file.exists()) {
+                            flash.message = message(code:'fc.contestmap.previousjobrunningerror',args:[])
+                            redirect(action:'mapexportquestion', id:params.id)
+                        } else {
+                            BufferedWriter printjob_writer = printjob_file.newWriter()
+                            printjob_writer << route.instance.id
+                            printjob_writer.close()
+                            String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
+                            String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
+                            String vrt_file_name = "${tif_file_name}.vrt"
+                            String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName4(),
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
+                                                                 mapScale: route.instance.mapScale,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
+                                                                ] + contestmap_params)
+                            if (r.ok) {
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 4, route.instance.contestMapForthTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -2664,6 +3258,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -2805,6 +3400,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -2946,6 +3542,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -3087,6 +3684,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -3216,6 +3814,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: HorizontalPos.Center,
                                                                  contestMapCenterVerticalPos: VerticalPos.Center
@@ -3345,6 +3944,7 @@ class RouteController {
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
                                                                  contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
+                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: HorizontalPos.Center,
                                                                  contestMapCenterVerticalPos: VerticalPos.Center,
@@ -3418,6 +4018,7 @@ class RouteController {
         routeInstance.contestMapDropShadow = params.contestMapDropShadow == "on"
         routeInstance.contestMapAdditionals = params.contestMapAdditionals == "on"
         routeInstance.contestMapAirspaces = params.contestMapAirspaces == "on"
+        routeInstance.contestMapAirfieldsData = params.contestMapAirfieldsData
         routeInstance.contestMapAirspacesLayer2 = params.contestMapAirspacesLayer2
         if (params.contestMapAirspacesLowerLimit && params.contestMapAirspacesLowerLimit.isInteger()) {
             routeInstance.contestMapAirspacesLowerLimit = params.contestMapAirspacesLowerLimit.toInteger()

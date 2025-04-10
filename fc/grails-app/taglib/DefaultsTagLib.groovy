@@ -2,7 +2,7 @@ class DefaultsTagLib
 {
 	//static defaultEncodeAs = 'html'
 	//static encodeAsForTags = [tagName: 'raw']
-	
+    
     // --------------------------------------------------------------------------------------------------------------------
     def editDefaults = { attrs, body ->
         outln"""<table>"""
@@ -232,7 +232,17 @@ class DefaultsTagLib
             outln"""<p>"""
             outln"""    <label>${message(code:'fc.general.livetrackingscorecard')}:</label>"""
             outln"""    <br/>"""
-            outln"""    <input type="text" id="liveTrackingScorecard" name="liveTrackingScorecard" value="${fieldValue(bean:attrs.contest,field:'liveTrackingScorecard')}" tabIndex="${attrs.ti[0]++}"/>"""
+            //outln"""    <input type="text" id="liveTrackingScorecard" name="liveTrackingScorecard" value="${fieldValue(bean:attrs.contest,field:'liveTrackingScorecard')}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""        <select name="liveTrackingScorecard" tabIndex="${attrs.ti[0]++}">"""
+            //outln"""            <option></option>"""
+            for (String scorecard in Defs.LIVETRACKING_SCORECARDS) {
+                if (scorecard == attrs.contest.liveTrackingScorecard) {
+                    outln"""<option value="${scorecard}" selected>${scorecard}</option>"""
+                } else {
+                    outln"""<option value="${scorecard}">${scorecard}</option>"""
+                }
+            }
+            outln"""        </select>"""
             if (attrs.contest.liveTrackingScorecard != attrs.contest.contestRule.ruleValues.liveTrackingScorecard) {
                 outln"""    !"""
                 attrs.ret.modifynum++
@@ -249,6 +259,13 @@ class DefaultsTagLib
         outln"""    </div>"""
         outln"""    <div id="otherdefaults_id" hidden>"""
         outln"""        <br/>"""
+        outln"""        <div>"""
+        checkBox("precisionFlying", attrs.contest.precisionFlying, 'fc.general.precisionflying', attrs)
+        if (attrs.contest.precisionFlying != attrs.contest.contestRule.ruleValues.precisionFlying) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </div>"""
         outln"""        <div>"""
         checkBox("anrFlying", attrs.contest.anrFlying, 'fc.contestrule.anr', attrs)
         if (attrs.contest.anrFlying != attrs.contest.contestRule.ruleValues.anrFlying) {

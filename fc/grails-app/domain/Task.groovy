@@ -565,9 +565,12 @@ class Task
 			test_instance.crew = crew_instance
 			test_instance.taskTAS = crew_instance.tas
 			test_instance.taskAircraft = crew_instance.aircraft
+            test_instance.taskTrackerID = crew_instance.trackerID
 			test_instance.viewpos = i
 			test_instance.task = this
 			test_instance.timeCalculated = false
+            test_instance.loggerData = new LoggerDataTest()
+            test_instance.loggerResult = new LoggerResult()
 			test_instance.save()
 		}
 	}
@@ -1201,20 +1204,21 @@ class Task
     
     String GetLandingPointsText(int landingTestPoints)
     {
-        if (!contest.precisionFlying || (contest.resultClasses && contest.contestRuleForEachClass)) {
-            switch (landingTestPoints) {
-                case 1: return "fc.landingtest.points1"
-                case 2: return "fc.landingtest.points2"
-                case 3: return "fc.landingtest.points3"
-                case 4: return "fc.landingtest.points4"
-            }
-        } else {
-            switch (landingTestPoints) {
-                case 1: return "fc.landingtest.points1.precision"
-                case 2: return "fc.landingtest.points2.precision"
-                case 3: return "fc.landingtest.points3.precision"
-                case 4: return "fc.landingtest.points4.precision"
-            }
+        String short_rule_title = ""
+        switch (landingTestPoints) {
+            case 1: short_rule_title = contest.landingTest1ShortRuleTitle; break
+            case 2: short_rule_title = contest.landingTest2ShortRuleTitle; break
+            case 3: short_rule_title = contest.landingTest3ShortRuleTitle; break
+            case 4: short_rule_title = contest.landingTest4ShortRuleTitle; break
+        }
+        if (short_rule_title) {
+            short_rule_title = " (" + short_rule_title + ")"
+        }
+        switch (landingTestPoints) {
+            case 1: return getMsg("fc.landingtest.points1") + short_rule_title
+            case 2: return getMsg("fc.landingtest.points2") + short_rule_title
+            case 3: return getMsg("fc.landingtest.points3") + short_rule_title
+            case 4: return getMsg("fc.landingtest.points4") + short_rule_title
         }
         return ""
     }

@@ -80,7 +80,7 @@
                             </tbody>
                         </table>
 						<fieldset>
-							<legend>${message(code:'fc.landingtest.landing1')}<g:if test="${testInstance.IsPrecisionLanding()}"> (${message(code:testInstance.GetPrecisionFlyingLandingText(testInstance.task.landingTest1Points))})</g:if></legend>
+							<legend>${testInstance.GetLandingShortTitle(testInstance.task.landingTest1Points,false)}</legend>
 							<g:if test="${!testInstance.landingTest1Complete}">
 								<p>
 									<label>${message(code:'fc.landingresults.measure')}*:</label>

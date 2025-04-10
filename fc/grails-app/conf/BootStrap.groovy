@@ -443,7 +443,6 @@ class BootStrap {
                                 contest_instance.printFreeTextA3 = false
                                 contest_instance.printFreeTextStyle = Contest.DEFAULT_FREETEXTSTYLE
                                 contest_instance.contestRuleForEachClass = true
-                                contest_instance.printLandingCalculatorValues = contest_instance.contestRule.ruleValues.printLandingCalculatorValues
 								contest_instance.save()
 							}
 							ResultClass.findAll().each { ResultClass resultclass_instance ->
@@ -455,7 +454,6 @@ class BootStrap {
                                 resultclass_instance.contestPrintTaskTestDetails = ""
                                 resultclass_instance.contestPrintLandingDetails = false
                                 resultclass_instance.contestPrintEqualPositions = false
-                                resultclass_instance.printLandingCalculatorValues = resultclass_instance.contestRule.ruleValues.printLandingCalculatorValues
 								resultclass_instance.save()
 							}
 							Task.findAll().each { Task task_instance ->
@@ -671,7 +669,6 @@ class BootStrap {
                                 contest_instance.printPointsObservationTest = contest_instance.contestRule.ruleValues.printPointsObservationTest
                                 contest_instance.contestPrintObservationDetails = contest_instance.contestRule.ruleValues.contestPrintObservationDetails
                                 contest_instance.printPointsLandingField = contest_instance.contestRule.ruleValues.printPointsLandingField
-                                contest_instance.landingFieldImageName = contest_instance.contestRule.ruleValues.landingFieldImageName
                                 contest_instance.printPointsTurnpointSign = contest_instance.contestRule.ruleValues.printPointsTurnpointSign
                                 contest_instance.printPointsEnrouteCanvas = contest_instance.contestRule.ruleValues.printPointsEnrouteCanvas
                                 contest_instance.save()
@@ -692,7 +689,6 @@ class BootStrap {
                                 resultclass_instance.printPointsObservationTest = resultclass_instance.contestRule.ruleValues.printPointsObservationTest
                                 resultclass_instance.contestPrintObservationDetails = resultclass_instance.contestRule.ruleValues.contestPrintObservationDetails
                                 resultclass_instance.printPointsLandingField = resultclass_instance.contestRule.ruleValues.printPointsLandingField
-                                resultclass_instance.landingFieldImageName = resultclass_instance.contestRule.ruleValues.landingFieldImageName
                                 resultclass_instance.printPointsTurnpointSign = resultclass_instance.contestRule.ruleValues.printPointsTurnpointSign
                                 resultclass_instance.printPointsEnrouteCanvas = resultclass_instance.contestRule.ruleValues.printPointsEnrouteCanvas
                                 resultclass_instance.save()
@@ -1345,6 +1341,54 @@ class BootStrap {
                                 coord_instance.resultOutsideCorridorMeasurement = ""
                                 coord_instance.resultOutsideCorridorSeconds = 0
                                 coord_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 42) { // DB-2.42 compatibility
+                            print "    2.42 modifications"
+							Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.landingTest1LongRuleTitle = contest_instance.contestRule.ruleValues.landingTest1.LongRuleTitle
+                                contest_instance.landingTest1ShortRuleTitle = contest_instance.contestRule.ruleValues.landingTest1.ShortRuleTitle
+                                contest_instance.landingTest1AirfieldImageNames = contest_instance.contestRule.ruleValues.landingTest1.AirfieldImageNames
+                                contest_instance.landingTest1PrintCalculatorValues = contest_instance.contestRule.ruleValues.landingTest1.PrintCalculatorValues
+                                contest_instance.landingTest2LongRuleTitle = contest_instance.contestRule.ruleValues.landingTest2.LongRuleTitle
+                                contest_instance.landingTest2ShortRuleTitle = contest_instance.contestRule.ruleValues.landingTest2.ShortRuleTitle
+                                contest_instance.landingTest2AirfieldImageNames = contest_instance.contestRule.ruleValues.landingTest2.AirfieldImageNames
+                                contest_instance.landingTest2PrintCalculatorValues = contest_instance.contestRule.ruleValues.landingTest2.PrintCalculatorValues
+                                contest_instance.landingTest3LongRuleTitle = contest_instance.contestRule.ruleValues.landingTest3.LongRuleTitle
+                                contest_instance.landingTest3ShortRuleTitle = contest_instance.contestRule.ruleValues.landingTest3.ShortRuleTitle
+                                contest_instance.landingTest3AirfieldImageNames = contest_instance.contestRule.ruleValues.landingTest3.AirfieldImageNames
+                                contest_instance.landingTest3PrintCalculatorValues = contest_instance.contestRule.ruleValues.landingTest3.PrintCalculatorValues
+                                contest_instance.landingTest4LongRuleTitle = contest_instance.contestRule.ruleValues.landingTest4.LongRuleTitle
+                                contest_instance.landingTest4ShortRuleTitle = contest_instance.contestRule.ruleValues.landingTest4.ShortRuleTitle
+                                contest_instance.landingTest4AirfieldImageNames = contest_instance.contestRule.ruleValues.landingTest4.AirfieldImageNames
+                                contest_instance.landingTest4PrintCalculatorValues = contest_instance.contestRule.ruleValues.landingTest4.PrintCalculatorValues
+								contest_instance.save()
+							}
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+                                resultclass_instance.landingTest1LongRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest1.LongRuleTitle
+                                resultclass_instance.landingTest1ShortRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest1.ShortRuleTitle
+                                resultclass_instance.landingTest1AirfieldImageNames = resultclass_instance.contestRule.ruleValues.landingTest1.AirfieldImageNames
+                                resultclass_instance.landingTest1PrintCalculatorValues = resultclass_instance.contestRule.ruleValues.landingTest1.PrintCalculatorValues
+                                resultclass_instance.landingTest2LongRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest2.LongRuleTitle
+                                resultclass_instance.landingTest2ShortRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest2.ShortRuleTitle
+                                resultclass_instance.landingTest2AirfieldImageNames = resultclass_instance.contestRule.ruleValues.landingTest2.AirfieldImageNames
+                                resultclass_instance.landingTest2PrintCalculatorValues = resultclass_instance.contestRule.ruleValues.landingTest2.PrintCalculatorValues
+                                resultclass_instance.landingTest3LongRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest3.LongRuleTitle
+                                resultclass_instance.landingTest3ShortRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest3.ShortRuleTitle
+                                resultclass_instance.landingTest3AirfieldImageNames = resultclass_instance.contestRule.ruleValues.landingTest3.AirfieldImageNames
+                                resultclass_instance.landingTest3PrintCalculatorValues = resultclass_instance.contestRule.ruleValues.landingTest3.PrintCalculatorValues
+                                resultclass_instance.landingTest4LongRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest4.LongRuleTitle
+                                resultclass_instance.landingTest4ShortRuleTitle = resultclass_instance.contestRule.ruleValues.landingTest4.ShortRuleTitle
+                                resultclass_instance.landingTest4AirfieldImageNames = resultclass_instance.contestRule.ruleValues.landingTest4.AirfieldImageNames
+                                resultclass_instance.landingTest4PrintCalculatorValues = resultclass_instance.contestRule.ruleValues.landingTest4.PrintCalculatorValues
+								resultclass_instance.save()
+							}
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.contestMapAirfieldsData = ""
+                                route_instance.contestMapShowAirfields = true
+                                route_instance.contestMapShowAirspaces = true
+                                route_instance.save()
                             }
                             println " done."
                         }

@@ -1,6 +1,28 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.0
+-------------
+- Edit contest points: Possibility for take over of landing points of another ruleset added
+- Edit contest points: "Recalculate all results" added
+    Changes to the penalty points no longer result in the penalty points of all results being recalculated immediately.
+    This function must be called up explicitly for this purpose.
+- OSM Contest Map: Airfield OpenAIP queries are now saved in the route.
+    Use "Search airfields around the airport" to determine the airfields before printing.
+    Airfields starting with # are ignored during map generation.
+- OSM Contest Map: "Generate (only T/O)" added.
+    Prints map with T/O point but without further turning points.
+- Internal Task Creator: Page guide added.
+    The selected page size (A3, A4, ...) and orientation (Portrait or Landscape W) 
+    is displayed around the center of existing check and plotting points.
+    To define the page location before entering the route, first enter the takeoff and a plotting point.
+- Option to launch the internal and external Task Creator in the map menu added.
+- Bug "OSM Contest Map cannot be printed with ANR rules if only the T/O point is available" fixed
+- Bug "Google Earth display in the internal Task Creator no longer works" fixed
+- Bug "Live tracking contest cannot be created" fixed
+- Bug "OpenAIP layer in OSM online map no longer works" fixed
+- Help chapter "Restore 'Flight Contest' database damaged by installation" added
+
 Changes 4.0.2
 -------------
 - OSM Contest Map: Airspace OpenAIP queries are now saved in the contest.
@@ -95,7 +117,7 @@ Changes 3.4.8
   The canvas placeholder * must be replaced by the desired canvas sign before use in a competition.
 - New route: Button "Create without observations" added
 - Overview Timetable: Planning, take-off and landing times are printed for each group when page breaks are made to form groups.
-- Integrated Task Creator: Bug "Magnetic declination swapped east with west" fixed.
+- Internal Task Creator: Bug "Magnetic declination swapped east with west" fixed.
 
 Changes 3.4.7
 -------------
@@ -115,7 +137,7 @@ Changes 3.4.7
 
 Changes 3.4.6
 -------------
-- Integrated Task Creator: German and Spanish user interface added.
+- Internal Task Creator: German and Spanish user interface added.
   The desired language can be set under "Extras -> Settings".
 - Flight Contest Manager: Flight Contest starts with Firefox if it is available, even if it is not the default browser.
 - Bug "PDF contest map cannot be created if the map title contains umlauts" fixed
@@ -125,7 +147,7 @@ Changes 3.4.5
 - Added map menu item "Export all contest maps"
 - Map import now displays an error message if the map(s) to be imported already exist in the map menu.
     An existing map must first be deleted before it can be imported again.
-- Integrated Task Creator: 'Sync map url' button added.
+- Internal Task Creator: 'Sync map url' button added.
     After loading a task that has been created on another computer, the map URL points to maps of another contest.
     With this button, the map URL is changed to the current contest.
 - The airspace altitude to be taken into account is now also transported during route export/import and route copy.
@@ -172,13 +194,11 @@ Changes 3.4.3
     Marks teams with ! that are equal to the predecessor's predecessor.
 - Bug "Gate direction at the end of the semicircle in construction mode incorrect" fixed
 - Language setting for Task Creator in "Extras -> Settings" added (German, English, Spanish)
-    This setting is only fully effective in the original Task Creator.
-    The integrated Task Creator only works in English.
 
 Changes 3.4.2
 -------------
-- When configuring the original Task Creator, additional links are displayed next to the links to the integrated Task Creator.
-- Integrated Task Creator: 'Addons RL' and 'SUAs Url' added
+- When configuring the external Task Creator, additional links are displayed next to the links to the internal Task Creator.
+- Internal Task Creator: 'Addons RL' and 'SUAs Url' added
 - OSM Contest Map: 'Determine airspaces around the airport' added
     Airspaces below 4000ft are taken into account by default (customizable).
     'KMZ export airspaces' now also contains the names of the airspaces.
@@ -188,7 +208,7 @@ Changes 3.4.2
 
 Changes 3.4.1
 -------------
-- Integrated Task Creator: Error messages when entering the task name removed
+- Internal Task Creator: Error messages when entering the task name removed
 - Routes: Improved error message for semi-circle center points incl. help text
 - Map generation: AirportArea name extended by route title
 - Maps: Bug "Import of a map zip crashes" fixed
@@ -216,7 +236,7 @@ Changes 3.4.0
     If several local maps are available, you can switch between them.
     The default map can be defined in the 'Route settings'.
     Maps created for the Task Creator cannot be displayed here because these maps use a different map projection.
-- Integrated Task Creator for route construction added
+- Internal Task Creator for route construction added
     Based on https://www.airrats.cl/taskcreator?lang=en by Carlos Rocca.
     Start the Task-Creator via "..." of a saved map for a new task:
       Here, the "Map Url" is preset in the Task Creator and can be loaded with "Load".

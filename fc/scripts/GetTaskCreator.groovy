@@ -17,6 +17,7 @@ CHECK_LOCALE_DE = true
 TASK_CREATOR_URL = "https://www.airrats.cl/taskcreator"
 
 MODIFY_DATA = [
+    [Old:"""key=AIzaSyDFCicW-Cz5hVwe3sBG5qyWdyzBfWiRIY0""", ReplaceWith:"""key=AIzaSyAzxxtg-0BdE8Xi-QvDCx5G1JnTyDC8d-w"""],
     [JSExtern:true, Old:"""<script src="js/airrats.min.js"></script>""", New:"""		<script src="${TASK_CREATOR_URL}/js/airrats.min.js"></script>"""],
     [Old:"""<!-- Global site tag (gtag.js) - Google Analytics -->""", RemoveTo:"""<!-- end google analytics -->"""],
     [Old:"""<body>""", New:"""	<body onmousemove="get_taskname()" onload="clear_addons()">"""],
@@ -206,7 +207,10 @@ void get_taskcreator_html(String lang, String destDir)
                     }
                 }
                 if (line.contains(modify_date.Old)) {
-                    if (!modify_date.RemoveTo) {
+                    if (modify_date.ReplaceWith) {
+                        std_line = line.replace(modify_date.Old, modify_date.ReplaceWith)
+                        last_replaced_pos = replace_pos
+                    } else if (!modify_date.RemoveTo) {
                         if (!modify_date.JSExtern) {
                             std_line = modify_date.New
                             if (std_line) {
@@ -316,7 +320,7 @@ void check_locale(String srcFileName, String destFileName, String newFileName, S
             dest_file.withReader { dest_reader ->
                 while ((dest_line = dest_reader.readLine()) != null) {
                     def dest_line_array = dest_line.split(':')
-                    if (src_line_array[0] == dest_line_array[0]) {
+                    if (src_line_array[0].trim() == dest_line_array[0].trim()) {
                         new_writer.writeLine dest_line
                         dest_line_found = true
                         break

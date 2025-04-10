@@ -16,13 +16,6 @@ class PointsTagLib
         outln"""<fieldset>"""
         outln"""    <legend>${message(code:'fc.general')}</legend>"""
         outln"""    <p/>"""
-        outln"""    <div>"""
-        checkBox("precisionFlying", attrs.i.precisionFlying, 'fc.general.precisionflyinglanding', attrs)
-        if (attrs.i.precisionFlying != attrs.i.contestRule.ruleValues.precisionFlying) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </div>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.general.increasefactor')}* [${message(code:'fc.percent')}]:</label>"""
         outln"""        <br/>"""
@@ -33,88 +26,90 @@ class PointsTagLib
         }
         outln"""    </p>"""
         outln"""</fieldset>"""
-        outln"""<fieldset>"""
-        outln"""    <legend>${message(code:'fc.planningtest')}</legend>"""
-        outln"""    <p/>"""
-        outln"""    <fieldset>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.directioncorrectgrad')}* [${message(code:'fc.grad')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestDirectionCorrectGrad" name="planningTestDirectionCorrectGrad" value="${fieldValue(bean:attrs.i,field:'planningTestDirectionCorrectGrad')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestDirectionCorrectGrad != attrs.i.contestRule.ruleValues.planningTestDirectionCorrectGrad) {
-            outln"""        !"""
-            attrs.ret.modifynum++
+        if (attrs.contest.showPlanningTest) {
+            outln"""<fieldset>"""
+            outln"""    <legend>${message(code:'fc.planningtest')}</legend>"""
+            outln"""    <p/>"""
+            outln"""    <fieldset>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.directioncorrectgrad')}* [${message(code:'fc.grad')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestDirectionCorrectGrad" name="planningTestDirectionCorrectGrad" value="${fieldValue(bean:attrs.i,field:'planningTestDirectionCorrectGrad')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestDirectionCorrectGrad != attrs.i.contestRule.ruleValues.planningTestDirectionCorrectGrad) {
+                outln"""        !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.directionpointspergrad')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestDirectionPointsPerGrad" name="planningTestDirectionPointsPerGrad" value="${fieldValue(bean:attrs.i,field:'planningTestDirectionPointsPerGrad')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestDirectionPointsPerGrad != attrs.i.contestRule.ruleValues.planningTestDirectionPointsPerGrad) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""    </fieldset>"""
+            outln"""    <fieldset>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.timecorrectsecond')}* [${message(code:'fc.time.s')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestTimeCorrectSecond" name="planningTestTimeCorrectSecond" value="${fieldValue(bean:attrs.i,field:'planningTestTimeCorrectSecond')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestTimeCorrectSecond != attrs.i.contestRule.ruleValues.planningTestTimeCorrectSecond) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.timepointspersecond')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestTimePointsPerSecond" name="planningTestTimePointsPerSecond" value="${fieldValue(bean:attrs.i,field:'planningTestTimePointsPerSecond')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestTimePointsPerSecond != attrs.i.contestRule.ruleValues.planningTestTimePointsPerSecond) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""    </fieldset>"""
+            outln"""    <fieldset>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.maxpoints')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestMaxPoints" name="planningTestMaxPoints" value="${fieldValue(bean:attrs.i,field:'planningTestMaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestMaxPoints != attrs.i.contestRule.ruleValues.planningTestMaxPoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.giventolate')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestPlanTooLatePoints" name="planningTestPlanTooLatePoints" value="${fieldValue(bean:attrs.i,field:'planningTestPlanTooLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestPlanTooLatePoints != attrs.i.contestRule.ruleValues.planningTestPlanTooLatePoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.exitroomtolate')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestExitRoomTooLatePoints" name="planningTestExitRoomTooLatePoints" value="${fieldValue(bean:attrs.i,field:'planningTestExitRoomTooLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.planningTestExitRoomTooLatePoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""        <p>"""
+            outln"""            <label>${message(code:'fc.planningtest.forbiddencalculators')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""            <br/>"""
+            outln"""            <input type="text" id="planningTestForbiddenCalculatorsPoints" name="planningTestForbiddenCalculatorsPoints" value="${fieldValue(bean:attrs.i,field:'planningTestForbiddenCalculatorsPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.planningTestForbiddenCalculatorsPoints != attrs.i.contestRule.ruleValues.planningTestForbiddenCalculatorsPoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""        </p>"""
+            outln"""    </fieldset>"""
+            outln"""</fieldset>"""
         }
-        outln"""        </p>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.directionpointspergrad')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestDirectionPointsPerGrad" name="planningTestDirectionPointsPerGrad" value="${fieldValue(bean:attrs.i,field:'planningTestDirectionPointsPerGrad')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestDirectionPointsPerGrad != attrs.i.contestRule.ruleValues.planningTestDirectionPointsPerGrad) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""    </fieldset>"""
-        outln"""    <fieldset>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.timecorrectsecond')}* [${message(code:'fc.time.s')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestTimeCorrectSecond" name="planningTestTimeCorrectSecond" value="${fieldValue(bean:attrs.i,field:'planningTestTimeCorrectSecond')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestTimeCorrectSecond != attrs.i.contestRule.ruleValues.planningTestTimeCorrectSecond) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.timepointspersecond')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestTimePointsPerSecond" name="planningTestTimePointsPerSecond" value="${fieldValue(bean:attrs.i,field:'planningTestTimePointsPerSecond')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestTimePointsPerSecond != attrs.i.contestRule.ruleValues.planningTestTimePointsPerSecond) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""    </fieldset>"""
-        outln"""    <fieldset>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.maxpoints')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestMaxPoints" name="planningTestMaxPoints" value="${fieldValue(bean:attrs.i,field:'planningTestMaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestMaxPoints != attrs.i.contestRule.ruleValues.planningTestMaxPoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.giventolate')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestPlanTooLatePoints" name="planningTestPlanTooLatePoints" value="${fieldValue(bean:attrs.i,field:'planningTestPlanTooLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestPlanTooLatePoints != attrs.i.contestRule.ruleValues.planningTestPlanTooLatePoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.exitroomtolate')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestExitRoomTooLatePoints" name="planningTestExitRoomTooLatePoints" value="${fieldValue(bean:attrs.i,field:'planningTestExitRoomTooLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.planningTestExitRoomTooLatePoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.planningtest.forbiddencalculators')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="planningTestForbiddenCalculatorsPoints" name="planningTestForbiddenCalculatorsPoints" value="${fieldValue(bean:attrs.i,field:'planningTestForbiddenCalculatorsPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.planningTestForbiddenCalculatorsPoints != attrs.i.contestRule.ruleValues.planningTestForbiddenCalculatorsPoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""    </fieldset>"""
-        outln"""</fieldset>"""
         outln"""<fieldset>"""
         outln"""    <legend>${message(code:'fc.flighttest')}</legend>"""
         outln"""    <p/>"""
@@ -194,17 +189,6 @@ class PointsTagLib
         outln"""    </fieldset>"""
         outln"""    <fieldset>"""
         outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.flighttest.procedureturnnotflown')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="flightTestProcedureTurnNotFlownPoints" name="flightTestProcedureTurnNotFlownPoints" value="${fieldValue(bean:attrs.i,field:'flightTestProcedureTurnNotFlownPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.flightTestProcedureTurnNotFlownPoints != attrs.i.contestRule.ruleValues.flightTestProcedureTurnNotFlownPoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
-        outln"""    </fieldset>"""
-        outln"""    <fieldset>"""
-        outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.minaltitudemissed')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
         outln"""            <input type="text" id="flightTestMinAltitudeMissedPoints" name="flightTestMinAltitudeMissedPoints" value="${fieldValue(bean:attrs.i,field:'flightTestMinAltitudeMissedPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
@@ -242,6 +226,19 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </p>"""
+        outln"""    </fieldset>"""
+        outln"""    <fieldset>"""
+        outln"""        <p>"""
+        outln"""            <label>${message(code:'fc.flighttest.procedureturnnotflown')}* [${message(code:'fc.points')}]:</label>"""
+        outln"""            <br/>"""
+        outln"""            <input type="text" id="flightTestProcedureTurnNotFlownPoints" name="flightTestProcedureTurnNotFlownPoints" value="${fieldValue(bean:attrs.i,field:'flightTestProcedureTurnNotFlownPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.flightTestProcedureTurnNotFlownPoints != attrs.i.contestRule.ruleValues.flightTestProcedureTurnNotFlownPoints) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </p>"""
+        outln"""    </fieldset>"""
+        outln"""    <fieldset>"""
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.badcoursestartlanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
@@ -258,15 +255,6 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </div>"""
-        outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.flighttest.landingtolate')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""            <br/>"""
-        outln"""            <input type="text" id="flightTestLandingToLatePoints" name="flightTestLandingToLatePoints" value="${fieldValue(bean:attrs.i,field:'flightTestLandingToLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.flightTestLandingToLatePoints != attrs.i.contestRule.ruleValues.flightTestLandingToLatePoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""        </p>"""
         outln"""    </fieldset>"""
         outln"""    <fieldset>"""
         outln"""        <p>"""
@@ -274,6 +262,15 @@ class PointsTagLib
         outln"""            <br/>"""
         outln"""            <input type="text" id="flightTestExitRoomTooLatePoints" name="flightTestExitRoomTooLatePoints" value="${fieldValue(bean:attrs.i,field:'flightTestExitRoomTooLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
         if (attrs.i.flightTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.flightTestExitRoomTooLatePoints) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </p>"""
+        outln"""        <p>"""
+        outln"""            <label>${message(code:'fc.flighttest.landingtolate')}* [${message(code:'fc.points')}]:</label>"""
+        outln"""            <br/>"""
+        outln"""            <input type="text" id="flightTestLandingToLatePoints" name="flightTestLandingToLatePoints" value="${fieldValue(bean:attrs.i,field:'flightTestLandingToLatePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.flightTestLandingToLatePoints != attrs.i.contestRule.ruleValues.flightTestLandingToLatePoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -287,6 +284,8 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </p>"""
+        outln"""    </fieldset>"""
+        outln"""    <fieldset>"""
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.safetyandrulesinfringement')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
@@ -296,6 +295,7 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </p>"""
+        /*
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.instructionsnotfollowed')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
@@ -314,6 +314,7 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </p>"""
+        */
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.safetyenvelopeopened')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
@@ -342,8 +343,7 @@ class PointsTagLib
         }
         outln"""        </p>"""
         outln"""    </fieldset>"""
-        outln"""</fieldset>"""
-        outln"""<fieldset>"""
+        outln"""    <fieldset>"""
         outln"""        <p>"""
         outln"""            <label>${message(code:'fc.flighttest.outsidecorridorcorrectsecond')}* [${message(code:'fc.time.s')}]:</label>"""
         outln"""            <br/>"""
@@ -362,102 +362,112 @@ class PointsTagLib
             attrs.ret.modifynum++
         }
         outln"""        </p>"""
+        outln"""    </fieldset>"""
         outln"""</fieldset>"""
-        outln"""<fieldset>"""
-        outln"""    <legend>${message(code:'fc.observationtest')}</legend>"""
-        outln"""    <p/>"""
-        outln"""    <p class="group">${message(code:'fc.observationtest.turnpoint')}</p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.turnpointnotfound')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestTurnpointNotFoundPoints" name="observationTestTurnpointNotFoundPoints" value="${fieldValue(bean:attrs.i,field:'observationTestTurnpointNotFoundPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestTurnpointNotFoundPoints != attrs.i.contestRule.ruleValues.observationTestTurnpointNotFoundPoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.turnpointfalse')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestTurnpointFalsePoints" name="observationTestTurnpointFalsePoints" value="${fieldValue(bean:attrs.i,field:'observationTestTurnpointFalsePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestTurnpointFalsePoints != attrs.i.contestRule.ruleValues.observationTestTurnpointFalsePoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""    <p class="group">${message(code:'fc.observationtest.enroute')}</p>"""
+        if (attrs.contest.showObservationTest) {
+            outln"""<fieldset>"""
+            outln"""    <legend>${message(code:'fc.observationtest')}</legend>"""
+            outln"""    <p/>"""
+            outln"""    <p class="group">${message(code:'fc.observationtest.turnpoint')}</p>"""
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.turnpointnotfound')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestTurnpointNotFoundPoints" name="observationTestTurnpointNotFoundPoints" value="${fieldValue(bean:attrs.i,field:'observationTestTurnpointNotFoundPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestTurnpointNotFoundPoints != attrs.i.contestRule.ruleValues.observationTestTurnpointNotFoundPoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.turnpointfalse')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestTurnpointFalsePoints" name="observationTestTurnpointFalsePoints" value="${fieldValue(bean:attrs.i,field:'observationTestTurnpointFalsePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestTurnpointFalsePoints != attrs.i.contestRule.ruleValues.observationTestTurnpointFalsePoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""    <p class="group">${message(code:'fc.observationtest.enroute')}</p>"""
 
-        outln"""    <div>"""
-        outln"""        <label>${message(code:'fc.observationtest.enroutevalueunit')}:</label>"""
-        outln"""        <br/>"""
-        for (def v in EnrouteValueUnit.values()) {
-            radioEntry("observationTestEnrouteValueUnit", v, attrs.i.observationTestEnrouteValueUnit == v, message(code:v.code), attrs)
-        }
-        attrs.ti[0]++
-        if (attrs.i.observationTestEnrouteValueUnit != attrs.i.contestRule.ruleValues.observationTestEnrouteValueUnit) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </div>"""
-        outln"""    <p/>"""
+            outln"""    <div>"""
+            outln"""        <label>${message(code:'fc.observationtest.enroutevalueunit')}:</label>"""
+            outln"""        <br/>"""
+            for (def v in EnrouteValueUnit.values()) {
+                radioEntry("observationTestEnrouteValueUnit", v, attrs.i.observationTestEnrouteValueUnit == v, message(code:v.code), attrs)
+            }
+            attrs.ti[0]++
+            if (attrs.i.observationTestEnrouteValueUnit != attrs.i.contestRule.ruleValues.observationTestEnrouteValueUnit) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </div>"""
+            outln"""    <p/>"""
 
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.enroutecorrectvalue')}*:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestEnrouteCorrectValue" name="observationTestEnrouteCorrectValue" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteCorrectValue')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestEnrouteCorrectValue != attrs.i.contestRule.ruleValues.observationTestEnrouteCorrectValue) {
-            outln"""    !"""
-            attrs.ret.modifynum++
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.enroutecorrectvalue')}*:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestEnrouteCorrectValue" name="observationTestEnrouteCorrectValue" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteCorrectValue')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestEnrouteCorrectValue != attrs.i.contestRule.ruleValues.observationTestEnrouteCorrectValue) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.enrouteinexactvalue')}*:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestEnrouteInexactValue" name="observationTestEnrouteInexactValue" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteInexactValue')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestEnrouteInexactValue != attrs.i.contestRule.ruleValues.observationTestEnrouteInexactValue) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.enrouteinexact')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestEnrouteInexactPoints" name="observationTestEnrouteInexactPoints" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteInexactPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestEnrouteInexactPoints != attrs.i.contestRule.ruleValues.observationTestEnrouteInexactPoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.enroutenotfound')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestEnrouteNotFoundPoints" name="observationTestEnrouteNotFoundPoints" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteNotFoundPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestEnrouteNotFoundPoints != attrs.i.contestRule.ruleValues.observationTestEnrouteNotFoundPoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""    <p>"""
+            outln"""        <label>${message(code:'fc.observationtest.enroutefalse')}* [${message(code:'fc.points')}]:</label>"""
+            outln"""        <br/>"""
+            outln"""        <input type="text" id="observationTestEnrouteFalsePoints" name="observationTestEnrouteFalsePoints" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteFalsePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.i.observationTestEnrouteFalsePoints != attrs.i.contestRule.ruleValues.observationTestEnrouteFalsePoints) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""    </p>"""
+            outln"""</fieldset>"""
         }
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.enrouteinexactvalue')}*:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestEnrouteInexactValue" name="observationTestEnrouteInexactValue" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteInexactValue')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestEnrouteInexactValue != attrs.i.contestRule.ruleValues.observationTestEnrouteInexactValue) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.enrouteinexact')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestEnrouteInexactPoints" name="observationTestEnrouteInexactPoints" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteInexactPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestEnrouteInexactPoints != attrs.i.contestRule.ruleValues.observationTestEnrouteInexactPoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.enroutenotfound')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestEnrouteNotFoundPoints" name="observationTestEnrouteNotFoundPoints" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteNotFoundPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestEnrouteNotFoundPoints != attrs.i.contestRule.ruleValues.observationTestEnrouteNotFoundPoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.observationtest.enroutefalse')}* [${message(code:'fc.points')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="observationTestEnrouteFalsePoints" name="observationTestEnrouteFalsePoints" value="${fieldValue(bean:attrs.i,field:'observationTestEnrouteFalsePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.observationTestEnrouteFalsePoints != attrs.i.contestRule.ruleValues.observationTestEnrouteFalsePoints) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""</fieldset>"""
         outln"""<fieldset>"""
-        if (attrs.i.precisionFlying) {
-            outln"""<legend>${message(code:'fc.landingtest.landing1')} (${message(code:'fc.landingtest.landing1.precision')})</legend>"""
+        if (attrs.i.landingTest1ShortRuleTitle) {
+            outln"""<legend>${message(code:'fc.landingtest.landing1')} (${attrs.i.landingTest1ShortRuleTitle})</legend>"""
         } else {
             outln"""<legend>${message(code:'fc.landingtest.landing1')}</legend>"""
         }
+        outln"""    <p>${attrs.i.landingTest1LongRuleTitle}"""
+        if (attrs.i.landingTest1LongRuleTitle != attrs.i.contestRule.ruleValues.landingTest1.LongRuleTitle) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.maxpoints')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1MaxPoints" name="landingTest1MaxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1MaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1MaxPoints != attrs.i.contestRule.ruleValues.landingTest1MaxPoints) {
+        if (attrs.i.landingTest1MaxPoints != attrs.i.contestRule.ruleValues.landingTest1.MaxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -466,7 +476,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.nolanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1NoLandingPoints" name="landingTest1NoLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1NoLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest1NoLandingPoints) {
+        if (attrs.i.landingTest1NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest1.NoLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -475,7 +485,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.outsidelanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1OutsideLandingPoints" name="landingTest1OutsideLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1OutsideLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest1OutsideLandingPoints) {
+        if (attrs.i.landingTest1OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest1.OutsideLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -484,7 +494,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.rollingoutside')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1RollingOutsidePoints" name="landingTest1RollingOutsidePoints" value="${fieldValue(bean:attrs.i,field:'landingTest1RollingOutsidePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest1RollingOutsidePoints) {
+        if (attrs.i.landingTest1RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest1.RollingOutsidePoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -493,7 +503,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.powerinbox')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1PowerInBoxPoints" name="landingTest1PowerInBoxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1PowerInBoxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest1PowerInBoxPoints) {
+        if (attrs.i.landingTest1PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest1.PowerInBoxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -502,7 +512,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundwithouttouching')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1GoAroundWithoutTouchingPoints" name="landingTest1GoAroundWithoutTouchingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1GoAroundWithoutTouchingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest1GoAroundWithoutTouchingPoints) {
+        if (attrs.i.landingTest1GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest1.GoAroundWithoutTouchingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -511,7 +521,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundinsteadstop')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1GoAroundInsteadStopPoints" name="landingTest1GoAroundInsteadStopPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1GoAroundInsteadStopPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest1GoAroundInsteadStopPoints) {
+        if (attrs.i.landingTest1GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest1.GoAroundInsteadStopPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -520,7 +530,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.abnormallanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1AbnormalLandingPoints" name="landingTest1AbnormalLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1AbnormalLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest1AbnormalLandingPoints) {
+        if (attrs.i.landingTest1AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest1.AbnormalLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -529,33 +539,59 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1NotAllowedAerodynamicAuxiliariesPoints" name="landingTest1NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:attrs.i,field:'landingTest1NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest1NotAllowedAerodynamicAuxiliariesPoints) {
+        if (attrs.i.landingTest1NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest1.NotAllowedAerodynamicAuxiliariesPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest1PenaltyCalculator" name="landingTest1PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest1PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest1PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest1PenaltyCalculator) {
+        if (attrs.i.landingTest1PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest1.PenaltyCalculator) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.landingtest.printcalculatorvalues')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="landingTest1PrintCalculatorValues" name="landingTest1PrintCalculatorValues" value="${fieldValue(bean:attrs.i,field:'landingTest1PrintCalculatorValues')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.landingTest1PrintCalculatorValues != attrs.i.contestRule.ruleValues.landingTest1.PrintCalculatorValues) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </p>"""
+        outln"""    <div style="margin-right:1%;">"""
+        outln"""        <label>${message(code:'fc.contestrule.landings')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <select id="takeover_rule1" tabIndex="${attrs.ti[0]++}" style="width:auto;">"""
+        outln"""            <option value="">${message(code:'fc.contestrule.landings.select')}</option>"""
+        for (def landing_rule in ContestRulesLanding.GetLanding1Rules()) {
+            outln"""        <option value="${landing_rule}">${landing_rule.data.LongRuleTitle}</option>"""
+        }
+        outln"""        </select>"""
+        outln"""        <input type="button" value="${message(code:'fc.contestrule.landings.takeover')}" onclick="landing_takeover_click('1');"/>"""
+        outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
-        if (attrs.i.precisionFlying) {
-            outln"""<legend>${message(code:'fc.landingtest.landing2')} (${message(code:'fc.landingtest.landing2.precision')})</legend>"""
+        if (attrs.i.landingTest2ShortRuleTitle) {
+            outln"""<legend>${message(code:'fc.landingtest.landing2')} (${attrs.i.landingTest2ShortRuleTitle})</legend>"""
         } else {
             outln"""<legend>${message(code:'fc.landingtest.landing2')}</legend>"""
         }
+        outln"""    <p>${attrs.i.landingTest2LongRuleTitle}"""
+        if (attrs.i.landingTest2LongRuleTitle != attrs.i.contestRule.ruleValues.landingTest2.LongRuleTitle) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.maxpoints')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2MaxPoints" name="landingTest2MaxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2MaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2MaxPoints != attrs.i.contestRule.ruleValues.landingTest2MaxPoints) {
+        if (attrs.i.landingTest2MaxPoints != attrs.i.contestRule.ruleValues.landingTest2.MaxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -564,7 +600,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.nolanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2NoLandingPoints" name="landingTest2NoLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2NoLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest2NoLandingPoints) {
+        if (attrs.i.landingTest2NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest2.NoLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -573,7 +609,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.outsidelanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2OutsideLandingPoints" name="landingTest2OutsideLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2OutsideLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest2OutsideLandingPoints) {
+        if (attrs.i.landingTest2OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest2.OutsideLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -582,7 +618,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.rollingoutside')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2RollingOutsidePoints" name="landingTest2RollingOutsidePoints" value="${fieldValue(bean:attrs.i,field:'landingTest2RollingOutsidePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest2RollingOutsidePoints) {
+        if (attrs.i.landingTest2RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest2.RollingOutsidePoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -591,7 +627,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.powerinbox')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2PowerInBoxPoints" name="landingTest2PowerInBoxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2PowerInBoxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest2PowerInBoxPoints) {
+        if (attrs.i.landingTest2PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest2.PowerInBoxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -600,7 +636,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundwithouttouching')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2GoAroundWithoutTouchingPoints" name="landingTest2GoAroundWithoutTouchingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2GoAroundWithoutTouchingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest2GoAroundWithoutTouchingPoints) {
+        if (attrs.i.landingTest2GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest2.GoAroundWithoutTouchingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -609,7 +645,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundinsteadstop')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2GoAroundInsteadStopPoints" name="landingTest2GoAroundInsteadStopPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2GoAroundInsteadStopPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest2GoAroundInsteadStopPoints) {
+        if (attrs.i.landingTest2GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest2.GoAroundInsteadStopPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -618,7 +654,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.abnormallanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2AbnormalLandingPoints" name="landingTest2AbnormalLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2AbnormalLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest2AbnormalLandingPoints) {
+        if (attrs.i.landingTest2AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest2.AbnormalLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -627,7 +663,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2NotAllowedAerodynamicAuxiliariesPoints" name="landingTest2NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest2NotAllowedAerodynamicAuxiliariesPoints) {
+        if (attrs.i.landingTest2NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest2.NotAllowedAerodynamicAuxiliariesPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -636,33 +672,59 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.powerinair')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2PowerInAirPoints" name="landingTest2PowerInAirPoints" value="${fieldValue(bean:attrs.i,field:'landingTest2PowerInAirPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest2PowerInAirPoints) {
+        if (attrs.i.landingTest2PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest2.PowerInAirPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest2PenaltyCalculator" name="landingTest2PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest2PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest2PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest2PenaltyCalculator) {
+        if (attrs.i.landingTest2PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest2.PenaltyCalculator) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.landingtest.printcalculatorvalues')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="landingTest2PrintCalculatorValues" name="landingTest2PrintCalculatorValues" value="${fieldValue(bean:attrs.i,field:'landingTest2PrintCalculatorValues')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.landingTest2PrintCalculatorValues != attrs.i.contestRule.ruleValues.landingTest2.PrintCalculatorValues) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </p>"""
+        outln"""    <div style="margin-right:1%;">"""
+        outln"""        <label>${message(code:'fc.contestrule.landings')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <select id="takeover_rule2" tabIndex="${attrs.ti[0]++}" style="width:auto;">"""
+        outln"""            <option value="">${message(code:'fc.contestrule.landings.select')}</option>"""
+        for (def landing_rule in ContestRulesLanding.GetLanding2Rules()) {
+            outln"""        <option value="${landing_rule}">${landing_rule.data.LongRuleTitle}</option>"""
+        }
+        outln"""        </select>"""
+        outln"""        <input type="button" value="${message(code:'fc.contestrule.landings.takeover')}" onclick="landing_takeover_click('2');"/>"""
+        outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
-        if (attrs.i.precisionFlying) {
-            outln"""<legend>${message(code:'fc.landingtest.landing3')} (${message(code:'fc.landingtest.landing3.precision')})</legend>"""
+        if (attrs.i.landingTest3ShortRuleTitle) {
+            outln"""<legend>${message(code:'fc.landingtest.landing3')} (${attrs.i.landingTest3ShortRuleTitle})</legend>"""
         } else {
             outln"""<legend>${message(code:'fc.landingtest.landing3')}</legend>"""
         }
+        outln"""    <p>${attrs.i.landingTest3LongRuleTitle}"""
+        if (attrs.i.landingTest3LongRuleTitle != attrs.i.contestRule.ruleValues.landingTest3.LongRuleTitle) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.maxpoints')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3MaxPoints" name="landingTest3MaxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3MaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3MaxPoints != attrs.i.contestRule.ruleValues.landingTest3MaxPoints) {
+        if (attrs.i.landingTest3MaxPoints != attrs.i.contestRule.ruleValues.landingTest3.MaxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -671,7 +733,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.nolanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3NoLandingPoints" name="landingTest3NoLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3NoLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest3NoLandingPoints) {
+        if (attrs.i.landingTest3NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest3.NoLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -680,7 +742,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.outsidelanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3OutsideLandingPoints" name="landingTest3OutsideLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3OutsideLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest3OutsideLandingPoints) {
+        if (attrs.i.landingTest3OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest3.OutsideLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -689,7 +751,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.rollingoutside')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3RollingOutsidePoints" name="landingTest3RollingOutsidePoints" value="${fieldValue(bean:attrs.i,field:'landingTest3RollingOutsidePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest3RollingOutsidePoints) {
+        if (attrs.i.landingTest3RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest3.RollingOutsidePoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -698,7 +760,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.powerinbox')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3PowerInBoxPoints" name="landingTest3PowerInBoxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3PowerInBoxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest3PowerInBoxPoints) {
+        if (attrs.i.landingTest3PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest3.PowerInBoxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -707,7 +769,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundwithouttouching')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3GoAroundWithoutTouchingPoints" name="landingTest3GoAroundWithoutTouchingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3GoAroundWithoutTouchingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest3GoAroundWithoutTouchingPoints) {
+        if (attrs.i.landingTest3GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest3.GoAroundWithoutTouchingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -716,7 +778,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundinsteadstop')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3GoAroundInsteadStopPoints" name="landingTest3GoAroundInsteadStopPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3GoAroundInsteadStopPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest3GoAroundInsteadStopPoints) {
+        if (attrs.i.landingTest3GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest3.GoAroundInsteadStopPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -725,7 +787,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.abnormallanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3AbnormalLandingPoints" name="landingTest3AbnormalLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3AbnormalLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest3AbnormalLandingPoints) {
+        if (attrs.i.landingTest3AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest3.AbnormalLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -734,7 +796,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3NotAllowedAerodynamicAuxiliariesPoints" name="landingTest3NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest3NotAllowedAerodynamicAuxiliariesPoints) {
+        if (attrs.i.landingTest3NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest3.NotAllowedAerodynamicAuxiliariesPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -743,7 +805,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.powerinair')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3PowerInAirPoints" name="landingTest3PowerInAirPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3PowerInAirPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest3PowerInAirPoints) {
+        if (attrs.i.landingTest3PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest3.PowerInAirPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -752,33 +814,59 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.flapsinair')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3FlapsInAirPoints" name="landingTest3FlapsInAirPoints" value="${fieldValue(bean:attrs.i,field:'landingTest3FlapsInAirPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3FlapsInAirPoints != attrs.i.contestRule.ruleValues.landingTest3FlapsInAirPoints) {
+        if (attrs.i.landingTest3FlapsInAirPoints != attrs.i.contestRule.ruleValues.landingTest3.FlapsInAirPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest3PenaltyCalculator" name="landingTest3PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest3PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest3PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest3PenaltyCalculator) {
+        if (attrs.i.landingTest3PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest3.PenaltyCalculator) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.landingtest.printcalculatorvalues')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="landingTest3PrintCalculatorValues" name="landingTest13PrintCalculatorValues" value="${fieldValue(bean:attrs.i,field:'landingTest3PrintCalculatorValues')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.landingTest3PrintCalculatorValues != attrs.i.contestRule.ruleValues.landingTest3.PrintCalculatorValues) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </p>"""
+        outln"""    <div style="margin-right:1%;">"""
+        outln"""        <label>${message(code:'fc.contestrule.landings')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <select id="takeover_rule3" tabIndex="${attrs.ti[0]++}" style="width:auto;">"""
+        outln"""            <option value="">${message(code:'fc.contestrule.landings.select')}</option>"""
+        for (def landing_rule in ContestRulesLanding.GetLanding3Rules()) {
+            outln"""        <option value="${landing_rule}">${landing_rule.data.LongRuleTitle}</option>"""
+        }
+        outln"""        </select>"""
+        outln"""        <input type="button" value="${message(code:'fc.contestrule.landings.takeover')}" onclick="landing_takeover_click('3');"/>"""
+        outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
-        if (attrs.i.precisionFlying) {
-            outln"""<legend>${message(code:'fc.landingtest.landing4')} (${message(code:'fc.landingtest.landing4.precision')})</legend>"""
+        if (attrs.i.landingTest4ShortRuleTitle) {
+            outln"""<legend>${message(code:'fc.landingtest.landing4')} (${attrs.i.landingTest4ShortRuleTitle})</legend>"""
         } else {
             outln"""<legend>${message(code:'fc.landingtest.landing4')}</legend>"""
         }
+        outln"""    <p>${attrs.i.landingTest4LongRuleTitle}"""
+        if (attrs.i.landingTest4LongRuleTitle != attrs.i.contestRule.ruleValues.landingTest4.LongRuleTitle) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
+        outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.maxpoints')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4MaxPoints" name="landingTest4MaxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4MaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4MaxPoints != attrs.i.contestRule.ruleValues.landingTest4MaxPoints) {
+        if (attrs.i.landingTest4MaxPoints != attrs.i.contestRule.ruleValues.landingTest4.MaxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -787,7 +875,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.nolanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4NoLandingPoints" name="landingTest4NoLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4NoLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest4NoLandingPoints) {
+        if (attrs.i.landingTest4NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest4.NoLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -796,7 +884,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.outsidelanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4OutsideLandingPoints" name="landingTest4OutsideLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4OutsideLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest4OutsideLandingPoints) {
+        if (attrs.i.landingTest4OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest4.OutsideLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -805,7 +893,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.rollingoutside')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4RollingOutsidePoints" name="landingTest4RollingOutsidePoints" value="${fieldValue(bean:attrs.i,field:'landingTest4RollingOutsidePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest4RollingOutsidePoints) {
+        if (attrs.i.landingTest4RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest4.RollingOutsidePoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -814,7 +902,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.powerinbox')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4PowerInBoxPoints" name="landingTest4PowerInBoxPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4PowerInBoxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest4PowerInBoxPoints) {
+        if (attrs.i.landingTest4PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest4.PowerInBoxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -823,7 +911,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundwithouttouching')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4GoAroundWithoutTouchingPoints" name="landingTest4GoAroundWithoutTouchingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4GoAroundWithoutTouchingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest4GoAroundWithoutTouchingPoints) {
+        if (attrs.i.landingTest4GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest4.GoAroundWithoutTouchingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -832,7 +920,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.goaroundinsteadstop')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4GoAroundInsteadStopPoints" name="landingTest4GoAroundInsteadStopPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4GoAroundInsteadStopPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest4GoAroundInsteadStopPoints) {
+        if (attrs.i.landingTest4GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest4.GoAroundInsteadStopPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -841,7 +929,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.abnormallanding')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4AbnormalLandingPoints" name="landingTest4AbnormalLandingPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4AbnormalLandingPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest4AbnormalLandingPoints) {
+        if (attrs.i.landingTest4AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest4.AbnormalLandingPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -850,7 +938,7 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4NotAllowedAerodynamicAuxiliariesPoints" name="landingTest4NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:attrs.i,field:'landingTest4NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest4NotAllowedAerodynamicAuxiliariesPoints) {
+        if (attrs.i.landingTest4NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest4.NotAllowedAerodynamicAuxiliariesPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -859,21 +947,40 @@ class PointsTagLib
         outln"""        <label>${message(code:'fc.landingtest.touchingobstacle')}* [${message(code:'fc.points')}]:</label>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4TouchingObstaclePoints" name="landingTest4TouchingObstaclePoints" value="${fieldValue(bean:attrs.i,field:'landingTest4TouchingObstaclePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4TouchingObstaclePoints != attrs.i.contestRule.ruleValues.landingTest4TouchingObstaclePoints) {
+        if (attrs.i.landingTest4TouchingObstaclePoints != attrs.i.contestRule.ruleValues.landingTest4.TouchingObstaclePoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>"""
-        outln"""        <a href="/fc/docs/help_${session.showLanguage}.html#landings" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>"""
         outln"""        <br/>"""
         outln"""        <input type="text" id="landingTest4PenaltyCalculator" name="landingTest4PenaltyCalculator" value="${fieldValue(bean:attrs.i,field:'landingTest4PenaltyCalculator')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.landingTest4PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest4PenaltyCalculator) {
+        if (attrs.i.landingTest4PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest4.PenaltyCalculator) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.landingtest.printcalculatorvalues')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="landingTest4PrintCalculatorValues" name="landingTest4PrintCalculatorValues" value="${fieldValue(bean:attrs.i,field:'landingTest4PrintCalculatorValues')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.landingTest4PrintCalculatorValues != attrs.i.contestRule.ruleValues.landingTest4.PrintCalculatorValues) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </p>"""
+        outln"""    <div style="margin-right:1%;">"""
+        outln"""        <label>${message(code:'fc.contestrule.landings')}:</label>"""
+        outln"""        <br/>"""
+        outln"""        <select id="takeover_rule4" tabIndex="${attrs.ti[0]++}" style="width:auto;">"""
+        outln"""            <option value="">${message(code:'fc.contestrule.landings.select')}</option>"""
+        for (def landing_rule in ContestRulesLanding.GetLanding4Rules()) {
+            outln"""        <option value="${landing_rule}">${landing_rule.data.LongRuleTitle}</option>"""
+        }
+        outln"""        </select>"""
+        outln"""        <input type="button" value="${message(code:'fc.contestrule.landings.takeover')}" onclick="landing_takeover_click('4');"/>"""
+        outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
         if (attrs.ret.modifynum > 0) {
@@ -888,15 +995,19 @@ class PointsTagLib
         outln"""        <div>"""
         checkBox("printPointsGeneral", attrs.i.printPointsGeneral, 'fc.general', attrs)
         outln"""        </div>"""
-        outln"""        <div>"""
-        checkBox("printPointsPlanningTest", attrs.i.printPointsPlanningTest, 'fc.planningtest', attrs) 
-        outln"""        </div>"""
+        if (attrs.contest.showPlanningTest) {
+            outln"""        <div>"""
+            checkBox("printPointsPlanningTest", attrs.i.printPointsPlanningTest, 'fc.planningtest', attrs) 
+            outln"""        </div>"""
+        }
         outln"""        <div>"""
         checkBox("printPointsFlightTest", attrs.i.printPointsFlightTest, 'fc.flighttest', attrs)
         outln"""        </div>"""
-        outln"""        <div>"""
-        checkBox("printPointsObservationTest", attrs.i.printPointsObservationTest, 'fc.observationtest', attrs)
-        outln"""        </div>"""
+        if (attrs.contest.showObservationTest) {
+            outln"""        <div>"""
+            checkBox("printPointsObservationTest", attrs.i.printPointsObservationTest, 'fc.observationtest', attrs)
+            outln"""        </div>"""
+        }
         outln"""        <div>"""
         checkBox("printPointsLandingTest1", attrs.i.printPointsLandingTest1, 'fc.landingtest.landing1', attrs)
         outln"""        </div>"""
@@ -920,15 +1031,6 @@ class PointsTagLib
         outln"""        </div>"""
         outln"""    </p>"""
         outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.general.printlandingcalculatorvalues')}:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="printLandingCalculatorValues" name="printLandingCalculatorValues" value="${fieldValue(bean:attrs.i,field:'printLandingCalculatorValues')}" tabIndex="${attrs.ti[0]++}"/>"""
-        if (attrs.i.printLandingCalculatorValues != attrs.i.contestRule.ruleValues.printLandingCalculatorValues) {
-            outln"""    !"""
-            attrs.ret.modifynum++
-        }
-        outln"""    </p>"""
-        outln"""    <p>"""
         outln"""        <div>"""
         checkBox("printPointsZero", attrs.i.printPointsZero, 'fc.general.printpointszero', attrs)
         outln"""        </div>"""
@@ -940,6 +1042,18 @@ class PointsTagLib
         outln"""        </div>"""
         outln"""    </p>"""
         outln"""</fieldset>"""
+        outln"""<script>"""
+        outln"""    function landing_takeover_click(landingNum) {"""
+        outln"""        var takeover_select = \$("#takeover_rule" + landingNum);"""
+        outln"""        if (takeover_select) {"""
+        if (attrs.i == attrs.contest) {
+            outln"""        window.location.href = "/fc/contest/takeover_landingpoints/${attrs.contest.id}?landingnum=" + landingNum + "&landingrule=" + takeover_select.val();"""
+        } else {
+            outln"""        window.location.href = "/fc/resultClass/takeover_landingpoints/${attrs.i.id}?landingnum=" + landingNum + "&landingrule=" + takeover_select.val();"""
+        }
+        outln"""        }"""
+        outln"""    }"""
+        outln"""</script>"""
     }
     
     // --------------------------------------------------------------------------------------------------------------------
@@ -1133,17 +1247,6 @@ class PointsTagLib
                 outln"""                            <td class="modify"/>"""
             }
             outln"""                            </tr>"""
-            if (attrs.i.printPointsZero || attrs.i.flightTestProcedureTurnNotFlownPoints > 0) {
-                outln"""                        <tr class="value">"""
-                outln"""                            <td class="name">${message(code:'fc.flighttest.procedureturnnotflown')}</td>"""
-                outln"""                            <td class="value">${attrs.i.flightTestProcedureTurnNotFlownPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.flightTestProcedureTurnNotFlownPoints != attrs.i.contestRule.ruleValues.flightTestProcedureTurnNotFlownPoints) {
-                    outln"""                        <td class="modify">!</td>"""
-                } else {
-                    outln"""                        <td class="modify"/>"""
-                }
-                outln"""                        </tr>"""
-            }
             if (attrs.i.printPointsZero || attrs.i.flightTestMinAltitudeMissedPoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.minaltitudemissed')}</td>"""
@@ -1186,6 +1289,17 @@ class PointsTagLib
                 }
                 outln"""                        </tr>"""
             }
+            if (attrs.i.printPointsZero || attrs.i.flightTestProcedureTurnNotFlownPoints > 0) {
+                outln"""                        <tr class="value">"""
+                outln"""                            <td class="name">${message(code:'fc.flighttest.procedureturnnotflown')}</td>"""
+                outln"""                            <td class="value">${attrs.i.flightTestProcedureTurnNotFlownPoints} ${message(code:'fc.points')}</td>"""
+                if (attrs.i.flightTestProcedureTurnNotFlownPoints != attrs.i.contestRule.ruleValues.flightTestProcedureTurnNotFlownPoints) {
+                    outln"""                        <td class="modify">!</td>"""
+                } else {
+                    outln"""                        <td class="modify"/>"""
+                }
+                outln"""                        </tr>"""
+            }
             if (attrs.i.printPointsZero || attrs.i.flightTestBadCourseStartLandingPoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursestartlanding')}</td>"""
@@ -1212,6 +1326,17 @@ class PointsTagLib
                     outln"""                        </tr>"""
                 }
             }
+           if (attrs.i.printPointsZero || attrs.i.flightTestExitRoomTooLatePoints > 0) {
+                outln"""                        <tr class="value">"""
+                outln"""                            <td class="name">${message(code:'fc.planningtest.exitroomtolate')}</td>"""
+                outln"""                            <td class="value">${attrs.i.flightTestExitRoomTooLatePoints} ${message(code:'fc.points')}</td>"""
+                if (attrs.i.flightTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.flightTestExitRoomTooLatePoints) {
+                    outln"""                        <td class="modify">!</td>"""
+                } else {
+                    outln"""                        <td class="modify"/>"""
+                }
+                outln"""                        </tr>"""
+            }
             if (attrs.i.printPointsZero || attrs.i.flightTestLandingToLatePoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.landingtolate')}</td>"""
@@ -1223,18 +1348,7 @@ class PointsTagLib
                 }
                 outln"""                        </tr>"""
             }
-            if (attrs.i.printPointsZero || attrs.i.flightTestExitRoomTooLatePoints > 0) {
-                outln"""                        <tr class="value">"""
-                outln"""                            <td class="name">${message(code:'fc.planningtest.exitroomtolate')}</td>"""
-                outln"""                            <td class="value">${attrs.i.flightTestExitRoomTooLatePoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.flightTestExitRoomTooLatePoints != attrs.i.contestRule.ruleValues.flightTestExitRoomTooLatePoints) {
-                    outln"""                        <td class="modify">!</td>"""
-                } else {
-                    outln"""                        <td class="modify"/>"""
-                }
-                outln"""                        </tr>"""
-            }
-            if (attrs.i.printPointsZero || attrs.i.flightTestGivenToLatePoints > 0) {
+             if (attrs.i.printPointsZero || attrs.i.flightTestGivenToLatePoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.giventolate')}</td>"""
                 outln"""                            <td class="value">${attrs.i.flightTestGivenToLatePoints} ${message(code:'fc.points')}</td>"""
@@ -1256,6 +1370,7 @@ class PointsTagLib
                 }
                 outln"""                        </tr>"""
             }
+            /*
             if (attrs.i.printPointsZero || attrs.i.flightTestInstructionsNotFollowedPoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.instructionsnotfollowed')}</td>"""
@@ -1278,6 +1393,7 @@ class PointsTagLib
                 }
                 outln"""                        </tr>"""
             }
+            */
             if (attrs.i.printPointsZero || attrs.i.flightTestSafetyEnvelopeOpenedPoints > 0) {
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.flighttest.safetyenvelopeopened')}</td>"""
@@ -1437,8 +1553,8 @@ class PointsTagLib
             outln"""                        <tbody>"""
             outln"""                            <tr class="title">"""
             if (attrs.i.printPointsLandingTest2 || attrs.i.printPointsLandingTest3 || attrs.i.printPointsLandingTest4) {
-                if (attrs.i.precisionFlying) {
-                    outln"""                        <th colspan="3">${message(code:'fc.landingtest.landing1')} (${message(code:'fc.landingtest.landing1.precision')})</th>"""
+                if (attrs.i.landingTest1ShortRuleTitle) {
+                    outln"""                        <th colspan="3">${message(code:'fc.landingtest.landing1')} (${attrs.i.landingTest1ShortRuleTitle})</th>"""
                 } else {
                     outln"""                        <th colspan="3">${message(code:'fc.landingtest.landing1')}</th>"""
                 }
@@ -1449,7 +1565,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.maxpoints')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest1MaxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest1MaxPoints != attrs.i.contestRule.ruleValues.landingTest1MaxPoints) {
+            if (attrs.i.landingTest1MaxPoints != attrs.i.contestRule.ruleValues.landingTest1.MaxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1458,7 +1574,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.nolanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest1NoLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest1NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest1NoLandingPoints) {
+            if (attrs.i.landingTest1NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest1.NoLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1467,7 +1583,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.outsidelanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest1OutsideLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest1OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest1OutsideLandingPoints) {
+            if (attrs.i.landingTest1OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest1.OutsideLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1477,7 +1593,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.rollingoutside')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest1RollingOutsidePoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest1RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest1RollingOutsidePoints) {
+                if (attrs.i.landingTest1RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest1.RollingOutsidePoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1487,7 +1603,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.powerinbox')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest1PowerInBoxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest1PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest1PowerInBoxPoints) {
+            if (attrs.i.landingTest1PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest1.PowerInBoxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1497,7 +1613,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundwithouttouching')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest1GoAroundWithoutTouchingPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest1GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest1GoAroundWithoutTouchingPoints) {
+                if (attrs.i.landingTest1GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest1.GoAroundWithoutTouchingPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1508,7 +1624,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundinsteadstop')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest1GoAroundInsteadStopPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest1GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest1GoAroundInsteadStopPoints) {
+                if (attrs.i.landingTest1GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest1.GoAroundInsteadStopPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1518,7 +1634,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.abnormallanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest1AbnormalLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest1AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest1AbnormalLandingPoints) {
+            if (attrs.i.landingTest1AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest1.AbnormalLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1528,7 +1644,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest1NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest1NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest1NotAllowedAerodynamicAuxiliariesPoints) {
+                if (attrs.i.landingTest1NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest1.NotAllowedAerodynamicAuxiliariesPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1536,8 +1652,8 @@ class PointsTagLib
                 outln"""                        </tr>"""
             }
             outln"""                            <tr class="penaltycalculator">"""
-            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.printLandingCalculatorValues,attrs.i.landingTest1PenaltyCalculator)}</td>"""
-            if (attrs.i.landingTest1PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest1PenaltyCalculator) {
+            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.landingTest1PrintCalculatorValues,attrs.i.landingTest1PenaltyCalculator)}</td>"""
+            if (attrs.i.landingTest1PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest1.PenaltyCalculator) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1554,8 +1670,8 @@ class PointsTagLib
             outln"""                    <table class="landingpoints">"""
             outln"""                        <tbody>"""
             outln"""                            <tr class="title">"""
-            if (attrs.i.precisionFlying) {
-                outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing2')} (${message(code:'fc.landingtest.landing2.precision')})</th>"""
+            if (attrs.i.landingTest2ShortRuleTitle) {
+                outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing2')} (${attrs.i.landingTest2ShortRuleTitle})</th>"""
             } else {
                 outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing2')}</th>"""
             }
@@ -1563,7 +1679,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.maxpoints')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest2MaxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest2MaxPoints != attrs.i.contestRule.ruleValues.landingTest2MaxPoints) {
+            if (attrs.i.landingTest2MaxPoints != attrs.i.contestRule.ruleValues.landingTest2.MaxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1572,7 +1688,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.nolanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest2NoLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest2NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest2NoLandingPoints) {
+            if (attrs.i.landingTest2NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest2.NoLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1581,7 +1697,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.outsidelanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest2OutsideLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest2OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest2OutsideLandingPoints) {
+            if (attrs.i.landingTest2OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest2.OutsideLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1591,7 +1707,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.rollingoutside')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest2RollingOutsidePoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest2RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest2RollingOutsidePoints) {
+                if (attrs.i.landingTest2RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest2.RollingOutsidePoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1601,7 +1717,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.powerinbox')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest2PowerInBoxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest2PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest2PowerInBoxPoints) {
+            if (attrs.i.landingTest2PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest2.PowerInBoxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1611,7 +1727,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundwithouttouching')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest2GoAroundWithoutTouchingPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest2GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest2GoAroundWithoutTouchingPoints) {
+                if (attrs.i.landingTest2GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest2.GoAroundWithoutTouchingPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1622,7 +1738,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundinsteadstop')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest2GoAroundInsteadStopPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest2GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest2GoAroundInsteadStopPoints) {
+                if (attrs.i.landingTest2GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest2.GoAroundInsteadStopPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1632,7 +1748,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.abnormallanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest2AbnormalLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest2AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest2AbnormalLandingPoints) {
+            if (attrs.i.landingTest2AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest2.AbnormalLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1642,7 +1758,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest2NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest2NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest2NotAllowedAerodynamicAuxiliariesPoints) {
+                if (attrs.i.landingTest2NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest2.NotAllowedAerodynamicAuxiliariesPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1653,7 +1769,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.powerinair')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest2PowerInAirPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest2PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest2PowerInAirPoints) {
+                if (attrs.i.landingTest2PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest2.PowerInAirPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1661,8 +1777,8 @@ class PointsTagLib
                 outln"""                        </tr>"""
             }
             outln"""                            <tr class="penaltycalculator">"""
-            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.printLandingCalculatorValues,attrs.i.landingTest2PenaltyCalculator)}</td>"""
-            if (attrs.i.landingTest2PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest2PenaltyCalculator) {
+            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.landingTest2PrintCalculatorValues,attrs.i.landingTest2PenaltyCalculator)}</td>"""
+            if (attrs.i.landingTest2PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest2.PenaltyCalculator) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1679,8 +1795,8 @@ class PointsTagLib
             outln"""                    <table class="landingpoints">"""
             outln"""                        <tbody>"""
             outln"""                            <tr class="title">"""
-            if (attrs.i.precisionFlying) {
-                outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing3')} (${message(code:'fc.landingtest.landing3.precision')})</th>"""
+            if (attrs.i.landingTest3ShortRuleTitle) {
+                outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing3')} (${attrs.i.landingTest3ShortRuleTitle})</th>"""
             } else {
                 outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing3')}</th>"""
             }
@@ -1688,7 +1804,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.maxpoints')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest3MaxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest3MaxPoints != attrs.i.contestRule.ruleValues.landingTest3MaxPoints) {
+            if (attrs.i.landingTest3MaxPoints != attrs.i.contestRule.ruleValues.landingTest3.MaxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1697,7 +1813,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.nolanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest3NoLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest3NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest3NoLandingPoints) {
+            if (attrs.i.landingTest3NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest3.NoLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1706,7 +1822,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.outsidelanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest3OutsideLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest3OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest3OutsideLandingPoints) {
+            if (attrs.i.landingTest3OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest3.OutsideLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1716,7 +1832,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.rollingoutside')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest3RollingOutsidePoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest3RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest3RollingOutsidePoints) {
+                if (attrs.i.landingTest3RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest3.RollingOutsidePoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1726,7 +1842,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.powerinbox')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest3PowerInBoxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest3PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest3PowerInBoxPoints) {
+            if (attrs.i.landingTest3PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest3.PowerInBoxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1736,7 +1852,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundwithouttouching')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest3GoAroundWithoutTouchingPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest3GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest3GoAroundWithoutTouchingPoints) {
+                if (attrs.i.landingTest3GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest3.GoAroundWithoutTouchingPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1747,7 +1863,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundinsteadstop')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest3GoAroundInsteadStopPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest3GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest3GoAroundInsteadStopPoints) {
+                if (attrs.i.landingTest3GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest3.GoAroundInsteadStopPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1757,7 +1873,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.abnormallanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest3AbnormalLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest3AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest3AbnormalLandingPoints) {
+            if (attrs.i.landingTest3AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest3.AbnormalLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1767,7 +1883,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest3NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest3NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest3NotAllowedAerodynamicAuxiliariesPoints) {
+                if (attrs.i.landingTest3NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest3.NotAllowedAerodynamicAuxiliariesPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1778,7 +1894,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.powerinair')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest3PowerInAirPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest3PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest3PowerInAirPoints) {
+                if (attrs.i.landingTest3PowerInAirPoints != attrs.i.contestRule.ruleValues.landingTest3.PowerInAirPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1789,7 +1905,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.flapsinair')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest3FlapsInAirPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest3FlapsInAirPoints != attrs.i.contestRule.ruleValues.landingTest3FlapsInAirPoints) {
+                if (attrs.i.landingTest3FlapsInAirPoints != attrs.i.contestRule.ruleValues.landingTest3.FlapsInAirPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1797,8 +1913,8 @@ class PointsTagLib
                 outln"""                        </tr>"""
             }
             outln"""                            <tr class="penaltycalculator">"""
-            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.printLandingCalculatorValues,attrs.i.landingTest3PenaltyCalculator)}</td>"""
-            if (attrs.i.landingTest3PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest3PenaltyCalculator) {
+            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.landingTest3PrintCalculatorValues,attrs.i.landingTest3PenaltyCalculator)}</td>"""
+            if (attrs.i.landingTest3PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest3.PenaltyCalculator) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1815,8 +1931,8 @@ class PointsTagLib
             outln"""                    <table class="landingpoints">"""
             outln"""                        <tbody>"""
             outln"""                            <tr class="title">"""
-            if (attrs.i.precisionFlying) {
-                outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing4')} (${message(code:'fc.landingtest.landing4.precision')})</th>"""
+            if (attrs.i.landingTest4ShortRuleTitle) {
+                outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing4')} (${attrs.i.landingTest4ShortRuleTitle})</th>"""
             } else {
                 outln"""                            <th colspan="3">${message(code:'fc.landingtest.landing4')}</th>"""
             }
@@ -1824,7 +1940,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.maxpoints')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest4MaxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest4MaxPoints != attrs.i.contestRule.ruleValues.landingTest4MaxPoints) {
+            if (attrs.i.landingTest4MaxPoints != attrs.i.contestRule.ruleValues.landingTest4.MaxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1833,7 +1949,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.nolanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest4NoLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest4NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest4NoLandingPoints) {
+            if (attrs.i.landingTest4NoLandingPoints != attrs.i.contestRule.ruleValues.landingTest4.NoLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1842,7 +1958,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.outsidelanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest4OutsideLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest4OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest4OutsideLandingPoints) {
+            if (attrs.i.landingTest4OutsideLandingPoints != attrs.i.contestRule.ruleValues.landingTest4.OutsideLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1852,7 +1968,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.rollingoutside')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest4RollingOutsidePoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest4RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest4RollingOutsidePoints) {
+                if (attrs.i.landingTest4RollingOutsidePoints != attrs.i.contestRule.ruleValues.landingTest4.RollingOutsidePoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1862,7 +1978,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.powerinbox')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest4PowerInBoxPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest4PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest4PowerInBoxPoints) {
+            if (attrs.i.landingTest4PowerInBoxPoints != attrs.i.contestRule.ruleValues.landingTest4.PowerInBoxPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1872,7 +1988,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundwithouttouching')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest4GoAroundWithoutTouchingPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest4GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest4GoAroundWithoutTouchingPoints) {
+                if (attrs.i.landingTest4GoAroundWithoutTouchingPoints != attrs.i.contestRule.ruleValues.landingTest4.GoAroundWithoutTouchingPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1883,7 +1999,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.goaroundinsteadstop')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest4GoAroundInsteadStopPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest4GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest4GoAroundInsteadStopPoints) {
+                if (attrs.i.landingTest4GoAroundInsteadStopPoints != attrs.i.contestRule.ruleValues.landingTest4.GoAroundInsteadStopPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1893,7 +2009,7 @@ class PointsTagLib
             outln"""                            <tr class="value">"""
             outln"""                                <td class="name">${message(code:'fc.landingtest.abnormallanding')}</td>"""
             outln"""                                <td class="value">${attrs.i.landingTest4AbnormalLandingPoints} ${message(code:'fc.points')}</td>"""
-            if (attrs.i.landingTest4AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest4AbnormalLandingPoints) {
+            if (attrs.i.landingTest4AbnormalLandingPoints != attrs.i.contestRule.ruleValues.landingTest4.AbnormalLandingPoints) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1903,7 +2019,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest4NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest4NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest4NotAllowedAerodynamicAuxiliariesPoints) {
+                if (attrs.i.landingTest4NotAllowedAerodynamicAuxiliariesPoints != attrs.i.contestRule.ruleValues.landingTest4.NotAllowedAerodynamicAuxiliariesPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1914,7 +2030,7 @@ class PointsTagLib
                 outln"""                        <tr class="value">"""
                 outln"""                            <td class="name">${message(code:'fc.landingtest.touchingobstacle')}</td>"""
                 outln"""                            <td class="value">${attrs.i.landingTest4TouchingObstaclePoints} ${message(code:'fc.points')}</td>"""
-                if (attrs.i.landingTest4TouchingObstaclePoints != attrs.i.contestRule.ruleValues.landingTest4TouchingObstaclePoints) {
+                if (attrs.i.landingTest4TouchingObstaclePoints != attrs.i.contestRule.ruleValues.landingTest4.TouchingObstaclePoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""
@@ -1922,8 +2038,8 @@ class PointsTagLib
                 outln"""                        </tr>"""
             }
             outln"""                            <tr class="penaltycalculator">"""
-            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.printLandingCalculatorValues,attrs.i.landingTest4PenaltyCalculator)}</td>"""
-            if (attrs.i.landingTest4PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest4PenaltyCalculator) {
+            outln"""                                <td class="value" colspan="2">${message(code:'fc.landingtest.penalties')}: ${FcMath.GetPrintLandingCalculatorValues(attrs.i.landingTest4PrintCalculatorValues,attrs.i.landingTest4PenaltyCalculator)}</td>"""
+            if (attrs.i.landingTest4PenaltyCalculator != attrs.i.contestRule.ruleValues.landingTest4.PenaltyCalculator) {
                 outln"""                            <td class="modify">!</td>"""
             } else {
                 outln"""                            <td class="modify"/>"""
@@ -1938,7 +2054,7 @@ class PointsTagLib
                 outln"""<div style="page-break-before: always; color: white; height: 2px;">.</div>"""
             }
             points_printed = true
-            for (String landingfield_imagename in attrs.i.landingFieldImageName.split(',')) {
+            for (String landingfield_imagename in FcService.GetLandingAirfieldImageNames(attrs.i)) {
                 if (landingfield_imagename.contains('*')) {
                     landingfield_imagename = landingfield_imagename.replace('*', "_${attrs.lang}")
                 }

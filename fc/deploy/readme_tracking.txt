@@ -1,6 +1,11 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 4.1.0
+-------------
+- Adjustments to Live Tracking API changes (Parse and creation of contests)
+- Creation of ANR navigation tasks added (not operable, some adjustments on the server needed)
+
 Changes 3.3.0
 -------------
 - Live Tracking task settings for the 'Results Service':

@@ -1563,6 +1563,9 @@ class KmlService
                             xml.Data(name:"contestmapairfields") {
                                 xml.value routeInstance.contestMapAirfields
                             }
+                            xml.Data(name:"contestmapairfieldsdata") {
+                                xml.value routeInstance.contestMapAirfieldsData
+                            }
                             xml.Data(name:"contestmapcircle") {
                                 xml.value getYesNo(routeInstance.contestMapCircle)
                             }

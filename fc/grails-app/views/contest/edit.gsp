@@ -360,6 +360,9 @@
                                             <g:actionSubmit action="livetracking_contestvisibility_setprivate" value="${message(code:'fc.livetracking.contestvisibility.setprivate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         
+                                        <g:if test="${BootStrap.global.IsDevelopmentEnvironment()}" >
+                                            <g:actionSubmit action="livetracking_scorecards" value="${message(code:'fc.livetracking.scorecards')}" tabIndex="${ti[0]++}"/>
+                                        </g:if>
                                         
                                     </g:if>
                                     <g:else>

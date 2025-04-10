@@ -45,6 +45,11 @@ class Defs
 
     static final String EXE_GPSBABEL                                   = "C:/Program Files/GPSBabel/gpsbabel.exe"
     
+    static final String LIVETRACKING_SCORECARD_ANR                     = "FAI ANR"
+    static final String LIVETRACKING_SCORECARD_PF                      = "FAI Precision"
+    static final String LIVETRACKING_SCORECARD_RF                      = "FAI Air Rally"
+    final static List LIVETRACKING_SCORECARDS = [LIVETRACKING_SCORECARD_ANR, LIVETRACKING_SCORECARD_PF, LIVETRACKING_SCORECARD_RF]
+
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
     static final String LIVETRACKING_DISPLAY_MAP                       = "/map/"
     static final String LIVETRACKING_RESULTS_SERVICE                   = "/resultsservice/"
@@ -190,7 +195,7 @@ class Defs
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
-    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 14"
+    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 15"
     static final String ROUTEEXPORT_SETTINGS                           = "settings"
     static final String ROUTEEXPORT_MAPSETTINGS                        = "mapsettings"
     static final String ROUTEEXPORT_TURNPOINTS                         = "turnpoints"
@@ -211,4 +216,6 @@ class Defs
     static final String DEFAULT_CONFIG_SERVER                          = "https://config.flightcontest.de"
     static final String CONFIG_NAME                                    = "config.groovy"
     static final String FCMAP_COUNTER_NAME                             = "fcmap_counter.groovy"
+    
+    static final String DEFAULT_EXTERNAL_TASKCREATOR                   = "https://www.airrats.cl/taskcreator?admin" 
 }

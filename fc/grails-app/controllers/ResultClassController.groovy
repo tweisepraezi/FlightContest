@@ -150,7 +150,7 @@ class ResultClassController {
 		}
 	}
 
-	def calculatepoints = {
+	def recalculatepenalties = {
 		def resultclass = fcService.calculatepointsResultClass(params)
 		flash.message = resultclass.message
 		redirect(action:editpoints,id:params.id)
@@ -422,5 +422,15 @@ class ResultClassController {
 				lang:session.printLanguage
 			   ]
 	}
+    
+    def takeover_landingpoints = {
+        ResultClass resultclass_instance = ResultClass.get(params.id)
+        if (params.landingnum && params.landingrule) {
+            fcService.SetLandingRulePoints(resultclass_instance, params.landingnum, params.landingrule)
+            resultclass_instance.save()
+            flash.message = message(code:'fc.contestrule.landings.takeover.done', args:[params.landingnum])
+        }
+        redirect(action:'editpoints',id:params.id)
+    }
 }
 	

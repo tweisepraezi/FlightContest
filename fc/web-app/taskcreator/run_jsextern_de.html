@@ -7,7 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="css/airrats.css" />
 		<link rel="stylesheet" type="text/css" href="js/jquery.ajax-combobox/css/jquery.ajax-combobox.css"/>
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
-		<script defer src="https://maps.googleapis.com/maps/api/js?callback=InitMap&amp;libraries=geometry&amp;v=beta&amp;key=AIzaSyDFCicW-Cz5hVwe3sBG5qyWdyzBfWiRIY0"></script>
+		<script defer src="https://maps.googleapis.com/maps/api/js?callback=InitMap&amp;libraries=geometry&amp;v=beta&amp;loading=async&amp;key=AIzaSyDFCicW-Cz5hVwe3sBG5qyWdyzBfWiRIY0"></script>
 		<script src="js/jquery-3.6.0.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
 		<!--<script src="js/jquery.blockUI.js"></script>-->
@@ -31,10 +31,13 @@
 			<br>
 			<label for="paper_size">Papier-Größe:</label>
 			<select id="paper_size">
-				<option value="A3">A3 (297 x 420 mm)</option>
-				<option value="A4">A4 (210 x 297 mm)</option>
-				<option value="Letter">Letter (8.5 x 11 in)</option>
-				<option value="Folio" selected>Folio (8.5 x 13 in)</option>
+				<option value="A1">A1 594 x 841 mm (23.4 x 33.1 inches)</option>
+				<option value="A2">A2 420 x 594 mm (16.5 x 23.4 inches)</option>
+				<option value="A3">A3 297 x 420 mm (11.7 x 16.5 inches)</option>
+				<option value="A3+">A3+: 329 x 483 mm (13 x 19 inches)</option>
+				<option value="A4">A4 210 x 297 mm (8.3 x 11.7 inches)</option>
+				<option value="Letter">Carta 215.9 x 279.4 mm (8.5 x 11 inches)</option>
+				<option value="Folio" selected>Oficio 220 x 280 mm (8.5 x 13 inches)</option>
 				<option value="user">Benutzer-definiert</option>
 			</select>
 			<label for="paper_width">Papier-Breite (in):</label>
@@ -214,10 +217,29 @@
 					<label for="seconds_to_sp" title="Zusätzliche Sekunden zum SP (max. 255)">Sekunden:</label>
 					<span><input id="seconds_to_sp" class="seconds_to_sp" type="text" style="text-align: center; width:25px" value="0" title="Zusätzliche Sekunden zum SP (max. 255)"></span>
 					<!--<button id="test1">T1</button>-->
+					<label for="page_guide" style="margin: 0px;" title="Seiten-Leitfaden">SL:</label>
+					<select id="page_guide" class= "page_guide" title="Seiten-Leitfaden" style="width: 60px;">
+						<option value="None">No</option>
+						<option value="A1">A1</option>
+						<option value="A1W">A1 W</option>
+						<option value="A2">A2</option>
+						<option value="A2W">A2 W</option>
+						<option value="A3">A3</option>
+						<option value="A3W" selected>A3 W</option>
+						<option value="A3+">A3+</option>
+						<option value="A3+W">A3+ W</option>
+						<option value="A4">A4</option>
+						<option value="A4W">A4 W</option>
+						<option value="Letter">Karte</option>
+						<option value="LetterW">Carta W</option>
+						<option value="Folio">Oficio</option>
+						<option value="FolioW">Oficio W</option>
+					</select>
 				</div>
 				<div style="margin-top: 3px;">
 					<label for="notes"  style="margin-left: 0px;" title="Notizen">Notizen:</label>
-					<textarea id="notes" class="notes" style="width:360px; height:15px; vertical-align:middle;" title="Notizen">Check Both Categories: TPs, Total Distance, Map Name, Speed, Spd to SP, Seconds, Mag Dec, Arc descriptions, Scenic Leg descriptions
+					<textarea id="notes" class="notes" style="width:360px; height:15px; vertical-align:middle;" title="Notizen">Check List:
+Both Categories: TPs, Total Distance, Map Name, Speed, Spd to SP, Seconds, Mag Dec, Arc descriptions, Scenic Leg descriptions, References
 Unlimited Category: False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Unsort
 Advanced Category: False photos, TP heading tilt zoom, EPs, EPs heading tilt zoom, EP change, Sort</textarea>
 				</div>
@@ -406,7 +428,7 @@ Advanced Category: Refs, False photos, TP heading tilt zoom, EPs, EPs heading ti
 		</div>
 		<div id="blockMessage" style="display:none;"></div>
 		<figure id="print_figure_scale" style="margin:0px; overflow:hidden;">
-			<img id="print_map_scale" src="images/scale_200K_272,355mm_en.png" style="display:none; width:1743px; margin-top: 10px;"/>
+			<img id="print_map_scale" src="images/scale_200K_272,355mm_en.png" style="display:none; width:1848px; margin-top: 10px;"/>
 		</figure>
 	</body>
 </html>

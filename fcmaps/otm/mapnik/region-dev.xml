@@ -1,0 +1,1365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map
+[
+	<!ENTITY % entities SYSTEM "inc/entities.xml.inc">
+	%entities;
+]>
+
+<Map background-color="#ffffff" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over" buffer-size="256">
+	<!-- style definitions -->
+	&fontset-settings;
+
+    <!-- roads-small-grade5 -->
+    <!-- ================== -->
+    <Style name="roads-small-grade5">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'track') and ([tracktype] = 'grade5')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+    <Layer name="roads-small-grade5">
+        <StyleName>roads-small-grade5</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- roads-small-grade4 -->
+    <!-- ================== -->
+    <Style name="roads-small-grade4">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'track') and ([tracktype] = 'grade4')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+    <Layer name="roads-small-grade4">
+        <StyleName>roads-small-grade4</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- roads-small-grade3 -->
+    <!-- ================== -->
+    <Style name="roads-small-grade3">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'track') and ([tracktype] = 'grade3')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+    <Layer name="roads-small-grade3">
+        <StyleName>roads-small-grade3</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- roads-small-grade2 -->
+    <!-- ================== -->
+    <Style name="roads-small-grade2">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'track') and ([tracktype] = 'grade2')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+    <Layer name="roads-small-grade2">
+        <StyleName>roads-small-grade2</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- roads-small-grade1 -->
+    <!-- ================== -->
+    <Style name="roads-small-grade1">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'track') and ([tracktype] = 'grade1')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+    <Layer name="roads-small-grade1">
+        <StyleName>roads-small-grade1</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- landuse -->
+    <!-- ======= -->
+    <Style name="landuse">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([natural] = 'wood' or [landuse] = 'wood' or [landuse] = 'forest')</Filter>
+            <LineSymbolizer stroke="#61983c" stroke-width="0.3" stroke-opacity="0.3" />
+            <PolygonSymbolizer fill="#b7d8a1" />
+        </Rule>
+    </Style>
+	<Layer name="landuse">
+		<StyleName>landuse</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,way_area,landuse,leisure,"natural",wetland,leaf_type,amenity,crop,orchard FROM planet_osm_polygon ORDER BY (CASE WHEN landuse='forest' THEN 0 ELSE 1 END) asc) AS landuse </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- hillshade -->
+    <!-- ========= -->
+	<!--
+    <Style name="hillshade">
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom17;
+            <RasterSymbolizer comp-op="grain-merge" opacity="0.83" scaling="bilinear" />
+        </Rule>
+    </Style>
+    <Layer name="hillshade">
+        <StyleName>hillshade</StyleName>
+        <Datasource>
+            <Parameter name="type">gdal</Parameter>
+            <Parameter name="file">dem/hillshade-30m-jpeg.tif</Parameter>
+            <Parameter name="format">tiff</Parameter>
+        </Datasource>
+    </Layer>
+	-->
+	
+    <!-- landuse-over-hillshade -->
+    <!-- ====================== -->
+    <Style name="landuse-over-hillshade">
+        <Rule>
+            &maxscale_zoom10;
+            &minscale_zoom17;
+            <Filter>([natural] = 'scree')</Filter>
+            <PolygonPatternSymbolizer file="symbols-otm/scree.png"/>
+        </Rule>
+        <!-- again forest quite transparent over hillshade to optimize result -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([natural] = 'wood' or [landuse] = 'wood' or [landuse] = 'forest')</Filter>
+            <PolygonSymbolizer fill="#ffffd9" comp-op="soft-light" fill-opacity="0.5" />
+        </Rule>
+        <!-- forest outlines again -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([natural] = 'wood' or [landuse] = 'wood' or [landuse] = 'forest')</Filter>
+            <LineSymbolizer stroke="#61983c" stroke-width="0.3" stroke-opacity="0.4" />
+        </Rule>
+        <!-- glaciers -->
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom17;
+            <Filter>([natural] = 'glacier')</Filter>
+            <PolygonSymbolizer fill="#d0f8ff" fill-opacity="0.5"/>
+        </Rule>
+        <!-- residential fills -->
+        <Rule>
+            &maxscale_zoom10;
+            &minscale_zoom13;
+            <Filter>[landuse] = 'residential' or [landuse] = 'industrial' or [amenity] = 'university' or [amenity] = 'school' or [amenity] = 'hospital' or [landuse] = 'farmyard' or (([power]='plant' or [power]='substation') and ([building]=null or [building]!='no'))</Filter>
+            <PolygonSymbolizer fill="#aaaaaa" fill-opacity="0.3" />
+        </Rule>
+    </Style>
+	<Layer name="landuse-over-hillshade">
+		<StyleName>landuse-over-hillshade</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,landuse,"natural",leaf_type,amenity,building,power FROM planet_osm_polygon) AS landuse </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- waterpolys -->
+    <!-- ========== -->
+    <Style name="waterpolys">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <PolygonSymbolizer fill="#a3dde8" />
+        </Rule>
+    </Style>
+    <Layer name="waterpolys">
+        <StyleName>waterpolys</StyleName>
+        <Datasource>
+            <Parameter name="type">shape</Parameter>
+            <Parameter name="file">data/water-polygons-split-3857/water_polygons</Parameter>
+        </Datasource>
+    </Layer>
+	
+    <!-- waterway-lines -->
+    <!-- ============== -->
+    <Style name="waterway-lines">
+        <!-- important rivers -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom12;
+            <Filter>([waterway] = 'river') and ([intermittent] != 'yes')</Filter>
+            <LineSymbolizer stroke="#1d4dff" stroke-width="1.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>([waterway] = 'river') and ([intermittent] = 'yes')</Filter>
+            <LineSymbolizer stroke="#1d4dff" stroke-width="1.5" stroke-dasharray="1.5,2" />
+        </Rule>
+        <!-- streams and drains -->
+        <!-- always water (intermittent!=yes) -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom12;
+            <Filter>([waterway] = 'stream') and ([tunnel] != 'yes' and [tunnel] != 'culvert') and ([intermittent] != 'yes')</Filter>
+            <LineSymbolizer stroke="#1d4dff" stroke-width="0.5" />
+        </Rule>
+        <!-- less important canals -->
+        <Rule>
+            &maxscale_zoom11;	<!-- 10 -->
+            &minscale_zoom17;
+            <Filter>([waterway] = 'canal') and ([tunnel] != 'yes' and [tunnel] != 'culvert') and not (([CEMT] = 'IV') or ([CEMT] = 'Va') or ([CEMT] = 'Vb') or ([CEMT] = 'VIa') or ([CEMT] = 'VIb') or ([CEMT] = 'VIc') or ([CEMT] = 'VII') or ([motorboat] = 'yes'))</Filter>
+            <LineSymbolizer stroke="#1d4dff" stroke-width="1.8" stroke-opacity="0.5" />
+            <LinePatternSymbolizer file="symbols-otm/canal.png" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;	<!-- 10 -->
+            &minscale_zoom17;
+            <Filter>([waterway] = 'canal') and ([tunnel] = 'yes' or [tunnel] = 'culvert') and not (([CEMT] = 'IV') or ([CEMT] = 'Va') or ([CEMT] = 'Vb') or ([CEMT] = 'VIa') or ([CEMT] = 'VIb') or ([CEMT] = 'VIc') or ([CEMT] = 'VII') or ([motorboat] = 'yes'))</Filter>
+            <LineSymbolizer stroke="#1d4dff" stroke-width="1.2" stroke-opacity="0.5" stroke-dasharray="5,5" />
+            <!--LinePatternSymbolizer file="symbols-otm/canal.png" /-->
+        </Rule>
+
+    </Style>
+	<Layer name="waterway-lines">
+		<StyleName>waterway-lines</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,"CEMT",intermittent,motorboat,tunnel,waterway FROM planet_osm_line) AS water </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- water-polygons -->
+    <!-- ============== -->
+    <Style name="water-polygons">
+        <!-- riverbanks -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>(([waterway] = 'riverbank') and ([way_area] &gt; 250000))</Filter>
+            <LineSymbolizer stroke="blue" stroke-width="0.8" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([waterway] = 'riverbank')</Filter>
+            <PolygonSymbolizer fill="#a3dde8" />
+        </Rule>
+        <!-- water areas -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom13;
+            <Filter>([natural] = 'water' or [landuse] = 'basin' or [landuse] = 'reservoir') and ([way_area] &gt; 50000) and ([waterway] != 'riverbank') and ([intermittent] != 'yes')</Filter>
+            <PolygonSymbolizer fill="#a3dde8" />
+            <LineSymbolizer stroke="blue" stroke-width="0.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom12;
+            <Filter>([natural] = 'water' or [landuse] = 'basin' or [landuse] = 'reservoir') and ([way_area] &lt; 50000) and ([waterway] != 'riverbank') and ([intermittent] != 'yes')</Filter>
+            <PolygonSymbolizer fill="#a3dde8" />
+            <LineSymbolizer stroke="blue" stroke-width="0.5" stroke-opacity="0.5" />
+        </Rule>
+        <!-- intermittent -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom13;
+            <Filter>([natural] = 'water' or [landuse] = 'basin' or [landuse] = 'reservoir') and ([way_area] &gt; 50000) and ([waterway] != 'riverbank') and ([intermittent] = 'yes')</Filter>
+            <PolygonPatternSymbolizer file="symbols-otm/water-intermittent.png"/>
+            <LineSymbolizer stroke="blue" stroke-width="0.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom12;
+            <Filter>([natural] = 'water' or [landuse] = 'basin' or [landuse] = 'reservoir') and ([way_area] &lt; 50000) and ([waterway] != 'riverbank') and ([intermittent] = 'yes')</Filter>
+            <PolygonPatternSymbolizer file="symbols-otm/water-intermittent.png"/>
+            <LineSymbolizer stroke="blue" stroke-width="0.5" stroke-opacity="0.5" />
+        </Rule>
+    </Style>
+	<Layer name="water-polygons">
+		<StyleName>water-polygons</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,"CEMT",motorboat,"natural",landuse,leisure,waterway,intermittent,way_area FROM planet_osm_polygon) AS water </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- landuse-over-water -->
+    <!-- ================== -->
+    <Style name="landuse-over-water">
+        <Rule>
+            &maxscale_zoom10;
+            &minscale_zoom17;
+            <Filter>(([natural] = 'wetland') and ([wetland] = 'swamp'))</Filter>
+            <PolygonSymbolizer fill="#73b64b" fill-opacity="0.3"/>
+            <PolygonPatternSymbolizer file="symbols-otm/wetland.png"/>
+        </Rule>
+        <Rule>
+            &maxscale_zoom10;
+            &minscale_zoom17;
+            <Filter>(([natural] = 'wetland') and ([wetland] = 'bog'))</Filter>
+            <PolygonSymbolizer fill="#d9cf57" fill-opacity="0.2"/>
+            <PolygonPatternSymbolizer file="symbols-otm/wetland.png"/>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>(([natural] = 'wetland') and ([wetland] = 'reedbed'))</Filter>
+            <PolygonPatternSymbolizer file="symbols-otm/reedbed.png"/>
+        </Rule>
+        <Rule>
+            &maxscale_zoom10;
+            &minscale_zoom17;
+            <Filter>(([natural] = 'wetland') and not (([wetland] = 'bog') or ([wetland] = 'swamp') or ([wetland] = 'tidalflat') or ([wetland] = 'reedbed')))</Filter>
+            <PolygonSymbolizer fill="#304eff" fill-opacity="0.1"/>
+            <PolygonPatternSymbolizer file="symbols-otm/wetland.png"/>
+        </Rule>
+        
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom11;
+            <Filter>(([natural] = 'wetland') and ([wetland] = 'tidalflat'))</Filter>
+            <PolygonPatternSymbolizer file="symbols-otm/tidalflat_z9.png" opacity="0.7"/>
+        </Rule>
+    </Style>
+	<Layer name="landuse-over-water">
+		<StyleName>landuse-over-water</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,"natural",wetland FROM planet_osm_polygon) AS landuse </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- tunnels -->
+    <!-- ======= -->
+    <Style name="tunnels-casing">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway' or [highway] = 'trunk'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="5" stroke-dasharray="6,4" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway_link' or [highway] = 'trunk_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="3" stroke-dasharray="6,4" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'primary_link' or [highway] = 'secondary' or [highway] = 'tertiary' or [highway] = 'tertiary_link')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" stroke-dasharray="6,4" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'primary'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="3.5" stroke-dasharray="6,4" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.7" stroke-dasharray="6,4" />
+        </Rule>
+    </Style>
+    <Style name="tunnels-fill">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway'</Filter>
+            <LineSymbolizer stroke="#fdd8a0" stroke-width="3" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'trunk'</Filter>
+            <LineSymbolizer stroke="&color_roads_2;" stroke-width="3" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway_link'</Filter>
+            <LineSymbolizer stroke="#fdd8a0" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'primary' or [highway] = 'trunk_link'</Filter>
+            <LineSymbolizer stroke="&color_roads_2;" stroke-width="1.9" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary' or [highway] = 'primary_link'</Filter>
+            <LineSymbolizer stroke="&color_roads_2;" stroke-width="1" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'tertiary' or [highway] = 'tertiary_link'</Filter>
+            <LineSymbolizer stroke="white" stroke-width="1" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary_link'</Filter>
+            <LineSymbolizer stroke="&color_roads_2;" stroke-width="0.8" />
+        </Rule>
+    </Style>
+	<Layer name="tunnels">
+		<StyleName>tunnels-casing</StyleName>
+		<StyleName>tunnels-fill</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,tracktype,oneway,attraction,sport,leisure,surface FROM planet_osm_line WHERE (tunnel = 'yes') AND (highway IS NOT NULL OR attraction='summer_toboggan' OR leisure='track')) AS roads </Parameter> 
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- roads-residential -->
+    <!-- ================= -->
+    <Style name="roads-residential">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'residential')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'residential')</Filter>
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+    <Layer name="roads-residential">
+        <StyleName>roads-residential</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- buildings -->
+    <!-- ========= -->
+    <Style name="buildings">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+             <LineSymbolizer stroke="black" stroke-width="0.4" />
+            <PolygonSymbolizer fill="black" />
+        </Rule>
+    </Style>
+	<Layer name="buildings">
+		<StyleName>buildings</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,building,leisure,railway,amenity,aeroway FROM planet_osm_polygon WHERE (building IS NOT NULL AND building != 'no') OR (aeroway = 'terminal')) AS buildings </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- areas -->
+    <!-- ===== -->
+    <Style name="areas">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[landuse] = 'residential'</Filter>
+            <PolygonSymbolizer fill="#ffacb7" /> 
+            
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[landuse] = 'industrial'</Filter>
+            <PolygonSymbolizer fill="#aaaaaa" /> 
+            
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[landuse] = 'commercial'</Filter>
+            <PolygonSymbolizer fill="#aaaaaa" /> 
+            
+        </Rule>
+    </Style>
+	<Layer name="areas">
+		<StyleName>areas</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,landuse,leisure,way_area FROM planet_osm_polygon) AS area </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- contours20 -->
+    <!-- ========== -->
+    <Style name="contours20">
+        <!-- 100 m -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([ele] % 100 = 0) and ([ele] != 0)</Filter>
+            <LineSymbolizer stroke="#c45700" stroke-width="0.4" />
+            <TextSymbolizer fontset-name="sans-book" size="4" fill="#bc7e55" upright="left" halo-radius="1" halo-fill="rgba(255,255,255,1)" halo-comp-op="soft-light" placement="line" max-char-angle-delta="10" label-position-tolerance="100" minimum-path-length="200" spacing="200">[ele]</TextSymbolizer>
+        </Rule>
+        <!-- 20 m -->
+         <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([ele] % 100 != 0) and ([ele] % 20 = 0) and ([ele] != 0)</Filter>
+            <LineSymbolizer stroke="#c45700" stroke-width="0.2" smooth="0.5" />
+        </Rule>
+    </Style>
+    <Layer name="contours20">
+        <StyleName>contours20</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
+            <Parameter name="dbname">contours_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- contours50 -->
+    <!-- ========== -->
+    <Style name="contours50">
+        <!-- 250 m -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([ele] % 500 = 0) and ([ele] != 0)</Filter>
+            <LineSymbolizer stroke="#c45700" stroke-width="0.4" />
+            <TextSymbolizer fontset-name="sans-book" size="4" fill="#bc7e55" upright="left" halo-radius="1" halo-fill="rgba(255,255,255,1)" halo-comp-op="soft-light" placement="line" max-char-angle-delta="10" label-position-tolerance="100" minimum-path-length="200" spacing="200">[ele]</TextSymbolizer>
+        </Rule>
+        <!-- 50 m -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([ele] % 500 != 0) and ([ele] % 50 = 0) and ([ele] != 0)</Filter>
+            <LineSymbolizer stroke="#c45700" stroke-width="0.2" />
+        </Rule>
+    </Style>
+	<Layer name="contours50">
+		<StyleName>contours50</StyleName>
+		<Datasource>
+            <Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
+			<Parameter name="dbname">contours_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- contours100 -->
+    <!-- =========== -->
+    <Style name="contours100">
+        <!-- 500 m -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([ele] % 500 = 0) and ([ele] != 0)</Filter>
+            <LineSymbolizer stroke="#c45700" stroke-width="0.4" />
+            <TextSymbolizer fontset-name="sans-book" size="4" fill="#bc7e55" upright="left" halo-radius="1" halo-fill="rgba(255,255,255,1)" halo-comp-op="soft-light" placement="line" max-char-angle-delta="10" label-position-tolerance="100" minimum-path-length="200" spacing="200">[ele]</TextSymbolizer>
+        </Rule>
+        <!-- 100 m -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([ele] % 500 != 0) and ([ele] % 100 = 0) and ([ele] != 0)</Filter>
+            <LineSymbolizer stroke="#c45700" stroke-width="0.2" />
+        </Rule>
+    </Style>
+    <Layer name="contours100">
+        <StyleName>contours100</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
+            <Parameter name="dbname">contours_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- borders -->
+    <!-- ======= -->
+    <Style name="borders">
+        <!-- admin_level = 2 -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>([admin_level] = '2')</Filter>
+            <LineSymbolizer stroke="#cb82d9" stroke-width="10" stroke-opacity="0.2" />
+            <LineSymbolizer stroke="#8301b1" stroke-width="0.8" stroke-opacity="0.9" />
+        </Rule>
+        <!-- admin_level = 4 -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>([admin_level] = '4')</Filter>
+            <LineSymbolizer stroke="#cb82d9" stroke-width="4" stroke-opacity="0.2" />
+            <LineSymbolizer stroke="#8301b1" stroke-width="0.5" stroke-opacity="0.8" />
+        </Rule>
+        <!-- admin_level = 5 -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>([admin_level] = '5')</Filter>
+            <LineSymbolizer stroke="#cb82d9" stroke-width="3" stroke-opacity="0.1" />
+            <LineSymbolizer stroke="#c82fe5" stroke-width="0.6" />
+        </Rule>
+        <!-- admin_level = 6 -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>([admin_level] = '6')</Filter>
+            <LineSymbolizer stroke="#cb82d9" stroke-width="3" stroke-opacity="0.1" />
+            <LineSymbolizer stroke="#c82fe5" stroke-width="0.4" />
+        </Rule>
+    </Style>
+	<Layer name="borders">
+		<StyleName>borders</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,boundary,admin_level,name FROM planet_osm_line WHERE boundary IN ('administrative') AND admin_level IN ('0', '1', '2', '3')) AS borders </Parameter> <!-- Flight Contest -->
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- railways-lowzoom -->
+    <!-- ================ -->
+    <Style name="railways-lowzoom">
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom11;
+            <Filter>[railway] = 'rail' and [tunnel] != 'yes'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.5" stroke-opacity="0.9" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom11;
+            <Filter>[railway] = 'light_rail' and [tunnel] != 'yes'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1" stroke-opacity="0.9" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom11;
+            <Filter>[railway] = 'rail' and [tunnel] = 'yes'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.5" stroke-opacity="0.5" stroke-dasharray="4,4" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom9;
+            &minscale_zoom11;
+            <Filter>[railway] = 'light_rail' and [tunnel] = 'yes'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="4,4" />
+        </Rule>
+    </Style>
+	<Layer name="railways-lowzoom">
+		<StyleName>railways-lowzoom</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,railway,"service",tunnel FROM railways) AS railways</Parameter>
+			<Parameter name="dbname">lowzoom_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- airports-line -->
+    <!-- ============= -->
+    <Style name="airports-line-casing">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([aeroway] = 'runway')</Filter>
+            <LineSymbolizer stroke="#666666" stroke-width="2" stroke-linecap="butt" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([aeroway] = 'taxiway')</Filter>
+            <LineSymbolizer stroke="#666666" stroke-width="1" stroke-linecap="butt" />
+        </Rule>
+    </Style>
+    <Style name="airports-line-fill">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([aeroway] = 'runway')</Filter>
+            <LineSymbolizer stroke="#dddddd" stroke-width="1" stroke-linecap="butt" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([aeroway] = 'taxiway')</Filter>
+            <LineSymbolizer stroke="#dddddd" stroke-width="0.5" stroke-linecap="butt" />
+        </Rule>
+    </Style>
+	<Layer name="airports-line">
+		<StyleName>airports-line-casing</StyleName>
+		<StyleName>airports-line-fill</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,aeroway FROM planet_osm_line WHERE aeroway IS NOT NULL) AS airports_line</Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- roads -->
+    <!-- ===== -->
+    <Style name="roads-casing">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway' or [highway] = 'trunk'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="3" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'trunk_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'primary'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary' or [highway] = 'primary_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'tertiary' or [highway] = 'tertiary_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'unclassified'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="1.2" />
+        </Rule>
+    </Style>
+    <Style name="roads-fill">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway' or [highway] = 'trunk'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway_link'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="1.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'trunk_link'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="1.5" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'primary'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="1.5" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary' or [highway] = 'primary_link'</Filter>
+            <LineSymbolizer stroke="yellow" stroke-width="1.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary_link'</Filter>
+            <LineSymbolizer stroke="yellow" stroke-width="1.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'tertiary' or [highway] = 'tertiary_link'</Filter>
+            <LineSymbolizer stroke="white" stroke-width="1.5" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'unclassified'</Filter>
+            <LineSymbolizer stroke="white" stroke-width="0.8" />
+        </Rule>
+    </Style>
+	<Layer name="roads">
+		<StyleName>roads-casing</StyleName>
+		<StyleName>roads-fill</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- bridges -->
+    <!-- ======= -->
+    <Style name="bridges-casing">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway' or [highway] = 'trunk'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="3" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway_link' or [highway] = 'trunk_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([highway] = 'primary_link' or [highway] = 'secondary' or [highway] = 'tertiary' or [highway] = 'tertiary_link')</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'primary'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary_link'</Filter>
+            <LineSymbolizer stroke="black" stroke-width="2" />
+        </Rule>
+    </Style>
+    <Style name="bridges-fill">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="2" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'trunk'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="1.5" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway_link'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="1.5" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'primary' or [highway] = 'trunk_link'</Filter>
+            <LineSymbolizer stroke="red" stroke-width="1.5" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary' or [highway] = 'primary_link'</Filter>
+            <LineSymbolizer stroke="yellow" stroke-width="1" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'secondary_link'</Filter>
+            <LineSymbolizer stroke="yellow" stroke-width="0.8" stroke-linecap="round" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'tertiary' or [highway] = 'tertiary_link'</Filter>
+            <LineSymbolizer stroke="white" stroke-width="1" stroke-linecap="round" />
+        </Rule>
+    </Style>
+	<Layer name="bridges">
+		<StyleName>bridges-casing</StyleName>
+		<StyleName>bridges-fill</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,surface,tracktype,layer,name,railway,oneway,leisure,sport,attraction FROM planet_osm_line WHERE (bridge != 'no') AND (highway IS NOT NULL OR railway = 'tram' OR leisure='track' OR attraction='summer_toboggan') AND (layer IS NULL OR layer &lt;= '1')) AS roads </Parameter> 
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	<Layer name="bridges-layer2">
+		<StyleName>bridges-casing</StyleName>
+		<StyleName>bridges-fill</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,surface,tracktype,layer,name,railway,oneway,leisure,sport,attraction FROM planet_osm_line WHERE (bridge != 'no') AND (highway IS NOT NULL OR railway = 'tram' OR leisure='track' OR attraction='summer_toboggan') AND (layer = '2')) AS roads </Parameter> 
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	<Layer name="bridges-layer3" group-by="layer">
+		<StyleName>bridges-casing</StyleName>
+		<StyleName>bridges-fill</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,service,surface,tracktype,layer,name,railway,oneway,leisure,sport,attraction FROM planet_osm_line WHERE (bridge != 'no') AND (highway IS NOT NULL OR railway = 'tram' OR leisure='track' OR attraction='summer_toboggan') AND (layer &gt; '2')) AS roads </Parameter> 
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- powerlines -->
+    <!-- ========== -->
+    <Style name="powerlines">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom17;
+            <Filter>([power] = 'line')</Filter>
+            <LinePatternSymbolizer file="symbols-otm/powerline.png"/>
+            <LineSymbolizer stroke="black" stroke-width="0.5"/>
+        </Rule>
+    </Style>
+	<Layer name="powerlines">
+		<StyleName>powerlines</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,power,voltage FROM planet_osm_line) AS powerlines </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- powertowers -->
+    <!-- =========== -->
+    <!--
+    <Style name="powertowers">
+        <Rule>
+            &maxscale_zoom15;
+            &minscale_zoom17;
+            <PointSymbolizer file="symbols-otm/powertower.png" allow-overlap="true" ignore-placement="true"/>
+        </Rule>
+    </Style>
+	<Layer name="powertowers">
+		<StyleName>powertowers</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,power FROM planet_osm_point WHERE power IN ('tower','pole')) AS powertowers </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+    -->
+
+    <!-- text-natural-areas-lowzoom -->
+    <!-- ========================== -->
+    <Style name="text-natural-areas-lowzoom">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[way_area] &lt; 6.4e9  and ([way_area] &gt; 1e8  and [nextregionsize] &gt; 6.4e9)</Filter>
+            <TextSymbolizer size="11" character-spacing="40" spacing="500" fontset-name="sans-oblique" fill="black" halo-radius="2" halo-fill="rgba(255,255,255,0.8)" placement="line" allow-overlap="true" placement-type="list">[name]
+            <Placement character-spacing="20"/>
+            <Placement character-spacing="10"/>
+            <Placement character-spacing="5" halo-radius="1.7"/>
+            <Placement character-spacing="2" halo-radius="1.5"/>
+            </TextSymbolizer>
+        </Rule>
+    </Style>
+	<Layer name="text-natural-areas-lowzoom">
+        <StyleName>text-natural-areas-lowzoom</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
+            <Parameter name="dbname">lowzoom_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+	</Layer>
+
+    <!-- text-water-lowzoom -->
+    <!-- ================== -->
+    <Style name="text-water-lowzoom">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[lake_area] &gt; 1E9</Filter>
+            <TextSymbolizer fontset-name="sans-oblique" fill="#2020ff" halo-radius="1" halo-fill="rgba(255,255,255,0.8)" max-char-angle-delta="0" smooth="0.5" horizontal-alignment="adjust" placement="line" size="17" placement-type="list">[name]
+                <Placement size="16"/>
+                <Placement size="15"/>
+                <Placement size="14"/>
+                <Placement size="13"/>
+                <Placement size="12"/>
+            </TextSymbolizer>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[lake_area] &gt; 1E8 and [lake_area] &lt; 1E9</Filter>
+            <TextSymbolizer fontset-name="sans-oblique" fill="#2020ff" halo-radius="1" halo-fill="rgba(255,255,255,0.8)" max-char-angle-delta="0" smooth="0.5" horizontal-alignment="adjust" placement="line" size="13" placement-type="list">[name]
+                <Placement size="12"/>
+                <Placement size="11"/>
+                <Placement size="10"/>
+                <Placement size="9"/>
+            </TextSymbolizer>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[lake_area] &gt; 1E6 and [lake_area] &lt; 1E8</Filter>
+            <TextSymbolizer fontset-name="sans-oblique" fill="#2020ff" halo-radius="1" halo-fill="rgba(255,255,255,0.8)" max-char-angle-delta="0" smooth="0.5" placement="line" size="11" placement-type="list">[name]
+                <Placement size="10"/>
+                <Placement size="9"/>
+            </TextSymbolizer>
+        </Rule>
+    </Style>
+    <Layer name="text-water-lowzoom">
+		<StyleName>text-water-lowzoom</StyleName>
+		<Datasource>
+            <Parameter name="table">(SELECT way,' '&#124;&#124;name&#124;&#124;' ' AS name,lake_area FROM lakelabels WHERE label='lakeaxis' OR label='bayaxis' OR label='straitaxis') AS lakelabels </Parameter>
+			<Parameter name="dbname">lowzoom_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- symbols-stations -->
+    <!-- ================ -->
+    <Style name="symbols-stations">
+        <!-- Stations with rotation -->
+        <!-- railway=station -->
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[direction]!=null and [railway] = 'station' and not ([subway] = 'yes' or [station] = 'subway')</Filter>
+            <PointSymbolizer file="symbols-otm/station_rect.svg" allow-overlap="true" transform="rotate([direction]) scale(0.7)"/>
+        </Rule>
+    </Style>
+    <Layer name="symbols-stations">
+		<StyleName>symbols-stations</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,name,railway,train,subway,station,direction FROM planet_osm_point WHERE (railway='station' OR railway='halt') AND ((direction IS NULL) OR direction SIMILAR TO '[0-9]+')) AS names</Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- symbols-peaks -->
+    <!-- ============= -->
+    <Style name="symbols-peaks">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>(([natural] = 'peak' or [natural] = 'volcano') and ([otm_isolation] &gt;  3000))</Filter>
+            <MarkersSymbolizer placement="point" ignore-placement="true" file="symbols-otm/peak_z8.png"/>
+        </Rule>
+    </Style>
+	<Layer name="symbols-peaks">
+		<StyleName>symbols-peaks</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,"natural",name,ele,"summit:cross",otm_isolation::INTEGER FROM planet_osm_point WHERE ("natural" = 'peak' or "natural" = 'volcano') ORDER BY otm_isolation::INTEGER DESC) AS symbols </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- symbols-churches -->
+    <!-- ================ -->
+    <Style name="symbols-churches">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[amenity] = 'place_of_worship' and [religion] = 'christian' and ([denomination] = NULL or [denomination] = 'catholic' or [denomination] = 'roman_catholic' or [denomination] = 'greek_catholic' or [denomination] = 'lutheran' or [denomination] = 'protestant') and not (([building] = 'chapel') or ([building] = 'wayside_chapel') or ([historic] = 'wayside_chapel') or ([historic] = 'wayside_shrine') or ([historic] = 'wayside_cross'))</Filter>
+            <MarkersSymbolizer placement="point" allow-overlap="true" file="symbols-otm/church_z13.png" transform="translate(0 -3) scale(0.75, 0.75)"/>
+        </Rule>
+    </Style>
+    <Layer name="symbols-churches">
+        <StyleName>symbols-churches</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!-- symbols-castles -->
+    <!-- =============== -->
+    <Style name="symbols-castles">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([historic] = 'castle')</Filter>
+            <MarkersSymbolizer placement="point" allow-overlap="true" file="symbols-otm/castle_z13.png" transform="translate(0 -3) scale(0.75, 0.75)"/>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([historic] = 'ruins') or (([ruins] = 'yes') and ([historic] = 'castle'))</Filter>
+            <MarkersSymbolizer placement="point" allow-overlap="true" file="symbols-otm/castle_ruins_z13.png" transform="translate(2 -3) scale(0.75, 0.75)"/>
+        </Rule>
+    </Style>
+    <Layer name="symbols-castles">
+        <StyleName>symbols-castles</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+     
+    <!-- windpowerstations -->
+    <!-- ================= -->
+    <Style name="windpowerstations">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([power] = 'generator') and ([generator:source] = 'wind')</Filter>
+            <MarkersSymbolizer placement="point" file="symbols-otm/wind_turbine.png" transform="translate(1 -8) scale(0.75, 0.75)"/>
+        </Rule>
+    </Style>
+    <Layer name="symbols-point-windpowerstations">
+        <StyleName>windpowerstations</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    <Layer name="symbols-poly-windpowerstations">
+        <StyleName>windpowerstations</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+
+    <!-- symbols-2 -->
+    <!-- ========= -->
+    <Style name="symbols-2">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom15;
+            <Filter>([man_made] = 'communications_tower' or [communication:radio] = 'yes' or [communication:television] = 'yes') or ([tower:type] = 'communication' and [height] &gt; 100)</Filter>
+            <MarkersSymbolizer placement="point" file="symbols-otm/communications_tower_z13.png" transform="translate(0 -5) scale(0.75, 0.75)"/>
+        </Rule>
+    </Style>
+	<Layer name="symbols-poly">
+		<StyleName>symbols-2</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	<Layer name="symbols-point">
+		<StyleName>symbols-2</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- text-glacier-lowzoom -->
+    <!-- ==================== -->
+    <Style name="text-glacier-lowzoom">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[lake_area] &gt; 1E8</Filter>
+            <TextSymbolizer fontset-name="sans-condensed-oblique" size="10" fill="#6199ca" halo-radius="1" halo-fill="rgba(208,248,255,0.8)" max-char-angle-delta="30" smooth="0.5" placement="line">[name]</TextSymbolizer>
+        </Rule>
+    </Style>
+    <Layer name="text-glacier-lowzoom">
+		<StyleName>text-glacier-lowzoom</StyleName>
+		<Datasource>
+            <Parameter name="table">(SELECT way,name,lake_area FROM lakelabels WHERE label='glacieraxis') AS lakelabels </Parameter>
+			<Parameter name="dbname">lowzoom_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+
+    <!-- text-roads-ref -->
+    <!-- ============== -->
+    <Style name="text-roads-ref">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>[highway] = 'motorway' or [highway] = 'trunk'</Filter>
+            <TextSymbolizer fontset-name="sans-condensed" size="11" fill="black" spacing="500" minimum-distance="500" minimum-path-length="60" minimum-padding="60" dy="5" halo-radius="1" placement="line">[ref]</TextSymbolizer>
+        </Rule>
+    </Style>
+	<Layer name="text-roads-ref">
+		<StyleName>text-roads-ref</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,highway,ref FROM planet_osm_line WHERE (ST_Length(way)::integer &gt; 1000) AND ref IS NOT NULL) AS roads </Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- text-cities -->
+    <!-- =========== -->
+    <Style name="text-cities">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([place] = 'town') and ([population] &gt; 50000)</Filter>
+            <PointSymbolizer file="symbols-otm/town.png" opacity="0.0" />
+            <TextSymbolizer fontset-name="sans-condensed" size="15" fill="black" wrap-width="100" placement="point" placement-type="list" opacity="0.7">[name]
+                <Placement dx="6" dy="-5" />
+                <Placement dx="7" dy="5" />
+                <Placement dy="-8" />
+                <Placement dy="7" />
+                <Placement dx="-5" dy="6" />
+            </TextSymbolizer>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([place] = 'town') and ([population] &lt; 50000) and ([population] &gt; 20000)</Filter>
+            <PointSymbolizer file="symbols-otm/town.png" opacity="0.0"/>
+            <TextSymbolizer fontset-name="sans-condensed" size="13" fill="black" wrap-width="100" placement="point" placement-type="list" opacity="0.7">[name]
+                <Placement dx="5" dy="-4" />
+                <Placement dx="6" dy="4" />
+                <Placement dy="-7" />
+                <Placement dy="6" />
+                <Placement dx="-4" dy="5" />
+            </TextSymbolizer>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([place] = 'town') and not ([population] &gt; 20000)</Filter>
+            <PointSymbolizer file="symbols-otm/small_town.png" opacity="0.0"/>
+            <TextSymbolizer fontset-name="sans-condensed" size="10" fill="black" wrap-width="100" placement="point" placement-type="list" opacity="0.7">[name]
+                <Placement dx="4" dy="-3" />
+                <Placement dx="5" dy="3" />
+                <Placement dy="-6" />
+                <Placement dy="5" />
+                <Placement dx="-3" dy="4" />
+            </TextSymbolizer>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([place] = 'city')</Filter>
+            <TextSymbolizer fontset-name="sans-condensed" size="21" fill="black" halo-radius="2" halo-fill="rgba(255,255,255,0.8)" wrap-width="100" placement="point" dx="50" dy="-3">[name]</TextSymbolizer>
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>([place] = 'village')</Filter> <!-- and (([population] = null) or ([population] &gt; 1000)) -->
+            <PointSymbolizer file="symbols-otm/small_town.png" opacity="0.0"/>
+            <TextSymbolizer fontset-name="sans-condensed" size="6" fill="black" wrap-width="75" wrap-before="true" placement="point" placement-type="list" opacity="0.7">[name]
+                <Placement dx="4" dy="-3" />
+                <Placement dx="0" dy="5" />
+                <Placement dx="4" dy="3" />
+                <Placement dx="-4" dy="3" />
+            </TextSymbolizer>
+        </Rule>
+    </Style>
+	<Layer name="text-cities" clear-label-cache="on">
+		<StyleName>text-cities</StyleName>
+		<Datasource>
+			<Parameter name="table">(SELECT way,admin_level,name,capital,'('&#124;&#124;substring(ele from '^[\d]+')&#124;&#124;')' as ele,place,population::INTEGER FROM planet_osm_point WHERE (population IS NULL OR population SIMILAR TO '[[:digit:]]+') AND place IN ('city','town','village','suburb','hamlet','isolated_dwelling','locality') ORDER BY (CASE WHEN place='city' THEN 0 WHEN place='town' THEN 1 WHEN place='village' THEN 2 ELSE 3 END) ASC, (CASE WHEN population IS NUll THEN 0 WHEN population similar to '[[:digit:]]+' THEN population::integer ELSE 0 END) DESC
+		  ) AS names</Parameter>
+			<Parameter name="dbname">gis_dev</Parameter>
+			&postgis-settings;
+		</Datasource>
+	</Layer>
+	
+    <!-- airports-name -->
+    <!-- ============= -->
+    <Style name="airports-name">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>(([aeroway] = 'aerodrome' or [aeroway] = 'runway') and ([name] != null))</Filter>
+            <MarkersSymbolizer file="symbols-otm/aerodrome.12.svg" placement="point" allow-overlap="true" clip="false" fill="#000000" transform="scale(0.75, 0.75)" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>(([aeroway] = 'aerodrome' or [aeroway] = 'runway') and ([name] != null))</Filter>
+            <TextSymbolizer size="10" line-spacing="-1.5" fill="#000000" dy="10" fontset-name="fontset-0" halo-radius="1" halo-fill="white" placement="point" allow-overlap="true">[name]</TextSymbolizer>
+        </Rule>
+    </Style>
+    <Layer name="airports-name">
+        <StyleName>airports-name</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,aeroway,way_area,name,icao FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+   
+    <!-- airports-icao -->
+    <!-- ============= -->
+    <Style name="airports-icao">
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>(([aeroway] = 'aerodrome' or [aeroway] = 'runway') and ([icao] != null))</Filter>
+            <MarkersSymbolizer file="symbols-otm/aerodrome.12.svg" placement="point" allow-overlap="true" clip="false" fill="#000000" transform="scale(0.75, 0.75)" />
+        </Rule>
+        <Rule>
+            &maxscale_zoom11;
+            &minscale_zoom11;
+            <Filter>(([aeroway] = 'aerodrome' or [aeroway] = 'runway') and ([icao] != null))</Filter>
+            <TextSymbolizer size="10" line-spacing="-1.5" fill="#000000" dy="10" fontset-name="fontset-0" halo-radius="1" halo-fill="white" placement="point" allow-overlap="true">[icao]</TextSymbolizer>
+        </Rule>
+    </Style>
+    <Layer name="airports-icao">
+        <StyleName>airports-icao</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,aeroway,way_area,name,icao FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
+            <Parameter name="dbname">gis_dev</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    	
+</Map>

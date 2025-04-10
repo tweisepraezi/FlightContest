@@ -19,15 +19,16 @@
                     <g:form method="post" params="${['contestReturnAction':contestReturnAction,'contestReturnController':contestReturnController,'contestReturnID':contestReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
                         <g:set var="ret" value="${[modifynum:0]}"/>
-                        <g:editPoints i="${contestInstance}" recalculatepoints="${message(code:'fc.contest.recalculatepoints')}" ret="${ret}" ti="${ti}"/>
+                        <g:editPoints i="${contestInstance}" contest="${contestInstance}" recalculatepoints="${message(code:'fc.contest.recalculatepoints')}" ret="${ret}" ti="${ti}"/>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="savepoints" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
                         <g:if test="${ret.modifynum > 0}">
-                            <g:actionSubmit action="standardpoints" value="${message(code:'fc.standard')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="standardpoints" value="${message(code:'fc.standard')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:actionSubmit action="printpoints" value="${message(code:'fc.print')}"  tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="recalculatepenalties" value="${message(code:'fc.recalculatepenalties')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>

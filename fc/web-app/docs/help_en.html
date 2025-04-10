@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.0.2,</span>
-<span id="revdate">21.02.2025</span>
+<span id="revnumber">version 4.1.0,</span>
+<span id="revdate">10.04.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -540,7 +540,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-fcmap">Configure your own map printing server</a></li>
 <li><a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a></li>
 <li><a href="#configuration-onlinemap">Configure OSM online map</a></li>
-<li><a href="#configuration-task-creator">Configure original Task Creator for use</a></li>
+<li><a href="#configuration-task-creator">Task Creator configuration</a></li>
 <li><a href="#configuration-configserver">Configure your own configuration server</a></li>
 <li><a href="#configuration-test">Configure test displays</a></li>
 </ul>
@@ -560,6 +560,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#save-prints">Save 'Flight Contest' prints (Firefox)</a></li>
 <li><a href="#save-fcsave">Backup of the data stored in C:\FCSave</a></li>
 <li><a href="#restore-fcdb">Data recovery of the 'Flight Contest' database</a></li>
+<li><a href="#restore-fcdb-damaged-by-installation">Restore 'Flight Contest' database damaged by installation</a></li>
 </ul>
 </li>
 </ul>
@@ -733,13 +734,10 @@ and to evaluate planning, navigation, observation and/or landing test results.</
 <div class="ulist">
 <ul>
 <li>
-<p><a href="rules/DE_Navigationsflug_2020.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)</a></p>
+<p><a href="rules/DE_Navigationsflug_2020.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Rallyeflug Deutschland</a></p>
 </li>
 <li>
-<p><a href="rules/DE_ANR_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Air Navigation Race Deutschland (German)</a></p>
-</li>
-<li>
-<p><a href="rules/DE_Navigationsflug_2017_en.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland 2017</a></p>
+<p><a href="rules/DE_ANR_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Air Navigation Race Deutschland</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
@@ -1599,7 +1597,7 @@ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 <p>Create route with TO (Routes &#8594; <strong>New route</strong>)</p>
 </li>
 <li>
-<p>Routes &#8594; OSM Contest Map &#8594; <strong>Determine airspaces around the airport</strong> (if <a href="#configuration-openaip">OpenAIP access</a> has been configured)<br></p>
+<p>Routes &#8594; OSM Contest Map &#8594; <strong>Search airspaces around the airport</strong> (if <a href="#configuration-openaip">OpenAIP access</a> has been configured)<br></p>
 <div class="paragraph">
 <p>The height of the airspaces to be taken into account can be adjusted (4000ft by default).<br>
 Airspaces not to be taken into account can be commented out with a # in front if required.<br>
@@ -2296,7 +2294,7 @@ The providers of the map data and the manufacturer of this function do not assum
 <p><strong>Airspaces</strong></p>
 </div>
 <div class="paragraph">
-<p>"<em>Determine airspaces around the airport</em>" retrieves all airspaces from OpenAIP that are necessary to serve all map sizes.
+<p>"<em>Search airspaces around the airport</em>" retrieves all airspaces from OpenAIP that are necessary to serve all map sizes.
 All airspaces where the lower altitude limit is lower than the set altitude (default: 4000ft) are taken into account.</p>
 </div>
 <div class="paragraph">
@@ -3042,7 +3040,7 @@ Select the option to print in portrait format if necessary<br>
 Run “Generate (for Task Creator)”<br></p>
 </div>
 <div class="paragraph">
-<p>If OpenAIP access has been configured, run “Determine airspaces around the airport” first if necessary.<br></p>
+<p>If OpenAIP access has been configured, run "Search airspaces around the airport" first if necessary.<br></p>
 </div>
 <div class="paragraph">
 <p>The height of airspaces to be taken into account can be adjusted (4000 feet pre-set).<br>
@@ -3240,132 +3238,14 @@ A locked planning must be unlocked first.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Depending on the selected competition rules, a fixed landing scheme is used.
-Its penalty point calculation from a landing measurement value is stored as a formula.
-This formula can be adapted to use a landing scheme that differs from the selected
-to use a different landing scheme. The formulas can be found under
-'Competition &#8594; Points' or 'Class &#8594; Points' for each landing (max. 4).
-Special landing errors like 'No landing', 'Abnormal landing' etc. are entered through
-clickable check boxes.</p>
+This can have up to 4 different penalty point settings.
+A non-standard application sequence can be configured in the task.
+The penalty point calculation from an observed landing field is stored as a formula.
+Special landing faults like 'No landing', 'Abnormal landing', etc. are entered by clickable check boxes.</p>
 </div>
 <div class="paragraph">
-<p>The following formulas are used for penalty point calculation of landings:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="rules/DE_Navigationsflug_2020.pdf#page=16" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020</a> (all landings)</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="rules/DE_Navigationsflug_2017.pdf#page=16" target="_blank" rel="noopener">Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017</a> (all landings)</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="rules/FAI_landing_rules_2024.pdf#page=10" target="_blank" rel="noopener">FAI Air Rally Flying</a> (all landings)</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="rules/FAI_landing_rules_2024.pdf#page=11" target="_blank" rel="noopener">FAI Precision Flying</a></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Landing 1 and 4</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Landing 2 and 3</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}</pre>
-</div>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The order of application can be configured for a task.</p>
-</div>
-</li>
-</ul>
-</div>
-<div style="page-break-after: always;"></div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="rules/CH_Praezisionsflug_2017.pdf#page=19" target="_blank" rel="noopener">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017</a></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Landing 1 and 4</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Landing 2 and 3</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}</pre>
-</div>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The order of application can be configured for a task.</p>
-</div>
-</li>
-<li>
-<p><a href="rules/AT_Motorflug_2023.pdf#page=27" target="_blank" rel="noopener">Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2023</a> (all landings).</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="rules/AT_Motorflug_2023.pdf#page=27" target="_blank" rel="noopener">Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2023</a> (all landings).</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="rules/AT_Motorflug_2023.pdf#page=27" target="_blank" rel="noopener">Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2023</a> (all landings).</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 2*i}else{return -(3*i)}}else{return null;}}</pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="rules/AT_Motorflug_2023.pdf#page=36" target="_blank" rel="noopener">Navigationsflug-Reglement Österreich - Ausgabe 2023</a> (all landings)</p>
-<div class="literalblock">
-<div class="content">
-<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
-</div>
-</div>
-</li>
-</ul>
+<p>The penalty point definitions can be customized under 'Contest &#8594; Points' or 'Class &#8594; Points'.
+In addition to changing individual penalty points and the landing field formula, you can also switch to the penalty points of a different competition ruleset.</p>
 </div>
 <div class="paragraph">
 <p>To record the landings, print the referee schedule of a task with the following fields:</p>
@@ -3376,7 +3256,7 @@ clickable check boxes.</p>
 <p>No. (start number)</p>
 </li>
 <li>
-<p>Aircraft (registration number)</p>
+<p>Aircraft (registration)</p>
 </li>
 <li>
 <p>Aircraft type</p>
@@ -3388,15 +3268,18 @@ clickable check boxes.</p>
 <p>Latest landing time</p>
 </li>
 <li>
-<p>Blank column 1&#8230;&#8203;4 (for recording landing fields and landing errors)</p>
+<p>Empty column 1 (landing field)</p>
+</li>
+<li>
+<p>Empty columns 2&#8230;&#8203;4 (to record landing faults)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Do not print the crew, as this is against the rules.</p>
+<p>Do not print the crew, as this contradicts the rules.</p>
 </div>
 <div class="paragraph">
-<p>Landing judges should know as little as possible about the specific crew of an aircraft in order to objectively judge a landing.</p>
+<p>Landing judges should know as little as possible about the specific crew of an aircraft in order to objectively assess a landing.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -4534,7 +4417,7 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.</p
 <a href="#configuration-fcmap">Configure your own map printing server</a><br>
 <a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a><br>
 <a href="#configuration-onlinemap">Configure OSM online map</a><br>
-<a href="#configuration-task-creator">Configure original Task Creator for use</a><br>
+<a href="#configuration-task-creator">Task Creator configuration</a><br>
 <a href="#configuration-configserver">Configure your own configuration server</a><br>
 <a href="#configuration-test">Configure test displays</a></p>
 </div>
@@ -4821,22 +4704,20 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration-task-creator">Configure original Task Creator for use</h3>
+<h3 id="configuration-task-creator">Task Creator configuration</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
   taskcreator {
-    url = "https://www.airrats.cl/taskcreator?admin"  // use original Task Creator
-    // jsextern = true                                // use original code for integrated Task Creator
+    url = "https://www.airrats.cl/taskcreator?admin"  // Use 'Task Creator (extern)' with different parameters
+    // jsextern = true                                // Use the JS code of the external Task Creator for 'Task Creator (intern)'
   }
 }</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Flight Contest is delivered with an integrated Task Creator.
-Specifying this value also makes the original task creator available.
-The integrated task creator has a different appearance and has online functions deactivated,
-which prevents a task from being saved in a publicly accessible database.</p>
+<p>Specifying the url value makes it possible to use the external Task Creator with other parameters.
+The internal Task Creator disables all online functions that make it possible to save a route in the publicly accessible database.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5255,7 +5136,8 @@ after you have made backups as described below.</p>
 <p><a href="#save-fcdb">Backup of the 'Flight Contest' database</a><br>
 <a href="#save-prints">Save 'Flight Contest' prints (Firefox)</a><br>
 <a href="#save-fcsave">Backup of the data stored in C:\FCSave</a><br>
-<a href="#restore-fcdb">Data recovery of the 'Flight Contest' database</a></p>
+<a href="#restore-fcdb">Data recovery of the 'Flight Contest' database</a><br>
+<a href="#restore-fcdb-damaged-by-installation">Restore 'Flight Contest' database damaged by installation</a></p>
 </div>
 <div class="sect2">
 <h3 id="save-fcdb">Backup of the 'Flight Contest' database</h3>
@@ -5306,6 +5188,28 @@ where you set the variable <strong>dest_dir</strong> to a folder on an external 
 <p>Copy 'C:\FCSave\&lt;date&gt;-&lt;time&gt;-fcdb.h2.db'
 to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'.
 You need administrator privileges for this.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restore-fcdb-damaged-by-installation">Restore 'Flight Contest' database damaged by installation</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Stop Flight Contest (Flight Contest Manager &#8594; Right mouse button &#8594; Service commands &#8594; Stop Flight Contest)</p>
+</li>
+<li>
+<p>In 'C:\Program Files\Flight Contest\fc' rename the file 'fcdb.h2.db' to 'fcdb.h2.db.old'</p>
+</li>
+<li>
+<p>In 'C:\Program Files\Flight Contest' search for the latest backup folder 'fc-backup-&#8230;&#8203;'</p>
+</li>
+<li>
+<p>Copy the file 'fcdb.h2.db' from this folder to the folder 'C:\Program Files\Flight Contest\fc'</p>
+</li>
+<li>
+<p>Start Flight Contest (Flight Contest Manager &#8594; Right mouse button &#8594; Service commands &#8594; Start Flight Contest)</p>
 </li>
 </ol>
 </div>

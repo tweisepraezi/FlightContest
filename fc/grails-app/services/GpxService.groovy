@@ -1720,6 +1720,7 @@ class GpxService
                         )
                         xml.mapsettings(
                             contestmapairfields: routeInstance.contestMapAirfields,
+                            contestmapairfieldsdata: routeInstance.contestMapAirfieldsData,
                             contestmapcircle: getYesNo(routeInstance.contestMapCircle),
                             contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
                             contestmapleg: getYesNo(routeInstance.contestMapLeg),
@@ -1812,7 +1813,7 @@ class GpxService
         }
         
         // legs
-        if (!routeInstance.corridorWidth) { // default legs
+        if (!routeInstance.corridorWidth || params.isTracking) { // default legs
             long restart_id = 0
             xml.rte {
                 xml.extensions {
@@ -2442,10 +2443,10 @@ class GpxService
                             // BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             if (write_gate) {
                                 xml.name last_coordroute_instance.titleMediaCode(media)
-                                xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
                                     // xml.ele altitude_meter
                                 }
-                                xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
                             }
@@ -2701,6 +2702,7 @@ class GpxService
                     )
                     xml.mapsettings(
                         contestmapairfields: routeInstance.contestMapAirfields,
+                        contestmapairfieldsdata: routeInstance.contestMapAirfieldsData,
                         contestmapcircle: getYesNo(routeInstance.contestMapCircle),
                         contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
                         contestmapleg: getYesNo(routeInstance.contestMapLeg),
@@ -2974,125 +2976,134 @@ class GpxService
                     }
                 }
             } else { // corridor track
-                xml.rte { // left track
-                    xml.extensions {
-                        xml.flightcontest {
-                            xml.route(number:1)
-                        }
-                    }
-                    xml.name routeInstance.title.encodeAsHTML()
-                    CoordRoute last_last_coordroute_instance = null
-                    CoordRoute last_coordroute_instance = null
-                    boolean first = true
-                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                        if (coordroute_instance.type.IsCorridorCoord()) {
-                            if (last_coordroute_instance) {
-                                if (first) {
-                                    Map start_gate = AviationMath.getGate(
-                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                        routeInstance.corridorWidth
-                                    )
-                                    BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
-                                    xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
-                                        xml.name last_coordroute_instance.titleMediaCode(media)
-                                        xml.ele altitude_meter
-                                    }
-                                }
-                            }
-                            if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
-                                Map gate = AviationMath.getCorridorGate(
-                                    last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
-                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    routeInstance.corridorWidth
-                                )
-                                BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
-                                    xml.name last_coordroute_instance.titleMediaCode(media)
-                                    xml.ele altitude_meter
-                                }
-                            }
-                            if (last_coordroute_instance) {
-                                first = false
-                                switch (coordroute_instance.type) {
-                                    case CoordType.FP:
-                                        Map gate = AviationMath.getGate(
-                                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                                            coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                            routeInstance.corridorWidth
-                                        )
-                                        BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                        xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
-                                            xml.name coordroute_instance.titleMediaCode(media)
-                                            xml.ele altitude_meter
-                                        }
-                                        break
-                                }
-                            }
-                            last_last_coordroute_instance = last_coordroute_instance
-                            last_coordroute_instance = coordroute_instance
-                        }
+                boolean has_corridor_points = false
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsCorridorCoord()) {
+                        has_corridor_points = true
+                        break
                     }
                 }
-                xml.rte { // right track
-                    xml.extensions {
-                        xml.flightcontest {
-                            xml.route(number:2)
+                if (has_corridor_points) {
+                    xml.rte { // left track
+                        xml.extensions {
+                            xml.flightcontest {
+                                xml.route(number:1)
+                            }
                         }
-                    }
-                    xml.name routeInstance.title.encodeAsHTML()
-                    CoordRoute last_last_coordroute_instance = null
-                    CoordRoute last_coordroute_instance = null
-                    boolean first = true
-                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                        if (coordroute_instance.type.IsCorridorCoord()) {
-                            if (last_coordroute_instance) {
-                                if (first) {
-                                    Map start_gate = AviationMath.getGate(
-                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                        xml.name routeInstance.title.encodeAsHTML()
+                        CoordRoute last_last_coordroute_instance = null
+                        CoordRoute last_coordroute_instance = null
+                        boolean first = true
+                        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                            if (coordroute_instance.type.IsCorridorCoord()) {
+                                if (last_coordroute_instance) {
+                                    if (first) {
+                                        Map start_gate = AviationMath.getGate(
+                                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                            routeInstance.corridorWidth
+                                        )
+                                        BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                        xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
+                                            xml.name last_coordroute_instance.titleMediaCode(media)
+                                            xml.ele altitude_meter
+                                        }
+                                    }
+                                }
+                                if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
+                                    Map gate = AviationMath.getCorridorGate(
+                                        last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                         routeInstance.corridorWidth
                                     )
                                     BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
-                                    xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
+                                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         xml.name last_coordroute_instance.titleMediaCode(media)
                                         xml.ele altitude_meter
                                     }
                                 }
-                            }
-                            if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
-                                Map gate = AviationMath.getCorridorGate(
-                                    last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
-                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    routeInstance.corridorWidth
-                                )
-                                BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
-                                    xml.name last_coordroute_instance.titleMediaCode(media)
-                                    xml.ele altitude_meter
+                                if (last_coordroute_instance) {
+                                    first = false
+                                    switch (coordroute_instance.type) {
+                                        case CoordType.FP:
+                                            Map gate = AviationMath.getGate(
+                                                last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                                coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                                routeInstance.corridorWidth
+                                            )
+                                            BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                                xml.name coordroute_instance.titleMediaCode(media)
+                                                xml.ele altitude_meter
+                                            }
+                                            break
+                                    }
                                 }
+                                last_last_coordroute_instance = last_coordroute_instance
+                                last_coordroute_instance = coordroute_instance
                             }
-                            if (last_coordroute_instance) {
-                                first = false
-                                switch (coordroute_instance.type) {
-                                    case CoordType.FP:
-                                        Map gate = AviationMath.getGate(
-                                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                                            coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                        }
+                    }
+                    xml.rte { // right track
+                        xml.extensions {
+                            xml.flightcontest {
+                                xml.route(number:2)
+                            }
+                        }
+                        xml.name routeInstance.title.encodeAsHTML()
+                        CoordRoute last_last_coordroute_instance = null
+                        CoordRoute last_coordroute_instance = null
+                        boolean first = true
+                        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                            if (coordroute_instance.type.IsCorridorCoord()) {
+                                if (last_coordroute_instance) {
+                                    if (first) {
+                                        Map start_gate = AviationMath.getGate(
+                                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                             routeInstance.corridorWidth
                                         )
-                                        BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                        xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
-                                            xml.name coordroute_instance.titleMediaCode(media)
+                                        BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                        xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
+                                            xml.name last_coordroute_instance.titleMediaCode(media)
                                             xml.ele altitude_meter
                                         }
-                                        break
+                                    }
                                 }
+                                if (last_last_coordroute_instance && last_coordroute_instance) { // standard gate
+                                    Map gate = AviationMath.getCorridorGate(
+                                        last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
+                                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
+                                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                        routeInstance.corridorWidth
+                                    )
+                                    BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                        xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.ele altitude_meter
+                                    }
+                                }
+                                if (last_coordroute_instance) {
+                                    first = false
+                                    switch (coordroute_instance.type) {
+                                        case CoordType.FP:
+                                            Map gate = AviationMath.getGate(
+                                                last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                                coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
+                                                routeInstance.corridorWidth
+                                            )
+                                            BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                                xml.name coordroute_instance.titleMediaCode(media)
+                                                xml.ele altitude_meter
+                                            }
+                                            break
+                                    }
+                                }
+                                last_last_coordroute_instance = last_coordroute_instance
+                                last_coordroute_instance = coordroute_instance
                             }
-                            last_last_coordroute_instance = last_coordroute_instance
-                            last_coordroute_instance = coordroute_instance
                         }
                     }
                 }

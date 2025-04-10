@@ -28,7 +28,7 @@ Source folder:
 		contains folder .git, fc, fcmaps, gpx2gac, printlabel, and files .gitignore and readme.txt
 	
 Additional sources for installer compilation (used by build.bat and fc.is6):
-	Open JDK 8 (x64) in folder '%PROJECT_ROOT%\Java\jdk8u422-b05'
+	Open JDK 8 (x64) in folder '%PROJECT_ROOT%\Java\jdk8u442-b06'
 	Grails 2.5.6 in folder '%PROJECT_ROOT%\Grails\grails-2.5.6'
 	Apache Tomcat 9 (x64) in folder '%PROJECT_ROOT%\Server\apache-tomcat-9.0.54-windows-x64'
 	Apache Tomcat 9 (x64) in folder '%PROJECT_ROOT%\Server\apache-tomcat-9.0.13-windows-x64'

@@ -1173,6 +1173,11 @@ class RouteFileTools
                         route_instance.contestMapAirfields = contestmapairfields
                         save_route = true
                     }
+                    String contestmapairfieldsdata = gpx.extensions.flightcontest.mapsettings.'@contestmapairfieldsdata'[0]
+                    if (contestmapairfieldsdata) {
+                        route_instance.contestMapAirfieldsData = contestmapairfieldsdata
+                        save_route = true
+                    }
                     String contestmapcircle = gpx.extensions.flightcontest.mapsettings.'@contestmapcircle'[0]
                     if (contestmapcircle) {
                         route_instance.contestMapCircle = contestmapcircle == "yes"
@@ -1795,6 +1800,9 @@ class RouteFileTools
                         switch (d.'@name') {
                             case "contestmapairfields":
                                 route_instance.contestMapAirfields = d.value.text()
+                                break
+                            case "contestmapairfieldsdata":
+                                route_instance.contestMapAirfieldsData = d.value.text()
                                 break
                             case "contestmapcircle":
                                 route_instance.contestMapCircle = d.value.text() == "yes"

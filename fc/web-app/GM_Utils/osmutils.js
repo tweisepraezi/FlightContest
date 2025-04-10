@@ -119,6 +119,7 @@ JB.Map = function(makemap) {
     if (FCOpenaipApiKey != '') {
 		var openaip = L.tileLayer('https://api.tiles.openaip.net/api/data/openaip/{z}/{x}/{y}.png?apiKey='+FCOpenaipApiKey, {
 			tms: false,
+            referrerPolicy: 'no-referrer',
 			minZoom: 5, 
 			maxZoom: 13,
 			attribution: 'Map data &copy; <a href="https://www.openaip.net/" target="_blank">OpenAIP</a>'

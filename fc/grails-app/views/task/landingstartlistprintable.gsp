@@ -184,7 +184,7 @@
             </table>
             <g:if test="${taskInstance.printLandingStartlistLandingField}">
                 <div style="page-break-before: always; color: white; height: 2px;">.</div>
-                <g:each var="landingfield_imagename" in="${taskInstance.contest.landingFieldImageName.split(',')}">
+                <g:each var="landingfield_imagename" in="${FcService.GetLandingAirfieldImageNames(taskInstance.contest)}">
                     <g:set var="landingfield_imagename2" value="${landingfield_imagename}"/>
                     <g:if test="${landingfield_imagename.contains('*')}">
                         <g:set var="landingfield_imagename2" value="${landingfield_imagename.replace('*', "_${session.printLanguage}")}"/>

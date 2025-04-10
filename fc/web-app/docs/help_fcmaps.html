@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.0.2,</span>
-<span id="revdate">21.02.2025</span>
+<span id="revnumber">version 4.1.0,</span>
+<span id="revdate">10.04.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -862,31 +862,21 @@ psql -d gis_new -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (37h)</p>
+<p>Wait&#8230;&#8203; (24h)</p>
 </div>
 <div class="paragraph">
 <p>Preprocessing</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd ~/fcmaps/otm-dev/mapnik/tools/
+<pre>cd ~/fcmaps/osmtools/
 psql gis_new &lt; arealabel.sql
-psql gis_new &lt; stationdirection.sql</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (10min)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>psql gis_new &lt; viewpointdirection.sql
+psql gis_new &lt; stationdirection.sql
+psql gis_new &lt; viewpointdirection.sql
 psql gis_new &lt; pitchicon.sql
 psql -d gis_new -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
-bash update_lowzoom.sh</pre>
+bash create_lowzoom_new.sh</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (20h)</p>
 </div>
 <div class="paragraph">
 <p>Activate new databases <strong>gis_eu</strong> and <strong>lowzoom_eu</strong></p>
@@ -898,7 +888,7 @@ dropdb lowzoomold_eu
 psql -d postgres -c 'ALTER DATABASE gis_eu RENAME TO gisold_eu;'
 psql -d postgres -c 'ALTER DATABASE gis_new RENAME TO gis_eu;'
 psql -d postgres -c 'ALTER DATABASE lowzoom_eu RENAME TO lowzoomold_eu;'
-psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom_eu;'</pre>
+psql -d postgres -c 'ALTER DATABASE lowzoom_new RENAME TO lowzoom_eu;'</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -918,7 +908,7 @@ nano printmaps_webservice_capabilities.json</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
+<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"</pre>
 </div>
 </div>
 </div>
@@ -931,7 +921,16 @@ nano printmaps_webservice_capabilities.json</pre>
 <div class="content">
 <pre>cd ~/data
 mkdir srtm
-cd ~/data/srtm
+cd ~/data/srtm</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create folder (for Germany)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir germany
+cd germany
 nano list.txt</pre>
 </div>
 </div>
@@ -957,12 +956,11 @@ http://viewfinderpanoramas.org/dem3/L33.zip</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Move zip files to folder germany and unpack all</p>
+<p>Unpack all</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>mkdir germany &amp;&amp; mv N*.zip germany &amp;&amp; mv M*.zip germany &amp;&amp; mv L*.zip germany
-for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; done</pre>
+<pre>for zipfile in *.zip; do unzip -j -o "$zipfile" -d unpacked; done</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -970,7 +968,7 @@ for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; don
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>for hgtfile in germany/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
+<pre>for hgtfile in unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -978,7 +976,7 @@ for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; don
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o germany/unpacked/raw.tif germany/unpacked/*.hgt.tif</pre>
+<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o unpacked/raw.tif unpacked/*.hgt.tif</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -986,15 +984,15 @@ for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; don
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 germany/unpacked/raw.tif germany/unpacked/90.tif</pre>
+<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 unpacked/raw.tif unpacked/90.tif</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Create 10m contour data (90.tif &#8594; lon*.pbf) (high memory consumption)</p>
+<p>Create 10m contour data (90.tif &#8594; lon*.pbf) (high memory consumption) (change --start-node-id and --start-way-id for additional contour lines in database)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf germany/unpacked/90.tif</pre>
+<pre>phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf unpacked/90.tif</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -1009,7 +1007,7 @@ for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; don
 <p>Do these steps for other countries (with different folders and ids). Because of memory consumption of phyghtmap only max. 6 zip files.</p>
 </div>
 <div class="paragraph">
-<p>France (node-id=3000000000)</p>
+<p>France (start-node-id=3000000000)</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1027,40 +1025,6 @@ http://viewfinderpanoramas.org/dem3/K31.zip</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>South Africa (node-id=2000000000)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>http://viewfinderpanoramas.org/dem3/SG33.zip
-http://viewfinderpanoramas.org/dem3/SG34.zip
-http://viewfinderpanoramas.org/dem3/SG35.zip
-http://viewfinderpanoramas.org/dem3/SG36.zip
-http://viewfinderpanoramas.org/dem3/SH33.zip
-http://viewfinderpanoramas.org/dem3/SH34.zip
-http://viewfinderpanoramas.org/dem3/SH35.zip
-http://viewfinderpanoramas.org/dem3/SH36.zip
-http://viewfinderpanoramas.org/dem3/SI33.zip
-http://viewfinderpanoramas.org/dem3/SI34.zip
-http://viewfinderpanoramas.org/dem3/SI35.zip</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Lon 14...36°, Lat -35...-24°</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Old</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>http://viewfinderpanoramas.org/dem3/N31.zip
-http://viewfinderpanoramas.org/dem3/N34.zip
-http://viewfinderpanoramas.org/dem3/M34.zip
-http://viewfinderpanoramas.org/dem3/L34.zip</pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Create database <strong>contours_new</strong></p>
 </div>
 <div class="literalblock">
@@ -1074,7 +1038,7 @@ psql -d contours_new -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d contours_new --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
+<pre>osm2pgsql -d contours_new --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style lon*.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1095,7 +1059,7 @@ psql -d postgres -c 'ALTER DATABASE contours_new RENAME TO contours_eu;'</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
+<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"</pre>
 </div>
 </div>
 </div>
@@ -1111,7 +1075,7 @@ psql -d postgres -c 'ALTER DATABASE contours_new RENAME TO contours_eu;'</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
+<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"</pre>
 </div>
 </div>
 <div class="paragraph">

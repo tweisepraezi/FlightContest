@@ -386,9 +386,11 @@ class FcService
 				}
 			}
 			
+            /*
 			if (calculate_points) {
 			    calculate_points_contest(contest_instance)
 			}
+            */
 
             if(!contest_instance.hasErrors() && contest_instance.save()) {
                 Map ret = ['instance':contest_instance,'saved':true,'message':getMsg('fc.updated',["${contest_instance.title}"])]
@@ -744,9 +746,11 @@ class FcService
         Map old_contestrulepoints_values = GetContestRulePointsValues(contest_instance)
         
         setContestRulePoints(contest_instance, contest_instance.contestRule)
+        /*
         if (IsContestRulePointsValueModified(contest_instance,old_contestrulepoints_values)) {
             calculate_points_contest(contest_instance)
         }
+        */
         
         if(!contest_instance.hasErrors() && contest_instance.save()) {
             return ['instance':contest_instance,'saved':true,'message':getMsg('fc.created',["${contest_instance.title}"])]
@@ -780,9 +784,7 @@ class FcService
 		
 		// General
         toInstance.ruleTitle                                            = contestRule.ruleValues.ruleTitle
-		toInstance.precisionFlying                                      = contestRule.ruleValues.precisionFlying
         toInstance.increaseFactor                                       = contestRule.ruleValues.increaseFactor
-        toInstance.printLandingCalculatorValues                         = contestRule.ruleValues.printLandingCalculatorValues
         toInstance.printPointsGeneral                                   = contestRule.ruleValues.printPointsGeneral
 		toInstance.printPointsPlanningTest                              = contestRule.ruleValues.printPointsPlanningTest
 		toInstance.printPointsFlightTest                                = contestRule.ruleValues.printPointsFlightTest
@@ -792,7 +794,6 @@ class FcService
 		toInstance.printPointsLandingTest3                              = contestRule.ruleValues.printPointsLandingTest3
 		toInstance.printPointsLandingTest4                              = contestRule.ruleValues.printPointsLandingTest4
         toInstance.printPointsLandingField                              = contestRule.ruleValues.printPointsLandingField
-        toInstance.landingFieldImageName                                = contestRule.ruleValues.landingFieldImageName
         toInstance.printPointsTurnpointSign                             = contestRule.ruleValues.printPointsTurnpointSign
         toInstance.printPointsEnrouteCanvas                             = contestRule.ruleValues.printPointsEnrouteCanvas
         
@@ -845,6 +846,9 @@ class FcService
         toInstance.observationTestTurnpointFalsePoints                  = contestRule.ruleValues.observationTestTurnpointFalsePoints
                 
 		// LandingTest
+        toInstance.landingTest1LongRuleTitle                            = contestRule.ruleValues.landingTest1.LongRuleTitle
+        toInstance.landingTest1ShortRuleTitle                           = contestRule.ruleValues.landingTest1.ShortRuleTitle
+        toInstance.landingTest1AirfieldImageNames                       = contestRule.ruleValues.landingTest1.AirfieldImageNames
 		toInstance.landingTest1MaxPoints                                = contestRule.ruleValues.landingTest1.MaxPoints
 		toInstance.landingTest1NoLandingPoints                          = contestRule.ruleValues.landingTest1.NoLandingPoints
 		toInstance.landingTest1OutsideLandingPoints                     = contestRule.ruleValues.landingTest1.OutsideLandingPoints
@@ -855,7 +859,11 @@ class FcService
 		toInstance.landingTest1AbnormalLandingPoints                    = contestRule.ruleValues.landingTest1.AbnormalLandingPoints
 		toInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest1.NotAllowedAerodynamicAuxiliariesPoints
 		toInstance.landingTest1PenaltyCalculator                        = contestRule.ruleValues.landingTest1.PenaltyCalculator
+		toInstance.landingTest1PrintCalculatorValues                    = contestRule.ruleValues.landingTest1.PrintCalculatorValues
 	
+        toInstance.landingTest2LongRuleTitle                            = contestRule.ruleValues.landingTest2.LongRuleTitle
+        toInstance.landingTest2ShortRuleTitle                           = contestRule.ruleValues.landingTest2.ShortRuleTitle
+        toInstance.landingTest2AirfieldImageNames                       = contestRule.ruleValues.landingTest2.AirfieldImageNames
 		toInstance.landingTest2MaxPoints                                = contestRule.ruleValues.landingTest2.MaxPoints
 		toInstance.landingTest2NoLandingPoints                          = contestRule.ruleValues.landingTest2.NoLandingPoints
 		toInstance.landingTest2OutsideLandingPoints                     = contestRule.ruleValues.landingTest2.OutsideLandingPoints
@@ -867,7 +875,11 @@ class FcService
 		toInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest2.NotAllowedAerodynamicAuxiliariesPoints
 		toInstance.landingTest2PowerInAirPoints                         = contestRule.ruleValues.landingTest2.PowerInAirPoints
 		toInstance.landingTest2PenaltyCalculator                        = contestRule.ruleValues.landingTest2.PenaltyCalculator
+		toInstance.landingTest2PrintCalculatorValues                    = contestRule.ruleValues.landingTest2.PrintCalculatorValues
 		
+        toInstance.landingTest3LongRuleTitle                            = contestRule.ruleValues.landingTest3.LongRuleTitle
+        toInstance.landingTest3ShortRuleTitle                           = contestRule.ruleValues.landingTest3.ShortRuleTitle
+        toInstance.landingTest3AirfieldImageNames                       = contestRule.ruleValues.landingTest3.AirfieldImageNames
 		toInstance.landingTest3MaxPoints                                = contestRule.ruleValues.landingTest3.MaxPoints
 		toInstance.landingTest3NoLandingPoints                          = contestRule.ruleValues.landingTest3.NoLandingPoints
 		toInstance.landingTest3OutsideLandingPoints                     = contestRule.ruleValues.landingTest3.OutsideLandingPoints
@@ -880,7 +892,11 @@ class FcService
 		toInstance.landingTest3PowerInAirPoints                         = contestRule.ruleValues.landingTest3.PowerInAirPoints
 		toInstance.landingTest3FlapsInAirPoints                         = contestRule.ruleValues.landingTest3.FlapsInAirPoints
 		toInstance.landingTest3PenaltyCalculator                        = contestRule.ruleValues.landingTest3.PenaltyCalculator
+		toInstance.landingTest3PrintCalculatorValues                    = contestRule.ruleValues.landingTest3.PrintCalculatorValues
 		
+        toInstance.landingTest4LongRuleTitle                            = contestRule.ruleValues.landingTest4.LongRuleTitle
+        toInstance.landingTest4ShortRuleTitle                           = contestRule.ruleValues.landingTest4.ShortRuleTitle
+        toInstance.landingTest4AirfieldImageNames                       = contestRule.ruleValues.landingTest4.AirfieldImageNames
 		toInstance.landingTest4MaxPoints                                = contestRule.ruleValues.landingTest4.MaxPoints
 		toInstance.landingTest4NoLandingPoints                          = contestRule.ruleValues.landingTest4.NoLandingPoints
 		toInstance.landingTest4OutsideLandingPoints                     = contestRule.ruleValues.landingTest4.OutsideLandingPoints
@@ -892,6 +908,7 @@ class FcService
 		toInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints   = contestRule.ruleValues.landingTest4.NotAllowedAerodynamicAuxiliariesPoints
 		toInstance.landingTest4TouchingObstaclePoints                   = contestRule.ruleValues.landingTest4.TouchingObstaclePoints
 		toInstance.landingTest4PenaltyCalculator                        = contestRule.ruleValues.landingTest4.PenaltyCalculator
+		toInstance.landingTest4PrintCalculatorValues                    = contestRule.ruleValues.landingTest4.PrintCalculatorValues
 	}
 	
     //--------------------------------------------------------------------------
@@ -908,6 +925,7 @@ class FcService
             }
         }
         
+        contestInstance.precisionFlying                         = contestRule.ruleValues.precisionFlying
         contestInstance.anrFlying                               = contestRule.ruleValues.anrFlying
         contestInstance.flightPlanShowLegDistance               = contestRule.ruleValues.flightPlanShowLegDistance
         contestInstance.flightPlanShowTrueTrack                 = contestRule.ruleValues.flightPlanShowTrueTrack
@@ -955,9 +973,7 @@ class FcService
         
         // General
         values += [ruleTitle:fromInstance.ruleTitle]
-        values += [precisionFlying:fromInstance.precisionFlying]
         values += [increaseFactor:fromInstance.increaseFactor]
-        values += [printLandingCalculatorValues:fromInstance.printLandingCalculatorValues]
         values += [printPointsGeneral:fromInstance.printPointsGeneral]
         values += [printPointsPlanningTest:fromInstance.printPointsPlanningTest]
         values += [printPointsFlightTest:fromInstance.printPointsFlightTest]
@@ -967,7 +983,6 @@ class FcService
         values += [printPointsLandingTest3:fromInstance.printPointsLandingTest3]
         values += [printPointsLandingTest4:fromInstance.printPointsLandingTest4]
         values += [printPointsLandingField:fromInstance.printPointsLandingField]
-        values += [landingFieldImageName:fromInstance.landingFieldImageName]
         values += [printPointsTurnpointSign:fromInstance.printPointsTurnpointSign]
         values += [printPointsEnrouteCanvas:fromInstance.printPointsEnrouteCanvas]
         
@@ -1020,6 +1035,9 @@ class FcService
         values += [observationTestTurnpointFalsePoints:fromInstance.observationTestTurnpointFalsePoints]
                 
         // LandingTest
+        values += [landingTest1LongRuleTitle:fromInstance.landingTest1LongRuleTitle]
+        values += [landingTest1ShortRuleTitle:fromInstance.landingTest1ShortRuleTitle]
+        values += [landingTest1AirfieldImageNames:fromInstance.landingTest1AirfieldImageNames]
         values += [landingTest1MaxPoints:fromInstance.landingTest1MaxPoints]
         values += [landingTest1NoLandingPoints:fromInstance.landingTest1NoLandingPoints]
         values += [landingTest1OutsideLandingPoints:fromInstance.landingTest1OutsideLandingPoints]
@@ -1030,7 +1048,11 @@ class FcService
         values += [landingTest1AbnormalLandingPoints:fromInstance.landingTest1AbnormalLandingPoints]
         values += [landingTest1NotAllowedAerodynamicAuxiliariesPoints:fromInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints]
         values += [landingTest1PenaltyCalculator:fromInstance.landingTest1PenaltyCalculator]
+        values += [landingTest1PrintCalculatorValues:fromInstance.landingTest1PrintCalculatorValues]
     
+        values += [landingTest2LongRuleTitle:fromInstance.landingTest2LongRuleTitle]
+        values += [landingTest2ShortRuleTitle:fromInstance.landingTest2ShortRuleTitle]
+        values += [landingTest2AirfieldImageNames:fromInstance.landingTest2AirfieldImageNames]
         values += [landingTest2MaxPoints:fromInstance.landingTest2MaxPoints]
         values += [landingTest2NoLandingPoints:fromInstance.landingTest2NoLandingPoints]
         values += [landingTest2OutsideLandingPoints:fromInstance.landingTest2OutsideLandingPoints]
@@ -1042,7 +1064,11 @@ class FcService
         values += [landingTest2NotAllowedAerodynamicAuxiliariesPoints:fromInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints]
         values += [landingTest2PowerInAirPoints:fromInstance.landingTest2PowerInAirPoints]
         values += [landingTest2PenaltyCalculator:fromInstance.landingTest2PenaltyCalculator]
+        values += [landingTest2PrintCalculatorValues:fromInstance.landingTest2PrintCalculatorValues]
         
+        values += [landingTest3LongRuleTitle:fromInstance.landingTest3LongRuleTitle]
+        values += [landingTest3ShortRuleTitle:fromInstance.landingTest3ShortRuleTitle]
+        values += [landingTest3AirfieldImageNames:fromInstance.landingTest3AirfieldImageNames]
         values += [landingTest3MaxPoints:fromInstance.landingTest3MaxPoints]
         values += [landingTest3NoLandingPoints:fromInstance.landingTest3NoLandingPoints]
         values += [landingTest3OutsideLandingPoints:fromInstance.landingTest3OutsideLandingPoints]
@@ -1055,7 +1081,11 @@ class FcService
         values += [landingTest3PowerInAirPoints:fromInstance.landingTest3PowerInAirPoints]
         values += [landingTest3FlapsInAirPoints:fromInstance.landingTest3FlapsInAirPoints]
         values += [landingTest3PenaltyCalculator:fromInstance.landingTest3PenaltyCalculator]
+        values += [landingTest3PrintCalculatorValues:fromInstance.landingTest3PrintCalculatorValues]
         
+        values += [landingTest4LongRuleTitle:fromInstance.landingTest4LongRuleTitle]
+        values += [landingTest4ShortRuleTitle:fromInstance.landingTest4ShortRuleTitle]
+        values += [landingTest4AirfieldImageNames:fromInstance.landingTest4AirfieldImageNames]
         values += [landingTest4MaxPoints:fromInstance.landingTest4MaxPoints]
         values += [landingTest4NoLandingPoints:fromInstance.landingTest4NoLandingPoints]
         values += [landingTest4OutsideLandingPoints:fromInstance.landingTest4OutsideLandingPoints]
@@ -1067,6 +1097,7 @@ class FcService
         values += [landingTest4NotAllowedAerodynamicAuxiliariesPoints:fromInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints]
         values += [landingTest4TouchingObstaclePoints:fromInstance.landingTest4TouchingObstaclePoints]
         values += [landingTest4PenaltyCalculator:fromInstance.landingTest4PenaltyCalculator]
+        values += [landingTest4PrintCalculatorValues:fromInstance.landingTest4PrintCalculatorValues]
         
         return values
     }
@@ -1076,6 +1107,7 @@ class FcService
     {
         Map values = [:]
         
+        values += [precisionFlying:fromInstance.precisionFlying]
         values += [anrFlying:fromInstance.anrFlying]
         values += [flightPlanShowLegDistance:fromInstance.flightPlanShowLegDistance]
         values += [flightPlanShowTrueTrack:fromInstance.flightPlanShowTrueTrack]
@@ -1116,8 +1148,6 @@ class FcService
         if (fromInstance.increaseFactor != oldContestRuleValues.increaseFactor) {return true;}
         /*
         if (fromInstance.ruleTitle != oldContestRuleValues.ruleTitle) {return true;}
-        if (fromInstance.precisionFlying != oldContestRuleValues.precisionFlying) {return true;}
-        if (fromInstance.printLandingCalculatorValues != oldContestRuleValues.printLandingCalculatorValues) {return true;}
         if (fromInstance.printPointsGeneral != oldContestRuleValues.printPointsGeneral) {return true;}
         if (fromInstance.printPointsPlanningTest != oldContestRuleValues.printPointsPlanningTest) {return true;}
         if (fromInstance.printPointsFlightTest != oldContestRuleValues.printPointsFlightTest) {return true;}
@@ -1127,7 +1157,6 @@ class FcService
         if (fromInstance.printPointsLandingTest3 != oldContestRuleValues.printPointsLandingTest3) {return true;}
         if (fromInstance.printPointsLandingTest4 != oldContestRuleValues.printPointsLandingTest4) {return true;}
         if (fromInstance.printPointsLandingField != oldContestRuleValues.printPointsLandingField) {return true;}
-        if (fromInstance.landingFieldImageName != oldContestRuleValues.landingFieldImageName) {return true;}
         if (fromInstance.printPointsTurnpointSign != oldContestRuleValues.printPointsTurnpointSign) {return true;}
         if (fromInstance.printPointsEnrouteCanvas != oldContestRuleValues.printPointsEnrouteCanvas) {return true;}
         */
@@ -1181,6 +1210,9 @@ class FcService
         if (fromInstance.observationTestTurnpointFalsePoints != oldContestRuleValues.observationTestTurnpointFalsePoints) {return true}
                 
         // LandingTest
+        if (fromInstance.landingTest1LongRuleTitle != oldContestRuleValues.landingTest1LongRuleTitle) {return true}
+        if (fromInstance.landingTest1ShortRuleTitle != oldContestRuleValues.landingTest1ShortRuleTitle) {return true}
+        if (fromInstance.landingTest1AirfieldImageNames != oldContestRuleValues.landingTest1AirfieldImageNames) {return true}
         if (fromInstance.landingTest1MaxPoints != oldContestRuleValues.landingTest1MaxPoints) {return true}
         if (fromInstance.landingTest1NoLandingPoints != oldContestRuleValues.landingTest1NoLandingPoints) {return true}
         if (fromInstance.landingTest1OutsideLandingPoints != oldContestRuleValues.landingTest1OutsideLandingPoints) {return true}
@@ -1191,7 +1223,11 @@ class FcService
         if (fromInstance.landingTest1AbnormalLandingPoints != oldContestRuleValues.landingTest1AbnormalLandingPoints) {return true}
         if (fromInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints != oldContestRuleValues.landingTest1NotAllowedAerodynamicAuxiliariesPoints) {return true}
         if (fromInstance.landingTest1PenaltyCalculator != oldContestRuleValues.landingTest1PenaltyCalculator) {return true}
+        if (fromInstance.landingTest1PrintCalculatorValues != oldContestRuleValues.landingTest1PrintCalculatorValues) {return true}
 
+        if (fromInstance.landingTest2LongRuleTitle != oldContestRuleValues.landingTest2LongRuleTitle) {return true}
+        if (fromInstance.landingTest2ShortRuleTitle != oldContestRuleValues.landingTest2ShortRuleTitle) {return true}
+        if (fromInstance.landingTest2AirfieldImageNames != oldContestRuleValues.landingTest2AirfieldImageNames) {return true}
         if (fromInstance.landingTest2MaxPoints != oldContestRuleValues.landingTest2MaxPoints) {return true}
         if (fromInstance.landingTest2NoLandingPoints != oldContestRuleValues.landingTest2NoLandingPoints) {return true}
         if (fromInstance.landingTest2OutsideLandingPoints != oldContestRuleValues.landingTest2OutsideLandingPoints) {return true}
@@ -1203,7 +1239,11 @@ class FcService
         if (fromInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints != oldContestRuleValues.landingTest2NotAllowedAerodynamicAuxiliariesPoints) {return true}
         if (fromInstance.landingTest2PowerInAirPoints != oldContestRuleValues.landingTest2PowerInAirPoints) {return true}
         if (fromInstance.landingTest2PenaltyCalculator != oldContestRuleValues.landingTest2PenaltyCalculator) {return true}
+        if (fromInstance.landingTest2PrintCalculatorValues != oldContestRuleValues.landingTest2PrintCalculatorValues) {return true}
 
+        if (fromInstance.landingTest3LongRuleTitle != oldContestRuleValues.landingTest3LongRuleTitle) {return true}
+        if (fromInstance.landingTest3ShortRuleTitle != oldContestRuleValues.landingTest3ShortRuleTitle) {return true}
+        if (fromInstance.landingTest3AirfieldImageNames != oldContestRuleValues.landingTest3AirfieldImageNames) {return true}
         if (fromInstance.landingTest3MaxPoints != oldContestRuleValues.landingTest3MaxPoints) {return true}
         if (fromInstance.landingTest3NoLandingPoints != oldContestRuleValues.landingTest3NoLandingPoints) {return true}
         if (fromInstance.landingTest3OutsideLandingPoints != oldContestRuleValues.landingTest3OutsideLandingPoints) {return true}
@@ -1216,7 +1256,11 @@ class FcService
         if (fromInstance.landingTest3PowerInAirPoints != oldContestRuleValues.landingTest3PowerInAirPoints) {return true}
         if (fromInstance.landingTest3FlapsInAirPoints != oldContestRuleValues.landingTest3FlapsInAirPoints) {return true}
         if (fromInstance.landingTest3PenaltyCalculator != oldContestRuleValues.landingTest3PenaltyCalculator) {return true}
+        if (fromInstance.landingTest3PrintCalculatorValues != oldContestRuleValues.landingTest3PrintCalculatorValues) {return true}
 
+        if (fromInstance.landingTest4LongRuleTitle != oldContestRuleValues.landingTest4LongRuleTitle) {return true}
+        if (fromInstance.landingTest4ShortRuleTitle != oldContestRuleValues.landingTest4ShortRuleTitle) {return true}
+        if (fromInstance.landingTest4AirfieldImageNames != oldContestRuleValues.landingTest4AirfieldImageNames) {return true}
         if (fromInstance.landingTest4MaxPoints != oldContestRuleValues.landingTest4MaxPoints) {return true}
         if (fromInstance.landingTest4NoLandingPoints != oldContestRuleValues.landingTest4NoLandingPoints) {return true}
         if (fromInstance.landingTest4OutsideLandingPoints != oldContestRuleValues.landingTest4OutsideLandingPoints) {return true}
@@ -1228,6 +1272,7 @@ class FcService
         if (fromInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints != oldContestRuleValues.landingTest4NotAllowedAerodynamicAuxiliariesPoints) {return true}
         if (fromInstance.landingTest4TouchingObstaclePoints != oldContestRuleValues.landingTest4TouchingObstaclePoints) {return true}
         if (fromInstance.landingTest4PenaltyCalculator != oldContestRuleValues.landingTest4PenaltyCalculator) {return true}
+        if (fromInstance.landingTest4PrintCalculatorValues != oldContestRuleValues.landingTest4PrintCalculatorValues) {return true}
         
         return false
     }
@@ -1258,6 +1303,110 @@ class FcService
         if (fromInstance.showObservationTest != oldContestRuleValues.showObservationTest) {return true}
         
         return false
+    }
+    
+    //--------------------------------------------------------------------------
+	void SetLandingRulePoints(toInstance, String landingNum, String landingRule)
+	{
+        Map landing_data = ContestRulesLanding[landingRule].data
+        println "SetLandingRulePoints '$toInstance' $landingNum $landingRule"
+		switch (landingNum) {
+            case "1":
+                toInstance.landingTest1LongRuleTitle                            = landing_data.LongRuleTitle
+                toInstance.landingTest1ShortRuleTitle                           = landing_data.ShortRuleTitle
+                toInstance.landingTest1AirfieldImageNames                       = landing_data.AirfieldImageNames
+                toInstance.landingTest1MaxPoints                                = landing_data.MaxPoints
+                toInstance.landingTest1NoLandingPoints                          = landing_data.NoLandingPoints
+                toInstance.landingTest1OutsideLandingPoints                     = landing_data.OutsideLandingPoints
+                toInstance.landingTest1RollingOutsidePoints                     = landing_data.RollingOutsidePoints
+                toInstance.landingTest1PowerInBoxPoints                         = landing_data.PowerInBoxPoints
+                toInstance.landingTest1GoAroundWithoutTouchingPoints            = landing_data.GoAroundWithoutTouchingPoints
+                toInstance.landingTest1GoAroundInsteadStopPoints                = landing_data.GoAroundInsteadStopPoints
+                toInstance.landingTest1AbnormalLandingPoints                    = landing_data.AbnormalLandingPoints
+                toInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints   = landing_data.NotAllowedAerodynamicAuxiliariesPoints
+                toInstance.landingTest1PenaltyCalculator                        = landing_data.PenaltyCalculator
+                toInstance.landingTest1PrintCalculatorValues                    = landing_data.PrintCalculatorValues
+                break
+            case "2":
+                toInstance.landingTest2LongRuleTitle                            = landing_data.LongRuleTitle
+                toInstance.landingTest2ShortRuleTitle                           = landing_data.ShortRuleTitle
+                toInstance.landingTest2AirfieldImageNames                       = landing_data.AirfieldImageNames
+                toInstance.landingTest2MaxPoints                                = landing_data.MaxPoints
+                toInstance.landingTest2NoLandingPoints                          = landing_data.NoLandingPoints
+                toInstance.landingTest2OutsideLandingPoints                     = landing_data.OutsideLandingPoints
+                toInstance.landingTest2RollingOutsidePoints                     = landing_data.RollingOutsidePoints
+                toInstance.landingTest2PowerInBoxPoints                         = landing_data.PowerInBoxPoints
+                toInstance.landingTest2GoAroundWithoutTouchingPoints            = landing_data.GoAroundWithoutTouchingPoints
+                toInstance.landingTest2GoAroundInsteadStopPoints                = landing_data.GoAroundInsteadStopPoints
+                toInstance.landingTest2AbnormalLandingPoints                    = landing_data.AbnormalLandingPoints
+                toInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints   = landing_data.NotAllowedAerodynamicAuxiliariesPoints
+                toInstance.landingTest2PowerInAirPoints                         = landing_data.PowerInAirPoints
+                toInstance.landingTest2PenaltyCalculator                        = landing_data.PenaltyCalculator
+                toInstance.landingTest2PrintCalculatorValues                    = landing_data.PrintCalculatorValues
+                break
+            case "3":
+                toInstance.landingTest3LongRuleTitle                            = landing_data.LongRuleTitle
+                toInstance.landingTest3ShortRuleTitle                           = landing_data.ShortRuleTitle
+                toInstance.landingTest3AirfieldImageNames                       = landing_data.AirfieldImageNames
+                toInstance.landingTest3MaxPoints                                = landing_data.MaxPoints
+                toInstance.landingTest3NoLandingPoints                          = landing_data.NoLandingPoints
+                toInstance.landingTest3OutsideLandingPoints                     = landing_data.OutsideLandingPoints
+                toInstance.landingTest3RollingOutsidePoints                     = landing_data.RollingOutsidePoints
+                toInstance.landingTest3PowerInBoxPoints                         = landing_data.PowerInBoxPoints
+                toInstance.landingTest3GoAroundWithoutTouchingPoints            = landing_data.GoAroundWithoutTouchingPoints
+                toInstance.landingTest3GoAroundInsteadStopPoints                = landing_data.GoAroundInsteadStopPoints
+                toInstance.landingTest3AbnormalLandingPoints                    = landing_data.AbnormalLandingPoints
+                toInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints   = landing_data.NotAllowedAerodynamicAuxiliariesPoints
+                toInstance.landingTest3PowerInAirPoints                         = landing_data.PowerInAirPoints
+                toInstance.landingTest3FlapsInAirPoints                         = landing_data.FlapsInAirPoints
+                toInstance.landingTest3PenaltyCalculator                        = landing_data.PenaltyCalculator
+                toInstance.landingTest3PrintCalculatorValues                    = landing_data.PrintCalculatorValues
+                break
+            case "4":
+                toInstance.landingTest4LongRuleTitle                            = landing_data.LongRuleTitle
+                toInstance.landingTest4ShortRuleTitle                           = landing_data.ShortRuleTitle
+                toInstance.landingTest4AirfieldImageNames                       = landing_data.AirfieldImageNames
+                toInstance.landingTest4MaxPoints                                = landing_data.MaxPoints
+                toInstance.landingTest4NoLandingPoints                          = landing_data.NoLandingPoints
+                toInstance.landingTest4OutsideLandingPoints                     = landing_data.OutsideLandingPoints
+                toInstance.landingTest4RollingOutsidePoints                     = landing_data.RollingOutsidePoints
+                toInstance.landingTest4PowerInBoxPoints                         = landing_data.PowerInBoxPoints
+                toInstance.landingTest4GoAroundWithoutTouchingPoints            = landing_data.GoAroundWithoutTouchingPoints
+                toInstance.landingTest4GoAroundInsteadStopPoints                = landing_data.GoAroundInsteadStopPoints
+                toInstance.landingTest4AbnormalLandingPoints                    = landing_data.AbnormalLandingPoints
+                toInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints   = landing_data.NotAllowedAerodynamicAuxiliariesPoints
+                toInstance.landingTest4TouchingObstaclePoints                   = landing_data.TouchingObstaclePoints
+                toInstance.landingTest4PenaltyCalculator                        = landing_data.PenaltyCalculator
+                toInstance.landingTest4PrintCalculatorValues                    = landing_data.PrintCalculatorValues
+                break
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    static List GetLandingAirfieldImageNames(fromInstance)
+    {
+        List airfield_image_names = []
+        for (String airfield_image_name in fromInstance.landingTest1AirfieldImageNames.split(',')) {
+            if (!(airfield_image_name in airfield_image_names)) {
+                airfield_image_names += airfield_image_name
+            }
+        }
+        for (String airfield_image_name in fromInstance.landingTest2AirfieldImageNames.split(',')) {
+            if (!(airfield_image_name in airfield_image_names)) {
+                airfield_image_names += airfield_image_name
+            }
+        }
+        for (String airfield_image_name in fromInstance.landingTest3AirfieldImageNames.split(',')) {
+            if (!(airfield_image_name in airfield_image_names)) {
+                airfield_image_names += airfield_image_name
+            }
+        }
+        for (String airfield_image_name in fromInstance.landingTest4AirfieldImageNames.split(',')) {
+            if (!(airfield_image_name in airfield_image_names)) {
+                airfield_image_names += airfield_image_name
+            }
+        }
+        return airfield_image_names
     }
     
     //--------------------------------------------------------------------------
@@ -4476,10 +4625,12 @@ class FcService
 				}
 			}
 			
+            /*
             if (IsContestRulePointsValueModified(resultclass_instance,old_contestrulepoints_values)) {
                 println "Contest rule value modfified."
 			    calculate_points_resultclass(resultclass_instance)
 			}
+            */
 
             if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
                 Map ret = ['instance':resultclass_instance,'saved':true,'message':getMsg('fc.updated',["${resultclass_instance.name}"])]
@@ -4577,9 +4728,11 @@ class FcService
         Map old_contestrulepoints_values = GetContestRulePointsValues(resultclass_instance)
         
         setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
+        /*
         if (IsContestRulePointsValueModified(resultclass_instance,old_contestrulepoints_values)) {
             calculate_points_resultclass(resultclass_instance)
         }
+        */
         
         if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
             return ['instance':resultclass_instance,'saved':true,'message':getMsg('fc.created',["${resultclass_instance.name}"])]

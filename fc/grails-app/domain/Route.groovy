@@ -51,6 +51,8 @@ class Route
     String contestMapPrintName = ""
     
     String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_AUTO                   // DB-2.21
+    String contestMapAirfieldsData = ""                                          // DB-2.42
+    Boolean contestMapShowAirfields = true                                       // DB-2.42
     Boolean contestMapCircle = true                                              // DB-2.21
     Boolean contestMapProcedureTurn = true                                       // DB-2.21
     Boolean contestMapLeg = true                                                 // DB-2.21
@@ -78,6 +80,7 @@ class Route
     Boolean contestMapAirspaces = false                                          // DB-2.21
     String contestMapAirspacesLayer = ""                                         // DB-2.21, UNUSED, since DB-2.32
     String contestMapAirspacesLayer2 = ""                                        // DB-2.32
+    Boolean contestMapShowAirspaces = true                                       // DB-2.42
     Integer contestMapAirspacesLowerLimit = 4000                                 // DB-2.38
     Boolean contestMapShowFirstOptions = true                                    // DB-2.29
     String contestMapFirstTitle = ""                                             // DB-2.29
@@ -273,6 +276,11 @@ class Route
         // DB-2.41 compatibility
         corridorWidth(nullable:true,min:0.0)
         defaultPrintMap(nullable:true)
+        
+        // DB-2.42 compatibility
+        contestMapAirfieldsData(nullable:true)
+        contestMapShowAirfields(nullable:true)
+        contestMapShowAirspaces(nullable:true)
 	}
 
 	static mapping = {
@@ -282,6 +290,7 @@ class Route
         enroutephotos sort:"id"
         enroutecanvas sort:"id"
         contestMapAirspacesLayer2 sqlType: "nvarchar(max)"
+        contestMapAirfieldsData sqlType: "nvarchar(max)"
 	}
 	
 	void CopyValues(Route routeInstance)
@@ -318,6 +327,8 @@ class Route
         }
 
         contestMapAirfields = routeInstance.contestMapAirfields
+        contestMapAirfieldsData = routeInstance.contestMapAirfieldsData
+        contestMapShowAirfields = routeInstance.contestMapShowAirfields
         contestMapCircle = routeInstance.contestMapCircle
         contestMapProcedureTurn = routeInstance.contestMapProcedureTurn
         contestMapLeg = routeInstance.contestMapLeg
@@ -342,6 +353,7 @@ class Route
         contestMapAdditionals = routeInstance.contestMapAdditionals
         contestMapAirspaces = routeInstance.contestMapAirspaces
         contestMapAirspacesLayer2 = routeInstance.contestMapAirspacesLayer2
+        contestMapShowAirspaces = routeInstance.contestMapShowAirspaces
         contestMapAirspacesLowerLimit = routeInstance.contestMapAirspacesLowerLimit
 		contestMapShowFirstOptions = routeInstance.contestMapShowFirstOptions
         contestMapFirstTitle = routeInstance.contestMapFirstTitle

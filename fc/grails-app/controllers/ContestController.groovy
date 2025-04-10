@@ -259,9 +259,9 @@ class ContestController {
         }
     }
 
-    def calculatepoints = {
+    def recalculatepenalties = {
         def contest = fcService.calculatepointsContest(params)
-          flash.message = contest.message
+        flash.message = contest.message
         redirect(action:editpoints,id:params.id)
     }
 
@@ -1231,4 +1231,19 @@ class ContestController {
         redirect(controller:"crew", action:"list") // ,model:[contestInstance:ret.instance])
     }
     
+    def livetracking_scorecards = {
+        List scorecards = trackerService.GetScorecards()
+        flash.message = scorecards
+        render(view:'edit',model:[contestInstance:session?.lastContest])
+    }
+
+    def takeover_landingpoints = {
+        Contest contest_instance = Contest.get(params.id)
+        if (params.landingnum && params.landingrule) {
+            fcService.SetLandingRulePoints(contest_instance, params.landingnum, params.landingrule)
+            contest_instance.save()
+            flash.message = message(code:'fc.contestrule.landings.takeover.done', args:[params.landingnum])
+        }
+        redirect(action:'editpoints')
+    }
 }

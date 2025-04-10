@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.0.2
-:revdate: 21.02.2025
+:revnumber: 4.1.0
+:revdate: 10.04.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -77,9 +77,8 @@ Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?la
 [[supported-rules]]
 == Supported rulesets
 
-* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)^]
-* link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland (German)^]
-* link:rules/DE_Navigationsflug_2017_en.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
+* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Rallyeflug Deutschland^]
+* link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_anr_rules_2024.pdf[FAI Air Navigation Race^]
 * link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
@@ -553,7 +552,7 @@ Blank lines and lines starting with # are ignored
 
 . Create route with TO (Routes -> *New route*)
 
-. Routes -> OSM Contest Map -> *Determine airspaces around the airport* (if <<fc_en.adoc#configuration-openaip,OpenAIP access>> has been configured) +
+. Routes -> OSM Contest Map -> *Search airspaces around the airport* (if <<fc_en.adoc#configuration-openaip,OpenAIP access>> has been configured) +
 +
 The height of the airspaces to be taken into account can be adjusted (4000ft by default). +
 Airspaces not to be taken into account can be commented out with a # in front if required. +
@@ -926,7 +925,7 @@ All mentioned route details and objects can be deselected.
 
 *Airspaces*
 
-"_Determine airspaces around the airport_" retrieves all airspaces from OpenAIP that are necessary to serve all map sizes.
+"_Search airspaces around the airport_" retrieves all airspaces from OpenAIP that are necessary to serve all map sizes.
 All airspaces where the lower altitude limit is lower than the set altitude (default: 4000ft) are taken into account.
 
 The airspaces determined are entered in the Airspaces text field. AREA and FIS airspaces as well as airspaces specified in the <<fc_en.adoc#configuration-openaip,OpenAIP configuration>>
@@ -1264,7 +1263,7 @@ OSM Contest Map -> Show 1. settings +
 Select the option to print in portrait format if necessary +
 Run “Generate (for Task Creator)” +
 +
-If OpenAIP access has been configured, run “Determine airspaces around the airport” first if necessary. +
+If OpenAIP access has been configured, run "Search airspaces around the airport" first if necessary. +
 +
 The height of airspaces to be taken into account can be adjusted (4000 feet pre-set). +
 Air spaces that are not to be considered can be commented out with a leading # if necessary. +
@@ -1398,80 +1397,27 @@ see <<fc_en.adoc#evaluation>>
 [[landings]]
 == Landings
 Depending on the selected competition rules, a fixed landing scheme is used.
-Its penalty point calculation from a landing measurement value is stored as a formula.
-This formula can be adapted to use a landing scheme that differs from the selected
-to use a different landing scheme. The formulas can be found under
-'Competition -> Points' or 'Class -> Points' for each landing (max. 4).
-Special landing errors like 'No landing', 'Abnormal landing' etc. are entered through
-clickable check boxes.
+This can have up to 4 different penalty point settings.
+A non-standard application sequence can be configured in the task.
+The penalty point calculation from an observed landing field is stored as a formula.
+Special landing faults like 'No landing', 'Abnormal landing', etc. are entered by clickable check boxes.
 
-The following formulas are used for penalty point calculation of landings:
-
-* link:rules/DE_Navigationsflug_2020.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020^] (all landings)
-
-  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
-
-* link:rules/DE_Navigationsflug_2017.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017^] (all landings)
-
-  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
-
-* link:rules/FAI_landing_rules_2024.pdf#page=10[FAI Air Rally Flying^] (all landings)
-
-  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
-
-* link:rules/FAI_landing_rules_2024.pdf#page=11[FAI Precision Flying^]
-** Landing 1 and 4
-
-  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
-
-** Landing 2 and 3
-
-  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
-
-+
-The order of application can be configured for a task.
-
-<<<
-* link:rules/CH_Praezisionsflug_2017.pdf#page=19[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017^]
-** Landing 1 and 4
-
-  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
- 
-** Landing 2 and 3
-
-  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
-
-+
-The order of application can be configured for a task.
-
-* link:rules/AT_Motorflug_2023.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2023^] (all landings).
-
-  {x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}
-  
-* link:rules/AT_Motorflug_2023.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2023^] (all landings).
-
-  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}
-  
-* link:rules/AT_Motorflug_2023.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2023^] (all landings).
-
-  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}
-  
-* link:rules/AT_Motorflug_2023.pdf#page=36[Navigationsflug-Reglement Österreich - Ausgabe 2023^] (all landings)
-
-  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+The penalty point definitions can be customized under 'Contest -> Points' or 'Class -> Points'.
+In addition to changing individual penalty points and the landing field formula, you can also switch to the penalty points of a different competition ruleset.
 
 To record the landings, print the referee schedule of a task with the following fields:
 
 * No. (start number)
-* Aircraft (registration number)
+* Aircraft (registration)
 * Aircraft type
 * Color (if recorded)
 * Latest landing time
-* Blank column 1...4 (for recording landing fields and landing errors)
+* Empty column 1 (landing field)
+* Empty columns 2...4 (to record landing faults)
 
-Do not print the crew, as this is against the rules.
+Do not print the crew, as this contradicts the rules.
 
-Landing judges should know as little as possible about the specific crew of an aircraft in order to objectively judge a landing.
+Landing judges should know as little as possible about the specific crew of an aircraft in order to objectively assess a landing.
 
 <<<
 [[evaluation]]
@@ -2128,18 +2074,16 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
 
 
 [[configuration-task-creator]]
-=== Configure original Task Creator for use
+=== Task Creator configuration
  flightcontest {
    taskcreator {
-     url = "https://www.airrats.cl/taskcreator?admin"  // use original Task Creator
-     // jsextern = true                                // use original code for integrated Task Creator
+     url = "https://www.airrats.cl/taskcreator?admin"  // Use 'Task Creator (extern)' with different parameters
+     // jsextern = true                                // Use the JS code of the external Task Creator for 'Task Creator (intern)'
    }
  }
 
-Flight Contest is delivered with an integrated Task Creator.
-Specifying this value also makes the original task creator available.
-The integrated task creator has a different appearance and has online functions deactivated,
-which prevents a task from being saved in a publicly accessible database.
+Specifying the url value makes it possible to use the external Task Creator with other parameters.
+The internal Task Creator disables all online functions that make it possible to save a route in the publicly accessible database.
 
 [[configuration-configserver]]
 === Configure your own configuration server
@@ -2392,7 +2336,8 @@ after you have made backups as described below.
 <<fc_en.adoc#save-fcdb>> +
 <<fc_en.adoc#save-prints>> +
 <<fc_en.adoc#save-fcsave>> +
-<<fc_en.adoc#restore-fcdb>>
+<<fc_en.adoc#restore-fcdb>> +
+<<fc_en.adoc#restore-fcdb-damaged-by-installation>>
 
 [[save-fcdb]]
 === Backup of the 'Flight Contest' database
@@ -2430,3 +2375,12 @@ where you set the variable *dest_dir* to a folder on an external storage medium.
 . Copy 'C:\FCSave\<date>-<time>-fcdb.h2.db'
     to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'.
     You need administrator privileges for this.
+
+[[restore-fcdb-damaged-by-installation]]
+=== Restore 'Flight Contest' database damaged by installation
+
+. Stop Flight Contest (Flight Contest Manager -> Right mouse button -> Service commands -> Stop Flight Contest)
+. In 'C:\Program Files\Flight Contest\fc' rename the file 'fcdb.h2.db' to 'fcdb.h2.db.old'
+. In 'C:\Program Files\Flight Contest' search for the latest backup folder 'fc-backup-...'
+. Copy the file 'fcdb.h2.db' from this folder to the folder 'C:\Program Files\Flight Contest\fc'
+. Start Flight Contest (Flight Contest Manager -> Right mouse button -> Service commands -> Start Flight Contest)
