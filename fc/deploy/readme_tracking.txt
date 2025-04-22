@@ -1,6 +1,10 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 4.1.1
+-------------
+- Bug "Created ANR navigation tasks don't work" fixed
+
 Changes 4.1.0
 -------------
 - Adjustments to Live Tracking API changes (Parse and creation of contests)

@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.1
+-------------
+- Updating of the following sets of rules
+    Wettbewerbsordnung Rallyeflug Deutschland 2025
+    Wettbewerbsordnung Air Navigation Race Deutschland 2025
+    Regelwerk Landewertung Deutschland 2025
+- OSM Contest Map: Now all airspaces where the lower altitude limit is less than or equal to the set altitude are taken into account.
+- ANR corridor evaluation: Only one second legs of logger measurement points lying outside the corridor are taken into account for calculating penalty points.
+- Bug "Created live tracking ANR navigation tasks don't work" fixed
+
 Changes 4.1.0
 -------------
 - Edit contest points: Possibility for take over of landing points of another ruleset added

@@ -257,7 +257,7 @@ class FlightResultsTagLib
                         if (show_outside) {
                             if (coordresult_instance.type.IsCorridorResultCoord()) {
                                 if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
-                                    int outsidecorridor_penalties = coordresult_instance.resultOutsideCorridorSeconds*attrs.t.GetFlightTestOutsideCorridorPointsPerSecond()
+                                    int outsidecorridor_penalties = coordresult_instance.GetOutsideCorridorPenalties()
                                     penalty_outsidecorridor_summary += outsidecorridor_penalties
                                     String points_class = "points"
                                     if (!coordresult_instance.resultOutsideCorridorSeconds) {
@@ -1013,7 +1013,7 @@ class FlightResultsTagLib
                         if (show_outside) {
                             if (last_coordresult_instance.type.IsCorridorResultCoord()) {
                                 if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
-                                    int outsidecorridor_penalties = last_coordresult_instance.resultOutsideCorridorSeconds*attrs.t.GetFlightTestOutsideCorridorPointsPerSecond()
+                                    int outsidecorridor_penalties = last_coordresult_instance.GetOutsideCorridorPenalties()
                                     penalty_outsidecorridor_summary += outsidecorridor_penalties
                                     String s = """<td class="penaltyoutsidecorridor">${outsidecorridor_penalties}"""
                                     if (last_coordresult_instance.resultOutsideCorridorMeasurement) {
@@ -1125,7 +1125,7 @@ class FlightResultsTagLib
                     if (show_outside) {
                         if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
                             if (last_coordresult_instance.type.IsCorridorResultCoord()) {
-                                int outsidecorridor_penalties = last_coordresult_instance.resultOutsideCorridorSeconds*attrs.t.GetFlightTestOutsideCorridorPointsPerSecond()
+                                int outsidecorridor_penalties = last_coordresult_instance.GetOutsideCorridorPenalties()
                                 penalty_outsidecorridor_summary += outsidecorridor_penalties
                                 String s = """<td class="penaltyoutsidecorridor">${outsidecorridor_penalties}"""
                                 if (last_coordresult_instance.resultOutsideCorridorMeasurement) {
@@ -1617,11 +1617,15 @@ class FlightResultsTagLib
                     return ret
                 }
                 if (calcresult_instance.outsideCorridor) {
-                    ret.info = "Out ${outsideSec}${message(code:'fc.time.s')}"
-                    if (calcresult_instance.noOutsideCorridor) {
-                        ret.tdclass = "nobadcourseinfo"
-                    } else {
-                        ret.tdclass = "badcourseinfo"
+                    int outside_sec = outsideSec
+                    outside_sec -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
+                    if (outside_sec > 0) {
+                        ret.info = "Out ${outside_sec}${message(code:'fc.time.s')}"
+                        if (calcresult_instance.noOutsideCorridor) {
+                            ret.tdclass = "nobadcourseinfo"
+                        } else {
+                            ret.tdclass = "badcourseinfo"
+                        }
                     }
                     return ret
                 }

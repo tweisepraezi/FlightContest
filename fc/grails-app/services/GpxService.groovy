@@ -1188,8 +1188,12 @@ class GpxService
                 }
                 if (it.extensions.flightcontest.outsidecorridor.'@duration'[0]) {
                     String outsidecorridor_duration = it.extensions.flightcontest.outsidecorridor.'@duration'[0].toString()
-                    if (outsidecorridor_duration) {
-                        points[points.size()-1].name += getMsg("fc.offlinemap.outsidecorridor.seconds.2", [outsidecorridor_duration], isPrint) // Text ohne Umlaute
+                    if (outsidecorridor_duration && outsidecorridor_duration.isInteger()) {
+                        int outsidecorridor_duration2 = outsidecorridor_duration.toInteger()
+                        if (outsidecorridor_duration2 > 0) {
+                            outsidecorridor_duration2 -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
+                        }
+                        points[points.size()-1].name += getMsg("fc.offlinemap.outsidecorridor.seconds.2", [outsidecorridor_duration2], isPrint) // Text ohne Umlaute
                         if (print_warning) {
                             points[points.size()-1].name += "*"
                         }
@@ -1554,7 +1558,14 @@ class GpxService
             gpx.trk.trkseg.trkpt.each { p ->
                 if (p.extensions.flightcontest.outsidecorridor && p.extensions.flightcontest.outsidecorridor.'@duration'[0]) {
                     String duration = p.extensions.flightcontest.outsidecorridor.'@duration'[0]
-                    Map new_point = [name:getMsg("fc.offlinemap.outsidecorridor.seconds", [duration], false)] // false - no Print
+                    int duration2 = 0
+                    if (duration && duration.isInteger()) {
+                        duration2 = duration.toInteger()
+                        if (duration2 > 0) {
+                            duration2 -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
+                        }
+                    }
+                    Map new_point = [name:getMsg("fc.offlinemap.outsidecorridor.seconds", [duration2], false)] // false - no Print
                     new_point += [latcenter:p.'@lat', loncenter:p.'@lon', radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_ERRORPOINT]
                     if (p.extensions.flightcontest.outsidecorridor.text() == "yes") {
                         new_point += [error:true]
@@ -1682,7 +1693,11 @@ class GpxService
         Media media = Media.Screen
         boolean is_print = false
         if (params.isTracking) {
-            media = Media.Tracking
+            if (routeInstance.corridorWidth) {
+                media = Media.TrackingANR
+            } else {
+                media = Media.Tracking
+            }
             is_print = true
         } else if (params.isPrint) {
             media = Media.Print
@@ -2439,7 +2454,7 @@ class GpxService
                             routeInstance.corridorWidth
                         )
                         xml.rte {
-                            wr_gate(last_coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage, null, null, false)
+                            wr_gate(last_coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage, null, null, false, true)
                             // BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             if (write_gate) {
                                 xml.name last_coordroute_instance.titleMediaCode(media)
@@ -3588,7 +3603,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, int secretGateNumber, MarkupBuilder xml, Task taskInstance, boolean wrPhotoImage, BigDecimal latValue = null, BigDecimal lonValue = null, boolean setEndCurved = false)
+    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, int secretGateNumber, MarkupBuilder xml, Task taskInstance, boolean wrPhotoImage, BigDecimal latValue = null, BigDecimal lonValue = null, boolean setEndCurved = false, boolean wrSECRET = false)
     {
         BigDecimal altitude_meter = coordrouteInstance.altitude.toLong() / ftPerMeter
         String dir = ""
@@ -3613,17 +3628,21 @@ class GpxService
         if (setEndCurved) {
             end_curved = true
         }
-        if (coordrouteInstance.type == CoordType.SECRET) {
+        CoordType type = coordrouteInstance.type
+        if (coordrouteInstance.type == CoordType.TP && wrSECRET) {
+            type = CoordType.SECRET
+        }
+        if (type == CoordType.SECRET) {
             end_curved = false
         }
         int gate_number = coordrouteInstance.titleNumber
-        if (coordrouteInstance.type == CoordType.SECRET && secretGateNumber) {
+        if (type == CoordType.SECRET && secretGateNumber) {
             gate_number = secretGateNumber
         }
         xml.extensions {
             xml.flightcontest {
                 xml.gate(
-                    type:           coordrouteInstance.type,
+                    type:           type,
                     number:         gate_number,
                     lat:            latValue,
                     lon:            lonValue,

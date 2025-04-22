@@ -387,10 +387,14 @@ class Coord
 		}
 	}
 	
-    String titleTrackingCode()
+    String titleTrackingCode(boolean isANR)
 	{
 		switch (type) {
 			case CoordType.TP:
+                if (isANR) {
+                    return "${getTrackingMsg(CoordType.SECRET.code)}${titleNumber}"
+                }
+                return "${getTrackingMsg(type.code)}${titleNumber}"
             case CoordType.SECRET:
 				return "${getTrackingMsg(type.code)}${titleNumber}"
 			default:
@@ -424,7 +428,10 @@ class Coord
                 title = titlePrintCode()
                 break
             case Media.Tracking:
-                title = titleTrackingCode()
+                title = titleTrackingCode(false)
+                break
+            case Media.TrackingANR:
+                title = titleTrackingCode(true)
                 break
         }
 		return title

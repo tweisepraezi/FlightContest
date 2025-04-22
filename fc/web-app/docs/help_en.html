@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.1.0,</span>
-<span id="revdate">10.04.2025</span>
+<span id="revnumber">version 4.1.1,</span>
+<span id="revdate">22.04.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -734,10 +734,13 @@ and to evaluate planning, navigation, observation and/or landing test results.</
 <div class="ulist">
 <ul>
 <li>
-<p><a href="rules/DE_Navigationsflug_2020.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Rallyeflug Deutschland</a></p>
+<p><a href="rules/DE_Rallyeflug_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Rallyeflug Deutschland</a></p>
 </li>
 <li>
 <p><a href="rules/DE_ANR_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Air Navigation Race Deutschland</a></p>
+</li>
+<li>
+<p><a href="rules/DE_Landewertung_2025.pdf" target="_blank" rel="noopener">Regelwerk Landewertung Deutschland</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
@@ -1599,7 +1602,7 @@ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 <li>
 <p>Routes &#8594; OSM Contest Map &#8594; <strong>Search airspaces around the airport</strong> (if <a href="#configuration-openaip">OpenAIP access</a> has been configured)<br></p>
 <div class="paragraph">
-<p>The height of the airspaces to be taken into account can be adjusted (4000ft by default).<br>
+<p>The height of the airspaces to be taken into account can be adjusted (lower limit &#8656; 4000ft by default).<br>
 Airspaces not to be taken into account can be commented out with a # in front if required.<br>
 An export for viewing in Google Earth can be carried out with "KMZ export airspaces".</p>
 </div>
@@ -2295,7 +2298,7 @@ The providers of the map data and the manufacturer of this function do not assum
 </div>
 <div class="paragraph">
 <p>"<em>Search airspaces around the airport</em>" retrieves all airspaces from OpenAIP that are necessary to serve all map sizes.
-All airspaces where the lower altitude limit is lower than the set altitude (default: 4000ft) are taken into account.</p>
+All airspaces where the lower altitude limit is lower or equal than the set altitude (default: 4000ft) are taken into account.</p>
 </div>
 <div class="paragraph">
 <p>The airspaces determined are entered in the Airspaces text field. AREA and FIS airspaces as well as airspaces specified in the <a href="#configuration-openaip">OpenAIP configuration</a>
@@ -3043,7 +3046,7 @@ Run “Generate (for Task Creator)”<br></p>
 <p>If OpenAIP access has been configured, run "Search airspaces around the airport" first if necessary.<br></p>
 </div>
 <div class="paragraph">
-<p>The height of airspaces to be taken into account can be adjusted (4000 feet pre-set).<br>
+<p>The height of airspaces to be taken into account can be adjusted (lower limit &#8656; 4000ft by default).<br>
 Air spaces that are not to be considered can be commented out with a leading # if necessary.<br>
 With “KMZ export airspaces”, an export can be made to view the airspaces in Google Earth.<br></p>
 </div>

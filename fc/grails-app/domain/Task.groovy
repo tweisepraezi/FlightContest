@@ -707,6 +707,7 @@ class Task
                 name = printName()
                 break
             case Media.Tracking:
+            case Media.TrackingANR:
                 name = trackingName()
                 break
         }

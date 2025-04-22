@@ -4,16 +4,16 @@
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
 const DBVersion = '2.42.0';     // DB-2.42
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '4.1.0';      // no milestone
+const FCVersion = '4.1.1';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '4.1.0';    // no milestone
+const FCVersion64 = '4.1.1';    // no milestone
 [Setup]
 AppName=Flight Contest
 
 AppVerName=Flight Contest
-AppVersion=4.1.0
+AppVersion=4.1.1
 ; no milestone below
-VersionInfoVersion=4.1.0
+VersionInfoVersion=4.1.1
 
 AppCopyright=(C) 2009-2025 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -158,7 +158,8 @@ Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2024";          
 Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2024";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2024.pdf";WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\FAI GAC Landing appendix 2024";                                 Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_landing_rules_2024.pdf";         WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Air Navigation Race Deutschland 2025";       Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_ANR_2025.pdf";                    WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2020";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2020.pdf";        WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Wettbewerbsordnung Rallyeflug Deutschland 2025";                Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Rallyeflug_2025.pdf";             WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Regelwerk Landewertung Deutschland 2025";                       Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Landewertung_2025.pdf";           WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2017"; Filename: "{app}\tomcat\webapps\fc\docs\rules\CH_Praezisionsflug_2017.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Motorflug-Wettbewerbsordnung Österreich 2023";                  Filename: "{app}\tomcat\webapps\fc\docs\rules\AT_Motorflug_2023.pdf";              WorkingDir: "{commondesktop}";
 

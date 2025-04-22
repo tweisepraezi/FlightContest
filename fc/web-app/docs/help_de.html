@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 4.1.0,</span>
-<span id="revdate">10.04.2025</span>
+<span id="revnumber">version 4.1.1,</span>
+<span id="revdate">22.04.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -737,10 +737,13 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <div class="ulist">
 <ul>
 <li>
-<p><a href="rules/DE_Navigationsflug_2020.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Rallyeflug Deutschland</a></p>
+<p><a href="rules/DE_Rallyeflug_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Rallyeflug Deutschland</a></p>
 </li>
 <li>
 <p><a href="rules/DE_ANR_2025.pdf" target="_blank" rel="noopener">Wettbewerbsordnung Air Navigation Race Deutschland</a></p>
+</li>
+<li>
+<p><a href="rules/DE_Landewertung_2025.pdf" target="_blank" rel="noopener">Regelwerk Landewertung Deutschland</a></p>
 </li>
 <li>
 <p><a href="rules/FAI_rally_flying_rules_2024.pdf" target="_blank" rel="noopener">FAI Air Rally Flying</a></p>
@@ -1612,7 +1615,7 @@ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 <li>
 <p>Strecken &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Lufträume um Flughafen suchen</strong> (wenn ein  <a href="#configuration-openaip">OpenAIP-Zugang</a> konfiguriert wurde)<br></p>
 <div class="paragraph">
-<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt).<br>
+<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (Untergrenze &#8656; 4000ft voreingestellt).<br>
 Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden.<br>
 Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.</p>
 </div>
@@ -2308,7 +2311,7 @@ Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen
 </div>
 <div class="paragraph">
 <p>"<em>Lufträume um Flughafen suchen</em>" ruft aus OpenAIP alle Lufträume ab, die nötig sind, um alle Karten-Größen zu bedienen.
-Dabei werden alle Lufträume berücksichtigt, wo das untere Höhenlimit kleiner als die eingestellte Höhe (Standard: 4000ft) ist.</p>
+Dabei werden alle Lufträume berücksichtigt, wo das untere Höhenlimit kleiner oder gleich als die eingestellte Höhe (Standard: 4000ft) ist.</p>
 </div>
 <div class="paragraph">
 <p>Die ermittelten Lufträume werden in das Luftraum-Textfeld eingetragen. AREA- und FIS-Lufträume sowie in der <a href="#configuration-openaip">OpenAIP-Konfiguration</a>
@@ -3059,7 +3062,7 @@ Ausdruck im Hochformat bei Bedarf wählen<br>
 <p>Wurde ein OpenAIP-Zugang konfiguriert, bei Bedarf zuvor "Lufträume um Flughafen suchen" durchführen.<br></p>
 </div>
 <div class="paragraph">
-<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt).<br>
+<p>Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (Untergrenze &#8656; 4000ft voreingestellt).<br>
 Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden.<br>
 Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google Earth vorgenommen werden.<br></p>
 </div>

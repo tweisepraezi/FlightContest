@@ -863,6 +863,11 @@ class TrackerService
                 test_list += test_instance
             }
         }
+        if (false) { // write gpx to log
+            log.println "GPX1"
+            log.println new String(Base64.getDecoder().decode(route_data),"UTF-8")
+            log.println "GPX2"
+        }
         
         if (!contestant_list) {
             Map ret = ['instance':task_instance, 'created':false, 'message':getMsg('fc.livetracking.navigationtaskcreate.error',[route_instance.liveTrackingScorecard, getMsg('fc.livetracking.navigationtaskcontestantlistcreate.error')])]
@@ -1918,6 +1923,11 @@ class TrackerService
         Map ret = [data:[:], arrivalTime:null]
         Contest contest_instance = testInstance.task.contest
         
+        Media media = Media.Tracking
+        if (testInstance.flighttestwind.flighttest.route.corridorWidth) {
+            media = Media.TrackingANR
+        }
+        
         int minutes_between_trackerstart_takeoff = 5
         if (grailsApplication.config.flightcontest?.livetracking?.contestant?.minutesBetweenTrackerStartAndTakeoff && grailsApplication.config.flightcontest?.livetracking?.contestant?.minutesBetweenTrackerStartAndTakeoff instanceof Integer) {
             minutes_between_trackerstart_takeoff = grailsApplication.config.flightcontest?.livetracking?.contestant?.minutesBetweenTrackerStartAndTakeoff
@@ -1938,7 +1948,7 @@ class TrackerService
         Date leg_time = testInstance.startTime
         for (TestLegFlight testlegflight_instance in TestLegFlight.findAllByTest(testInstance)) {
             leg_time = testlegflight_instance.AddPlanLegTime(leg_time)
-            gate_times += ["${testlegflight_instance.coordTitle.titleMediaCode(Media.Tracking)}":FcTime.UTCGetDateTime(trackingDate, leg_time, contest_instance.timeZone)] 
+            gate_times += ["${testlegflight_instance.coordTitle.titleMediaCode(media)}":FcTime.UTCGetDateTime(trackingDate, leg_time, contest_instance.timeZone)] 
         }
         gate_times += ["LDG":ldg_time]
         

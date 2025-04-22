@@ -385,7 +385,7 @@ class OpenAIPService
         if (d.lowerLimit.value == 0) {
             return true
         }
-        if (d.lowerLimit.unit == 1 && d.lowerLimit.value < contestMapAirspacesLowerLimit) {
+        if (d.lowerLimit.unit == 1 && d.lowerLimit.value <= contestMapAirspacesLowerLimit) {
             return true
         }
         return false

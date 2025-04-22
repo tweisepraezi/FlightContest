@@ -23,7 +23,7 @@ enum ContestRulesLanding
     ]),
 
     DE_RF_ANR ([
-            LongRuleTitle:"Wettbewerbsordnung Landung Deutschland - Ausgabe 2025", // DE_RF_ANR
+            LongRuleTitle:"Regelwerk Landewertung Deutschland - Ausgabe 2025", // DE_RF_ANR
             ShortRuleTitle:"",                            // DE_RF_ANR
             AirfieldImageNames:'images/landingfield/de_nav.jpg', // DE_RF_ANR
             MaxPoints:300,                                // DE_RF_ANR 4

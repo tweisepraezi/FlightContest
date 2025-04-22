@@ -49,6 +49,8 @@ class Defs
     static final String LIVETRACKING_SCORECARD_PF                      = "FAI Precision"
     static final String LIVETRACKING_SCORECARD_RF                      = "FAI Air Rally"
     final static List LIVETRACKING_SCORECARDS = [LIVETRACKING_SCORECARD_ANR, LIVETRACKING_SCORECARD_PF, LIVETRACKING_SCORECARD_RF]
+    
+    final static int ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE          = 1
 
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
     static final String LIVETRACKING_DISPLAY_MAP                       = "/map/"

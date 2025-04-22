@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.1.0
-:revdate:   10.04.2025
+:revnumber: 4.1.1
+:revdate:   22.04.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -78,8 +78,9 @@ Integration des Rallye Flying Task Creators (https://www.airrats.cl/taskcreator?
 [[supported-rules]]
 == Unterstützte Regelwerke
 
-* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Rallyeflug Deutschland^]
+* link:rules/DE_Rallyeflug_2025.pdf[Wettbewerbsordnung Rallyeflug Deutschland^]
 * link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland^]
+* link:rules/DE_Landewertung_2025.pdf[Regelwerk Landewertung Deutschland^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_anr_rules_2024.pdf[FAI Air Navigation Race^]
 * link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
@@ -565,7 +566,7 @@ Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 
 . Strecken -> OSM-Wettbewerbs-Karte -> *Lufträume um Flughafen suchen* (wenn ein  <<fc.adoc#configuration-openaip,OpenAIP-Zugang>> konfiguriert wurde) +
 +
-Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt). +
+Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (Untergrenze <= 4000ft voreingestellt). +
 Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden. +
 Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.
 
@@ -935,7 +936,7 @@ Alle genannten Streckendetails und Objekte können abgewählt werden.
 *Lufträume*
 
 "_Lufträume um Flughafen suchen_" ruft aus OpenAIP alle Lufträume ab, die nötig sind, um alle Karten-Größen zu bedienen.
-Dabei werden alle Lufträume berücksichtigt, wo das untere Höhenlimit kleiner als die eingestellte Höhe (Standard: 4000ft) ist.
+Dabei werden alle Lufträume berücksichtigt, wo das untere Höhenlimit kleiner oder gleich als die eingestellte Höhe (Standard: 4000ft) ist.
 
 Die ermittelten Lufträume werden in das Luftraum-Textfeld eingetragen. AREA- und FIS-Lufträume sowie in der <<fc.adoc#configuration-openaip,OpenAIP-Konfiguration>>
 in _ignoreAirspacesStartsWith_ angegebene Lufträume werden auskommentiert.
@@ -1274,7 +1275,7 @@ Ausdruck im Hochformat bei Bedarf wählen +
 +
 Wurde ein OpenAIP-Zugang konfiguriert, bei Bedarf zuvor "Lufträume um Flughafen suchen" durchführen. +
 +
-Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (4000ft voreingestellt). +
+Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (Untergrenze <= 4000ft voreingestellt). +
 Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden. +
 Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google Earth vorgenommen werden. +
 +

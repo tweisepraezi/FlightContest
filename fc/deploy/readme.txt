@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.1
+----------------
+- Aktualisierung folgender Regelwerke
+    Wettbewerbsordnung Rallyeflug Deutschland 2025
+    Wettbewerbsordnung Air Navigation Race Deutschland 2025
+    Regelwerk Landewertung Deutschland 2025
+- OSM-Wettbewerbs-Karte: Jetzt werden alle Lufträume, wo das untere Höhenlimit kleiner oder gleich als die eingestellte Höhe ist, berücksichtigt.
+- ANR-Korridor-Auswertung: Nur außerhalb des Korridors liegende Sekunden-Abschnitte von Logger-Meßpunkten werden zur Berechnung der Strafpunkte berücksichtigt.
+- Bug "Erstellte Live-Tracking-ANR-Navigation-Tasks funktionieren nicht" behoben
+
 Änderungen 4.1.0
 ----------------
 - Wettbewerbspunkte bearbeiten: Möglichkeit der Übernahme der Landepunkte einer anderen Wettbewerbsordung hinzugefügt

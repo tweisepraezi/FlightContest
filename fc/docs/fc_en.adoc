@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.1.0
-:revdate: 10.04.2025
+:revnumber: 4.1.1
+:revdate: 22.04.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -77,8 +77,9 @@ Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?la
 [[supported-rules]]
 == Supported rulesets
 
-* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Rallyeflug Deutschland^]
+* link:rules/DE_Rallyeflug_2025.pdf[Wettbewerbsordnung Rallyeflug Deutschland^]
 * link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland^]
+* link:rules/DE_Landewertung_2025.pdf[Regelwerk Landewertung Deutschland^]
 * link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_anr_rules_2024.pdf[FAI Air Navigation Race^]
 * link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
@@ -554,7 +555,7 @@ Blank lines and lines starting with # are ignored
 
 . Routes -> OSM Contest Map -> *Search airspaces around the airport* (if <<fc_en.adoc#configuration-openaip,OpenAIP access>> has been configured) +
 +
-The height of the airspaces to be taken into account can be adjusted (4000ft by default). +
+The height of the airspaces to be taken into account can be adjusted (lower limit <= 4000ft by default). +
 Airspaces not to be taken into account can be commented out with a # in front if required. +
 An export for viewing in Google Earth can be carried out with "KMZ export airspaces".
 
@@ -926,7 +927,7 @@ All mentioned route details and objects can be deselected.
 *Airspaces*
 
 "_Search airspaces around the airport_" retrieves all airspaces from OpenAIP that are necessary to serve all map sizes.
-All airspaces where the lower altitude limit is lower than the set altitude (default: 4000ft) are taken into account.
+All airspaces where the lower altitude limit is lower or equal than the set altitude (default: 4000ft) are taken into account.
 
 The airspaces determined are entered in the Airspaces text field. AREA and FIS airspaces as well as airspaces specified in the <<fc_en.adoc#configuration-openaip,OpenAIP configuration>>
 in _ignoreAirspacesStartsWith_ are commented out.
@@ -1265,7 +1266,7 @@ Run “Generate (for Task Creator)” +
 +
 If OpenAIP access has been configured, run "Search airspaces around the airport" first if necessary. +
 +
-The height of airspaces to be taken into account can be adjusted (4000 feet pre-set). +
+The height of airspaces to be taken into account can be adjusted (lower limit <= 4000ft by default). +
 Air spaces that are not to be considered can be commented out with a leading # if necessary. +
 With “KMZ export airspaces”, an export can be made to view the airspaces in Google Earth. +
 +

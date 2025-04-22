@@ -5873,6 +5873,9 @@ class FcService
                         if (coordresult_instance.resultOutsideCorridorMeasurement) {
                             coordresult_instance.resultOutsideCorridorMeasurement += ","
                         }
+                        if (outsideCorridorSeconds > 0) {
+                            outsideCorridorSeconds -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
+                        }
                         coordresult_instance.resultOutsideCorridorMeasurement += outsideCorridorSeconds
                         if (outsideCorridorSeconds > testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
                             coordresult_instance.resultOutsideCorridorSeconds += outsideCorridorSeconds - testInstance.GetFlightTestOutsideCorridorCorrectSecond()
@@ -6051,6 +6054,9 @@ class FcService
                 }
                 if (is_corridor && last_coordresult_instance && coordresult_instance.type.IsCorridorResultCoord()) {
                     coordresult_instance.resultOutsideCorridorSeconds = FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, coordresult_instance.planCpTime)
+                    if (coordresult_instance.resultOutsideCorridorSeconds > 0) {
+                        coordresult_instance.resultOutsideCorridorSeconds -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
+                    }
                     coordresult_instance.resultOutsideCorridorMeasurement = coordresult_instance.resultOutsideCorridorSeconds.toString()
                     if (coordresult_instance.resultOutsideCorridorSeconds > testInstance.GetFlightTestOutsideCorridorCorrectSecond()) {
                         coordresult_instance.resultOutsideCorridorSeconds -= testInstance.GetFlightTestOutsideCorridorCorrectSecond()
