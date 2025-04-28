@@ -1,6 +1,12 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 4.1.2
+-------------
+- ANR Live Tracking does not work by following conditions:
+    * ANR route contains semi-circles or scenic legs
+    * Crews with deviated corridor width
+
 Changes 4.1.1
 -------------
 - Bug "Created ANR navigation tasks don't work" fixed

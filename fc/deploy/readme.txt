@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.2
+----------------
+- ANR-Planung: Abweichende Korridor-Breiten können hinzugefügt werden (-> Navigationstest-Details -> Flugtestwind hinzufügen)
+    Dann können die abweichenden Korridor-Breiten mit 'Wind zuweisen' ausgewählten Besatzungen zugewiesen werden. 
+- Bug "ANR-Loggerauswertung: 'Berechnete Punkte' zeigt in Spalte 'Außerhalb Korridor' eine Sekunde zuviel an" behoben
+- Bug "ANR-Karten-Namen mit Leerzeichen verhindert Druck des ANR-Karten-Flugplanes" behoben
+- ANR Live Tracking funktioniert nicht bei folgenden Bedingungen:
+    * ANR-Strecke enthält Halbkreise oder landschaftliche Abschnitte
+    * Besatzungen mit abweichender Korridor-Breite
+
 Änderungen 4.1.1
 ----------------
 - Aktualisierung folgender Regelwerke

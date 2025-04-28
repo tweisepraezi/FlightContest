@@ -68,9 +68,9 @@ class MapTools
     }
 
     // ----------------------------------------------------------------------------------
-    static Map GetMap(String mapName, def servletContext, def session)
+    static Map GetMap(String mapName, def servletContext, def session, boolean printMap = false)
     {
-        for (Map map_entry in GetMapList(servletContext, session)) {
+        for (Map map_entry in GetMapList(servletContext, session, printMap)) {
             if (map_entry.title == mapName) {
                 return map_entry
             }

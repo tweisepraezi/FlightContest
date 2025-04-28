@@ -12337,8 +12337,8 @@ class FcService
     private Map checkFlightTestWindParams(String showLanguage, Map params)
     {
         if (showLanguage) {
-            if (params.direction != null) {
-                params.direction = Languages.GetLanguageDecimal(showLanguage, params.direction)
+            if (params.corridorWidthWind != null) {
+                params.corridorWidthWind = Languages.GetLanguageDecimal(showLanguage, params.corridorWidthWind)
             }
             if (params.speed != null) {
                 params.speed = Languages.GetLanguageDecimal(showLanguage, params.speed)

@@ -30,6 +30,16 @@
                             </tbody>
                         </table>
                         <g:if test="${!flightTestWindInstance.Used() && !flightTestWindInstance.flighttest.task.lockPlanning}">
+                            <g:if test="${flightTestWindInstance.corridorWidthWind}">
+                                <fieldset>
+                                    <legend>${message(code:'fc.corridorwidth.deviating')}</legend>
+                                    <div>
+                                        <label>${message(code:'fc.corridorwidth')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="corridorWidthWind" name="corridorWidthWind" value="${fieldValue(bean:flightTestWindInstance,field:'corridorWidthWind')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                </fieldset>
+                            </g:if>
 	                        <fieldset>
 	                            <legend>${message(code:'fc.wind')}</legend>
 	                            <p>
@@ -45,6 +55,12 @@
 	                        </fieldset>
 	                    </g:if>
                         <g:else>
+                            <g:if test="${flightTestWindInstance.corridorWidthWind}">
+                                <fieldset>
+                                    <legend>${message(code:'fc.corridorwidth.deviating')}</legend>
+                                    <p>${FcMath.DistanceStr(flightTestWindInstance.corridorWidthWind)} ${message(code:'fc.mile')}</p>
+                                </fieldset>
+                            </g:if>
                             <fieldset>
                                 <legend>${message(code:'fc.wind')}</legend>
                                 <p>${flightTestWindInstance.wind.name()}</p>

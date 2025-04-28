@@ -7,10 +7,14 @@ class AnrTagLib
     def anrMap = { attrs, body ->
         Route route_instance = attrs.t.flighttestwind.flighttest.route
         if (route_instance.defaultPrintMap) {
-            Map map = MapTools.GetMap(route_instance.defaultPrintMap, servletContext, session)
+            Map map = MapTools.GetMap(route_instance.defaultPrintMap, servletContext, session, true)
             if (map) {
-                outln"""<img class="mapanr" src="${map.localref}" ></img>"""
+                outln"""<img class="mapanr" src="${HTMLFilter.GetStr(map.localref)}" ></img>"""
+            } else {
+                outln"""${message(code:'fc.map.notfound')}:<br/>${route_instance.defaultPrintMap}"""
             }
+        } else {
+            outln"""${message(code:'fc.route.printmap.default.notassigned')}:<br/>${route_instance.printName()}"""
         }
     }
     

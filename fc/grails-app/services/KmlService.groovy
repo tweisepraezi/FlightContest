@@ -511,6 +511,10 @@ class KmlService
         center_longitude = (max_longitude+min_longitude)/2
         
         String route_name = routeInstance.GetName(isPrint)
+        BigDecimal corridor_width = routeInstance.corridorWidth
+        if (testInstance && testInstance.flighttestwind.corridorWidthWind) {
+            corridor_width = testInstance.flighttestwind.corridorWidthWind
+        }               
 
         xml.Folder {
             xml.name "${getMsg('fc.kmz.route',isPrint)} '${route_name.encodeAsHTML()}'"
@@ -645,7 +649,7 @@ class KmlService
                                             Map start_gate = AviationMath.getGate(
                                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                                routeInstance.corridorWidth
+                                                corridor_width
                                             )
                                             BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                             if (route_coordinates) {
@@ -659,7 +663,7 @@ class KmlService
                                             last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                            routeInstance.corridorWidth
+                                            corridor_width
                                         )
                                         BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                         if (route_coordinates) {
@@ -674,7 +678,7 @@ class KmlService
                                                 Map gate = AviationMath.getGate(
                                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                                     coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                                    routeInstance.corridorWidth
+                                                    corridor_width
                                                 )
                                                 BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                                 if (route_coordinates) {
@@ -707,7 +711,7 @@ class KmlService
                                             Map start_gate = AviationMath.getGate(
                                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                                routeInstance.corridorWidth
+                                                corridor_width
                                             )
                                             BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                             if (route_coordinates) {
@@ -721,7 +725,7 @@ class KmlService
                                             last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                            routeInstance.corridorWidth
+                                            corridor_width
                                         )
                                         BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                         if (route_coordinates) {
@@ -736,7 +740,7 @@ class KmlService
                                                 Map gate = AviationMath.getGate(
                                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                                     coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                                    routeInstance.corridorWidth
+                                                    corridor_width
                                                 )
                                                 BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                                 if (route_coordinates) {
@@ -1243,7 +1247,7 @@ class KmlService
                                     Map start_gate = AviationMath.getGate(
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                        routeInstance.corridorWidth
+                                        corridor_width
                                     )
                                     xml.Placemark {
                                         BigDecimal altitude_meter2 = last_coordroute_instance.altitude.toLong() / ftPerMeter
@@ -1409,7 +1413,7 @@ class KmlService
                                         last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                        routeInstance.corridorWidth
+                                        corridor_width
                                     )
                                     if (!last_coordroute_instance.type.IsEnrouteFinishCoord()) {
                                         xml.Placemark {
@@ -1441,7 +1445,7 @@ class KmlService
                                         Map gate = AviationMath.getGate(
                                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                             coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                            routeInstance.corridorWidth
+                                            corridor_width
                                         )
                                         xml.Placemark {
                                             BigDecimal altitude_meter2 = coordroute_instance.altitude.toLong() / ftPerMeter

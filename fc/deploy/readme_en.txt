@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.2
+-------------
+- ANR Planning: Deviating corridor width can be added (->  Navigation test details -> Add enroute wind)
+    Then deviating corridor width can be assigned with 'Assign wind' to selected crews.
+- Bug "ANR logger evaluation: 'Calculated points' shows in column 'Outside corridor' one second to much" fixed
+- Bug "ANR map names with spaces prevent printing of ANR map flight plans" fixed
+- ANR Live Tracking does not work by following conditions:
+    * ANR route contains semi-circles or scenic legs
+    * Crews with deviated corridor width
+
 Changes 4.1.1
 -------------
 - Updating of the following sets of rules

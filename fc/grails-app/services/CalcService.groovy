@@ -1030,6 +1030,10 @@ class CalcService
                 }
             }
         } else { // corridor gates
+            BigDecimal corridor_width = route_instance.corridorWidth
+            if (flighttestwind_instance.corridorWidthWind) {
+                corridor_width = flighttestwind_instance.corridorWidthWind
+            }
             CoordRoute last_last_coordroute_instance = null
             CoordRoute last_coordroute_instance = null
             boolean first = true
@@ -1041,7 +1045,7 @@ class CalcService
                             Map start_gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                route_instance.corridorWidth
+                                corridor_width
                             )
                             Map advanced_start_gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
@@ -1055,7 +1059,7 @@ class CalcService
                                             advancedCoordLeft:advanced_start_gate.coordLeft, 
                                             advancedCoordRight:advanced_start_gate.coordRight, 
                                             gateTrack:FcMath.RoundGrad(AviationMath.getDiametricalTrack(start_gate.gateTrack)),
-                                            gateWidth:route_instance.corridorWidth,
+                                            gateWidth:corridor_width,
                                             gateLatitude:last_coordroute_instance.latMath(),
                                             gateLongitude:last_coordroute_instance.lonMath(),
                                             gateAltitude:last_coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
@@ -1145,7 +1149,7 @@ class CalcService
                                 last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                route_instance.corridorWidth
+                                corridor_width
                             )
                             Map advanced_gate = AviationMath.getCorridorGate(
                                 last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
@@ -1160,7 +1164,7 @@ class CalcService
                                             advancedCoordLeft:advanced_gate.coordLeft,
                                             advancedCoordRight:advanced_gate.coordRight,
                                             gateTrack:FcMath.RoundGrad(gate.gateTrack),
-                                            gateWidth:route_instance.corridorWidth,
+                                            gateWidth:corridor_width,
                                             gateLatitude:last_coordroute_instance.latMath(),
                                             gateLongitude:last_coordroute_instance.lonMath(),
                                             gateAltitude:last_coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
@@ -1186,7 +1190,7 @@ class CalcService
                                 Map gate = AviationMath.getGate(
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                    route_instance.corridorWidth
+                                    corridor_width
                                 )
                                 Map advanced_gate = AviationMath.getGate(
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
@@ -1200,7 +1204,7 @@ class CalcService
                                                 advancedCoordLeft:advanced_gate.coordLeft,
                                                 advancedCoordRight:advanced_gate.coordRight,
                                                 gateTrack:FcMath.RoundGrad(gate.gateTrack),
-                                                gateWidth:route_instance.corridorWidth,
+                                                gateWidth:corridor_width,
                                                 gateLatitude:coordroute_instance.latMath(),
                                                 gateLongitude:coordroute_instance.lonMath(),
                                                 gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),

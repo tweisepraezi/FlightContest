@@ -23,6 +23,16 @@
                     </g:else>
                     <g:form method="post" params="${newparams}" >
                         <g:set var="ti" value="${[]+1}"/>
+                        <g:if test="${flightTestWindInstance.flighttest.route.corridorWidth}">
+                            <fieldset>
+                                <legend>${message(code:'fc.corridorwidth.deviating')}</legend>
+                                <div>
+                                    <label>${message(code:'fc.corridorwidth')} [${message(code:'fc.mile')}]:</label>
+                                    <br/>
+                                    <input type="text" id="corridorWidthWind" name="corridorWidthWind" value="${fieldValue(bean:flightTestWindInstance,field:'corridorWidthWind')}" tabIndex="${ti[0]++}"/>
+                                </div>
+                            </fieldset>
+                        </g:if>
                         <fieldset>
                             <legend>${message(code:'fc.wind')}</legend>
                             <p>

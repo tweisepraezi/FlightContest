@@ -20,6 +20,8 @@ class FlightTestWind
 	String LDGDurationFormula = "wind+:6NM"                // DB-2.39
 	String iLDGDurationFormula = "wind+:2NM"               // DB-2.39
 	String iTODurationFormula = "wind+:3NM"                // DB-2.39
+    
+    BigDecimal corridorWidthWind = 0.0                     // DB-2.43, NM
 
     Integer idTitle = 0                                    // DB-2.12
 	
@@ -51,10 +53,16 @@ class FlightTestWind
         LDGDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
         iLDGDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
         iTODurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+        
+        // DB-2.43 compatibility
+        corridorWidthWind(nullable:true)
 	}
 	
 	String name()
 	{
+        if (corridorWidthWind) {
+            return "${wind.name()} (${idTitle}) [${FcMath.DistanceStr(corridorWidthWind)}${getMsgArgs('fc.mile',[])}]"
+        }
 		return "${wind.name()} (${idTitle})"
 	}
     

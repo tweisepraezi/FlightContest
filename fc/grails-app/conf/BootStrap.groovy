@@ -1392,6 +1392,14 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 43) { // DB-2.43 compatibility
+                            print "    2.43 modifications"
+                            FlightTestWind.findAll().each { FlightTestWind flighttestwind_instance ->
+                                flighttestwind_instance.corridorWidthWind = 0.0
+                                flighttestwind_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

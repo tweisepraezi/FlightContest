@@ -546,7 +546,9 @@ class FlightResultsTagLib
                     outside_corridor_msg = message(code:'fc.no')
                 }
                 if (calcresultInstance.outsideCorridorSeconds) {
-                    outln"""<td class="${show_class}">${outside_corridor_msg} (${calcresultInstance.outsideCorridorSeconds}${message(code:'fc.time.s')})</td>"""
+                    int outside_corridor_seconds = calcresultInstance.outsideCorridorSeconds
+                    outside_corridor_seconds -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
+                    outln"""<td class="${show_class}">${outside_corridor_msg} (${outside_corridor_seconds}${message(code:'fc.time.s')})</td>"""
                 } else {
                     outln"""<td class="${show_class}">${outside_corridor_msg}</td>"""
                 }

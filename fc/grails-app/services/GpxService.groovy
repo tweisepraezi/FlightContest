@@ -1707,6 +1707,10 @@ class GpxService
         if (params.taskInstance) {
             task_instance = params.taskInstance
         }
+        BigDecimal corridor_width = routeInstance.corridorWidth
+        if (testInstance && testInstance.flighttestwind.corridorWidthWind) {
+            corridor_width = testInstance.flighttestwind.corridorWidthWind
+        }               
 
         // observation settings & enroute signs without position
         Map contest_map_rect = [:]
@@ -1937,7 +1941,7 @@ class GpxService
                 }
                 xml.name getMsg('fc.kmz.legs.right',is_print)
                 CoordRoute last_last_coordroute_instance = null
-                CoordRoute last_coordroute_instance = null
+                CoordRoute last_coordroute_instance = null              
                 boolean first = true
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsCorridorCoord()) {
@@ -1946,7 +1950,7 @@ class GpxService
                                 Map start_gate = AviationMath.getGate(
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                    routeInstance.corridorWidth
+                                    corridor_width
                                 )
                                 BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
@@ -1960,7 +1964,7 @@ class GpxService
                                 last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                routeInstance.corridorWidth
+                                corridor_width
                             )
                             BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
@@ -1975,7 +1979,7 @@ class GpxService
                                     Map gate = AviationMath.getGate(
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                        routeInstance.corridorWidth
+                                        corridor_width
                                     )
                                     BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
@@ -2007,7 +2011,7 @@ class GpxService
                                 Map start_gate = AviationMath.getGate(
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                    routeInstance.corridorWidth
+                                    corridor_width
                                 )
                                 BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
@@ -2021,7 +2025,7 @@ class GpxService
                                 last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                routeInstance.corridorWidth
+                                corridor_width
                             )
                             BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2036,7 +2040,7 @@ class GpxService
                                     Map gate = AviationMath.getGate(
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                        routeInstance.corridorWidth
+                                        corridor_width
                                     )
                                     BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2342,7 +2346,7 @@ class GpxService
                             Map start_gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                routeInstance.corridorWidth
+                                corridor_width
                             )
                             xml.rte {
                                 wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
@@ -2451,10 +2455,10 @@ class GpxService
                             last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                            routeInstance.corridorWidth
+                            corridor_width
                         )
                         xml.rte {
-                            wr_gate(last_coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage, null, null, false, true)
+                            wr_gate(last_coordroute_instance, corridor_width, 0, xml, task_instance, wr_photoimage, null, null, false, true)
                             // BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             if (write_gate) {
                                 xml.name last_coordroute_instance.titleMediaCode(media)
@@ -2474,10 +2478,10 @@ class GpxService
                                 Map gate = AviationMath.getGate(
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                    routeInstance.corridorWidth
+                                    corridor_width
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage, null, null, false)
+                                    wr_gate(coordroute_instance, corridor_width, 0, xml, task_instance, wr_photoimage, null, null, false)
                                     // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
