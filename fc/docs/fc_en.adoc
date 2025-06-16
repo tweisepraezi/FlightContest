@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.1.2
-:revdate: 28.04.2025
+:revnumber: 4.1.3
+:revdate: 09.06.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -80,10 +80,10 @@ Integration of Rallye Flying Task Creator (https://www.airrats.cl/taskcreator?la
 * link:rules/DE_Rallyeflug_2025.pdf[Wettbewerbsordnung Rallyeflug Deutschland^]
 * link:rules/DE_ANR_2025.pdf[Wettbewerbsordnung Air Navigation Race Deutschland^]
 * link:rules/DE_Landewertung_2025.pdf[Regelwerk Landewertung Deutschland^]
-* link:rules/FAI_rally_flying_rules_2024.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_rally_flying_rules_2025.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_anr_rules_2024.pdf[FAI Air Navigation Race^]
-* link:rules/FAI_precision_flying_rules_2024.pdf[FAI Precision Flying^]
-* link:rules/FAI_landing_rules_2024.pdf[FAI GAC Landing appendix^]
+* link:rules/FAI_precision_flying_rules_2025.pdf[FAI Precision Flying^]
+* link:rules/FAI_landing_rules_2025.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)^]
 * link:rules/AT_Motorflug_2023.pdf#page=29[Navigationsflug-Reglement Österreich (German)^]
 * link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
@@ -1738,9 +1738,9 @@ Table classes:
 |resultclasslist|value [#crew.num]|resultclass shortresultclass crew aircraft tas
 |aircraftlist|value [#aircraft]|aircraft aircrafttype aircraftcolor crew1 crew2
 
-|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version
+|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime corridorwidth version
 |legtimelist|value [#tas]|tas legtime
-|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime corridorwidth sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
 |timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 |landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4	

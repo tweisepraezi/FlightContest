@@ -728,7 +728,7 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
-    Map printtimetableoverviewTask(Map params, printparams)
+    Map printtimetableoverviewTask(Map params, boolean printSPFPTimes, printparams)
     {
         Map task = domainService.GetTask(params) 
         if (!task.instance) {
@@ -820,7 +820,7 @@ class PrintService
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = ""
-            url = "${printparams.baseuri}/task/timetableoverviewprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            url = "${printparams.baseuri}/task/timetableoverviewprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&spfptimes=${printSPFPTimes}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()

@@ -66,6 +66,12 @@
                                     <g:checkBox name="printTimetableTakeoff" value="${taskInstance.printTimetableTakeoff}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.takeoff')}</label>
                                 </div>
+                                <g:if test="${taskInstance.flighttest?.route?.corridorWidth}">
+                                    <div>
+                                        <g:checkBox name="printTimetableCorridorWidth" value="${taskInstance.printTimetableCorridorWidth}" onclick="modify();"/>
+                                        <label>${message(code:'fc.test.corridorwidth.long')}</label>
+                                    </div>
+                                </g:if>
                                 <div>
                                     <g:checkBox name="printTimetableVersion" value="${taskInstance.printTimetableVersion}" onclick="modify();"/>
                                     <label>${message(code:'fc.version')}</label>

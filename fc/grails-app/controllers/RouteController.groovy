@@ -324,7 +324,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map coord_data = ImportSign.GetRouteCoordData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:coord_data.importsign, lineContent:coord_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"turnpoints"])
+        redirect(action:'selectimporttxt', params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:coord_data.importsign, lineContent:coord_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"turnpoints"])
     }
     
     def importturnpointsign = {
@@ -333,7 +333,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map turnpoint_sign_data = ImportSign.GetTurnpointSignData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:turnpoint_sign_data.titlecode, routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
+        redirect(action:'selectimporttxt', params:[titlecode:turnpoint_sign_data.titlecode, routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
     }
     
     def importmapobject = {
@@ -342,7 +342,7 @@ class RouteController {
         session.routeReturnID = params.routeid
         Route route_instance = Route.get(params.routeid)
         Map mapobject_data = ImportSign.GetMapObjectData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.mapobjects.import', routeid:params.routeid, importSign:mapobject_data.importsign, lineContent:mapobject_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"mapobjects"])
+        redirect(action:'selectimporttxt', params:[titlecode:'fc.coordroute.mapobjects.import', routeid:params.routeid, importSign:mapobject_data.importsign, lineContent:mapobject_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"mapobjects"])
     }
     
     def selectturnpointphotos = {
@@ -368,7 +368,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, true)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.photo.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"photos", autoName:true, namePrefix:true])
+        redirect(action:'selectimporttxt', params:[titlecode:'fc.coordroute.photo.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"photos", autoName:true, namePrefix:true])
     }
     
     def importenroutecanvas = {
@@ -377,7 +377,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, false)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.canvas.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"canvas", autoName:true, namePrefix:true])
+        redirect(action:'selectimporttxt', params:[titlecode:'fc.coordroute.canvas.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"canvas", autoName:true, namePrefix:true])
     }
     
     def importenroutesign = {
@@ -728,6 +728,34 @@ class RouteController {
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true, wrPhotoImage:true])
+            if (converter.ok) {
+                String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                gpxService.Download(webroot_dir + upload_gpx_file_name, route_file_name, response.outputStream)
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'show',id:params.id)
+            }
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+    }
+    
+    def gpxexport_route_semicirclegates = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            gpxService.printstart "gpxexport_route_semicirclegates: Export route '${route.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true, wrPhotoImage:true, gpxSemicircleGates:true])
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")

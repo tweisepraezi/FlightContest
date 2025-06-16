@@ -1954,6 +1954,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = true
 					task_instance.printTimetableJuryLandscape = true
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1988,6 +1989,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2036,6 +2038,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = true
+                    task_instance.printTimetableJuryCorridorWidth = true
 					task_instance.printTimetableJuryLandscape = true
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2070,6 +2073,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2123,6 +2127,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2157,6 +2162,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = true
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2191,6 +2197,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = true
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2225,6 +2232,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2259,6 +2267,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = true
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2309,6 +2318,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = true
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2351,6 +2361,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2385,6 +2396,7 @@ class FcService
                     task_instance.printTimetableJuryEmptyColumn4 = false
                     task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
+                    task_instance.printTimetableJuryCorridorWidth = false
                     task_instance.printTimetableJuryLandscape = false
                     task_instance.printTimetableJuryA3 = false
                     break
@@ -2401,6 +2413,7 @@ class FcService
 					task_instance.printTimetableShortClass = true
 					task_instance.printTimetablePlanning = true
 					task_instance.printTimetableTakeoff = true
+                    task_instance.printTimetableCorridorWidth = true
 					task_instance.printTimetableVersion = true
                     task_instance.printTimetableLegTimes = true
 					task_instance.printTimetableLandscape = false
@@ -2419,6 +2432,7 @@ class FcService
 					task_instance.printTimetableShortClass = false
 					task_instance.printTimetablePlanning = false
 					task_instance.printTimetableTakeoff = false
+                    task_instance.printTimetableCorridorWidth = false
 					task_instance.printTimetableVersion = false
                     task_instance.printTimetableLegTimes = false
 					task_instance.printTimetableLandscape = false
@@ -2437,6 +2451,7 @@ class FcService
 					task_instance.printTimetableShortClass = true
 					task_instance.printTimetablePlanning = true
 					task_instance.printTimetableTakeoff = true
+                    task_instance.printTimetableCorridorWidth = true
 					task_instance.printTimetableVersion = true
                     task_instance.printTimetableLegTimes = true
 					task_instance.printTimetableLandscape = true
@@ -10322,7 +10337,8 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculatePenaltyTurnpointDataInstance(TurnpointData turnpointDataInstance, Test testInstance)
     {
-        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs).contains("${turnpointDataInstance.tpTitle()},")) {
+        Route route_instance = testInstance.flighttestwind.flighttest.route
+        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointDataInstance.tpTitle()},")) {
             turnpointDataInstance.penaltyCoord = 0
         } else {
             switch (turnpointDataInstance.resultValue) {
@@ -10888,6 +10904,7 @@ class FcService
     private void calculateTestPenalties(Test testInstance, boolean recalculatePenalties)
     {
     	printstart "calculateTestPenalties: '$testInstance.crew.name', recalculate: $recalculatePenalties"
+        Route route_instance = testInstance.flighttestwind.flighttest.route
     	
 		if (recalculatePenalties) {
 			// recalculate TestLegPlanning
@@ -10983,7 +11000,7 @@ class FcService
     		if (coordresult_instance.resultEntered) {
 				if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
 					testInstance.flightTestCheckPointPenalties += coordresult_instance.penaltyCoord
-                    if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound).contains("${coordresult_instance.title()},")) {
+                    if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound,route_instance).contains("${coordresult_instance.title()},")) {
                         set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
                     } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
                         set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
@@ -11031,7 +11048,7 @@ class FcService
     		if (coordresult_instance.planProcedureTurn) {
 	    		if (coordresult_instance.resultProcedureTurnEntered) {
 		    		if (coordresult_instance.resultProcedureTurnNotFlown) {
-						if (last_coordresult_instance && DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn).contains("${last_coordresult_instance.title()},")) {
+						if (last_coordresult_instance && DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn,route_instance).contains("${last_coordresult_instance.title()},")) {
 						    // no penalties
                             set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, false) // noBadTurn, no hide
                         } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
@@ -11050,12 +11067,12 @@ class FcService
 	    		}
     		}
     		if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
-                if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsMinAltitude).contains("${coordresult_instance.title()},")) {
+                if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsMinAltitude,route_instance).contains("${coordresult_instance.title()},")) {
 				    testInstance.flightTestCheckPointPenalties += testInstance.GetFlightTestMinAltitudeMissedPoints()
                 }
     		}
     		if (coordresult_instance.resultBadCourseNum) {
-                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse).contains("${coordresult_instance.title()},")) {
+                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse,route_instance).contains("${coordresult_instance.title()},")) {
                     // no penalties
                     set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
                 } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
@@ -11132,7 +11149,7 @@ class FcService
         if (testInstance.IsObservationTestTurnpointRun()) {
             if (testInstance.GetTurnpointRoute().IsTurnpointSign()) {
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(testInstance,[sort:"id"])) {
-                    if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")) {
+                    if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointdata_instance.tpTitle()},")) {
                         testInstance.observationTestTurnPointPhotoPenalties += turnpointdata_instance.penaltyCoord
                     }
                 }
@@ -12955,17 +12972,18 @@ class FcService
             }
 
             calculateTestPenalties(coordresult_instance.test,false)
+            Route route_instance = coordresult_instance.test.flighttestwind.flighttest.route
 	
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
 				String altitude_points = "0"
 				if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
-                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsMinAltitude).contains("${coordresult_instance.title()},")) {
+                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsMinAltitude,route_instance).contains("${coordresult_instance.title()},")) {
                         altitude_points = coordresult_instance.test.GetFlightTestMinAltitudeMissedPoints().toString()
                     }
 				}
                 int badcourse_penalties = 0
                 if (coordresult_instance.resultBadCourseNum) {
-                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsBadCourse).contains("${coordresult_instance.title()},")) {
+                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsBadCourse,route_instance).contains("${coordresult_instance.title()},")) {
                         badcourse_penalties = coordresult_instance.GetBadCoursePenalties()
                     }
                 }
@@ -13209,15 +13227,16 @@ class FcService
     {
 		if (coordResultInstance.type.IsCpTimeCheckCoord()) {
 	        Test test_instance = coordResultInstance.test
+            Route route_instance = test_instance.flighttestwind.flighttest.route
 			
 	        if (coordResultInstance.resultCpNotFound) {
-				if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPointsNotFound).contains("${coordResultInstance.title()},")) { // no not found check
+				if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPointsNotFound,route_instance).contains("${coordResultInstance.title()},")) { // no not found check
 					coordResultInstance.penaltyCoord = 0
 				} else {
 					coordResultInstance.penaltyCoord = test_instance.GetFlightTestCpNotFoundPoints()
 				}
 	        } else {
-                if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPoints).contains("${coordResultInstance.title()},")) { // no time check
+                if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPoints,route_instance).contains("${coordResultInstance.title()},")) { // no time check
     				coordResultInstance.penaltyCoord = 0
     	        } else {
     		        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)

@@ -77,6 +77,7 @@ class RouteTools
                    enrouteMeasurementCanvasOk:false, enrouteMeasurementCanvasInfo:"",
                    enrouteSignPhotoOk:false,         enrouteSignPhotoStatusInfo:"",
                    enrouteSignCanvasOk:false,        enrouteSignCanvasStatusInfo:"",
+                   exportSemicircleGates:false,
                    routeUsuable:false,
                    routeOk:false,                    routeInfo:""
                   ]
@@ -105,6 +106,9 @@ class RouteTools
         ret.routeUsuable = is_route_usuable(route_status)
         ret.routeOk = is_route_ok(route_status)
         ret.routeInfo = get_route_status_info(routeInstance, route_status, ret.routeOk)
+        if (route_status.circlecenter_num > 0) {
+            ret.exportSemicircleGates = true
+        }
         
         return ret
     }

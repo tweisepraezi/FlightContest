@@ -168,11 +168,13 @@
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
                         <g:actionSubmit action="savetimetableoverviewsettings" id="savetimetableoverviewsettings_id" value="${message(code:'fc.save')}" disabled tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="printtimetableoverview" id="printtimetableoverview_id" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="printspfptimes" id="printrunwayduration_id" value="${message(code:'fc.printspfptimes')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                         <script>
                             function modify() {
                                 $("#savetimetableoverviewsettings_id").prop("disabled", false);
                                 $("#printtimetableoverview_id").prop("disabled", true);
+                                $("#printrunwayduration_id").prop("disabled", true);
                             }
                         </script>
                     </g:form>

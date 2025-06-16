@@ -1,6 +1,21 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.3
+-------------
+- ANR Crew Timetable: Print corridor width added
+- ANR Judge Timetable: Print corridor width added
+- Route command 'GPX export GPX export (with semi-circle gates)' is now automatically offered as soon as a route with a center point is detected
+- Bug "ANR flight plan is not printed with deviating corridor width info" fixed
+- Bug "OSM Contest Map: ANR map printing without route details always prints SP and FP gates" fixed
+- Bug "Maps whose names contain a comma cannot be loaded in the Task Creator" fixed
+- Bug "OSM Contest Map: 'Import map objects' crashes" fixed
+- Bug "OSM Contest Map: Missing turning point definitions for map center and print definition after 'Import FC route'" fixed
+- Updating of the following sets of rules
+    FAI Precision Flying - Edition 2025
+    FAI Air Rally Flying - Edition 2025
+    GAC Landing appendix - Edition 2025
+
 Changes 4.1.2
 -------------
 - ANR Planning: Deviating corridor width can be added (->  Navigation test details -> Add enroute wind)

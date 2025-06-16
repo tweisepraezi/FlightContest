@@ -49,7 +49,7 @@ class ContestMapTagLib
         if (coordrouteInstance) {
             if (coordrouteInstance.type.IsContestMapQuestionCoord()) {
                 String check_title = coordrouteInstance.title()+','
-                boolean checked = DisabledCheckPointsTools.Uncompress(attrs.tp).contains(check_title)
+                boolean checked = DisabledCheckPointsTools.Uncompress(attrs.tp,routeInstance).contains(check_title)
                 checkBox("${attrs.tpid}${coordrouteInstance.title()}", coordrouteInstance.titleCode(), checked, attrs)
             }
         }
@@ -192,7 +192,7 @@ class ContestMapTagLib
         if (coordrouteInstance) {
             if (coordrouteInstance.type.IsContestMapQuestionCoord()) {
                 String check_title = coordrouteInstance.title()+','
-                boolean checked = DisabledCheckPointsTools.Uncompress(attrs.tp).contains(check_title)
+                boolean checked = DisabledCheckPointsTools.Uncompress(attrs.tp,routeInstance).contains(check_title)
                 checkBox("${attrs.tpid}${coordrouteInstance.title()}", "${lastCoordrouteInstance.titleCode()}...${coordrouteInstance.titleCode()}", checked, attrs)
             }
         }

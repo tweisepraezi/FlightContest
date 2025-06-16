@@ -235,13 +235,14 @@ class RoutePointsTools
     private static Map GetPointGateMissed(Test testInstance, CoordRoute coordrouteInstance)
     {
         Map error_point = [:]
+        Route route_instance = testInstance.flighttestwind.flighttest.route
         for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
             if (coordrouteInstance.title() == coordresult_instance.title()) {
                 if (coordresult_instance.resultEntered) {
                     if (coordresult_instance.resultCpNotFound) {
                         if ((coordresult_instance.type == CoordType.SECRET) && (!testInstance.IsFlightTestCheckSecretPoints())) {
                             error_point += [warning:true]
-                        } else if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound).contains(coordresult_instance.title()+',')) {
+                        } else if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound,route_instance).contains(coordresult_instance.title()+',')) {
                             error_point += [warning:true]
                         } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
                             error_point += [warning:true]
@@ -293,6 +294,7 @@ class RoutePointsTools
     private static List GetErrorPoints(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance, def messageSource)
     {
         List error_points = []
+        Route route_instance = testInstance.flighttestwind.flighttest.route
         if (coordrouteInstance && lastCoordrouteInstance) {
             
             CoordResult coordresult_instance = GetCoordResult(testInstance, coordrouteInstance)
@@ -320,7 +322,7 @@ class RoutePointsTools
                                     if (coordresult_instance.resultProcedureTurnNotFlown) {
                                         Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false,messageSource)] // false - no Print
                                         new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
-                                        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
+                                        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn,route_instance).contains(last_coordresult_instance.title()+',')) {
                                             new_point += [warning:true] // noBadTurn
                                         } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
                                             new_point += [warning:true] // noBadTurn
@@ -336,7 +338,7 @@ class RoutePointsTools
                            if (coordresult_instance.resultEntered && coordresult_instance.type.IsBadCourseCheckCoord()) {
                                 Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [calcresult_instance.badCourseSeconds], false, messageSource)] // false - no Print
                                 new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
-                                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse,route_instance).contains(coordresult_instance.title()+',')) {
                                     new_point += [warning:true] // noBadCourse
                                 } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
                                     new_point += [warning:true] // noBadCourse
@@ -360,6 +362,7 @@ class RoutePointsTools
     private static List GetErrorPointsOld(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance, def messageSource)
     {
         List error_points = []
+        Route route_instance = testInstance.flighttestwind.flighttest.route
         CoordResult coordresult_instance = GetCoordResult(testInstance, coordrouteInstance)
         CoordResult last_coordresult_instance = GetCoordResult(testInstance, lastCoordrouteInstance)
         if (coordresult_instance) {
@@ -370,7 +373,7 @@ class RoutePointsTools
                     if (coordresult_instance.resultProcedureTurnNotFlown) {
                         Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false, messageSource)] // false - no Print
                         new_point += GetPointCoords(lastCoordrouteInstance)
-                        if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
+                        if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn,route_instance).contains(last_coordresult_instance.title()+',')) {
                             new_point += [error:true]
                         } else {
                             new_point += [warning:true]
@@ -387,7 +390,7 @@ class RoutePointsTools
                         Map new_point = [name:getMsg("fc.offlinemap.badcourse.number", [coordresult_instance.resultBadCourseNum], false, messageSource)] // false - no Print
                         
                         new_point += GetPointCoords(coordrouteInstance)
-                        if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
+                        if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse,route_instance).contains(coordresult_instance.title()+',')) {
                             new_point += [error:true]
                         } else {
                             new_point += [warning:true]

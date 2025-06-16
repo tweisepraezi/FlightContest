@@ -131,7 +131,12 @@
                     </tr>
                     <tr class="corridorwidth">
                         <td class="title">${message(code:'fc.corridorwidth')}:</td>
-                        <td class="value">${FcMath.DistanceStr(testInstance.flighttestwind.flighttest.route.corridorWidth)}${message(code:'fc.mile')}</td>
+                        <g:if test="${testInstance.flighttestwind.corridorWidthWind}">
+                            <td class="value">${FcMath.DistanceStr(testInstance.flighttestwind.corridorWidthWind)}${message(code:'fc.mile')}</td>
+                        </g:if>
+                        <g:else>
+                            <td class="value">${FcMath.DistanceStr(testInstance.flighttestwind.flighttest.route.corridorWidth)}${message(code:'fc.mile')}</td>
+                        </g:else>
                     </tr>
                     <g:if test="${testInstance.flighttestwind.wind.speed}">
                         <tr class="wind">

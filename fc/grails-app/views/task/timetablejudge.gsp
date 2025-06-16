@@ -60,6 +60,12 @@
                                         <label>${message(code:'fc.resultclass.short')}</label>
                                     </div>
                                 </g:if>
+                                <g:if test="${taskInstance.flighttest?.route?.corridorWidth}">
+                                    <div>
+                                        <g:checkBox name="printTimetableJuryCorridorWidth" value="${taskInstance.printTimetableJuryCorridorWidth}" onclick="modify();"/>
+                                        <label>${message(code:'fc.test.corridorwidth.long')}</label>
+                                    </div>
+                                </g:if>
                                 <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
                                     <div>
                                         <g:checkBox name="printTimetableJuryPlanning" value="${taskInstance.printTimetableJuryPlanning}" onclick="modify();"/>

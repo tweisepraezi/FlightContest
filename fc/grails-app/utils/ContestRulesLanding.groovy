@@ -3,7 +3,7 @@ import java.util.List;
 enum ContestRulesLanding 
 {
     FAI_RF ([
-            LongRuleTitle:"FAI GAC Landing appendix - Edition 2024 - Rally Flying", // FAI_RF
+            LongRuleTitle:"FAI GAC Landing appendix - Edition 2025 - Rally Flying", // FAI_RF
             ShortRuleTitle:"",                            // FAI_RF
             AirfieldImageNames:'images/landingfield/fai_rally.jpg', // FAI_RF
             MaxPoints:300,                                // FAI_RF A4.6 - Landing 6.1
@@ -63,7 +63,7 @@ enum ContestRulesLanding
     ]),
 
     FAI_PF_ANR_NORMAL ([
-            LongRuleTitle:"FAI GAC Landing appendix - Edition 2024 - Precision Flying / Air Navigation Race - Normal", // FAI_PF_ANR_NORMAL
+            LongRuleTitle:"FAI GAC Landing appendix - Edition 2025 - Precision Flying / Air Navigation Race - Normal", // FAI_PF_ANR_NORMAL
             ShortRuleTitle:"Normal",                      // FAI_PF_ANR_NORMAL
             AirfieldImageNames:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg', // FAI_PF_ANR_NORMAL
             MaxPoints:400,                                // FAI_PF_ANR_NORMAL Landing 6.2.1
@@ -83,7 +83,7 @@ enum ContestRulesLanding
     ]),
        
     FAI_PF_ANR_OBSTACLE ([
-            LongRuleTitle:"FAI GAC Landing appendix - Edition 2024 - Precision Flying / Air Navigation Race - Obstacle", // FAI_PF_ANR_OBSTACLE
+            LongRuleTitle:"FAI GAC Landing appendix - Edition 2025 - Precision Flying / Air Navigation Race - Obstacle", // FAI_PF_ANR_OBSTACLE
             ShortRuleTitle:"Obstacle",                    // FAI_PF_ANR_OBSTACLE
             AirfieldImageNames:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg', // FAI_PF_ANR_OBSTACLE
             MaxPoints:400,                                // FAI_PF_ANR_OBSTACLE Landing 6.2.1
@@ -103,7 +103,7 @@ enum ContestRulesLanding
     ]),
     
     FAI_PF_ANR_IDLE ([
-            LongRuleTitle:"FAI GAC Landing appendix - Edition 2024 - Precision Flying / Air Navigation Race - Idle", // FAI_PF_ANR_IDLE
+            LongRuleTitle:"FAI GAC Landing appendix - Edition 2025 - Precision Flying / Air Navigation Race - Idle", // FAI_PF_ANR_IDLE
             ShortRuleTitle:"Idle",                        // FAI_PF_ANR_IDLE
             AirfieldImageNames:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg', // FAI_PF_ANR_IDLE
             MaxPoints:200,                                // FAI_PF_ANR_IDLE Landing 6.2.1
@@ -123,7 +123,7 @@ enum ContestRulesLanding
     ]),
         
     FAI_PF_ANR_IDLE_NO_FLAPS ([
-            LongRuleTitle:"FAI GAC Landing appendix - Edition 2024 - Precision Flying / Air Navigation Race - Idle No Flaps", // FAI_PF_ANR_NORMAL
+            LongRuleTitle:"FAI GAC Landing appendix - Edition 2025 - Precision Flying / Air Navigation Race - Idle No Flaps", // FAI_PF_ANR_NORMAL
             ShortRuleTitle:"Idle No Flaps",               // FAI_PF_ANR_NORMAL
             AirfieldImageNames:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg', // FAI_PF_ANR_IDLE_NO_FLAPS
             MaxPoints:200,                                // FAI_PF_ANR_IDLE_NO_FLAPS Landing 6.2.1

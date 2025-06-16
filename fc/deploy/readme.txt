@@ -1,6 +1,21 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.3
+----------------
+- ANR-Besatzungs-Zeitplan: Druck der Korridor-Breite hinzugefügt
+- ANR-Schiedsrichter-Zeitplan: Druck der Korridor-Breite hinzugefügt
+- Strecken-Kommando 'GPX-Export (mit Halbkreis-Tore)' wird jetzt automatisch angeboten, sobald eine Strecke mit Kreismittelpunkt erkannt wird
+- Bug "ANR-Flugplan wird nicht mit abweichender Korridor-Breiten-Info gedruckt" behoben
+- Bug "OSM-Wettbewerbs-Karte: ANR-Karten-Druck ohne Strecken-Details druckt immer SP- und FP-Tore" behoben
+- Bug "Karten, deren Namen ein Komma enthält, kann im Task-Creator nicht geladen werden" behoben
+- Bug "OSM-Wettbewerbs-Karte: 'Karten-Objekte importieren' stürzt ab" behoben
+- Bug "OSM-Wettbewerbs-Karte: Fehlende Wendepunkt-Festlegungen zum Karten-Zentrum und zur Druck-Festlegung nach 'Import FC-Strecke'" behoben
+- Aktualisierung folgender Regelwerke
+    FAI Precision Flying - Edition 2025
+    FAI Air Rally Flying - Edition 2025
+    GAC Landing appendix - Edition 2025
+
 Änderungen 4.1.2
 ----------------
 - ANR-Planung: Abweichende Korridor-Breiten können hinzugefügt werden (-> Navigationstest-Details -> Flugtestwind hinzufügen)

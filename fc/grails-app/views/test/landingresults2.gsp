@@ -72,7 +72,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.wind')}:</td>
                                     <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:windtext var="${testInstance.flighttestwind}" /></td>
+                                        <td><g:flighttestwindtext var="${testInstance.flighttestwind}" /></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>

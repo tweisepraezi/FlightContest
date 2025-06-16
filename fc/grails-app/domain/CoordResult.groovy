@@ -19,9 +19,10 @@ class CoordResult extends Coord
         if (penaltyCoord != 0) {
             return false
         }
+        Route route_instance = test.flighttestwind.flighttest.route
         if (test.GetFlightTestBadCoursePoints() > 0) {
             if (resultEntered) {
-                if (!DisabledCheckPointsTools.Uncompress(test.task.disabledCheckPointsBadCourse).contains(title()+',')) {
+                if (!DisabledCheckPointsTools.Uncompress(test.task.disabledCheckPointsBadCourse,route_instance).contains(title()+',')) {
                     if (resultBadCourseNum > 0) {
                         return false
                     }
@@ -29,7 +30,7 @@ class CoordResult extends Coord
             }
         }
         if (test.GetFlightTestMinAltitudeMissedPoints() > 0) {
-            if (!DisabledCheckPointsTools.Uncompress(test.task.disabledCheckPointsMinAltitude).contains("${title()},")) {
+            if (!DisabledCheckPointsTools.Uncompress(test.task.disabledCheckPointsMinAltitude,route_instance).contains("${title()},")) {
                 if (resultAltitude && resultMinAltitudeMissed) {
                     return false
                 }

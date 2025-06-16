@@ -1007,7 +1007,7 @@ class OpenAIPService
         BigDecimal max_longitude = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
             if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                if (!contestMapCenterPoints || DisabledCheckPointsTools.Uncompress(contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                if (!contestMapCenterPoints || DisabledCheckPointsTools.Uncompress(contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                     BigDecimal lat = coordroute_instance.latMath()
                     BigDecimal lon = coordroute_instance.lonMath()
                     if (min_latitude == null || lat < min_latitude) {

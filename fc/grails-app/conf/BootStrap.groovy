@@ -1400,6 +1400,15 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 44) { // DB-2.44 compatibility
+                            print "    2.44 modifications"
+							Task.findAll().each { Task task_instance ->
+								task_instance.printTimetableCorridorWidth = true
+                                task_instance.printTimetableJuryCorridorWidth = true
+								task_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

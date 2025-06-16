@@ -3,7 +3,7 @@ import java.util.List;
 enum ContestRules 
 {
     R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2024",         // FAI-RF
+            ruleTitle:"FAI Air Rally Flying - Edition 2025",         // FAI-RF
             
             // General
             increaseFactor:0,                                        // FAI-RF
@@ -543,7 +543,7 @@ enum ContestRules
 	),
 
 	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2024",         // FAI-PF
+            ruleTitle:"FAI Precision Flying - Edition 2025",         // FAI-PF
             
 			// General
             increaseFactor:0,                                        // FAI-PF

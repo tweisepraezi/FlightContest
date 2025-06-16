@@ -1710,7 +1710,12 @@ class GpxService
         BigDecimal corridor_width = routeInstance.corridorWidth
         if (testInstance && testInstance.flighttestwind.corridorWidthWind) {
             corridor_width = testInstance.flighttestwind.corridorWidthWind
-        }               
+        }
+        boolean export_semicircle_gates = false
+        if (params.gpxSemicircleGates) {
+            export_semicircle_gates = true
+            corridor_width = 0
+        }
 
         // observation settings & enroute signs without position
         Map contest_map_rect = [:]
@@ -1832,7 +1837,7 @@ class GpxService
         }
         
         // legs
-        if (!routeInstance.corridorWidth || params.isTracking) { // default legs
+        if (!corridor_width || params.isTracking) { // default legs
             long restart_id = 0
             xml.rte {
                 xml.extensions {
@@ -2058,7 +2063,7 @@ class GpxService
         }
         
         // gates
-        if (!routeInstance.corridorWidth) { // default gates
+        if (!corridor_width) { // default gates
             CoordRoute last_coordroute_instance = null
             CoordRoute start_coordroute_instance = null
             CoordRoute center_coordroute_instance = null
@@ -2117,7 +2122,7 @@ class GpxService
                         }
                         for (Map semicircle_coord in semicircle_coords) {
                             if (last_semicircle_coord) {
-                                if (write_gate && routeInstance.exportSemicircleGates && params.gpxExport) {
+                                if (write_gate && export_semicircle_gates && params.gpxExport) {
                                     secret_gate_num++
                                     Map gate = AviationMath.getGate(
                                         last_semicircle_coord.lat, last_semicircle_coord.lon,
@@ -2149,7 +2154,7 @@ class GpxService
                     first = false
                 }
                 
-                if (!coordroute_instance.circleCenter || (!routeInstance.exportSemicircleGates && params.gpxExport)) {
+                if (!coordroute_instance.circleCenter || (!export_semicircle_gates && params.gpxExport)) {
                     boolean show_wpt = false
                     switch (coordroute_instance.type) {
                         case CoordType.TO:
@@ -2349,7 +2354,7 @@ class GpxService
                                 corridor_width
                             )
                             xml.rte {
-                                wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
+                                wr_gate(last_coordroute_instance, 0.0, 0, xml, task_instance, wr_photoimage)
                                 //BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.name last_coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
@@ -2458,7 +2463,7 @@ class GpxService
                             corridor_width
                         )
                         xml.rte {
-                            wr_gate(last_coordroute_instance, corridor_width, 0, xml, task_instance, wr_photoimage, null, null, false, true)
+                            wr_gate(last_coordroute_instance, 0.0, 0, xml, task_instance, wr_photoimage, null, null, false, true)
                             // BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             if (write_gate) {
                                 xml.name last_coordroute_instance.titleMediaCode(media)
@@ -2481,7 +2486,7 @@ class GpxService
                                     corridor_width
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, corridor_width, 0, xml, task_instance, wr_photoimage, null, null, false)
+                                    wr_gate(coordroute_instance, 0.0, 0, xml, task_instance, wr_photoimage, null, null, false)
                                     // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2501,7 +2506,7 @@ class GpxService
         }
         
         // procedure turns
-        if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.useProcedureTurns && !routeInstance.corridorWidth) {
+        if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.useProcedureTurns && !corridor_width) {
             CoordRoute last_coordroute_instance = null
             CoordRoute last_last_coordroute_instance = null
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
@@ -2550,7 +2555,7 @@ class GpxService
         }
                         
         // CoordEnroutePhoto
-        if (wr_enroutesign && routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition() && !routeInstance.corridorWidth) {
+        if (wr_enroutesign && routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition() && !corridor_width) {
             for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                 xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
                     xml.extensions {
@@ -2578,7 +2583,7 @@ class GpxService
         }
         
         // CoordEnrouteCanvas
-        if (wr_enroutesign && routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition() && !routeInstance.corridorWidth) {
+        if (wr_enroutesign && routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition() && !corridor_width) {
             for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                 xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
                     xml.extensions {
@@ -2639,7 +2644,7 @@ class GpxService
                     view_pos++
                 }
             }
-            if (routeInstance.exportSemicircleGates && !routeInstance.corridorWidth) {
+            if (export_semicircle_gates && !routeInstance.corridorWidth) {
                 int circle_pos = 1
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRouteAndCircleCenter(routeInstance,true,[sort:'id'])) {
                     xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
@@ -2693,6 +2698,10 @@ class GpxService
         Task task_instance = null
         if (params.taskInstance) {
             task_instance = params.taskInstance
+        }
+        boolean export_semicircle_gates_contestmap = false
+        if (params.gpxSemicircleGates) {
+            export_semicircle_gates_contestmap = true
         }
 
         // observation settings & enroute signs without position
@@ -2816,7 +2825,7 @@ class GpxService
                 boolean min_one_center_point = false
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                             min_one_center_point = true
                             break
                         }
@@ -2824,7 +2833,7 @@ class GpxService
                 }
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                        if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
+                        if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                             BigDecimal lat = coordroute_instance.latMath()
                             BigDecimal lon = coordroute_instance.lonMath()
                             if (min_latitude == null || lat < min_latitude) {
@@ -2932,7 +2941,10 @@ class GpxService
                     if (coordroute_instance.type.IsContestMapCoord()) { // no secret and runway points
                         if (last_coordroute_instance) {
                             if (coordroute_instance.endCurved) {
-                                if (contestMapParams.contestMapCurvedLeg && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                                if (contestMapParams.contestMapCurvedLeg &&
+                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints,routeInstance).contains(coordroute_instance.title()+',') && 
+                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',') &&
+                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
                                     xml.rte {
                                         xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
                                         boolean run = false
@@ -2970,7 +2982,8 @@ class GpxService
                                     }
                                 }
                             } else if (contestMapParams.contestMapLeg) {
-                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',') &&
+                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
                                     Map track_coords_start = AviationMath.getTrack2Circle(
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
@@ -3135,7 +3148,7 @@ class GpxService
             CoordRoute last_last_coordroute_instance = null
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                 if (coordroute_instance.type.IsContestMapCoord()) {
-                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                         List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), coordroute_instance.gatewidth2 / 2) // CONTESTMAP_TPCIRCLE_RADIUS
                         xml.rte {
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
@@ -3160,7 +3173,7 @@ class GpxService
             CoordRoute last_last_coordroute_instance = null
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                 if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
-                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
                         List circle_coords = AviationMath.getProcedureTurnCircle(
                             last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -3202,7 +3215,7 @@ class GpxService
                     if (last_coordroute_instance && last_last_coordroute_instance) {
                         if (!coordroute_instance.type.IsEnrouteStartCoord()) {
                             if (last_coordroute_instance.type.IsEnrouteStartCoord()) { // iSP
-                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                                     Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -3216,7 +3229,7 @@ class GpxService
                                     }
                                 }
                             } else { // TP
-                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
                                     BigDecimal distancevalue_procedureturn = CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE
                                     if (coordroute_instance.endCurved) {
                                         distancevalue_procedureturn = contestmap_tpname_distance
@@ -3238,7 +3251,7 @@ class GpxService
                             }
                         }
                         if (coordroute_instance.type.IsEnrouteFinishCoord()) { // FP, iFP
-                            if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                            if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                                 Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                     last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                     coordroute_instance.latMath(), coordroute_instance.lonMath(),
@@ -3253,7 +3266,7 @@ class GpxService
                             }
                         }
                     } else if (last_coordroute_instance && last_coordroute_instance.type.IsEnrouteStartCoord()) { // SP
-                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
                             Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                 coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -3270,7 +3283,7 @@ class GpxService
                     last_last_coordroute_instance = last_coordroute_instance 
                     last_coordroute_instance = coordroute_instance
                 } else if (coordroute_instance.type.IsRunwayCoord()) {
-                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',')) {
                         boolean print_runway_coord = true
                         switch (coordroute_instance.type) {
                             case CoordType.TO:
@@ -3331,7 +3344,7 @@ class GpxService
         }
         
         // Start- und Ende-Gates
-        if (routeInstance.corridorWidth) {
+        if (contestMapParams.contestMapLeg && routeInstance.corridorWidth) {
             CoordRoute last_coordroute_instance = null
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                 if (last_coordroute_instance) {
@@ -3430,9 +3443,9 @@ class GpxService
         // CoordEnroutePhoto
         if (contestMapParams.contestMapEnroutePhotos && !routeInstance.corridorWidth) {
             for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutephoto_instance.title()+',')) {
+                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordenroutephoto_instance.title()+',')) {
                     Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutephoto_instance)
-                    if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
+                    if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(next_coord_instance.title()+',')) {
                         xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
                             xml.name ""
                             xml.sym "fcphoto.png"
@@ -3446,9 +3459,9 @@ class GpxService
         // CoordEnrouteCanvas
         if (contestMapParams.contestMapEnrouteCanvas && !routeInstance.corridorWidth) {
             for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutecanvas_instance.title()+',')) {
+                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordenroutecanvas_instance.title()+',')) {
                     Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutecanvas_instance)
-                    if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
+                    if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(next_coord_instance.title()+',')) {
                         xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
                             xml.name ""
                             xml.sym "${coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()}.png"
@@ -3567,7 +3580,7 @@ class GpxService
                     view_pos++
                 }
             }
-            if (routeInstance.exportSemicircleGates && !routeInstance.corridorWidth) {
+            if (export_semicircle_gates_contestmap && !routeInstance.corridorWidth) {
                 int circle_pos = 1
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRouteAndCircleCenter(routeInstance,true,[sort:'id'])) {
                     xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
@@ -3622,11 +3635,11 @@ class GpxService
         }
         boolean no_timecheck = coordrouteInstance.noTimeCheck
         if (taskInstance) {
-            no_timecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPoints).contains("${coordrouteInstance.title()},")
+            no_timecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPoints,coordrouteInstance.route).contains("${coordrouteInstance.title()},")
         }
         boolean no_gatecheck = coordrouteInstance.noGateCheck
         if (taskInstance) {
-            no_gatecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsNotFound).contains("${coordrouteInstance.title()},")
+            no_gatecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsNotFound,coordrouteInstance.route).contains("${coordrouteInstance.title()},")
         }
         boolean end_curved = coordrouteInstance.endCurved
         if (setEndCurved) {

@@ -176,6 +176,11 @@ class FcTagLib
     }
 
     // ====================================================================================================================
+    def flighttestwindtext = { p ->
+        out << p.var.name()
+    }
+    
+    // ====================================================================================================================
     // <g:planningtest var="${planningTestInstance}" link="${createLink(controller:'planningTest',action:'show')}"/>
     def planningtest = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""

@@ -28,7 +28,7 @@ class Route
 	Integer altitudeAboveGround = 400                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
     String defaultOnlineMap = ""                                                 // DB-2.37
     String defaultPrintMap = ""                                                  // DB-2.41
-    Boolean exportSemicircleGates = false                                        // DB-2.26
+    Boolean exportSemicircleGates = false                                        // DB-2.26, UNUSED, since DB-2.44
     Integer semicircleCourseChange = 5                                           // DB-2.37
     BigDecimal corridorWidth = 0.0                                               // DB-2.41, NM
     

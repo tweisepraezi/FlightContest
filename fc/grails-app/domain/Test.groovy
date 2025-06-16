@@ -3049,4 +3049,12 @@ class Test
         }
         return null
     }
+    
+    BigDecimal GetCorridorWidth()
+    {
+        if (flighttestwind.corridorWidthWind) {
+            return flighttestwind.corridorWidthWind
+        }
+        return flighttestwind.flighttest.route.corridorWidth
+    }
 }

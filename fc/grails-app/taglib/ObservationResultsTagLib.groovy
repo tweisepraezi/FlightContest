@@ -7,6 +7,7 @@ class ObservationResultsTagLib
     def observationTestComplete = { attrs, body ->
         boolean head_written = false
         if (attrs.t.IsObservationSignUsed()) {
+            Route route_instance = attrs.t.flighttestwind.flighttest.route
             
             if (attrs.crewResults) {
                 outln"""<table>"""
@@ -63,7 +64,7 @@ class ObservationResultsTagLib
                     outln"""    <tbody>"""
                 }
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")
+                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointdata_instance.tpTitle()},")
                     outln"""    <tr>"""
                     outln"""        <td>${turnpointdata_instance.tpName()}</td>"""
                     switch (attrs.t.GetTurnpointRoute()) {
@@ -391,6 +392,7 @@ class ObservationResultsTagLib
 		boolean show_buttons = BootStrap.global.ShowObservationButtons()
 		attrs.complete[0] = true
         if (attrs.t.IsObservationSignUsed()) {
+            Route route_instance = attrs.t.flighttestwind.flighttest.route
             // TurnpointData
             if (attrs.t.GetTurnpointRoute().IsTurnpointSign() && attrs.t.IsObservationTestTurnpointRun()) {
                 String turnpoint_headcode = ""
@@ -432,7 +434,7 @@ class ObservationResultsTagLib
                 outln"""    </thead>"""
                 outln"""    <tbody>"""
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")
+                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointdata_instance.tpTitle()},")
                     outln"""    <tr>"""
                     outln"""        <td>${turnpointdata_instance.tpName()}</td>"""
                     switch (attrs.t.GetTurnpointRoute()) {
@@ -1097,6 +1099,7 @@ class ObservationResultsTagLib
 	def observationTestPrintable = { attrs, body ->
         String turnpoint_headcode = "fc.observationresults.turnpointphotopenalties"
         if (attrs.t.IsObservationSignUsed()) {
+            Route route_instance = attrs.t.flighttestwind.flighttest.route
             // TurnpointData
             if (attrs.t.GetTurnpointRoute().IsTurnpointSign() && attrs.t.IsObservationTestTurnpointRun()) {
                 int penalty_sum = 0
@@ -1125,7 +1128,7 @@ class ObservationResultsTagLib
                 outln"""</thead>"""
                 outln"""<tbody>"""
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")
+                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointdata_instance.tpTitle()},")
                     outln"""<tr class="value" id="${turnpointdata_instance.tpTitle()}">"""
                     outln"""        <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
                     switch (attrs.t.GetTurnpointRoute()) {

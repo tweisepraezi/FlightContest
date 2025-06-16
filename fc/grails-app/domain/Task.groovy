@@ -100,6 +100,7 @@ class Task
     Boolean printTimetableJuryReserve1               // DB-2.21 
     Boolean printTimetableJuryReserve2               // DB-2.21 
     Boolean printTimetableJuryReserve3               // DB-2.21 
+	Boolean printTimetableJuryCorridorWidth  = true  // DB-2.44
 	Boolean printTimetableJuryLandscape      = true  // DB-2.3
 	Boolean printTimetableJuryA3             = false // DB-2.3
 	
@@ -115,7 +116,8 @@ class Task
 	Boolean printTimetableTakeoff            = true  // DB-2.3
 	Boolean printTimetableVersion            = true  // DB-2.3
 	String printTimetableChange              = ""    // DB-2.3
-    Boolean printTimetableLegTimes           = false // DB-2.8
+    Boolean printTimetableLegTimes           = true  // DB-2.8
+	Boolean printTimetableCorridorWidth      = true  // DB-2.44
 	Boolean printTimetableLandscape          = false // DB-2.3
 	Boolean printTimetableA3                 = false // DB-2.3
 	
@@ -416,6 +418,10 @@ class Task
 		printLandingStartlistLandingField(nullable:true)
 		printLandingStartlistLandscape(nullable:true)
 		printLandingStartlistA3(nullable:true)
+        
+        // DB-2.44 compatibility
+        printTimetableCorridorWidth(nullable:true)
+        printTimetableJuryCorridorWidth(nullable:true)
 	}
 
     static mapping = {

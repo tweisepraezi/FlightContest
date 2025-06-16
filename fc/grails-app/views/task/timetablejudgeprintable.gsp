@@ -61,6 +61,10 @@
             <h4>${message(code:'fc.test.landing.printinfo', args:[BootStrap.global.GetLandingInfo()])}</h4>
         </g:if>
         <g:form>
+            <g:set var="printtimetablejudge_corridorwidth" value="${false}"/>
+            <g:if test="${taskInstance.flighttest.route.corridorWidth && taskInstance.printTimetableJuryCorridorWidth}">
+                <g:set var="printtimetablejudge_corridorwidth" value="${true}"/>
+            </g:if>
             <table class="timetablejudgelist">
                 <thead>
                     <tr>
@@ -92,6 +96,9 @@
                             <g:if test="${taskInstance.printTimetableJuryShortClass}">
                                 <th>${message(code:'fc.resultclass.short.short')}</th>
                             </g:if>
+                        </g:if>
+                        <g:if test="${printtimetablejudge_corridorwidth}">
+                            <th>${message(code:'fc.test.corridorwidth')}</th>
                         </g:if>
                         <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
                             <g:if test="${taskInstance.printTimetableJuryPlanning}">
@@ -193,6 +200,9 @@
                                     <g:if test="${taskInstance.printTimetableJuryShortClass}">
                                         <td class="shortresultclass"><g:if test="${test_instance.crew.resultclass}">${HTMLFilter.NoWrapStr(test_instance.crew.resultclass.shortName)}</g:if></td>
                                     </g:if>
+                                </g:if>
+                                <g:if test="${printtimetablejudge_corridorwidth}">
+                                    <td class="corridorwidth">${FcMath.DistanceStr(test_instance.GetCorridorWidth())}</td>
                                 </g:if>
                                 <g:if test="${taskInstance.printTimetableJuryPlanning}">
                                     <g:set var="minutes_before" value="${test_instance.GetMinutesBeforeStartTime()}"/>

@@ -58,6 +58,10 @@
         <h2>${message(code:'fc.test.timetable')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
         <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
         <g:form>
+            <g:set var="printtimetable_corridorwidth" value="${false}"/>
+            <g:if test="${taskInstance.flighttest.route.corridorWidth && taskInstance.printTimetableCorridorWidth}">
+                <g:set var="printtimetable_corridorwidth" value="${true}"/>
+            </g:if>
             <table class="timetablelist">
                 <thead>
                     <tr>
@@ -94,6 +98,9 @@
                         </g:if>
                         <g:if test="${taskInstance.printTimetableTakeoff}">
                             <th>${message(code:'fc.test.takeoff')}</th>
+                        </g:if>
+                        <g:if test="${printtimetable_corridorwidth}">
+                            <th>${message(code:'fc.test.corridorwidth')}</th>
                         </g:if>
                         <g:if test="${taskInstance.printTimetableVersion}">
                             <th>${message(code:'fc.test.timetable.unchangedversion.short')}</th>
@@ -142,6 +149,9 @@
                                 <g:if test="${taskInstance.printTimetableTakeoff}">
                                     <td class="takeofftime">${test_instance.takeoffTime?.format('HH:mm')}</td>
                                 </g:if>
+                                <g:if test="${printtimetable_corridorwidth}">
+                                    <td class="corridorwidth">${FcMath.DistanceStr(test_instance.GetCorridorWidth())}</td>
+                                </g:if>
                                 <g:if test="${taskInstance.printTimetableVersion}">
                                     <td class="version">${test_instance.timetableVersion}</td>
                                 </g:if>
@@ -150,8 +160,16 @@
                     </g:each>
                 </tbody>
             </table>
-            <g:if test="${taskInstance.printTimetableVersion}">
-                <p>${message(code:'fc.test.timetable.unchangedversion.short.help')}</p>
+            <g:if test="${taskInstance.printTimetableVersion || printtimetable_corridorwidth}">
+                <p>
+                    <g:if test="${printtimetable_corridorwidth}">
+                        ${message(code:'fc.test.corridorwidth.info')}
+                    </g:if>
+                    <g:if test="${taskInstance.printTimetableVersion}">
+                        <g:if test="${printtimetable_corridorwidth}"><br/></g:if>
+                        ${message(code:'fc.test.timetable.unchangedversion.short.help')}
+                    </g:if>
+                </p>
             </g:if>
             <g:if test="${taskInstance.printTimetableLegTimes}">
                 <div style="page-break-inside:avoid">

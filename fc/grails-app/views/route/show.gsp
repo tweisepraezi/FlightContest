@@ -378,8 +378,8 @@
 	                                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 	                                        </g:if>
                                             <g:actionSubmit action="kmzexport_route" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:if test="${routeInstance.exportSemicircleGates}">
-                                                <g:actionSubmit action="gpxexport_route" value="${message(code:'fc.gpx.export.semicirclegates')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:if test="${route_status.exportSemicircleGates}">
+                                                <g:actionSubmit action="gpxexport_route_semicirclegates" value="${message(code:'fc.gpx.export.semicirclegates')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
                                             <g:else>
                                                 <g:actionSubmit action="gpxexport_route" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>

@@ -1280,7 +1280,23 @@ class TaskController {
 	}
 	
     def printtimetableoverview = {
-        Map task = printService.printtimetableoverviewTask(params,GetPrintParams()) 
+        Map task = printService.printtimetableoverviewTask(params,false,GetPrintParams()) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+            flash.message = task.message
+            flash.error = true
+            redirect(action:listplanning,id:task.instance.id)
+        } else if (task.content) {
+            printService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"overviewtimetable-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}",true,task.instance.printTimetableOverviewA3,task.instance.printTimetableOverviewLandscape)
+        } else {
+            redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+    
+    def printspfptimes = {
+        Map task = printService.printtimetableoverviewTask(params,true,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")

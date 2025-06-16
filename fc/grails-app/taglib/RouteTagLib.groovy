@@ -598,9 +598,9 @@ class RouteTagLib
         outln"""    <div>"""
         checkBox("showCurvedPoints", attrs.route.showCurvedPoints, 'fc.route.showcurvedpoints', attrs)
         outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("exportSemicircleGates", attrs.route.exportSemicircleGates, 'fc.route.exportsemicirclegates', attrs)
-        outln"""    </div>"""
+        //outln"""    <div>"""
+        //checkBox("exportSemicircleGates", attrs.route.exportSemicircleGates, 'fc.route.exportsemicirclegates', attrs)
+        //outln"""    </div>"""
         outln"""    <div>"""
         outln"""        <label>${message(code:'fc.route.semicirclecoursechange')}* [${message(code:'fc.grad')}]:</label>"""
         outln"""        <input type="text" name="semicircleCourseChange" value="${fieldValue(bean:attrs.route,field:'semicircleCourseChange')}" tabIndex="${attrs.ti[0]++}"/>"""
