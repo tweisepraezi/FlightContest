@@ -116,7 +116,7 @@ class Task
 	Boolean printTimetableTakeoff            = true  // DB-2.3
 	Boolean printTimetableVersion            = true  // DB-2.3
 	String printTimetableChange              = ""    // DB-2.3
-    Boolean printTimetableLegTimes           = true  // DB-2.8
+    Boolean printTimetableLegTimes           = false // DB-2.8
 	Boolean printTimetableCorridorWidth      = true  // DB-2.44
 	Boolean printTimetableLandscape          = false // DB-2.3
 	Boolean printTimetableA3                 = false // DB-2.3

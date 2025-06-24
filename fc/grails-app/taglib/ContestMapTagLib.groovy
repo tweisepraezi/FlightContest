@@ -27,6 +27,28 @@ class ContestMapTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def contestMapRouteInputField = { attrs, body ->
+        outln"""<div>"""
+        outln"""    <br/>"""
+        outln"""    <label>${attrs.fieldlabel}</label>"""
+        outln"""    <br/>"""
+        outln"""    <input type="text" id="${attrs.fieldid}" name="${attrs.fieldid}" value="${attrs.fieldvalue}" tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""</div>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def contestMapShowCorridorWidth = { attrs, body ->
+        if (attrs.r.corridorWidth) {
+            outln"""<div>"""
+            outln"""    <br>"""
+            outln"""    <label>${message(code:'fc.corridorwidth')}:</label>"""
+            outln"""    <br>"""
+            outln"""    <input type="text" value="${attrs.r.corridorWidth}${message(code:'fc.mile')}" disabled/>"""
+            outln"""</div>"""
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     def contestMapRoutePointsInput = { attrs, body ->
         outln"""<div>"""
         outln"""    <br/>"""
@@ -226,7 +248,7 @@ class ContestMapTagLib
 		if (attrs.PrintButton) {
             outln"""<p>"""
 			outln"""	    <br/>"""
-            outln"""        <label>${message(code:'fc.contestmap.savemap.name')}: <input type="text" id="maponlinename_id" name="contestMapPrintName" value="${attrs.r.contestMapPrintName}" size="${attrs.r.contestMapPrintName.size()}" ></input></label>"""
+            outln"""        <label>${message(code:'fc.contestmap.savemap.name')}: <input type="text" id="maponlinename_id" name="contestMapPrintName" value="${attrs.r.contestMapPrintName}" size="${attrs.r.contestMapPrintName.size()+10}" ></input></label>"""
             checkBox("contestMapAllowOverwrite", message(code:'fc.contestmap.savemap.allowoverwrite'), false, attrs)
             outln"""</p>"""
             outln"""<p>"""

@@ -1,6 +1,21 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.4
+----------------
+- OSM-Wettbewerbs-Karte für ANR-Strecken: Erzeugung von Karten mit abweichender Korridor-Breite für eine Strecke hinzugefügt
+    Bis zu 3 abweichende Korridor-Breiten können in den 2., 3. und 4. Einstellungen konfiguriert werden.
+- ANR Live Tracking bei Strecken mit landschaftlichen Abschnitten oder Halbkreisen hinzugefügt
+    Bei Besatzungen mit abweichender Korridor-Breite werden Strafpunkte beim Live-Tracking gegen die Korridor-Breite der Strecke ermittelt.
+- Strecken -> Import Strecke:
+    Verfügbare Optionen werden jetzt nach der Wettbewerbsart gefiltert.
+      So steht z.B. die Option 'UZK-Koordinaten automatisch ermitteln' nur bei Präzisionsflug-Wettbewerben zur Verfügung.
+    'Verzeichnisname in kml/kmz-Datei' wird jetzt mit 'turnpoints' voreingestellt.
+      Dieses Verzeichnis wird in FC-kmz-Dateien und in Task-Creator-Export-kml-Dateien zur Speicherung der Strecken-Koordinaten verwendet.
+    Nutzen Sie dieses Kommando bei Präzisionsflug-Wettbewerben, um im Task-Creator konstruktierte Strecken, 
+    wo Wendepunkte für unbekannte Zeitkontrollen eingefügt wurden, automatisch in unbekannte Zeitkontrollen umzuwandeln.
+- Bug "'Ergebnisse -> Abweichungen' stürzt bei gelöschten Beobachtungsformularen ab" behoben
+
 Änderungen 4.1.3
 ----------------
 - ANR-Besatzungs-Zeitplan: Druck der Korridor-Breite hinzugefügt

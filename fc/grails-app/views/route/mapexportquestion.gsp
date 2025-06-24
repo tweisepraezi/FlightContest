@@ -214,18 +214,21 @@
 	                                </div>
                                     <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos}" vpname="contestMapCenterVerticalPos" hp="${routeInstance.contestMapCenterHorizontalPos}" hpname="contestMapCenterHorizontalPos" ti="${ti}"/>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints}" tpid="${Defs.TurnpointID_ContestMapCenterPoints}" ti="${ti}" printpoints="${false}"/>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveX" name="contestMapCenterMoveX" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX')}" tabIndex="${ti[0]++}"/>
-                                    </div>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveY" name="contestMapCenterMoveY" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY')}" tabIndex="${ti[0]++}"/>
-                                    </div>
+                                    <table class="mapexportquestiontable">
+                                        <tr class="mapexportquestiontable">
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX" fieldvalue="${routeInstance.contestMapCenterMoveX}" ti="${ti}"/>
+                                            </td>
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY" fieldvalue="${routeInstance.contestMapCenterMoveY}" ti="${ti}"/>
+                                            </td>
+                                            <g:if test="${routeInstance.corridorWidth}">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                </td>
+                                            </g:if>
+                                        </tr>
+                                    </table>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints}" tpid="${Defs.TurnpointID_ContestMapPrintPoints}" ti="${ti}" printpoints="${true}"/>
                                     <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize}" printsizename="contestMapPrintSize" printlandscape="${routeInstance.contestMapPrintLandscape}" printlandscapename="contestMapPrintLandscape" ti="${ti}"/>
 									<br/>
@@ -262,20 +265,28 @@
 	                                </div>
                                     <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos2}" vpname="contestMapCenterVerticalPos2" hp="${routeInstance.contestMapCenterHorizontalPos2}" hpname="contestMapCenterHorizontalPos2" ti="${ti}"/>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints2}" tpid="${Defs.TurnpointID_ContestMapCenterPoints2}" ti="${ti}" printpoints="${false}"/>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveX2" name="contestMapCenterMoveX2" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX2')}" tabIndex="${ti[0]++}"/>
-                                    </div>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveY2" name="contestMapCenterMoveY2" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY2')}" tabIndex="${ti[0]++}"/>
-                                    </div>
+                                    <table class="mapexportquestiontable">
+                                        <tr class="mapexportquestiontable">
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX2" fieldvalue="${routeInstance.contestMapCenterMoveX2}" ti="${ti}"/>
+                                            </td>
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY2" fieldvalue="${routeInstance.contestMapCenterMoveY2}" ti="${ti}"/>
+                                            </td>
+                                            <g:if test="${routeInstance.corridorWidth}">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth2" fieldvalue="${routeInstance.corridorWidth2}" ti="${ti}"/>
+                                                </td>
+                                            </g:if>
+                                        </tr>
+                                    </table>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints2}" tpid="${Defs.TurnpointID_ContestMapPrintPoints2}" ti="${ti}" printpoints="${true}"/>
                                     <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize2}" printsizename="contestMapPrintSize2" printlandscape="${routeInstance.contestMapPrintLandscape2}" printlandscapename="contestMapPrintLandscape2" ti="${ti}"/>
+                                    <g:if test="${routeInstance.corridorWidth}">
+                                    </g:if>
                                     <br/>
                                     <g:actionSubmit action="mapgenerate2" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_takeoff2" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
@@ -309,18 +320,24 @@
 	                                </div>
                                     <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos3}" vpname="contestMapCenterVerticalPos3" hp="${routeInstance.contestMapCenterHorizontalPos3}" hpname="contestMapCenterHorizontalPos3" ti="${ti}"/>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints3}" tpid="${Defs.TurnpointID_ContestMapCenterPoints3}" ti="${ti}" printpoints="${false}"/>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveX3" name="contestMapCenterMoveX3" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX3')}" tabIndex="${ti[0]++}"/>
-                                    </div>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveY3" name="contestMapCenterMoveY3" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY3')}" tabIndex="${ti[0]++}"/>
-                                    </div>
+                                    <table class="mapexportquestiontable">
+                                        <tr class="mapexportquestiontable">
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX3" fieldvalue="${routeInstance.contestMapCenterMoveX3}" ti="${ti}"/>
+                                            </td>
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY3" fieldvalue="${routeInstance.contestMapCenterMoveY3}" ti="${ti}"/>
+                                            </td>
+                                            <g:if test="${routeInstance.corridorWidth}">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth3" fieldvalue="${routeInstance.corridorWidth3}" ti="${ti}"/>
+                                                </td>
+                                            </g:if>
+                                        </tr>
+                                    </table>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints3}" tpid="${Defs.TurnpointID_ContestMapPrintPoints3}" ti="${ti}" printpoints="${true}"/>
                                     <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize3}" printsizename="contestMapPrintSize3" printlandscape="${routeInstance.contestMapPrintLandscape3}" printlandscapename="contestMapPrintLandscape3" ti="${ti}"/>
                                     <br/>
@@ -356,18 +373,24 @@
 	                                </div>
                                     <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos4}" vpname="contestMapCenterVerticalPos4" hp="${routeInstance.contestMapCenterHorizontalPos4}" hpname="contestMapCenterHorizontalPos4" ti="${ti}"/>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints4}" tpid="${Defs.TurnpointID_ContestMapCenterPoints4}" ti="${ti}" printpoints="${false}"/>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveX4" name="contestMapCenterMoveX4" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX4')}" tabIndex="${ti[0]++}"/>
-                                    </div>
-                                    <div>
-                                        <br/>
-                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
-                                        <br/>
-                                        <input type="text" id="contestMapCenterMoveY4" name="contestMapCenterMoveY4" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY4')}" tabIndex="${ti[0]++}"/>
-                                    </div>
+                                    <table class="mapexportquestiontable">
+                                        <tr class="mapexportquestiontable">
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX4" fieldvalue="${routeInstance.contestMapCenterMoveX4}" ti="${ti}"/>
+                                            </td>
+                                            <td class="mapexportquestiontable">
+                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY4" fieldvalue="${routeInstance.contestMapCenterMoveY4}" ti="${ti}"/>
+                                            </td>
+                                            <g:if test="${routeInstance.corridorWidth}">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth4" fieldvalue="${routeInstance.corridorWidth4}" ti="${ti}"/>
+                                                </td>
+                                            </g:if>
+                                        </tr>
+                                    </table>
                                     <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints4}" tpid="${Defs.TurnpointID_ContestMapPrintPoints4}" ti="${ti}" printpoints="${true}"/>
                                     <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize4}" printsizename="contestMapPrintSize4" printlandscape="${routeInstance.contestMapPrintLandscape4}" printlandscapename="contestMapPrintLandscape4" ti="${ti}"/>
                                     <br/>

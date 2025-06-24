@@ -1,6 +1,21 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.4
+-------------
+- OSM Contest Map for ANR routes: Generation of maps with different corridor widths for a route added
+    Up to 3 different corridor widths can be configured in the 2nd, 3rd, and 4th settings.
+- ANR Live Tracking for routes with scenic sections or semicircles added
+    For crews with different corridor widths, penalty points are calculated during live tracking based on the corridor width of the route.
+- Routes -> Import route:
+    Available options are now filtered according to the type of competition.
+      For example, the option 'Calculate SC coordinates automatically' is only available for Precision Flying competitions.
+    'Folder name in kml/kmz file' is now preset with 'turnpoints'.
+      This folder is used in FC kmz files and in Task Creator export kml files to save the route coordinates.
+    Use this command in Precision Flying competitions to automatically convert TP coordinates,
+    added in Task Creator for secret timechecks, to SC coordinates.
+- Bug "'Results -> Differences' crashes when observation forms are deleted" fixed
+
 Changes 4.1.3
 -------------
 - ANR Crew Timetable: Print corridor width added

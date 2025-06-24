@@ -1409,6 +1409,16 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 45) { // DB-2.45 compatibility
+                            print "    2.45 modifications"
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.corridorWidth2 = 0.0
+                                route_instance.corridorWidth3 = 0.0
+                                route_instance.corridorWidth4 = 0.0
+                                route_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

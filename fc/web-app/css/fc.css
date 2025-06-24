@@ -203,3 +203,12 @@ tr.pagebreak td {
 
 .mapexportquestionbutton {
 }
+
+.mapexportquestiontable {
+    width: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    padding-right:20px;
+    white-space: nowrap;
+}

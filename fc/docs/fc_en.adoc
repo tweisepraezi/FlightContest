@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.1.3
-:revdate: 09.06.2025
+:revnumber: 4.1.4
+:revdate: 24.06.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -685,8 +685,7 @@ Edit "Properties" of the added points in the 'Placemark' dialog:
 
 . Create a route with a curved leg
 
-- Activate the route setting '*Export semicircle gates from circle centers*'.
-- Execute '*GPX export (with semicircle gates)*'.
+- Execute '*GPX export (with semi-circle gates)*'.
 - Execute '-> Routes -> *Import FC route*' with the previously exported GPX file. This route now contains a curved leg that includes the semicircle.
 
 [[route-planning-on-printed-map]]
@@ -867,8 +866,6 @@ Internal data error +
 Execute 'Recalculate legs
 
 From this route with circle centers, a route with semi-circle gates must be created for use::
-Open "Route settings" +
-Activate the option "Export semi-circle gates from circle centers" +
 Execute "GPX export (with semi-circle gates)" +
 Execute "Import FC route" with the exported GPX file
 
@@ -1301,7 +1298,7 @@ If you get the error "Coordinates procedure turn differences" press the button "
 The route can now be checked for correctness using “OSM online map”. +
 +
 If the route includes a semi-circle, it must be converted into a route with semi-circle gates
-(activate route settings "Export semi-circle gates from circle centers", run "GPX export (with semi-circle gates)", and run "Import FC route" again).
+(run "GPX export (with semi-circle gates)", and run "Import FC route" again).
 
 . Create an A4 competition map with ANR parcour
 +

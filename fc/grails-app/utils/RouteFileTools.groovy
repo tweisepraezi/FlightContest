@@ -977,6 +977,18 @@ class RouteFileTools
                                 if (corridorwidth) {
                                     route_instance.corridorWidth = corridorwidth.toBigDecimal()
                                 }
+                                String corridorwidth2 = gpx.extensions.flightcontest.observationsettings.'@corridorwidth2'[0]
+                                if (corridorwidth2) {
+                                    route_instance.corridorWidth2 = corridorwidth2.toBigDecimal()
+                                }
+                                String corridorwidth3 = gpx.extensions.flightcontest.observationsettings.'@corridorwidth3'[0]
+                                if (corridorwidth3) {
+                                    route_instance.corridorWidth3 = corridorwidth3.toBigDecimal()
+                                }
+                                String corridorwidth4 = gpx.extensions.flightcontest.observationsettings.'@corridorwidth4'[0]
+                                if (corridorwidth4) {
+                                    route_instance.corridorWidth4 = corridorwidth4.toBigDecimal()
+                                }
                             }
                             if (!route_instance.corridorWidth && corridorWidth) {
                                 route_instance.corridorWidth = corridorWidth
@@ -1791,6 +1803,15 @@ class RouteFileTools
 							break
 						case "corridorwidth":
 							route_instance.corridorWidth = d.value.text().toBigDecimal()
+							break
+						case "corridorwidth2":
+							route_instance.corridorWidth2 = d.value.text().toBigDecimal()
+							break
+						case "corridorwidth3":
+							route_instance.corridorWidth3 = d.value.text().toBigDecimal()
+							break
+						case "corridorwidth4":
+							route_instance.corridorWidth4 = d.value.text().toBigDecimal()
 							break
                     }
                 }

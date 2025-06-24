@@ -31,6 +31,9 @@ class Route
     Boolean exportSemicircleGates = false                                        // DB-2.26, UNUSED, since DB-2.44
     Integer semicircleCourseChange = 5                                           // DB-2.37
     BigDecimal corridorWidth = 0.0                                               // DB-2.41, NM
+    BigDecimal corridorWidth2 = 0.0                                              // DB-2.45, NM
+    BigDecimal corridorWidth3 = 0.0                                              // DB-2.45, NM
+    BigDecimal corridorWidth4 = 0.0                                              // DB-2.45, NM
     
     Boolean showCoords = true                                                    // DB-2.30
     Boolean showCoordObservations = false                                        // DB-2.30
@@ -281,6 +284,11 @@ class Route
         contestMapAirfieldsData(nullable:true)
         contestMapShowAirfields(nullable:true)
         contestMapShowAirspaces(nullable:true)
+
+        // DB-2.45 compatibility
+        corridorWidth2(nullable:true,min:0.0)
+        corridorWidth3(nullable:true,min:0.0)
+        corridorWidth4(nullable:true,min:0.0)
 	}
 
 	static mapping = {
@@ -320,6 +328,9 @@ class Route
         showEnrouteCanvas = routeInstance.showEnrouteCanvas
         semicircleCourseChange = routeInstance.semicircleCourseChange
         corridorWidth = routeInstance.corridorWidth
+        corridorWidth2 = routeInstance.corridorWidth2
+        corridorWidth3 = routeInstance.corridorWidth3
+        corridorWidth4 = routeInstance.corridorWidth4
         if (routeInstance.contestMapShowMapObjectsFromRouteID) {
             contestMapShowMapObjectsFromRouteID = routeInstance.contestMapShowMapObjectsFromRouteID
         } else if (routeInstance.mapobjects) {
@@ -529,34 +540,62 @@ class Route
 
     String GetOSMRouteName1()
     {
-        if (contestMapFirstTitle) {
-            return "${name()} - ${contestMapFirstTitle}"
+        String route_name = name()
+        if (corridorWidth) {
+            route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
         }
-        return name()
+        if (contestMapFirstTitle) {
+            return "${route_name} - ${contestMapFirstTitle}"
+        }
+        return route_name
     }
     
     String GetOSMRouteName2()
     {
-        if (contestMapSecondTitle) {
-            return "${name()} - ${contestMapSecondTitle}"
+        String route_name = name()
+        if (corridorWidth) {
+            if (corridorWidth2) {
+                route_name += " [${FcMath.DistanceStr(corridorWidth2)}${getMsgArgs('fc.mile',[])}]"
+            } else {
+                route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+            }
         }
-        return name()
+        if (contestMapSecondTitle) {
+            return "${route_name} - ${contestMapSecondTitle}"
+        }
+        return route_name
     }
     
     String GetOSMRouteName3()
     {
-        if (contestMapThirdTitle) {
-            return "${name()} - ${contestMapThirdTitle}"
+        String route_name = name()
+        if (corridorWidth) {
+            if (corridorWidth3) {
+                route_name += " [${FcMath.DistanceStr(corridorWidth3)}${getMsgArgs('fc.mile',[])}]"
+            } else {
+                route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+            }
         }
-        return name()
+        if (contestMapThirdTitle) {
+            return "${route_name} - ${contestMapThirdTitle}"
+        }
+        return route_name
     }
     
     String GetOSMRouteName4()
     {
-        if (contestMapForthTitle) {
-            return "${name()} - ${contestMapForthTitle}"
+        String route_name = name()
+        if (corridorWidth) {
+            if (corridorWidth4) {
+                route_name += " [${FcMath.DistanceStr(corridorWidth4)}${getMsgArgs('fc.mile',[])}]"
+            } else {
+                route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+            }
         }
-        return name()
+        if (contestMapForthTitle) {
+            return "${route_name} - ${contestMapForthTitle}"
+        }
+        return route_name
     }
     
 	boolean Used()

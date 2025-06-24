@@ -1740,7 +1740,10 @@ class GpxService
                             useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
 							mapscale: routeInstance.mapScale,
 							altitudeaboveground: routeInstance.altitudeAboveGround,
-                            corridorwidth: routeInstance.corridorWidth
+                            corridorwidth: routeInstance.corridorWidth,
+                            corridorwidth2: routeInstance.corridorWidth2,
+                            corridorwidth3: routeInstance.corridorWidth3,
+                            corridorwidth4: routeInstance.corridorWidth4
                         )
                         xml.mapsettings(
                             contestmapairfields: routeInstance.contestMapAirfields,
@@ -2726,7 +2729,10 @@ class GpxService
                         useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
                         mapscale: routeInstance.mapScale,
                         altitudeaboveground: routeInstance.altitudeAboveGround,
-                        corridorwidth: routeInstance.corridorWidth
+                        corridorwidth: contestMapParams.contestMapCorridorWidth,
+                        corridorwidth2: contestMapParams.contestMapCorridorWidth2,
+                        corridorwidth3: contestMapParams.contestMapCorridorWidth3,
+                        corridorwidth4: contestMapParams.contestMapCorridorWidth4
                     )
                     xml.mapsettings(
                         contestmapairfields: routeInstance.contestMapAirfields,
@@ -3033,7 +3039,7 @@ class GpxService
                                         Map start_gate = AviationMath.getGate(
                                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                            routeInstance.corridorWidth
+                                            contestMapParams.contestMapCorridorWidth
                                         )
                                         BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                         xml.rtept(lat:start_gate.coordLeft.lat, lon:start_gate.coordLeft.lon) {
@@ -3047,7 +3053,7 @@ class GpxService
                                         last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                        routeInstance.corridorWidth
+                                        contestMapParams.contestMapCorridorWidth
                                     )
                                     BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
@@ -3062,7 +3068,7 @@ class GpxService
                                             Map gate = AviationMath.getGate(
                                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                                 coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                                routeInstance.corridorWidth
+                                                contestMapParams.contestMapCorridorWidth
                                             )
                                             BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                             xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
@@ -3094,7 +3100,7 @@ class GpxService
                                         Map start_gate = AviationMath.getGate(
                                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                            routeInstance.corridorWidth
+                                            contestMapParams.contestMapCorridorWidth
                                         )
                                         BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                         xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
@@ -3108,7 +3114,7 @@ class GpxService
                                         last_last_coordroute_instance.latMath(),last_last_coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                        routeInstance.corridorWidth
+                                        contestMapParams.contestMapCorridorWidth
                                     )
                                     BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -3123,7 +3129,7 @@ class GpxService
                                             Map gate = AviationMath.getGate(
                                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                                 coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                                routeInstance.corridorWidth
+                                                contestMapParams.contestMapCorridorWidth
                                             )
                                             BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -3352,10 +3358,10 @@ class GpxService
                         Map gate = AviationMath.getGate(
                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                            routeInstance.corridorWidth
+                            contestMapParams.contestMapCorridorWidth
                         )
                         xml.rte {
-                            wr_gate(coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage)
+                            wr_gate(coordroute_instance, contestMapParams.contestMapCorridorWidth, 0, xml, task_instance, wr_photoimage)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -3370,10 +3376,10 @@ class GpxService
                         Map gate = AviationMath.getGate(
                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                            routeInstance.corridorWidth
+                            contestMapParams.contestMapCorridorWidth
                         )
                         xml.rte {
-                            wr_gate(coordroute_instance, routeInstance.corridorWidth, 0, xml, task_instance, wr_photoimage)
+                            wr_gate(coordroute_instance, contestMapParams.contestMapCorridorWidth, 0, xml, task_instance, wr_photoimage)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {

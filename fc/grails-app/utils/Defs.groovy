@@ -51,6 +51,7 @@ class Defs
     final static List LIVETRACKING_SCORECARDS = [LIVETRACKING_SCORECARD_ANR, LIVETRACKING_SCORECARD_PF, LIVETRACKING_SCORECARD_RF]
     
     final static int ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE          = 1
+    final static int ANR_LIVETRACKING_SECRETPOINT_OFFSET               = 100
 
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
     static final String LIVETRACKING_DISPLAY_MAP                       = "/map/"
@@ -197,7 +198,7 @@ class Defs
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
-    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 15"
+    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 16"
     static final String ROUTEEXPORT_SETTINGS                           = "settings"
     static final String ROUTEEXPORT_MAPSETTINGS                        = "mapsettings"
     static final String ROUTEEXPORT_TURNPOINTS                         = "turnpoints"

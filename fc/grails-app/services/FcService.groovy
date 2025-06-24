@@ -2266,7 +2266,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
-                    task_instance.printTimetableJuryLandingField = true
+                    task_instance.printTimetableJuryLandingField = false
                     task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
@@ -2317,7 +2317,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
-                    task_instance.printTimetableJuryLandingField = true
+                    task_instance.printTimetableJuryLandingField = false
                     task_instance.printTimetableJuryCorridorWidth = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false

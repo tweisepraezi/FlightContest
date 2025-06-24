@@ -1544,6 +1544,15 @@ class KmlService
                             xml.Data(name:"corridorwidth") {
                                 xml.value routeInstance.corridorWidth
                             }
+                            xml.Data(name:"corridorwidth2") {
+                                xml.value routeInstance.corridorWidth2
+                            }
+                            xml.Data(name:"corridorwidth3") {
+                                xml.value routeInstance.corridorWidth3
+                            }
+                            xml.Data(name:"corridorwidth4") {
+                                xml.value routeInstance.corridorWidth4
+                            }
                             if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                                 for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                                     xml.Data(name:"enroutephotosign:${coordenroutephoto_instance.enrouteViewPos}") {

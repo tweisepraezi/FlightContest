@@ -123,7 +123,10 @@ class CoordTitle // DB-2.5
                 }
                 return "${getTrackingMsg(type.code)}${number}"
             case CoordType.SECRET:
-				return "${getTrackingMsg(type.code)}${number}"
+                if (isANR) {
+                    return "${getTrackingMsg(CoordType.SECRET.code)}${number+Defs.ANR_LIVETRACKING_SECRETPOINT_OFFSET}"
+                }
+                return "${getTrackingMsg(type.code)}${number}"
 			default:
 				return getTrackingMsg(type.code)
 		}

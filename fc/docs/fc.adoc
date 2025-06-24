@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.1.3
-:revdate:   09.06.2025
+:revnumber: 4.1.4
+:revdate:   24.06.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -695,7 +695,6 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 
 . Strecke mit krummen Streckenabschnitt erzeugen
 
-- Aktivieren Sie die Strecken-Einstellung '*Halbkreis-Tore aus Kreismittelpunkten exportieren*'.
 - Führen Sie '*GPX-Export (mit Halbkreis-Tore)*' aus.
 - Führen Sie '-> Strecken -> *Import FC-Strecke*' mit der zuvor exportierten GPX-Datei aus. Diese Strecke enthält nun einen krummen Streckenabschnitt, der den Halbkreis beinhaltet.
 
@@ -876,8 +875,6 @@ Interner Datenfehler +
 'Etappen neu berechnen' ausführen
 
 Aus dieser Strecke mit Kreismittelpunkten muss zur Nutzung eine Strecke mit Halbkreis-Toren erzeugt werden::
-Öffnen Sie die Strecken-Einstellungen +
-Aktivieren Sie die Option "Halbkreis-Tore aus Kreismittelpunkten exportieren" +
 Führen Sie "GPX-Export (mit Halbkreis-Tore)" aus +
 Führen Sie "Import FC-Strecke" mit der exportierten GPX-Datei aus
 
@@ -1311,7 +1308,7 @@ Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, dr�
 Die Korrektheit der Strecke kann nun mit OSM-Online-Karte geprüft werden. +
 +
 Enthält die Strecke einen Kreisbogen, muss sie in eine Strecke mit Halbkreis-Toren umgewandelt werden
-(Strecken-Einstellung "Halbkreis-Tore aus Kreismittelpunkten exportieren" aktivieren, "GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")
+("GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")
 
 . A4-Wettbewerbs-Karte mit ANR-Parcour erzeugen
 +

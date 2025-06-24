@@ -396,7 +396,10 @@ class Coord
                 }
                 return "${getTrackingMsg(type.code)}${titleNumber}"
             case CoordType.SECRET:
-				return "${getTrackingMsg(type.code)}${titleNumber}"
+                if (isANR) {
+                    return "${getTrackingMsg(CoordType.SECRET.code)}${titleNumber+Defs.ANR_LIVETRACKING_SECRETPOINT_OFFSET}"
+                }
+                return "${getTrackingMsg(type.code)}${titleNumber}"
 			default:
 				return getTrackingMsg(type.code)
 		}

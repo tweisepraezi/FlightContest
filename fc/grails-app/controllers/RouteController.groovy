@@ -261,7 +261,7 @@ class RouteController {
     
     def importfileroute2 = {
         def file = request.getFile('routefile')
-		String secretcoursechange = params?.secretcoursechange.replace(',','.')
+		String secretcoursechange = params?.secretcoursechange?.replace(',','.')
         BigDecimal corridor_width = 0
         if (params.corridorWidth && params.corridorWidth.isBigDecimal()) {
             corridor_width = params.corridorWidth.toBigDecimal()
@@ -271,27 +271,27 @@ class RouteController {
                              firstcoordto:params?.firstcoordto == 'on',
                              todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
                              curved1:params?.curved1 == 'on',
-                             curvedstartpos1:params?.curvedstartpos1.isInteger()?params?.curvedstartpos1.toInteger():null,
-                             curvedendpos1:params?.curvedendpos1.isInteger()?params?.curvedendpos1.toInteger():null,
+                             curvedstartpos1:params?.curvedstartpos1?.isInteger()?params?.curvedstartpos1.toInteger():null,
+                             curvedendpos1:params?.curvedendpos1?.isInteger()?params?.curvedendpos1.toInteger():null,
                              curved2:params?.curved2 == 'on',
-                             curvedstartpos2:params?.curvedstartpos2.isInteger()?params?.curvedstartpos2.toInteger():null,
-                             curvedendpos2:params?.curvedendpos2.isInteger()?params?.curvedendpos2.toInteger():null,
+                             curvedstartpos2:params?.curvedstartpos2?.isInteger()?params?.curvedstartpos2.toInteger():null,
+                             curvedendpos2:params?.curvedendpos2?.isInteger()?params?.curvedendpos2.toInteger():null,
                              curved3:params?.curved3 == 'on',
-                             curvedstartpos3:params?.curvedstartpos3.isInteger()?params?.curvedstartpos3.toInteger():null,
-                             curvedendpos3:params?.curvedendpos3.isInteger()?params?.curvedendpos3.toInteger():null,
+                             curvedstartpos3:params?.curvedstartpos3?.isInteger()?params?.curvedstartpos3.toInteger():null,
+                             curvedendpos3:params?.curvedendpos3?.isInteger()?params?.curvedendpos3.toInteger():null,
                              semicircle1:params?.semicircle1 == 'on',
-                             semicirclepos1:params?.semicirclepos1.isInteger()?params?.semicirclepos1.toInteger():null,
+                             semicirclepos1:params?.semicirclepos1?.isInteger()?params?.semicirclepos1.toInteger():null,
                              semicircle2:params?.semicircle2 == 'on',
-                             semicirclepos2:params?.semicirclepos2.isInteger()?params?.semicirclepos2.toInteger():null,
+                             semicirclepos2:params?.semicirclepos2?.isInteger()?params?.semicirclepos2.toInteger():null,
                              semicircle3:params?.semicircle3 == 'on',
-                             semicirclepos3:params?.semicirclepos3.isInteger()?params?.semicirclepos3.toInteger():null,
+                             semicirclepos3:params?.semicirclepos3?.isInteger()?params?.semicirclepos3.toInteger():null,
                              ildg:params?.ildg == 'on', 
-                             ildgpos:params?.ildgpos.isInteger()?params?.ildgpos.toInteger():null, 
-                             ildgdirection:params?.ildgdirection.isBigDecimal()?params?.ildgdirection.toBigDecimal():0.0,
+                             ildgpos:params?.ildgpos?.isInteger()?params?.ildgpos.toInteger():null, 
+                             ildgdirection:params?.ildgdirection?.isBigDecimal()?params?.ildgdirection.toBigDecimal():0.0,
                              ldg:params?.ldg.toInteger(),
-                             ldgdirection:params?.ldgdirection.isBigDecimal()?params?.ldgdirection.toBigDecimal():0.0,
+                             ldgdirection:params?.ldgdirection?.isBigDecimal()?params?.ldgdirection.toBigDecimal():0.0,
                              autosecret:params?.autosecret == 'on',
-							 secretcoursechange:secretcoursechange.isBigDecimal()?secretcoursechange.toBigDecimal():1.5,
+							 secretcoursechange:secretcoursechange?.isBigDecimal()?secretcoursechange.toBigDecimal():1.5,
                             ]
         Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, corridor_width, file, import_params)
         if (!import_route.found) {
@@ -1260,6 +1260,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth2) {
+                    corridor_width = route.instance.corridorWidth2
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:route.instance.contestMapCircle,
                                          contestMapProcedureTurn:route.instance.contestMapProcedureTurn,
@@ -1273,7 +1277,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1389,6 +1393,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth3) {
+                    corridor_width = route.instance.corridorWidth3
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:route.instance.contestMapCircle,
                                          contestMapProcedureTurn:route.instance.contestMapProcedureTurn,
@@ -1402,7 +1410,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -1518,6 +1526,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth4) {
+                    corridor_width = route.instance.corridorWidth4
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:route.instance.contestMapCircle,
                                          contestMapProcedureTurn:route.instance.contestMapProcedureTurn,
@@ -1531,7 +1543,7 @@ class RouteController {
                                          contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2035,6 +2047,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth2) {
+                    corridor_width = route.instance.corridorWidth2
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2048,7 +2064,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2164,6 +2180,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth2) {
+                    corridor_width = route.instance.corridorWidth2
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2177,7 +2197,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2294,6 +2314,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth2) {
+                    corridor_width = route.instance.corridorWidth2
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2307,7 +2331,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2423,6 +2447,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth3) {
+                    corridor_width = route.instance.corridorWidth3
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2436,7 +2464,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2552,6 +2580,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth3) {
+                    corridor_width = route.instance.corridorWidth3
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2565,7 +2597,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2682,6 +2714,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth3) {
+                    corridor_width = route.instance.corridorWidth3
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2695,7 +2731,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2811,6 +2847,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth4) {
+                    corridor_width = route.instance.corridorWidth4
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2824,7 +2864,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -2940,6 +2980,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth4) {
+                    corridor_width = route.instance.corridorWidth4
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -2953,7 +2997,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3070,6 +3114,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth4) {
+                    corridor_width = route.instance.corridorWidth4
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -3083,7 +3131,7 @@ class RouteController {
                                          contestMapTurnpointSign:false,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3354,6 +3402,10 @@ class RouteController {
 				if (curvedleg_points) {
 					curvedleg_points += ","
 				}
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth2) {
+                    corridor_width = route.instance.corridorWidth2
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:true,
                                          contestMapProcedureTurn:true,
@@ -3367,7 +3419,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3496,6 +3548,10 @@ class RouteController {
 				if (curvedleg_points) {
 					curvedleg_points += ","
 				}
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth3) {
+                    corridor_width = route.instance.corridorWidth3
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:true,
                                          contestMapProcedureTurn:true,
@@ -3509,7 +3565,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -3638,6 +3694,10 @@ class RouteController {
 				if (curvedleg_points) {
 					curvedleg_points += ","
 				}
+                BigDecimal corridor_width = route.instance.corridorWidth
+                if (route.instance.corridorWidth4) {
+                    corridor_width = route.instance.corridorWidth4
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:true,
                                          contestMapProcedureTurn:true,
@@ -3651,7 +3711,7 @@ class RouteController {
                                          contestMapTurnpointSign:true,
                                          contestMapGraticule:route.instance.contestMapGraticule,
                                          contestMapContourLines:route.instance.contestMapContourLines,
-                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapCorridorWidth:corridor_width,
                                          contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
                                          contestMapAirfields:route.instance.contestMapAirfields,
                                          contestMapChurches:route.instance.contestMapChurches,
@@ -4198,6 +4258,15 @@ class RouteController {
             routeInstance.contestMapShowMapObjectsFromRouteID = 0
         }
         routeInstance.contestMapDevStyle = params.contestMapDevStyle == "on"
+        if (params.corridorWidth2 && params.corridorWidth2.replace(',','.').isBigDecimal()) {
+            routeInstance.corridorWidth2 = params.corridorWidth2.replace(',','.').toBigDecimal()
+        }
+        if (params.corridorWidth3 && params.corridorWidth3.replace(',','.').isBigDecimal()) {
+            routeInstance.corridorWidth3 = params.corridorWidth3.replace(',','.').toBigDecimal()
+        }
+        if (params.corridorWidth4 && params.corridorWidth4.replace(',','.').isBigDecimal()) {
+            routeInstance.corridorWidth4 = params.corridorWidth4.replace(',','.').toBigDecimal()
+        }
         routeInstance.save()
     }
     
