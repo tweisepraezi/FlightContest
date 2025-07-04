@@ -251,19 +251,21 @@ class ContestMapTagLib
             outln"""        <label>${message(code:'fc.contestmap.savemap.name')}: <input type="text" id="maponlinename_id" name="contestMapPrintName" value="${attrs.r.contestMapPrintName}" size="${attrs.r.contestMapPrintName.size()+10}" ></input></label>"""
             checkBox("contestMapAllowOverwrite", message(code:'fc.contestmap.savemap.allowoverwrite'), false, attrs)
             outln"""</p>"""
-            outln"""<p>"""
-            checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), true, attrs)
-            if (attrs.r.defaultOnlineMap) {
-                outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultOnlineMap])})"""
-            }
-            outln"""</p>"""
-            if (attrs.PrintSize == Defs.CONTESTMAPPRINTSIZE_ANR) {
+            if (attrs.MapProjection == "3857") {
                 outln"""<p>"""
-                checkBox("contestMapSetDefaultPrintMap", message(code:'fc.contestmap.savemap.defaultprintmap'), true, attrs)
-                if (attrs.r.defaultPrintMap) {
-                    outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultPrintMap])})"""
+                checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), true, attrs)
+                if (attrs.r.defaultOnlineMap) {
+                    outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultOnlineMap])})"""
                 }
                 outln"""</p>"""
+                if (attrs.PrintSize == Defs.CONTESTMAPPRINTSIZE_ANR) {
+                    outln"""<p>"""
+                    checkBox("contestMapSetDefaultPrintMap", message(code:'fc.contestmap.savemap.defaultprintmap'), true, attrs)
+                    if (attrs.r.defaultPrintMap) {
+                        outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultPrintMap])})"""
+                    }
+                    outln"""</p>"""
+                }
             }
 		}
 	}

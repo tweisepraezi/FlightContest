@@ -471,6 +471,7 @@ class GpxTagLib
         outln"""</script>"""
         
         // FC OnlineMap
+        String onlinemap_separator = "#,#"
         String map_folder_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${attrs.contestUUID}/"
         File map_folder = new File(map_folder_name)
         String onlinemap_names = ""
@@ -480,7 +481,7 @@ class GpxTagLib
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
                 if (map_entry.projection == "3857") {
                     if (onlinemap_names) {
-                        onlinemap_names += ","
+                        onlinemap_names += onlinemap_separator
                     }
                     onlinemap_names += map_entry.localref
                     i++
@@ -496,7 +497,7 @@ class GpxTagLib
         outln"""    var onlineMapIndex = 0;"""
         if (onlinemap_names) {
             outln"""const xhttp = new XMLHttpRequest();"""
-            outln"""var onlinemap_names_array = "${onlinemap_names}".split(",");"""
+            outln"""var onlinemap_names_array = "${onlinemap_names}".split("${onlinemap_separator}");"""
             outln"""for (let i in onlinemap_names_array) {"""
             outln"""    var onlinemap_name = onlinemap_names_array[i];"""
             outln"""    xhttp.onload = function() {load_onlinemap_info(this);}"""

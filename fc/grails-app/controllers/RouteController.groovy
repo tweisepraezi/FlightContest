@@ -1053,6 +1053,7 @@ class RouteController {
             boolean print_button = false // drucken
             boolean discard_button = false // verwerfen
             String print_size = ""
+            String map_projection = ""
             String webroot_dir = servletContext.getRealPath("/")
             String printjobid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + route.instance.id + ".txt"
             String printfileid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + route.instance.id + ".txt"
@@ -1093,6 +1094,7 @@ class RouteController {
                 printfileid_reader.readLine()
                 print_size = printfileid_reader.readLine()
                 route.instance.contestMapPrintName = printfileid_reader.readLine()
+                map_projection = printfileid_reader.readLine()
                 printfileid_reader.close()
             } else if (new File(printfileid_errorfilename).exists()) { // Job ends not successful
                 flash.message = message(code:'fc.contestmap.job.error')
@@ -1102,7 +1104,7 @@ class RouteController {
             // quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
             
             // set return action
-            return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map, PrintSize:print_size]
+            return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map, PrintSize:print_size, MapProjection:map_projection]
         } else {
             flash.message = task.message
             redirect(action:'show',id:params.id)
@@ -3827,6 +3829,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                String print_size = Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA
+                if (session.lastContest.anrFlying) {
+                    print_size = Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -3856,7 +3862,7 @@ class RouteController {
                                          contestMapCenterPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
                                          contestMapPrintLandscape:true,
-                                         contestMapPrintSize:Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA,
+                                         contestMapPrintSize:print_size,
                                          contestMapCenterMoveX:0.0,
                                          contestMapCenterMoveY:0.0,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
@@ -3957,6 +3963,10 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                String print_size = Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA
+                if (session.lastContest.anrFlying) {
+                    print_size = Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA
+                }
                 Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
                                          contestMapCircle:false,
                                          contestMapProcedureTurn:false,
@@ -3986,7 +3996,7 @@ class RouteController {
                                          contestMapCenterPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
                                          contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
                                          contestMapPrintLandscape:true,
-                                         contestMapPrintSize:Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA,
+                                         contestMapPrintSize:print_size,
                                          contestMapCenterMoveX:0.0,
                                          contestMapCenterMoveY:0.0,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,

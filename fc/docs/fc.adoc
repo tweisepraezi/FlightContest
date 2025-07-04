@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.1.4
-:revdate:   24.06.2025
+:revnumber: 4.1.5
+:revdate:   04.07.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -316,6 +316,12 @@ Besatzungsnamen (Pilot oder Navigator) bewirken den erneuten Import der Besatzun
 mit Zuordnung einer weiteren Start-Nummer. Korrigieren Sie deshalb Besatzungen nach
 einem Import nur noch in 'Flight Contest'.
 
+Kombinierte Import-Spalten-Kennzeichnungen in Zeile 8 für Daten-Import aus fremden Excel-Dateien:
+
+* "name" für Piloten-Namen
+* "name2" für Navigator-Namen
+* "email" für E-Mail-Adressen
+
 <<<
 [[route-planning]]
 == Streckenplanung
@@ -562,39 +568,69 @@ Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 [[route-planning-task-creator]]
 === Wettbewerbsstrecken mit Task-Creator erstellen
 
-. Strecke mit TO anlegen (Strecken -> *Neue Strecke*)
+. Wettbewerb anlegen (Wettbewerb -> Neuer Wettbewerb)
++
+Eine Wettbewerbsordnung wählen. +
 
-. Strecken -> OSM-Wettbewerbs-Karte -> *Lufträume um Flughafen suchen* (wenn ein  <<fc.adoc#configuration-openaip,OpenAIP-Zugang>> konfiguriert wurde) +
+. Strecke mit TO anlegen (Strecken -> Neue Strecke)
++
+Als Titel den Flugplatz-Namen eintragen. +
++
+Flugplatz-Koordinate als TO-Punkt hinzufügen. +
+Die Korrektheit der Flugplatz-Koordinate kann mit "OSM-Online-Karte" geprüft werden.
+
+. Karte des Gebietes um den TO für Task-Creator erzeugen (Abstand zum Rand bei Rallye- und Präzisionsflug: 420mm, bei ANR: 297mm)
++
+OSM-Wettbewerbs-Karte -> Task-Creator-Karte um Flughafen erzeugen
++
+Zuvor "Flugplätze um Flugplatz suchen" durchführen. +
++
+Nicht zu berücksichtigende Flugplätze können bei Bedarf mit vorangestelltem # auskommentiert werden. +
+Flugplätze werden mit ICAO-Kartendarstellung auf die Karte geplottet. +
++
+Zuvor "Lufträume um Flughafen suchen" durchführen. +
 +
 Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (Untergrenze <= 4000ft voreingestellt). +
 Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden. +
-Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht in Google Earth vorgenommen werden.
-
-. Wettbewerbs-Karte mit TO drucken
-
-- Strecken -> OSM-Wettbewerbs-Karte -> *Online-Karte um Flughafen erzeugen*
-- Strecken -> OSM-Wettbewerbs-Karte -> *Task-Creator-Karte um Flughafen erzeugen*
-- Wurde ein <<fc.adoc#configuration-openaip,OpenAIP-Zugang>> konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet. +
-Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet.
-
-. Task-Creator starten (Karten -> AirportArea (Task Creator) -> *...*) +
+Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google Earth vorgenommen werden. +
 +
-Im gestarteten Task-Creator ist die "Map Url" im Task-Creator voreingestellt und kann mit *Load* geladen werden. +
-Nach Aktivieren von *Turn Points -> Edit* können mit Doppelklick Wendepunkte auf der Karte hinzugefügt werden. +
-Mit *Save task data* kann die Aufgabe als CSV-Datei im Download-Ordner des Computers abgespeichert werden.
+Die erzeugte Karte "Flugplatz-Name (Task Creator)" ohne weitere Einstellungen mit "Karte speichern und zur Liste der Karten wechseln" speichern.
 
-. Task-Creator zur weiteren Bearbeitung starten (Karten -> *Task-Creator*) +
+. Strecke im Task-Creator konstruieren
 +
-Mit *Load task data* kann die gespeicherte CSV-Datei einer Aufgabe geladen werden. +
-Eine voreingestellte "Map Url" muss mit *Load* geladen werden. +
-Nach Aktivieren von *Turn Points -> Edit* ist eine Weiterbearbeitung der Aufgabe möglich.
-
-. Export der Wettbewerbsstrecke (Task-Creator -> *Export FC kml*)
-
-. Import der Wettbewerbsstrecke (Strecken -> *Import FC-Strecke*) +
+Task-Creator starten (Karten -> "Flugplatz-Name (Task Creator)" -> Task-Creator -> …) +
 +
-Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche *Etappen neu berechnen*. +
-Die Korrektheit der Strecke kann nun mit *OSM-Online-Karte* geprüft werden.
+Im gestarteten Task-Creator ist eine "Karten-Url" auf die erzeugte Karte voreingestellt und kann mit "Laden" geladen werden. +
+Seiten-Leitfaden (SL) bei Rallye- und Präzisionsflug auf "A3" oder "A3 W" und bei ANR auf "A4" oder "A4 W" einstellen. Dieser zeigt die Größe des Karten-Ausdruckes an (Hoch- oder Querformat). +
+Nach Aktivieren von "Check-Punkte -> Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für die Strecke nacheinander hinzugefügt werden:
+Der 1. Punkt ist auf den Flupplatz zu setzen (TOP). Der 2. Punkt wird SP. Der letzte Punkt wird FP. +
+Bei Präzisionsflug-Strecken können zusätzliche TP-Punkte zwischen den regulären Wendepunkten durch Anfassen des Zwischenpunktes auf der Geraden hinzugefügt werden,
+die beim Strecken-Import zur unbekannten Zeitkontrolle werden. +
+Der Seiten-Leitfaden wird mit jedem neuen Punkt neu ausgerichtet. Durch Hinzufügen eines Plotting-Punktes kann die Ausrichtung des Seiten-Leitfaden zusätzlich beeinflusst werden. +
+Mit "Task-Name -> Speichern" kann die Strecke als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben). +
++
+Die fertig konstruierte Strecke ist mit "Export FC kml" zu exportieren.
++
+Zur Korrektur der Strecke ist der Task-Creator mir "Karten -> Task-Creator" zu starten,
+die gespeicherte CSV-Datei mit "Task-Name -> Laden" zu laden, die "Karten-Url" zu laden
+und "Check-Punkte -> Bearbeiten" zu aktivieren. +
+Jetzt kann die Position einzelner Check-Punkte geändert, neue Check-Punkte hinzugefügt oder Check-Punkte gelöscht werden.
+
+. Import der Strecke (Strecken -> Import FC-Strecke)
++
+Auswahl der im Task-Creator exportierten kml-Datei. +
+Die importierte Strecke erscheint in der Strecken-Liste. +
+Öffnen durch Klicken auf den Strecken-Titel.
++
+Verwenden Sie bei Präzisionsflug-Strecken das Kommando "Strecken -> Import Strecke", um unbekannte Zeitkontrollen automatisch zu erkennen. +
++
+Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche "Etappen neu berechnen". +
++
+Die Korrektheit der Strecke kann nun mit "OSM-Online-Karte" geprüft werden. +
++
+Enthält die Strecke einen Kreisbogen, muss sie in eine Strecke mit Halbkreis-Toren umgewandelt werden
+("GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")
+
 
 [[route-planning-google-earth]]
 === Wettbewerbsstrecken mit Google Earth Pro erstellen
@@ -607,12 +643,9 @@ Die Korrektheit der Strecke kann nun mit *OSM-Online-Karte* geprüft werden.
 
 .. Öffnen Sie 'FC-Route-Sample.kmz' auf Ihrem Computer mit 'Google Earth Pro'
 
-.. Öffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz) +
-   (zur Installation hier zu finden: https://my.hidrive.com/share/vobbr89etw#$/Geodata)
-
 .. Check-Punkte eingeben
 
-- Klicken Sie den Ordner *Route* an und fügen Sie einen 'Pfad' hinzu. +
+- Klicken Sie den Ordner *turnpoints* an und fügen Sie einen 'Pfad' hinzu. +
 Es öffnet sich der 'Pfad bearbeiten'-Dialog. Name des Pfades entspr. Streckenbezeichnung festlegen. +
 Bei weiter geöffnetem 'Pfad bearbeiten'-Dialog im Grafikbereich mit Linksklick alle Check-Punkte (TO, SP, WP1, WP2, ..., FP, LDG) der Strecke ohne UZKs nacheinander hinzufügen. +
 Die Position muss hier noch nicht genau stimmen. Deren Genauigkeit kann im Nachhinein korrigiert werden. +
@@ -628,19 +661,19 @@ Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt an
 
 .. Strecken-Fotos eingeben
 
-- Klicken Sie den Ordner *Photos* an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu. +
+- Klicken Sie den Ordner *photos* an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu. +
 Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen (kann nach Import geändert werden) +
 Position der Ortsmarkierung im Grafikbereich auf das gewünschte Objekt schieben + 
 'Ortsmarkierung'-Dialog beenden
 
 .. Strecken-Bodenzeichen hinzufügen
 
-- Klicken Sie den Ordner *Canvas* an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu. +
+- Klicken Sie den Ordner *canvas* an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu. +
 Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung mit 'S01' bis 'S15' festlegen (kann nach Import geändert werden) +
 Position der Ortsmarkierung im Grafikbereich auf die gewünschte Auslegestelle schieben +
 'Ortsmarkierung'-Dialog beenden
 
-.. Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmenü 'Ort speichern unter' mit Ihrer Streckenbezeichung ab
+.. Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmenü 'Ort speichern unter' mit Ihrer Streckenbezeichnung ab
 
 [upperalpha, start=2]
 . Strecken-Import (Flight Contest)
@@ -648,17 +681,18 @@ Position der Ortsmarkierung im Grafikbereich auf die gewünschte Auslegestelle s
 [arabic, start=7]
 .. Strecken -> Import Strecke
 *** Abgespeicherte kmz-Datei auswählen
-*** Verzeichnisname in kml/kmz-Datei: *Route* eintragen
+*** Verzeichnisname in kml/kmz-Datei: turnpoints
+*** *Option "Ortsmarkierungen anstelle von Pfaden bei kml/kmz-Dateien" deaktivieren*
 *** 'Import' anklicken
 
 .. Strecken -> Strecke -> Strecken-Fotos importieren
 *** Abgespeicherte kmz-Datei auswählen
-*** Verzeichnisname in kml/kmz-Datei: *Photos* eintragen
+*** Verzeichnisname in kml/kmz-Datei: photos
 *** 'Import' anklicken
 	
 .. Strecken -> Strecke -> Strecken-Bodenzeichen importieren
 *** Abgespeicherte kmz-Datei auswählen
-*** Verzeichnisname in kml/kmz-Datei: *Canvas* eintragen
+*** Verzeichnisname in kml/kmz-Datei: canvas
 *** 'Import' anklicken
 
 [[route-planning-google-earth-add-secret]]
@@ -1264,20 +1298,20 @@ Als Titel den Flugplatz-Namen eintragen. +
 Flugplatz-Koordinate als TO-Punkt hinzufügen. +
 Die Korrektheit der Flugplatz-Koordinate kann mit "OSM-Online-Karte" geprüft werden.
 
-. A4-Karte mit TO für Task-Creator erzeugen
+. Karte des Gebietes um den TO für Task-Creator erzeugen (Abstand zum Rand: 297mm)
 +
-OSM-Wettbewerbs-Karte -> Zeige 1. Einstellungen +
-Ausdruck im Hochformat bei Bedarf wählen +
-"Erzeugen (für Task-Creator)" ausführen +
+OSM-Wettbewerbs-Karte -> Task-Creator-Karte um Flughafen erzeugen
 +
-Wurde ein OpenAIP-Zugang konfiguriert, bei Bedarf zuvor "Lufträume um Flughafen suchen" durchführen. +
+Zuvor "Flugplätze um Flugplatz suchen" durchführen. +
++
+Nicht zu berücksichtigende Flugplätze können bei Bedarf mit vorangestelltem # auskommentiert werden. +
+Flugplätze werden mit ICAO-Kartendarstellung auf die Karte geplottet. +
++
+Zuvor "Lufträume um Flughafen suchen" durchführen. +
 +
 Die Höhe dabei zu berücksichtigender Lufträume kann angepasst werden (Untergrenze <= 4000ft voreingestellt). +
 Nicht zu berücksichtigende Lufträume können bei Bedarf mit vorangestelltem # auskommentiert werden. +
 Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google Earth vorgenommen werden. +
-+
-Wurde ein OpenAIP-Zugang konfiguriert, werden Flugplätze mit ICAO-Kartendarstellung auf die Karte geplottet. +
-Sonst werden Flugplätze aus OSM-Daten mit einem einfachen Flugzeug-Symbol auf die Karte gezeichnet. +
 +
 Die erzeugte Karte "Flugplatz-Name (Task Creator)" ohne weitere Einstellungen mit "Karte speichern und zur Liste der Karten wechseln" speichern.
 
@@ -1286,8 +1320,10 @@ Die erzeugte Karte "Flugplatz-Name (Task Creator)" ohne weitere Einstellungen mi
 Task-Creator starten (Karten -> "Flugplatz-Name (Task Creator)" -> Task-Creator -> …) +
 +
 Im gestarteten Task-Creator ist eine "Karten-Url" auf die erzeugte Karte voreingestellt und kann mit "Laden" geladen werden. +
+Seiten-Leitfaden (SL) auf "A4" oder "A4 W" einstellen. Dieser zeigt die Größe des A4-Karten-Ausdruckes an (Hoch- oder Querformat). +
 Nach Aktivieren von "Check-Punkte -> Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für den ANR-Parcour nacheinander hinzugefügt werden:
 Der 1. Punkt ist auf den Flupplatz zu setzen (TOP). Der 2. Punkt wird SP. Der letzte Punkt wird FP. +
+Der Seiten-Leitfaden wird mit jedem neuen Punkt neu ausgerichtet. Durch Hinzufügen eines Plotting-Punktes kann die Ausrichtung des Seiten-Leitfaden zusätzlich beeinflusst werden. +
 Mit "Task-Name -> Speichern" kann der Parcour als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben). +
 +
 Der fertig konstruierte Parcour ist mit "Export FC kml" zu exportieren.

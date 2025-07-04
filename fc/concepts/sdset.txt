@@ -1,0 +1,53 @@
+
+sc sdset FlightContest D:AR(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPWPDTLOCRRC;;;IU)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)
+
+sc [<ServerName>] sdset <ServiceName> <ServiceSecurityDescriptor>
+
+D:dacl_flags(string_ace 1)(string_ace 2)... (string_ace n)
+S:sacl_flags(string_ace 1)(string_ace 2)... (string_ace n)
+
+"AR" 	SDDL_AUTO_INHERIT_REQ 	Das SE_DACL_AUTO_INHERIT_REQ-Flag ist festgelegt.
+
+string_ace (https://learn.microsoft.com/de-de/windows/win32/secauthz/ace-strings)
+ace_type;ace_flags;rights;object_guid;inherit_object_guid;account_sid;(resource_attribute)
+
+ace_type
+"A" 	ACCESS_ALLOWED_ACE_TYPE
+"AU" 	SYSTEM_AUDIT_ACE_TYPE
+
+ace_flags
+"FA" 	FAILED_ACCESS_ACE_FLAG
+
+rights 
+
+CCDCLCSWRPWPDTLOCRSDRCWDWO
+CC      ADS_RIGHT_DS_CREATE_CHILD (Verzeichnis)
+DC      ADS_RIGHT_DS_DELETE_CHILD (Verzeichnis)
+LC      ADS_RIGHT_ACTRL_DS_LIST (Verzeichnis)
+SW      ADS_RIGHT_DS_SELF (Verzeichnis)
+RP      ADS_RIGHT_DS_READ_PROP (Verzeichnis)
+WP      ADS_RIGHT_DS_WRITE_PROP (Verzeichnis)
+DT      ADS_RIGHT_DS_DELETE_TREE (Verzeichnis)
+LO      ADS_RIGHT_DS_LIST_OBJECT (Verzeichnis)
+CR      ADS_RIGHT_DS_CONTROL_ACCESS (Verzeichnis)
+SD      LÖSCHEN (Standard)
+RC      READ_CONTROL (Standard)
+WD      WRITE_DAC (Standard)
+WO      WRITE_OWNER (Standard)
+
+CCLCSWRPWPDTLOCRRC
+CC      ADS_RIGHT_DS_CREATE_CHILD (Verzeichnis)
+LC      ADS_RIGHT_ACTRL_DS_LIST (Verzeichnis)
+SW      ADS_RIGHT_DS_SELF (Verzeichnis)
+RP      ADS_RIGHT_DS_READ_PROP (Verzeichnis)
+WP      ADS_RIGHT_DS_WRITE_PROP (Verzeichnis)
+DT      ADS_RIGHT_DS_DELETE_TREE (Verzeichnis)
+LO      ADS_RIGHT_DS_LIST_OBJECT (Verzeichnis)
+CR      ADS_RIGHT_DS_CONTROL_ACCESS (Verzeichnis)
+RC      READ_CONTROL (Standard)
+
+account_sid (https://learn.microsoft.com/de-de/windows/win32/secauthz/sid-strings)
+SY      SDDL_LOCAL_SYSTEM 	            Lokales System. Das entsprechende RID ist SECURITY_LOCAL_SYSTEM_RID.
+BA      SDDL_BUILTIN_ADMINISTRATORS     Integrierte Administratoren. Das entsprechende RID wird DOMAIN_ALIAS_RID_ADMINS.
+IU      SDDL_INTERACTIVE 	            Interaktiv angemeldeter Benutzer. Dies ist ein Gruppenbezeichner, der dem Token eines Prozesses hinzugefügt wird, wenn er interaktiv angemeldet wurde. Der entsprechende Anmeldetyp ist LOGON32_LOGON_INTERACTIVE. Das entsprechende RID ist SECURITY_INTERACTIVE_RID.
+WD      SDDL_EVERYONE 	                Jeder. Das entsprechende RID ist SECURITY_WORLD_RID.

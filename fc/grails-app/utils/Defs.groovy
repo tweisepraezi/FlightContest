@@ -185,6 +185,7 @@ class Defs
     static final String CONTESTMAPPRINTSIZE_A1                         = "A1"      // saved in database. do not modify.
     static final String CONTESTMAPPRINTSIZE_ANR                        = "ANR"     // saved in database. do not modify.
     static final String CONTESTMAPPRINTSIZE_AIRPORTAREA                = "AIRPORTAREA"
+    static final String CONTESTMAPPRINTSIZE_ANRAIRPORTAREA             = "ANRAIRPORTAREA"
     
     static final String NAME_AIRPORTAREA                               = "AirportArea"
     

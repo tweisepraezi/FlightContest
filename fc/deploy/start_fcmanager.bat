@@ -12,7 +12,7 @@ setlocal ENABLEDELAYEDEXPANSION
 echo.
 echo "Start FlightContest Manager"
 cd %~dp0
-powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -WindowStyle hidden powershell .\fcmanager.ps1
+powershell -WindowStyle hidden -ExecutionPolicy Unrestricted Start-Process -FilePath "powershell" -ArgumentList ".\fcmanager.ps1" -WindowStyle hidden
 
 echo.
 echo Done.

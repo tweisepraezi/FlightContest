@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.5
+-------------
+- The airport area when searching for airfields and airspaces and when generating maps around the airfield 
+  has been reduced to a margin of 297 mm for ANR competitions. This allows A4 maps to be used in all directions from the TO.  
+  A margin of 420 mm is used for Rally and Precision flying. This allows A3 maps to be used in all directions from the TO.
+- Help for "Planning and evaluation of ANR competitions" revised
+- Help for "Create competition routes with Task Creator" revised
+- Help for "Create competition routes with Google Earth Pro" revised
+- Bug "Task Creator maps are assigned to a route as the default online map" fixed
+
 Changes 4.1.4
 -------------
 - OSM Contest Map for ANR routes: Generation of maps with different corridor widths for a route added

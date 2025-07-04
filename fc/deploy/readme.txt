@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.5
+----------------
+- Der Flughafen-Bereich beim Suchen von Flupplätzen und Lufträumen und beim Erzeugen der Karten um den Flugplatz
+  wurde für ANR-Wettbewerbe auf 297mm Randabstand reduziert. Das ermöglich vom TO aus A4-Karten in alle Richtungen.
+  Für Rallye- und Präzisionsflug wird ein Randabstand von 420mm verwendet. Das ermöglich vom TO aus A3-Karten in alle Richtungen.
+- Hilfe zu "Planung und Auswertung von ANR-Wettbewerben" überarbeitet
+- Hilfe zu "Wettbewerbsstrecken mit Task-Creator erstellen" überarbeitet
+- Hilfe zu "Wettbewerbsstrecken mit Google Earth Pro erstellen" überarbeitet
+- Bug "Task-Creator-Karten werden einer Strecke als Default-Online-Karte zugeordnet" behoben
+
 Änderungen 4.1.4
 ----------------
 - OSM-Wettbewerbs-Karte für ANR-Strecken: Erzeugung von Karten mit abweichender Korridor-Breite für eine Strecke hinzugefügt

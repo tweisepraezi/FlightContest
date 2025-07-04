@@ -10,7 +10,7 @@ If ($Restart -ne "") {
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc_version = "4.1.4"
+$str_fc_version = "4.1.5"
 $str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"
@@ -42,6 +42,10 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_service_stopping = "Flight Contest stoppt."
     $str_service_stopped = "Flight Contest ist bereits gestoppt."
     $str_service_savedb = "Datenbank sichern"
+    $str_service_setpriority_high = "Hohe Prioritaet einstellen"
+    $str_service_setpriority_high_set = "Hohe Prioritaet eingestellt."
+    $str_service_setpriority_normal = "Normale Prioritaet einstellen"
+    $str_service_setpriority_normal_set = "Normale Prioritaet eingestellt."
     $str_getclientid = "Client-ID ermitteln"
     $str_clientid = "Client-ID wurde in die Zwischenablage kopiert: "
 } else {
@@ -66,9 +70,15 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_service_stopping = "Flight Contest is stopping."
     $str_service_stopped = "Flight Contest is already stopped."
     $str_service_savedb = "Save database"
+    $str_service_setpriority_high = "Set high priority"
+    $str_service_setpriority_high_set = "High priority have been set."
+    $str_service_setpriority_normal = "Set normal priority"
+    $str_service_setpriority_normal_set = "Normal priority have been set."
     $str_getclientid = "Get client-id"
     $str_clientid = "Client-id has been copied to the clipboard: "
 }
+
+$isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 
 # Load assemblies 
 # ---------------
@@ -117,6 +127,28 @@ function stop_manager {
     foreach ($proc in (Get-CimInstance Win32_Process -Filter "Name = 'powershell.exe'" | Where-Object -Property CommandLine -like '*fcmanager.ps1*' ))
     {
         Stop-Process $proc.ProcessId
+    }
+}
+
+function setpriority_high {
+    $high_priority_value = 128
+    foreach ($proc in (Get-CimInstance Win32_Process -Filter "Name = 'tomcat9.exe'" | Where-Object -Property CommandLine -like '*//RS//FlightContest*' )) 
+    {
+        $ret = Invoke-CimMethod -InputObject $proc -MethodName SetPriority -Arguments @{Priority = $high_priority_value}
+        if ($ret.ReturnValue -eq 0) {
+            [System.Windows.Forms.MessageBox]::Show($str_service_setpriority_high_set, $str_fcmanager)
+        }
+    }
+}
+
+function setpriority_normal {
+    $low_priority_value = 32
+    foreach ($proc in (Get-CimInstance Win32_Process -Filter "Name = 'tomcat9.exe'" | Where-Object -Property CommandLine -like '*//RS//FlightContest*'))
+    {
+        $ret = Invoke-CimMethod -InputObject $proc -MethodName SetPriority -Arguments @{Priority = $low_priority_value}
+        if ($ret.ReturnValue -eq 0) {
+            [System.Windows.Forms.MessageBox]::Show($str_service_setpriority_normal_set, $str_fcmanager)
+        }
     }
 }
 
@@ -268,6 +300,22 @@ $menu_service_savedb.Add_Click({
 })
 $menu_service.DropDownItems.Add($menu_service_savedb)
 
+If ($isAdmin -eq $true) {
+    $menu_service_setpriority_high = New-Object System.Windows.Forms.ToolStripMenuItem
+    $menu_service_setpriority_high.Text = $str_service_setpriority_high
+    $menu_service_setpriority_high.Add_Click({
+        setpriority_high
+    })
+    $menu_service.DropDownItems.Add($menu_service_setpriority_high)
+
+    $menu_service_setpriority_normal = New-Object System.Windows.Forms.ToolStripMenuItem
+    $menu_service_setpriority_normal.Text = $str_service_setpriority_normal
+    $menu_service_setpriority_normal.Add_Click({
+        setpriority_normal
+    })
+    $menu_service.DropDownItems.Add($menu_service_setpriority_normal)
+}
+
 # Download menu entry
 # -------------------
 $new_fc_version = Invoke-WebRequest -Uri $str_new_version_url
@@ -303,7 +351,7 @@ $menu_restart = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_restart.Text = $str_menu_restart
 $menu_restart.add_Click({
     $Restart = "Yes"
-    Start-Process -WindowStyle hidden powershell.exe ".\fcmanager.ps1 '$Restart'"  
+    Start-Process -FilePath "powershell" -ArgumentList ".\fcmanager.ps1 '$Restart'" -WindowStyle hidden
  
     # $window.Close()
     Stop-Process $pid

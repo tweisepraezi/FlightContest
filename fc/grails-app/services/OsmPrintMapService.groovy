@@ -76,7 +76,8 @@ class OsmPrintMapService
     final static int A4_LONG = 297 // mm
     final static int ANR_SHORT = 172 // mm
     final static int ANR_LONG = 198 // mm
-    final static int AIRPORTAREA_DISTANCE = 420 // mm
+    final static int AIRPORTAREA_A3_DISTANCE = A3_LONG // mm
+    final static int AIRPORTAREA_A4_DISTANCE = A4_LONG // mm
     final static int MARGIN = 10 // nicht bedruckbarer Rand [mm]
 
     final static int DPI = 600 // Original: 300 DPI
@@ -325,9 +326,15 @@ class OsmPrintMapService
                 tp_font_size = TP_ANR_FONT_SIZE
                 break
             case Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA:
-                paper_size = "T/O"
-                print_width = 2*AIRPORTAREA_DISTANCE
-                print_height = 2*AIRPORTAREA_DISTANCE
+                print_width = 2*AIRPORTAREA_A3_DISTANCE
+                print_height = 2*AIRPORTAREA_A3_DISTANCE
+                paper_size = "${print_width}x${print_height}mm"
+                alternate_pos = true
+                break
+            case Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA:
+                print_width = 2*AIRPORTAREA_A4_DISTANCE
+                print_height = 2*AIRPORTAREA_A4_DISTANCE
+                paper_size = "${print_width}x${print_height}mm"
                 alternate_pos = true
                 break
         }
@@ -1012,6 +1019,8 @@ class OsmPrintMapService
             printfileid_writer << contestMapParams.contestMapPrintSize
             printfileid_writer << "\n"
             printfileid_writer << contestMapParams.routeTitle
+            printfileid_writer << "\n"
+            printfileid_writer << map_projection
             printfileid_writer.close()
             printdone ""
             

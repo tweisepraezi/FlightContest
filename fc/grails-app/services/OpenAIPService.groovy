@@ -1051,7 +1051,11 @@ class OpenAIPService
             return [:]
         }
         
-        int airspace_distance = (OsmPrintMapService.AIRPORTAREA_DISTANCE * routeInstance.mapScale * 1.414 / 1000).toInteger() // m
+        int airportarea_distance = OsmPrintMapService.AIRPORTAREA_A3_DISTANCE
+        if (routeInstance.contest.anrFlying) {
+            airportarea_distance = OsmPrintMapService.AIRPORTAREA_A4_DISTANCE
+        }
+        int airspace_distance = (airportarea_distance * routeInstance.mapScale * 1.414 / 1000).toInteger() // m
         if (checkAirport) {
             airspace_distance = 5000 // m
         }

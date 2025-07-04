@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.1.4,</span>
-<span id="revdate">24.06.2025</span>
+<span id="revnumber">version 4.1.5,</span>
+<span id="revdate">04.07.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -1232,6 +1232,22 @@ The numbers to be omitted can be configured under 'Competition &#8594; Defaults'
 Corrections of already imported crew names (pilot or navigator) will cause the re-import of the crew
 with assignment of another start number. Therefore correct crews after an import only in 'Flight Contest'.</p>
 </div>
+<div class="paragraph">
+<p>Combined import column labels in line 8 for data import from external Excel files:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>"name" for Pilot names</p>
+</li>
+<li>
+<p>"name2" for Navigator names</p>
+</li>
+<li>
+<p>"email" for email addresses</p>
+</li>
+</ul>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1597,57 +1613,88 @@ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Create route with TO (Routes &#8594; <strong>New route</strong>)</p>
-</li>
-<li>
-<p>Routes &#8594; OSM Contest Map &#8594; <strong>Search airspaces around the airport</strong> (if <a href="#configuration-openaip">OpenAIP access</a> has been configured)<br></p>
+<p>Create competition (Contest &#8594; New Contest)</p>
 <div class="paragraph">
-<p>The height of the airspaces to be taken into account can be adjusted (lower limit &#8656; 4000ft by default).<br>
-Airspaces not to be taken into account can be commented out with a # in front if required.<br>
-An export for viewing in Google Earth can be carried out with "KMZ export airspaces".</p>
+<p>Choose an contest rule.<br></p>
 </div>
 </li>
 <li>
-<p>Print competition map with TO</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Routes &#8594; OSM Contest Map &#8594; <strong>Generate online map around airport</strong></p>
-</li>
-<li>
-<p>Routes &#8594; OSM Contest Map &#8594; <strong>Generate Task Creator map around airport</strong></p>
-</li>
-<li>
-<p>If <a href="#configuration-openaip">OpenAIP access</a> has been configured, airports with ICAO map style are plotted on the map.<br>
-Otherwise, airfields from OSM data are plotted on the map with a simple aircraft symbol.</p>
-</li>
-</ul>
+<p>Create route with TO (Routes &#8594; New Route)</p>
+<div class="paragraph">
+<p>Enter the name of the airfield as the title.<br></p>
+</div>
+<div class="paragraph">
+<p>Add airfield coordinates as TO point.<br>
+The correctness of the airfield coordinates can be checked using "OSM online map".</p>
 </div>
 </li>
 <li>
-<p>Start Task Creator (Maps &#8594; AirportArea (Task Creator) &#8594; <strong>&#8230;&#8203;</strong>)<br></p>
+<p>Create a map of the area around the TO for Task Creator (Distance to edge for Rally and Precision flying: 420 mm, for ANR: 297 mm)</p>
 <div class="paragraph">
-<p>In the started Task Creator, the "Map Url" is preset in the Task Creator and can be loaded with <strong>Load</strong>.<br>
-After activating <strong>Turn Points &#8594; Edit</strong>, turn points can be added to the map by double-clicking.<br>
-With <strong>Save task data</strong> the task can be saved as a CSV file in the download folder of the computer.</p>
+<p>OSM Contest Map &#8594; Generate Task Creator map around airport<br></p>
+</div>
+<div class="paragraph">
+<p>Run "Search airfields around the airport" first.<br></p>
+</div>
+<div class="paragraph">
+<p>Airfields that are not to be considered can be commented out with a leading # if necessary.<br>
+Airports with ICAO symbols are plotted on the map.<br></p>
+</div>
+<div class="paragraph">
+<p>Run "Search airspaces around the airport" first.<br></p>
+</div>
+<div class="paragraph">
+<p>The height of airspaces to be taken into account can be adjusted (lower limit &#8656; 4000ft by default).<br>
+Air spaces that are not to be considered can be commented out with a leading # if necessary.<br>
+With "KMZ export airspaces", an export can be made to view the airspaces in Google Earth.<br></p>
+</div>
+<div class="paragraph">
+<p>Save the generated map "Airfield name (Task Creator)" without further settings with "Save map and switch to the list of maps".</p>
 </div>
 </li>
 <li>
-<p>Start Task-Creator for further editing (Maps &#8594; <strong>Task Creator</strong>)<br></p>
+<p>Construct route in the Task Creator</p>
 <div class="paragraph">
-<p>With <strong>Load task data</strong> the saved CSV file of a task can be loaded.<br>
-A preset "Map Url" must be loaded with <strong>Load</strong>.<br>
-After activating <strong>Turn Points &#8594; Edit</strong>, further processing of the task is possible.</p>
+<p>Start Task Creator (Maps &#8594; "Airfield name (Task Creator)" &#8594; Task Creator &#8594; …)<br></p>
+</div>
+<div class="paragraph">
+<p>In the Task Creator that has been started, a "Map Url" is preset to the generated map and can be loaded with “Load”.<br>
+Set the page guide (PG) for Rally and Precision flying to "A3" or "A3 W", for ANR to "A4" or "A4 W". This shows the size of the map printout (portrait or landscape format).<br>
+After activating "Turn Points &#8594; Edit", double-click to add all checkpoints to the map for the route one after the other:
+The first point is to be put on the airfield (TOP). The second point becomes SP. The last point becomes FP.<br>
+For  Precision flying routes, additional TP points can be added between the regular turning points by touching the intermediate point on the straight line,
+which become secret time controls when the route is imported.<br>
+The page guide is realigned with each new point. By adding a plotting point, the alignment of the page guide can be further influenced.<br>
+With "Task name &#8594; Save", the route can be saved as a CSV file in the download folder of the computer (enter the task name first).<br></p>
+</div>
+<div class="paragraph">
+<p>The finished route is to be exported with "Export FC kml".</p>
+</div>
+<div class="paragraph">
+<p>To correct the route, start the Task Creator by clicking on “Maps &#8594; Task Creator”,
+load the saved CSV file with "Task name &#8594; Load", load the "Map Url", and activate "Turn Points &#8594; Edit".<br>
+Now the position of individual checkpoints can be changed, new checkpoints added or checkpoints deleted.</p>
 </div>
 </li>
 <li>
-<p>Exporting the competition route (Task Creator &#8594; <strong>Export FC kml</strong>)</p>
-</li>
-<li>
-<p>Import the competition route (Routes &#8594; <strong>Import FC route</strong>)<br></p>
+<p>Import route (Routes &#8594; Import FC route)</p>
 <div class="paragraph">
-<p>If you get the error "Coordinates procedure turn differences" press the button <strong>Calculate legs again</strong>.<br>
-The correctness of the route can now be checked with <strong>OSM online map</strong>.</p>
+<p>Select the kml file exported in Task Creator.<br>
+The imported route appears in the route list.<br>
+Open it by clicking on the route title.</p>
+</div>
+<div class="paragraph">
+<p>For Precision flying routes, use the command “Routes &#8594; Import Route” to automatically detect secret time controls.<br></p>
+</div>
+<div class="paragraph">
+<p>If you get the error "Coordinates procedure turn differences" press the button "Calculate legs again".<br></p>
+</div>
+<div class="paragraph">
+<p>The route can now be checked for correctness using "OSM online map".<br></p>
+</div>
+<div class="paragraph">
+<p>If the route includes a semi-circle, it must be converted into a route with semi-circle gates
+(run "GPX export (with semi-circle gates)", and run "Import FC route" again).</p>
 </div>
 </li>
 </ol>
@@ -1671,15 +1718,11 @@ The correctness of the route can now be checked with <strong>OSM online map</str
 <p>Open 'FC-Route-Sample.kmz' on your computer with 'Google Earth Pro'.</p>
 </li>
 <li>
-<p>Open airspace data (C:\FCSave\.geodata\airspaces.kmz) if needed<br>
-(to be found here for installation: <a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a>).</p>
-</li>
-<li>
 <p>Enter check points</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Click the <strong>Route</strong> folder and add a 'Path'.<br>
+<p>Click the <strong>turnpoints</strong> folder and add a 'Path'.<br>
 The 'Edit Path' dialog opens. Set the name of the path according to the route name.<br>
 With the 'Edit Path' dialog still open, left click in the graphics area to add all check points (TO, SP, TP1, TP2, &#8230;&#8203;, FP, LDG) of the route without SCs one after the other.<br>
 The position does not have to be exact yet. Its accuracy can be corrected afterwards.<br>
@@ -1703,7 +1746,7 @@ Close 'Edit path' dialog</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Click the <strong>Photos</strong> folder and add a 'location marker' per track photo.<br>
+<p>Click the <strong>photos</strong> folder and add a 'location marker' per track photo.<br>
 The 'Placemark' dialog opens. Set the name of the placemark according to the image name (running number or letter) (can be changed after importing)<br>
 Move the position of the placemark in the graphics area to the desired object<br>
 Exit 'Placemark' dialog</p>
@@ -1716,7 +1759,7 @@ Exit 'Placemark' dialog</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Click the <strong>Canvas</strong> folder and add a 'placemark' per route ground sign.<br>
+<p>Click the <strong>canvas</strong> folder and add a 'placemark' per route ground sign.<br>
 The 'placemark' dialog will open. Set name of placemark with 'S01' to 'S15' (can be changed after import)<br>
 Move the position of the placemark in the graphic area to the desired position<br>
 Close 'Placemark' dialog</p>
@@ -1746,7 +1789,10 @@ Close 'Placemark' dialog</p>
 <p>Select saved kmz file</p>
 </li>
 <li>
-<p>Directory name in kml/kmz file: *enter route</p>
+<p>Directory name in kml/kmz file: turnpoints</p>
+</li>
+<li>
+<p><strong>Disable Option "Read placemarks instead of path in kml/kmz file"</strong></p>
 </li>
 <li>
 <p>click 'Import</p>
@@ -1762,7 +1808,7 @@ Close 'Placemark' dialog</p>
 <p>Select saved kmz file</p>
 </li>
 <li>
-<p>Enter directory name in kml/kmz file: *Photos</p>
+<p>Enter directory name in kml/kmz file: photos</p>
 </li>
 <li>
 <p>click 'Import</p>
@@ -1778,7 +1824,7 @@ Close 'Placemark' dialog</p>
 <p>Select saved kmz file</p>
 </li>
 <li>
-<p>Directory name in kml/kmz file: *Canvas</p>
+<p>Directory name in kml/kmz file: canvas</p>
 </li>
 <li>
 <p>click 'Import</p>
@@ -3027,27 +3073,28 @@ If required, activate "Contest with classes".</p>
 </div>
 <div class="paragraph">
 <p>Add airfield coordinates as TO point.<br>
-The correctness of the airfield coordinates can be checked using “OSM online map”.</p>
+The correctness of the airfield coordinates can be checked using "OSM online map".</p>
 </div>
 </li>
 <li>
-<p>Create an A4 map with TO for Task Creator</p>
+<p>Create a map of the area around the TO for Task Creator (distance to edge: 297 mm)</p>
 <div class="paragraph">
-<p>OSM Contest Map &#8594; Show 1. settings<br>
-Select the option to print in portrait format if necessary<br>
-Run “Generate (for Task Creator)”<br></p>
+<p>OSM Contest Map &#8594; Generate Task Creator map around airport<br></p>
 </div>
 <div class="paragraph">
-<p>If OpenAIP access has been configured, run "Search airspaces around the airport" first if necessary.<br></p>
+<p>Run "Search airfields around the airport" first.<br></p>
+</div>
+<div class="paragraph">
+<p>Airfields that are not to be considered can be commented out with a leading # if necessary.<br>
+Airports with ICAO symbols are plotted on the map.<br></p>
+</div>
+<div class="paragraph">
+<p>Run "Search airspaces around the airport" first.<br></p>
 </div>
 <div class="paragraph">
 <p>The height of airspaces to be taken into account can be adjusted (lower limit &#8656; 4000ft by default).<br>
 Air spaces that are not to be considered can be commented out with a leading # if necessary.<br>
 With “KMZ export airspaces”, an export can be made to view the airspaces in Google Earth.<br></p>
-</div>
-<div class="paragraph">
-<p>If OpenAIP access has been configured, airports with ICAO symbols are plotted on the map.<br>
-Otherwise, airports are drawn on the map from OSM data with a simple airplane symbol.<br></p>
 </div>
 <div class="paragraph">
 <p>Save the generated map "Airfield name (Task Creator)" without further settings with "Save map and switch to the list of maps".</p>
@@ -3059,9 +3106,11 @@ Otherwise, airports are drawn on the map from OSM data with a simple airplane sy
 <p>Start Task Creator (Maps &#8594; "Airfield name (Task Creator)" &#8594; Task Creator &#8594; …)<br></p>
 </div>
 <div class="paragraph">
-<p>In the Task Creator that has been started, a “Map Url” is preset to the generated map and can be loaded with “Load”.<br>
-After activating “Turn Points &#8594; Edit”, double-click to add all checkpoints to the map for the ANR parcour one after the other:
+<p>In the Task Creator that has been started, a "Map Url" is preset to the generated map and can be loaded with “Load”.<br>
+Set the page guide (PG) to "A4" or "A4 W". This shows the size of the A4 map printout (portrait or landscape format).<br>
+After activating "Turn Points &#8594; Edit", double-click to add all checkpoints to the map for the ANR parcour one after the other:
 The first point is to be put on the airfield (TOP). The second point becomes SP. The last point becomes FP.<br>
+The page guide is realigned with each new point. By adding a plotting point, the alignment of the page guide can be further influenced.<br>
 With “Task name &#8594; Save”, the parcour can be saved as a CSV file in the download folder of the computer (enter the task name first).<br></p>
 </div>
 <div class="paragraph">
