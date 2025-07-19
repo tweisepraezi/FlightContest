@@ -507,11 +507,18 @@ class RouteTools
             route_incomplete = !routeInstance.IsRouteComplete()
         }
         
+        int coord_num = CoordRoute.countByRoute(routeInstance)
+        
+        boolean route_pointnum_error = false
+        if (coord_num > Defs.ROUTE_MAX_POINTS) {
+            route_pointnum_error = true
+        }
+        
         int leg_num = RouteLegTest.countByRoute(routeInstance)
         
         boolean min_leg_error = false
         int min_leg_num = routeInstance.contest.minRouteLegs
-        if (!route_empty && !route_incomplete) {
+        if (!route_empty && !route_incomplete && !route_pointnum_error) {
             if (leg_num < min_leg_num) {
                 min_leg_error = true
             }
@@ -519,7 +526,7 @@ class RouteTools
         
         boolean max_leg_error = false
         int max_leg_num = routeInstance.contest.maxRouteLegs
-        if (!route_empty && !route_incomplete) {
+        if (!route_empty && !route_incomplete && !route_pointnum_error) {
             if (leg_num > max_leg_num) {
                 max_leg_error = true
             }
@@ -629,6 +636,7 @@ class RouteTools
                 max_leg_error:               max_leg_error,
                 route_empty:                 route_empty,
                 route_incomplete:            route_incomplete,
+                route_pointnum_error:        route_pointnum_error,
                 measure_distance_difference: measure_distance_difference,
                 procedureturn_difference:    procedureturn_difference,
                 circlecenter_num:            circlecenter_num,
@@ -642,7 +650,7 @@ class RouteTools
     //--------------------------------------------------------------------------
     private static boolean is_route_usuable(Map status)
     {
-        if (status.route_empty || status.route_incomplete || status.measure_distance_difference || status.procedureturn_difference || status.circlecenter_num || status.secret_measure_incomplete || status.corridor_error || status.gatewidth_errors) {
+        if (status.route_empty || status.route_incomplete || status.route_pointnum_error || status.measure_distance_difference || status.procedureturn_difference || status.circlecenter_num || status.secret_measure_incomplete || status.corridor_error || status.gatewidth_errors) {
             return false
         }
         return true
@@ -684,6 +692,13 @@ class RouteTools
                         s += ", "
                     }
                     s += routeInstance.getMsgArgs('fc.route.incomplete',[])
+                    wr_comma = true
+                }
+                if (status.route_pointnum_error) {
+                    if (wr_comma) {
+                        s += ", "
+                    }
+                    s += routeInstance.getMsgArgs('fc.route.pointnumerror',[Defs.ROUTE_MAX_POINTS])
                     wr_comma = true
                 }
                 if (status.min_leg_error) {

@@ -1,6 +1,19 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.6
+-------------
+- Bug "Route command 'GPX export GPX export (with semi-circle gates)' did not retain turning point definitions from the OSM Contest Map" fixed
+- Added inquiry when exiting the internal Task Creator. Prevents accidental loss of a route construction.
+- Bug "OSM Online Map: Map zoom with mouse scroll wheel does not work" fixed
+- Bug "Contest evaluation: When specifying a landing penalty point reduction, the final result is displayed as 'Provisional'" fixed
+    Specifying a landing penalty point reduction in the Contest Evaluation Settings also applies to class evaluation.
+- OSM map printing: Display of the name of another print job in progress added.
+    A print job that was interrupted due to a loss of network connection displays "Print waiting" on the right side of the main menu.
+    Clicking on it opens the print job.
+- The size of a route is limited to 250 points. Such a route will be loaded but cannot be used.
+    Reduce the number of points in scenic legs when this error appears.
+
 Changes 4.1.5
 -------------
 - The airport area when searching for airfields and airspaces and when generating maps around the airfield 
@@ -15,7 +28,7 @@ Changes 4.1.4
 -------------
 - OSM Contest Map for ANR routes: Generation of maps with different corridor widths for a route added
     Up to 3 different corridor widths can be configured in the 2nd, 3rd, and 4th settings.
-- ANR Live Tracking for routes with scenic sections or semicircles added
+- ANR Live Tracking for routes with scenic legs or semicircles added
     For crews with different corridor widths, penalty points are calculated during live tracking based on the corridor width of the route.
 - Routes -> Import route:
     Available options are now filtered according to the type of competition.

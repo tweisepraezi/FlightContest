@@ -1059,6 +1059,7 @@ class RouteController {
             String printfileid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + route.instance.id + ".txt"
             String printfileid_errorfilename = printfileid_filename + Defs.OSMPRINTMAP_ERR_EXTENSION
             String route_id = ""
+            String other_route_id = ""
             String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
             File printjob_file = new File(printjob_filename)
             if (printjob_file.exists()) {
@@ -1081,6 +1082,7 @@ class RouteController {
                 }
             } else if (route_id && route_id != route.instance.id.toString()) { // Scheduler job of another route is running
                 new_osm_map = false
+                other_route_id = route_id
             } else if (!route_id && new File(printjobid_filename).exists()) { // No scheduler job is running & Print job  of this route exists
                 new_osm_map = false
                 fetch_button = true
@@ -1104,7 +1106,7 @@ class RouteController {
             // quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
             
             // set return action
-            return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map, PrintSize:print_size, MapProjection:map_projection]
+            return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map, OtherRouteId:other_route_id, PrintSize:print_size, MapProjection:map_projection]
         } else {
             flash.message = task.message
             redirect(action:'show',id:params.id)

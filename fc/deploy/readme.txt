@@ -1,6 +1,19 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.6
+----------------
+- Bug "Strecken-Kommando 'GPX-Export (mit Halbkreis-Tore)' hat Wendepunkt-Festlegungen der OSM-Wettbewerbs-Karte nicht beibehalten" behoben
+- Rückfrage beim Verlassen des internen Task-Creators hinzugefügt. Verhindert den ungewollten Verlust einer Strecken-Konstruktion.
+- Bug "OSM-Online-Karte: Karten-Zoom mit der Maus-Scroll-Taste geht nicht" behoben
+- Bug "Wettbewerbs-Auswertung: Bei Angabe einer Lande-Strafpunkt-Reduzierung wird Endergebnis als 'Vorläufig' angezeigt" behoben
+    Die Angabe einer Lande-Strafpunkt-Reduzierung in den Wettbewerbs-Auswertungs-Einstellungen wirkt auch bei der Klassenauswertung.
+- OSM-Karten-Druck: Anzeige des Namen eines anderen laufenden Druckes hinzugefügt.
+    Ein durch Verlust der Netzwerkverbindung abgebrochener Druck zeigt "Druck wartet" rechts im Hauptmenü an.
+    Ein Klick darauf öffnet den Druck-Auftrag.
+- Die Größe einer Strecke wird auf 250 Punkte begrenzt. Eine derarige Strecke wird zwar geladen, ist aber nicht nutzbar.
+    Reduzieren Sie die Anzahl der Punkte in landschaftlichen Abschnitten, wenn dieser Fehler erscheint.
+
 Änderungen 4.1.5
 ----------------
 - Der Flughafen-Bereich beim Suchen von Flupplätzen und Lufträumen und beim Erzeugen der Karten um den Flugplatz

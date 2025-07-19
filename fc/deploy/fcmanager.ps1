@@ -10,7 +10,7 @@ If ($Restart -ne "") {
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc_version = "4.1.5"
+$str_fc_version = "4.1.6"
 $str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"

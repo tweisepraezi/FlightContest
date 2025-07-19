@@ -1,6 +1,11 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 4.1.4
+-------------
+- ANR Live Tracking for routes with scenic sections or semicircles added
+    For crews with different corridor widths, penalty points are calculated during live tracking based on the corridor width of the route.
+
 Changes 4.1.2
 -------------
 - ANR Live Tracking does not work by following conditions:

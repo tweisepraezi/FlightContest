@@ -410,7 +410,7 @@
 	                        </fieldset>
                         </g:if>
                         <g:else>
-							<g:contestMapRoutePrintOptions r="${routeInstance}" BreakButton="${BreakButton}" FetchButton="${FetchButton}" PrintButton="${PrintButton}" PrintSize="${PrintSize}" MapProjection="${MapProjection}" map_upload_job_status="${map_upload_job_status}" ti="${ti}"/>
+							<g:contestMapRoutePrintOptions r="${routeInstance}" BreakButton="${BreakButton}" FetchButton="${FetchButton}" PrintButton="${PrintButton}" OtherRouteId="${OtherRouteId}" PrintSize="${PrintSize}" MapProjection="${MapProjection}" map_upload_job_status="${map_upload_job_status}" ti="${ti}"/>
                             <input type="hidden" name="id" value="${routeInstance?.id}" />
                             <g:if test="${BreakButton}">
                                 <g:actionSubmit action="mapbreak" value="${message(code:'fc.contestmap.job.break')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />

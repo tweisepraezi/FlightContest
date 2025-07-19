@@ -1712,129 +1712,46 @@ class GpxService
             corridor_width = testInstance.flighttestwind.corridorWidthWind
         }
         boolean export_semicircle_gates = false
+        String contestmapcurvedlegpoints = ""
+        String contestmapcenterpoints = ""
+        String contestmapprintpoints = ""
+        String contestmapcenterpoints2 = ""
+        String contestmapprintpoints2 = ""
+        String contestmapcenterpoints3 = ""
+        String contestmapprintpoints3 = ""
+        String contestmapcenterpoints4 = ""
+        String contestmapprintpoints4 = ""
+        List gate_titles = []
         if (params.gpxSemicircleGates) {
             export_semicircle_gates = true
+            contestmapcurvedlegpoints = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapCurvedLegPoints, routeInstance)
+            contestmapcenterpoints = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapCenterPoints, routeInstance)
+            contestmapprintpoints = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapPrintPoints, routeInstance)
+            contestmapcenterpoints2 = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapCenterPoints2, routeInstance)
+            contestmapprintpoints2 = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapPrintPoints2, routeInstance)
+            contestmapcenterpoints3 = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapCenterPoints3, routeInstance)
+            contestmapprintpoints3 = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapPrintPoints3, routeInstance)
+            contestmapcenterpoints4 = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapCenterPoints4, routeInstance)
+            contestmapprintpoints4 = DisabledCheckPointsTools.Uncompress(routeInstance.contestMapPrintPoints4, routeInstance)
             corridor_width = 0
         }
-
+        
         // observation settings & enroute signs without position
-        Map contest_map_rect = [:]
-        BigDecimal center_latitude = null
-        BigDecimal center_longitude = null
-        if (wr_enroutesign) {
+        if (wr_enroutesign && !export_semicircle_gates) {
             xml.extensions {
                 xml.flightcontest {
-                    if (wr_enroutesign) {
-                        xml.observationsettings(
-                            routetitle: routeInstance.title,
-                            turnpoint: routeInstance.turnpointRoute,
-                            turnpointmapmeasurement: getYesNo(routeInstance.turnpointMapMeasurement),
-                            turnpointprintstyle: routeInstance.turnpointPrintStyle,
-                            turnpointprintpositionmaker: getYesNo(routeInstance.turnpointPrintPositionMaker),
-                            enroutephoto: routeInstance.enroutePhotoRoute,
-                            enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
-                            enroutephotoprintstyle: routeInstance.enroutePhotoPrintStyle,
-                            enroutephotoprintpositionmarker: getYesNo(routeInstance.enroutePhotoPrintPositionMaker),
-                            enroutecanvas: routeInstance.enrouteCanvasRoute,
-                            enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
-                            useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
-							mapscale: routeInstance.mapScale,
-							altitudeaboveground: routeInstance.altitudeAboveGround,
-                            corridorwidth: routeInstance.corridorWidth,
-                            corridorwidth2: routeInstance.corridorWidth2,
-                            corridorwidth3: routeInstance.corridorWidth3,
-                            corridorwidth4: routeInstance.corridorWidth4
-                        )
-                        xml.mapsettings(
-                            contestmapairfields: routeInstance.contestMapAirfields,
-                            contestmapairfieldsdata: routeInstance.contestMapAirfieldsData,
-                            contestmapcircle: getYesNo(routeInstance.contestMapCircle),
-                            contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
-                            contestmapleg: getYesNo(routeInstance.contestMapLeg),
-                            contestmapcurvedleg: getYesNo(routeInstance.contestMapCurvedLeg),
-                            contestmapcurvedlegpoints: routeInstance.contestMapCurvedLegPoints,
-                            contestmaptpname: getYesNo(routeInstance.contestMapTpName),
-                            contestmapsecretgates: getYesNo(routeInstance.contestMapSecretGates),
-                            contestmapenroutephotos: getYesNo(routeInstance.contestMapEnroutePhotos),
-                            contestmapenroutecanvas: getYesNo(routeInstance.contestMapEnrouteCanvas),
-                            contestmapturnpointsign: getYesNo(routeInstance.contestMapTurnpointSign),
-                            contestmapgraticule: getYesNo(routeInstance.contestMapGraticule),
-                            contestmapcontourlines: routeInstance.contestMapContourLines,
-                            contestmapmunicipalitynames: getYesNo(routeInstance.contestMapMunicipalityNames),
-                            contestmapchurches: getYesNo(routeInstance.contestMapChurches),
-                            contestmapcastles: getYesNo(routeInstance.contestMapCastles),
-                            contestmapchateaus: getYesNo(routeInstance.contestMapChateaus),
-                            contestmappowerlines: getYesNo(routeInstance.contestMapPowerlines),
-                            contestmapwindpowerstations: getYesNo(routeInstance.contestMapWindpowerstations),
-                            contestmapsmallroadsgrade: routeInstance.contestMapSmallRoadsGrade,
-                            contestmappeaks: getYesNo(routeInstance.contestMapPeaks),
-                            contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
-                            contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
-                            contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
-                            contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
-                            contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
-                            contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
-                            contestmaptitle1: routeInstance.contestMapFirstTitle,
-                            contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,
-                            contestmapcenterhorizontalpos1: routeInstance.contestMapCenterHorizontalPos,
-                            contestmapcenterpoints1: routeInstance.contestMapCenterPoints,
-                            contestmapprintpoints1: routeInstance.contestMapPrintPoints,
-                            contestmapprintlandscape1: getYesNo(routeInstance.contestMapPrintLandscape),
-                            contestmapprintsize1: routeInstance.contestMapPrintSize,
-                            contestmapcentermovex1: routeInstance.contestMapCenterMoveX,
-                            contestmapcentermovey1: routeInstance.contestMapCenterMoveY,
-                            contestmapshowoptions2: getYesNo(routeInstance.contestMapShowSecondOptions),
-                            contestmaptitle2: routeInstance.contestMapSecondTitle,
-                            contestmapcenterverticalpos2: routeInstance.contestMapCenterVerticalPos2,
-                            contestmapcenterhorizontalpos2: routeInstance.contestMapCenterHorizontalPos2,
-                            contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
-                            contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
-                            contestmapprintlandscape2: getYesNo(routeInstance.contestMapPrintLandscape2),
-                            contestmapprintsize2: routeInstance.contestMapPrintSize2,
-                            contestmapcentermovex2: routeInstance.contestMapCenterMoveX2,
-                            contestmapcentermovey2: routeInstance.contestMapCenterMoveY2,
-                            contestmapshowoptions3: getYesNo(routeInstance.contestMapShowThirdOptions),
-                            contestmaptitle3: routeInstance.contestMapThirdTitle,
-                            contestmapcenterverticalpos3: routeInstance.contestMapCenterVerticalPos3,
-                            contestmapcenterhorizontalpos3: routeInstance.contestMapCenterHorizontalPos3,
-                            contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
-                            contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
-                            contestmapprintlandscape3: getYesNo(routeInstance.contestMapPrintLandscape3),
-                            contestmapprintsize3: routeInstance.contestMapPrintSize3,
-                            contestmapcentermovex3: routeInstance.contestMapCenterMoveX3,
-                            contestmapcentermovey3: routeInstance.contestMapCenterMoveY3,
-                            contestmapshowoptions4: getYesNo(routeInstance.contestMapShowForthOptions),
-                            contestmaptitle4: routeInstance.contestMapForthTitle,
-                            contestmapcenterverticalpos4: routeInstance.contestMapCenterVerticalPos4,
-                            contestmapcenterhorizontalpos4: routeInstance.contestMapCenterHorizontalPos4,
-                            contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
-                            contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
-                            contestmapprintlandscape4: getYesNo(routeInstance.contestMapPrintLandscape4),
-                            contestmapprintsize4: routeInstance.contestMapPrintSize4,
-                            contestmapcentermovex4: routeInstance.contestMapCenterMoveX4,
-                            contestmapcentermovey4: routeInstance.contestMapCenterMoveY4
-                        )
-                        if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
-                            xml.enroutephotosigns {
-                                for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                                    xml.enroutephotosign(
-                                        photoname: coordenroutephoto_instance.enroutePhotoName,
-                                        viewpos: coordenroutephoto_instance.enrouteViewPos
-                                    )
-                                }
-                            }
-                        }
-                        if (routeInstance.enrouteCanvasRoute == EnrouteRoute.InputName) {
-                            xml.enroutecanvassigns {
-                                for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                                    xml.enroutecanvassign(
-                                        canvasname: coordenroutecanvas_instance.enrouteCanvasSign,
-                                        viewpos: coordenroutecanvas_instance.enrouteViewPos
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    wr_route_settings(routeInstance, xml, [corridorwidth:routeInstance.corridorWidth, corridorwidth2:routeInstance.corridorWidth2,
+                                                           corridorwidth3:routeInstance.corridorWidth3, corridorwidth4:routeInstance.corridorWidth4,
+                                                           contestmapcurvedlegpoints:routeInstance.contestMapCurvedLegPoints,
+                                                           contestmapcenterpoints: routeInstance.contestMapCenterPoints,
+                                                           contestmapprintpoints: routeInstance.contestMapPrintPoints,
+                                                           contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
+                                                           contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
+                                                           contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
+                                                           contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
+                                                           contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
+                                                           contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
+                                                          ])
                 }
             }
         }
@@ -2097,6 +2014,7 @@ class GpxService
                                 // xml.ele altitude_meter
                             }
                         }
+                        gate_titles += last_coordroute_instance.title()
                     }
                 }
                 
@@ -2143,6 +2061,7 @@ class GpxService
                                             //xml.ele altitude_meter
                                         }
                                     }
+                                    gate_titles += "${CoordType.SECRET.title}${secret_gate_num}"
                                 }
                             }
                             last_semicircle_coord = semicircle_coord
@@ -2198,6 +2117,7 @@ class GpxService
                                     }
                                 }
                             }
+                            gate_titles += coordroute_instance.title()
                             break
                         case CoordType.LDG:
                             if (testInstance) {
@@ -2237,6 +2157,7 @@ class GpxService
                                     }
                                 }
                             }
+                            gate_titles += coordroute_instance.title()
                             break
                         case CoordType.iTO:
                         case CoordType.iLDG:
@@ -2277,6 +2198,7 @@ class GpxService
                                     }
                                 }
                             }
+                            gate_titles += coordroute_instance.title()
                             break
                     }
                     if (show_wpt) {
@@ -2330,6 +2252,7 @@ class GpxService
                                         // xml.ele altitude_meter
                                     }
                                 }
+                                gate_titles += coordroute_instance.title()
                             }
                         }
                         first = false
@@ -2672,6 +2595,26 @@ class GpxService
             }
         }
         
+        // observation settings & enroute signs without position
+        if (wr_enroutesign && export_semicircle_gates) {
+            xml.extensions {
+                xml.flightcontest {
+                    wr_route_settings(routeInstance, xml, [corridorwidth:routeInstance.corridorWidth, corridorwidth2:routeInstance.corridorWidth2,
+                                                           corridorwidth3:routeInstance.corridorWidth3, corridorwidth4:routeInstance.corridorWidth4,
+                                                           contestmapcurvedlegpoints:"", // DisabledCheckPointsTools.Compress2(contestmapcurvedlegpoints, gate_titles)
+                                                           contestmapcenterpoints: DisabledCheckPointsTools.Compress2(contestmapcenterpoints, gate_titles),
+                                                           contestmapprintpoints: DisabledCheckPointsTools.Compress2(contestmapprintpoints, gate_titles),
+                                                           contestmapcenterpoints2: DisabledCheckPointsTools.Compress2(contestmapcenterpoints2, gate_titles),
+                                                           contestmapprintpoints2: DisabledCheckPointsTools.Compress2(contestmapprintpoints2, gate_titles),
+                                                           contestmapcenterpoints3: DisabledCheckPointsTools.Compress2(contestmapcenterpoints3, gate_titles),
+                                                           contestmapprintpoints3: DisabledCheckPointsTools.Compress2(contestmapprintpoints3, gate_titles),
+                                                           contestmapcenterpoints4: DisabledCheckPointsTools.Compress2(contestmapcenterpoints4, gate_titles),
+                                                           contestmapprintpoints4: DisabledCheckPointsTools.Compress2(contestmapprintpoints4, gate_titles),
+                                                          ])
+                }
+            }
+        }
+        
         printdone ""
     }
     
@@ -2708,121 +2651,22 @@ class GpxService
         }
 
         // observation settings & enroute signs without position
-        Map contest_map_rect = [:]
         BigDecimal center_latitude = null
         BigDecimal center_longitude = null
         xml.extensions {
             xml.flightcontest {
                 if (wr_enroutesign) {
-                    xml.observationsettings(
-                        routetitle: routeInstance.title,
-                        turnpoint: routeInstance.turnpointRoute,
-                        turnpointmapmeasurement: getYesNo(routeInstance.turnpointMapMeasurement),
-                        turnpointprintstyle: routeInstance.turnpointPrintStyle,
-                        turnpointprintpositionmaker: getYesNo(routeInstance.turnpointPrintPositionMaker),
-                        enroutephoto: routeInstance.enroutePhotoRoute,
-                        enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
-                        enroutephotoprintstyle: routeInstance.enroutePhotoPrintStyle,
-                        enroutephotoprintpositionmarker: getYesNo(routeInstance.enroutePhotoPrintPositionMaker),
-                        enroutecanvas: routeInstance.enrouteCanvasRoute,
-                        enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
-                        useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
-                        mapscale: routeInstance.mapScale,
-                        altitudeaboveground: routeInstance.altitudeAboveGround,
-                        corridorwidth: contestMapParams.contestMapCorridorWidth,
-                        corridorwidth2: contestMapParams.contestMapCorridorWidth2,
-                        corridorwidth3: contestMapParams.contestMapCorridorWidth3,
-                        corridorwidth4: contestMapParams.contestMapCorridorWidth4
-                    )
-                    xml.mapsettings(
-                        contestmapairfields: routeInstance.contestMapAirfields,
-                        contestmapairfieldsdata: routeInstance.contestMapAirfieldsData,
-                        contestmapcircle: getYesNo(routeInstance.contestMapCircle),
-                        contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
-                        contestmapleg: getYesNo(routeInstance.contestMapLeg),
-                        contestmapcurvedleg: getYesNo(routeInstance.contestMapCurvedLeg),
-                        contestmapcurvedlegpoints: routeInstance.contestMapCurvedLegPoints,
-                        contestmaptpname: getYesNo(routeInstance.contestMapTpName),
-                        contestmapsecretgates: getYesNo(routeInstance.contestMapSecretGates),
-                        contestmapenroutephotos: getYesNo(routeInstance.contestMapEnroutePhotos),
-                        contestmapenroutecanvas: getYesNo(routeInstance.contestMapEnrouteCanvas),
-                        contestmapturnpointsign: getYesNo(routeInstance.contestMapTurnpointSign),
-                        contestmapgraticule: getYesNo(routeInstance.contestMapGraticule),
-                        contestmapcontourlines: routeInstance.contestMapContourLines,
-                        contestmapmunicipalitynames: getYesNo(routeInstance.contestMapMunicipalityNames),
-                        contestmapchurches: getYesNo(routeInstance.contestMapChurches),
-                        contestmapcastles: getYesNo(routeInstance.contestMapCastles),
-                        contestmapchateaus: getYesNo(routeInstance.contestMapChateaus),
-                        contestmappowerlines: getYesNo(routeInstance.contestMapPowerlines),
-                        contestmapwindpowerstations: getYesNo(routeInstance.contestMapWindpowerstations),
-                        contestmapsmallroadsgrade: routeInstance.contestMapSmallRoadsGrade,
-                        contestmappeaks: getYesNo(routeInstance.contestMapPeaks),
-                        contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
-                        contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
-                        contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
-                        contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
-                        contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
-                        contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
-                        contestmaptitle1: routeInstance.contestMapFirstTitle,
-                        contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,
-                        contestmapcenterhorizontalpos1: routeInstance.contestMapCenterHorizontalPos,
-                        contestmapcenterpoints1: routeInstance.contestMapCenterPoints,
-                        contestmapprintpoints1: routeInstance.contestMapPrintPoints,
-                        contestmapprintlandscape1: getYesNo(routeInstance.contestMapPrintLandscape),
-                        contestmapprintsize1: routeInstance.contestMapPrintSize,
-                        contestmapcentermovex1: routeInstance.contestMapCenterMoveX,
-                        contestmapcentermovey1: routeInstance.contestMapCenterMoveY,
-                        contestmapshowoptions2: getYesNo(routeInstance.contestMapShowSecondOptions),
-                        contestmaptitle2: routeInstance.contestMapSecondTitle,
-                        contestmapcenterverticalpos2: routeInstance.contestMapCenterVerticalPos2,
-                        contestmapcenterhorizontalpos2: routeInstance.contestMapCenterHorizontalPos2,
-                        contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
-                        contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
-                        contestmapprintlandscape2: getYesNo(routeInstance.contestMapPrintLandscape2),
-                        contestmapprintsize2: routeInstance.contestMapPrintSize2,
-                        contestmapcentermovex2: routeInstance.contestMapCenterMoveX2,
-                        contestmapcentermovey2: routeInstance.contestMapCenterMoveY2,
-                        contestmapshowoptions3: getYesNo(routeInstance.contestMapShowThirdOptions),
-                        contestmaptitle3: routeInstance.contestMapThirdTitle,
-                        contestmapcenterverticalpos3: routeInstance.contestMapCenterVerticalPos3,
-                        contestmapcenterhorizontalpos3: routeInstance.contestMapCenterHorizontalPos3,
-                        contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
-                        contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
-                        contestmapprintlandscape3: getYesNo(routeInstance.contestMapPrintLandscape3),
-                        contestmapprintsize3: routeInstance.contestMapPrintSize3,
-                        contestmapcentermovex3: routeInstance.contestMapCenterMoveX3,
-                        contestmapcentermovey3: routeInstance.contestMapCenterMoveY3,
-                        contestmapshowoptions4: getYesNo(routeInstance.contestMapShowForthOptions),
-                        contestmaptitle4: routeInstance.contestMapForthTitle,
-                        contestmapcenterverticalpos4: routeInstance.contestMapCenterVerticalPos4,
-                        contestmapcenterhorizontalpos4: routeInstance.contestMapCenterHorizontalPos4,
-                        contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
-                        contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
-                        contestmapprintlandscape4: getYesNo(routeInstance.contestMapPrintLandscape4),
-                        contestmapprintsize4: routeInstance.contestMapPrintSize4,
-                        contestmapcentermovex4: routeInstance.contestMapCenterMoveX4,
-                        contestmapcentermovey4: routeInstance.contestMapCenterMoveY4
-                    )
-                    if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
-                        xml.enroutephotosigns {
-                            for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                                xml.enroutephotosign(
-                                    photoname: coordenroutephoto_instance.enroutePhotoName,
-                                    viewpos: coordenroutephoto_instance.enrouteViewPos
-                                )
-                            }
-                        }
-                    }
-                    if (routeInstance.enrouteCanvasRoute == EnrouteRoute.InputName) {
-                        xml.enroutecanvassigns {
-                            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                                xml.enroutecanvassign(
-                                    canvasname: coordenroutecanvas_instance.enrouteCanvasSign,
-                                    viewpos: coordenroutecanvas_instance.enrouteViewPos
-                                )
-                            }
-                        }
-                    }
+                    wr_route_settings(routeInstance, xml, contestMapParams + [
+                                        contestmapcurvedlegpoints:routeInstance.contestMapCurvedLegPoints,
+                                        contestmapcenterpoints: routeInstance.contestMapCenterPoints,
+                                        contestmapprintpoints: routeInstance.contestMapPrintPoints,
+                                        contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
+                                        contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
+                                        contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
+                                        contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
+                                        contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
+                                        contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
+                                     ])
                 }
                 BigDecimal min_latitude = null
                 BigDecimal min_longitude = null
@@ -2858,7 +2702,7 @@ class GpxService
                     }
                 }
                 
-                contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, CONTESTMAP_MARGIN_DISTANCE)
+                Map contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, CONTESTMAP_MARGIN_DISTANCE)
                 min_latitude = contest_map_rect.latmin
                 min_longitude = contest_map_rect.lonmin
                 max_latitude = contest_map_rect.latmax
@@ -3613,6 +3457,120 @@ class GpxService
         
         printdone ""
     }
+    
+    //--------------------------------------------------------------------------
+    private void wr_route_settings(Route routeInstance, MarkupBuilder xml, Map params)
+    {
+        xml.observationsettings(
+            routetitle: routeInstance.title,
+            turnpoint: routeInstance.turnpointRoute,
+            turnpointmapmeasurement: getYesNo(routeInstance.turnpointMapMeasurement),
+            turnpointprintstyle: routeInstance.turnpointPrintStyle,
+            turnpointprintpositionmaker: getYesNo(routeInstance.turnpointPrintPositionMaker),
+            enroutephoto: routeInstance.enroutePhotoRoute,
+            enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
+            enroutephotoprintstyle: routeInstance.enroutePhotoPrintStyle,
+            enroutephotoprintpositionmarker: getYesNo(routeInstance.enroutePhotoPrintPositionMaker),
+            enroutecanvas: routeInstance.enrouteCanvasRoute,
+            enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
+            useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
+            mapscale: routeInstance.mapScale,
+            altitudeaboveground: routeInstance.altitudeAboveGround,
+            corridorwidth: params.contestMapCorridorWidth,
+            corridorwidth2: params.contestMapCorridorWidth2,
+            corridorwidth3: params.contestMapCorridorWidth3,
+            corridorwidth4: params.contestMapCorridorWidth4
+        )
+        xml.mapsettings(
+            contestmapairfields: routeInstance.contestMapAirfields,
+            contestmapairfieldsdata: routeInstance.contestMapAirfieldsData,
+            contestmapcircle: getYesNo(routeInstance.contestMapCircle),
+            contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
+            contestmapleg: getYesNo(routeInstance.contestMapLeg),
+            contestmapcurvedleg: getYesNo(routeInstance.contestMapCurvedLeg),
+            contestmapcurvedlegpoints: params.contestmapcurvedlegpoints,
+            contestmaptpname: getYesNo(routeInstance.contestMapTpName),
+            contestmapsecretgates: getYesNo(routeInstance.contestMapSecretGates),
+            contestmapenroutephotos: getYesNo(routeInstance.contestMapEnroutePhotos),
+            contestmapenroutecanvas: getYesNo(routeInstance.contestMapEnrouteCanvas),
+            contestmapturnpointsign: getYesNo(routeInstance.contestMapTurnpointSign),
+            contestmapgraticule: getYesNo(routeInstance.contestMapGraticule),
+            contestmapcontourlines: routeInstance.contestMapContourLines,
+            contestmapmunicipalitynames: getYesNo(routeInstance.contestMapMunicipalityNames),
+            contestmapchurches: getYesNo(routeInstance.contestMapChurches),
+            contestmapcastles: getYesNo(routeInstance.contestMapCastles),
+            contestmapchateaus: getYesNo(routeInstance.contestMapChateaus),
+            contestmappowerlines: getYesNo(routeInstance.contestMapPowerlines),
+            contestmapwindpowerstations: getYesNo(routeInstance.contestMapWindpowerstations),
+            contestmapsmallroadsgrade: routeInstance.contestMapSmallRoadsGrade,
+            contestmappeaks: getYesNo(routeInstance.contestMapPeaks),
+            contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
+            contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
+            contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
+            contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
+            contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
+            contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
+            contestmaptitle1: routeInstance.contestMapFirstTitle,
+            contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,
+            contestmapcenterhorizontalpos1: routeInstance.contestMapCenterHorizontalPos,
+            contestmapcenterpoints1: params.contestmapcenterpoints,
+            contestmapprintpoints1: params.contestmapprintpoints,
+            contestmapprintlandscape1: getYesNo(routeInstance.contestMapPrintLandscape),
+            contestmapprintsize1: routeInstance.contestMapPrintSize,
+            contestmapcentermovex1: routeInstance.contestMapCenterMoveX,
+            contestmapcentermovey1: routeInstance.contestMapCenterMoveY,
+            contestmapshowoptions2: getYesNo(routeInstance.contestMapShowSecondOptions),
+            contestmaptitle2: routeInstance.contestMapSecondTitle,
+            contestmapcenterverticalpos2: routeInstance.contestMapCenterVerticalPos2,
+            contestmapcenterhorizontalpos2: routeInstance.contestMapCenterHorizontalPos2,
+            contestmapcenterpoints2: params.contestmapcenterpoints2,
+            contestmapprintpoints2: params.contestmapprintpoints2,
+            contestmapprintlandscape2: getYesNo(routeInstance.contestMapPrintLandscape2),
+            contestmapprintsize2: routeInstance.contestMapPrintSize2,
+            contestmapcentermovex2: routeInstance.contestMapCenterMoveX2,
+            contestmapcentermovey2: routeInstance.contestMapCenterMoveY2,
+            contestmapshowoptions3: getYesNo(routeInstance.contestMapShowThirdOptions),
+            contestmaptitle3: routeInstance.contestMapThirdTitle,
+            contestmapcenterverticalpos3: routeInstance.contestMapCenterVerticalPos3,
+            contestmapcenterhorizontalpos3: routeInstance.contestMapCenterHorizontalPos3,
+            contestmapcenterpoints3: params.contestmapcenterpoints3,
+            contestmapprintpoints3: params.contestmapprintpoints3,
+            contestmapprintlandscape3: getYesNo(routeInstance.contestMapPrintLandscape3),
+            contestmapprintsize3: routeInstance.contestMapPrintSize3,
+            contestmapcentermovex3: routeInstance.contestMapCenterMoveX3,
+            contestmapcentermovey3: routeInstance.contestMapCenterMoveY3,
+            contestmapshowoptions4: getYesNo(routeInstance.contestMapShowForthOptions),
+            contestmaptitle4: routeInstance.contestMapForthTitle,
+            contestmapcenterverticalpos4: routeInstance.contestMapCenterVerticalPos4,
+            contestmapcenterhorizontalpos4: routeInstance.contestMapCenterHorizontalPos4,
+            contestmapcenterpoints4: params.contestmapcenterpoints4,
+            contestmapprintpoints4: params.contestmapprintpoints4,
+            contestmapprintlandscape4: getYesNo(routeInstance.contestMapPrintLandscape4),
+            contestmapprintsize4: routeInstance.contestMapPrintSize4,
+            contestmapcentermovex4: routeInstance.contestMapCenterMoveX4,
+            contestmapcentermovey4: routeInstance.contestMapCenterMoveY4
+        )
+        if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
+            xml.enroutephotosigns {
+                for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                    xml.enroutephotosign(
+                        photoname: coordenroutephoto_instance.enroutePhotoName,
+                        viewpos: coordenroutephoto_instance.enrouteViewPos
+                    )
+                }
+            }
+        }
+        if (routeInstance.enrouteCanvasRoute == EnrouteRoute.InputName) {
+            xml.enroutecanvassigns {
+                for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                    xml.enroutecanvassign(
+                        canvasname: coordenroutecanvas_instance.enrouteCanvasSign,
+                        viewpos: coordenroutecanvas_instance.enrouteViewPos
+                    )
+                }
+            }
+        }
+}
     
     //--------------------------------------------------------------------------
     private BigDecimal GetRoundedDecimalGrad(BigDecimal decimalGrad)

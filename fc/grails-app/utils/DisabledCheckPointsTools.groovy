@@ -19,6 +19,25 @@ class DisabledCheckPointsTools
                 compressed_str += "0"
             }
         }
+        return compressed_str // Defs.ROUTE_MAX_POINTS
+    }
+    
+    static String Compress2(String umcompressedValue, List gateTitles)
+    {
+        String compressed_str = "${COMPRESS_IDENTIFIER}0:" 
+        for (String gate_title in gateTitles) {
+            boolean found = false
+            for (String v in umcompressedValue.split(',')) {
+                if (v == gate_title) {
+                    found = true
+                }
+            }
+            if (found) {
+                compressed_str += "1"
+            } else {
+                compressed_str += "0"
+            }
+        }
         return compressed_str
     }
     

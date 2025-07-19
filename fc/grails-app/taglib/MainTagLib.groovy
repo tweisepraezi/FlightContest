@@ -71,13 +71,25 @@ class MainTagLib
                 outln """<li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings?newwindow=true" target="_blank">${message(code:'fc.livesettings.short')}</a> </li>"""
             }
         }
-        //String webroot_dir = servletContext.getRealPath("/")
-        //String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
-        //if (new File(printjob_filename).exists()) {
-        def job_key = new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP)
-        if (job_key) {
-            if (quartzScheduler.getTriggersOfJob(job_key)*.key) {
-                outln """<li class="secondary"><a>${message(code:'fc.contestmap.job.running.short')}</a> </li>"""
+        Route route_instance = null
+        String route_id = ""
+        String webroot_dir = servletContext.getRealPath("/")
+        String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+        File printjob_file = new File(printjob_filename)
+        if (printjob_file.exists()) {
+            LineNumberReader printjob_reader = printjob_file.newReader()
+            route_id = printjob_reader.readLine()
+            printjob_reader.close()
+            if (route_id) {
+                route_instance = Route.get(route_id)
+            }
+        }
+        if (route_instance) {
+            def job_key = new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP)
+            if (job_key && quartzScheduler.getTriggersOfJob(job_key)*.key) {
+                outln """<li class="secondary"><a href="${p.link}/../../route/mapexportquestion/${route_id}">${message(code:'fc.contestmap.job.running.short')}</a> </li>"""
+            } else {
+                outln """<li class="secondary"><a href="${p.link}/../../route/mapexportquestion/${route_id}">${message(code:'fc.contestmap.job.waiting')}</a> </li>"""
             }
         }
         outln """  </ul>"""

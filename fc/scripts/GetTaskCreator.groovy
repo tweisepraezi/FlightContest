@@ -87,6 +87,9 @@ MODIFY_DATA = [
                             }
                         }
                     }
+                    window.onbeforeunload = function(event) {
+                        event.returnValue = "Do you want to close Task Creator?";
+                    }
                 </script>
             </div>
             <div id="separador_carta" class="separador"><hr></div>"""

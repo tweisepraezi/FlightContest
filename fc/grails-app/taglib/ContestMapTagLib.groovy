@@ -230,7 +230,15 @@ class ContestMapTagLib
 		} else if (attrs.PrintButton) {
 			outln message(code:'fc.contestmap.job.done')
 		} else {
-			outln message(code:'fc.contestmap.job.otherrunning')
+            Route route_instance = null
+            if (attrs.OtherRouteId) {
+                route_instance = Route.get(attrs.OtherRouteId)
+            }
+            if (route_instance) {
+                outln message(code:'fc.contestmap.job.otherrunning.route', args:[route_instance.name()])
+            } else {
+                outln message(code:'fc.contestmap.job.otherrunning')
+            }
 		}
         /*
 		if (attrs.map_upload_job_status == UploadJobStatus.Waiting) {

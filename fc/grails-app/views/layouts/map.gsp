@@ -18,7 +18,7 @@
          </g:if>
         <g:layoutHead />
     </head>
-    <body onunload="removeGpxFile()">
+    <body onunload="removeGpxFile()" style="overflow: clip;">
         <div class="container_12">
             <div class="grid"  >
                 <h1 id="branding">
