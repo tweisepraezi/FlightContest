@@ -315,7 +315,7 @@ class AviationMath
         Map right_coord = getCoordinate(gateLatitude, gateLongitude, gate_track2, gate_width/2)
         
         // return Map
-        return [coordLeft:left_coord, coordRight:right_coord, gateTrack:gate_track, destTrack:dest_track]
+        return [coordLeft:left_coord, coordRight:right_coord, gateTrack:gate_track, srcTrack:src_track, destTrack:dest_track]
     }
 
     //--------------------------------------------------------------------------

@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.7
+----------------
+- Kursabweichungen > 90% werden jetzt ab dem zweiten Aufreten zwischen 2 Logger-Meßpunkten gezählt.
+  Die berechnete Abweichung des ersten Auftretens gilt nicht für dessen ganzen Verlauf,
+  da das Flugzeug hierbei gerade erst in den Fehlerzustand eingeflogen ist. Diese Einflugphase wird ohne Strafe toleriert.
+- Bug "ANR: Fehlerhafte Berechnung von Kursabweichungen" behoben
+- Überprüfung der Koordinaten-Flags krummer Streckenabschnitte hinzugefügt.
+    Bei Halbkreisen müssen die Flags "Keine Zeitauswertung" und "Keine Torauswertung" der UZKs aktiviert sein.
+    Bei landschaflichen Abschnitten müssen die Flags "Keine Zeitauswertung", "Keine Torauswertung" und "Check-Punkt ignorieren" der UZKs aktiviert sein.
+
 Änderungen 4.1.6
 ----------------
 - Bug "Strecken-Kommando 'GPX-Export (mit Halbkreis-Tore)' hat Wendepunkt-Festlegungen der OSM-Wettbewerbs-Karte nicht beibehalten" behoben

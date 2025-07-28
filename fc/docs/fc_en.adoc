@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.1.6
-:revdate: 19.07.2025
+:revnumber: 4.1.7
+:revdate: 28.07.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -895,6 +895,13 @@ Execute 'Recalculate legs
 Coordinate turning loops deviating::
 Internal data error +
 Execute 'Recalculate legs
+
+Curved check point settings are faulty::
+For semicircle legs the flags "No time check" and "No gate check" must be activated in the SCs. +
+For scenic legs the flags "No time check", "No gate check" and "Ignore check point" must be activated in the SCs.
+
+Scenic check point settings are faulty::
+For scenic legs the flags "No time check", "No gate check" and "Ignore check point" must be activated in the SCs.
 
 From this route with circle centers, a route with semi-circle gates must be created for use::
 Execute "GPX export (with semi-circle gates)" +

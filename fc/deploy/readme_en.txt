@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.7
+-------------
+- Course deviations > 90% are now counted from the second occurrence between two logger measuring points.
+  The calculated deviation of the first occurrence does not apply to its entire progress,
+  as the aircraft has only just entered the error state. This entry phase is tolerated without penalty.
+- Bug "ANR: Incorrect calculation of bad cources" fixed
+- Checking of coordinate flags for curved legs added.
+    For semicircle legs the flags "No time check" and "No gate check" must be activated in the SCs.
+    For scenic legs the flags "No time check", "No gate check" and "Ignore check point" must be activated in the SCs.
+
 Changes 4.1.6
 -------------
 - Bug "Route command 'GPX export GPX export (with semi-circle gates)' did not retain turning point definitions from the OSM Contest Map" fixed

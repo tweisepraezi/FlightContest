@@ -207,6 +207,7 @@ class CalcService
             Map last_p = null
             boolean check_course_nextgate = false
             List badcourse_points = []
+            boolean first_badcourse_point = true
             boolean check_procedureturn = false
             boolean check_procedureturn_nextgate = false
             BigDecimal procedureturn_track_changes = 0
@@ -223,6 +224,7 @@ class CalcService
                                 saveCalcResultBadCourse(testInstance, badcourse_points)
                                 badcourse_points.clear()
                             }
+                            first_badcourse_point = true
                             check_course_nextgate = false
                         }
                         if (check_procedureturn_nextgate) {
@@ -306,13 +308,20 @@ class CalcService
                                 // save bad course
                                 if (is_bad_course) {
                                     if (!gate.ignoreBadCourse) {
-                                        badcourse_points += p
-                                        check_course_nextgate = true
+                                        if (Defs.BADCOURSE_ONESECOND_TOLERANCE && first_badcourse_point) {
+                                            first_badcourse_point = false
+                                        } else {
+                                            badcourse_points += p
+                                            check_course_nextgate = true
+                                        }
                                     }
-                                } else if (badcourse_points.size() > 0) {
-                                    saveCalcResultBadCourse(testInstance, badcourse_points)
-                                    badcourse_points.clear()
-                                    check_course_nextgate = false
+                                } else {
+                                    if (badcourse_points.size() > 0) {
+                                        saveCalcResultBadCourse(testInstance, badcourse_points)
+                                        badcourse_points.clear()
+                                        check_course_nextgate = false
+                                    }
+                                    first_badcourse_point = true
                                 }
                             }
                         }
@@ -1053,6 +1062,7 @@ class CalcService
                                             advancedCoordLeft:advanced_gate.coordLeft,
                                             advancedCoordRight:advanced_gate.coordRight,
                                             gateTrack:FcMath.RoundGrad(gate.gateTrack),
+                                            srcTrack:FcMath.RoundGrad(gate.srcTrack),
                                             gateWidth:corridor_width,
                                             gateLatitude:last_coordroute_instance.latMath(),
                                             gateLongitude:last_coordroute_instance.lonMath(),
@@ -1281,9 +1291,13 @@ class CalcService
                     }
                 }
                 if (gate_utc) {
+                    BigDecimal gate_track = g.gateTrack
+                    if (g.srcTrack) {
+                        gate_track = g.srcTrack
+                    }
                     Map new_gate = [coordType:g.coordType,
                                     coordTypeNumber:g.coordTypeNumber,
-                                    gateTrack:g.gateTrack,
+                                    gateTrack:gate_track,
                                     gateUtc:gate_utc,
                                     gateFlyBy:gate_flyby,
                                     ignoreGate:false,

@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.1.6
-:revdate:   19.07.2025
+:revnumber: 4.1.7
+:revdate:   28.07.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -907,6 +907,13 @@ Interner Datenfehler +
 Koordinaten-Wendeschleifen abweichend::
 Interner Datenfehler +
 'Etappen neu berechnen' ausführen
+
+Check-Punkt-Einstellungen eines krummen Streckenabschnittes fehlerhaft::
+Bei Halbkreisen müssen die Flags "Keine Zeitauswertung" und "Keine Torauswertung" der UZKs aktiviert sein. +
+Bei landschaflichen Abschnitten müssen die Flags "Keine Zeitauswertung", "Keine Torauswertung" und "Check-Punkt ignorieren" der UZKs aktiviert sein.
+
+Check-Punkt-Einstellungen eines landschaftlichen Streckenabschnittes fehlerhaft::
+Bei landschaflichen Abschnitten müssen die Flags "Keine Zeitauswertung", "Keine Torauswertung" und "Check-Punkt ignorieren" der UZKs aktiviert sein.
 
 Aus dieser Strecke mit Kreismittelpunkten muss zur Nutzung eine Strecke mit Halbkreis-Toren erzeugt werden::
 Führen Sie "GPX-Export (mit Halbkreis-Tore)" aus +

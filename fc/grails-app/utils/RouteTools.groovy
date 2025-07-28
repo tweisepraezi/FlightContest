@@ -606,7 +606,33 @@ class RouteTools
                 }
             }
 		}
-            
+
+        List curvedpointflags_errors = []
+        List scenicpointflags_errors = []
+        boolean curved_point = false
+        boolean is_scenic_leg = false
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id", order:"desc"])) {
+            if (curved_point && coordroute_instance.type == CoordType.SECRET) {
+                if (is_scenic_leg) {
+                    if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck || !coordroute_instance.ignoreGate) {
+                        scenicpointflags_errors += coordroute_instance.titleCode()
+                    }
+                } else {
+                    if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck) {
+                        curvedpointflags_errors += coordroute_instance.titleCode()
+                    }
+                }
+            } else {
+                curved_point = false
+            }
+            if (coordroute_instance.endCurved) {
+                curved_point = true
+                if (false) { // TODO if (coordroute_instance.endScenic) {
+                    is_scenic_leg = true
+                }
+            }
+        }
+        
         boolean corridor_error = false
         if (routeInstance.contest.anrFlying) {
             if (!routeInstance.corridorWidth) {
@@ -643,6 +669,8 @@ class RouteTools
 				secret_measure_incomplete:   secret_measure_incomplete,
                 corridor_error:              corridor_error,
                 corridor_tpflags_errors:     corridor_tpflags_errors,
+                curvedpointflags_errors:     curvedpointflags_errors.reverse(),
+                scenicpointflags_errors:     scenicpointflags_errors.reverse(),
                 gatewidth_errors:            gatewidth_errors
                ]
     }
@@ -661,7 +689,7 @@ class RouteTools
     {
         if (!is_route_usuable(status)) {
             return false
-        } else if (status.min_target_error || status.max_target_error || status.min_canvas_error || status.max_canvas_error || status.min_leg_error || status.max_leg_error || status.corridor_tpflags_errors) {
+        } else if (status.min_target_error || status.max_target_error || status.min_canvas_error || status.max_canvas_error || status.min_leg_error || status.max_leg_error || status.corridor_tpflags_errors || status.curvedpointflags_errors || status.scenicpointflags_errors) {
             return false
         }
         return true
@@ -780,6 +808,20 @@ class RouteTools
                         s += ", "
                     }
                     s += routeInstance.getMsgArgs('fc.route.corridortpflagserrors',[status.corridor_tpflags_errors])
+                    wr_comma = true
+                }
+                if (status.curvedpointflags_errors) {
+                    if (wr_comma) {
+                        s += ", "
+                    }
+                    s += routeInstance.getMsgArgs('fc.route.curvedpointflagserrors',[status.curvedpointflags_errors])
+                    wr_comma = true
+                }
+                if (status.scenicpointflags_errors) {
+                    if (wr_comma) {
+                        s += ", "
+                    }
+                    s += routeInstance.getMsgArgs('fc.route.senicpointflagserrors',[status.scenicpointflags_errors])
                     wr_comma = true
                 }
                 if (status.gatewidth_errors) {
