@@ -316,8 +316,8 @@ class ResultClass
         
         // DB-2.19 compatibility
         secretGateWidth(nullable:true,scale:10,min:0.0f)
-        minutesBeforeStartTime(nullable:true,min:0)
-        minutesAddSubmission(nullable:true,min:0)
+        minutesBeforeStartTime(nullable:true)
+        minutesAddSubmission(nullable:true)
         
         // DB-2.21 compatibility
         ruleTitle(nullable:true)

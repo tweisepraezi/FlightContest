@@ -61,7 +61,7 @@ class FlightTestWind
 	String name()
 	{
         if (corridorWidthWind) {
-            return "${wind.name()} (${idTitle}) [${FcMath.DistanceStr(corridorWidthWind)}${getMsgArgs('fc.mile',[])}]"
+            return "${wind.name()} (${idTitle}) (${FcMath.DistanceStr2(corridorWidthWind)}${getMsgArgs('fc.mile',[])})"
         }
 		return "${wind.name()} (${idTitle})"
 	}

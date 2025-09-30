@@ -45,9 +45,6 @@
                                             <a href="${email_links.kmz}" target="_blank"><img src="${createLinkTo(dir:'images',file:'kmz.png')}"/></a>
                                         </td>
                                     </g:elseif>
-                                    <td style="width:1%;">
-                                        <a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>
-                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -106,6 +103,59 @@
                                     </g:else>
                                 </tr>
                             </tbody>
+                        </table>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <a href="#end" style="color:blue;margin-right:10px;"><img src="${createLinkTo(dir:'images',file:'down.png')}"/>
+                                            <g:if test="${!testInstance.flightTestComplete}">
+                                                ${message(code:'fc.results.open')}
+                                            </g:if>
+                                        </a>
+                                        <g:if test="${next_id}">
+                                            <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" disabled tabIndex="${ti[0]++}"/>
+                                        </g:else>
+                                        <g:if test="${prev_id}">
+                                            <g:actionSubmit action="flightresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:actionSubmit action="flightresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" onclick="this.form.target='_self';return true;" disabled tabIndex="${ti[0]++}"/>
+                                        </g:else>
+                                        <g:if test="${!testInstance.flightTestComplete}">
+                                            <g:if test="${is_loggerdata}">
+                                                <g:actionSubmit action="recalculatecrew" value="${message(code:'fc.flightresults.recalculate')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            </g:if>
+                                            <g:else>
+	                                            <g:if test="${testInstance.IsTrackerImportPossible()}">
+	                                                <g:actionSubmit action="importtracker" value="${message(code:'fc.flightresults.trackerimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                            </g:if>
+                                                <g:actionSubmit action="importlogger" value="${message(code:'fc.flightresults.loggerimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            </g:else>
+                                            <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:if test="${testInstance.IsShowMapPossible()}">
+                                            <g:actionSubmit action="showmap_test" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="showofflinemap_test" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="gpxexport_test" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="kmzexport_test" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.flightresults.printmeasurement')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        <g:if test="${is_loggerdata}">
+                                            <g:actionSubmit action="printloggerdata" value="${message(code:'fc.flightresults.printloggerdata')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:if test="${testInstance.flightTestComplete}">
+                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                    </td>
+                                    <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
+                                </tr>
+                            </thead>
                         </table>
                         <g:flightTestLoggerResults t="${testInstance}" showAll="false" allowJudgeActions="${(!testInstance.flightTestComplete).toString()}" />
                         <g:flightTestResults t="${testInstance}"/>
@@ -323,9 +373,10 @@
                             </tbody>
                         </table>
                         <table>
-                            <tfoot>
+                            <thead>
                                 <tr>
                                     <td>
+                                        <a style="color:blue;margin-right:10px;" href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a>
                                         <g:if test="${!testInstance.flightTestComplete}">
 				                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:if test="${testInstance.flightTestCheckPointsComplete}">
@@ -364,8 +415,8 @@
                                             </g:else>
                                             <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:if test="${testInstance.IsShowMapPossible()}">
-                                                <g:actionSubmit action="showofflinemap_test" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                                 <g:actionSubmit action="showmap_test" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                                <g:actionSubmit action="showofflinemap_test" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                                 <g:actionSubmit action="gpxexport_test" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                                 <g:actionSubmit action="kmzexport_test" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
@@ -389,10 +440,9 @@
 											<g:else>
 												<g:actionSubmit action="flightresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" onclick="this.form.target='_self';return true;" disabled tabIndex="${ti[0]++}"/>
 											</g:else>
-                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:if test="${testInstance.IsShowMapPossible()}">
-                                                <g:actionSubmit action="showofflinemap_test" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                                 <g:actionSubmit action="showmap_test" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                                <g:actionSubmit action="showofflinemap_test" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                                 <g:actionSubmit action="gpxexport_test" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                                 <g:actionSubmit action="kmzexport_test" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
@@ -401,12 +451,13 @@
                                             <g:if test="${is_loggerdata}">
                                                 <g:actionSubmit action="printloggerdata" value="${message(code:'fc.flightresults.printloggerdata')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
+                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         </g:else>
                                     </td>
                                     <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                                 </tr>
-                            </tfoot>
+                            </thead>
                         </table>
                         <a name="end"/>
                     </g:form>

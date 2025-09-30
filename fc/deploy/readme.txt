@@ -1,6 +1,15 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.8
+----------------
+- ANR: Korridor-Breite wird jetzt mit runden Klammern und Punkt ausgegeben. Das vermeidet Probleme bei der Nutzung verschiedener Browser.
+- Klassen-Einstellungen:
+    Die Planungs-Zeit für eine Klasse kann nun auch verkürzt werden (durch Angabe eines negativen Wertes).
+    Die spätestest Abgabezeit des Lösungsbogens für eine Klasse kann nun auch verkürzt werden (durch Angabe eines negativen Wertes).
+- Logger-Auswertung: Navigation verbessert
+- Bug "Flughafen-Karte kann an der Grenze verfügbarer OSM-Daten nicht erzeugt werden" behoben
+
 Änderungen 4.1.7
 ----------------
 - Kursabweichungen > 90% werden jetzt ab dem zweiten Aufreten zwischen 2 Logger-Meßpunkten gezählt.

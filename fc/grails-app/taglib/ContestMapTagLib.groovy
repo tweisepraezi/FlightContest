@@ -261,7 +261,7 @@ class ContestMapTagLib
             outln"""</p>"""
             if (attrs.MapProjection == "3857") {
                 outln"""<p>"""
-                checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), true, attrs)
+                checkBox("contestMapSetDefaultOnlineMap", message(code:'fc.contestmap.savemap.defaultonlinemap'), false, attrs)
                 if (attrs.r.defaultOnlineMap) {
                     outln """(${message(code:'fc.contestmap.savemap.saveddefault', args:[attrs.r.defaultOnlineMap])})"""
                 }

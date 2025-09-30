@@ -7,10 +7,17 @@ If ($Restart -ne "") {
   sleep 1
 }
 
+$language = "en"
+if ($Restart -eq "de" -or $Restart -eq "en") {
+    $language = $Restart
+} elseif ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
+    $language = "de"
+}
+
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc_version = "4.1.7"
+$str_fc_version = "4.1.8"
 $str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"
@@ -20,12 +27,13 @@ $str_firefox_url = "C:\Program Files\Mozilla Firefox\firefox.exe"
 $str_new_version_url = "http://download.flightcontest.de/FCSetup4-NewVersion.txt"
 $str_new_setup_url = "http://download.flightcontest.de"
 $str_new_setup_path = "C:\FCSave\.fcsetups"
-if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
+if ($language -eq "de") {
     $str_help = "Hilfe"
     $str_help_url = "http://localhost:8080/fc/docs/help_de.html"
     $str_areyousure = "Sind Sie sicher?"
     $str_menu_exit = "Beenden"
     $str_menu_restart = "Manager neu starten"
+    $str_menu_restart_otherlang = "Restart manager in English"
     $str_menu_fc_install = "Installiere Flight Contest"
     $str_evaluation = "Auswertungs-Kommandos"
     $str_evaluation_loadlogger = "Logger-Daten automatisch laden"
@@ -54,6 +62,7 @@ if ((Get-WinUserLanguageList)[0].EnglishName -eq "German") {
     $str_areyousure = "Are you sure?"
     $str_menu_exit = "Exit"
     $str_menu_restart = "Restart manager"
+    $str_menu_restart_otherlang = "Manager in Deutsch starten"
     $str_menu_fc_install = "Install Flight Contest"
     $str_evaluation = "Evaluation commands"
     $str_evaluation_loadlogger = "Auto load logger data"
@@ -350,7 +359,28 @@ if ([String]$new_fc_version -ne "") {
 $menu_restart = New-Object System.Windows.Forms.ToolStripMenuItem
 $menu_restart.Text = $str_menu_restart
 $menu_restart.add_Click({
-    $Restart = "Yes"
+    $Restart = $language
+    Start-Process -FilePath "powershell" -ArgumentList ".\fcmanager.ps1 '$Restart'" -WindowStyle hidden
+ 
+    # $window.Close()
+    Stop-Process $pid
+  
+    $Global:Timer_Status = $timer.Enabled
+    If ($Timer_Status -eq $true) {
+        $timer.Stop() 
+    }  
+})
+
+# Restart other lang menu entry
+# -----------------------------
+$menu_restart_otherlang = New-Object System.Windows.Forms.ToolStripMenuItem
+$menu_restart_otherlang.Text = $str_menu_restart_otherlang
+$menu_restart_otherlang.add_Click({
+    if ($language -eq "de") {
+        $Restart = "en"
+    } else {
+        $Restart = "de"
+    }
     Start-Process -FilePath "powershell" -ArgumentList ".\fcmanager.ps1 '$Restart'" -WindowStyle hidden
  
     # $window.Close()
@@ -402,6 +432,7 @@ $taskbar_menu_strip.Items.Add($menu_service)
 $taskbar_menu_strip.Items.Add($separator3)
 $taskbar_menu_strip.Items.Add($menu_getclientid)
 $taskbar_menu_strip.Items.Add($menu_restart)
+$taskbar_menu_strip.Items.Add($menu_restart_otherlang)
 $taskbar_menu_strip.Items.Add($menu_exit);
 $taskbar_icon.ContextMenuStrip = $taskbar_menu_strip
 $taskbar_icon.Add_Click({

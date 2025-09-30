@@ -192,7 +192,7 @@ class Coord
 	        }
 	        return false
 	    })
-	    resultAltitude(min:0)
+	    resultAltitude()
 	    resultBadCourseNum(min:0)
 		secretLegRatio(scale:10)
 		

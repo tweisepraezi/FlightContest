@@ -1,6 +1,15 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.8
+-------------
+- ANR: Corridor width is now displayed with round brackets and a point. This avoids problems when using different browsers.
+- Class settings:
+    The planning time for a class can now also be shortened (by entering a negative value).
+    The latest submission time for an answer sheet for a class can now also be shortened (by entering a negative value).
+- Logger evaluation: Navigation improved
+- Bug "Airport map cannot be generated at the boundary of available OSM data" fixed
+
 Changes 4.1.7
 -------------
 - Course deviations > 90% are now counted from the second occurrence between two logger measuring points.

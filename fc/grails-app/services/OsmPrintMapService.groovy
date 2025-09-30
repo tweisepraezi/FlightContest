@@ -391,6 +391,7 @@ class OsmPrintMapService
         if (status.responseCode == 200) {
 
             // check full page
+            println "Full page $rect_height.latmin $rect_height.latmax $rect_width.lonmin $rect_width.lonmax"
             for (def config_style in status.json.ConfigStyles) {
                 if (config_style.Name.startsWith('region-')) {
                     if (contestMapParams.contestMapDevStyle) {
@@ -399,11 +400,14 @@ class OsmPrintMapService
                             BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
                             BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                             BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                            print "Check full page for $config_style.Name ($lat_bottom $lat_top $lon_left $lon_right)"
                             if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
                                 region_style = config_style.Name
                                 mapdata_date = config_style.Date
+                                println " found."
                                 break
                             }
+                            println ""
                         }
                     } else {
                         if (config_style.Name != 'region-dev') {
@@ -411,17 +415,21 @@ class OsmPrintMapService
                             BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
                             BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                             BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
+                            print "Check full page for $config_style.Name ($lat_bottom $lat_top $lon_left $lon_right)"
                             if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
                                 region_style = config_style.Name
                                 mapdata_date = config_style.Date
+                                println " found."
                                 break
                             }
+                            println ""
                         }
                     }
                 }
             }
             
             // check center page
+            println "Center $contestMapParams.centerLatitude $contestMapParams.centerLongitude"
             if (!region_style) {
                 for (def config_style in status.json.ConfigStyles) {
                     if (config_style.Name.startsWith('region-')) {
@@ -431,11 +439,14 @@ class OsmPrintMapService
                                 BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
                                 BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                                 BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
-                                if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                                print "Check center for $config_style.Name ($lat_bottom $lat_top $lon_left $lon_right)"
+                                if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
                                     region_style = config_style.Name
                                     mapdata_date = config_style.Date
+                                    println " found."
                                     break
                                 }
+                                println ""
                             }
                         } else {
                             if (config_style.Name != 'region-dev') {
@@ -443,11 +454,14 @@ class OsmPrintMapService
                                 BigDecimal lat_top = get_value(config_style.LongDescription, 'Top(Lat):')
                                 BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                                 BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
-                                if (rect_height.latmin >= lat_bottom && rect_height.latmax <= lat_top && rect_width.lonmin >= lon_left && rect_width.lonmax <= lon_right) {
+                                print "Check center for $config_style.Name ($lat_bottom $lat_top $lon_left $lon_right)"
+                                if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
                                     region_style = config_style.Name
                                     mapdata_date = config_style.Date
+                                    println " found."
                                     break
                                 }
+                                println ""
                             }
                         }
                     }
@@ -457,7 +471,7 @@ class OsmPrintMapService
             if (region_style) {
                 printdone "${region_style} ${mapdata_date}"
             } else {
-                printerror ""
+                printerror "No region found"
                 ret.message = getMsg('fc.contestmap.noregionerror', [contestMapParams.centerLatitude, contestMapParams.centerLongitude], false)
                 return ret
             }

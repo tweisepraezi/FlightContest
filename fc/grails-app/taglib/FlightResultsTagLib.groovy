@@ -340,12 +340,24 @@ class FlightResultsTagLib
             outln"""                <td>${message(code:'fc.test.results.summary')}</td>"""
             //outln"""              <td/>"""
             //outln"""              <td/>"""
-            outln"""                <td>${penalty_coord_summary} ${message(code:'fc.points')}</td>"""
+            if (penalty_coord_summary) {
+                outln"""             <td class="points">${penalty_coord_summary} ${message(code:'fc.points')}</td>"""
+            } else {
+                outln"""             <td>${penalty_coord_summary} ${message(code:'fc.points')}</td>"""
+            }
             if (show_outside) {
                 outln"""             <td>${penalty_outsidecorridor_summary} ${message(code:'fc.points')}</td>"""
             }
-            outln"""                <td>${penalty_badcourse_summary} ${message(code:'fc.points')}</td>"""
-            outln"""                <td>${penalty_altitude_summary} ${message(code:'fc.points')}</td>"""
+            if (penalty_badcourse_summary) {
+                outln"""            <td class="points">${penalty_badcourse_summary} ${message(code:'fc.points')}</td>"""
+            } else {
+                outln"""            <td>${penalty_badcourse_summary} ${message(code:'fc.points')}</td>"""
+            }
+            if (penalty_altitude_summary) {
+                outln"""            <td class="points">${penalty_altitude_summary} ${message(code:'fc.points')}</td>"""
+            } else {
+                outln"""            <td>${penalty_altitude_summary} ${message(code:'fc.points')}</td>"""
+            }
             outln"""        </tfoot>"""
             outln"""    </table>"""
             outln"""</div>"""

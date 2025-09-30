@@ -48,6 +48,17 @@ class FcMath
 	}
 
     //--------------------------------------------------------------------------
+	static String DistanceStr2(BigDecimal distanceValue)
+    // NM
+	{
+		if (distanceValue != null) {
+			DecimalFormat df = new DecimalFormat("#0.0#")
+			return df.format(distanceValue).replace(',','.')
+		}
+		return ""
+	}
+
+    //--------------------------------------------------------------------------
 	static BigDecimal RoundEnrouteDistance(BigDecimal distanceValue)
     // NM
 	{

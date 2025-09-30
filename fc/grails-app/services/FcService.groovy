@@ -1814,14 +1814,16 @@ class FcService
 				}
 			}
 			
-			if (calculate_penalties) {
+			if (calculate_penalties && task_instance.flighttest) {
 				println "Calculate penalties"
 		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
-					calculateTestPenalties(test_instance,recalculate_penalties)
-                    test_instance.flightTestLink = ""
-					delete_uploadjobtest(test_instance)
-					test_instance.crewResultsModified = true
-		            test_instance.save()
+                    if (test_instance.flighttestwind) {
+                        calculateTestPenalties(test_instance,recalculate_penalties)
+                        test_instance.flightTestLink = ""
+                        delete_uploadjobtest(test_instance)
+                        test_instance.crewResultsModified = true
+                        test_instance.save()
+                    }
 		        }
 			}
 			
@@ -1930,7 +1932,7 @@ class FcService
 					task_instance.printTimetableJuryNumber = true
 					task_instance.printTimetableJuryCrew = true
 					task_instance.printTimetableJuryAircraft = true
-					task_instance.printTimetableJuryAircraftType = true
+					task_instance.printTimetableJuryAircraftType = false
 					task_instance.printTimetableJuryAircraftColour = false
 					task_instance.printTimetableJuryTAS = false
 					task_instance.printTimetableJuryTeam = false
@@ -1943,9 +1945,9 @@ class FcService
 					task_instance.printTimetableJuryCheckPoints = ""
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
-					task_instance.printTimetableJuryArrival = true
-                    task_instance.printTimetableJurySubmission = true
-					task_instance.printTimetableJuryEmptyColumn1 = true
+					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
+					task_instance.printTimetableJuryEmptyColumn1 = false
 					task_instance.printTimetableJuryEmptyTitle1 = ""
 					task_instance.printTimetableJuryEmptyColumn2 = false
 					task_instance.printTimetableJuryEmptyTitle2 = ""
@@ -1955,7 +1957,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle4 = ""
                     task_instance.printTimetableJuryLandingField = false
                     task_instance.printTimetableJuryCorridorWidth = true
-					task_instance.printTimetableJuryLandscape = true
+					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryNone:
@@ -2060,7 +2062,7 @@ class FcService
 					task_instance.printTimetableJuryTakeoff = true
 					task_instance.printTimetableJuryStartPoint = false
 					task_instance.printTimetableJuryCheckPoints = ""
-					task_instance.printTimetableJuryFinishPoint = false
+					task_instance.printTimetableJuryFinishPoint = true
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
                     task_instance.printTimetableJurySubmission = false
@@ -2254,7 +2256,7 @@ class FcService
 					task_instance.printTimetableJuryTakeoff = false
 					task_instance.printTimetableJuryStartPoint = false
 					task_instance.printTimetableJuryCheckPoints = ""
-					task_instance.printTimetableJuryFinishPoint = false
+					task_instance.printTimetableJuryFinishPoint = true
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
                     task_instance.printTimetableJurySubmission = false
@@ -2340,7 +2342,7 @@ class FcService
 					task_instance.printTimetableJuryTakeoff = false
 					task_instance.printTimetableJuryStartPoint = false
 					task_instance.printTimetableJuryCheckPoints = ""
-					task_instance.printTimetableJuryFinishPoint = false
+					task_instance.printTimetableJuryFinishPoint = true
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
                     task_instance.printTimetableJurySubmission = true
@@ -5704,12 +5706,7 @@ class FcService
     private boolean importResults(Test testInstance, boolean noRemoveExistingData, String loggerDataStartUtc, String loggerDataEndUtc)
     // Return true - Errors
     {
-        printstart "importResults"
-        
-        boolean is_corridor = false
-        if (testInstance.flighttestwind.flighttest.route.corridorWidth) {
-            is_corridor = true
-        }
+        printstart "importResults noRemoveExistingData=$noRemoveExistingData"
         
         // Import CheckPoints
         printstart "Import check points"
@@ -13050,7 +13047,7 @@ class FcService
             calculateTestPenalties(coordresult_instance.test,false)
             
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
-                return ['instance':coordresult_instance,'saved':true,'message':getMsg('fc.updated',["${coordresult_instance.name()}"])]
+                return ['instance':coordresult_instance,'saved':true,'message':getMsg('fc.updated',["${coordresult_instance.title()}"])]
             } else {
                 return ['instance':coordresult_instance]
             }
@@ -13078,7 +13075,7 @@ class FcService
             calculateTestPenalties(coordresult_instance.test,false)
             
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
-                return ['instance':coordresult_instance,'saved':true,'message':getMsg('fc.updated',["${coordresult_instance.name()}"])]
+                return ['instance':coordresult_instance,'saved':true,'message':getMsg('fc.updated',["${coordresult_instance.title()}"])]
             } else {
                 return ['instance':coordresult_instance]
             }
@@ -13090,7 +13087,7 @@ class FcService
     //--------------------------------------------------------------------------
     private Map calculate_coordresult(CoordResult coordResultInstance, boolean calculateUTC, boolean recalculatePenalties)
     {
-		println "calculate_coordresult '${coordResultInstance.title()}' (${coordResultInstance.mark}) '$coordResultInstance.resultCpTimeInput'"
+		printstart "calculate_coordresult ${coordResultInstance.title()}, Input=$coordResultInstance.resultCpTimeInput, calculateUTC=$calculateUTC, recalculatePenalties=$recalculatePenalties "
 		
 		coordResultInstance.penaltyCoord = 0
 		
@@ -13119,12 +13116,12 @@ class FcService
 	                    break
 	                default:
 						Map ret = ['instance':coordResultInstance,'error':true,'message':getMsg('fc.coordresult.cptime.error')]
-						println "  Error: $ret"
+						printerror ret
 	                    return ret
 	            }
 	        } catch (Exception e) {
 	            Map ret = ['instance':coordResultInstance,'error':true,'message':getMsg('fc.testlegplanningresult.value.error')]
-				println "  Error: $ret"
+				printerror ret
 				return ret
 	        }
 		}
@@ -13218,7 +13215,7 @@ class FcService
 			}
 		}
         
-		println "  Ok: '$coordResultInstance.resultCpTime'"
+        printdone "${FcMath.TimeStr(coordResultInstance.resultCpTime)} LT, resultEntered=${coordResultInstance.resultEntered}"
         return [:]
     }
     

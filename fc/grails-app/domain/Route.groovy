@@ -542,7 +542,7 @@ class Route
     {
         String route_name = name()
         if (corridorWidth) {
-            route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+            route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
         }
         if (contestMapFirstTitle) {
             return "${route_name} - ${contestMapFirstTitle}"
@@ -555,9 +555,9 @@ class Route
         String route_name = name()
         if (corridorWidth) {
             if (corridorWidth2) {
-                route_name += " [${FcMath.DistanceStr(corridorWidth2)}${getMsgArgs('fc.mile',[])}]"
+                route_name += " (${FcMath.DistanceStr2(corridorWidth2)}${getMsgArgs('fc.mile',[])})"
             } else {
-                route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+                route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
             }
         }
         if (contestMapSecondTitle) {
@@ -571,9 +571,9 @@ class Route
         String route_name = name()
         if (corridorWidth) {
             if (corridorWidth3) {
-                route_name += " [${FcMath.DistanceStr(corridorWidth3)}${getMsgArgs('fc.mile',[])}]"
+                route_name += " (${FcMath.DistanceStr2(corridorWidth3)}${getMsgArgs('fc.mile',[])})"
             } else {
-                route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+                route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
             }
         }
         if (contestMapThirdTitle) {
@@ -587,9 +587,9 @@ class Route
         String route_name = name()
         if (corridorWidth) {
             if (corridorWidth4) {
-                route_name += " [${FcMath.DistanceStr(corridorWidth4)}${getMsgArgs('fc.mile',[])}]"
+                route_name += " (${FcMath.DistanceStr2(corridorWidth4)}${getMsgArgs('fc.mile',[])})"
             } else {
-                route_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+                route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
             }
         }
         if (contestMapForthTitle) {
@@ -969,7 +969,7 @@ class Route
             ret_name = idName()
 		}
         if (corridorWidth) {
-            ret_name += " [${FcMath.DistanceStr(corridorWidth)}${getMsgArgs('fc.mile',[])}]"
+            ret_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
         }
         int used_num = FlightTest.findAllByRoute(this,[sort:"id"]).size()
         if (used_num) {

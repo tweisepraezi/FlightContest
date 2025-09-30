@@ -478,15 +478,35 @@ class GpxTagLib
         int onlinemap_index = 1
         int i = 0
         if (map_folder.exists()) {
+            //String airportarea_size = Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA
+            //if (attrs.anr) {
+            //    airportarea_size = Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA
+            //}
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
-                if (map_entry.projection == "3857") {
-                    if (onlinemap_names) {
-                        onlinemap_names += onlinemap_separator
+                if (map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA)) {
+                    if (map_entry.projection == "3857") {
+                        if (onlinemap_names) {
+                            onlinemap_names += onlinemap_separator
+                        }
+                        onlinemap_names += map_entry.localref
+                        i++
+                        if (map_entry.title == attrs.defaultOnlineMap) {
+                            onlinemap_index = i
+                        }
                     }
-                    onlinemap_names += map_entry.localref
-                    i++
-                    if (map_entry.title == attrs.defaultOnlineMap) {
-                        onlinemap_index = i
+                }
+            }
+            for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
+                if (!map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA)) {
+                    if (map_entry.projection == "3857") {
+                        if (onlinemap_names) {
+                            onlinemap_names += onlinemap_separator
+                        }
+                        onlinemap_names += map_entry.localref
+                        i++
+                        if (map_entry.title == attrs.defaultOnlineMap) {
+                            onlinemap_index = i
+                        }
                     }
                 }
             }

@@ -1157,6 +1157,35 @@ class Task
         return null
     }
     
+    List GetFirstPlannings()
+    {
+        List first_tests = []
+        boolean search_pagebreak = false
+        Test first_test = null
+        for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"asc"])) {
+            if (test_instance.timeCalculated && !test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (search_pagebreak) {
+                    if (test_instance.pageBreak) {
+                        if (first_test) {
+                            first_tests += first_test
+                        }
+                        first_test = test_instance
+                    }
+                } else {
+                    first_test = test_instance
+                    search_pagebreak = true
+                }
+                if (test_instance.GetTestingTime() < first_test.GetTestingTime()) {
+                    first_test = test_instance
+                }
+            }
+        }
+        if (first_test) {
+            first_tests += first_test
+        }
+        return first_tests
+    }
+    
     List GetFirstTests()
     {
         List first_tests = []

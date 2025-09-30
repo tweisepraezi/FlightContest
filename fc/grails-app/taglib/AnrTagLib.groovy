@@ -9,7 +9,7 @@ class AnrTagLib
         if (route_instance.defaultPrintMap) {
             Map map = MapTools.GetMap(route_instance.defaultPrintMap, servletContext, session, true)
             if (map) {
-                outln"""<img class="mapanr" src="${HTMLFilter.GetStr(map.localref)}" ></img>"""
+                outln"""<img class="mapanr" src="${HTMLFilter.GetStr(map.localref)}" alt="${HTMLFilter.GetStr(map.name)}"></img>"""
             } else {
                 outln"""${message(code:'fc.map.notfound')}:<br/>${route_instance.defaultPrintMap}"""
             }

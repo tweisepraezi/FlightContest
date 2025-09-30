@@ -157,7 +157,7 @@ class FcTagLib
         if (p.var.route) {
             String route_name = p.var.route.name()
             if (p.var.route.corridorWidth) {
-                route_name += " [${FcMath.DistanceStr(p.var.route.corridorWidth)}${message(code:'fc.mile')}]"
+                route_name += " (${FcMath.DistanceStr2(p.var.route.corridorWidth)}${message(code:'fc.mile')})"
             }
             if (p.var.title) {
                 out << """<a href="${p.link}/${p.var.id}">${route_name.encodeAsHTML()}</a> (${p.var.name().encodeAsHTML()})"""
@@ -201,7 +201,7 @@ class FcTagLib
         }
         String name = p.var.name()
         if (p.var.corridorWidth) {
-            name += " [${FcMath.DistanceStr(p.var.corridorWidth)}${message(code:'fc.mile')}]"
+            name += " (${FcMath.DistanceStr2(p.var.corridorWidth)}${message(code:'fc.mile')})"
         }
         if (p.next) {
             out << """<a class="$c" href="${p.link}/${p.var.id}${p.next}">${name.encodeAsHTML()}</a>"""
