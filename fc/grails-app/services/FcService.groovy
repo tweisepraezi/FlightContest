@@ -2136,7 +2136,11 @@ class FcService
 				case PrintSettings.TimetableJuryPlanning:
 					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.planningtest.setprintsettings')
-					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.planningtest')
+                    if (task_instance.contest.anrFlying) {
+                        task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.task.listplanning')
+                    } else {
+                        task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.planningtest')
+                    }
 					task_instance.printTimetableJuryNumber = true
 					task_instance.printTimetableJuryCrew = true
 					task_instance.printTimetableJuryAircraft = true
@@ -2148,7 +2152,7 @@ class FcService
 					task_instance.printTimetableJuryShortClass = true
 					task_instance.printTimetableJuryPlanning = true
 					task_instance.printTimetableJuryPlanningEnd = true
-					task_instance.printTimetableJuryTakeoff = false
+					task_instance.printTimetableJuryTakeoff = true
 					task_instance.printTimetableJuryStartPoint = false
 					task_instance.printTimetableJuryCheckPoints = ""
 					task_instance.printTimetableJuryFinishPoint = false
@@ -2156,9 +2160,9 @@ class FcService
 					task_instance.printTimetableJuryArrival = false
                     task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.planning.solutiongiven')
+					task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.planning.solutiongiven')
 					task_instance.printTimetableJuryEmptyColumn2 = true
-					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.planning.exitroom')
+					task_instance.printTimetableJuryEmptyTitle2 = "" // getPrintMsg('fc.test.planning.exitroom')
 					task_instance.printTimetableJuryEmptyColumn3 = false
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
@@ -2348,15 +2352,15 @@ class FcService
                     task_instance.printTimetableJurySubmission = true
 					task_instance.printTimetableJuryEmptyColumn1 = true
                     if (task_instance.flighttest.submissionMinutes) {
-                        task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.givingtime')
+                        task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.arrival.givingtime')
                     } else {
-                        task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.stoptime')
+                        task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.arrival.stoptime')
                     }
 					task_instance.printTimetableJuryEmptyColumn2 = true
                     if (task_instance.flighttest.submissionMinutes) {
                         task_instance.printTimetableJuryEmptyTitle2 = ""
                     } else {
-                        task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.arrival.givingtime')
+                        task_instance.printTimetableJuryEmptyTitle2 = "" // getPrintMsg('fc.test.arrival.givingtime')
                     }
 					task_instance.printTimetableJuryEmptyColumn3 = true
 					task_instance.printTimetableJuryEmptyTitle3 = ""
@@ -2390,7 +2394,7 @@ class FcService
                     task_instance.printTimetableJuryArrival = false
                     task_instance.printTimetableJurySubmission = true
                     task_instance.printTimetableJuryEmptyColumn1 = true
-                    task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.debriefing.exittime')
+                    task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.debriefing.exittime')
                     task_instance.printTimetableJuryEmptyColumn2 = true
                     task_instance.printTimetableJuryEmptyTitle2 = ""
                     task_instance.printTimetableJuryEmptyColumn3 = true
@@ -5905,7 +5909,6 @@ class FcService
     //--------------------------------------------------------------------------
     private boolean process_errorpoints_badcourse(Test testInstance, int badCourseSeconds, String badCourseStartTimeUTC)
     {
-    	boolean course_error = false
     	Contest contest_instance = testInstance.task.contest
     	
         Date badcourse_starttime = Date.parse("HH:mm:ss", badCourseStartTimeUTC)
@@ -5926,10 +5929,8 @@ class FcService
         GregorianCalendar badcourse_endcalendar = badcourse_startcalendar.clone()
         badcourse_endcalendar.add(Calendar.SECOND, badCourseSeconds)
             
-    	course_error = true
-		int last_index = 0
-		Date last_time = null
-        CoordResult.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { CoordResult coordresult_instance, int i ->
+		boolean found = false
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
 			switch (coordresult_instance.type) {
                 case CoordType.SP:
 				case CoordType.TP:
@@ -5937,29 +5938,25 @@ class FcService
 				case CoordType.FP:
 				case CoordType.iFP:
 					if (coordresult_instance.resultCpTime != Date.parse("HH:mm","02:00")) { // Messung
-		            	if (last_index != 0) {
+		            	if (found) {
 							if (badcourse_endcalendar.getTime() <= coordresult_instance.resultCpTime) {
 		        				coordresult_instance.resultBadCourseNum++
 		        				coordresult_instance.save()
 		        				println "${coordresult_instance.title()} at ${coordresult_instance.resultCpTime} (>= ${badcourse_endcalendar.getTime()}) relevant: Set BadCourseNum to $coordresult_instance.resultBadCourseNum)."
-		        			} else {
-		        				// println "${coordresult_instance.title()} at ${coordresult_instance.resultCpTime} (${badcourse_endcalendar.getTime()}) not relevant."
+                                return true
 		        			}
-		            	}
-		
+		            	}	
 		            	if (badcourse_startcalendar.getTime() > coordresult_instance.resultCpTime) {
-		                    last_index = i
-		                    last_time = coordresult_instance.resultCpTime
+		                    found = true
 		                } else {
-		                    last_index = 0
-							last_time = null
+		                    found = false
 		                }
 					}
 					break
 			}
         }
     		
-        return course_error
+        return false
     }
     
     //--------------------------------------------------------------------------
@@ -9968,6 +9965,85 @@ class FcService
         }
     }
     
+    //--------------------------------------------------------------------------
+    Map additionalflightresultsTest(Map params) // TODO
+    {
+        Map test = domainService.GetTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        Test test_instance = new Test()
+        test_instance.crew = test.instance.crew
+        test_instance.taskTAS = test.instance.taskTAS
+        test_instance.taskAircraft = test.instance.taskAircraft
+        test_instance.taskTrackerID = test.instance.taskTrackerID
+        test_instance.viewpos = test.instance.viewpos
+        test_instance.task = test.instance.task
+        test_instance.flighttestwind = test.instance.flighttestwind
+        //test_instance.timeCalculated = false
+        test_instance.loggerData = new LoggerDataTest()
+        test_instance.loggerResult = new LoggerResult()
+        test_instance.reserve = "additionalflightresult"
+        test_instance.save(flush:true)
+        
+        boolean additional_test_found = false
+        Test.findAllByTask(test.instance.task,[sort:"viewpos"]).each { Test test_instance2 ->
+            if (test_instance2.id == test_instance.id) {
+                additional_test_found = true
+            }
+            if (additional_test_found) {
+                test_instance2.viewpos++
+                test_instance2.save()
+            }
+        }
+
+        //calulateTimetable(test.instance.task)
+        calculate_testlegflight(test_instance)
+        GregorianCalendar start_time = new GregorianCalendar() 
+        start_time.setTime(test.instance.testingTime)
+        calculate_test_time(test_instance, test.instance.task, start_time, null, true)
+        calculate_coordresults_test(test_instance)
+        
+        if(!test_instance.hasErrors() && test_instance.save()) {
+            return ['instance':test_instance,'saved':true,'message':getMsg('fc.reopened',["${test_instance.GetTitle(ResultType.Flight)}"])]
+        } else {
+            return ['instance':test_instance,'error':true]
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    Map deleteadditionalflightresultsTest(Map params) // TODO
+    {
+        Map test = domainService.GetTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            long version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+        
+        boolean additional_test_found = false
+        Test.findAllByTask(test.instance.task,[sort:"viewpos"]).each { Test test_instance2 ->
+            if (additional_test_found) {
+                test_instance2.viewpos--
+                test_instance2.save()
+            }
+            if (test_instance2.id == test.instance.id) {
+                additional_test_found = true
+            }
+        }
+
+        test.instance.delete(flush:true)
+        
+        return ['message':"Deleted"]
+    }
+
     //--------------------------------------------------------------------------
     Map readyobservationresultsTest(Map params)
     {

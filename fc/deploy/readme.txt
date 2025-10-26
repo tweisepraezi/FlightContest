@@ -1,6 +1,15 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.9
+----------------
+- ANR-Schiedsrichter-Zeitplan: "Einstellungen für Planung" hinzugefügt
+- Bug "Logger-Auswertung: Tor-Erkennung nach landschaftlichem Abschnitt benutzt fehlerhaften Anflugkurs" behoben
+- Bug "Logger-Auswertung: Fehlerhafte Druck-Punkte im landschaftlichen Abschnitt" behoben
+- Bug "Logger-Auswertung: Fehlerhafte mehrfache Wertung einer Kursabweichung" behoben
+- Bug "ANR-Logger-Auswertung: Fehlerhaft festgestellte Kursabweichungen im Halbkreis" behoben
+- Logger-Auswertung: Anzeige deaktivierter Punkte im Offline-Viewer entfernt
+
 Änderungen 4.1.8
 ----------------
 - ANR: Korridor-Breite wird jetzt mit runden Klammern und Punkt ausgegeben. Das vermeidet Probleme bei der Nutzung verschiedener Browser.

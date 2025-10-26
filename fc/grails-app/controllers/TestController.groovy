@@ -597,6 +597,32 @@ class TestController
         }
     }
     
+    def flightresultsadditional = {
+        def test = fcService.additionalflightresultsTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else if (test.instance) {
+            flash.message = test.message
+            redirect(action:flightresults,id:test.instance.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def flightresultsdeleteadditional = {
+        def test = fcService.deleteadditionalflightresultsTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+        } else {
+            flash.message = test.message
+        }
+        redirect(controller:"task",action:"startresults")
+    }
+    
     def printflightresults = {
         String webroot_dir = servletContext.getRealPath("/")
         Map test = printService.printflightresultsTest(params,false,false,webroot_dir,GetPrintParams()) 
@@ -2311,14 +2337,18 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
             Map converter = [:]
+            boolean hide_disabled_points = false
+            //if (test.instance.task.flighttest.route.corridorWidth) {
+                hide_disabled_points = true
+            //}
             if (params.showCoord) {
                 String show_utc = params.showUtc
                 if (params.addShowTimeValue && params.addShowTimeValue.isInteger()) {
                     show_utc = FcTime.UTCAddSeconds(show_utc, 60*params.addShowTimeValue.toInteger())
                 }
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc, hideDisabledPoints:false])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc, hideDisabledPoints:hide_disabled_points])
             } else {
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:false, hideDisabledPoints:false])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:false, hideDisabledPoints:hide_disabled_points])
             }
             if (converter.ok && converter.track) {
                 gpxService.printdone ""

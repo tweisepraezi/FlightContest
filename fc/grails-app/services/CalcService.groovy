@@ -924,6 +924,7 @@ class CalcService
                     last_coordroute_instance = coordroute_instance
                     ignore_bad_course = false
                 } else {
+                    last_coordroute_instance = coordroute_instance // for TP gate direction after scenic leg
                     ignore_bad_course = true
                 }
             }
@@ -1072,7 +1073,7 @@ class CalcService
                                             procedureTurn:false,
                                             additionalGate:false
                                            ]
-                            if (last_coordroute_instance.type != CoordType.SECRET) {
+                            if (last_coordroute_instance.type != CoordType.SECRET || !last_coordroute_instance.ignoreGate) { // tp and circle points 
                                 gates += new_gate
                             }
                             corridor_check_gates += new_gate

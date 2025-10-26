@@ -995,7 +995,7 @@ class FlightResultsTagLib
             boolean show_curved_point = attrs.t.task.flighttest.flightResultsShowCurvedPoints
 			CoordResult last_coordresult_instance = null
 			for (CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
-				if (last_coordresult_instance) {
+				if (last_coordresult_instance && !last_coordresult_instance.ignoreGate) {
 					if ((last_coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
 						penalty_coord_summary += last_coordresult_instance.penaltyCoord
 					}
@@ -1107,7 +1107,7 @@ class FlightResultsTagLib
 				}
 				last_coordresult_instance = coordresult_instance
 			}
-			if (last_coordresult_instance) {
+			if (last_coordresult_instance && !last_coordresult_instance.ignoreGate) {
 				if ((last_coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
 					penalty_coord_summary += last_coordresult_instance.penaltyCoord
 				}

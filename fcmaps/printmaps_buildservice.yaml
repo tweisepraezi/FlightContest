@@ -48,6 +48,9 @@ styles:
 - name: region-it
   xmlpath: ../otm/mapnik
   xmlfile: region-it.xml
+- name: region-es
+  xmlpath: ../otm/mapnik
+  xmlfile: region-es.xml
 - name: region-eu
   xmlpath: ../otm/mapnik
   xmlfile: region-eu.xml

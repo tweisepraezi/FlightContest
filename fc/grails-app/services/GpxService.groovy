@@ -3878,6 +3878,7 @@ class GpxService
                                                         v = "no"
                                                         if (params.hideDisabledPoints) {
                                                             show_result = false
+                                                            xml.gate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway))
                                                         }
                                                     }
                                                     if (show_result) {
@@ -3898,6 +3899,7 @@ class GpxService
                                                         v = "no"
                                                         if (params.hideDisabledPoints) {
                                                             show_result = false
+                                                            xml.gate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway))
                                                         }
                                                     }
                                                     if (show_result) {

@@ -1,6 +1,15 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.9
+-------------
+- ANR judge timetable: "Settings for planning" added
+- Bug "Logger evaluation: Gate detection after scenic leg uses invalid flight course" fixed
+- Bug "Logger evaluation: False printed penalties in scenic legs" fixed
+- Bug "Logger evaluation: False multiple penalties for bad courses" fixed
+- Bug "ANR logger evaluation: False detection of bad courses in semicircles" fixed
+- Logger evaluation: Display of disabled points removed in offline viewer
+
 Changes 4.1.8
 -------------
 - ANR: Corridor width is now displayed with round brackets and a point. This avoids problems when using different browsers.

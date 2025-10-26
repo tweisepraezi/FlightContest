@@ -191,8 +191,13 @@
                                 </div>
                             </p>
                             <g:actionSubmit action="updatetimetablejudgesettingsstandard" value="${message(code:'fc.standard')}" tabIndex="${ti[0]++}"/>
-                            <g:if test="${taskInstance.IsPlanningTestRun() && taskInstance.planningTestDuration && taskInstance.preparationDuration}">
-                                <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            <g:if test="${(taskInstance.contest.anrFlying || taskInstance.IsPlanningTestRun()) && taskInstance.planningTestDuration && taskInstance.preparationDuration}">
+                                <g:if test="${taskInstance.contest.anrFlying}">
+                                    <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.task.listplanning.settings')}" tabIndex="${ti[0]++}"/>
+                                </g:if>
+                                <g:else>
+                                    <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                                </g:else>    
                             </g:if>
                             <g:else>
                                 <g:actionSubmit action="updatetimetablejudgesettingsdocumentsoutput" value="${message(code:'fc.flighttest.documentsoutput.setprintsettings')}" tabIndex="${ti[0]++}"/>

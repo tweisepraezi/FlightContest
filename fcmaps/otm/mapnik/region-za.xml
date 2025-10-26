@@ -996,75 +996,6 @@
 	</Layer>
     -->
 
-    <!-- text-natural-areas-lowzoom -->
-    <!-- ========================== -->
-    <Style name="text-natural-areas-lowzoom">
-        <Rule>
-            &maxscale_zoom11;
-            &minscale_zoom11;
-            <Filter>[way_area] &lt; 6.4e9  and ([way_area] &gt; 1e8  and [nextregionsize] &gt; 6.4e9)</Filter>
-            <TextSymbolizer size="11" character-spacing="40" spacing="500" fontset-name="sans-oblique" fill="black" halo-radius="2" halo-fill="rgba(255,255,255,0.8)" placement="line" allow-overlap="true" placement-type="list">[name]
-            <Placement character-spacing="20"/>
-            <Placement character-spacing="10"/>
-            <Placement character-spacing="5" halo-radius="1.7"/>
-            <Placement character-spacing="2" halo-radius="1.5"/>
-            </TextSymbolizer>
-        </Rule>
-    </Style>
-	<Layer name="text-natural-areas-lowzoom">
-        <StyleName>text-natural-areas-lowzoom</StyleName>
-        <Datasource>
-            <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
-            <Parameter name="dbname">lowzoom_za</Parameter>
-            &postgis-settings;
-        </Datasource>
-	</Layer>
-
-    <!-- text-water-lowzoom -->
-    <!-- ================== -->
-    <Style name="text-water-lowzoom">
-        <Rule>
-            &maxscale_zoom11;
-            &minscale_zoom11;
-            <Filter>[lake_area] &gt; 1E9</Filter>
-            <TextSymbolizer fontset-name="sans-oblique" fill="#2020ff" halo-radius="1" halo-fill="rgba(255,255,255,0.8)" max-char-angle-delta="0" smooth="0.5" horizontal-alignment="adjust" placement="line" size="17" placement-type="list">[name]
-                <Placement size="16"/>
-                <Placement size="15"/>
-                <Placement size="14"/>
-                <Placement size="13"/>
-                <Placement size="12"/>
-            </TextSymbolizer>
-        </Rule>
-        <Rule>
-            &maxscale_zoom11;
-            &minscale_zoom11;
-            <Filter>[lake_area] &gt; 1E8 and [lake_area] &lt; 1E9</Filter>
-            <TextSymbolizer fontset-name="sans-oblique" fill="#2020ff" halo-radius="1" halo-fill="rgba(255,255,255,0.8)" max-char-angle-delta="0" smooth="0.5" horizontal-alignment="adjust" placement="line" size="13" placement-type="list">[name]
-                <Placement size="12"/>
-                <Placement size="11"/>
-                <Placement size="10"/>
-                <Placement size="9"/>
-            </TextSymbolizer>
-        </Rule>
-        <Rule>
-            &maxscale_zoom11;
-            &minscale_zoom11;
-            <Filter>[lake_area] &gt; 1E6 and [lake_area] &lt; 1E8</Filter>
-            <TextSymbolizer fontset-name="sans-oblique" fill="#2020ff" halo-radius="1" halo-fill="rgba(255,255,255,0.8)" max-char-angle-delta="0" smooth="0.5" placement="line" size="11" placement-type="list">[name]
-                <Placement size="10"/>
-                <Placement size="9"/>
-            </TextSymbolizer>
-        </Rule>
-    </Style>
-    <Layer name="text-water-lowzoom">
-		<StyleName>text-water-lowzoom</StyleName>
-		<Datasource>
-            <Parameter name="table">(SELECT way,' '&#124;&#124;name&#124;&#124;' ' AS name,lake_area FROM lakelabels WHERE label='lakeaxis' OR label='bayaxis' OR label='straitaxis') AS lakelabels </Parameter>
-			<Parameter name="dbname">lowzoom_za</Parameter>
-			&postgis-settings;
-		</Datasource>
-	</Layer>
-
     <!-- symbols-stations -->
     <!-- ================ -->
     <Style name="symbols-stations">
@@ -1199,25 +1130,6 @@
 		<Datasource>
 			<Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
 			<Parameter name="dbname">gis_za</Parameter>
-			&postgis-settings;
-		</Datasource>
-	</Layer>
-
-    <!-- text-glacier-lowzoom -->
-    <!-- ==================== -->
-    <Style name="text-glacier-lowzoom">
-        <Rule>
-            &maxscale_zoom11;
-            &minscale_zoom11;
-            <Filter>[lake_area] &gt; 1E8</Filter>
-            <TextSymbolizer fontset-name="sans-condensed-oblique" size="10" fill="#6199ca" halo-radius="1" halo-fill="rgba(208,248,255,0.8)" max-char-angle-delta="30" smooth="0.5" placement="line">[name]</TextSymbolizer>
-        </Rule>
-    </Style>
-    <Layer name="text-glacier-lowzoom">
-		<StyleName>text-glacier-lowzoom</StyleName>
-		<Datasource>
-            <Parameter name="table">(SELECT way,name,lake_area FROM lakelabels WHERE label='glacieraxis') AS lakelabels </Parameter>
-			<Parameter name="dbname">lowzoom_za</Parameter>
 			&postgis-settings;
 		</Datasource>
 	</Layer>
