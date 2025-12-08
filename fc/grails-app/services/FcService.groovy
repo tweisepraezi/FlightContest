@@ -5885,7 +5885,7 @@ class FcService
         for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
             if (coordresult_instance.type.IsCorridorCoord()) {
                 if (coordresult_instance.resultCpTime != Date.parse("HH:mm","02:00")) { // Messung
-                    if (outsidecorridor_endcalendar.getTime() <= coordresult_instance.resultCpTime) {
+                    if (outsidecorridor_startcalendar.getTime() <= coordresult_instance.resultCpTime) {
                         if (coordresult_instance.resultOutsideCorridorMeasurement) {
                             coordresult_instance.resultOutsideCorridorMeasurement += ","
                         }
@@ -5897,7 +5897,8 @@ class FcService
                             coordresult_instance.resultOutsideCorridorSeconds += outsideCorridorSeconds - testInstance.GetFlightTestOutsideCorridorCorrectSecond()
                         }
                         coordresult_instance.save()
-                        println "  added to ${coordresult_instance.title()} ${coordresult_instance.resultOutsideCorridorSeconds}s"
+                        println "  ${coordresult_instance.title()} at ${coordresult_instance.resultCpTime} (>= ${outsidecorridor_startcalendar.getTime()}) relevant: Add OutsideSeconds ${outsideCorridorSeconds}s."
+                        //println "  added to ${coordresult_instance.title()} ${coordresult_instance.resultOutsideCorridorSeconds}s"
                         break
                     }
                 }
@@ -5942,7 +5943,7 @@ class FcService
 							if (badcourse_endcalendar.getTime() <= coordresult_instance.resultCpTime) {
 		        				coordresult_instance.resultBadCourseNum++
 		        				coordresult_instance.save()
-		        				println "${coordresult_instance.title()} at ${coordresult_instance.resultCpTime} (>= ${badcourse_endcalendar.getTime()}) relevant: Set BadCourseNum to $coordresult_instance.resultBadCourseNum)."
+		        				println "  ${coordresult_instance.title()} at ${coordresult_instance.resultCpTime} (>= ${badcourse_endcalendar.getTime()}) relevant: Set BadCourseNum to $coordresult_instance.resultBadCourseNum."
                                 return true
 		        			}
 		            	}	
@@ -5991,9 +5992,9 @@ class FcService
                     coordresult_instance.resultProcedureTurnNotFlown = true
                     coordresult_instance.save()
                     calculatePenalties = true
-                    println "${coordresult_instance.title()} (${coordresult_instance.resultCpTime}) relevant."
+                    println "  ${coordresult_instance.title()} (${coordresult_instance.resultCpTime}) relevant."
                 } else {
-                    println "${coordresult_instance.title()} (${coordresult_instance.resultCpTime}) not relevant."
+                    println "  ${coordresult_instance.title()} (${coordresult_instance.resultCpTime}) not relevant."
                 }
             }
 
@@ -8258,6 +8259,37 @@ class FcService
         }
         
         return ['instance':coordmapobject_instance]
+    }
+
+    //--------------------------------------------------------------------------
+    Map removeAllWriteObjects(Map params)
+    {
+        Route route_instance = Route.get(params.routeid)
+        
+        if (params.contestMapShowMapObjectsFromRouteID) {
+            route_instance.contestMapShowMapObjectsFromRouteID = params.contestMapShowMapObjectsFromRouteID.toLong()
+        } else {
+            route_instance.contestMapShowMapObjectsFromRouteID = 0
+        }
+        
+        // Airfields
+        route_instance.contestMapAirfieldsData = ""
+        route_instance.contestMapShowAirfields = false
+        
+        // Airspaces
+        route_instance.contestMapAirspacesLayer2 = ""
+        route_instance.contestMapShowAirspaces = false
+        
+        // Map objects
+        for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(route_instance)) {
+            if (coordmapobject_instance) {
+                coordmapobject_instance.delete()
+            }
+        }
+        route_instance.contestMapShowMapObjects = false
+        route_instance.save()
+        
+        return ['deleted':true,'message':getMsg('fc.coordroute.writeobjects.removedall'),'routeid':route_instance.id]
     }
 
     //--------------------------------------------------------------------------

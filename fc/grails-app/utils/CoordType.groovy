@@ -265,6 +265,16 @@ enum CoordType
 		return false
     }
     
+    boolean IsCorridorStartEndCoord()
+    {
+		switch(this) {
+			case CoordType.SP:
+			case CoordType.FP:
+				return true
+		}
+		return false
+    }
+    
     boolean IsCorridorNoCheckCoord()
     {
 		switch(this) {

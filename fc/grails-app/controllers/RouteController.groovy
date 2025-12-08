@@ -1208,8 +1208,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -1341,8 +1339,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -1474,8 +1470,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -1607,8 +1601,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -1736,8 +1728,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -1865,8 +1855,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos,
@@ -1995,8 +1983,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -2128,8 +2114,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -2261,8 +2245,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2,
@@ -2395,8 +2377,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -2528,8 +2508,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -2661,8 +2639,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3,
@@ -2795,8 +2771,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -2928,8 +2902,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -3061,8 +3033,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4,
@@ -3195,8 +3165,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -3337,8 +3305,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -3483,8 +3449,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -3629,8 +3593,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -3775,8 +3737,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -3909,8 +3869,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: HorizontalPos.Center,
                                                                  contestMapCenterVerticalPos: VerticalPos.Center
@@ -4043,8 +4001,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
-                                                                 contestMapAirfieldsData: route.instance.contestMapAirfieldsData,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: HorizontalPos.Center,
                                                                  contestMapCenterVerticalPos: VerticalPos.Center,
@@ -4665,6 +4621,12 @@ class RouteController {
             }
         }
         redirect(action:"show",id:params.id)
+    }
+    
+    def removeallmapwriteobjects = {
+        def mapobjects = fcService.removeAllWriteObjects(params)
+        flash.message = mapobjects.message
+        redirect(controller:"route",action:"mapexportquestion",id:params.routeid)
     }
     
     def routelinks = {

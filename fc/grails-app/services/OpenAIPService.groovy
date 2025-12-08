@@ -122,78 +122,26 @@ class OpenAIPService
                         }
 					}
 				}
-				for (String layer in routeInstance.contestMapAirspacesLayer2.split("\n")) {
-					if (layer && layer.trim()) {
-						String airspace_name = layer.trim()
-                        boolean ignore_line = false
-                        if (isHidden) {
-                            ignore_line = true
-                            if (airspace_name.startsWith(Defs.IGNORE_LINE)) {
-                                ignore_line = false
-                            }
-                            airspace_name = airspace_name.substring(Defs.IGNORE_LINE.size()).trim()
-                        } else {
-                            if (airspace_name.startsWith(Defs.IGNORE_LINE)) {
-                                ignore_line = true
-                            }
+				Map ret = write_airspace_from_layer(routeInstance, airspaces_filename, isHidden, new_airspaces, xml)
+                missing_airspaces = ret.missingAirspaces
+                if (!ret.allAirspacesWritten) {
+                    all_airspaces_written = false
+                }
+                new_airspaces = ret.newAirspaces
+                if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                    Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                    if (route_instance) {
+                        ret = write_airspace_from_layer(route_instance, airspaces_filename, isHidden, new_airspaces, xml)
+                        if (missing_airspaces) {
+                            missing_airspaces += ", "
                         }
-                        if (!ignore_line) {
-                            String airspace_text = ""
-                            boolean first_style = true
-                            for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
-                                List airspace_style_values = Tools.Split(airspace_style.trim(), OsmPrintMapService.AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
-                                if (airspace_style_values.size() == 1) {
-                                    if (first_style) {
-                                        airspace_name = airspace_style_values[0].trim()
-                                    } else if (airspace_text) {
-                                        airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
-                                    }
-                                } else if (airspace_style_values.size() == 2) {
-                                    switch (airspace_style_values[0].trim()) {
-                                        case 'text': 
-                                            airspace_text = airspace_style_values[1]
-                                            break
-                                    }
-                                }
-                                first_style = false
-                            }
-                            if (!airspace_text) {
-                                airspace_text = airspace_name
-                            }   
-                            airspace_text = airspace_text.trim()
-                            
-                            // get airspace from cache
-                            Map ret = get_airspace_from_cache(airspaces_filename, airspace_name) // get airspace from cache
-                            if (ret.ok && ret.coordinates) {
-                                write_airspace(xml, airspace_name, airspace_text, "airspace", ret.coordinates)
-                            } else {
-                                // get airspace from OpenAIP
-                                ret = [:]
-                                if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
-                                    String search_id = airspace_name.substring(3)
-                                    println "Get airspace $search_id from OpenAIP"
-                                    ret = call_rest("airspaces?id=${search_id}", "GET", 200, "", "items")
-                                } else {
-                                    String search_name = URLEncoder.encode(airspace_name, "UTF-8")
-                                    println "Get airspace '$search_name' from OpenAIP"
-                                    ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items")
-                                }
-                                if (ret.ok && ret.data) {
-                                    String airspace_coordinates = ret.data.geometry.coordinates.toString()
-                                    airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
-                                    write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
-                                    new_airspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
-                                } else {
-                                    all_airspaces_written = false
-                                    if (missing_airspaces) {
-                                        missing_airspaces += ", "
-                                    }
-                                    missing_airspaces += airspace_name
-                                }
-                            }
+                        missing_airspaces += ret.missingAirspaces
+                        if (!ret.allAirspacesWritten) {
+                            all_airspaces_written = false
                         }
-					}
-				}
+                        new_airspaces = ret.newAirspaces
+                    }
+                }
 			}
 		}
         kml_writer.close()
@@ -211,6 +159,86 @@ class OpenAIPService
         return [ok:all_airspaces_written, missingAirspaces:missing_airspaces]
     }
 
+    //--------------------------------------------------------------------------
+    private Map write_airspace_from_layer(Route routeInstance, String airspacesFilename, boolean isHidden, List newAirspaces, def xml)
+    {
+		String missing_airspaces = ""
+        boolean all_airspaces_written = true
+        for (String layer in routeInstance.contestMapAirspacesLayer2.split("\n")) {
+            if (layer && layer.trim()) {
+                String airspace_name = layer.trim()
+                boolean ignore_line = false
+                if (isHidden) {
+                    ignore_line = true
+                    if (airspace_name.startsWith(Defs.IGNORE_LINE)) {
+                        ignore_line = false
+                    }
+                    airspace_name = airspace_name.substring(Defs.IGNORE_LINE.size()).trim()
+                } else {
+                    if (airspace_name.startsWith(Defs.IGNORE_LINE)) {
+                        ignore_line = true
+                    }
+                }
+                if (!ignore_line) {
+                    String airspace_text = ""
+                    boolean first_style = true
+                    for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
+                        List airspace_style_values = Tools.Split(airspace_style.trim(), OsmPrintMapService.AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
+                        if (airspace_style_values.size() == 1) {
+                            if (first_style) {
+                                airspace_name = airspace_style_values[0].trim()
+                            } else if (airspace_text) {
+                                airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
+                            }
+                        } else if (airspace_style_values.size() == 2) {
+                            switch (airspace_style_values[0].trim()) {
+                                case 'text': 
+                                    airspace_text = airspace_style_values[1]
+                                    break
+                            }
+                        }
+                        first_style = false
+                    }
+                    if (!airspace_text) {
+                        airspace_text = airspace_name
+                    }   
+                    airspace_text = airspace_text.trim()
+                    
+                    // get airspace from cache
+                    Map ret = get_airspace_from_cache(airspacesFilename, airspace_name) // get airspace from cache
+                    if (ret.ok && ret.coordinates) {
+                        write_airspace(xml, airspace_name, airspace_text, "airspace", ret.coordinates)
+                    } else {
+                        // get airspace from OpenAIP
+                        ret = [:]
+                        if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
+                            String search_id = airspace_name.substring(3)
+                            println "Get airspace $search_id from OpenAIP"
+                            ret = call_rest("airspaces?id=${search_id}", "GET", 200, "", "items")
+                        } else {
+                            String search_name = URLEncoder.encode(airspace_name, "UTF-8")
+                            println "Get airspace '$search_name' from OpenAIP"
+                            ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items")
+                        }
+                        if (ret.ok && ret.data) {
+                            String airspace_coordinates = ret.data.geometry.coordinates.toString()
+                            airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
+                            write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
+                            newAirspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
+                        } else {
+                            all_airspaces_written = false
+                            if (missing_airspaces) {
+                                missing_airspaces += ", "
+                            }
+                            missing_airspaces += airspace_name
+                        }
+                    }
+                }
+            }
+        }
+        return [missingAirspaces:missing_airspaces, allAirspacesWritten:all_airspaces_written, newAirspaces:newAirspaces]
+    }
+    
     //--------------------------------------------------------------------------
     private void write_airspaces_to_cache(String airspacesFilename, List newAirspaces) // TODO
     {
@@ -631,100 +659,19 @@ class OpenAIPService
             
             // Airfields and reporting points
             if (openaipAirfields) {
-                for (String airfield_date in routeInstance.contestMapAirfieldsData.split("\n")) {
-                    if (airfield_date && airfield_date.trim()) {
-                        String airfield_date2 = airfield_date.trim()
-                        if (!airfield_date2.startsWith(Defs.IGNORE_LINE)) {
-                            String airfield_id = ""
-                            String airfield_name = ""
-                            String airfield_icao = ""
-                            String airfield_symbol = ""
-                            String runway_symbol = ""
-                            String runway_heading = ""
-                            String airfield_wkt = ""
-                            for (String airfield_date3 in Tools.Split(airfield_date2, AIRFIELD_DATA_SEPARATOR)) {
-                                List airfield_values = Tools.Split(airfield_date3.trim(), AIRFIELD_DATA_KEY_VALUE_SEPARATOR)
-                                if (airfield_values.size() == 1) {
-                                    airfield_id = airfield_values[0].trim().substring(AIRFIELD_ID_PREAFIX.size())
-                                } else if (airfield_values.size() == 2) {
-                                    switch (airfield_values[0].trim()) {
-                                        case AIRFIELD_NAME:
-                                            airfield_name = airfield_values[1].trim()
-                                            break
-                                        case AIRFIELD_ICAO:
-                                            airfield_icao = airfield_values[1].trim()
-                                            break
-                                        case AIRFIELD_WKT:
-                                            airfield_wkt = airfield_values[1].trim()
-                                            break
-                                        case AIRFIELD_HEADING:
-                                            runway_heading = airfield_values[1].trim()
-                                            break
-                                        case AIRFIELD_TYPE:
-                                            switch (airfield_values[1].trim()) {
-                                                case AIRFIELD_TYPE_GLIDING_SMALL:
-                                                    airfield_symbol = "gliding-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_AF_CIVIL_SMALL:
-                                                    airfield_symbol = "af_civil-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_APT_MIL_CIVIL_SMALL:
-                                                    airfield_symbol = "apt_mil_civil-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_AD_MIL_SMALL:
-                                                    airfield_symbol = "ad_mil-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_LIGHT_AIRCRAFT_SMALL:
-                                                    airfield_symbol = "light_aircraft-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_AD_CLOSED_SMALL:
-                                                    airfield_symbol = "ad_closed-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_APT_SMALL:
-                                                    airfield_symbol = "apt-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_AF_WATER_LARGE:
-                                                    airfield_symbol = "af_water-large.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_REPORTING_POINT_COMPULSORY_SMALL:
-                                                    airfield_symbol = "reporting_point_compulsory-small.svg"
-                                                    break
-                                                case AIRFIELD_TYPE_REPORTING_POINT_REQUEST_SMALL:
-                                                    airfield_symbol = "reporting_point_request-small.svg"
-                                                    break
-                                                default:
-                                                    airfield_symbol = airfield_values[1].trim()
-                                                    break
-                                            }
-                                            break
-                                        case AIRFIELD_RUNWAY:
-                                            switch (airfield_values[1].trim()) {
-                                                case AIRFIELD_RUNWAY_PAVED_SMALL:
-                                                    runway_symbol = "runway_paved-small.svg"
-                                                    break
-                                                case AIRFIELD_RUNWAY_UNPAVED_SMALL:
-                                                    runway_symbol = "runway_unpaved-small.svg"
-                                                    break
-                                                default:
-                                                    runway_symbol = airfield_values[1].trim()
-                                                    break
-                                            }
-                                            break
-                                    }
-                                }
-                            }
-                            if (airfield_id) {
-                                ok = true
-                                airfields_num++
-                                csv_writer << CSV_LINESEPARATOR + airfield_id
-                                csv_writer << CSV_DELIMITER + airfield_symbol
-                                csv_writer << CSV_DELIMITER + runway_symbol
-                                csv_writer << CSV_DELIMITER + runway_heading
-                                csv_writer << CSV_DELIMITER + airfield_icao
-                                csv_writer << CSV_DELIMITER + '"' + airfield_name + '"'
-                                csv_writer << CSV_DELIMITER + airfield_wkt
-                            }
+                Map ret = write_airfields_line(routeInstance, csv_writer)
+                if (ret.ok) {
+                    ok = true
+                }
+                airfields_num += ret.airfieldsnum
+                if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                    Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                    if (route_instance) {
+                        ret = write_airfields_line(route_instance, csv_writer)
+                        if (ret.ok) {
+                            ok = true
                         }
+                        airfields_num += ret.airfieldsnum
                     }
                 }
             }
@@ -768,7 +715,111 @@ class OpenAIPService
         
         return [ok:ok, airfieldsnum:airfields_num]
     }
-        
+       
+    //--------------------------------------------------------------------------
+    private Map write_airfields_line(Route routeInstance, def csvWriter)
+    {
+        int airfields_num = 0
+        boolean ok = false
+        for (String airfield_date in routeInstance.contestMapAirfieldsData.split("\n")) {
+            if (airfield_date && airfield_date.trim()) {
+                String airfield_date2 = airfield_date.trim()
+                if (!airfield_date2.startsWith(Defs.IGNORE_LINE)) {
+                    String airfield_id = ""
+                    String airfield_name = ""
+                    String airfield_icao = ""
+                    String airfield_symbol = ""
+                    String runway_symbol = ""
+                    String runway_heading = ""
+                    String airfield_wkt = ""
+                    for (String airfield_date3 in Tools.Split(airfield_date2, AIRFIELD_DATA_SEPARATOR)) {
+                        List airfield_values = Tools.Split(airfield_date3.trim(), AIRFIELD_DATA_KEY_VALUE_SEPARATOR)
+                        if (airfield_values.size() == 1) {
+                            airfield_id = airfield_values[0].trim().substring(AIRFIELD_ID_PREAFIX.size())
+                        } else if (airfield_values.size() == 2) {
+                            switch (airfield_values[0].trim()) {
+                                case AIRFIELD_NAME:
+                                    airfield_name = airfield_values[1].trim()
+                                    break
+                                case AIRFIELD_ICAO:
+                                    airfield_icao = airfield_values[1].trim()
+                                    break
+                                case AIRFIELD_WKT:
+                                    airfield_wkt = airfield_values[1].trim()
+                                    break
+                                case AIRFIELD_HEADING:
+                                    runway_heading = airfield_values[1].trim()
+                                    break
+                                case AIRFIELD_TYPE:
+                                    switch (airfield_values[1].trim()) {
+                                        case AIRFIELD_TYPE_GLIDING_SMALL:
+                                            airfield_symbol = "gliding-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_AF_CIVIL_SMALL:
+                                            airfield_symbol = "af_civil-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_APT_MIL_CIVIL_SMALL:
+                                            airfield_symbol = "apt_mil_civil-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_AD_MIL_SMALL:
+                                            airfield_symbol = "ad_mil-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_LIGHT_AIRCRAFT_SMALL:
+                                            airfield_symbol = "light_aircraft-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_AD_CLOSED_SMALL:
+                                            airfield_symbol = "ad_closed-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_APT_SMALL:
+                                            airfield_symbol = "apt-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_AF_WATER_LARGE:
+                                            airfield_symbol = "af_water-large.svg"
+                                            break
+                                        case AIRFIELD_TYPE_REPORTING_POINT_COMPULSORY_SMALL:
+                                            airfield_symbol = "reporting_point_compulsory-small.svg"
+                                            break
+                                        case AIRFIELD_TYPE_REPORTING_POINT_REQUEST_SMALL:
+                                            airfield_symbol = "reporting_point_request-small.svg"
+                                            break
+                                        default:
+                                            airfield_symbol = airfield_values[1].trim()
+                                            break
+                                    }
+                                    break
+                                case AIRFIELD_RUNWAY:
+                                    switch (airfield_values[1].trim()) {
+                                        case AIRFIELD_RUNWAY_PAVED_SMALL:
+                                            runway_symbol = "runway_paved-small.svg"
+                                            break
+                                        case AIRFIELD_RUNWAY_UNPAVED_SMALL:
+                                            runway_symbol = "runway_unpaved-small.svg"
+                                            break
+                                        default:
+                                            runway_symbol = airfield_values[1].trim()
+                                            break
+                                    }
+                                    break
+                            }
+                        }
+                    }
+                    if (airfield_id) {
+                        ok = true
+                        airfields_num++
+                        csvWriter << CSV_LINESEPARATOR + airfield_id
+                        csvWriter << CSV_DELIMITER + airfield_symbol
+                        csvWriter << CSV_DELIMITER + runway_symbol
+                        csvWriter << CSV_DELIMITER + runway_heading
+                        csvWriter << CSV_DELIMITER + airfield_icao
+                        csvWriter << CSV_DELIMITER + '"' + airfield_name + '"'
+                        csvWriter << CSV_DELIMITER + airfield_wkt
+                    }
+                }
+            }
+        }
+        return [ok:ok, airfieldsnum:airfields_num]
+    }
+    
     //--------------------------------------------------------------------------
     Map WriteAirfieldsOld2CSV(Route routeInstance, String webRootDir, String csvFileName, boolean isPrint, boolean checkAirport, String contestMapCenterPoints, boolean openaipAirfields, boolean additionalAirfields)
     {

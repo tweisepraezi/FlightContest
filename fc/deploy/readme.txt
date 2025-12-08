@@ -1,6 +1,21 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 4.1.10
+-----------------
+- OSM-Wettbewerbs-Karte:
+    Option "Flugplätze, Lufträume und Karten-Objekte von folgender Strecke verwenden" hinzugefügt.
+        Die zuvor auf Karten-Objekte beschränkte Option wurde um Flugplätze und Lufträume erweitert.
+        Damit ist es möglich, diese Daten aus einer Gebiets-Karte für alle Wettbewerbs-Karten anzuwenden.
+    Bei neuen Strecken sind nun Lufträume, Hochspannungsleitungen und Feldwege der Abstufung 2 aktiviert.
+        Nicht gewünschte Details auf der Karte müssen abgewählt werden.
+- Bug "ANR: SP/FP-Gatecheck erfolgt mit Korridorbreite und nicht mit 0.6NM" behoben
+    Die Gate-Breiten von SP und FP müssen mit 0.6NM eingestellt werden, was beim Strecken-Import automatisch gesetzt wird.
+    Die Anzeige beim Online- und Offline-Viewer, im kmz-Export und bei der Kartenerzeugung zeigen diese Gatebreite nun auch an.
+- Bug "ANR-Loggerauswertung-Offline-Viewer: Fehlende Außerhalb-Buttons bei Erreichen des Folge-Wendepunktes" behoben
+- Bug "ANR-Navigationsflug-Ergebniskartendruck: Fehlende Außerhalb-Sekunden" behoben
+- Bug "ANR-Loggerdatendruck: Überlappungen von Kursabweichungen und Außerhalb wurden nicht gedruckt" behoben
+
 Änderungen 4.1.9
 ----------------
 - ANR-Schiedsrichter-Zeitplan: "Einstellungen für Planung" hinzugefügt

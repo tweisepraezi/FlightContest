@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.1.9
-:revdate:   26.10.2025
+:revnumber: 4.1.10
+:revdate:   08.12.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -511,7 +511,7 @@ auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Chec
  TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
  SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
  TP1,  Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
- SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+ SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 1.0NM
  TP2,  Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
  iFP,  Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
  iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM,notime,nogate,noplan
@@ -572,14 +572,14 @@ Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 +
 Eine Wettbewerbsordnung wählen. +
 
-. Strecke mit TO anlegen (Strecken -> Neue Strecke)
+. Strecke mit TO-Punkt anlegen (Strecken -> Neue Strecke)
 +
 Als Titel den Flugplatz-Namen eintragen. +
 +
 Flugplatz-Koordinate als TO-Punkt hinzufügen. +
 Die Korrektheit der Flugplatz-Koordinate kann mit "OSM-Online-Karte" geprüft werden.
 
-. Karte des Gebietes um den TO für Task-Creator erzeugen (Abstand zum Rand bei Rallye- und Präzisionsflug: 420mm, bei ANR: 297mm)
+. Karte des Gebietes um den TO-Punkt für Task-Creator erzeugen (Abstand zum Rand bei Rallye- und Präzisionsflug: 420mm, bei ANR: 297mm)
 +
 OSM-Wettbewerbs-Karte -> Task-Creator-Karte um Flughafen erzeugen
 +
@@ -707,7 +707,7 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 "Eigenschaften" der hinzufügten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:
 
 *** Im Name-Feld Check-Punkt-Bezeichnung und Gate-Breite anpassen +
-(TP1 -> SC, z.B. "TP1, Gate 1.0NM" -> "SC, Gate 2.0NM" (SC muss nicht nummeriert werden))
+(TP1 -> SC, z.B. "TP1, Gate 1.0NM" -> "SC, Gate 1.0NM" (SC muss nicht nummeriert werden))
 *** Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gewünschten Position ziehen
 *** 'Ortsmarkierung'-Dialog beenden
 
@@ -735,12 +735,12 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 [[route-planning-on-printed-map]]
 === Wettbewerbsstrecken mit Hilfe einer gedruckten Karte erstellen
 
-. Gebiet um TO auswählen
+. Gebiet um TO-Punkt auswählen
 
-. Strecke mit TO anlegen (Strecken -> *Neue Strecke*)
+. Strecke mit TO-Punkt anlegen (Strecken -> *Neue Strecke*)
 
-. Wettbewerbs-Karte mit TO drucken (Strecke -> *OSM-Wettbewerbs-Karte*) +
-Dabei TO an eine gewünschte Position legen (rechts oben, links unten o.ä.).
+. Wettbewerbs-Karte mit TO-Punkt drucken (Strecke -> *OSM-Wettbewerbs-Karte*) +
+Dabei TO-Punkt an eine gewünschte Position legen (rechts oben, links unten o.ä.).
 
 . Geeignete Wendepunkte auf der gedruckten Karte auswählen +
 Mit den Koordinaten-Linealen links und oben können mit einem Zirkel die Wendepunkt-Koordinaten Minuten-genau bestimmt werden.
@@ -1037,8 +1037,8 @@ Keine Angabe: 0.2
 
 *Übersichts-Karten-Druck-Optionen*
 
-* "_Online-Karte um Flughafen erzeugen_" erzeugt eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für OSM-Online-Anzeige.
-* "_Task-Creator-Karte um Flughafen erzeugen_" erzeugt eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für Verwendung im Task-Creator.
+* "_Online-Karte um Flughafen erzeugen_" erzeugt eine Karte mit TO-Punkt in der Mitte für OSM-Online-Anzeige (Abstand zum Rand bei Rallye- und Präzisionsflug: 420mm, bei ANR: 297mm).
+* "_Task-Creator-Karte um Flughafen erzeugen_" erzeugt eine Karte mit TO-Punkt in der Mitte für Verwendung im Task-Creator (Abstand zum Rand bei Rallye- und Präzisionsflug: 420mm, bei ANR: 297mm).
 
 *4 Einstellungs-Bereiche erlauben folgende Karten-Druck-Optionen in einer Strecke parallel zu nutzen*
 
@@ -1298,14 +1298,14 @@ Mehrere Aufgaben hintereinander, wo die Besatzungen gegeneinander antreten, sind
 Eine ANR-Wettbewerbsordnung wählen. +
 Bei Bedarf "Wettbewerb mit Klassen" aktivieren.
 
-. Strecke mit TO anlegen (Strecken -> Neue Strecke)
+. Strecke mit TO-Punkt anlegen (Strecken -> Neue Strecke)
 +
 Als Titel den Flugplatz-Namen eintragen. +
 +
 Flugplatz-Koordinate als TO-Punkt hinzufügen. +
 Die Korrektheit der Flugplatz-Koordinate kann mit "OSM-Online-Karte" geprüft werden.
 
-. Karte des Gebietes um den TO für Task-Creator erzeugen (Abstand zum Rand: 297mm)
+. Karte des Gebietes um den TO-Punkt für Task-Creator erzeugen (Abstand zum Rand: 297mm)
 +
 OSM-Wettbewerbs-Karte -> Task-Creator-Karte um Flughafen erzeugen
 +

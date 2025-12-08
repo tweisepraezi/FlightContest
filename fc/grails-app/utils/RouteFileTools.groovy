@@ -16,6 +16,7 @@ class RouteFileTools
     
     final static Float DEFAULT_GATEWIDTH_RUNWAY = 0.02f
     final static Float DEFAULT_GATEWIDTH_TP = 1.0f
+    final static Float DEFAULT_GATEWIDTH_CORRIDORSTARTEND = 0.6f
     
     final static String ALT = "Alt"
     final static String MINALT = "MinAlt"
@@ -3048,7 +3049,9 @@ class RouteFileTools
     //--------------------------------------------------------------------------
     static void SetCorridorWidthFlags(CoordRoute coordRouteInstance)
     {
-        if (coordRouteInstance.type.IsCorridorNoCheckCoord()) {
+        if (coordRouteInstance.type.IsCorridorStartEndCoord()) {
+            coordRouteInstance.gatewidth2 = DEFAULT_GATEWIDTH_CORRIDORSTARTEND
+        } else if (coordRouteInstance.type.IsCorridorNoCheckCoord()) {
             coordRouteInstance.noTimeCheck = true
             coordRouteInstance.noGateCheck = true
             coordRouteInstance.gatewidth2 = 0

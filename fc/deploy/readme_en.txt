@@ -1,6 +1,21 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.10
+--------------
+- OSM Contest Map: 
+    Option "Use airfields, airspaces and map objects from the following route" added.
+        The option, which was previously limited to map objects, has been extended to include airfields and airspaces.
+        This makes it possible to apply this data from an area map to all competition maps.
+    Airspaces, high-voltage power lines and grade 2 field paths are now activated for new routes.
+        Unwanted details on the map must be deselected.
+- Bug "ANR: SP/FP gate check is performed with corridor width and not with 0.6NM" fixed
+    The gate widths of SP and FP must be set to 0.6NM, which is set automatically during route import.
+    The display in the Online and Offline Viewer, in the kmz export, and in map generation now also shows this gate width.
+- Bug "ANR logger evaluation offline viewer: Missing outside buttons when reaching the next turning point" fixed
+- Bug "ANR navigation flight results map printing: Missing outside seconds" fixed
+- Bug "ANR logger data print: Overlaps of bad course and outside were not printed" fixed
+
 Changes 4.1.9
 -------------
 - ANR judge timetable: "Settings for planning" added

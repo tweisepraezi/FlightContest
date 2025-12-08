@@ -2274,10 +2274,14 @@ class GpxService
                 
                     if (last_coordroute_instance && last_coordroute_instance.type.IsCpCheckCoord() && coordroute_instance.type.IsCpCheckCoord()) {
                         if (first) {
+                            Float gate_width = last_coordroute_instance.gatewidth2
+                            if (!gate_width) {
+                                gate_width = corridor_width
+                            }
                             Map start_gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                corridor_width
+                                gate_width
                             )
                             xml.rte {
                                 wr_gate(last_coordroute_instance, 0.0, 0, xml, task_instance, wr_photoimage)
@@ -2406,10 +2410,14 @@ class GpxService
                         first = false
                         switch (coordroute_instance.type) {
                             case CoordType.FP:
+                                Float gate_width = coordroute_instance.gatewidth2
+                                if (!gate_width) {
+                                    gate_width = corridor_width
+                                }
                                 Map gate = AviationMath.getGate(
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                    corridor_width
+                                    gate_width
                                 )
                                 xml.rte {
                                     wr_gate(coordroute_instance, 0.0, 0, xml, task_instance, wr_photoimage, null, null, false)
@@ -3199,13 +3207,17 @@ class GpxService
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                 if (last_coordroute_instance) {
                     if (last_coordroute_instance.type == CoordType.SP) {
+                        Float gate_width = last_coordroute_instance.gatewidth2
+                        if (!gate_width) {
+                            gate_width = contestMapParams.contestMapCorridorWidth
+                        }
                         Map gate = AviationMath.getGate(
                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                            contestMapParams.contestMapCorridorWidth
+                            gate_width
                         )
                         xml.rte {
-                            wr_gate(coordroute_instance, contestMapParams.contestMapCorridorWidth, 0, xml, task_instance, wr_photoimage)
+                            wr_gate(coordroute_instance, gate_width, 0, xml, task_instance, wr_photoimage)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -3217,13 +3229,17 @@ class GpxService
                         }
                     }
                     if (coordroute_instance.type == CoordType.FP) {
+                        Float gate_width = coordroute_instance.gatewidth2
+                        if (!gate_width) {
+                            gate_width = contestMapParams.contestMapCorridorWidth
+                        }
                         Map gate = AviationMath.getGate(
                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                             coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                            contestMapParams.contestMapCorridorWidth
+                            gate_width
                         )
                         xml.rte {
-                            wr_gate(coordroute_instance, contestMapParams.contestMapCorridorWidth, 0, xml, task_instance, wr_photoimage)
+                            wr_gate(coordroute_instance, gate_width, 0, xml, task_instance, wr_photoimage)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -3461,6 +3477,26 @@ class GpxService
     //--------------------------------------------------------------------------
     private void wr_route_settings(Route routeInstance, MarkupBuilder xml, Map params)
     {
+        String airfields = routeInstance.contestMapAirfieldsData
+        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+            Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+            if (route_instance && route_instance.contestMapAirfieldsData) {
+                if (airfields ) {
+                    airfields += "\n"
+                }
+                airfields += route_instance.contestMapAirfieldsData
+            }
+        }
+        String airspaces = routeInstance.contestMapAirspacesLayer2
+        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+            Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+            if (route_instance && route_instance.contestMapAirspacesLayer2) {
+                if (airspaces ) {
+                    airspaces += "\n"
+                }
+                airspaces += route_instance.contestMapAirspacesLayer2
+            }
+        }
         xml.observationsettings(
             routetitle: routeInstance.title,
             turnpoint: routeInstance.turnpointRoute,
@@ -3483,7 +3519,7 @@ class GpxService
         )
         xml.mapsettings(
             contestmapairfields: routeInstance.contestMapAirfields,
-            contestmapairfieldsdata: routeInstance.contestMapAirfieldsData,
+            contestmapairfieldsdata: airfields,
             contestmapcircle: getYesNo(routeInstance.contestMapCircle),
             contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
             contestmapleg: getYesNo(routeInstance.contestMapLeg),
@@ -3507,7 +3543,7 @@ class GpxService
             contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
             contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
             contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
-            contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
+            contestmapairspaceslayer2: airspaces,
             contestmapairspaceslowerlimit: routeInstance.contestMapAirspacesLowerLimit,
             contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
             contestmaptitle1: routeInstance.contestMapFirstTitle,
@@ -3923,7 +3959,7 @@ class GpxService
                                             }
                                         } 
                                     }
-                                    break
+                                    //break // identical calc_result.utc one after another
                                 }
                                 
                                 // add <extensions> for enroute photo / canvas

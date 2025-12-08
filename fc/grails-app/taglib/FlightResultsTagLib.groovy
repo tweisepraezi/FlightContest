@@ -1544,13 +1544,15 @@ class FlightResultsTagLib
             outln"""    </thead>"""
             outln"""    <tbody>"""
             int badcourse_sec = 0
+            boolean badcourse_disabled = false
             int outside_sec = 0
             String last_utc = ""
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
             TrackPoint.findAllByLoggerdata(attrs.t.loggerData,[sort:"id"]).each { TrackPoint trackpoint_instance ->
-                Map r = get_logger_result(logger_result, trackpoint_instance.utc, badcourse_sec, outside_sec)
+                Map r = get_logger_result(logger_result, trackpoint_instance.utc, badcourse_sec, badcourse_disabled, outside_sec)
                 badcourse_sec = r.badcourseSec
+                badcourse_disabled = r.badcourseDisabled
                 outside_sec = r.outsideSec
                 outln"""    <tr class="${r.trclass}">"""
                 if (trackpoint_instance.interpolated) {
@@ -1588,26 +1590,21 @@ class FlightResultsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private Map get_logger_result(LoggerResult loggerResult, String utc, int badcourseSec, int outsideSec)
+    private Map get_logger_result(LoggerResult loggerResult, String utc, int badcourseSec, boolean badcourseDisabled, int outsideSec)
     {
-        Map ret = [info:'', trclass:'value', tdclass:'info', badcourseSec:0, outsideSec:outsideSec]
+        Map ret = [info:'', trclass:'value', tdclass:'info', badcourseSec:0, badcourseDisabled:false, outsideSec:outsideSec]
         if (loggerResult) {
-            CalcResult calcresult_instance = CalcResult.findByLoggerresultAndUtc(loggerResult,utc,[sort:'utc'])
-            if (calcresult_instance) {
-                if (calcresult_instance.coordTitle) {
-                    if (ret.outsideSec) {
-                        ret.outsideSec++
-                    }
-                }
+            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresultAndUtc(loggerResult,utc,[sort:'utc'])) {
                 if (calcresult_instance.badCourse) {
                     if (calcresult_instance.badCourseSeconds) {
                         badcourseSec = 0
+                        if (calcresult_instance.judgeDisabled) {
+                            badcourseDisabled = true
+                        }
                     }
                     badcourseSec++
-                    ret.badcourseSec = badcourseSec 
-                    if (ret.outsideSec) {
-                        ret.outsideSec++
-                    }
+                    ret.badcourseSec = badcourseSec
+                    ret.badcourseDisabled = badcourseDisabled
                 }
                 if (calcresult_instance.outsideCorridor) {
                     if (calcresult_instance.outsideCorridorSeconds) {
@@ -1616,33 +1613,36 @@ class FlightResultsTagLib
                     outsideSec++
                     ret.outsideSec = outsideSec 
                 }
-                
                 if (calcresult_instance.coordTitle) {
-                    ret.info = calcresult_instance.coordTitle.titlePrintCode()
+                    ret.info += calcresult_instance.coordTitle.titlePrintCode()
                     ret.trclass = "tpvalue"
-                    return ret
                 }
-                if (calcresult_instance.badCourse) {
-                    ret.info = "BC ${badcourseSec}${message(code:'fc.time.s')}"
-                    if (calcresult_instance.noBadCourse) {
-                        ret.tdclass = "nobadcourseinfo"
-                    } else {
-                        ret.tdclass = "badcourseinfo"
+                if (calcresult_instance.badCourse && !ret.badcourseDisabled) {
+                    if (ret.info) {
+                        ret.info += " "
                     }
-                    return ret
+                    ret.info += "BC ${badcourseSec}${message(code:'fc.time.s')}"
                 }
                 if (calcresult_instance.outsideCorridor) {
                     int outside_sec = outsideSec
                     outside_sec -= Defs.ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE
                     if (outside_sec > 0) {
-                        ret.info = "Out ${outside_sec}${message(code:'fc.time.s')}"
-                        if (calcresult_instance.noOutsideCorridor) {
-                            ret.tdclass = "nobadcourseinfo"
-                        } else {
-                            ret.tdclass = "badcourseinfo"
+                        if (ret.info) {
+                            ret.info += " "
                         }
+                        ret.info += "Out ${outside_sec}${message(code:'fc.time.s')}"
                     }
-                    return ret
+                }
+                if (ret.info) {
+                    if (calcresult_instance.badCourse && !calcresult_instance.noBadCourse) {
+                        ret.tdclass = "badcourseinfo"
+                    } else if (calcresult_instance.outsideCorridor && !calcresult_instance.noOutsideCorridor) {
+                        ret.tdclass = "badcourseinfo"
+                    } else if (calcresult_instance.badCourse && calcresult_instance.noBadCourse) {
+                        ret.tdclass = "nobadcourseinfo"
+                    } else if (calcresult_instance.outsideCorridor && calcresult_instance.noOutsideCorridor) {
+                        ret.tdclass = "nobadcourseinfo"
+                    }
                 }
             }
         }

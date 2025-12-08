@@ -279,6 +279,34 @@ class ContestMapTagLib
 	}
 	
     // --------------------------------------------------------------------------------------------------------------------
+    def showContestMapSelectOtherRoute = { attrs, body ->
+        outln"""<div style="margin-bottom:10px;" >"""
+        outln"""    <label>${message(code:'fc.coordroute.writeobjects.fromroute')}:</label>"""
+        outln"""    <select id="contestMapShowMapObjectsFromRouteID" name="contestMapShowMapObjectsFromRouteID" tabIndex="${attrs.ti[0]++}">"""
+        outln"""            <option></option>"""
+        for (Route route_instance in Route.findAllByContest(attrs.route.contest,[sort:"idTitle"])) {
+            if (route_instance.id != attrs.route.id) {
+                if (route_instance.id == attrs.route.contestMapShowMapObjectsFromRouteID) {
+                    outln"""<option value="${route_instance.id}" selected>${route_instance.name()}</option>"""
+                } else {
+                    outln"""<option value="${route_instance.id}">${route_instance.name()}</option>"""
+                }
+            }
+        }
+        outln"""    </select>"""
+        outln"""</div>"""
+		outln"""<script>"""
+		outln"""    \$(document).on('change', '#contestMapShowMapObjectsFromRouteID', function(e) {"""
+        outln"""        if (this.value) {"""
+        outln"""            if (confirm("${message(code:'fc.coordroute.writeobjects.removeall')}")) {"""
+        outln"""                window.location.href = "/fc/route/removeallmapwriteobjects?routeid=${attrs.route.id}&contestMapShowMapObjectsFromRouteID="+this.value;"""
+        outln"""            }"""
+        outln"""        }"""
+		outln"""	});"""
+		outln"""</script>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     def showContestMapRouteMapObjects = { attrs, body ->
     
         // Map objects
@@ -297,19 +325,6 @@ class ContestMapTagLib
         outln"""        <input type="button" class="mapexportquestionbutton" id="" value="${message(code:'fc.coordroute.mapobjects.import')}" onclick="importmapobjects_click();"/>"""
         outln"""        <input type="button" class="mapexportquestionbutton" id="" value="${message(code:'fc.coordroute.mapobjects.add')}" onclick="addmapobject_click();"/>"""
         outln"""        <input type="button" class="mapexportquestionbutton" id="" value="${message(code:'fc.coordroute.mapobjects.removeall')}" onclick="this.form.target='_self';if (confirm('${message(code:'fc.areyousure')}')){removeallmapobjects_click()};"/>"""
-        outln"""        <label style="margin-left:10px;">${message(code:'fc.coordroute.mapobjects.fromroute')}:</label>"""
-        outln"""        <select name="contestMapShowMapObjectsFromRouteID" tabIndex="${attrs.ti[0]++}">"""
-        outln"""            <option></option>"""
-        for (Route route_instance in Route.findAllByContest(attrs.route.contest,[sort:"idTitle"])) {
-            if (route_instance.id != attrs.route.id) {
-                if (route_instance.id == attrs.route.contestMapShowMapObjectsFromRouteID) {
-                    outln"""<option value="${route_instance.id}" selected>${route_instance.name()}</option>"""
-                } else {
-                    outln"""<option value="${route_instance.id}">${route_instance.name()}</option>"""
-                }
-            }
-        }
-        outln"""        </select>"""
         outln"""    </div>"""
         outln"""    <table>"""
         outln"""        <thead>"""
@@ -349,12 +364,12 @@ class ContestMapTagLib
             s += """            </td>"""
             outln s
             String image_str = ""
-            if (coordmapobject_instance.mapObjectType.imageName) {
+            if (coordmapobject_instance.mapObjectType?.imageName) {
                 image_str = """<img style="max-height:12px;" src="${createLinkTo(dir:'',file:coordmapobject_instance.mapObjectType.imageName)}"/>"""
             } else if (coordmapobject_instance.imagecoord) {
                 image_str = """<img style="max-height:12px;" src="/fc/route/get_mapobject_symbol/${coordmapobject_instance.id}"/>"""
             }
-            outln"""            <td style="white-space: nowrap;">${message(code:coordmapobject_instance.mapObjectType.code)} ${image_str}</td>"""
+            outln"""            <td style="white-space: nowrap;">${message(code:coordmapobject_instance.mapObjectType?.code)} ${image_str}</td>"""
             outln"""            <td style="white-space: nowrap;">${coordmapobject_instance.mapObjectText}</td>"""
             if (coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
                 String details_str = "${coordmapobject_instance.gateDirection}${message(code:'fc.grad')}"

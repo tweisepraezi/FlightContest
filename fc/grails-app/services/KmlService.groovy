@@ -1244,10 +1244,14 @@ class KmlService
                         
                             if (last_coordroute_instance && last_coordroute_instance.type.IsCpCheckCoord() && coordroute_instance.type.IsCpCheckCoord()) {
                                 if (first) {
+                                    Float gate_width = last_coordroute_instance.gatewidth2
+                                    if (!gate_width) {
+                                        gate_width = corridor_width
+                                    }
                                     Map start_gate = AviationMath.getGate(
                                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(), // corridor gate
-                                        corridor_width
+                                        gate_width
                                     )
                                     xml.Placemark {
                                         BigDecimal altitude_meter2 = last_coordroute_instance.altitude.toLong() / ftPerMeter
@@ -1442,10 +1446,14 @@ class KmlService
                                 first = false
                                 switch (coordroute_instance.type) {
                                     case CoordType.FP:
+                                        Float gate_width = coordroute_instance.gatewidth2
+                                        if (!gate_width) {
+                                            gate_width = corridor_width
+                                        }
                                         Map gate = AviationMath.getGate(
                                             last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                             coordroute_instance.latMath(),coordroute_instance.lonMath(), // corridor gate
-                                            corridor_width
+                                            gate_width
                                         )
                                         xml.Placemark {
                                             BigDecimal altitude_meter2 = coordroute_instance.altitude.toLong() / ftPerMeter
@@ -1577,7 +1585,17 @@ class KmlService
                                 xml.value routeInstance.contestMapAirfields
                             }
                             xml.Data(name:"contestmapairfieldsdata") {
-                                xml.value routeInstance.contestMapAirfieldsData
+                                String airfields = routeInstance.contestMapAirfieldsData
+                                if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                                    Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                                    if (route_instance && route_instance.contestMapAirfieldsData) {
+                                        if (airfields ) {
+                                            airfields += "\n"
+                                        }
+                                        airfields += route_instance.contestMapAirfieldsData
+                                    }
+                                }
+                                xml.value airfields
                             }
                             xml.Data(name:"contestmapcircle") {
                                 xml.value getYesNo(routeInstance.contestMapCircle)
@@ -1649,7 +1667,17 @@ class KmlService
                                 xml.value getYesNo(routeInstance.contestMapAirspaces)
                             }
                             xml.Data(name:"contestmapairspaceslayer2") {
-                                xml.value routeInstance.contestMapAirspacesLayer2
+                                String airspaces = routeInstance.contestMapAirspacesLayer2
+                                if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                                    Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                                    if (route_instance && route_instance.contestMapAirspacesLayer2) {
+                                        if (airspaces ) {
+                                            airspaces += "\n"
+                                        }
+                                        airspaces += route_instance.contestMapAirspacesLayer2
+                                    }
+                                }
+                                xml.value airspaces
                             }
                             xml.Data(name:"contestmapairspaceslowerlimit") {
                                 xml.value routeInstance.contestMapAirspacesLowerLimit

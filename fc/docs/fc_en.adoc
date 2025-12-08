@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.1.9
-:revdate: 26.10.2025
+:revnumber: 4.1.10
+:revdate: 08.12.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -500,7 +500,7 @@ is also possible with text files (UTF-8). In an empty route all check points can
  TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
  SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
  TP1,  Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
- SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+ SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 1.0NM
  TP2,  Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
  iFP,  Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
  iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM,notime,nogate,noplan
@@ -561,14 +561,14 @@ Blank lines and lines starting with # are ignored
 +
 Choose an contest rule. +
 
-. Create route with TO (Routes -> New Route)
+. Create route with TO point (Routes -> New Route)
 +
 Enter the name of the airfield as the title. +
 +
 Add airfield coordinates as TO point. +
 The correctness of the airfield coordinates can be checked using "OSM online map".
 
-. Create a map of the area around the TO for Task Creator (Distance to edge for Rally and Precision flying: 420 mm, for ANR: 297 mm)
+. Create a map of the area around the TO point for Task Creator (distance to edge for Rally and Precision flying: 420 mm, for ANR: 297 mm)
 +
 OSM Contest Map -> Generate Task Creator map around airport +
 +
@@ -694,7 +694,7 @@ Execute context menu item "Paste" once or several times (according to the number
 Edit "Properties" of the added points in the 'Placemark' dialog:
 
 *** In the Name field adjust check point name and gate width +
-(TP1 -> SC, e.g. "TP1, Gate 1.0NM" -> "SC, Gate 2.0NM" (SC does not need to be numbered))
+(TP1 -> SC, e.g. "TP1, Gate 1.0NM" -> "SC, Gate 1.0NM" (SC does not need to be numbered))
 *** Grab point in graphic area with left mouse button and drag to desired position
 *** Close 'Place marking' dialog
 
@@ -722,12 +722,12 @@ Edit "Properties" of the added points in the 'Placemark' dialog:
 [[route-planning-on-printed-map]]
 === Create competition routes with the help of a printed map
 
-. Select area around TO
+. Select area around TO point
 
-. Create route with TO (Routes -> *New route*)
+. Create route with TO point (Routes -> *New route*)
 
-. Print competition map with TO (route -> *OSM Contest Map*) +
-Place TO at a desired position (top right, bottom left or similar).
+. Print competition map with TO point (route -> *OSM Contest Map*) +
+Place TO point at a desired position (top right, bottom left or similar).
 
 . Select suitable turning points on the printed map +
 With the coordinate rulers on the left and above, the turning point coordinates can be determined to the minute with a compass.
@@ -1025,8 +1025,8 @@ Not specified: 0.2
 
 *Overview map print options*
 
-* "_Generate online map around airport_" creates a map with T/O in the center with 420mm distance to the edge for OSM online map display.
-* "_Generate Task Creator map around airport_" creates a map with T/O in the center with 420mm distance to the edge for use in the Task Creator.
+* "_Generate online map around airport_" creates a map with TO point in the center for OSM online map display (distance to edge for Rally and Precision flying: 420 mm, for ANR: 297 mm).
+* "_Generate Task Creator map around airport_" creates a map with TO point in the center for use in the Task Creator (distance to edge for Rally and Precision flying: 420 mm, for ANR: 297 mm).
 
 *4 setting areas allow the following map printing options to be used parallel in one route*
 
@@ -1286,14 +1286,14 @@ Of course, it is also possible to perform several tasks in succession, in which 
 Choose an ANR contest rule. +
 If required, activate "Contest with classes".
 
-. Create route with TO (Routes -> New Route)
+. Create route with TO point (Routes -> New Route)
 +
 Enter the name of the airfield as the title. +
 +
 Add airfield coordinates as TO point. +
 The correctness of the airfield coordinates can be checked using "OSM online map".
 
-. Create a map of the area around the TO for Task Creator (distance to edge: 297 mm)
+. Create a map of the area around the TO point for Task Creator (distance to edge: 297 mm)
 +
 OSM Contest Map -> Generate Task Creator map around airport +
 +

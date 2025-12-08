@@ -185,6 +185,12 @@ class OsmPrintMapService
     {
         Map ret = [ok:false, message:'']
         
+        Route route_instance = Route.get(contestMapParams.routeId)
+        Route route_instance2 = null
+        if (route_instance.contestMapShowMapObjectsFromRouteID) {
+            route_instance2 = Route.get(route_instance.contestMapShowMapObjectsFromRouteID)
+        }
+        
         String map_projection = ATTR_OUTPUT_PROJECTION_PRINTPDF
         if (contestMapParams.taskCreator) {
             map_projection = ATTR_OUTPUT_PROJECTION_TASKCREATOR
@@ -493,7 +499,7 @@ class OsmPrintMapService
         }
         copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
         // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
-        if (BootStrap.global.IsOpenAIP() && ((contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) || openaip_airfields)) {
+        if (BootStrap.global.IsOpenAIP() && ((contestMapParams.contestMapAirspaces && (route_instance.contestMapAirspacesLayer2 || route_instance2?.contestMapAirspacesLayer2)) || (openaip_airfields && (route_instance.contestMapAirfieldsData || route_instance2?.contestMapAirfieldsData)))) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.openaip',[],true)}"
         }
         String user_text = ""
@@ -641,7 +647,6 @@ class OsmPrintMapService
         List mapobjects_symbol_filenames = []
         if (contestMapParams.contestMapAdditionals) {
             String uuid = UUID.randomUUID().toString()
-            Route route_instance = Route.get(contestMapParams.routeId)
             String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAPOBJECTS-${uuid}-UPLOAD.csv"
             String symbol_praefix = "SYMBOL-${uuid}-"
             mapobjects_symbol_filenames = create_mapobjects_csv(route_instance, contestMapParams.webRootDir, file_name, false, symbol_praefix)
@@ -665,10 +670,9 @@ class OsmPrintMapService
         
         String airspaces_lines = ""
         String airspaces_file_name = "" // will be uploaded
-        if (contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) {
+        if (contestMapParams.contestMapAirspaces) {
 			if (BootStrap.global.IsOpenAIP()) {
 				String uuid = UUID.randomUUID().toString()
-				Route route_instance = Route.get(contestMapParams.routeId)
 				String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
 				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false, false)
 				if (!ret2.ok) {
@@ -679,79 +683,10 @@ class OsmPrintMapService
 			} else {
 				airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
 			}
-            String airspaces_short_file_name = airspaces_file_name.substring(airspaces_file_name.lastIndexOf('/')+1)
-            for (String layer in contestMapParams.contestMapAirspacesLayer2.split("\n")) {
-                if (layer && layer.trim()) {
-                    String airspace_layer = layer.trim()
-                    if (!airspace_layer.startsWith(Defs.IGNORE_LINE)) {
-                        String airspace_filename = airspaces_short_file_name
-                        String airspace_text = airspace_layer
-                        String airspace_textsize= '10'
-                        String airspace_textspacing = '1'
-                        String airspace_textcolor = 'black'
-                        String airspace_fillcolor = 'steelblue'
-                        String airspace_fillopacity = '0.2'
-                        boolean first_style = true
-                        for (String airspace_style in Tools.Split(airspace_layer, AIRSPACE_LAYER_STYLE_SEPARATOR)) {
-                            List airspace_style_values = Tools.Split(airspace_style.trim(), AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
-                            if (airspace_style_values.size() == 1) {
-                                if (first_style) {
-                                    airspace_layer = airspace_style_values[0].trim()
-                                    airspace_text = airspace_layer
-                                } else if (airspace_text) {
-                                    airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
-                                }
-                            } else if (airspace_style_values.size() == 2) {
-                                switch (airspace_style_values[0].trim()) {
-                                    case 'file': 
-                                        airspace_filename = airspace_style_values[1].trim()
-                                        break
-                                    case 'text': 
-                                        airspace_text = airspace_style_values[1]
-                                        break
-                                    case 'textsize': 
-                                        airspace_textsize = airspace_style_values[1].trim()
-                                        break
-                                    case 'textspacing': 
-                                        airspace_textspacing = airspace_style_values[1].trim()
-                                        break
-                                    case 'textcolor': 
-                                        airspace_textcolor = airspace_style_values[1].trim()
-                                        break
-                                    case 'fillcolor': 
-                                        airspace_fillcolor = airspace_style_values[1].trim()
-                                        break
-                                    case 'fillopacity': 
-                                        airspace_fillopacity = airspace_style_values[1].trim()
-                                        break
-                                }
-                            }
-                            first_style = false
-                        }
-                        airspace_text = airspace_text.trim()
-                        airspace_text = Tools.GetMapnikString(airspace_text)
-                        airspaces_lines += """,{
-                            "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
-                            "SRS": "+init=${ATTR_INPUT_SRS}",
-                            "Type": "ogr",
-                            "File": "${airspace_filename}",
-                            "Layer": "${airspace_layer}"
-                        }
-                        ,{
-                            "Style": "<LineSymbolizer stroke='${airspace_fillcolor}' stroke-width='${AIRSPACE_STROKE_WIDTH}' stroke-linecap='round' />",
-                            "SRS": "+init=${ATTR_INPUT_SRS}",
-                            "Type": "ogr",
-                            "File": "${airspace_filename}",
-                            "Layer": "${airspace_layer}"
-                        }
-                        ,{
-                            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${airspace_textsize}' fill='${airspace_textcolor}' allow-overlap='false' placement='line' halo-radius='1' halo-fill='white' spacing='${airspace_textspacing}' placement-type='simple' placements='X,12,10,8,6,4,2'>'${airspace_text}'</TextSymbolizer>",
-                            "SRS": "+init=${ATTR_INPUT_SRS}",
-                            "Type": "ogr",
-                            "File": "${airspace_filename}",
-                            "Layer": "${airspace_layer}"
-                        }"""
-                    }
+            airspaces_lines += get_airspaces_lines(route_instance.contestMapAirspacesLayer2, airspaces_file_name)
+            if (route_instance.contestMapShowMapObjectsFromRouteID) {
+                if (route_instance2) {
+                    airspaces_lines += get_airspaces_lines(route_instance2.contestMapAirspacesLayer2, airspaces_file_name)
                 }
             }
         }
@@ -759,7 +694,6 @@ class OsmPrintMapService
         String airports_lines = ""
         String airports_file_name = ""
         String uuid = UUID.randomUUID().toString()
-        Route route_instance = Route.get(contestMapParams.routeId)
         String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
         openAIPService.WriteAirfields2CSV(route_instance, contestMapParams.webRootDir, file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", openaip_airfields, contestMapParams.contestMapAdditionals)
         airports_file_name = contestMapParams.webRootDir + file_name
@@ -1062,6 +996,88 @@ class OsmPrintMapService
         }
         
         return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private String get_airspaces_lines(String airspacesLayer, String airspacesFileName)
+    {
+        String airspaces_lines = ""
+        String airspaces_short_file_name = airspacesFileName.substring(airspacesFileName.lastIndexOf('/')+1)
+        for (String layer in airspacesLayer.split("\n")) {
+            if (layer && layer.trim()) {
+                String airspace_layer = layer.trim()
+                if (!airspace_layer.startsWith(Defs.IGNORE_LINE)) {
+                    String airspace_filename = airspaces_short_file_name
+                    String airspace_text = airspace_layer
+                    String airspace_textsize= '10'
+                    String airspace_textspacing = '1'
+                    String airspace_textcolor = 'black'
+                    String airspace_fillcolor = 'steelblue'
+                    String airspace_fillopacity = '0.2'
+                    boolean first_style = true
+                    for (String airspace_style in Tools.Split(airspace_layer, AIRSPACE_LAYER_STYLE_SEPARATOR)) {
+                        List airspace_style_values = Tools.Split(airspace_style.trim(), AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
+                        if (airspace_style_values.size() == 1) {
+                            if (first_style) {
+                                airspace_layer = airspace_style_values[0].trim()
+                                airspace_text = airspace_layer
+                            } else if (airspace_text) {
+                                airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
+                            }
+                        } else if (airspace_style_values.size() == 2) {
+                            switch (airspace_style_values[0].trim()) {
+                                case 'file': 
+                                    airspace_filename = airspace_style_values[1].trim()
+                                    break
+                                case 'text': 
+                                    airspace_text = airspace_style_values[1]
+                                    break
+                                case 'textsize': 
+                                    airspace_textsize = airspace_style_values[1].trim()
+                                    break
+                                case 'textspacing': 
+                                    airspace_textspacing = airspace_style_values[1].trim()
+                                    break
+                                case 'textcolor': 
+                                    airspace_textcolor = airspace_style_values[1].trim()
+                                    break
+                                case 'fillcolor': 
+                                    airspace_fillcolor = airspace_style_values[1].trim()
+                                    break
+                                case 'fillopacity': 
+                                    airspace_fillopacity = airspace_style_values[1].trim()
+                                    break
+                            }
+                        }
+                        first_style = false
+                    }
+                    airspace_text = airspace_text.trim()
+                    airspace_text = Tools.GetMapnikString(airspace_text)
+                    airspaces_lines += """,{
+                        "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
+                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "Type": "ogr",
+                        "File": "${airspace_filename}",
+                        "Layer": "${airspace_layer}"
+                    }
+                    ,{
+                        "Style": "<LineSymbolizer stroke='${airspace_fillcolor}' stroke-width='${AIRSPACE_STROKE_WIDTH}' stroke-linecap='round' />",
+                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "Type": "ogr",
+                        "File": "${airspace_filename}",
+                        "Layer": "${airspace_layer}"
+                    }
+                    ,{
+                        "Style": "<TextSymbolizer fontset-name='fontset-0' size='${airspace_textsize}' fill='${airspace_textcolor}' allow-overlap='false' placement='line' halo-radius='1' halo-fill='white' spacing='${airspace_textspacing}' placement-type='simple' placements='X,12,10,8,6,4,2'>'${airspace_text}'</TextSymbolizer>",
+                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "Type": "ogr",
+                        "File": "${airspace_filename}",
+                        "Layer": "${airspace_layer}"
+                    }"""
+                }
+            }
+        }
+        return airspaces_lines
     }
     
     //--------------------------------------------------------------------------

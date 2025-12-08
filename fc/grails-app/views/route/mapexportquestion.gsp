@@ -121,6 +121,7 @@
 	                            </g:if>
 	                        </fieldset>
 	                        <fieldset>
+                                <g:showContestMapSelectOtherRoute route="${routeInstance}" ti="${ti}"/>
 								<div>
                                     <g:contestMapAirfieldsSelect airfields="${routeInstance.contestMapAirfields}" airfieldsname="contestMapAirfields" showairfields="${routeInstance.contestMapShowAirfields}" routeid="${routeInstance.id}" airfieldslines="${Tools.Split(routeInstance.contestMapAirfieldsData,'\n').size()}" ti="${ti}"/>
                                     <g:if test="${BootStrap.global.IsOpenAIP()}">
@@ -129,12 +130,14 @@
                                             <g:set var="showairfields" value=""/>
                                         </g:if>
                                         <div style="margin-top:10px;margin-left:20px;" id="showairfields_id" ${showairfields}>
-                                            <g:if test="${routeInstance.contestMapAirfieldsData}">
-                                                <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairfields.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
+                                            <g:if test="${!routeInstance.contestMapShowMapObjectsFromRouteID}">
+                                                <g:if test="${routeInstance.contestMapAirfieldsData}">
+                                                    <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairfields.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
+                                                </g:if>
+                                                <g:else>
+                                                    <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" tabIndex="${ti[0]++}" />
+                                                </g:else>
                                             </g:if>
-                                            <g:else>
-                                                <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" tabIndex="${ti[0]++}" />
-                                            </g:else>
                                             <g:actionSubmit action="csvexport_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport')}" tabIndex="${ti[0]++}" />
                                             <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
                                                 <label style="margin-left:20px;">Dev:</label>
@@ -159,13 +162,15 @@
                                             <g:set var="showairspaces" value=""/>
                                         </g:if>
                                         <div style="margin-top:10px;margin-left:20px;" id="showairspaces_id" ${showairspaces}>
-                                            <g:if test="${routeInstance.contestMapAirspacesLayer2}">
-                                                <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairspaces.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
+                                            <g:if test="${!routeInstance.contestMapShowMapObjectsFromRouteID}">
+                                                <g:if test="${routeInstance.contestMapAirspacesLayer2}">
+                                                    <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairspaces.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
+                                                </g:if>
+                                                <g:else>
+                                                    <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" tabIndex="${ti[0]++}" />
+                                                </g:else>
+                                                <input type="text" name="contestMapAirspacesLowerLimit" value="${routeInstance.contestMapAirspacesLowerLimit}" min="0" size="6" tabIndex="${ti[0]++}"/> <label>${message(code:'fc.foot')}</label>
                                             </g:if>
-                                            <g:else>
-                                                <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" tabIndex="${ti[0]++}" />
-                                            </g:else>
-                                            <input type="text" name="contestMapAirspacesLowerLimit" value="${routeInstance.contestMapAirspacesLowerLimit}" min="0" size="6" tabIndex="${ti[0]++}"/> <label>${message(code:'fc.foot')}</label>
                                             <g:actionSubmit action="kmzexportairspaces_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport')}" tabIndex="${ti[0]++}" />
                                             <g:actionSubmit action="kmzexportairspaceshidden_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport.hidden')}" tabIndex="${ti[0]++}" />
                                             <p style="margin-top:10px;">
