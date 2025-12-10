@@ -17,7 +17,7 @@ if ($Restart -eq "de" -or $Restart -eq "en") {
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc_version = "4.1.10"
+$str_fc_version = "4.1.11"
 $str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"
@@ -327,7 +327,7 @@ If ($isAdmin -eq $true) {
 
 # Download menu entry
 # -------------------
-$new_fc_version = Invoke-WebRequest -Uri $str_new_version_url
+$new_fc_version = Invoke-WebRequest -UseBasicParsing -Uri $str_new_version_url
 if ([String]$new_fc_version -ne "") {
     if ([String]$new_fc_version -ne $str_fc_version) {
         $newversion_icon = New-Object System.Drawing.Icon "C:\Program Files\Flight Contest\fcdownload.ico"

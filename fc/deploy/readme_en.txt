@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Changes 4.1.11
+--------------
+- Flight Contest Manager: Adjustments to Windows 11 2025-12 Security Update (KB5072033) (26200.7462)
+
 Changes 4.1.10
 --------------
 - OSM Contest Map: 
