@@ -13,7 +13,7 @@ class TestController
     def trackerService
 
     def show = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.taskReturnAction = actionName
@@ -33,7 +33,7 @@ class TestController
     }
 
     def flightplan = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -114,7 +114,7 @@ class TestController
     }
 
 	def flightplangotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
@@ -129,7 +129,7 @@ class TestController
 	}
 	
 	def flightplangotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Flight,session)
 			if (prevtest_id) {
@@ -144,7 +144,7 @@ class TestController
 	}
 	
     def planningtask = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -165,7 +165,7 @@ class TestController
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             return [contestInstance:session.lastContest,testInstance:test.instance]
         } else {
@@ -207,7 +207,7 @@ class TestController
     }
 
 	def planningtaskgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
@@ -222,7 +222,7 @@ class TestController
 	}
 	
 	def planningtaskgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Flight,session)
 			if (prevtest_id) {
@@ -237,7 +237,7 @@ class TestController
 	}
 	
     def planningtaskresults = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -288,7 +288,7 @@ class TestController
 	}
 	
 	def planningtaskresultsgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
 			if (nexttest_id) {
@@ -303,7 +303,7 @@ class TestController
 	}
 	
 	def planningtaskresultsgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Planningtask,session)
 			if (prevtest_id) {
@@ -397,7 +397,7 @@ class TestController
     }
     
     def planningtaskformimport = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             // save return action
             session.crewReturnAction = actionName
@@ -411,7 +411,7 @@ class TestController
     }
     
     def planningtaskformimportimagefile = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             def file = request.getFile('imagefile')
             Map img = imageService.LoadImage(ImageService.JPG_EXTENSION, file, test.instance, "scannedPlanningTest", Test.SCANNEDIMAGEMAXSIZE)
@@ -433,7 +433,7 @@ class TestController
     }
         
     def planningtaskformdeleteimagefile = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             delete_imagefile(['testInstance':test.instance,'imageField':'scannedPlanningTest'])
             flash.message = message(code:'fc.planningtesttask.deleteform.deleted')
@@ -457,7 +457,7 @@ class TestController
     }
     
     def planningtaskformimportcancel = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
             if (nexttest_id) {
@@ -471,7 +471,7 @@ class TestController
     }
         
     def flightresults = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -528,7 +528,7 @@ class TestController
     }
     
 	def flightresultsgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
@@ -543,7 +543,7 @@ class TestController
 	}
 	
 	def flightresultsgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Flight,session)
 			if (prevtest_id) {
@@ -746,7 +746,7 @@ class TestController
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             return [contestInstance:session.lastContest,testInstance:test.instance]
         } else {
@@ -765,7 +765,7 @@ class TestController
     }
     
     def importtrackercrew = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             // save return action
             session.crewReturnAction = actionName
@@ -788,7 +788,7 @@ class TestController
     }
     
     def importloggercrew = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             // save return action
             session.crewReturnAction = actionName
@@ -808,7 +808,7 @@ class TestController
             if (ret.error) {
                 flash.error = ret.error
             }
-            Map test = domainService.GetTest(params)
+            Map test = domainService.GetTestMap(params)
             long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
@@ -831,7 +831,7 @@ class TestController
             if (ret.error) {
             	flash.error = ret.error
             }
-			Map test = domainService.GetTest(params)
+			Map test = domainService.GetTestMap(params)
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
 				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
@@ -841,7 +841,7 @@ class TestController
         } else if (ret.error) {
             flash.error = ret.error
             flash.message = ret.message
-            Map test = domainService.GetTest(params)
+            Map test = domainService.GetTestMap(params)
             long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
@@ -854,7 +854,7 @@ class TestController
     }
     
     def importloggerfile = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             def file = request.getFile('loggerfile')
             boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
@@ -896,7 +896,7 @@ class TestController
     }
 	    
     def recalculatecrew = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             // save return action
             session.crewReturnAction = actionName 
@@ -954,7 +954,7 @@ class TestController
     }
     
     def observationresults = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1012,7 +1012,7 @@ class TestController
     }
     
 	def observationresultsgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
 			if (nexttest_id) {
@@ -1027,7 +1027,7 @@ class TestController
 	}
 	
 	def observationresultsgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Observation,session)
 			if (prevtest_id) {
@@ -1126,7 +1126,7 @@ class TestController
     }
     
     def observationformimport = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             // save return action
             session.crewReturnAction = actionName
@@ -1140,7 +1140,7 @@ class TestController
     }
     
     def observationformimportimagefile = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             def file = request.getFile('imagefile')
             Map img = imageService.LoadImage(ImageService.JPG_EXTENSION, file, test.instance, "scannedObservationTest", Test.SCANNEDIMAGEMAXSIZE)
@@ -1162,7 +1162,7 @@ class TestController
     }
         
     def observationformdeleteimagefile = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
             delete_imagefile(['testInstance':test.instance,'imageField':'scannedObservationTest'])
             flash.message = message(code:'fc.observation.deleteform.deleted')
@@ -1189,7 +1189,7 @@ class TestController
     }
     
     def observationformimportcancel = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
@@ -1211,7 +1211,7 @@ class TestController
     }   
     
     def landingresults = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1263,7 +1263,7 @@ class TestController
     }
     
 	def landingresultsgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
 			if (nexttest_id) {
@@ -1278,7 +1278,7 @@ class TestController
 	}
 	
 	def landingresultsgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing,session)
 			if (prevtest_id) {
@@ -1382,7 +1382,7 @@ class TestController
 	}
 	
     def landingresults1 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1434,7 +1434,7 @@ class TestController
     }
     
 	def landingresultsgotonext1 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
 			if (nexttest_id) {
@@ -1449,7 +1449,7 @@ class TestController
 	}
 	
 	def landingresultsgotoprev1 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing1,session)
 			if (prevtest_id) {
@@ -1553,7 +1553,7 @@ class TestController
 	}
 	
     def landingresults2 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1605,7 +1605,7 @@ class TestController
     }
     
 	def landingresultsgotonext2 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
 			if (nexttest_id) {
@@ -1620,7 +1620,7 @@ class TestController
 	}
 	
 	def landingresultsgotoprev2 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing2,session)
 			if (prevtest_id) {
@@ -1724,7 +1724,7 @@ class TestController
 	}
 	
     def landingresults3 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1776,7 +1776,7 @@ class TestController
     }
     
 	def landingresultsgotonext3 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
 			if (nexttest_id) {
@@ -1791,7 +1791,7 @@ class TestController
 	}
 	
 	def landingresultsgotoprev3 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing3,session)
 			if (prevtest_id) {
@@ -1895,7 +1895,7 @@ class TestController
 	}
 	
     def landingresults4 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1947,7 +1947,7 @@ class TestController
     }
     
 	def landingresultsgotonext4 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
 			if (nexttest_id) {
@@ -1962,7 +1962,7 @@ class TestController
 	}
 	
 	def landingresultsgotoprev4 = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing4,session)
 			if (prevtest_id) {
@@ -2066,7 +2066,7 @@ class TestController
 	}
 	
     def specialresults = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -2114,7 +2114,7 @@ class TestController
     }
     
 	def specialresultsgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Special,session)
 			if (nexttest_id) {
@@ -2129,7 +2129,7 @@ class TestController
 	}
 	
 	def specialresultsgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Special,session)
 			if (prevtest_id) {
@@ -2214,7 +2214,7 @@ class TestController
 	}
 	
 	def crewresultsgotonext = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Crew,session)
 			if (nexttest_id) {
@@ -2229,7 +2229,7 @@ class TestController
 	}
 	
 	def crewresultsgotoprev = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			long prevtest_id = test.instance.GetPrevTestID(ResultType.Crew,session)
 			if (prevtest_id) {
@@ -2244,7 +2244,7 @@ class TestController
 	}
 	
 	def crewresultsprintquestion = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// set return action
             if (params.fromTask) {
@@ -2267,7 +2267,7 @@ class TestController
 	}
 	
     def crewresults = {
-        Map test = domainService.GetTest(params) 
+        Map test = domainService.GetTestMap(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -2331,14 +2331,14 @@ class TestController
 	}
 	
     def showofflinemap_test = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             gpxService.printstart "showofflinemap_test: Show map of '${test.instance.crew.name}' $params"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
             Map converter = [:]
             boolean hide_disabled_points = false
-            //if (test.instance.task.flighttest.route.corridorWidth) {
+            //if (test.instance.GetCorridorWidth()) {
                 hide_disabled_points = true
             //}
             if (params.showCoord) {
@@ -2372,7 +2372,7 @@ class TestController
     }
     
     def showmap_test = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             gpxService.printstart "showmap_test: Show map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
@@ -2382,7 +2382,7 @@ class TestController
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
-                redirect(controller:'gpx',action:'startgpxviewer',params:[defaultOnlineMap:test.instance.task.flighttest.route.defaultOnlineMap,uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
+                redirect(controller:'gpx',action:'startgpxviewer',params:[defaultOnlineMap:test.instance.flighttestwind.GetRoute().defaultOnlineMap,uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
             } else {
                 flash.error = true
                 if (converter.ok && !converter.track) {
@@ -2401,7 +2401,7 @@ class TestController
     }
     
     def gpxexport_test = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             gpxService.printstart "gpxexport_test: Export logger data of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
@@ -2434,7 +2434,7 @@ class TestController
     }
      
     def kmzexport_test = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             kmlService.printstart "kmzexport_test: Export logger data of crew '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
@@ -2467,7 +2467,7 @@ class TestController
     }
      
     def sendmail = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             Map ret = emailService.SendEmailTest(test.instance, session.printLanguage, grailsAttributes, request)
             flash.message = ret.message
@@ -2499,7 +2499,7 @@ class TestController
     }
 	
     def cancelimportcrew = {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (test.instance) {
             long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {

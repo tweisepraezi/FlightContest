@@ -3069,9 +3069,98 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map selectfilterTask(Map params)
+    {
+        Map task = domainService.GetTaskMap(params) 
+        if (task.instance && params.selectFilter) {
+            Map selected_testids = [:]
+            Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
+                int test_pos = test_instance.GetTestPos()
+                if (test_pos) {
+                    switch (SelectFilter.(params.selectFilter)) {
+                        case SelectFilter.SelectNone:
+                            break
+                        case SelectFilter.SelectClass1:
+                            List resultclass_instances = task.instance.GetResultClasses()
+                            if (resultclass_instances.size() > 0 && resultclass_instances[0].id == test_instance.crew.resultclass.id) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectClass2:
+                            List resultclass_instances = task.instance.GetResultClasses()
+                            if (resultclass_instances.size() > 1 && resultclass_instances[1].id == test_instance.crew.resultclass.id) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectClass3:
+                            List resultclass_instances = task.instance.GetResultClasses()
+                            if (resultclass_instances.size() > 2 && resultclass_instances[2].id == test_instance.crew.resultclass.id) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectClass4:
+                            List resultclass_instances = task.instance.GetResultClasses()
+                            if (resultclass_instances.size() > 3 && resultclass_instances[3].id == test_instance.crew.resultclass.id) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos1Of2:
+                            if (test_pos % 2 == 1) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos2Of2:
+                            if (test_pos % 2 == 0) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos1Of3:
+                            if (test_pos % 3 == 1) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos2Of3:
+                            if (test_pos % 3 == 2) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos3Of3:
+                            if (test_pos % 3 == 0) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos1Of4:
+                            if (test_pos % 4 == 1) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos2Of4:
+                            if (test_pos % 4 == 2) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos3Of4:
+                            if (test_pos % 4 == 3) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                        case SelectFilter.SelectPos4Of4:
+                            if (test_pos % 4 == 0) {
+                                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                            }
+                            break
+                    }
+                }
+            }
+            task.selectedtestids = selected_testids
+        }
+        return task
+    }
+    
+    //--------------------------------------------------------------------------
     Map selectallTask(Map params)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             Map selected_testids = [selectedTestID:""]
             Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
@@ -3085,7 +3174,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map selectendTask(Map params) 
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
 
 			// search last selected test
@@ -3120,7 +3209,7 @@ class FcService
     {
 		printstart "assignplanningtesttaskTask"
 		
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
 			printerror ""
             return task
@@ -3165,13 +3254,13 @@ class FcService
     //--------------------------------------------------------------------------
     Map setplanningtesttaskTask(Map params)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             PlanningTestTask planningtesttask_instance = PlanningTestTask.get(params.planningtesttask.id)
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
-					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+					if (!test_instance.disabledCrew && !test_instance.crew.disabled && !test_instance.flightTestAdditionalResult) {
 	                    test_instance.planningtesttask = planningtesttask_instance 
 	                    calulateTestLegPlannings(test_instance)
 						test_instance.ResetPlanningTestResults()
@@ -3193,7 +3282,7 @@ class FcService
     {
 		printstart "assignflighttestwindTask"
 		
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
 			printerror ""
             return task
@@ -3225,7 +3314,11 @@ class FcService
         }
         task.testinstanceids = test_instance_ids
         if (!assign_num) {
-            task.message = getMsg('fc.flighttestwind.someonemustselected.assign')
+            if (task.instance.flighttest.route.corridorWidth) {
+                task.message = getMsg('fc.flighttestwind.someonemustselected.assign.route')
+            } else {
+                task.message = getMsg('fc.flighttestwind.someonemustselected.assign.wind')
+            }
             task.error = true
             printerror task.message
             return task
@@ -3239,7 +3332,7 @@ class FcService
     Map setflighttestwindTask(Map params)
     {
 		printstart "setflighttestwindTask"
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             FlightTestWind flighttestwind_instance = FlightTestWind.get(params.flighttestwind.id)
             boolean wind_set = false
@@ -3255,7 +3348,7 @@ class FcService
             if (wind_set) {
                 calulateTimetableWarnings(task.instance)
             }
-            task.message = getMsg('fc.task.selectflighttestwind.assigned',[flighttestwind_instance.wind.name()])
+            task.message = getMsg('fc.task.assignflighttestwind.assigned',[flighttestwind_instance.name()])
         }
 		printdone ""
         return task
@@ -3327,7 +3420,7 @@ class FcService
     {
 		printstart "calculatesequenceTask"
 		
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
 			printerror ""
             return task
@@ -3408,7 +3501,7 @@ class FcService
     {
 		printstart "resetsequenceTask"
 		
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
 			printerror ""
             return task
@@ -3435,7 +3528,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map moveupTask(Map params,session)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -3526,7 +3619,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map movedownTask(Map params,session)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -3616,7 +3709,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map moveendTask(Map params,session)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -3712,7 +3805,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map disableCrewsTask(Map params,session)
     {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -3736,7 +3829,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map enableCrewsTask(Map params,session)
     {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -3760,7 +3853,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map SetPageBreakTask(Map params, boolean pageBreak, def session)
     {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -3789,7 +3882,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map ResetAllPageBreakTask(Map params, def session)
     {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -3812,7 +3905,7 @@ class FcService
     {
         printstart "calculatetimetableTask"
 		
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
 			printerror ""
             return task
@@ -3845,7 +3938,11 @@ class FcService
 			}
         }
         if (call_return) {
-            task.message = getMsg('fc.flighttestwind.notassigned')
+            if (task.instance.flighttest.route.corridorWidth) {
+                task.message = getMsg('fc.flighttestwind.notassigned.route')
+            } else {
+                task.message = getMsg('fc.flighttestwind.notassigned.wind')
+            }
             task.error = true
 			printerror task.message
             return task
@@ -3888,7 +3985,7 @@ class FcService
     Map timeaddTask(Map params)
     {
         printstart "timeaddTask"
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -3917,7 +4014,7 @@ class FcService
     {
         printstart "timesubtractTask"
 		
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -3988,7 +4085,7 @@ class FcService
     {
         printstart "exporttimetablelabelTask $uploadFileName"
         
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -4057,7 +4154,7 @@ class FcService
     {
         printstart "exporttimetablestartlistTask $uploadFileName"
         
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -4116,7 +4213,7 @@ class FcService
     {
         printstart "exporttimetabledataTask $uploadFileName"
         
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -4187,7 +4284,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map positionscalculatedTask(Map params)
     {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             return task
         }
@@ -4217,7 +4314,7 @@ class FcService
     //--------------------------------------------------------------------------
 	Map timetablejudgeprintquestionTask(Map params)
 	{
-		Map task = domainService.GetTask(params)
+		Map task = domainService.GetTaskMap(params)
 		if (!task.instance) {
 			return task
 		}
@@ -4246,7 +4343,11 @@ class FcService
 			}
 		}
 		if (call_return) {
-			task.message = getMsg('fc.flighttestwind.notassigned')
+            if (task.instance.flighttest.route.corridorWidth) {
+                task.message = getMsg('fc.flighttestwind.notassigned.route')
+            } else {
+                task.message = getMsg('fc.flighttestwind.notassigned.wind')
+            }
 			task.error = true
 			return task
 		}
@@ -4947,6 +5048,15 @@ class FcService
                     if (route_instance2.contestMapShowMapObjectsFromRouteID == route_instance.id) {
                         route_instance2.contestMapShowMapObjectsFromRouteID = 0
                     }
+                    if (route_instance2.route2ID == route_instance.id) {
+                        route_instance2.route2ID = 0
+                    }
+                    if (route_instance2.route3ID == route_instance.id) {
+                        route_instance2.route3ID = 0
+                    }
+                    if (route_instance2.route4ID == route_instance.id) {
+                        route_instance2.route4ID = 0
+                    }
                 }
                 
                 Map ret = ['deleted':true,'message':getMsg('fc.deleted',["${route_instance.name()}"])]
@@ -5004,7 +5114,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map copyRoute(Map params)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return route
         }
@@ -5402,7 +5512,7 @@ class FcService
     {
         Map ret = [importNum:0, updateNum:0]
         
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return ret
         }
@@ -5463,7 +5573,7 @@ class FcService
     {
         Map ret = [importNum:0, updateNum:0]
         
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return ret
         }
@@ -5849,7 +5959,7 @@ class FcService
     //--------------------------------------------------------------------------
     private void get_altitude_from_route(CoordResult coordResultInstance)
     {
-        CoordRoute coordroute_instance = CoordRoute.findByRouteAndTypeAndTitleNumber(coordResultInstance.test.flighttestwind.flighttest.route, coordResultInstance.type, coordResultInstance.titleNumber)
+        CoordRoute coordroute_instance = CoordRoute.findByRouteAndTypeAndTitleNumber(coordResultInstance.test.flighttestwind.GetRoute(), coordResultInstance.type, coordResultInstance.titleNumber)
         if (coordroute_instance) {
             coordResultInstance.altitude = coordroute_instance.altitude
             coordResultInstance.minAltitudeAboveGround = coordroute_instance.minAltitudeAboveGround
@@ -6013,7 +6123,7 @@ class FcService
     {
         printstart "setnoflightresultsTest"
         
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             printerror ""
             return test
@@ -6037,10 +6147,7 @@ class FcService
     //--------------------------------------------------------------------------
     private void set_noflightresults(Test testInstance)
     {
-        boolean is_corridor = false
-        if (testInstance.flighttestwind.flighttest.route.corridorWidth) {
-            is_corridor = true
-        }
+        boolean is_corridor = testInstance.flighttestwind.IsCorridor()
         
         // remove old calc results
         if (testInstance.IsLoggerResult()) {
@@ -7398,7 +7505,7 @@ class FcService
     //--------------------------------------------------------------------------
     void deleteEnroutePhotos(Map params)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return
         }
@@ -7452,7 +7559,7 @@ class FcService
     //--------------------------------------------------------------------------
     void deleteTurnpointPhotos(Map params)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return
         }
@@ -9804,7 +9911,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map readyplanningtaskresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -9842,7 +9949,7 @@ class FcService
     //--------------------------------------------------------------------------
 	Map saveplanningtaskresultsTest(Map params)
 	{
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -9876,7 +9983,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map openplanningtaskresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -9902,7 +10009,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map readyflightresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -9940,7 +10047,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map saveflightresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -9974,7 +10081,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map openflightresultsreTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10000,7 +10107,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map additionalflightresultsTest(Map params) // TODO
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10016,7 +10123,7 @@ class FcService
         //test_instance.timeCalculated = false
         test_instance.loggerData = new LoggerDataTest()
         test_instance.loggerResult = new LoggerResult()
-        test_instance.reserve = "additionalflightresult"
+        test_instance.flightTestAdditionalResult = true
         test_instance.save(flush:true)
         
         boolean additional_test_found = false
@@ -10047,7 +10154,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map deleteadditionalflightresultsTest(Map params) // TODO
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10079,7 +10186,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map readyobservationresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10122,7 +10229,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map openobservationresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10148,7 +10255,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map saveobservationresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10442,8 +10549,8 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculatePenaltyTurnpointDataInstance(TurnpointData turnpointDataInstance, Test testInstance)
     {
-        Route route_instance = testInstance.flighttestwind.flighttest.route
-        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointDataInstance.tpTitle()},")) {
+        Route route_instance = testInstance.flighttestwind.GetRoute()
+        if (DisabledCheckPointsTools.Contains(testInstance.task.disabledCheckPointsTurnpointObs, route_instance, "${turnpointDataInstance.tpTitle()},")) {
             turnpointDataInstance.penaltyCoord = 0
         } else {
             switch (turnpointDataInstance.resultValue) {
@@ -10502,7 +10609,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map readylandingresultsTest(Map params, ResultType resultType)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10606,7 +10713,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map openlandingresultsTest(Map params, ResultType resultType)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10652,7 +10759,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map savelandingresultsTest(Map params, ResultType resultType)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10740,10 +10847,16 @@ class FcService
 								measures += " ?"
 								break
 							case 2:
-								measures += " $Contest.LANDING_NO"
+								measures += " $Defs.LANDING_NO"
 								break
 							case 3:
-								measures += " $Contest.LANDING_OUT"
+								measures += " $Defs.LANDING_OUT"
+								break
+							case 4:
+								measures += " $Defs.LANDING_OUT_SHORT"
+								break
+							case 5:
+								measures += " $Defs.LANDING_OUT_LONG"
 								break
 						}
 					}
@@ -10765,10 +10878,16 @@ class FcService
 								measures += " ?"
 								break
 							case 2:
-								measures += " $Contest.LANDING_NO"
+								measures += " $Defs.LANDING_NO"
 								break
 							case 3:
-								measures += " $Contest.LANDING_OUT"
+								measures += " $Defs.LANDING_OUT"
+								break
+							case 4:
+								measures += " $Defs.LANDING_OUT_SHORT"
+								break
+							case 5:
+								measures += " $Defs.LANDING_OUT_LONG"
 								break
 						}
 					}
@@ -10790,10 +10909,16 @@ class FcService
 								measures += " ?"
 								break
 							case 2:
-								measures += " $Contest.LANDING_NO"
+								measures += " $Defs.LANDING_NO"
 								break
 							case 3:
-								measures += " $Contest.LANDING_OUT"
+								measures += " $Defs.LANDING_OUT"
+								break
+							case 4:
+								measures += " $Defs.LANDING_OUT_SHORT"
+								break
+							case 5:
+								measures += " $Defs.LANDING_OUT_LONG"
 								break
 						}
 					}
@@ -10815,10 +10940,16 @@ class FcService
 								measures += " ?"
 								break
 							case 2:
-								measures += " $Contest.LANDING_NO"
+								measures += " $Defs.LANDING_NO"
 								break
 							case 3:
-								measures += " $Contest.LANDING_OUT"
+								measures += " $Defs.LANDING_OUT"
+								break
+							case 4:
+								measures += " $Defs.LANDING_OUT_SHORT"
+								break
+							case 5:
+								measures += " $Defs.LANDING_OUT_LONG"
 								break
 						}
 					}
@@ -10843,7 +10974,7 @@ class FcService
 				break
 			case ResultType.Landing1:
 				if (testInstance.IsLandingTest1Run()) {
-					if (testInstance.landingTest1Landing == 1) {
+					if (testInstance.landingTest1Landing == Defs.LANDING_SEL_VALUE) {
 						if (!testInstance.landingTest1Measure) {
 							error += " ${getMsg('fc.landingresults.measure1.empty')}"
 						} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest1Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest1Points)) == -1) {
@@ -10854,7 +10985,7 @@ class FcService
 				break
 			case ResultType.Landing2:
 				if (testInstance.IsLandingTest2Run()) {
-					if (testInstance.landingTest2Landing == 1) {
+					if (testInstance.landingTest2Landing == Defs.LANDING_SEL_VALUE) {
 						if (!testInstance.landingTest2Measure) {
 							if (error) {
 								error += ", "
@@ -10871,7 +11002,7 @@ class FcService
 				break
 			case ResultType.Landing3:
 				if (testInstance.IsLandingTest3Run()) {
-					if (testInstance.landingTest3Landing == 1) {
+					if (testInstance.landingTest3Landing == Defs.LANDING_SEL_VALUE) {
 						if (!testInstance.landingTest3Measure) {
 							if (error) {
 								error += ", "
@@ -10888,7 +11019,7 @@ class FcService
 				break
 			case ResultType.Landing4:
 				if (testInstance.IsLandingTest4Run()) {
-					if (testInstance.landingTest4Landing == 1) {
+					if (testInstance.landingTest4Landing == Defs.LANDING_SEL_VALUE) {
 						if (!testInstance.landingTest4Measure) {
 							if (error) {
 								error += ", "
@@ -10910,7 +11041,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map readyspecialresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10948,7 +11079,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map openspecialresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -10974,7 +11105,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map savespecialresultsTest(Map params)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -11009,7 +11140,6 @@ class FcService
     private void calculateTestPenalties(Test testInstance, boolean recalculatePenalties)
     {
     	printstart "calculateTestPenalties: '$testInstance.crew.name', recalculate: $recalculatePenalties"
-        Route route_instance = testInstance.flighttestwind.flighttest.route
     	
 		if (recalculatePenalties) {
 			// recalculate TestLegPlanning
@@ -11093,195 +11223,198 @@ class FcService
         }
 		testInstance.planningTestPenalties += testInstance.planningTestOtherPenalties
     	
-    	// flightTestPenalties
-    	testInstance.flightTestCheckPointPenalties = 0
-    	testInstance.flightTestCheckPointsComplete = false
-    	if (CoordResult.findByTest(testInstance)) {
-    		testInstance.flightTestCheckPointsComplete = true
-    	}
-		boolean check_secretpoints = testInstance.IsFlightTestCheckSecretPoints()
-		CoordResult last_coordresult_instance = null
-    	CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
-    		if (coordresult_instance.resultEntered) {
-				if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
-					testInstance.flightTestCheckPointPenalties += coordresult_instance.penaltyCoord
-                    if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound,route_instance).contains("${coordresult_instance.title()},")) {
-                        set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
-                    } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
-                        set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
+        if (testInstance.flighttestwind) {
+            // flightTestPenalties
+            Route route_instance = testInstance.flighttestwind.GetRoute()
+            testInstance.flightTestCheckPointPenalties = 0
+            testInstance.flightTestCheckPointsComplete = false
+            if (CoordResult.findByTest(testInstance)) {
+                testInstance.flightTestCheckPointsComplete = true
+            }
+            boolean check_secretpoints = testInstance.IsFlightTestCheckSecretPoints()
+            CoordResult last_coordresult_instance = null
+            CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
+                if (coordresult_instance.resultEntered) {
+                    if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+                        testInstance.flightTestCheckPointPenalties += coordresult_instance.penaltyCoord
+                        if (DisabledCheckPointsTools.Contains(testInstance.task.disabledCheckPointsNotFound, route_instance, "${coordresult_instance.title()},")) {
+                            set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
+                        } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
+                            set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
+                        } else {
+                            switch(coordresult_instance.type) {
+                                case CoordType.TO:
+                                    if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
+                                        set_calcresult_hide(testInstance, coordresult_instance, false)
+                                    } else {
+                                        set_calcresult_hide(testInstance, coordresult_instance, true)
+                                    }
+                                    break
+                                case CoordType.LDG:
+                                    if (testInstance.IsFlightTestCheckLanding()) {
+                                        set_calcresult_hide(testInstance, coordresult_instance, false)
+                                    } else {
+                                        set_calcresult_hide(testInstance, coordresult_instance, true)
+                                    }
+                                    break
+                                default:
+                                    set_calcresult_nogatemissed(testInstance, coordresult_instance, false)
+                                    break
+                            }
+                        }
                     } else {
-                        switch(coordresult_instance.type) {
-                            case CoordType.TO:
-                                if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
-                                    set_calcresult_hide(testInstance, coordresult_instance, false)
-                                } else {
-                                    set_calcresult_hide(testInstance, coordresult_instance, true)
-                                }
-                                break
-                            case CoordType.LDG:
-                                if (testInstance.IsFlightTestCheckLanding()) {
-                                    set_calcresult_hide(testInstance, coordresult_instance, false)
-                                } else {
-                                    set_calcresult_hide(testInstance, coordresult_instance, true)
-                                }
-                                break
-                            default:
-                                set_calcresult_nogatemissed(testInstance, coordresult_instance, false)
-                                break
+                        set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
+                    }
+                } else if (!coordresult_instance.ignoreGate) {
+                    switch(coordresult_instance.type) {
+                        case CoordType.TO:
+                            if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
+                                testInstance.flightTestCheckPointsComplete = false
+                            }
+                            break
+                        case CoordType.LDG:
+                            if (testInstance.IsFlightTestCheckLanding()) {
+                                testInstance.flightTestCheckPointsComplete = false
+                            }
+                            break
+                        default:
+                            testInstance.flightTestCheckPointsComplete = false
+                            break
+                    }
+                }
+                if (coordresult_instance.planProcedureTurn) {
+                    if (coordresult_instance.resultProcedureTurnEntered) {
+                        if (coordresult_instance.resultProcedureTurnNotFlown) {
+                            if (last_coordresult_instance && DisabledCheckPointsTools.Contains(testInstance.task.disabledCheckPointsProcedureTurn, route_instance, "${last_coordresult_instance.title()},")) {
+                                // no penalties
+                                set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, false) // noBadTurn, no hide
+                            } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
+                                // no penalties
+                                set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, false) // noBadTurn, no hide
+                            } else if (testInstance.task.procedureTurnDuration == 0) {
+                                // no penalties
+                                set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, true) // noBadTurn, hide
+                            } else {
+                                testInstance.flightTestCheckPointPenalties += testInstance.GetFlightTestProcedureTurnNotFlownPoints()
+                                set_calcresult_nobadturn(testInstance, last_coordresult_instance, false, false) // no noBadTurn, no hide
+                            }
+                        }
+                    } else {
+                        testInstance.flightTestCheckPointsComplete = false
+                    }
+                }
+                if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
+                    if (!DisabledCheckPointsTools.Contains(testInstance.task.disabledCheckPointsMinAltitude, route_instance, "${coordresult_instance.title()},")) {
+                        testInstance.flightTestCheckPointPenalties += testInstance.GetFlightTestMinAltitudeMissedPoints()
+                    }
+                }
+                if (coordresult_instance.resultBadCourseNum) {
+                    if (DisabledCheckPointsTools.Contains(testInstance.task.disabledCheckPointsBadCourse, route_instance, "${coordresult_instance.title()},", false)) {
+                        // no penalties
+                        set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
+                    } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
+                        // no penalties
+                        set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
+                    } else {
+                        testInstance.flightTestCheckPointPenalties += coordresult_instance.GetBadCoursePenalties()
+                        set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, false) // no noBadCourse
+                    }
+                }
+                if (coordresult_instance.resultOutsideCorridorSeconds) {
+                    if (testInstance.GetFlightTestOutsideCorridorPointsPerSecond() == 0) {
+                        // no penalties
+                        set_calcresult_nooutsidecorridor(testInstance, last_coordresult_instance, coordresult_instance, true) // noOutsideCorridor
+                    } else {
+                        testInstance.flightTestCheckPointPenalties += coordresult_instance.GetOutsideCorridorPenalties()
+                        set_calcresult_nooutsidecorridor(testInstance, last_coordresult_instance, coordresult_instance, false) // no noOutsideCorridor
+                    }
+                }
+                last_coordresult_instance = coordresult_instance
+            }
+            testInstance.flightTestPenalties = testInstance.flightTestCheckPointPenalties
+            if (testInstance.flightTestTakeoffMissed) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestTakeoffMissedPoints()
+            }
+            if (!testInstance.GetFlightTestBadCourseStartLandingSeparatePoints()) {
+                if (testInstance.flightTestBadCourseStartLanding) {
+                    testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+                }
+            } else {
+                if (testInstance.flightTestBadCourseStart) {
+                    testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+                }
+                if (testInstance.flightTestBadCourseLanding) {
+                    testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+                }
+            }
+            if (testInstance.flightTestLandingTooLate) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestLandingToLatePoints()
+            }
+            if (testInstance.flightTestExitRoomTooLate) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestExitRoomTooLatePoints()
+            }
+            if (testInstance.flightTestGivenTooLate) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestGivenToLatePoints()
+            }
+            if (testInstance.flightTestSafetyAndRulesInfringement) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestSafetyAndRulesInfringementPoints()
+            }
+            if (testInstance.flightTestInstructionsNotFollowed) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestInstructionsNotFollowedPoints()
+            }
+            if (testInstance.flightTestFalseEnvelopeOpened) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestFalseEnvelopeOpenedPoints()
+            }
+            if (testInstance.flightTestSafetyEnvelopeOpened) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestSafetyEnvelopeOpenedPoints()
+            }
+            if (testInstance.flightTestFrequencyNotMonitored) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestFrequencyNotMonitoredPoints()
+            }
+            if (testInstance.flightTestForbiddenEquipment) {
+                testInstance.flightTestPenalties += testInstance.GetFlightTestForbiddenEquipmentPoints()
+            }
+            testInstance.flightTestPenalties += testInstance.flightTestOtherPenalties
+            
+            // observationTestPenalties
+            testInstance.observationTestPenalties = 0
+            if (testInstance.IsObservationSignUsed()) { 
+                testInstance.observationTestTurnPointPhotoPenalties = 0
+                testInstance.observationTestRoutePhotoPenalties = 0
+                testInstance.observationTestGroundTargetPenalties = 0
+            }
+            if (testInstance.IsObservationTestTurnpointRun()) {
+                if (testInstance.GetTurnpointRoute().IsTurnpointSign()) {
+                    for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(testInstance,[sort:"id"])) {
+                        if (!DisabledCheckPointsTools.Contains(testInstance.task.disabledCheckPointsTurnpointObs, route_instance, "${turnpointdata_instance.tpTitle()},")) {
+                            testInstance.observationTestTurnPointPhotoPenalties += turnpointdata_instance.penaltyCoord
                         }
                     }
-				} else {
-                    set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
-				}
-    		} else if (!coordresult_instance.ignoreGate) {
-				switch(coordresult_instance.type) {
-					case CoordType.TO:
-						if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
-							testInstance.flightTestCheckPointsComplete = false
-						}
-						break
-					case CoordType.LDG:
-						if (testInstance.IsFlightTestCheckLanding()) {
-							testInstance.flightTestCheckPointsComplete = false
-						}
-						break
-					default:
-						testInstance.flightTestCheckPointsComplete = false
-						break
-				}
-    		}
-    		if (coordresult_instance.planProcedureTurn) {
-	    		if (coordresult_instance.resultProcedureTurnEntered) {
-		    		if (coordresult_instance.resultProcedureTurnNotFlown) {
-						if (last_coordresult_instance && DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn,route_instance).contains("${last_coordresult_instance.title()},")) {
-						    // no penalties
-                            set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, false) // noBadTurn, no hide
-                        } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
-                            // no penalties
-                            set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, false) // noBadTurn, no hide
-						} else if (testInstance.task.procedureTurnDuration == 0) {
-                            // no penalties
-                            set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, true) // noBadTurn, hide
-						} else {
-							testInstance.flightTestCheckPointPenalties += testInstance.GetFlightTestProcedureTurnNotFlownPoints()
-                            set_calcresult_nobadturn(testInstance, last_coordresult_instance, false, false) // no noBadTurn, no hide
-						}
-		    		}
-	    		} else {
-	    			testInstance.flightTestCheckPointsComplete = false
-	    		}
-    		}
-    		if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
-                if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsMinAltitude,route_instance).contains("${coordresult_instance.title()},")) {
-				    testInstance.flightTestCheckPointPenalties += testInstance.GetFlightTestMinAltitudeMissedPoints()
                 }
-    		}
-    		if (coordresult_instance.resultBadCourseNum) {
-                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse,route_instance).contains("${coordresult_instance.title()},")) {
-                    // no penalties
-                    set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
-                } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
-                    // no penalties
-                    set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
-                } else {
-                    testInstance.flightTestCheckPointPenalties += coordresult_instance.GetBadCoursePenalties()
-                    set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, false) // no noBadCourse
-                }
-    		}
-    		if (coordresult_instance.resultOutsideCorridorSeconds) {
-                if (testInstance.GetFlightTestOutsideCorridorPointsPerSecond() == 0) {
-                    // no penalties
-                    set_calcresult_nooutsidecorridor(testInstance, last_coordresult_instance, coordresult_instance, true) // noOutsideCorridor
-                } else {
-                    testInstance.flightTestCheckPointPenalties += coordresult_instance.GetOutsideCorridorPenalties()
-                    set_calcresult_nooutsidecorridor(testInstance, last_coordresult_instance, coordresult_instance, false) // no noOutsideCorridor
-                }
-    		}
-			last_coordresult_instance = coordresult_instance
-    	}
-    	testInstance.flightTestPenalties = testInstance.flightTestCheckPointPenalties
-        if (testInstance.flightTestTakeoffMissed) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestTakeoffMissedPoints()
-        }
-        if (!testInstance.GetFlightTestBadCourseStartLandingSeparatePoints()) {
-            if (testInstance.flightTestBadCourseStartLanding) {
-                testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
+                testInstance.observationTestPenalties += testInstance.observationTestTurnPointPhotoPenalties
             }
-        } else {
-            if (testInstance.flightTestBadCourseStart) {
-                testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
-            }
-            if (testInstance.flightTestBadCourseLanding) {
-                testInstance.flightTestPenalties += testInstance.GetFlightTestBadCourseStartLandingPoints()
-            }
-        }
-        if (testInstance.flightTestLandingTooLate) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestLandingToLatePoints()
-        }
-        if (testInstance.flightTestExitRoomTooLate) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestExitRoomTooLatePoints()
-        }
-        if (testInstance.flightTestGivenTooLate) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestGivenToLatePoints()
-        }
-        if (testInstance.flightTestSafetyAndRulesInfringement) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestSafetyAndRulesInfringementPoints()
-        }
-        if (testInstance.flightTestInstructionsNotFollowed) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestInstructionsNotFollowedPoints()
-        }
-        if (testInstance.flightTestFalseEnvelopeOpened) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestFalseEnvelopeOpenedPoints()
-        }
-        if (testInstance.flightTestSafetyEnvelopeOpened) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestSafetyEnvelopeOpenedPoints()
-        }
-        if (testInstance.flightTestFrequencyNotMonitored) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestFrequencyNotMonitoredPoints()
-        }
-        if (testInstance.flightTestForbiddenEquipment) {
-            testInstance.flightTestPenalties += testInstance.GetFlightTestForbiddenEquipmentPoints()
-        }
-		testInstance.flightTestPenalties += testInstance.flightTestOtherPenalties
-    	
-		// observationTestPenalties
-        testInstance.observationTestPenalties = 0
-        if (testInstance.IsObservationSignUsed()) { 
-            testInstance.observationTestTurnPointPhotoPenalties = 0
-            testInstance.observationTestRoutePhotoPenalties = 0
-            testInstance.observationTestGroundTargetPenalties = 0
-        }
-        if (testInstance.IsObservationTestTurnpointRun()) {
-            if (testInstance.GetTurnpointRoute().IsTurnpointSign()) {
-                for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(testInstance,[sort:"id"])) {
-                    if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs,route_instance).contains("${turnpointdata_instance.tpTitle()},")) {
-                        testInstance.observationTestTurnPointPhotoPenalties += turnpointdata_instance.penaltyCoord
+            if (testInstance.IsObservationTestEnroutePhotoRun()) {
+                if (testInstance.GetEnroutePhotoMeasurement().IsEnrouteMeasurement()) {
+                    for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(testInstance,[sort:"id"])) {
+                        if (!testInstance.task.disabledEnroutePhotoObs.contains("${enroutephotodata_instance.photoName},")) {
+                            testInstance.observationTestRoutePhotoPenalties += enroutephotodata_instance.penaltyCoord
+                        }
                     }
                 }
+                testInstance.observationTestPenalties += testInstance.observationTestRoutePhotoPenalties
             }
-            testInstance.observationTestPenalties += testInstance.observationTestTurnPointPhotoPenalties
-        }
-        if (testInstance.IsObservationTestEnroutePhotoRun()) {
-            if (testInstance.GetEnroutePhotoMeasurement().IsEnrouteMeasurement()) {
-                for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(testInstance,[sort:"id"])) {
-                    if (!testInstance.task.disabledEnroutePhotoObs.contains("${enroutephotodata_instance.photoName},")) {
-                        testInstance.observationTestRoutePhotoPenalties += enroutephotodata_instance.penaltyCoord
+            if (testInstance.IsObservationTestEnrouteCanvasRun()) {
+                if (testInstance.GetEnrouteCanvasMeasurement().IsEnrouteMeasurement()) {
+                    for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
+                        if (!testInstance.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")) {
+                            testInstance.observationTestGroundTargetPenalties += enroutecanvasdata_instance.penaltyCoord
+                        }
                     }
                 }
+                testInstance.observationTestPenalties += testInstance.observationTestGroundTargetPenalties
             }
-            testInstance.observationTestPenalties += testInstance.observationTestRoutePhotoPenalties
+            testInstance.observationTestPenalties += testInstance.observationTestOtherPenalties
         }
-        if (testInstance.IsObservationTestEnrouteCanvasRun()) {
-            if (testInstance.GetEnrouteCanvasMeasurement().IsEnrouteMeasurement()) {
-                for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
-                    if (!testInstance.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")) {
-                        testInstance.observationTestGroundTargetPenalties += enroutecanvasdata_instance.penaltyCoord
-                    }
-                }
-            }
-            testInstance.observationTestPenalties += testInstance.observationTestGroundTargetPenalties
-        }
-        testInstance.observationTestPenalties += testInstance.observationTestOtherPenalties
 		
         // landingTestPenalties
 		if (testInstance.IsLandingTestAnyRun()) {
@@ -11289,7 +11422,7 @@ class FcService
 			if (testInstance.IsLandingTest1Run()) {
 				testInstance.landingTest1Penalties = 0
 				if (testInstance.landingTest1Measure) {
-					testInstance.landingTest1Landing = GetLanding(testInstance.landingTest1Measure)
+					testInstance.landingTest1Landing = get_landing_sel(testInstance.landingTest1Measure)
 				}
 				switch (testInstance.landingTest1Landing) {
 					case 1:
@@ -11300,6 +11433,8 @@ class FcService
 						testInstance.landingTest1Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest1Points)
 						break
 					case 3:
+					case 4:
+					case 5:
 						testInstance.landingTest1Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest1Points)
 						break
 				}
@@ -11340,7 +11475,7 @@ class FcService
 			if (testInstance.IsLandingTest2Run()) {
 				testInstance.landingTest2Penalties = 0
 				if (testInstance.landingTest2Measure) {
-					testInstance.landingTest2Landing = GetLanding(testInstance.landingTest2Measure)
+					testInstance.landingTest2Landing = get_landing_sel(testInstance.landingTest2Measure)
 				}
 				switch (testInstance.landingTest2Landing) {
 					case 1:
@@ -11351,6 +11486,8 @@ class FcService
 						testInstance.landingTest2Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest2Points)
 						break
 					case 3: 
+					case 4: 
+					case 5: 
 						testInstance.landingTest2Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest2Points)
 						break
 				}
@@ -11391,7 +11528,7 @@ class FcService
 			if (testInstance.IsLandingTest3Run()) {
 				testInstance.landingTest3Penalties = 0
 				if (testInstance.landingTest3Measure) {
-					testInstance.landingTest3Landing = GetLanding(testInstance.landingTest3Measure)
+					testInstance.landingTest3Landing = get_landing_sel(testInstance.landingTest3Measure)
 				}
 				switch (testInstance.landingTest3Landing) {
 					case 1:
@@ -11402,6 +11539,8 @@ class FcService
 						testInstance.landingTest3Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest3Points)
 						break
 					case 3: 
+					case 4: 
+					case 5: 
 						testInstance.landingTest3Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest3Points)
 						break
 				}
@@ -11442,7 +11581,7 @@ class FcService
 			if (testInstance.IsLandingTest4Run()) {
 				testInstance.landingTest4Penalties = 0
 				if (testInstance.landingTest4Measure) {
-					testInstance.landingTest4Landing = GetLanding(testInstance.landingTest4Measure)
+					testInstance.landingTest4Landing = get_landing_sel(testInstance.landingTest4Measure)
 				}
 				switch (testInstance.landingTest4Landing) {
 					case 1:
@@ -11453,6 +11592,8 @@ class FcService
 						testInstance.landingTest4Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest4Points)
 						break
 					case 3: 
+					case 4: 
+					case 5: 
 						testInstance.landingTest4Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest4Points)
 						break
 				}
@@ -11653,14 +11794,14 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-	private int GetLanding(String landingMeasure)
+	private int get_landing_sel(String landingMeasure)
 	{
 		if (landingMeasure) {
 			switch (landingMeasure) {
-				case "NO":
-					return 2
-				case "OUT":
-					return 3
+				case Defs.LANDING_NO:        return Defs.LANDING_SEL_NO
+				case Defs.LANDING_OUT:       return Defs.LANDING_SEL_OUT
+				case Defs.LANDING_OUT_SHORT: return Defs.LANDING_SEL_OUT_SHORT
+				case Defs.LANDING_OUT_LONG:  return Defs.LANDING_SEL_OUT_LONG
 			}
 		}
 		return 1
@@ -13036,16 +13177,12 @@ class FcService
                 }
             }
 
-            boolean is_corridor = false
-            if (coordresult_instance.test.flighttestwind.flighttest.route.corridorWidth) {
-                is_corridor = true
-            }
             params.resultAltitude = Languages.GetLanguageDecimal(showLanguage, params.resultAltitude)
             
             coordresult_instance.properties = params
 			coordresult_instance.resultCpTimeInput = params.resultCpTimeInput
             
-            if (is_corridor) {
+            if (coordresult_instance.test.flighttestwind.IsCorridor()) {
                 if (params.resultOutsideCorridorMeasurement) {
                     coordresult_instance.resultOutsideCorridorMeasurement = params.resultOutsideCorridorMeasurement
                     coordresult_instance.resultOutsideCorridorSeconds = 0
@@ -13077,18 +13214,18 @@ class FcService
             }
 
             calculateTestPenalties(coordresult_instance.test,false)
-            Route route_instance = coordresult_instance.test.flighttestwind.flighttest.route
+            Route route_instance = coordresult_instance.test.flighttestwind.GetRoute()
 	
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
 				String altitude_points = "0"
 				if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
-                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsMinAltitude,route_instance).contains("${coordresult_instance.title()},")) {
+                    if (!DisabledCheckPointsTools.Contains(coordresult_instance.test.task.disabledCheckPointsMinAltitude, route_instance, "${coordresult_instance.title()},")) {
                         altitude_points = coordresult_instance.test.GetFlightTestMinAltitudeMissedPoints().toString()
                     }
 				}
                 int badcourse_penalties = 0
                 if (coordresult_instance.resultBadCourseNum) {
-                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsBadCourse,route_instance).contains("${coordresult_instance.title()},")) {
+                    if (!DisabledCheckPointsTools.Contains(coordresult_instance.test.task.disabledCheckPointsBadCourse, route_instance, "${coordresult_instance.title()},", false)) {
                         badcourse_penalties = coordresult_instance.GetBadCoursePenalties()
                     }
                 }
@@ -13309,7 +13446,7 @@ class FcService
 		if (coordResultInstance.type.IsAltitudeCheckCoord()) {
 			if (coordResultInstance.resultAltitude) {
 				if (coordResultInstance.type.IsAltitudeCheckCoord()) {
-					Route route_instance = coordResultInstance.test.task.flighttest.route
+					Route route_instance = coordResultInstance.test.flighttestwind.GetRoute()
                     int min_altitude = coordResultInstance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround)
                     if (coordResultInstance.resultAltitude < min_altitude) {
                         coordResultInstance.resultMinAltitudeMissed = true
@@ -13332,16 +13469,16 @@ class FcService
     {
 		if (coordResultInstance.type.IsCpTimeCheckCoord()) {
 	        Test test_instance = coordResultInstance.test
-            Route route_instance = test_instance.flighttestwind.flighttest.route
+            Route route_instance = test_instance.flighttestwind.GetRoute()
 			
 	        if (coordResultInstance.resultCpNotFound) {
-				if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPointsNotFound,route_instance).contains("${coordResultInstance.title()},")) { // no not found check
+				if (DisabledCheckPointsTools.Contains(test_instance.task.disabledCheckPointsNotFound, route_instance, "${coordResultInstance.title()},")) { // no not found check
 					coordResultInstance.penaltyCoord = 0
 				} else {
 					coordResultInstance.penaltyCoord = test_instance.GetFlightTestCpNotFoundPoints()
 				}
 	        } else {
-                if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPoints,route_instance).contains("${coordResultInstance.title()},")) { // no time check
+                if (DisabledCheckPointsTools.Contains(test_instance.task.disabledCheckPoints, route_instance, "${coordResultInstance.title()},")) { // no time check
     				coordResultInstance.penaltyCoord = 0
     	        } else {
     		        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)
@@ -13744,25 +13881,33 @@ class FcService
     private void calulateTimetableWarnings(Task taskInstance)
     {
 		printstart "calulateTimetableWarnings"
+
+        // calculate arrivalTimeWarning by arrivalTime
         Date first_date = null
         if (taskInstance.firstTime.size() > 5) {
             first_date = Date.parse("HH:mm:ss",taskInstance.firstTime)
         } else {
             first_date = Date.parse("HH:mm",taskInstance.firstTime)
         }
-        Date last_arrival_time = first_date
+        for (Route route_instance in taskInstance.GetRoutes()) {
+            Date last_arrival_time = first_date
+            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.flighttestwind.GetRoute() == route_instance) {
+                    test_instance.arrivalTimeWarning = false
+                    if (last_arrival_time > test_instance.arrivalTime) {
+                        test_instance.arrivalTimeWarning = true
+                        println "Arrival time warning ($test_instance.crew.name)."
+                    }
+                    last_arrival_time = test_instance.arrivalTime
+
+                    test_instance.save()
+                }
+            }
+        }
         
+        // calculate takeoffTimeWarning
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
 			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-
-	            // calculate arrivalTimeWarning by arrivalTime
-	            test_instance.arrivalTimeWarning = false
-	            if (last_arrival_time > test_instance.arrivalTime) {
-	                test_instance.arrivalTimeWarning = true
-					println "Arrival time warning ($test_instance.crew.name)."
-	            }
-	            last_arrival_time = test_instance.arrivalTime
-	            
 	            // calculate takeoffTimeWarning by aircraft
 	            test_instance.takeoffTimeWarning = false
 	            boolean found_aircraft = false
@@ -13967,7 +14112,7 @@ class FcService
         testInstance.takeoffTime = time.getTime()
         
         // calulate startTime
-		Map calculated_time = TimeCalculator(CoordType.SP, testInstance.flighttestwind.TODurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
+		Map calculated_time = TimeCalculator(CoordType.SP, testInstance.flighttestwind.TODurationFormula, testInstance.flighttestwind.GetRoute(), testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
 			FcMath.SetFullMinute(time)
@@ -13984,7 +14129,7 @@ class FcService
         testInstance.finishTime = time.getTime()
         
         // calculate maxLandingTime
-		calculated_time = TimeCalculator(CoordType.LDG, testInstance.flighttestwind.LDGDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
+		calculated_time = TimeCalculator(CoordType.LDG, testInstance.flighttestwind.LDGDurationFormula, testInstance.flighttestwind.GetRoute(), testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
 			FcMath.SetFullMinute(time)
@@ -14210,7 +14355,7 @@ class FcService
 
         // calculate TestLegFlights
 		printstart "Create and calculate TestLegFlight instances"
-        RouteLegCoord.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route,[sort:"id"]).each { RouteLegCoord routelegcoord_instance ->
+        RouteLegCoord.findAllByRoute(testInstance?.flighttestwind?.GetRoute(),[sort:"id"]).each { RouteLegCoord routelegcoord_instance ->
 			switch (routelegcoord_instance.startTitle.type) {
 				case CoordType.TO:
 				case CoordType.FP:
@@ -14218,13 +14363,13 @@ class FcService
 					break
 				case CoordType.SECRET:
 		            TestLegFlight testlegflight_instance = new TestLegFlight()
-		            calculateLeg(testInstance,testlegflight_instance, routelegcoord_instance, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS, 0, routelegcoord_instance.turnTrueTrack) // 0 - ohne ProcedureTurn
+		            calculateLeg(testInstance,testlegflight_instance, routelegcoord_instance, testInstance.flighttestwind.GetRoute(), testInstance.flighttestwind.wind, testInstance.taskTAS, 0, routelegcoord_instance.turnTrueTrack) // 0 - ohne ProcedureTurn
 		            testlegflight_instance.test = testInstance
 		            testlegflight_instance.save()
 					break
 				default:
 		            TestLegFlight testlegflight_instance = new TestLegFlight()
-		            calculateLeg(testInstance,testlegflight_instance, routelegcoord_instance, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS, testInstance.task.procedureTurnDuration, routelegcoord_instance.turnTrueTrack)
+		            calculateLeg(testInstance,testlegflight_instance, routelegcoord_instance, testInstance.flighttestwind.GetRoute(), testInstance.flighttestwind.wind, testInstance.taskTAS, testInstance.task.procedureTurnDuration, routelegcoord_instance.turnTrueTrack)
 		            testlegflight_instance.test = testInstance
 		            testlegflight_instance.save()
 					break
@@ -14251,7 +14396,7 @@ class FcService
         // create coordResultInstances
 		printstart "Create and calculate CoordResult instances"
         int coord_index = 0
-        Route route_instance = testInstance.flighttestwind.flighttest.route
+        Route route_instance = testInstance.flighttestwind.GetRoute()
 		CoordType last_coordtype = CoordType.UNKNOWN
         CoordRoute.findAllByRoute(route_instance,[sort:"id"]).each { CoordRoute coordroute_instance ->
             CoordResult coordresult_instance = new CoordResult()

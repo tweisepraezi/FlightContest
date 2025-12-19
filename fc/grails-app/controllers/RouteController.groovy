@@ -42,7 +42,7 @@ class RouteController {
     }
 
     def show = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             session.routeReturnAction = 'list'
             session.routeReturnController = controllerName
@@ -55,7 +55,7 @@ class RouteController {
     }
 
     def edit = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             session.routeReturnAction = 'show'
             session.routeReturnController = controllerName
@@ -135,7 +135,7 @@ class RouteController {
         if (params.mapexportquestionReturnAction) {
             redirect(action:params.mapexportquestionReturnAction,controller:params.mapexportquestionReturnController,id:params.mapexportquestionReturnID)
         } else if (session.routeReturnAction) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 long next_routeid = route.instance.GetNextRouteID()
                 if (next_routeid) {
@@ -152,7 +152,7 @@ class RouteController {
 	}
 	
     def gotonext = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             long next_id = route.instance.GetNextRouteID()
             if (next_id) {
@@ -167,7 +167,7 @@ class RouteController {
     }
     
     def gotoprev = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             long next_id = route.instance.GetPrevRouteID()
             if (next_id) {
@@ -182,32 +182,32 @@ class RouteController {
     }
     
 	def createcoordroutes = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         redirect(controller:'coordRoute',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
 	}
 
     def createsecretcoordroutes = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         redirect(controller:'coordRoute',action:'create',params:['secret':true,'route.id':route.instance.id,'routeid':route.instance.id])
     }
     
     def createenroutephoto = {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         redirect(controller:'coordEnroutePhoto',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
     
     def removeallenroutephoto = {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         redirect(controller:'coordEnroutePhoto',action:'removeall',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
 
     def createenroutecanvas = {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         redirect(controller:'coordEnrouteCanvas',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
     
     def removeallenroutecanvas = {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         redirect(controller:'coordEnrouteCanvas',action:'removeall',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
 
@@ -487,12 +487,12 @@ class RouteController {
 	}
     
     def assignnamealphabetical_enroutephoto = {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         redirect(controller:'coordEnroutePhoto',action:'assignnamealphabetical',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
     
     def assignnamerandomly_enroutephoto = {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         redirect(controller:'coordEnroutePhoto',action:'assignnamerandomly',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
 	
@@ -576,7 +576,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -590,7 +590,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -604,7 +604,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -618,7 +618,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -640,7 +640,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -666,7 +666,7 @@ class RouteController {
 	}
     
     def showofflinemap_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             gpxService.printstart "showofflinemap_route: Show map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
@@ -693,7 +693,7 @@ class RouteController {
     }
 
     def showonlinemap_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             gpxService.printstart "showonlinemap_route: Show map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
@@ -721,7 +721,7 @@ class RouteController {
     }
 
     def gpxexport_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             gpxService.printstart "gpxexport_route: Export route '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
@@ -749,7 +749,7 @@ class RouteController {
     }
     
     def gpxexport_route_semicirclegates = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             gpxService.printstart "gpxexport_route_semicirclegates: Export route '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
@@ -777,7 +777,7 @@ class RouteController {
     }
 
     def kmzexport_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             kmlService.printstart "kmzexport_route: Export route '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
@@ -805,7 +805,7 @@ class RouteController {
     }
 	
 	def kmzexportairspaces_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             kmlService.printstart "kmzexportairspaces_route"
             save_map_settings(route.instance, params)
@@ -835,7 +835,7 @@ class RouteController {
 	}
 
 	def kmzexportairspaceshidden_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             kmlService.printstart "kmzexportairspaceshidden_route"
             save_map_settings(route.instance, params)
@@ -865,7 +865,7 @@ class RouteController {
 	}
 
     def getairspaces_airportarea_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             save_map_settings(route.instance, params)
 			Map ret = openAIPService.GetAirspacesAirportarea(route.instance, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
@@ -883,7 +883,7 @@ class RouteController {
     }
     
     def getairfields_airportarea_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             save_map_settings(route.instance, params)
 			Map ret = openAIPService.GetAirfieldsAirportarea(route.instance, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
@@ -901,7 +901,7 @@ class RouteController {
     }
     
 	def csvexport_airfields_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             kmlService.printstart "csvexport_airfields_route"
             save_map_settings(route.instance, params)
@@ -931,7 +931,7 @@ class RouteController {
 	}
 
 	def csvexportold_airfields_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             kmlService.printstart "csvexportold_airfields_route"
             save_map_settings(route.instance, params)
@@ -961,7 +961,7 @@ class RouteController {
 	}
 
 	def csvexport_check_airfields_route = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             kmlService.printstart "csvexport_check_airfields_route"
             save_map_settings(route.instance, params)
@@ -991,7 +991,7 @@ class RouteController {
 	}
 
     def saveshow_ajax = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             if (params.showCoords) {
                 route.instance.showCoords = params.showCoords == "true"
@@ -1038,7 +1038,7 @@ class RouteController {
     }
     
     def mapexportquestion = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             route.instance.SetAllContestMapPoints()
             
@@ -1118,7 +1118,7 @@ class RouteController {
     }
     
     def mapsavesettings = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             save_map_settings(route.instance, params)
         }
@@ -1127,7 +1127,7 @@ class RouteController {
     
     def mapgenerate = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -1254,7 +1254,7 @@ class RouteController {
     
     def mapgenerate2 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -1385,7 +1385,7 @@ class RouteController {
     
     def mapgenerate3 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -1516,7 +1516,7 @@ class RouteController {
     
     def mapgenerate4 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -1647,7 +1647,7 @@ class RouteController {
     
     def mapgenerate_noroute = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -1774,7 +1774,7 @@ class RouteController {
     
     def mapgenerate_taskcreator = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -1902,7 +1902,7 @@ class RouteController {
     
     def mapgenerate_takeoff = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2029,7 +2029,7 @@ class RouteController {
     
     def mapgenerate_noroute2 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2160,7 +2160,7 @@ class RouteController {
     
     def mapgenerate_taskcreator2 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2292,7 +2292,7 @@ class RouteController {
     
     def mapgenerate_takeoff2 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2423,7 +2423,7 @@ class RouteController {
     
     def mapgenerate_noroute3 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2554,7 +2554,7 @@ class RouteController {
     
     def mapgenerate_taskcreator3 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2686,7 +2686,7 @@ class RouteController {
     
     def mapgenerate_takeoff3 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2817,7 +2817,7 @@ class RouteController {
     
     def mapgenerate_noroute4 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -2948,7 +2948,7 @@ class RouteController {
     
     def mapgenerate_taskcreator4 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3080,7 +3080,7 @@ class RouteController {
     
     def mapgenerate_takeoff4 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3211,7 +3211,7 @@ class RouteController {
     
     def mapgenerate_allroutedetails = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3351,7 +3351,7 @@ class RouteController {
     
     def mapgenerate_allroutedetails2 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3495,7 +3495,7 @@ class RouteController {
     
     def mapgenerate_allroutedetails3 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3639,7 +3639,7 @@ class RouteController {
     
     def mapgenerate_allroutedetails4 = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3783,7 +3783,7 @@ class RouteController {
     
     def mapgenerate_airportarea = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -3915,7 +3915,7 @@ class RouteController {
     
     def mapgenerate_airportarea_taskcreator = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapEdition++
                 save_map_settings(route.instance, params)
@@ -4239,7 +4239,7 @@ class RouteController {
     }
     
     def mapbreak = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             String webroot_dir = servletContext.getRealPath("/")
             String route_id = ""
@@ -4262,7 +4262,7 @@ class RouteController {
     }
     
     def mapfetch = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             String webroot_dir = servletContext.getRealPath("/")
             String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
@@ -4311,7 +4311,7 @@ class RouteController {
     }
     
     def mapdiscard = {
-        Map route = domainService.GetRoute(params) 
+        Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             String webroot_dir = servletContext.getRealPath("/")
             String printjobid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + route.instance.id + ".txt"
@@ -4370,7 +4370,7 @@ class RouteController {
 
     def mapsave_gotomap = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapPrint = params.contestMapPrint
                 String webroot_dir = servletContext.getRealPath("/")
@@ -4433,7 +4433,7 @@ class RouteController {
     
     def mapsave = {
         if (session?.lastContest) {
-            Map route = domainService.GetRoute(params) 
+            Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 route.instance.contestMapPrint = params.contestMapPrint
                 String webroot_dir = servletContext.getRealPath("/")
@@ -4497,7 +4497,7 @@ class RouteController {
     def mapsendmail = {
         if (session?.lastContest) {
             session.lastContest.refresh()
-            Map route = domainService.GetRoute(params)
+            Map route = domainService.GetRouteMap(params)
             if (route.instance) {
                 route.instance.contestMapPrint = params.contestMapPrint
                 String webroot_dir = servletContext.getRealPath("/")
@@ -4640,7 +4640,7 @@ class RouteController {
     def sendmail = {
         if (session?.lastContest) {
             session.lastContest.refresh()
-            Map route = domainService.GetRoute(params)
+            Map route = domainService.GetRouteMap(params)
             if (route.instance) {
                 Map ret = emailService.emailRoute(route.instance, session.printLanguage, grailsAttributes, request)
                 flash.message = ret.message

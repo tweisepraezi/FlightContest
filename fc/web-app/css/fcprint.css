@@ -166,6 +166,10 @@ table.timetablelist td.planningtimebefore, table.timetablejudgelist td.planningt
 	font-weight: bold;
 }
 
+table.timetablelist td.route, table.timetablejudgelist td.route {
+    white-space: nowrap;
+}
+
 /* -------------------------------------------------------------------------------------------------------------------- */
 table.legtimelist {
     width: 0%;
@@ -521,3 +525,6 @@ table.infoanr tr.takeoff td.value {
     font-weight: bold;
 }
 
+table.infoanr tr.route td.value {
+    font-weight: bold;
+}

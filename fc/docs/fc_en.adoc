@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.1.11
-:revdate: 10.12.2025
+:revnumber: 4.2.0
+:revdate: 19.12.2025
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -1268,18 +1268,19 @@ Distance measurement (map) [mm]'.
 [[anr]]
 == Planning and evaluation of ANR competitions
 
-Only individual parcours are supported for a task.
-This means that only exactly one parcour can be drawn on a map
-and the calculation of all time tables and flight plans for a task is only possible for exactly one parcour. +
-Of course, it is also possible to perform several tasks in succession, in which the crews compete against each other.
+Parcours with up to 4 routes are supported.
 
+Each route is initially a single-route parcour.
+By assigning up to 3 routes in the route settings, a route can be configured as a multi-route parcour.
+
+<<fc_en.adoc#anr-routes-construction>> +
 <<fc_en.adoc#anr-parcour-construction>> +
 <<fc_en.adoc#anr-planning>> +
 <<fc_en.adoc#anr-crew-results>> +
 <<fc_en.adoc#anr-evaluation>>
 
-[[anr-parcour-construction]]
-=== Parcour construction
+[[anr-routes-construction]]
+=== Routes construction
 
 . Create competition (Contest -> New Contest)
 +
@@ -1310,24 +1311,24 @@ With “KMZ export airspaces”, an export can be made to view the airspaces in 
 +
 Save the generated map "Airfield name (Task Creator)" without further settings with "Save map and switch to the list of maps".
 
-. Construct ANR parcour in the Task Creator
+. Construct routes in the Task Creator
 +
 Start Task Creator (Maps -> "Airfield name (Task Creator)" -> Task Creator -> …) +
 +
 In the Task Creator that has been started, a "Map Url" is preset to the generated map and can be loaded with “Load”. +
 Set the page guide (PG) to "A4" or "A4 W". This shows the size of the A4 map printout (portrait or landscape format). +
-After activating "Turn Points -> Edit", double-click to add all checkpoints to the map for the ANR parcour one after the other:
+After activating "Turn Points -> Edit", double-click to add all checkpoints to the map for the route one after the other:
 The first point is to be put on the airfield (TOP). The second point becomes SP. The last point becomes FP. +
 The page guide is realigned with each new point. By adding a plotting point, the alignment of the page guide can be further influenced. +
-With “Task name -> Save”, the parcour can be saved as a CSV file in the download folder of the computer (enter the task name first). +
+With “Task name -> Save”, the route can be saved as a CSV file in the download folder of the computer (enter the task name first). +
 +
-The finished parcour is to be exported with “Export FC kml”.
+The finished route is to be exported with “Export FC kml”.
 +
-To correct the parcour, start the Task Creator by clicking on “Maps -> Task Creator”,
+To correct the route, start the Task Creator by clicking on “Maps -> Task Creator”,
 load the saved CSV file with “Task name -> Load”, load the “Map Url”, and activate “Turn Points -> Edit”. +
 Now the position of individual checkpoints can be changed, new checkpoints added or checkpoints deleted.
 
-. Import parcour (Routes -> Import FC route)
+. Import route (Routes -> Import FC route)
 +
 Select the kml file exported in Task Creator. +
 The imported route appears in the route list. +
@@ -1340,12 +1341,20 @@ The route can now be checked for correctness using “OSM online map”. +
 If the route includes a semi-circle, it must be converted into a route with semi-circle gates
 (run "GPX export (with semi-circle gates)", and run "Import FC route" again).
 
-. Create an A4 competition map with ANR parcour
+[[anr-parcour-construction]]
+=== Parcour construction
+
+. Configure multi-route parcour (optional)
++
+Open route settings of 1st route +
+Assign up to 3 additional routes to the first route and specify a parcour name.
+
+. Create an A4 competition map
 +
 OSM Contest Map -> Show 1. settings +
 Deselect checkpoints between SP and FP for printing on the map (-> Turnpoints for printing) +
 Select the option to print in portrait format if necessary +
-Run “Generate” +
+Run "Generate" +
 +
 The generated map is to be saved with ‘Save map and switch to the list of maps’. +
 +
@@ -1375,13 +1384,13 @@ If necessary, correct the runway direction and arrival and departure flight time
 Click on "Create"
 +
 The settings made here can be edited again by clicking on the route name, which replaces the display of “[Add Navigation Test]”. +
-Further settings can also be made here, such as the flight plan design, the display of values in the flight plan and changed values for runway direction and arrival and departure flight times. +
+Further settings can also be made here, such as additional routes for multi-route parcours, the flight plan design, the display of values in the flight plan and changed values for runway direction and arrival and departure flight times. +
 Furthermore, the classic ANR forms can also be generated here. To do this, a default print map must be assigned to a map that was created with ANR size.
 
 .. Calculate the crew's flight plans
 +
 Click on "Select all" +
-Click on "Assign wind" +
+Click on "Assign route" +
 Click on "Calculate timetable"
 
 . Create flight plans and timetables
@@ -1775,9 +1784,9 @@ Table classes:
 |resultclasslist|value [#crew.num]|resultclass shortresultclass crew aircraft tas
 |aircraftlist|value [#aircraft]|aircraft aircrafttype aircraftcolor crew1 crew2
 
-|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime corridorwidth version
+|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass route planningtime planningtimebefore takeofftime version
 |legtimelist|value [#tas]|tas legtime
-|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime corridorwidth sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass route planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
 |timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 |landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4	

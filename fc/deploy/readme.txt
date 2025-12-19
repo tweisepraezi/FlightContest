@@ -1,9 +1,42 @@
-﻿Flight Contest
-==============
+﻿Flight Contest Versionshinweise
+===============================
+
+Änderungen 4.2.0
+----------------
+- ANR: Parcour-Planung und -Auswertung mit mehreren Strecken hinzugefügt
+    Jede Strecke ist grundsätzlich erst einmal ein Einzel-Strecken-Parcour.
+    Durch Zuweisung von bis zu 3 Strecken in den Strecken-Einstellungen kann eine Strecke zum Mehrfach-Strecken-Parcour konfiguriert werden.
+    Ein Parcour kann damit bis zu 4 Strecken haben.
+    OSM-Wettbewerbs-Karte des Mehrfach-Strecken-Parcours:
+        Karte enthält neben der Parcour-Strecke zusätzlich alle zugewiesenen Strecken.
+        Unter dem SP wird dann zusätzlich der Strecken-Name gedruckt.
+        Alle Check-Punkt-Druck-Optionen wirken auf alle Strecken gleichermaßen, so dass alle Strecken des Parcours eine identische Anzahl von Wendepunkten haben müssen.
+    Nutzung in einer neuen Aufgabe:
+        1. Aufgabe - Navigationstest hinzufügen: Wählen Sie die Parcour-Strecke aus und legen Sie Startbahn-Einstellungen zu TO und LDG fest. 
+        2. Navigationstest - Strecke hinzufügen: Weisen Sie dann die weiteren Strecken dem Navigationstest zu.
+        3. Planung - Strecke zuweisen: Weisen Sie den Besatzungen abweichselnd die Strecken zu.
+            Z.B. kann mit "Auswahl Pos. 1 von 2" die jeweils 1. Besatzung aller 2 Besatzungen markiert werden, um die 1. Strecke eines 2-Strecken-Parcours zuzuweisen.        
+- Planung: Auswahlmöglichkeiten von Besatzungen erweitert
+        Besatzungen einer Klasse auswählbar
+        Besatzungen einer bestimmten Reihenfolge auswählbar (z.B. kann mit "Pos. 1 von 2" die jeweils 1. Besatzung aller 2 Besatzungen ausgewählt werden)
+- Logger-Auswertung: Funktion "Zusätzliches Ergebnis" hinzugefügt
+    Erlaubt zusätzliche Loggerauswertungen eines Teilnehmers mit Reserve-Logger zum Vergleich.
+    Zusätzliche Auswertungen gehen nicht in die Endauswertung ein.
+- Landeergebnisse erweitert:
+    Landemesswert OUT- (Landung außerhalb der Landebox (kurz)) hinzugefügt
+    Landemesswert OUT+ (Landung außerhalb der Landebox (lang)) hinzugefügt
+    Neues Eingabefeld 'Landekommentar': mehrzeilger Text, z.B. Details zur abnormalen Landung oder Infos für Video-Check
+    Neues Eingabefeld 'Video-Check': Checkbox, um eine noch vorzunehmende Video-Überprüfung anzuzeigen
+        Ein aktivierter Video-Check wird in der Ergebnisliste und in der Live-Ergebnis-Anzeige angezeigt.
+- Endauswertung erweitert:
+    Option "Ausdruck der Startnummer" hinzugefügt
+    Option "Ausdruck der TAS" hinzugefügt
 
 Änderungen 4.1.11
 -----------------
 - Flight Contest Manager: Anpassungen an Windows 11 2025-12 Sicherheitsupdate (KB5072033) (26200.7462)
+    Durch das Windows-Sicherheitsupdate reagiert der Manager auf keine Maus-Kommandos mehr.
+    Weiterhin funktioniert die Anzeige des Vorhandenseins einer neuen FC-Version nicht mehr.
 
 Änderungen 4.1.10
 -----------------

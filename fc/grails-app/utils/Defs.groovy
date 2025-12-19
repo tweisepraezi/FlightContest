@@ -75,6 +75,16 @@ class Defs
     static final String LIVETRACKING_VISIBILITY_UNLISTED               = "unlisted"
     static final String TASKCREATOR_INTERN_ROOT_DIR                    = "http://localhost:8080/fc/taskcreator"
     
+    static final int LANDING_SEL_VALUE                                 = 1
+    static final int LANDING_SEL_NO                                    = 2
+    static final int LANDING_SEL_OUT                                   = 3
+    static final int LANDING_SEL_OUT_SHORT                             = 4
+    static final int LANDING_SEL_OUT_LONG                              = 5
+	static final String LANDING_NO                                     = "NO"   // DB-2.8
+	static final String LANDING_OUT                                    = "OUT"  // DB-2.8
+	static final String LANDING_OUT_SHORT                              = "OUT-" // DB-2.46
+	static final String LANDING_OUT_LONG                               = "OUT+" // DB-2.46
+    
     static final int OSMPRINTMAP_RUNSECONDS                            = 2
     static final String OSMPRINTMAP_GROUP                              = "OsmPrintMapGroup"
     static final String OSMPRINTMAP_ACTION                             = "Action"

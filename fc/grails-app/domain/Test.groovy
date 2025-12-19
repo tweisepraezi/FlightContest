@@ -70,6 +70,7 @@ class Test
 	boolean flightTestModified = true                      // Änderungsanzeige, DB-2.0
 	int     flightTestVersion = 0                          // Änderungsanzeige, DB-2.0
     String  flightTestLink = ""                            // DB-2.10
+    Boolean flightTestAdditionalResult = false             // DB-2.46
 
     int     observationTestTurnPointPhotoPenalties = 0
     int     observationTestRoutePhotoPenalties = 0
@@ -87,7 +88,7 @@ class Test
 	String  landingTest1Measure = ""                       // DB-2.0
 	int     landingTest1MeasurePenalties = 0               // DB-2.0
 	int     landingTest1Penalties = 0                      // DB-2.0
-	int     landingTest1Landing = 1                        // 1-Landing, 2-NoLanding, 3-OutsideLanding, DB-2.0
+	int     landingTest1Landing = Defs.LANDING_SEL_VALUE   // Def.LANDING_SEL_..., DB-2.0
 	boolean landingTest1RollingOutside = false             // DB-2.0
 	boolean landingTest1PowerInBox = false                 // DB-2.0
 	boolean landingTest1GoAroundWithoutTouching = false    // DB-2.0
@@ -97,6 +98,8 @@ class Test
     Boolean landingTest1PowerInAir = false                 // DB-2.9
     Boolean landingTest1FlapsInAir = false                 // DB-2.9
     Boolean landingTest1TouchingObstacle = false           // DB-2.9
+    String  landingTest1Comment = ""                       // DB-2.46
+    Boolean landingTest1VideoCheck = false                 // DB-2.46
 	Boolean landingTest1Complete = false                   // DB-2.35
     Boolean landingTest1LiveTrackingResultOk = false       // DB-2.35
     Boolean landingTest1LiveTrackingResultError = false    // DB-2.35
@@ -106,7 +109,7 @@ class Test
 	String  landingTest2Measure = ""                       // DB-2.0
 	int     landingTest2MeasurePenalties = 0               // DB-2.0
 	int     landingTest2Penalties = 0                      // DB-2.0
-	int     landingTest2Landing = 1                        // 1-Landing, 2-NoLanding, 3-OutsideLanding, DB-2.0
+	int     landingTest2Landing = Defs.LANDING_SEL_VALUE   // Def.LANDING_SEL_..., DB-2.0
 	boolean landingTest2RollingOutside = false             // DB-2.0
 	boolean landingTest2PowerInBox = false                 // DB-2.0
 	boolean landingTest2GoAroundWithoutTouching = false    // DB-2.0
@@ -116,6 +119,8 @@ class Test
 	boolean landingTest2PowerInAir = false                 // DB-2.0
     Boolean landingTest2FlapsInAir = false                 // DB-2.9
     Boolean landingTest2TouchingObstacle = false           // DB-2.9
+    String  landingTest2Comment = ""                       // DB-2.46
+    Boolean landingTest2VideoCheck = false                 // DB-2.46
 	Boolean landingTest2Complete = false                   // DB-2.35
     Boolean landingTest2LiveTrackingResultOk = false       // DB-2.35
     Boolean landingTest2LiveTrackingResultError = false    // DB-2.35
@@ -125,7 +130,7 @@ class Test
 	String  landingTest3Measure = ""                       // DB-2.0
 	int     landingTest3MeasurePenalties = 0               // DB-2.0
 	int     landingTest3Penalties = 0                      // DB-2.0
-	int     landingTest3Landing = 1                        // 1-Landing, 2-NoLanding, 3-OutsideLanding, DB-2.0
+	int     landingTest3Landing = Defs.LANDING_SEL_VALUE   // Def.LANDING_SEL_..., DB-2.0
 	boolean landingTest3RollingOutside = false             // DB-2.0
 	boolean landingTest3PowerInBox = false                 // DB-2.0
 	boolean landingTest3GoAroundWithoutTouching = false    // DB-2.0
@@ -135,6 +140,8 @@ class Test
 	boolean landingTest3PowerInAir = false                 // DB-2.0
 	boolean landingTest3FlapsInAir = false                 // DB-2.0
     Boolean landingTest3TouchingObstacle = false           // DB-2.9
+    String  landingTest3Comment = ""                       // DB-2.46
+    Boolean landingTest3VideoCheck = false                 // DB-2.46
 	Boolean landingTest3Complete = false                   // DB-2.35
     Boolean landingTest3LiveTrackingResultOk = false       // DB-2.35
     Boolean landingTest3LiveTrackingResultError = false    // DB-2.35
@@ -144,7 +151,7 @@ class Test
 	String  landingTest4Measure = ""                       // DB-2.0
 	int     landingTest4MeasurePenalties = 0               // DB-2.0
 	int     landingTest4Penalties = 0                      // DB-2.0
-	int     landingTest4Landing = 1                        // 1-Landing, 2-NoLanding, 3-OutsideLanding, DB-2.0
+	int     landingTest4Landing = Defs.LANDING_SEL_VALUE   // Def.LANDING_SEL_..., DB-2.0
 	boolean landingTest4RollingOutside = false             // DB-2.0
 	boolean landingTest4PowerInBox = false                 // DB-2.0
 	boolean landingTest4GoAroundWithoutTouching = false    // DB-2.0
@@ -154,6 +161,8 @@ class Test
     Boolean landingTest4PowerInAir = false                 // DB-2.9
     Boolean landingTest4FlapsInAir = false                 // DB-2.9
 	boolean landingTest4TouchingObstacle = false           // DB-2.0
+    String  landingTest4Comment = ""                       // DB-2.46
+    Boolean landingTest4VideoCheck = false                 // DB-2.46
 	Boolean landingTest4Complete = false                   // DB-2.35
     Boolean landingTest4LiveTrackingResultOk = false       // DB-2.35
     Boolean landingTest4LiveTrackingResultError = false    // DB-2.35
@@ -324,6 +333,17 @@ class Test
         flightTestExitRoomTooLate(nullable:true)
         flightTestBadCourseStart(nullable:true)
         flightTestBadCourseLanding(nullable:true)
+        
+        // DB-2.46 compatibility
+        flightTestAdditionalResult(nullable:true)
+        landingTest1Comment(nullable:true)
+        landingTest1VideoCheck(nullable:true)
+        landingTest2Comment(nullable:true)
+        landingTest2VideoCheck(nullable:true)
+        landingTest3Comment(nullable:true)
+        landingTest3VideoCheck(nullable:true)
+        landingTest4Comment(nullable:true)
+        landingTest4VideoCheck(nullable:true)
     }
 
 	static mapping = {
@@ -2241,6 +2261,9 @@ class Test
 	
     String name()
     {
+        if (flightTestAdditionalResult) {
+            return "${crew.startNum} - ${taskAircraft.registration} - ${crew.name} (${get_msg('fc.results.additional',false)})"
+        }
         return "${crew.startNum} - ${taskAircraft.registration} - ${crew.name}"
     }
     
@@ -3052,9 +3075,9 @@ class Test
     
     BigDecimal GetCorridorWidth()
     {
-        if (flighttestwind.corridorWidthWind) {
-            return flighttestwind.corridorWidthWind
+        if (flighttestwind) {
+            return flighttestwind.GetCorridorWidth()
         }
-        return flighttestwind.flighttest.route.corridorWidth
+        return 0.0
     }
 }

@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.route.settings')}</title>
+        <title>${message(code:'fc.route.settings')} ${routeInstance.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="route" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.route.settings')}</h2>
+                <h2>${message(code:'fc.route.settings')} ${routeInstance.name()}</h2>
                 <g:hasErrors bean="${routeInstance}">
                     <div class="errors">
                         <g:renderErrors bean="${routeInstance}" />
@@ -26,14 +26,35 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
-                            <g:if test="${!route_used && (routeInstance.contest.anrFlying || routeInstance.corridorWidth)}">
-                                <fieldset>
-                                    <div>
-                                        <label>${message(code:'fc.corridorwidth')} [${message(code:'fc.mile')}]:</label>
+                            <g:if test="${routeInstance.contest.anrFlying || routeInstance.corridorWidth}">
+                                <g:if test="${!route_used}">
+                                    <fieldset>
+                                        <div>
+                                            <label>${message(code:'fc.corridorwidth')} [${message(code:'fc.mile')}]:</label>
+                                            <br/>
+                                            <input type="text" id="corridorWidth" name="corridorWidth" value="${fieldValue(bean:routeInstance,field:'corridorWidth')}" tabIndex="${ti[0]++}"/>
+                                        </div>
                                         <br/>
-                                        <input type="text" id="corridorWidth" name="corridorWidth" value="${fieldValue(bean:routeInstance,field:'corridorWidth')}" tabIndex="${ti[0]++}"/>
-                                    </div>
-                                </fieldset>
+                                        <div>
+                                            <label>${message(code:'fc.parcour.name')}:</label>
+                                            <br/>
+                                            <input type="text" id="parcourName" name="parcourName" value="${fieldValue(bean:routeInstance,field:'parcourName')}" tabIndex="${ti[0]++}"/>
+                                        </div>
+                                        <g:showOtherRoute route="${routeInstance}" otherRouteName="route2ID" otherRouteTitle="${message(code:'fc.route.route2')}" otherRouteID="${routeInstance.route2ID}" otherRouteIDs="${[routeInstance.id,routeInstance.route2ID,routeInstance.route3ID,routeInstance.route4ID]}" ti="${ti}"/>
+                                        <g:showOtherRoute route="${routeInstance}" otherRouteName="route3ID" otherRouteTitle="${message(code:'fc.route.route3')}" otherRouteID="${routeInstance.route3ID}" otherRouteIDs="${[routeInstance.id,routeInstance.route2ID,routeInstance.route3ID,routeInstance.route4ID]}" ti="${ti}"/>
+                                        <g:showOtherRoute route="${routeInstance}" otherRouteName="route4ID" otherRouteTitle="${message(code:'fc.route.route4')}" otherRouteID="${routeInstance.route4ID}" otherRouteIDs="${[routeInstance.id,routeInstance.route2ID,routeInstance.route3ID,routeInstance.route4ID]}" ti="${ti}"/>
+                                    </fieldset>
+                                </g:if>
+                                <g:else>
+                                    <g:if test="${routeInstance.IsOtherRoute()}">
+                                        <div>
+                                            <label>${message(code:'fc.parcour.name')}:</label>
+                                            <br/>
+                                            <input type="text" id="parcourName" name="parcourName" value="${fieldValue(bean:routeInstance,field:'parcourName')}" tabIndex="${ti[0]++}"/>
+                                        </div>
+                                        <br/>
+                                    </g:if>
+                                </g:else>
                             </g:if>
                             <fieldset>
                                 <p>

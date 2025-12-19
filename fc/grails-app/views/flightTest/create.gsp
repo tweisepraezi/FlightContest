@@ -29,29 +29,40 @@
                         <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.title')}:</label>
+                                <g:if test="${contestInstance.anrFlying}">
+                                    <label>${message(code:'fc.parcour')}*:</label>
+                                </g:if>
+                                <g:else>
+                                    <label>${message(code:'fc.route')}*:</label>
+                                </g:else>
+                                <br/>
+                                <g:select id="routeselect_id" from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetParcourName(true)}}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.addtitle')}:</label>
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
-                            <p>
-                                <label>${message(code:'fc.route')}*:</label>
-                                <br/>
-                                <g:select id="routeselect_id" from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
-                            </p>
                         </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.wind')}</legend>
-                            <p>
-                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
-                                <br/>
-                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestInstance,field:'direction')}" tabIndex="${ti[0]++}"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.wind.velocity')}* [${message(code:'fc.knot')}]:</label>
-                                <br/>
-                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestInstance,field:'speed')}" tabIndex="${ti[0]++}"/>
-                            </p>
-                        </fieldset>
+                        <g:if test="${!contestInstance.anrFlying}">
+                            <fieldset>
+                                <legend>${message(code:'fc.wind')}</legend>
+                                <p>
+                                    <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
+                                    <br/>
+                                    <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestInstance,field:'direction')}" tabIndex="${ti[0]++}"/>
+                                </p>
+                                <p>
+                                    <label>${message(code:'fc.wind.velocity')}* [${message(code:'fc.knot')}]:</label>
+                                    <br/>
+                                    <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestInstance,field:'speed')}" tabIndex="${ti[0]++}"/>
+                                </p>
+                            </fieldset>
+                        </g:if>
+                        <g:else>
+                            <input type="hidden" name="direction" value="${0.0}" />
+                            <input type="hidden" name="speed" value="${0.0}" />
+                        </g:else>
                         <fieldset>
                             <legend>${message(code:'fc.runway')}</legend>
                             <p>

@@ -100,7 +100,7 @@ class Task
     Boolean printTimetableJuryReserve1               // DB-2.21 
     Boolean printTimetableJuryReserve2               // DB-2.21 
     Boolean printTimetableJuryReserve3               // DB-2.21 
-	Boolean printTimetableJuryCorridorWidth  = true  // DB-2.44
+	Boolean printTimetableJuryCorridorWidth  = true  // DB-2.44, zu Route umgewidmet
 	Boolean printTimetableJuryLandscape      = true  // DB-2.3
 	Boolean printTimetableJuryA3             = false // DB-2.3
 	
@@ -117,7 +117,7 @@ class Task
 	Boolean printTimetableVersion            = true  // DB-2.3
 	String printTimetableChange              = ""    // DB-2.3
     Boolean printTimetableLegTimes           = false // DB-2.8
-	Boolean printTimetableCorridorWidth      = true  // DB-2.44
+	Boolean printTimetableCorridorWidth      = true  // DB-2.44, zu Route umgewidmet
 	Boolean printTimetableLandscape          = false // DB-2.3
 	Boolean printTimetableA3                 = false // DB-2.3
 	
@@ -666,31 +666,51 @@ class Task
         return "${getTrackingMsg('fc.task')}-${idTitle}"
     }
     
+	String baseName()
+	{
+        if (flighttest) {
+            if (flighttest.title) {
+                return "${flighttest.route.GetParcourName()} (${flighttest.title})"
+            }
+            return flighttest.route.GetParcourName()
+        }
+        return idName()
+    }
+    
 	String name()
 	{
-		if(title) {
+		if (title) {
 			return title
-		} else {
-            return idName()
-		}
+        }
+        return baseName()
 	}
 	
     String printName()
     {
-        if(title) {
+        if (title) {
             return title
-        } else {
-            return idNamePrintable()
         }
+        if (flighttest) {
+            if (flighttest.title) {
+                return "${flighttest.route.GetParcourName()} (${flighttest.title})"
+            }
+            return flighttest.route.GetParcourName()
+        }
+        return idNamePrintable()
     }
     
     String trackingName()
     {
-		if(title) {
+		if (title) {
 			return title
-		} else {
-            return idNameTracking()
-		}
+        }
+        if (flighttest) {
+            if (flighttest.title) {
+                return "${flighttest.route.GetParcourName()} (${flighttest.title})"
+            }
+            return flighttest.route.GetParcourName()
+        }
+        return idNameTracking()
     }
     
     String GetName(boolean isPrint)
@@ -1443,4 +1463,27 @@ class Task
 		}
 		return false
 	}
+    
+    List GetResultClasses()
+    {
+        List ret = []
+        if (contest.resultClasses) {
+            for (ResultClass resultclass_instance in ResultClass.findAllByContest(contest)) {
+                ret += [id:resultclass_instance.id, name:resultclass_instance.name]
+            }
+        }
+        return ret
+    }
+
+    List GetRoutes()
+    {
+        List ret = []
+        for (FlightTestWind flighttestwind_instance in FlightTestWind.findAllByFlighttest(flighttest,[sort:"id"])) {
+            Route route_instance = flighttestwind_instance.GetRoute()
+            if (!(route_instance in ret)) {
+                ret += route_instance
+            }
+        }
+        return ret
+    }
 }

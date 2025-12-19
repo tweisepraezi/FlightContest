@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.1.11,</span>
-<span id="revdate">10.12.2025</span>
+<span id="revnumber">version 4.2.0,</span>
+<span id="revdate">19.12.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -490,6 +490,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#anr">Planning and evaluation of ANR competitions</a>
 <ul class="sectlevel2">
+<li><a href="#anr-routes-construction">Routes construction</a></li>
 <li><a href="#anr-parcour-construction">Parcour construction</a></li>
 <li><a href="#anr-planning">Task planning</a></li>
 <li><a href="#anr-crew-results">Calculate crew results</a></li>
@@ -3053,19 +3054,21 @@ Distance measurement (map) [mm]'.</p>
 <h2 id="anr">Planning and evaluation of ANR competitions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Only individual parcours are supported for a task.
-This means that only exactly one parcour can be drawn on a map
-and the calculation of all time tables and flight plans for a task is only possible for exactly one parcour.<br>
-Of course, it is also possible to perform several tasks in succession, in which the crews compete against each other.</p>
+<p>Parcours with up to 4 routes are supported.</p>
 </div>
 <div class="paragraph">
-<p><a href="#anr-parcour-construction">Parcour construction</a><br>
+<p>Each route is initially a single-route parcour.
+By assigning up to 3 routes in the route settings, a route can be configured as a multi-route parcour.</p>
+</div>
+<div class="paragraph">
+<p><a href="#anr-routes-construction">Routes construction</a><br>
+<a href="#anr-parcour-construction">Parcour construction</a><br>
 <a href="#anr-planning">Task planning</a><br>
 <a href="#anr-crew-results">Calculate crew results</a><br>
 <a href="#anr-evaluation">Final evaluation</a></p>
 </div>
 <div class="sect2">
-<h3 id="anr-parcour-construction">Parcour construction</h3>
+<h3 id="anr-routes-construction">Routes construction</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3110,29 +3113,29 @@ With “KMZ export airspaces”, an export can be made to view the airspaces in 
 </div>
 </li>
 <li>
-<p>Construct ANR parcour in the Task Creator</p>
+<p>Construct routes in the Task Creator</p>
 <div class="paragraph">
 <p>Start Task Creator (Maps &#8594; "Airfield name (Task Creator)" &#8594; Task Creator &#8594; …)<br></p>
 </div>
 <div class="paragraph">
 <p>In the Task Creator that has been started, a "Map Url" is preset to the generated map and can be loaded with “Load”.<br>
 Set the page guide (PG) to "A4" or "A4 W". This shows the size of the A4 map printout (portrait or landscape format).<br>
-After activating "Turn Points &#8594; Edit", double-click to add all checkpoints to the map for the ANR parcour one after the other:
+After activating "Turn Points &#8594; Edit", double-click to add all checkpoints to the map for the route one after the other:
 The first point is to be put on the airfield (TOP). The second point becomes SP. The last point becomes FP.<br>
 The page guide is realigned with each new point. By adding a plotting point, the alignment of the page guide can be further influenced.<br>
-With “Task name &#8594; Save”, the parcour can be saved as a CSV file in the download folder of the computer (enter the task name first).<br></p>
+With “Task name &#8594; Save”, the route can be saved as a CSV file in the download folder of the computer (enter the task name first).<br></p>
 </div>
 <div class="paragraph">
-<p>The finished parcour is to be exported with “Export FC kml”.</p>
+<p>The finished route is to be exported with “Export FC kml”.</p>
 </div>
 <div class="paragraph">
-<p>To correct the parcour, start the Task Creator by clicking on “Maps &#8594; Task Creator”,
+<p>To correct the route, start the Task Creator by clicking on “Maps &#8594; Task Creator”,
 load the saved CSV file with “Task name &#8594; Load”, load the “Map Url”, and activate “Turn Points &#8594; Edit”.<br>
 Now the position of individual checkpoints can be changed, new checkpoints added or checkpoints deleted.</p>
 </div>
 </li>
 <li>
-<p>Import parcour (Routes &#8594; Import FC route)</p>
+<p>Import route (Routes &#8594; Import FC route)</p>
 <div class="paragraph">
 <p>Select the kml file exported in Task Creator.<br>
 The imported route appears in the route list.<br>
@@ -3149,13 +3152,27 @@ Open it by clicking on the route title.</p>
 (run "GPX export (with semi-circle gates)", and run "Import FC route" again).</p>
 </div>
 </li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="anr-parcour-construction">Parcour construction</h3>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>Create an A4 competition map with ANR parcour</p>
+<p>Configure multi-route parcour (optional)</p>
+<div class="paragraph">
+<p>Open route settings of 1st route<br>
+Assign up to 3 additional routes to the first route and specify a parcour name.</p>
+</div>
+</li>
+<li>
+<p>Create an A4 competition map</p>
 <div class="paragraph">
 <p>OSM Contest Map &#8594; Show 1. settings<br>
 Deselect checkpoints between SP and FP for printing on the map (&#8594; Turnpoints for printing)<br>
 Select the option to print in portrait format if necessary<br>
-Run “Generate”<br></p>
+Run "Generate"<br></p>
 </div>
 <div class="paragraph">
 <p>The generated map is to be saved with ‘Save map and switch to the list of maps’.<br></p>
@@ -3200,7 +3217,7 @@ Click on "Create"</p>
 </div>
 <div class="paragraph">
 <p>The settings made here can be edited again by clicking on the route name, which replaces the display of “[Add Navigation Test]”.<br>
-Further settings can also be made here, such as the flight plan design, the display of values in the flight plan and changed values for runway direction and arrival and departure flight times.<br>
+Further settings can also be made here, such as additional routes for multi-route parcours, the flight plan design, the display of values in the flight plan and changed values for runway direction and arrival and departure flight times.<br>
 Furthermore, the classic ANR forms can also be generated here. To do this, a default print map must be assigned to a map that was created with ANR size.</p>
 </div>
 </li>
@@ -3208,7 +3225,7 @@ Furthermore, the classic ANR forms can also be generated here. To do this, a def
 <p>Calculate the crew&#8217;s flight plans</p>
 <div class="paragraph">
 <p>Click on "Select all"<br>
-Click on "Assign wind"<br>
+Click on "Assign route"<br>
 Click on "Calculate timetable"</p>
 </div>
 </li>
@@ -4124,7 +4141,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime corridorwidth version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass route planningtime planningtimebefore takeofftime version</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">legtimelist</p></td>
@@ -4134,7 +4151,7 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablejudgelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime corridorwidth sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass route planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>

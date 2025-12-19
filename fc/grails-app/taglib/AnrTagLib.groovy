@@ -5,7 +5,7 @@ class AnrTagLib
 
     // --------------------------------------------------------------------------------------------------------------------
     def anrMap = { attrs, body ->
-        Route route_instance = attrs.t.flighttestwind.flighttest.route
+        Route route_instance = attrs.t.flighttestwind.GetRoute()
         if (route_instance.defaultPrintMap) {
             Map map = MapTools.GetMap(route_instance.defaultPrintMap, servletContext, session, true)
             if (map) {
@@ -64,7 +64,7 @@ class AnrTagLib
     
     // --------------------------------------------------------------------------------------------------------------------
     def anrFlightPlan = { attrs, body ->
-        Route route_instance = attrs.t.flighttestwind.flighttest.route
+        Route route_instance = attrs.t.flighttestwind.GetRoute()
         
         // Info
         if (attrs.showCrew) {
@@ -81,7 +81,7 @@ class AnrTagLib
             outln"""            <td class="space"></td>"""
             outln"""            <td class="value">${attrs.t.takeoffTime.format('HH:mm:ss')}</td>"""
             outln"""        </tr>"""
-            if (attrs.t.flighttestwind.wind.speed) {
+            if (attrs.t.flighttestwind.IsWind()) {
                 outln"""    <tr class="empty">"""
                 outln"""        <td colnum="3"> </td>"""
                 outln"""    </tr>"""
@@ -96,7 +96,7 @@ class AnrTagLib
             outln"""<br/>"""
         } else if (attrs.showResults) {
             outln"""<div class="flightplantasanr">${message(code:'fc.tas')}: ${fieldValue(bean:attrs.t, field:'taskTAS')}${message(code:'fc.knot')}</div>"""
-            if (attrs.t.flighttestwind.wind.speed) {
+            if (attrs.t.flighttestwind.IsWind()) {
                 outln"""<table class="flightplaninfoanr">"""
                 outln"""    <tbody>"""
                 outln"""        <tr class="wind">"""

@@ -196,7 +196,7 @@
                         </g:if>
                     </thead>
 	                <tbody>
-	                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskPosition'])}">
+	                    <g:each var="test_instance" in="${Test.findAllByTaskAndFlightTestAdditionalResult(taskInstance,false,[sort:'taskPosition'])}">
 	                        <g:if test="${test_instance.crew.resultclass?.id == resultclassInstance.id}">
 		                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 			                        <tr id="${test_instance.taskPosition}">
@@ -385,7 +385,7 @@
 	                    </g:if>
 	                </thead>
 	                <tbody>
-	                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskPosition'])}">
+	                    <g:each var="test_instance" in="${Test.findAllByTaskAndFlightTestAdditionalResult(taskInstance,false,[sort:'taskPosition'])}">
 	                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 		                        <tr>
 		                            <td class="pos">${test_instance.taskPosition}</td>

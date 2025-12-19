@@ -48,8 +48,8 @@
 			                                        <td class="position">${message(code:'fc.test.results.position.none')}</td>
 			                                    </g:else>
 		                                    </g:else>
-	                                        <td class="positioncrew"><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/></td>
-	                                        <td><g:if test="${crew_instance.aircraft}"><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+	                                        <td class="positioncrew">${crew_instance.startNum} - <g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+	                                        <td class="aircrafttas"><g:if test="${crew_instance.aircraft}"><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/> (${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')})</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
                                             <g:if test="${crew_instance.team}">                          
 	                                           <td><g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
 	                                        </g:if>
@@ -60,7 +60,7 @@
 	                                        <g:set var="test_provisional" value="${false}"/>
                                             <g:set var="test_disabled" value="${false}"/>
 	                                        <g:each var="task_instance" in="${resultclassInstance.contest.GetResultTasks(resultclassInstance.contestTaskResults)}">
-	                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
+	                                        	<g:set var="test_instance" value="${Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)}"/>
 	                                        	<g:if test="${test_instance}">
                                                     <g:if test="${!test_instance.disabledCrew}">
 	                                        	        <td>${test_instance.GetResultPenalties(resultclassInstance.GetClassResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance)}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>

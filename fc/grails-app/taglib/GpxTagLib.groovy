@@ -476,12 +476,10 @@ class GpxTagLib
         File map_folder = new File(map_folder_name)
         String onlinemap_names = ""
         int onlinemap_index = 1
+        boolean onlinemap_show = false;
         int i = 0
         if (map_folder.exists()) {
-            //String airportarea_size = Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA
-            //if (attrs.anr) {
-            //    airportarea_size = Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA
-            //}
+            // add airportarea maps
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
                 if (map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA)) {
                     if (map_entry.projection == "3857") {
@@ -492,10 +490,12 @@ class GpxTagLib
                         i++
                         if (map_entry.title == attrs.defaultOnlineMap) {
                             onlinemap_index = i
+                            onlinemap_show = true;
                         }
                     }
                 }
             }
+            // add other maps
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
                 if (!map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA)) {
                     if (map_entry.projection == "3857") {
@@ -506,6 +506,7 @@ class GpxTagLib
                         i++
                         if (map_entry.title == attrs.defaultOnlineMap) {
                             onlinemap_index = i
+                            onlinemap_show = true;
                         }
                     }
                 }
@@ -515,6 +516,7 @@ class GpxTagLib
         outln"""    var onlineMapUrls = [];"""
         outln"""    var onlineMapBounds = [];"""
         outln"""    var onlineMapIndex = 0;"""
+        outln"""    var onlineMapHide = true;"""
         if (onlinemap_names) {
             outln"""const xhttp = new XMLHttpRequest();"""
             outln"""var onlinemap_names_array = "${onlinemap_names}".split("${onlinemap_separator}");"""
@@ -562,6 +564,7 @@ class GpxTagLib
             outln"""            onlineMapUrls.push(onlinemap_name);"""
             outln"""            onlineMapBounds.push([[top, left], [bottom, right]]);"""
             outln"""            onlineMapIndex = ${onlinemap_index};"""
+            outln"""            onlineMapHide = ${!onlinemap_show};"""
             outln"""        }"""
             outln"""    }"""
             outln"""}"""

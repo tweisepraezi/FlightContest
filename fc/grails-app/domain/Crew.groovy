@@ -194,7 +194,7 @@ class Crew
     boolean IsProvisionalCrew(Map resultSettings)
     {
         for( Task task_instance in contest.GetResultTasks(contest.contestTaskResults)) {
-            Test test_instance = Test.findByCrewAndTask(this,task_instance)
+            Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(this,task_instance,false)
             if (test_instance) {
                 if (test_instance.IsTestProvisional(resultSettings)) {
                     return true

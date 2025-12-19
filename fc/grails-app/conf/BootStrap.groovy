@@ -1419,6 +1419,44 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 46) { // DB-2.46 compatibility
+                            print "    2.46 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.contestPrintStartNum = true
+                                contest_instance.contestPrintTAS = true
+                                contest_instance.teamPrintStartNum = false
+                                contest_instance.save()
+                            }
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+                                resultclass_instance.contestPrintStartNum = true
+                                resultclass_instance.contestPrintTAS = true
+								resultclass_instance.save()
+							}
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.parcourName = ""
+                                route_instance.route2ID = 0
+                                route_instance.route3ID = 0
+                                route_instance.route4ID = 0
+                                route_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.flightTestAdditionalResult = false
+                                test_instance.landingTest1Comment = ""
+                                test_instance.landingTest1VideoCheck = false
+                                test_instance.landingTest2Comment = ""
+                                test_instance.landingTest2VideoCheck = false
+                                test_instance.landingTest3Comment = ""
+                                test_instance.landingTest3VideoCheck = false
+                                test_instance.landingTest4Comment = ""
+                                test_instance.landingTest4VideoCheck = false
+                                test_instance.save()
+                            }
+                            FlightTestWind.findAll().each { FlightTestWind flighttestwind_instance ->
+                                flighttestwind_instance.corridorRouteID = 0
+                                flighttestwind_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

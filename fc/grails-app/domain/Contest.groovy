@@ -14,9 +14,6 @@ class Contest
 	static final BigDecimal A4LANDSCAPEFACTOR = 1       // DB-2.8
 	static final BigDecimal A3LANDSCAPEFACTOR = 1       // DB-2.8
 	
-	static final String LANDING_NO = "NO"               // DB-2.8
-	static final String LANDING_OUT = "OUT"             // DB-2.8
-    
 	String title = ""
 	int mapScale = 200000                               // UNUSED, since DB-2.21
     CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
@@ -56,7 +53,9 @@ class Contest
     Boolean contestPrintObservationDetails = false      // Ausdruck der Beobachtungsdetails in Liste, DB-2.13
     Boolean contestPrintLandingDetails = false          // Ausdruck der Landedetails in Liste, DB-2.8
 	Boolean contestPrintTaskNamesInTitle = false        // Ausdruck der Aufgabennamen im Title, DB-2.1
+	Boolean contestPrintStartNum = true                 // Ausdruck der Startnummer in Liste, DB-2.46
 	Boolean contestPrintAircraft = true                 // Ausdruck des Flugzeuges in Liste, DB-2.8
+	Boolean contestPrintTAS = true                      // Ausdruck des TAS in Liste, DB-2.46
 	Boolean contestPrintTeam = false                    // Ausdruck des Teams in Liste, DB-2.8
 	Boolean contestPrintClass = false                   // Ausdruck der Klasse in Liste, DB-2.8
 	Boolean contestPrintShortClass = false              // Ausdruck des kurzen Klassennamens in Liste, DB-2.8
@@ -77,6 +76,7 @@ class Contest
 	int teamContestTitle = 0               	            // Wettbewerbstitel beim Ausdruck, DB-2.0
 	String teamPrintTitle = ""                          // Ausdruck-Titel, DB-2.3
 	String teamPrintSubtitle = ""                       // Ausdruck-Untertitel, DB-2.3
+	Boolean teamPrintStartNum = false                   // Ausdruck der Startnummer in Liste, DB-2.46
 	Boolean teamPrintLandscape = true                   // Ausdruck quer, DB-2.1
 	Boolean teamPrintProvisional = false                // Ausdruck "vorläufig", DB-2.3
 	Boolean teamPrintA3 = false                         // Ausdruck A3, DB-2.3
@@ -256,7 +256,7 @@ class Contest
 	Boolean printTeams = false                          // DB-2.35
 	Boolean printTeamLandscape = false                  // DB-2.35
 	Boolean printAircraft = false                       // DB-2.35
-	Boolean printAircraftLandscape = false              // DB-2.35
+	Boolean printAircraftLandscape = true               // DB-2.35
     
 	// Points print settings
 	String printPointsPrintTitle = ""                   // DB-2.3
@@ -674,6 +674,11 @@ class Contest
         landingTest4ShortRuleTitle(nullable:true)
         landingTest4AirfieldImageNames(nullable:true)
         landingTest4PrintCalculatorValues(nullable:true)
+        
+        // DB-2.46 compatibility
+        contestPrintStartNum(nullable:true)
+        contestPrintTAS(nullable:true)
+        teamPrintStartNum(nullable:true)
     }
 
     static mapping = {
@@ -1139,7 +1144,7 @@ class Contest
             		if (crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_num < teamCrewNum)) {
             			crew_num++
                         for ( Task task_instance in GetResultTasks(resultTaskIDs)) {
-                        	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+                        	Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)
 							if (test_instance) {
 	                        	if (test_instance.IsTestResultsProvisional(resultSettings)) {
 									return true
@@ -1182,7 +1187,7 @@ class Contest
 	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(this,false,[sort:'contestPosition'])) {
 			if (!crew_instance.disabled && !crew_instance.noContestPosition) {
 	            for (Task task_instance in GetResultTasks(resultTaskIDs)) {
-	            	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+	            	Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)
 					if (test_instance && !test_instance.disabledCrew) {
 		            	if (test_instance.IsTestResultsProvisional(resultSettings)) {
 							return true

@@ -155,10 +155,10 @@ class FcTagLib
     // <g:flighttest var="${flightTestInstance}" link="${createLink(controller:'flightTest',action:'show')}"/>
     def flighttest = { p ->
         if (p.var.route) {
-            String route_name = p.var.route.name()
-            if (p.var.route.corridorWidth) {
-                route_name += " (${FcMath.DistanceStr2(p.var.route.corridorWidth)}${message(code:'fc.mile')})"
-            }
+            String route_name = p.var.route.GetParcourName()
+            //if (p.var.route.corridorWidth) {
+            //    route_name += " (${FcMath.DistanceStr2(p.var.route.corridorWidth)}${message(code:'fc.mile')})"
+            //}
             if (p.var.title) {
                 out << """<a href="${p.link}/${p.var.id}">${route_name.encodeAsHTML()}</a> (${p.var.name().encodeAsHTML()})"""
             } else {
@@ -199,10 +199,7 @@ class FcTagLib
         if (p.error) {
             c = "error"
         }
-        String name = p.var.name()
-        if (p.var.corridorWidth) {
-            name += " (${FcMath.DistanceStr2(p.var.corridorWidth)}${message(code:'fc.mile')})"
-        }
+        String name = p.var.GetRouteName()
         if (p.next) {
             out << """<a class="$c" href="${p.link}/${p.var.id}${p.next}">${name.encodeAsHTML()}</a>"""
         } else {
@@ -210,6 +207,21 @@ class FcTagLib
         }
     }
 
+    // ====================================================================================================================
+    // <g:parcour var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/>
+    def parcour = { p ->
+        String c = ""
+        if (p.error) {
+            c = "error"
+        }
+        String name = p.var.GetParcourName()
+        if (p.next) {
+            out << """<a class="$c" href="${p.link}/${p.var.id}${p.next}">${name.encodeAsHTML()}</a>"""
+        } else {
+            out << """<a class="$c" href="${p.link}/${p.var.id}">${name.encodeAsHTML()}</a>"""
+        }
+    }
+    
     // ====================================================================================================================
     // <g:routetext var="${routeInstance}"/>
     def routetext = { p ->

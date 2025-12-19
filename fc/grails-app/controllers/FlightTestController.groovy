@@ -87,7 +87,7 @@ class FlightTestController {
             	redirect(controller:"contest",action:"tasks")
             }
         } else {
-        	return [flightTestInstance:flighttest.instance]
+        	return [flightTestInstance:flighttest.instance, contestInstance:session.lastContest]
         }
     }
 

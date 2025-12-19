@@ -26,11 +26,11 @@
                                 <tr>
                                 	<th>${message(code:'fc.test.results.position')}</th>
                                    	<th>${message(code:'fc.crew')}</th>
+                                   	<th>${message(code:'fc.aircraft')}</th>
+                                   	<th>${message(code:'fc.team')}</th>
 		                            <g:if test="${resultClasses}">
 		                                <th>${message(code:'fc.resultclass')}</th>
 		                            </g:if>
-                                   	<th>${message(code:'fc.aircraft')}</th>
-                                   	<th>${message(code:'fc.team')}</th>
                                    	<g:each var="task_instance1" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
                                     	<th><a href="${createLink(controller:'contest')}/../../task/listresults/${task_instance1.id}" >${task_instance1.bestOfName()}</a></th>
 	                                </g:each>
@@ -49,7 +49,14 @@
 		                                        <td class="position">${message(code:'fc.test.results.position.none')}</td>
 		                                    </g:else>
 	                                    </g:else>
-                                        <td class="positioncrew"><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                                        <td class="positioncrew">${crew_instance.startNum} - <g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                                        <td class="aircrafttas"><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/> (${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')})</td>
+                                        <g:if test="${crew_instance.team}">                          
+                                            <td><g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+		                                </g:if>
+		                                <g:else>
+		                                    <td>-</td>
+		                                </g:else>
                                         <g:if test="${resultClasses}">
                                             <g:if test="${crew_instance.resultclass}">                          
                                                 <td><g:resultclass var="${crew_instance.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
@@ -58,17 +65,10 @@
                                                 <td>-</td>
                                             </g:else>
                                         </g:if>
-                                        <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
-                                        <g:if test="${crew_instance.team}">                          
-                                            <td><g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
-		                                </g:if>
-		                                <g:else>
-		                                    <td>-</td>
-		                                </g:else>
                                         <g:set var="test_provisional" value="${false}"/>
                                         <g:set var="test_disabled" value="${false}"/>
                                         <g:each var="task_instance2" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
-                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance2)}"/>
+                                        	<g:set var="test_instance" value="${Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance, task_instance2, false)}"/>
                                         	<g:if test="${test_instance}">
                                                 <g:if test="${!test_instance.disabledCrew}">
                                         	        <td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>

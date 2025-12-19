@@ -50,7 +50,7 @@
                                         			<g:set var="crew_num" value="${crew_num+1}"/>
 			                                        <g:set var="test_provisional" value="${false}"/>
 			                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.teamTaskResults)}">
-			                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
+			                                        	<g:set var="test_instance" value="${Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)}"/>
                                                         <g:if test="${test_instance}">
 				                                        	<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetTeamResultSettings())}">
 				                                        		<g:set var="test_provisional" value="${true}"/>
@@ -58,7 +58,7 @@
 				                                        	</g:if>
 				                                        </g:if>
 					                                </g:each>
-                                        			<g:if test="${crew_num > 1}">, </g:if><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/> (${crew_instance.teamPenalties}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if>)
+                                        			<g:if test="${crew_num > 1}">, </g:if>${crew_instance.startNum} - <g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/> (${crew_instance.teamPenalties}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if>)
                                         		</g:if>
                                         	</g:each>
                                         </td>

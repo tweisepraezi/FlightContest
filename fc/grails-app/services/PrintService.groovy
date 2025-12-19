@@ -244,7 +244,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printCoord(Map params,boolean a3, boolean landscape,printparams,String detail)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return route
         }
@@ -274,7 +274,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printEnroutePhoto(Map params, boolean alphabetical, printparams)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return route
         }
@@ -304,7 +304,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printTurnpointPhoto(Map params, boolean alphabetical, printparams)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return route
         }
@@ -497,7 +497,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printRoute(Map params, boolean a3, boolean landscape, printparams)
     {
-        Map route = domainService.GetRoute(params)
+        Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
             return route
         }
@@ -611,7 +611,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printtimetableTask(Map params, printparams, boolean isJury)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -652,7 +652,11 @@ class PrintService
             }
         }
         if (call_return) {
-            task.message = getMsg('fc.flighttestwind.notassigned')
+            if (task.instance.flighttest.route.corridorWidth) {
+                task.message = getMsg('fc.flighttestwind.notassigned.route')
+            } else {
+                task.message = getMsg('fc.flighttestwind.notassigned.wind')
+            }
             task.error = true
             return task
         }
@@ -730,7 +734,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printtimetableoverviewTask(Map params, boolean printSPFPTimes, printparams)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -765,7 +769,11 @@ class PrintService
             }
         }
         if (call_return) {
-            task.message = getMsg('fc.flighttestwind.notassigned')
+            if (task.instance.flighttest.route.corridorWidth) {
+                task.message = getMsg('fc.flighttestwind.notassigned.route')
+            } else {
+                task.message = getMsg('fc.flighttestwind.notassigned.wind')
+            }
             task.error = true
             return task
         }
@@ -839,7 +847,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printlandingstartlistTask(Map params, printparams)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -891,7 +899,7 @@ class PrintService
     {
         printstart "printflightplansTask"
         
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             printerror ""
             return task
@@ -923,7 +931,11 @@ class PrintService
             }
         }
         if (call_return) {
-            task.message = getMsg('fc.flighttestwind.notassigned')
+            if (task.instance.flighttest.route.corridorWidth) {
+                task.message = getMsg('fc.flighttestwind.notassigned.route')
+            } else {
+                task.message = getMsg('fc.flighttestwind.notassigned.wind')
+            }
             task.error = true
             printerror task.message
             return task
@@ -1046,7 +1058,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printplanningtasksTask(Map params, boolean a3, boolean landscape, printparams)
     {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             return task
         }
@@ -1134,7 +1146,7 @@ class PrintService
     {
         printstart "printobservationTask"
         
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             printerror ""
             return task
@@ -1346,7 +1358,7 @@ class PrintService
     {
         printstart "printresultclassresultsTask"
 
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             printerror ""
             return task
@@ -1399,7 +1411,7 @@ class PrintService
     Map printcrewresultsTask(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
         printstart "printcrewresultsTask"
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             printerror "No task."
             return task
@@ -1506,7 +1518,7 @@ class PrintService
     {
         printstart "printresultsTask"
         
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             printerror ""
             return task
@@ -1575,7 +1587,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printflightresultsTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1618,7 +1630,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printmeasureflightresultsTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1661,7 +1673,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printloggerdataTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1691,7 +1703,7 @@ class PrintService
     Map printcrewresultsTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
         printstart "printcrewresultsTest"
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             printerror "No test."
             return test
@@ -1780,7 +1792,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printflightplanTest(Map params, boolean a3, boolean landscape, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1789,7 +1801,7 @@ class PrintService
         try {
             String print_action = "flightplanprintable"
             String print_params = ""
-            if (test.instance.flighttestwind.flighttest.route.corridorWidth) {
+            if (test.instance.flighttestwind.IsCorridor()) {
                 switch (test.instance.flighttestwind.flighttest.flightPlanDesign) {
                     case FlightPlanDesign.TPList:
                         print_action = "flightplananrprintable"
@@ -1826,7 +1838,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printplanningtaskTest(Map params, boolean a3, boolean landscape, boolean withResults, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1860,7 +1872,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printplanningtaskresultsTest(Map params, boolean a3, boolean landscape, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1889,7 +1901,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printobservationresultsTest(Map params, boolean a3, boolean landscape, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1918,7 +1930,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printlandingresultsTest(Map params, boolean a3, boolean landscape, printparams, ResultType resultType)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }
@@ -1966,7 +1978,7 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printspecialresultsTest(Map params, boolean a3, boolean landscape, printparams)
     {
-        Map test = domainService.GetTest(params)
+        Map test = domainService.GetTestMap(params)
         if (!test.instance) {
             return test
         }

@@ -1,6 +1,10 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 4.2.0
+-------------
+- ANR Live Tracking for parcours with multiple routes is not available.
+
 Changes 4.1.4
 -------------
 - ANR Live Tracking for routes with scenic sections or semicircles added

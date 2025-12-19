@@ -194,7 +194,7 @@ class AircraftController {
     }
 
     def print = {
-        Map aircrafts = printService.printAircrafts(params,false, false,GetPrintParams()) 
+        Map aircrafts = printService.printAircrafts(params,false, session.lastContest.printAircraftLandscape,GetPrintParams()) 
         if (aircrafts.error) {
             flash.message = aircrafts.message
             flash.error = true

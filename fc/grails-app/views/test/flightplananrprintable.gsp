@@ -129,24 +129,26 @@
                     <tr class="empty">
                         <td colnum="2"> </td>
                     </tr>
+                    <!--
                     <tr class="corridorwidth">
                         <td class="title">${message(code:'fc.corridorwidth')}:</td>
-                        <g:if test="${testInstance.flighttestwind.corridorWidthWind}">
-                            <td class="value">${FcMath.DistanceStr(testInstance.flighttestwind.corridorWidthWind)}${message(code:'fc.mile')}</td>
-                        </g:if>
-                        <g:else>
-                            <td class="value">${FcMath.DistanceStr(testInstance.flighttestwind.flighttest.route.corridorWidth)}${message(code:'fc.mile')}</td>
-                        </g:else>
+                        <td class="value">${FcMath.DistanceStr(testInstance.GetCorridorWidth())}${message(code:'fc.mile')}</td>
                     </tr>
-                    <g:if test="${testInstance.flighttestwind.wind.speed}">
+                    -->
+                    <tr class="route">
+                        <td class="title">${message(code:'fc.route')}:</td>
+                        <td class="value">${testInstance.flighttestwind.printName()}</td>
+                    </tr>
+                    <g:if test="${testInstance.flighttestwind.IsWind()}">
                         <tr class="wind">
                             <td class="title">${message(code:'fc.wind.directionvelocity')}:</td>
                             <td class="value">
-                             <g:if test="${testInstance.flighttestwind}">
-                                 <g:windtextprintable var="${testInstance.flighttestwind.wind}" />
-                             </g:if> <g:else>
-                                 ${message(code:'fc.noassigned')}                                    
-                             </g:else>
+                                <g:if test="${testInstance.flighttestwind}">
+                                     <g:windtextprintable var="${testInstance.flighttestwind.wind}" />
+                                </g:if> 
+                                <g:else>
+                                     ${message(code:'fc.noassigned')}                                    
+                                </g:else>
                             </td>
                         </tr>
                     </g:if>

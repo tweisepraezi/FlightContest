@@ -177,7 +177,7 @@ class EmailService
     Map emailcrewresultsTask(Map params, String printLanguage, def grailsAttributes, def request, boolean allResults)
     {
         printstart "emailcrewresultsTask"
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             printerror "No task."
             return task

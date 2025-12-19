@@ -133,6 +133,11 @@
                                 <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <div>
+                                <g:checkBox name="teamPrintStartNum" value="${contestInstance.teamPrintStartNum}" />
+                                <label>${message(code:'fc.printstartnum')}</label>
+                            </div>
+                            <br/>
+                            <div>
                                 <g:checkBox name="teamPrintLandscape" value="${contestInstance.teamPrintLandscape}" />
                                 <label>${message(code:'fc.printlandscape')}</label>
                             </div>

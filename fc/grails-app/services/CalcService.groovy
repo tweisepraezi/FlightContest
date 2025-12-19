@@ -703,8 +703,7 @@ class CalcService
         List corridor_check_gates = []
         
         FlightTestWind flighttestwind_instance = testInstance.flighttestwind
-        FlightTest flighttest_instance = flighttestwind_instance.flighttest
-        Route route_instance = flighttest_instance.route
+        Route route_instance = flighttestwind_instance.GetRoute()
         
         if (!route_instance.corridorWidth) { // standard gates
             CoordRoute last_coordroute_instance = null
@@ -1193,8 +1192,7 @@ class CalcService
         List triangles = []
         
         FlightTestWind flighttestwind_instance = testInstance.flighttestwind
-        FlightTest flighttest_instance = flighttestwind_instance.flighttest
-        Route route_instance = flighttest_instance.route
+        Route route_instance = flighttestwind_instance.GetRoute()
         
         if (route_instance.corridorWidth) {
             Map last_gate = [:]

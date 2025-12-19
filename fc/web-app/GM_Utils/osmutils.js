@@ -164,6 +164,9 @@ JB.Map = function(makemap) {
     // FC OnlineMap
     if (onlineMapIndex > 0 && onlineMapUrls && onlineMapBounds) {
         var onlinemap_slider = document.getElementById("onlinemap_opacity_id");
+        if (onlineMapHide) {
+            onlinemap_slider.value = 0;
+        }
         var onlinemap_select = document.getElementById("onlinemap_route_id");
         onlinemap_slider.style.display = 'initial';
         onlinemap_select.style.display = 'initial';
@@ -183,6 +186,7 @@ JB.Map = function(makemap) {
             overlays.push(onlinemap_overlay)
         }
         overlays[onlineMapIndex-1].addTo(map1);
+        overlays[onlineMapIndex-1].setOpacity(onlinemap_slider.value);
         
         onlinemap_slider.onmousemove = function() {
             overlays[onlineMapIndex-1].setOpacity(onlinemap_slider.value);

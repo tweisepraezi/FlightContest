@@ -1791,6 +1791,87 @@ class RouteTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def showOtherRoute = { attrs, body ->
+        outln"""<div style="margin-top:10px;" >"""
+        outln"""    <label>${message(code:attrs.otherRouteTitle)}:</label>"""
+        outln"""    <select id="${attrs.otherRouteName}" name="${attrs.otherRouteName}" onchange="${attrs.otherRouteName}_change()" tabIndex="${attrs.ti[0]++}">"""
+        outln"""            <option></option>"""
+        for (Route route_instance in Route.findAllByContest(attrs.route.contest,[sort:"idTitle"])) {
+            if (!(route_instance.id in attrs.otherRouteIDs) || (route_instance.id == attrs.otherRouteID)) {
+                if (route_instance.id == attrs.otherRouteID) {
+                    outln"""<option value="${route_instance.id}" selected>${route_instance.GetRouteName()}</option>"""
+                } else {
+                    outln"""<option value="${route_instance.id}">${route_instance.GetRouteName()}</option>"""
+                }
+            }
+        }
+        outln"""    </select>"""
+        outln"""</div>"""
+        outln"""<script>"""
+        outln"""    function ${attrs.otherRouteName}_change() {"""
+        outln"""        if ('${attrs.otherRouteName}' == 'route2ID' ) {"""
+        outln"""            if (\$('#route3ID').val() == \$('#route2ID').val()) {"""
+        outln"""                \$('#route3ID').val('');"""
+        outln"""            }"""
+        outln"""            if (\$('#route4ID').val() == \$('#route2ID').val()) {"""
+        outln"""                \$('#route4ID').val('');"""
+        outln"""            }"""
+        outln"""        }"""
+        outln"""        if ('${attrs.otherRouteName}' == 'route3ID' ) {"""
+        outln"""            if (\$('#route2ID').val() == \$('#route3ID').val()) {"""
+        outln"""                \$('#route2ID').val('');"""
+        outln"""            }"""
+        outln"""            if (\$('#route4ID').val() == \$('#route3ID').val()) {"""
+        outln"""                \$('#route4ID').val('');"""
+        outln"""            }"""
+        outln"""        }"""
+        outln"""        if ('${attrs.otherRouteName}' == 'route4ID' ) {"""
+        outln"""            if (\$('#route2ID').val() == \$('#route4ID').val()) {"""
+        outln"""                \$('#route2ID').val('');"""
+        outln"""            }"""
+        outln"""            if (\$('#route3ID').val() == \$('#route4ID').val()) {"""
+        outln"""                \$('#route3ID').val('');"""
+        outln"""            }"""
+        outln"""        }"""
+        outln"""    }"""
+        outln"""</script>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def showDeviatingRoute = { attrs, body ->
+        Route parcour_route_instance = attrs.flighttestwind.GetParcour()
+        outln"""<div style="margin-top:10px;margin-bottom:10px;" >"""
+        outln"""    <select id="corridorRouteID" name="corridorRouteID" tabIndex="${attrs.ti[0]++}">"""
+        outln"""            <option value="${parcour_route_instance.id}">${parcour_route_instance.GetRouteName()}</option>"""
+        if (parcour_route_instance.route2ID) {
+            Route route_instance = Route.get(parcour_route_instance.route2ID)
+            if (route_instance.id == attrs.routeid) {
+                outln"""<option value="${route_instance.id}" selected>${route_instance.GetRouteName()}</option>"""
+            } else {
+                outln"""<option value="${route_instance.id}">${route_instance.GetRouteName()}</option>"""
+            }
+        }
+        if (parcour_route_instance.route3ID) {
+            Route route_instance = Route.get(parcour_route_instance.route3ID)
+            if (route_instance.id == attrs.routeid) {
+                outln"""<option value="${route_instance.id}" selected>${route_instance.GetRouteName()}</option>"""
+            } else {
+                outln"""<option value="${route_instance.id}">${route_instance.GetRouteName()}</option>"""
+            }
+        }
+        if (parcour_route_instance.route4ID) {
+            Route route_instance = Route.get(parcour_route_instance.route4ID)
+            if (route_instance.id == attrs.routeid) {
+                outln"""<option value="${route_instance.id}" selected>${route_instance.GetRouteName()}</option>"""
+            } else {
+                outln"""<option value="${route_instance.id}">${route_instance.GetRouteName()}</option>"""
+            }
+        }
+        outln"""    </select>"""
+        outln"""</div>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     private checkBox(String name, boolean checked, String label, attrs)
     {
         outln"""    <input type="hidden" name="_${name}"/>"""

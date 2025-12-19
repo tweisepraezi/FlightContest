@@ -1,9 +1,42 @@
-﻿Flight Contest
-==============
+﻿Flight Contest Release Notes
+============================
+
+Changes 4.2.0
+-------------
+- ANR: Parcour planning and evaluation with multiple routes added.
+    Each route is initially a single-route parcour.
+    By assigning up to 3 routes in the route settings, a route can be configured as a multi-route parcour.
+    A parcour can thus have up to 4 routes.
+    OSM contest map of the multi-route parcour:
+        In addition to the parcour route, the map also contains all assigned routes.
+        The route name is then printed below the SP.
+        All checkpoint printing options apply equally to all routes, so all routes in the parcour must have an identical number of turning points.
+    Use in a new task:
+        1. Task - Add navigation test: Select the parcour route and set the runway settings for TO and LDG.
+        2. Navigation test - Add route: Then assign the other routes to the navigation test.
+        3. Planning - Assign route: Assign the routes to the crews alternately.
+            For example, "Select Pos. 1 of 2" can be used to select the first crew of every two crews in order to assign the first route of a two-route parcour.
+- Planning: Crew selection options expanded
+        Crews of a class can be selected
+        Crews of a specific order can be selected (e.g., "Pos. 1 of 2" can be used to select the first crew of every two crews)
+- Logger evaluation: Function "Additional result" added
+    Allows additional logger evaluations of a competitor with a reserve logger for comparison.
+    Additional evaluations are not included in the final evaluation.
+- Landing results expanded:
+    Landing measurement value OUT- (landing outside the landing box (short)) added
+    Landing measurement value OUT+ (landing outside the landing box (long)) added
+    New input field 'Landing comment': Multi-line text, e.g., details about abnormal landing or information for video check
+    New input field 'Video check': Checkbox to indicate a video inspection still to be performed
+        An activated video check is displayed in the results list and in live result display.
+- Final evaluation expanded:
+    Option "Print start number" added
+    Option "Print TAS" added
 
 Changes 4.1.11
 --------------
 - Flight Contest Manager: Adjustments to Windows 11 2025-12 Security Update (KB5072033) (26200.7462)
+    Due to the Windows security update, the manager no longer responds to mouse commands.
+    Furthermore, the display indicating the availability of a new FC version no longer works.
 
 Changes 4.1.10
 --------------

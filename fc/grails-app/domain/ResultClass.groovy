@@ -31,7 +31,9 @@ class ResultClass
     Boolean contestPrintObservationDetails = false      // Ausdruck der Beobachtungsdetails in Liste, DB-2.13
     Boolean contestPrintLandingDetails = false          // Ausdruck der Landedetails in Liste, DB-2.8
 	Boolean contestPrintTaskNamesInTitle = false        // Ausdruck der Aufgabennamen im Title, DB-2.1
+	Boolean contestPrintStartNum = true                 // Ausdruck der Startnummer in Liste, DB-2.46
 	Boolean contestPrintAircraft = true                 // Ausdruck des Flugzeuges in Liste, DB-2.8
+	Boolean contestPrintTAS = true                      // Ausdruck des TAS in Liste, DB-2.46
 	Boolean contestPrintTeam = false                    // Ausdruck des Teams in Liste, DB-2.8
 	Boolean contestPrintClass = false                   // Ausdruck der Klasse in Liste, DB-2.8
 	Boolean contestPrintShortClass = false              // Ausdruck des kurzen Klassennamens in Liste, DB-2.8
@@ -348,6 +350,10 @@ class ResultClass
         landingTest4ShortRuleTitle(nullable:true)
         landingTest4AirfieldImageNames(nullable:true)
         landingTest4PrintCalculatorValues(nullable:true)
+        
+        // DB-2.46 compatibility
+        contestPrintStartNum(nullable:true)
+        contestPrintTAS(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -743,7 +749,7 @@ class ResultClass
 	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(contest,false,[sort:'classPosition'])) {
 	    	if (crew_instance.resultclass.id == this.id) {
                 for (Task task_instance in contest.GetResultTasks(resultTaskIDs)) {
-                	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+                	Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)
 					if (test_instance && !test_instance.disabledCrew) {
 	                	if (test_instance.IsTestClassResultsProvisional(resultSettings,this)) {
 							return true

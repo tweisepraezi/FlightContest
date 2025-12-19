@@ -34,6 +34,11 @@ class Route
     BigDecimal corridorWidth2 = 0.0                                              // DB-2.45, NM
     BigDecimal corridorWidth3 = 0.0                                              // DB-2.45, NM
     BigDecimal corridorWidth4 = 0.0                                              // DB-2.45, NM
+
+    String parcourName = ""                                                      // DB-2.46
+    Long route2ID = 0                                                            // DB-2.46
+    Long route3ID = 0                                                            // DB-2.46
+    Long route4ID = 0                                                            // DB-2.46
     
     Boolean showCoords = true                                                    // DB-2.30
     Boolean showCoordObservations = false                                        // DB-2.30
@@ -289,6 +294,12 @@ class Route
         corridorWidth2(nullable:true,min:0.0)
         corridorWidth3(nullable:true,min:0.0)
         corridorWidth4(nullable:true,min:0.0)
+        
+        // DB-2.46 compatibility
+        parcourName(nullable:true)
+        route2ID(nullable:true)
+        route3ID(nullable:true)
+        route4ID(nullable:true)
 	}
 
 	static mapping = {
@@ -538,9 +549,18 @@ class Route
         }
     }
 
-    String GetOSMRouteName1()
+    String GetRouteName()
     {
         String route_name = name()
+        if (corridorWidth) {
+            route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
+        }
+        return route_name
+    }
+    
+    String GetOSMRouteName1()
+    {
+        String route_name = osm_name()
         if (corridorWidth) {
             route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
         }
@@ -552,7 +572,7 @@ class Route
     
     String GetOSMRouteName2()
     {
-        String route_name = name()
+        String route_name = osm_name()
         if (corridorWidth) {
             if (corridorWidth2) {
                 route_name += " (${FcMath.DistanceStr2(corridorWidth2)}${getMsgArgs('fc.mile',[])})"
@@ -568,7 +588,7 @@ class Route
     
     String GetOSMRouteName3()
     {
-        String route_name = name()
+        String route_name = osm_name()
         if (corridorWidth) {
             if (corridorWidth3) {
                 route_name += " (${FcMath.DistanceStr2(corridorWidth3)}${getMsgArgs('fc.mile',[])})"
@@ -584,7 +604,7 @@ class Route
     
     String GetOSMRouteName4()
     {
-        String route_name = name()
+        String route_name = osm_name()
         if (corridorWidth) {
             if (corridorWidth4) {
                 route_name += " (${FcMath.DistanceStr2(corridorWidth4)}${getMsgArgs('fc.mile',[])})"
@@ -598,9 +618,40 @@ class Route
         return route_name
     }
     
+    String osm_name()
+    {
+        String osm_route_name = ""
+		if (parcourName) {
+            osm_route_name = "${parcourName} - "
+        }
+        osm_route_name += name()
+        if (corridorWidth) {
+            if (route2ID) {
+                Route route_instance = Route.get(route2ID)
+                if (route_instance) {
+                    osm_route_name += ", ${route_instance.name()}"
+                }
+            }
+            if (route3ID) {
+                Route route_instance = Route.get(route3ID)
+                if (route_instance) {
+                    osm_route_name += ", ${route_instance.name()}"
+                }
+            }
+            if (route4ID) {
+                Route route_instance = Route.get(route4ID)
+                if (route_instance) {
+                    osm_route_name += ", ${route_instance.name()}"
+                }
+            }
+        }
+        return osm_route_name
+    }
+    
 	boolean Used()
 	{
-		if (PlanningTestTask.findByRoute(this) || FlightTest.findByRoute(this)) {
+        // TODOIF: look in SearchTools.GetRouteTasks() for extensions
+		if (PlanningTestTask.findByRoute(this) || FlightTest.findByRoute(this) || FlightTestWind.findByCorridorRouteID(this.id)) {
 			return true
 		}
 		return false
@@ -960,20 +1011,24 @@ class Route
         return ret_name
 	}
 	
-	String GetFlightTestRouteName()
+	String GetParcourName(boolean withUsedNum = false)
 	{
         String ret_name = ""
-		if (title) {
+		if (parcourName) {
+            ret_name = parcourName
+        } else if (title) {
 			ret_name = title
 		} else {
             ret_name = idName()
 		}
-        if (corridorWidth) {
-            ret_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
-        }
-        int used_num = FlightTest.findAllByRoute(this,[sort:"id"]).size()
-        if (used_num) {
-            ret_name += " [${getMsgArgs('fc.route.usednum',[used_num])}]"
+        //if (corridorWidth) {
+        //    ret_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
+        //}
+        if (withUsedNum) {
+            int used_num = FlightTest.findAllByRoute(this,[sort:"id"]).size()
+            if (used_num) {
+                ret_name += " [${getMsgArgs('fc.route.usednum',[used_num])}]"
+            }
         }
         return ret_name
 	}
@@ -1321,5 +1376,41 @@ class Route
             }
         }
         return ret
+    }
+    
+    boolean IsOtherRoute()
+    {
+        if (route2ID || route3ID || route4ID) {
+            return true
+        }
+        return false
+    }
+    
+    String GetInParcourNames()
+    {
+        List route_instances = Route.findAllByRoute2ID(this.id)
+        if (route_instances) {
+            return get_parcour_names(route_instances)
+        }
+        route_instances = Route.findAllByRoute3ID(this.id)
+        if (route_instances) {
+            return get_parcour_names(route_instances)
+        }
+        route_instances = Route.findAllByRoute4ID(this.id)
+        if (route_instances) {
+            return get_parcour_names(route_instances)
+        }
+    }
+    
+    private String get_parcour_names(List routeInstances)
+    {
+        String parcour_names = ""
+        for (Route route_instance in routeInstances) {
+            if (parcour_names) {
+                parcour_names += ", "
+            }
+            parcour_names += route_instance.GetParcourName()
+        }
+        return parcour_names
     }
 }

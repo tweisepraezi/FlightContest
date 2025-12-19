@@ -28,8 +28,18 @@
                             <td><g:aircraft var="${aircraft_instance}" link="${createLink(controller:'aircraft',action:'edit')}" /></td>
                             <td>${fieldValue(bean:aircraft_instance, field:'type')}</td>
                             <td>${fieldValue(bean:aircraft_instance, field:'colour')}</td>
-                            <td><g:crew var="${aircraft_instance.user1}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${aircraft_instance.user1?.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
-                            <td><g:crew var="${aircraft_instance.user2}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${aircraft_instance.user2?.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+                            <g:if test="${aircraft_instance.user1}">
+                                <td>${aircraft_instance.user1.startNum} - <g:crew var="${aircraft_instance.user1}" link="${createLink(controller:'crew',action:'edit')}"/> (${fieldValue(bean:aircraft_instance.user1, field:'tas')}${message(code:'fc.knot')})<g:if test="${aircraft_instance.user1.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+                            </g:if>
+                            <g:else>
+                                <td/>
+                            </g:else>
+                            <g:if test="${aircraft_instance.user2}">
+                                <td>${aircraft_instance.user2.startNum} - <g:crew var="${aircraft_instance.user2}" link="${createLink(controller:'crew',action:'edit')}"/> (${fieldValue(bean:aircraft_instance.user2, field:'tas')}${message(code:'fc.knot')})<g:if test="${aircraft_instance.user2.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+                            </g:if>
+                            <g:else>
+                                <td/>
+                            </g:else>
                         </tr>
                     </g:each>
                 </tbody>

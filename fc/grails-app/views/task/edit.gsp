@@ -22,7 +22,7 @@
 						<g:set var="prev_id" value="${taskInstance.GetPrevTaskID()}"/>
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.title')} (${taskInstance.idName()}):</label>
+                                <label>${message(code:'fc.alternativtitle')} (${taskInstance.baseName()}):</label>
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:taskInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                                 <a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>

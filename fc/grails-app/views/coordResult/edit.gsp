@@ -112,7 +112,7 @@
                                             }
                                         });
                                     </script>
-                                    <g:if test="${coordResultInstance.type.IsCorridorResultCoord() && coordResultInstance.test.flighttestwind.flighttest.route.corridorWidth}">
+                                    <g:if test="${coordResultInstance.type.IsCorridorResultCoord() && coordResultInstance.test.GetCorridorWidth()}">
                                         <script>
                                             $(document).on('keypress', '#resultBadCourseNum', function(e) {
                                                 if (e.charCode == 13) {
@@ -153,7 +153,7 @@
 										});
 									</script>
 								</g:else>
-                                <g:if test="${coordResultInstance.type.IsCorridorResultCoord() && coordResultInstance.test.flighttestwind.flighttest.route.corridorWidth}">
+                                <g:if test="${coordResultInstance.type.IsCorridorResultCoord() && coordResultInstance.test.GetCorridorWidth()}">
                                     <p>
                                         <label>${message(code:'fc.outside.edit')}* [${message(code:'fc.time.s')}]:</label>
                                         <br/>

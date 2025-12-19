@@ -20,11 +20,6 @@
                         <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.title')} (${flightTestInstance.idName()}):</label>
-                                <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
-                            </p>
-                            <p>
                                 <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
                                     <g:if test="${Test.findByFlighttestwind(flighttestwind_instance)}">
                                         <g:set var="foundTest" value="${true}" />
@@ -33,12 +28,17 @@
                                 <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
                                     <label>${message(code:'fc.route')}*:</label>
                                     <br/>
-                                    <g:select from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                    <g:select from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetParcourName(true)}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
                                 </g:if>
                                 <g:else>
                                     <label>${message(code:'fc.route')}:</label>
                                     <g:route var="${flightTestInstance?.route}" link="${createLink(controller:'route',action:'show')}"/>
                                 </g:else>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.addtitle')}:</label>
+                                <br/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <g:editFlightTest flighttest="${flightTestInstance}" ti="${ti}"/>

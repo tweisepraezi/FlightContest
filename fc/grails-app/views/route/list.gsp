@@ -15,7 +15,7 @@
                             <th colspan="11" class="table-head">${message(code:'fc.route.list')}</th>
                         </g:if>
                         <g:else>
-                            <th colspan="6" class="table-head">${message(code:'fc.route.list')}</th>
+                            <th colspan="7" class="table-head">${message(code:'fc.route.list')}</th>
                         </g:else>
                         <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
@@ -31,6 +31,7 @@
                             <th>${message(code:'fc.secretpoints')}</th>
                         </g:if>
                         <g:else>
+                            <th>${message(code:'fc.parcour')}</th>
                             <th>${message(code:'fc.corridorwidth')}</th>
                         </g:else>
                         <th>${message(code:'fc.distance.to2ldg')}</th>
@@ -93,6 +94,12 @@
                                 </g:else>
                             </g:if>
                             <g:else>
+                                <g:if test="${route_instance.IsOtherRoute()}">
+                                    <td>${route_instance.GetParcourName()}*</td>
+                                </g:if>
+                                <g:else>
+                                    <td>${route_instance.GetInParcourNames()}</td>
+                                </g:else>
                                 <td>${FcMath.DistanceStr(route_instance.corridorWidth)}${message(code:'fc.mile')}</td>
                             </g:else>
                             <td>${FcMath.DistanceStr(route_data.distance_to2ldg)}${message(code:'fc.mile')}</td>
@@ -109,16 +116,18 @@
                                     <g:else>
                                         ${task.name().encodeAsHTML()}
                                     </g:else>
-									<g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
-										<g:if test="${flighttest_instance && flighttest_instance.task == task}">
-											<g:if test="${flighttest_instance.IsObservationSignUsed()}">
-												(${message(code:'fc.observation')}: ${message(code:'fc.yes')})
-											</g:if>
-											<g:else>
-												(${message(code:'fc.observation')}: ${message(code:'fc.no')})
-											</g:else>
-										</g:if>
-									</g:each>
+                                    <g:if test="${!route_instance.corridorWidth}">
+                                        <g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
+                                            <g:if test="${flighttest_instance && flighttest_instance.task == task}">
+                                                <g:if test="${flighttest_instance.IsObservationSignUsed()}">
+                                                    (${message(code:'fc.observation')}: ${message(code:'fc.yes')})
+                                                </g:if>
+                                                <g:else>
+                                                    (${message(code:'fc.observation')}: ${message(code:'fc.no')})
+                                                </g:else>
+                                            </g:if>
+                                        </g:each>
+                                    </g:if>
                                     <br/>                                     
                                 </g:each>
                             </td>

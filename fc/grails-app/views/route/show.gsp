@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.route.show')}</title>
+        <title>${message(code:'fc.route.show')} ${routeInstance.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="." />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.route.show')}</h2>
+                <h2>${message(code:'fc.route.show')} ${routeInstance.name()}</h2>
                 <div class="block" id="forms" >
                     <g:form params="${['routeReturnAction':routeReturnAction,'routeReturnController':routeReturnController,'routeReturnID':routeReturnID]}">
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>
@@ -39,6 +39,23 @@
                                             ${FcMath.DistanceStr(routeInstance.corridorWidth)}${message(code:'fc.mile')}
                                         </td>
                                         <td colspan="2"/>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${routeInstance.IsOtherRoute()}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.parcour.name')}:</td>
+                                        <td>${routeInstance.parcourName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route.assignedroutes')}:</td>
+                                        <td>
+                                            <g:if test="${routeInstance.route2ID}">2: ${Route.get(routeInstance.route2ID).name()}</g:if>
+                                            <g:if test="${routeInstance.route3ID || routeInstance.route4ID}">, </g:if>
+                                            <g:if test="${routeInstance.route3ID}">3: ${Route.get(routeInstance.route3ID).name()}</g:if>
+                                            <g:if test="${routeInstance.route4ID}">, </g:if>
+                                            <g:if test="${routeInstance.route4ID}">4: ${Route.get(routeInstance.route4ID).name()}</g:if>
+                                        </td>
+                                        <td colspan="3"/>
                                     </tr>
                                 </g:if>
                                 <tr>

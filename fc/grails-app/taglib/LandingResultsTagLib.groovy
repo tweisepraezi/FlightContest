@@ -14,11 +14,17 @@ class LandingResultsTagLib
 			outln"""    <tbody>"""
 		}
         outln"""        <tr>"""
-        if (attrs.t.landingTest1Landing == 2) {
+        if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_NO) {
         	outln"""        <td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>"""
         	outln"""        <td>${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}</td>"""
-        } else if (attrs.t.landingTest1Landing == 3) {
+        } else if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_OUT) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.short')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.long')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}</td>"""
         } else if (!attrs.t.landingTest1Measure) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>"""
@@ -82,6 +88,22 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest1Comment) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.comment')}:</td>"""
+            String s = ""
+            for (String comment_line in attrs.t.landingTest1Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+			outln"""        <td>${s}</td>"""
+			outln"""    </tr>"""
+        }
+        if (attrs.t.landingTest1VideoCheck) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.videocheck')}:</td>"""
+			outln"""        <td>${message(code:'fc.yes')}</td>"""
+			outln"""    </tr>"""
+        }
 		if (attrs.crewResults) {
 			outln"""    <tr>"""
 			outln"""        <td class="detailtitle">${message(code:'fc.test.results.summary')}:</td>"""
@@ -107,10 +129,14 @@ class LandingResultsTagLib
         outln"""    <tbody>"""
         outln"""        <tr class="values" id="1">"""
         outln"""        	<td>"""
-        if (attrs.t.landingTest1Landing == 2) {
+        if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_NO) {
             outln"""   		    ${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}<br/>"""
-        } else if (attrs.t.landingTest1Landing == 3) {
+        } else if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_OUT) {
             outln"""         	${message(code:'fc.landingtest.outsidelanding')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""         	${message(code:'fc.landingtest.outsidelanding.short')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest1Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""         	${message(code:'fc.landingtest.outsidelanding.long')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}<br/>"""
         } else if (!attrs.t.landingTest1Measure) {
             outln"""       		${message(code:'fc.landingresults.measure')}: - (${attrs.t.landingTest1MeasurePenalties} ${message(code:'fc.points')})<br/>"""
         } else {
@@ -143,6 +169,16 @@ class LandingResultsTagLib
         if (attrs.t.landingTest1TouchingObstacle) {
             outln"""            ${message(code:'fc.landingtest.touchingobstacle')}: ${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest1Points)} ${message(code:'fc.points')}<br/>"""
         }
+        if (attrs.t.landingTest1Comment) {
+			String s = ""
+            for (String comment_line in attrs.t.landingTest1Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+            outln s
+        }
+        if (attrs.t.landingTest1VideoCheck) {
+			outln"""            ${message(code:'fc.landingresults.videocheck')}: ${message(code:'fc.yes')}<br/>"""
+        }
         outln"""            </td>"""
         outln"""        </tr>"""
         outln"""    </tbody>"""
@@ -165,11 +201,17 @@ class LandingResultsTagLib
 	        outln"""    <tbody>"""
 		}
         outln"""        <tr>"""
-        if (attrs.t.landingTest2Landing == 2) {
+        if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_NO) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}</td>"""
-        } else if (attrs.t.landingTest2Landing == 3) {
+        } else if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_OUT) {
 		    outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_OUT_SHORT) {
+		    outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.short')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_OUT_LONG) {
+		    outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.long')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}</td>"""
         } else if (!attrs.t.landingTest2Measure) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>"""
@@ -233,6 +275,22 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest2Comment) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.comment')}:</td>"""
+            String s = ""
+            for (String comment_line in attrs.t.landingTest2Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+			outln"""        <td>${s}</td>"""
+			outln"""    </tr>"""
+        }
+        if (attrs.t.landingTest2VideoCheck) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.videocheck')}:</td>"""
+			outln"""        <td>${message(code:'fc.yes')}</td>"""
+			outln"""    </tr>"""
+        }
 		if (attrs.crewResults) {
 			outln"""    <tr>"""
 			outln"""        <td class="detailtitle">${message(code:'fc.test.results.summary')}:</td>"""
@@ -258,10 +316,14 @@ class LandingResultsTagLib
         outln"""    <tbody>"""
         outln"""        <tr class="values" id="2">"""
         outln"""        	<td>"""
-        if (attrs.t.landingTest2Landing == 2) {
+        if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_NO) {
             outln"""       		${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}<br/>"""
-        } else if (attrs.t.landingTest2Landing == 3) {
+        } else if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_OUT) {
             outln"""       		${message(code:'fc.landingtest.outsidelanding')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""       		${message(code:'fc.landingtest.outsidelanding.short')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest2Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""       		${message(code:'fc.landingtest.outsidelanding.long')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}<br/>"""
         } else if (!attrs.t.landingTest2Measure) {
             outln"""       		${message(code:'fc.landingresults.measure')}: - (${attrs.t.landingTest2MeasurePenalties} ${message(code:'fc.points')})<br/>"""
         } else {
@@ -294,6 +356,16 @@ class LandingResultsTagLib
         if (attrs.t.landingTest2TouchingObstacle) {
             outln"""            ${message(code:'fc.landingtest.touchingobstacle')}: ${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest2Points)} ${message(code:'fc.points')}<br/>"""
         }
+        if (attrs.t.landingTest2Comment) {
+			String s = ""
+            for (String comment_line in attrs.t.landingTest2Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+            outln s
+        }
+        if (attrs.t.landingTest2VideoCheck) {
+			outln"""            ${message(code:'fc.landingresults.videocheck')}: ${message(code:'fc.yes')}<br/>"""
+        }
         outln"""            </td>"""
         outln"""        </tr>"""
         outln"""    </tbody>"""
@@ -316,11 +388,17 @@ class LandingResultsTagLib
 			outln"""    <tbody>"""
 		}
         outln"""        <tr>"""
-        if (attrs.t.landingTest3Landing == 2) {
+        if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_NO) {
         	outln"""        <td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}</td>"""
-        } else if (attrs.t.landingTest3Landing == 3) {
+        } else if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_OUT) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.short')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.long')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}</td>"""
         } else if (!attrs.t.landingTest3Measure) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>"""
@@ -384,6 +462,22 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest3Comment) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.comment')}:</td>"""
+            String s = ""
+            for (String comment_line in attrs.t.landingTest3Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+			outln"""        <td>${s}</td>"""
+			outln"""    </tr>"""
+        }
+        if (attrs.t.landingTest3VideoCheck) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.videocheck')}:</td>"""
+			outln"""        <td>${message(code:'fc.yes')}</td>"""
+			outln"""    </tr>"""
+        }
 		if (attrs.crewResults) {
 			outln"""    <tr>"""
 			outln"""        <td class="detailtitle">${message(code:'fc.test.results.summary')}:</td>"""
@@ -410,10 +504,14 @@ class LandingResultsTagLib
         outln"""    <tbody>"""
         outln"""        <tr class="values" id="3">"""
         outln"""        	<td>"""
-        if (attrs.t.landingTest3Landing == 2) {
+        if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_NO) {
             outln"""       		${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}<br/>"""
-        } else if (attrs.t.landingTest3Landing == 3) {
+        } else if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_OUT) {
             outln"""         	${message(code:'fc.landingtest.outsidelanding')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""         	${message(code:'fc.landingtest.outsidelanding.short')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest3Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""         	${message(code:'fc.landingtest.outsidelanding.long')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}<br/>"""
         } else if (!attrs.t.landingTest3Measure) {
             outln"""         	${message(code:'fc.landingresults.measure')}: - (${attrs.t.landingTest3MeasurePenalties} ${message(code:'fc.points')})<br/>"""
         } else {
@@ -446,6 +544,16 @@ class LandingResultsTagLib
         if (attrs.t.landingTest3TouchingObstacle) {
             outln"""            ${message(code:'fc.landingtest.touchingobstacle')}: ${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest3Points)} ${message(code:'fc.points')}<br/>"""
         }
+        if (attrs.t.landingTest3Comment) {
+			String s = ""
+            for (String comment_line in attrs.t.landingTest3Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+            outln s
+        }
+        if (attrs.t.landingTest3VideoCheck) {
+			outln"""            ${message(code:'fc.landingresults.videocheck')}: ${message(code:'fc.yes')}<br/>"""
+        }
         outln"""            </td>"""
         outln"""        </tr>"""
         outln"""    </tbody>"""
@@ -468,11 +576,17 @@ class LandingResultsTagLib
 			outln"""    <tbody>"""
 		}
         outln"""        <tr>"""
-        if (attrs.t.landingTest4Landing == 2) {
+        if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_NO) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}</td>"""
-        } else if (attrs.t.landingTest4Landing == 3) {
+        } else if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_OUT) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.short')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}</td>"""
+        } else if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.outsidelanding.long')}:</td>"""
             outln"""        <td>${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}</td>"""
         } else if (!attrs.t.landingTest4Measure) {
             outln"""        <td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>"""
@@ -536,6 +650,22 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest4Comment) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.comment')}:</td>"""
+            String s = ""
+            for (String comment_line in attrs.t.landingTest4Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+			outln"""        <td>${s}</td>"""
+			outln"""    </tr>"""
+        }
+        if (attrs.t.landingTest4VideoCheck) {
+            outln"""    <tr>"""
+			outln"""        <td class="detailtitle">${message(code:'fc.landingresults.videocheck')}:</td>"""
+			outln"""        <td>${message(code:'fc.yes')}</td>"""
+			outln"""    </tr>"""
+        }
 		if (attrs.crewResults) {
 			outln"""    <tr>"""
 			outln"""        <td class="detailtitle">${message(code:'fc.test.results.summary')}:</td>"""
@@ -561,10 +691,14 @@ class LandingResultsTagLib
         outln"""    <tbody>"""
         outln"""        <tr class="values" id="4">"""
         outln"""        	<td>"""
-        if (attrs.t.landingTest4Landing == 2) {
+        if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_NO) {
             outln"""       		${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTestNoLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}<br/>"""
-        } else if (attrs.t.landingTest4Landing == 3) {
+        } else if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_OUT) {
             outln"""       		${message(code:'fc.landingtest.outsidelanding')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_OUT_SHORT) {
+            outln"""       		${message(code:'fc.landingtest.outsidelanding.short')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}<br/>"""
+        } else if (attrs.t.landingTest4Landing == Defs.LANDING_SEL_OUT_LONG) {
+            outln"""       		${message(code:'fc.landingtest.outsidelanding.long')}: ${attrs.t.GetLandingTestOutsideLandingPoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}<br/>"""
         } else if (!attrs.t.landingTest4Measure) {
             outln"""       		${message(code:'fc.landingresults.measure')}: - (${attrs.t.landingTest4MeasurePenalties} ${message(code:'fc.points')})<br/>"""
         } else {
@@ -596,6 +730,16 @@ class LandingResultsTagLib
         }
         if (attrs.t.landingTest4TouchingObstacle) {
 			outln"""            ${message(code:'fc.landingtest.touchingobstacle')}: ${attrs.t.GetLandingTestTouchingObstaclePoints(attrs.t.task.landingTest4Points)} ${message(code:'fc.points')}<br/>"""
+        }
+        if (attrs.t.landingTest4Comment) {
+			String s = ""
+            for (String comment_line in attrs.t.landingTest4Comment.readLines()) {
+                s += "${comment_line}<br/>"
+            }
+            outln s
+        }
+        if (attrs.t.landingTest4VideoCheck) {
+			outln"""            ${message(code:'fc.landingresults.videocheck')}: ${message(code:'fc.yes')}<br/>"""
         }
         outln"""            </td>"""
         outln"""        </tr>"""

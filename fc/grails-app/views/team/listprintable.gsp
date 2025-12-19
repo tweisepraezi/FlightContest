@@ -78,7 +78,7 @@
                                         <g:else>
                                	            <td class="team"/>
                                         </g:else>
-                                        <td class="crew">${crew_instance.name}</td>
+                                        <td class="crew">${crew_instance.startNum} - ${crew_instance.name}</td>
                                         <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
                                         <td class="tas">${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
                                     </tr>

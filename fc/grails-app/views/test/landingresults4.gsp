@@ -61,22 +61,34 @@
                                     <td class="detailtitle">${message(code:'fc.tas')}:</td>
                                     <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.route')}:</td>
-                                    <g:if test="${testInstance.flighttestwind?.flighttest}">
-                                        <td><g:route var="${testInstance.flighttestwind.flighttest.route}" link="${createLink(controller:'route',action:'show')}"/></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.wind')}:</td>
-                                    <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:flighttestwindtext var="${testInstance.flighttestwind}" /></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                </tr>
+                                <g:if test="${testInstance.flighttestwind.IsCorridor()}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route')}:</td>
+                                        <g:if test="${testInstance.flighttestwind}">
+                                            <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route')}:</td>
+                                        <g:if test="${testInstance.flighttestwind?.flighttest}">
+                                            <td><g:route var="${testInstance.flighttestwind.GetRoute()}" link="${createLink(controller:'route',action:'show')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.wind')}:</td>
+                                        <g:if test="${testInstance.flighttestwind}">
+                                            <td><g:flighttestwindtext var="${testInstance.flighttestwind}" /></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                </g:else>
                             </tbody>
                         </table>
 						<fieldset>
@@ -89,13 +101,19 @@
 								</p>
 								<p>
 									<div>
-										<g:radioGroup name="landingTest4Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding')+" ("+Contest.LANDING_NO+")",message(code:'fc.landingtest.outsidelanding')+" ("+Contest.LANDING_OUT+")"]}" values="[1,2,3]" value="${testInstance.landingTest4Landing}">
+										<g:radioGroup name="landingTest4Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding')+" ("+Defs.LANDING_NO+")",message(code:'fc.landingtest.outsidelanding')+" ("+Defs.LANDING_OUT+")",message(code:'fc.landingtest.outsidelanding.short')+" ("+Defs.LANDING_OUT_SHORT+")",message(code:'fc.landingtest.outsidelanding.long')+" ("+Defs.LANDING_OUT_LONG+")"]}" values="[Defs.LANDING_SEL_VALUE,Defs.LANDING_SEL_NO,Defs.LANDING_SEL_OUT,Defs.LANDING_SEL_OUT_SHORT,Defs.LANDING_SEL_OUT_LONG]" value="${testInstance.landingTest4Landing}">
 											<label>${it.radio} ${it.label}</label>
 										</g:radioGroup>
-										<g:if test="${testInstance.landingTest4Landing == 2}">
+										<g:if test="${testInstance.landingTest4Landing == Defs.LANDING_SEL_NO}">
 											(${testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest4Points)} ${message(code:'fc.points')})
 										</g:if>
-										<g:elseif test="${testInstance.landingTest4Landing == 3}">
+										<g:elseif test="${testInstance.landingTest4Landing == Defs.LANDING_SEL_OUT}">
+											(${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest4Points)} ${message(code:'fc.points')})
+										</g:elseif>
+										<g:elseif test="${testInstance.landingTest4Landing == Defs.LANDING_SEL_OUT_SHORT}">
+											(${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest4Points)} ${message(code:'fc.points')})
+										</g:elseif>
+										<g:elseif test="${testInstance.landingTest4Landing == Defs.LANDING_SEL_OUT_LONG}">
 											(${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest4Points)} ${message(code:'fc.points')})
 										</g:elseif>
 										<g:else>
@@ -144,6 +162,15 @@
 											<label>${message(code:'fc.landingtest.touchingobstacle')}</label>
 										</g:if>
 									</div>
+								</p>
+								<p>
+									<label>${message(code:'fc.landingresults.comment')}:</label>
+									<br/>
+									<g:textArea name="landingTest4Comment" value="${testInstance.landingTest4Comment}" rows="3" style="width:100%;" tabIndex="${ti[0]++}"/>
+									<div>
+                                        <g:checkBox name="landingTest4VideoCheck" value="${testInstance.landingTest4VideoCheck}"/>
+                                        <label>${message(code:'fc.landingresults.videocheck')}</label>
+                                    </div>
 								</p>
                                 <script>
 									$('#landingTest4Measure').select();

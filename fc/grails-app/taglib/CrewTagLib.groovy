@@ -46,7 +46,11 @@ class CrewTagLib
         outln"""        <tr>"""
         outln"""            <td class="detailtitle">${message(code:'fc.route')}:</td>"""
         if (attrs.t.flighttestwind?.flighttest) {
-            outln"""        <td>${route(attrs.t.flighttestwind.flighttest.route,createLink(controller:'route',action:'show'))}</td>"""
+            if (attrs.t.flighttestwind.IsCorridor()) {
+                outln"""        <td>${flighttestwind(attrs.t.flighttestwind,createLink(controller:'flightTestWind',action:'edit'))}</td>"""
+            } else {
+                outln"""        <td>${route(attrs.t.flighttestwind.GetRoute(),createLink(controller:'route',action:'show'))}</td>"""
+            }
         } else {
             outln"""        <td>${message(code:'fc.noassigned')}</td>"""
         }
@@ -210,6 +214,14 @@ class CrewTagLib
         return ""
     }
    
+    // --------------------------------------------------------------------------------------------------------------------
+    private String flighttestwind(FlightTestWind flightTestWindInstance, String link) {
+        if (flightTestWindInstance) {
+            return """<a href="${link}/${flightTestWindInstance.id}">${flightTestWindInstance.name()}</a>""" // .encodeAsHTML()
+        }
+        return ""
+    }
+
     // --------------------------------------------------------------------------------------------------------------------
     private String route(Route routeInstance, String link) {
         if (routeInstance) {

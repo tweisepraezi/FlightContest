@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.1.11
-:revdate:   10.12.2025
+:revnumber: 4.2.0
+:revdate:   19.12.2025
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -1280,18 +1280,19 @@ ausgemessen und bei den Strecken-Koordinaten unter
 [[anr]]
 == Planung und Auswertung von ANR-Wettbewerben
 
-Es werden für eine Aufgabe nur Einzel-Parcours unterstützt.
-Das bedeutet, dass auf eine Karte nur genau ein Parcour gezeichnet werden kann
-und die Berechnung aller Zeit- und Flugpläne einer Aufgabe nur für genau einen Parcour möglich ist. +
-Mehrere Aufgaben hintereinander, wo die Besatzungen gegeneinander antreten, sind natürlich möglich.
+Es werden Parcours mit bis zu 4 Strecken unterstützt.
 
+Jede Strecke ist grundsätzlich erst einmal ein Einzel-Strecken-Parcour.
+Durch Zuweisung von bis zu 3 Strecken in den Strecken-Einstellungen kann eine Strecke zum Mehrfach-Strecken-Parcour konfiguriert werden.
+
+<<fc.adoc#anr-routes-construction>> +
 <<fc.adoc#anr-parcour-construction>> +
 <<fc.adoc#anr-planning>> +
 <<fc.adoc#anr-crew-results>> +
 <<fc.adoc#anr-evaluation>>
 
-[[anr-parcour-construction]]
-=== Parcour konstruieren
+[[anr-routes-construction]]
+=== Strecken konstruieren
 
 . Wettbewerb anlegen (Wettbewerb -> Neuer Wettbewerb)
 +
@@ -1322,25 +1323,25 @@ Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google
 +
 Die erzeugte Karte "Flugplatz-Name (Task Creator)" ohne weitere Einstellungen mit "Karte speichern und zur Liste der Karten wechseln" speichern.
 
-. ANR-Parcour im Task-Creator konstruieren
+. Strecken im Task-Creator konstruieren
 +
 Task-Creator starten (Karten -> "Flugplatz-Name (Task Creator)" -> Task-Creator -> …) +
 +
 Im gestarteten Task-Creator ist eine "Karten-Url" auf die erzeugte Karte voreingestellt und kann mit "Laden" geladen werden. +
 Seiten-Leitfaden (SL) auf "A4" oder "A4 W" einstellen. Dieser zeigt die Größe des A4-Karten-Ausdruckes an (Hoch- oder Querformat). +
-Nach Aktivieren von "Check-Punkte -> Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für den ANR-Parcour nacheinander hinzugefügt werden:
+Nach Aktivieren von "Check-Punkte -> Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für die Strecke nacheinander hinzugefügt werden:
 Der 1. Punkt ist auf den Flupplatz zu setzen (TOP). Der 2. Punkt wird SP. Der letzte Punkt wird FP. +
 Der Seiten-Leitfaden wird mit jedem neuen Punkt neu ausgerichtet. Durch Hinzufügen eines Plotting-Punktes kann die Ausrichtung des Seiten-Leitfaden zusätzlich beeinflusst werden. +
-Mit "Task-Name -> Speichern" kann der Parcour als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben). +
+Mit "Task-Name -> Speichern" kann die Strecke als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben). +
 +
-Der fertig konstruierte Parcour ist mit "Export FC kml" zu exportieren.
+Die fertig konstruierte Strecke ist mit "Export FC kml" zu exportieren.
 +
-Zur Korrektur des Parcours ist der Task-Creator mir "Karten -> Task-Creator" zu starten,
+Zur Korrektur der Strecke ist der Task-Creator mir "Karten -> Task-Creator" zu starten,
 die gespeicherte CSV-Datei mit "Task-Name -> Laden" zu laden, die "Karten-Url" zu laden
 und "Check-Punkte -> Bearbeiten" zu aktivieren. +
 Jetzt kann die Position einzelner Check-Punkte geändert, neue Check-Punkte hinzugefügt oder Check-Punkte gelöscht werden.
 
-. Import des Parcours (Strecken -> Import FC-Strecke)
+. Import der Strecke (Strecken -> Import FC-Strecke)
 +
 Auswahl der im Task-Creator exportierten kml-Datei. +
 Die importierte Strecke erscheint in der Strecken-Liste. +
@@ -1353,7 +1354,15 @@ Die Korrektheit der Strecke kann nun mit OSM-Online-Karte geprüft werden. +
 Enthält die Strecke einen Kreisbogen, muss sie in eine Strecke mit Halbkreis-Toren umgewandelt werden
 ("GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")
 
-. A4-Wettbewerbs-Karte mit ANR-Parcour erzeugen
+[[anr-parcour-construction]]
+=== Parcour konstruieren
+
+. Mehrfach-Strecken-Parcour konfigurieren (optional)
++
+Strecken-Einstellungen der 1. Strecke öffnen +
+Bis zu 3 weitere Strecken der 1. Strecke zuordnen und einen Parcour-Namen festlegen.
+
+. A4-Wettbewerbs-Karte erzeugen
 +
 Strecke -> OSM-Wettbewerbs-Karte -> Zeige 1. Einstellungen +
 Check-Punkte zwischen SP und FP vom Druck auf die Karte abwählen (-> Zu druckende Wendepunkte) +
@@ -1388,13 +1397,13 @@ Ggf. Startbahn-Richtung und An- und Abflug-Flugzeiten korrigieren +
 "Erstellen" anklicken
 +
 Die hier gemachten Einstellungen können durch Klick auf den Strecken-Namen, der die Anzeige von "[Navigationstest hinzufügen]" ersetzt, erneut bearbeitet werden. +
-Hier können dann auch weitere Einstellungen vorgenommen werden, wie das Flugplan-Design, die Anzeige von Werten im Flugplan und geänderte Werte für Startbahn-Richtung und An- und Abflug-Flugzeiten. +
+Hier können dann auch weitere Einstellungen vorgenommen werden, wie die weiteren Strecken bei Mehrfach-Strecken-Parcours, das Flugplan-Design, die Anzeige von Werten im Flugplan und geänderte Werte für Startbahn-Richtung und An- und Abflug-Flugzeiten. +
 Weiterhin können hier auch die klassischen ANR-Formulare erzeugt werden. Dazu muss der Strecke des ANR-Parcours eine Default-Druck-Karte auf eine Karte, die mit ANR-Größe erzeugt wurde, zugewiesen sein.
 
 .. Zeitplan der Besatzungen berechnen
 +
 "Alle auswählen" anklicken +
-"Wind zuweisen" anklicken +
+"Strecke zuweisen" anklicken +
 "Zeitplan berechnen" anklicken
 
 . Flug- und Zeitpläne erstellen
@@ -1788,9 +1797,9 @@ Tabellen-Klassen:
 |resultclasslist|value [#crew.num]|resultclass shortresultclass crew aircraft tas
 |aircraftlist|value [#aircraft]|aircraft aircrafttype aircraftcolor crew1 crew2
 
-|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime corridorwidth version
+|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass route planningtime planningtimebefore takeofftime version
 |legtimelist|value [#tas]|tas legtime
-|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime corridorwidth sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass route planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
 |timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 |landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4

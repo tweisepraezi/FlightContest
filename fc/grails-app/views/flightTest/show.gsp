@@ -15,32 +15,43 @@
                         <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.title')} (${flightTestInstance.idName()}):</label>
-                                <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
-                            </p>
-                            <p>
                                 <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
                                     <g:if test="${Test.findByFlighttestwind(flighttestwind_instance)}">
                                         <g:set var="foundTest" value="${true}" />
                                     </g:if>
                                 </g:each>
-                                <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
-                                    <label>${message(code:'fc.route')}*:</label>
-                                    <br/>
-                                    <g:select from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetFlightTestRouteName()}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                <g:if test="${flightTestInstance.route.corridorWidth}">
+                                    <g:set var="route_label" value="${message(code:'fc.parcour')}" />
                                 </g:if>
                                 <g:else>
-                                    <label>${message(code:'fc.route')}:</label>
-                                    <g:route var="${flightTestInstance?.route}" link="${createLink(controller:'route',action:'show')}"/>
+                                    <g:set var="route_label" value="${message(code:'fc.route')}" />
                                 </g:else>
+                                <g:if test="${!foundTest && !flightTestInstance.task.lockPlanning}">
+                                    <label>${route_label}*:</label>
+                                    <br/>
+                                    <g:select from="${RouteTools.GetOkFlightTestRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetParcourName(true)}}" name="route.id" value="${flightTestInstance?.route?.id}" tabIndex="${ti[0]++}"></g:select>
+                                </g:if>
+                                <g:else>
+                                    <label>${route_label}:</label>
+                                    <g:parcour var="${flightTestInstance?.route}" link="${createLink(controller:'route',action:'show')}"/>
+                                </g:else>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.addtitle')}:</label>
+                                <br/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <g:editFlightTest flighttest="${flightTestInstance}" ti="${ti}"/>
                         <fieldset>
                             <p>
                                 <g:set var="intermediate_landing" value="${flightTestInstance.route.IsIntermediateLanding()}"/>
-                                <label>${message(code:'fc.flighttestwind.list')}:</label>
+                                <g:if test="${flightTestInstance.route.corridorWidth}">
+                                    <label>${message(code:'fc.route.list')}:</label>
+                                </g:if>
+                                <g:else>
+                                    <label>${message(code:'fc.flighttestwind.list')}:</label>
+                                </g:else>
                                 <br/>
                                 <table>
                                     <thead>
@@ -108,7 +119,12 @@
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}" />
                         </g:if>
                         <g:if test="${!flightTestInstance.task.lockPlanning}">
-                            <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.flighttestwind.add1')}" tabIndex="${ti[0]++}" />
+                            <g:if test="${flightTestInstance.route.corridorWidth}">
+                                <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.route.add')}" tabIndex="${ti[0]++}" />
+                            </g:if>
+                            <g:else>
+                                <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.flighttestwind.add1')}" tabIndex="${ti[0]++}" />
+                            </g:else>
                         </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}" />
                     </g:form>

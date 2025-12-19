@@ -66,6 +66,9 @@
                         <g:if test="${contestInstance.contestPrintAircraft}">
                        	    <th>${message(code:'fc.aircraft')}</th>
                        	</g:if>
+                        <g:elseif test="${contestInstance.contestPrintTAS}">
+                            <th>${message(code:'fc.tas')}</th>
+                        </g:elseif>
                         <g:if test="${contestInstance.contestPrintTeam}">
                            	<th>${message(code:'fc.team')}</th>
                         </g:if>
@@ -148,7 +151,7 @@
 	                    <tr>
 	                        <th/>
 	                        <th/>
-	                        <g:if test="${contestInstance.contestPrintAircraft}">
+	                        <g:if test="${contestInstance.contestPrintAircraft || contestInstance.contestPrintTAS}">
 	                            <th/>
 	                        </g:if>
 	                        <g:if test="${contestInstance.contestPrintTeam}">
@@ -257,10 +260,13 @@
                     <g:each var="crew_instance" in="${Crew.findAllByContestAndDisabledAndNoContestPositionAndContestPenaltiesNotEqual(contestInstance,false,false,-1,[sort:'contestPosition'])}">
                         <tr id="${crew_instance.contestPosition}">
                             <td class="pos">${crew_instance.contestPosition}</td>
-                            <td class="crew">${crew_instance.name}</td>
+                            <td class="crew"><g:if test="${contestInstance.contestPrintStartNum}">${crew_instance.startNum} - </g:if>${crew_instance.name}</td>
                             <g:if test="${contestInstance.contestPrintAircraft}">
-                                <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>-</g:else></td>
+                                <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>-</g:else><g:if test="${contestInstance.contestPrintTAS}"> (${FcMath.SpeedStr_TAS(crew_instance.tas)}${message(code:'fc.knot')})</g:if></td>
                             </g:if>
+                            <g:elseif test="${contestInstance.contestPrintTAS}">
+                                <td class="tas">${FcMath.SpeedStr_TAS(crew_instance.tas)}${message(code:'fc.knot')}</td>
+                            </g:elseif>
                             <g:if test="${contestInstance.contestPrintTeam}">
                                 <g:if test="${crew_instance.team}">                          
                                     <td class="team">${crew_instance.team.name}</td>
@@ -279,7 +285,7 @@
                                 <g:set var="test_provisional" value="${false}"/>
                                 <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
                                     <g:set var="detail_num" value="${new Integer(0)}"/>
-                             	    <g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
+                             	    <g:set var="test_instance" value="${Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)}"/>
                              	    <g:if test="${test_instance}">
                                         <g:set var="taskpenalties_written" value="${false}"/>
                                         <g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">
@@ -425,7 +431,7 @@
                             </g:if>
                             <g:else>
                                 <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
-                                    <g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
+                                    <g:set var="test_instance" value="${Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)}"/>
                                     <g:if test="${test_instance}">
                                         <g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings(true))}"><g:set var="test_provisional" value="${true}"/></g:if>
                                     </g:if>

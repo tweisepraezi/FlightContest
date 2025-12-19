@@ -72,8 +72,18 @@
                             <td class="aircraft">${aircraft_instance.registration}</td>
                             <td class="aircrafttype">${aircraft_instance.type}</td>
                             <td class="aircraftcolor">${aircraft_instance.colour}</td>
-                            <td class="crew1">${aircraft_instance.user1?.name}</td>
-                            <td class="crew2">${aircraft_instance.user2?.name}</td>
+                            <g:if test="${aircraft_instance.user1}">
+                                <td class="crew1">${aircraft_instance.user1.startNum} - ${aircraft_instance.user1.name} (${FcMath.SpeedStr_TAS(aircraft_instance.user1.tas)}${message(code:'fc.knot')})</td>
+                            </g:if>
+                            <g:else>
+                                <td/>
+                            </g:else>
+                            <g:if test="${aircraft_instance.user2}">
+                                <td class="crew2">${aircraft_instance.user2.startNum} - ${aircraft_instance.user2.name}  (${FcMath.SpeedStr_TAS(aircraft_instance.user2.tas)}${message(code:'fc.knot')})</td>
+                            </g:if>
+                            <g:else>
+                                <td/>
+                            </g:else>
                         </tr>
                     </g:each>
                 </tbody>

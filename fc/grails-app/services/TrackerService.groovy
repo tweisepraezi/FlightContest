@@ -1142,7 +1142,11 @@ class TrackerService
         for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
 			if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID) {
 	            if (!test_instance.flighttestwind) {
-                    ret.message = getMsg('fc.flighttestwind.notassigned')
+                    if (taskInstance.flighttest.route.corridorWidth) {
+                        ret.message = getMsg('fc.flighttestwind.notassigned.route')
+                    } else {
+                        ret.message = getMsg('fc.flighttestwind.notassigned.wind')
+                    }
                     return ret
 	            }
                 enabled_crew_num++
@@ -1924,7 +1928,7 @@ class TrackerService
         Contest contest_instance = testInstance.task.contest
         
         Media media = Media.Tracking
-        if (testInstance.flighttestwind.flighttest.route.corridorWidth) {
+        if (testInstance.GetCorridorWidth()) {
             media = Media.TrackingANR
         }
         

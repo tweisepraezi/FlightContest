@@ -24,12 +24,14 @@
                                 ${message(code:'fc.task.differences.showoffset')}: <input type="text" id="showOffset" name="showOffset" value="${fieldValue(bean:taskInstance,field:'showOffset')}" tabIndex="${ti[0]++}"/>
                                 <g:checkBox name="showTurnPoints" value="${taskInstance.showTurnPoints}" tabIndex="${ti[0]++}"/>
                                 <label>${message(code:'fc.task.differences.showturnpoints')}</label>
-                                <g:checkBox name="showTurnPointSigns" value="${taskInstance.showTurnPointSigns}" tabIndex="${ti[0]++}"/>
-                                <label>${message(code:'fc.task.differences.showturnpointsigns')}</label>
-                                <g:checkBox name="showEnroutePhotos" value="${taskInstance.showEnroutePhotos}" tabIndex="${ti[0]++}"/>
-                                <label>${message(code:'fc.task.differences.showenroutephotos')}</label>
-                                <g:checkBox name="showEnrouteCanavas" value="${taskInstance.showEnrouteCanavas}" tabIndex="${ti[0]++}"/>
-                                <label>${message(code:'fc.task.differences.showenroutecanavas')}</label>
+                                <g:if test="${!taskInstance.flighttest.route.corridorWidth}">
+                                    <g:checkBox name="showTurnPointSigns" value="${taskInstance.showTurnPointSigns}" tabIndex="${ti[0]++}"/>
+                                    <label>${message(code:'fc.task.differences.showturnpointsigns')}</label>
+                                    <g:checkBox name="showEnroutePhotos" value="${taskInstance.showEnroutePhotos}" tabIndex="${ti[0]++}"/>
+                                    <label>${message(code:'fc.task.differences.showenroutephotos')}</label>
+                                    <g:checkBox name="showEnrouteCanavas" value="${taskInstance.showEnrouteCanavas}" tabIndex="${ti[0]++}"/>
+                                    <label>${message(code:'fc.task.differences.showenroutecanavas')}</label>
+                                </g:if>
                             </div>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}"/>

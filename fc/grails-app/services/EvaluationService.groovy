@@ -223,7 +223,7 @@ class EvaluationService
                 Date results_time = null
                 for (Task task_instance in result_tasks) {
                     Map task_values = GetTaskValues(task_instance, last_crew)
-                    Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+                    Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance,task_instance,false)
                     Map test_values = GetTestValues(test_instance)
                     Map new_task = [id: task_values.id,
                                     isTaskPlanningTest:task_values.isTaskPlanningTest,
@@ -254,6 +254,10 @@ class EvaluationService
                                     isLanding2Test:test_values.isLanding2Test,
                                     isLanding3Test:test_values.isLanding3Test,
                                     isLanding4Test:test_values.isLanding4Test,
+                                    landingTest1VideoCheck:test_values.landingTest1VideoCheck,
+                                    landingTest2VideoCheck:test_values.landingTest2VideoCheck,
+                                    landingTest3VideoCheck:test_values.landingTest3VideoCheck,
+                                    landingTest4VideoCheck:test_values.landingTest4VideoCheck,
                                     isSpecialTest:test_values.isSpecialTest,
                                     isIncreaseEnabled:test_values.isIncreaseEnabled,                            
                                     planningTestPenalties:test_instance.planningTestPenalties,
@@ -375,6 +379,10 @@ class EvaluationService
                         isLanding2Test:testInstance.IsLandingTest2Run(),
                         isLanding3Test:testInstance.IsLandingTest3Run(),
                         isLanding4Test:testInstance.IsLandingTest4Run(),
+                        landingTest1VideoCheck:testInstance.landingTest1VideoCheck,
+                        landingTest2VideoCheck:testInstance.landingTest2VideoCheck,
+                        landingTest3VideoCheck:testInstance.landingTest3VideoCheck,
+                        landingTest4VideoCheck:testInstance.landingTest4VideoCheck,
                         isSpecialTest:testInstance.IsSpecialTestRun(),
                         isIncreaseEnabled:testInstance.IsIncreaseEnabled()
                        ]
@@ -1226,7 +1234,7 @@ class EvaluationService
                             boolean disable_contest_penalties = false
                             for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
                                 if (task_instance in tastSettings) {
-                                    Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+                                    Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance, task_instance, false)
                                     int task_penalties = 0
                                     if (test_instance && !test_instance.disabledCrew) {
                                         if (test_instance.IsPlanningTestRun()) {
@@ -1302,7 +1310,7 @@ class EvaluationService
                                 List bestofanalysis_task_penalties = []
                                 for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
                                     if (task_instance in tastSettings) {
-                                        Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+                                        Test test_instance = Test.findByCrewAndTaskAndFlightTestAdditionalResult(crew_instance, task_instance, false)
                                         int task_penalties = 0
                                         if (test_instance && !test_instance.disabledCrew) {
                                             if (test_instance.IsPlanningTestRun()) {

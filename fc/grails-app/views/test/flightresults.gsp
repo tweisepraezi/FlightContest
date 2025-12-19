@@ -86,22 +86,34 @@
                                     <td class="detailtitle">${message(code:'fc.tas')}:</td>
                                     <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.route')}:</td>
-                                    <g:if test="${testInstance.flighttestwind?.flighttest}">
-                                        <td><g:route var="${testInstance.flighttestwind.flighttest.route}" link="${createLink(controller:'route',action:'show')}"/></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.wind')} (${message(code:'fc.runway.setoffset')}):</td>
-                                    <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                </tr>
+                                <g:if test="${testInstance.flighttestwind.IsCorridor()}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route')}:</td>
+                                        <g:if test="${testInstance.flighttestwind}">
+                                            <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route')}:</td>
+                                        <g:if test="${testInstance.flighttestwind?.flighttest}">
+                                            <td><g:route var="${testInstance.flighttestwind.GetRoute()}" link="${createLink(controller:'route',action:'show')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.wind')} (${message(code:'fc.runway.setoffset')}):</td>
+                                        <g:if test="${testInstance.flighttestwind}">
+                                            <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                </g:else>
                             </tbody>
                         </table>
                         <table>
@@ -110,7 +122,7 @@
                                     <td>
                                         <a href="#end" style="color:blue;margin-right:10px;"><img src="${createLinkTo(dir:'images',file:'down.png')}"/>
                                             <g:if test="${!testInstance.flightTestComplete}">
-                                                <g:if test="${!testInstance.reserve}">
+                                                <g:if test="${!testInstance.flightTestAdditionalResult}">
                                                     ${message(code:'fc.results.open')}
                                                 </g:if>
                                                 <g:else>
@@ -155,13 +167,13 @@
                                         </g:if>
                                         <g:if test="${testInstance.flightTestComplete}">
                                             <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:if test="${BootStrap.global.IsDevelopmentEnvironment()}">
-                                                <g:actionSubmit action="flightresultsadditional" value="${message(code:'fc.results.additional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            </g:if>
                                         </g:if>
-                                        <g:elseif test="${testInstance.reserve}">
+                                        <g:if test="${testInstance.flightTestAdditionalResult}">
                                             <g:actionSubmit action="flightresultsdeleteadditional" value="${message(code:'fc.results.deleteadditional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        </g:elseif>
+                                        </g:if>
+                                        <g:else>
+                                            <g:actionSubmit action="flightresultsadditional" value="${message(code:'fc.results.additional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:else>
                                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                     </td>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
@@ -388,13 +400,13 @@
                                 <tr>
                                     <td>
                                         <a style="color:blue;margin-right:10px;" href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/>
-                                            <g:if test="${!testInstance.flightTestComplete && testInstance.reserve}">
+                                            <g:if test="${!testInstance.flightTestComplete && testInstance.flightTestAdditionalResult}">
                                                 ${message(code:'fc.results.additional')}
                                             </g:if>
                                         </a>
                                         <g:if test="${!testInstance.flightTestComplete}">
 				                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:if test="${!testInstance.reserve}">
+                                            <g:if test="${!testInstance.flightTestAdditionalResult}">
                                                 <g:if test="${testInstance.flightTestCheckPointsComplete}">
                                                     <g:if test="${next_id}">
                                                         <g:actionSubmit action="flightresultsreadynext" value="${message(code:'fc.results.readynext')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
@@ -442,10 +454,6 @@
                                             <g:if test="${is_loggerdata}">
                                                 <g:actionSubmit action="printloggerdata" value="${message(code:'fc.flightresults.printloggerdata')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
-                                            <g:if test="${testInstance.reserve}">
-                                                <g:actionSubmit action="flightresultsdeleteadditional" value="${message(code:'fc.results.deleteadditional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            </g:if>
-                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:else>
                                             <g:if test="${next_id}">
@@ -472,11 +480,15 @@
                                                 <g:actionSubmit action="printloggerdata" value="${message(code:'fc.flightresults.printloggerdata')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
                                             <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:if test="${BootStrap.global.IsDevelopmentEnvironment()}">
-                                                <g:actionSubmit action="flightresultsadditional" value="${message(code:'fc.results.additional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            </g:if>
                                             <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         </g:else>
+                                        <g:if test="${testInstance.flightTestAdditionalResult}">
+                                            <g:actionSubmit action="flightresultsdeleteadditional" value="${message(code:'fc.results.deleteadditional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:actionSubmit action="flightresultsadditional" value="${message(code:'fc.results.additional')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:else>
+                                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                     </td>
                                     <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                                 </tr>

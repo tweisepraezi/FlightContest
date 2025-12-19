@@ -47,6 +47,7 @@
 		                                	<td/>
 		                                </g:else>
 		                                <td>
+                                            ${crew_instance.startNum} - 
 		                                    <g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/>
 		                                    <g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if>
 		                                    <g:else>

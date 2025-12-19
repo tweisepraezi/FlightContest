@@ -49,14 +49,26 @@
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.route')}:</td>
-                                    <g:if test="${testInstance.flighttestwind?.flighttest}">
-                                        <td><g:route var="${testInstance.flighttestwind.flighttest.route}" link="${createLink(controller:'route',action:'show')}"/></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                </tr>
+                                <g:if test="${testInstance.flighttestwind.IsCorridor()}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route')}:</td>
+                                        <g:if test="${testInstance.flighttestwind}">
+                                            <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                </g:if>
+                                <g:else>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.route')}:</td>
+                                        <g:if test="${testInstance.flighttestwind?.flighttest}">
+                                            <td><g:route var="${testInstance.flighttestwind.GetRoute()}" link="${createLink(controller:'route',action:'show')}"/></td>
+                                        </g:if> <g:else>
+                                            <td>${message(code:'fc.noassigned')}</td>
+                                        </g:else>
+                                    </tr>
+                                </g:else>
                             </tbody>
                         </table>
                         <table>

@@ -15,7 +15,7 @@ class TaskController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def edit = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
 			// assign return action
 			if (session.taskReturnAction) {
@@ -29,7 +29,7 @@ class TaskController {
     }
 
 	def timetable = {
-		Map task = domainService.GetTask(params)
+		Map task = domainService.GetTaskMap(params)
 		if (task.instance) {
 			// assign return action
 			if (session.taskReturnAction) {
@@ -43,7 +43,7 @@ class TaskController {
 	}
 	
     def timetablejudge = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (task.instance) {
             // assign return action
             if (session.taskReturnAction) {
@@ -57,7 +57,7 @@ class TaskController {
     }
     
     def timetableoverview = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (task.instance) {
             // assign return action
             if (session.taskReturnAction) {
@@ -386,7 +386,7 @@ class TaskController {
     }
 	
 	def disabledcheckpoints = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
 			// assign return action
 			if (session.taskReturnAction) {
@@ -426,7 +426,7 @@ class TaskController {
 	}
 	
     def listdifferences = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             // assign return action
             if (session.taskReturnAction) {
@@ -440,7 +440,7 @@ class TaskController {
     }
     
     def refresh = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         task.instance.showOffset = params.showOffset.toInteger()
         task.instance.showTurnPoints = params.showTurnPoints == "on"
         task.instance.showTurnPointSigns = params.showTurnPointSigns == "on"
@@ -450,7 +450,7 @@ class TaskController {
     }
     
 	def readlogger = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
 			// assign return action
 			if (session.taskReturnAction) {
@@ -464,14 +464,14 @@ class TaskController {
 	}
     
     def readlogger_refresh = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         flash.message = ""
         flash.error = false
         render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, newportimport:params.newportimport, port:params.port, ports:params.ports, checkports:true])
     }
 	
     def readlogger_read = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         String logger_file = ""
         if (params.port && params.loggertype) {
             String uuid = UUID.randomUUID().toString()
@@ -493,7 +493,7 @@ class TaskController {
     }
 	
 	def landingstartlist = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (task.instance) {
 			// assign return action
 			if (session.taskReturnAction) {
@@ -571,7 +571,7 @@ class TaskController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -594,7 +594,7 @@ class TaskController {
 	}
 
     def gotonext = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (task.instance) {
             long next_id = task.instance.GetNextTaskID()
             if (next_id) {
@@ -609,7 +609,7 @@ class TaskController {
     }
     
     def gotoprev = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (task.instance) {
             long next_id = task.instance.GetPrevTaskID()
             if (next_id) {
@@ -624,12 +624,12 @@ class TaskController {
     }
     
 	def createplanningtest = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         redirect(controller:'planningTest',action:'create',params:['task.id':task.instance.id,'taskid':task.instance.id,'fromtask':true])
 	}
 	
 	def createflighttest = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         redirect(controller:'flightTest',action:'create',params:['task.id':task.instance.id,'taskid':task.instance.id,'fromtask':true])
 	}
 	
@@ -656,7 +656,7 @@ class TaskController {
 		fcService.printstart "List planning"
 		if (session?.lastContest) {
 			session.lastContest.refresh()
-			Map task = domainService.GetTask(params) 
+			Map task = domainService.GetTaskMap(params) 
 	        if (!task.instance) {
 	            flash.message = task.message
 				fcService.printdone task.message
@@ -731,7 +731,7 @@ class TaskController {
 		fcService.printstart "List results"
 		if (session?.lastContest) {
 			session.lastContest.refresh()
-	        Map task = domainService.GetTask(params) 
+	        Map task = domainService.GetTaskMap(params) 
 	        if (!task.instance) {
 	            flash.message = task.message
 				fcService.printdone task.message
@@ -810,6 +810,18 @@ class TaskController {
 		}
 	}
 	
+	def selectfilter = {
+        def task = fcService.selectfilterTask(params) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+            return
+        } else {
+            flash.selectedTestIDs = task.selectedtestids
+        	redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+
 	def selectall = {
         def task = fcService.selectallTask(params) 
         if (!task.instance) {
@@ -835,7 +847,7 @@ class TaskController {
     }
 
     def deselectall = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -862,7 +874,7 @@ class TaskController {
     }
     
     def selectplanningtesttask = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -899,7 +911,7 @@ class TaskController {
     }
     
     def selectflighttestwind = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -1397,7 +1409,7 @@ class TaskController {
 	}
 	
     def listresultsprintquestion = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -1424,7 +1436,7 @@ class TaskController {
 	}
     
 	def listresultsprintable = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -1450,7 +1462,7 @@ class TaskController {
     }
 
 	def crewresultsprintquestion = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
 			// set return action
            	return [taskInstance:task.instance,crewresultsprintquestionReturnAction:"startresults",crewresultsprintquestionReturnController:controllerName,crewresultsprintquestionReturnID:params.id]
@@ -1478,7 +1490,7 @@ class TaskController {
 	}
     
     def kmzexport_task = {
-        Map task = domainService.GetTask(params)
+        Map task = domainService.GetTaskMap(params)
         if (task.instance) {
             kmlService.printstart "kmzexport_task: Export logger data of task '${task.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
@@ -1550,7 +1562,7 @@ class TaskController {
     }
     
     def planningtaskformimport = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             File image_file = new File(params.imagefile)
             Map img = imageService.LoadImage2(ImageService.JPG_EXTENSION, image_file, Test.SCANNEDIMAGEMAXSIZE)
@@ -1596,7 +1608,7 @@ class TaskController {
     }
     
     def loggerformimport = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             return [taskInstance:task.instance,loggerfile:params.loggerfile, 'removefile':params.removefile, 'info':params.info]
         } else {
@@ -1664,7 +1676,7 @@ class TaskController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             return [contestInstance:session.lastContest,taskInstance:task.instance]
         } else {
@@ -1688,7 +1700,7 @@ class TaskController {
     }
     
     def observationformimport = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
             File image_file = new File(params.imagefile)
             Map img = imageService.LoadImage2(ImageService.JPG_EXTENSION, image_file, Test.SCANNEDIMAGEMAXSIZE)
@@ -1732,7 +1744,7 @@ class TaskController {
     }
 
     def editlivetracking = {
-        Map task = domainService.GetTask(params) 
+        Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
 			// assign return action
 			if (session.taskReturnAction) {

@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 4.1.11,</span>
-<span id="revdate">10.12.2025</span>
+<span id="revnumber">version 4.2.0,</span>
+<span id="revdate">19.12.2025</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -490,6 +490,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#anr">Planung und Auswertung von ANR-Wettbewerben</a>
 <ul class="sectlevel2">
+<li><a href="#anr-routes-construction">Strecken konstruieren</a></li>
 <li><a href="#anr-parcour-construction">Parcour konstruieren</a></li>
 <li><a href="#anr-planning">Aufgaben-Planung</a></li>
 <li><a href="#anr-crew-results">Besatzungs-Ergebnisse ermitteln</a></li>
@@ -3070,19 +3071,21 @@ ausgemessen und bei den Strecken-Koordinaten unter
 <h2 id="anr">Planung und Auswertung von ANR-Wettbewerben</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Es werden für eine Aufgabe nur Einzel-Parcours unterstützt.
-Das bedeutet, dass auf eine Karte nur genau ein Parcour gezeichnet werden kann
-und die Berechnung aller Zeit- und Flugpläne einer Aufgabe nur für genau einen Parcour möglich ist.<br>
-Mehrere Aufgaben hintereinander, wo die Besatzungen gegeneinander antreten, sind natürlich möglich.</p>
+<p>Es werden Parcours mit bis zu 4 Strecken unterstützt.</p>
 </div>
 <div class="paragraph">
-<p><a href="#anr-parcour-construction">Parcour konstruieren</a><br>
+<p>Jede Strecke ist grundsätzlich erst einmal ein Einzel-Strecken-Parcour.
+Durch Zuweisung von bis zu 3 Strecken in den Strecken-Einstellungen kann eine Strecke zum Mehrfach-Strecken-Parcour konfiguriert werden.</p>
+</div>
+<div class="paragraph">
+<p><a href="#anr-routes-construction">Strecken konstruieren</a><br>
+<a href="#anr-parcour-construction">Parcour konstruieren</a><br>
 <a href="#anr-planning">Aufgaben-Planung</a><br>
 <a href="#anr-crew-results">Besatzungs-Ergebnisse ermitteln</a><br>
 <a href="#anr-evaluation">End-Auswertung</a></p>
 </div>
 <div class="sect2">
-<h3 id="anr-parcour-construction">Parcour konstruieren</h3>
+<h3 id="anr-routes-construction">Strecken konstruieren</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3127,30 +3130,30 @@ Mit "KMZ-Export-Lufträume" kann ein Export zur Ansicht der Lufträume in Google
 </div>
 </li>
 <li>
-<p>ANR-Parcour im Task-Creator konstruieren</p>
+<p>Strecken im Task-Creator konstruieren</p>
 <div class="paragraph">
 <p>Task-Creator starten (Karten &#8594; "Flugplatz-Name (Task Creator)" &#8594; Task-Creator &#8594; …)<br></p>
 </div>
 <div class="paragraph">
 <p>Im gestarteten Task-Creator ist eine "Karten-Url" auf die erzeugte Karte voreingestellt und kann mit "Laden" geladen werden.<br>
 Seiten-Leitfaden (SL) auf "A4" oder "A4 W" einstellen. Dieser zeigt die Größe des A4-Karten-Ausdruckes an (Hoch- oder Querformat).<br>
-Nach Aktivieren von "Check-Punkte &#8594; Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für den ANR-Parcour nacheinander hinzugefügt werden:
+Nach Aktivieren von "Check-Punkte &#8594; Bearbeiten" können mit Doppelklick alle Check-Punkte auf der Karte für die Strecke nacheinander hinzugefügt werden:
 Der 1. Punkt ist auf den Flupplatz zu setzen (TOP). Der 2. Punkt wird SP. Der letzte Punkt wird FP.<br>
 Der Seiten-Leitfaden wird mit jedem neuen Punkt neu ausgerichtet. Durch Hinzufügen eines Plotting-Punktes kann die Ausrichtung des Seiten-Leitfaden zusätzlich beeinflusst werden.<br>
-Mit "Task-Name &#8594; Speichern" kann der Parcour als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben).<br></p>
+Mit "Task-Name &#8594; Speichern" kann die Strecke als CSV-Datei im Download-Ordner des Computers abgespeichert werden (zuvor Task-Name eingeben).<br></p>
 </div>
 <div class="paragraph">
-<p>Der fertig konstruierte Parcour ist mit "Export FC kml" zu exportieren.</p>
+<p>Die fertig konstruierte Strecke ist mit "Export FC kml" zu exportieren.</p>
 </div>
 <div class="paragraph">
-<p>Zur Korrektur des Parcours ist der Task-Creator mir "Karten &#8594; Task-Creator" zu starten,
+<p>Zur Korrektur der Strecke ist der Task-Creator mir "Karten &#8594; Task-Creator" zu starten,
 die gespeicherte CSV-Datei mit "Task-Name &#8594; Laden" zu laden, die "Karten-Url" zu laden
 und "Check-Punkte &#8594; Bearbeiten" zu aktivieren.<br>
 Jetzt kann die Position einzelner Check-Punkte geändert, neue Check-Punkte hinzugefügt oder Check-Punkte gelöscht werden.</p>
 </div>
 </li>
 <li>
-<p>Import des Parcours (Strecken &#8594; Import FC-Strecke)</p>
+<p>Import der Strecke (Strecken &#8594; Import FC-Strecke)</p>
 <div class="paragraph">
 <p>Auswahl der im Task-Creator exportierten kml-Datei.<br>
 Die importierte Strecke erscheint in der Strecken-Liste.<br>
@@ -3167,8 +3170,22 @@ Die importierte Strecke erscheint in der Strecken-Liste.<br>
 ("GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")</p>
 </div>
 </li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="anr-parcour-construction">Parcour konstruieren</h3>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>A4-Wettbewerbs-Karte mit ANR-Parcour erzeugen</p>
+<p>Mehrfach-Strecken-Parcour konfigurieren (optional)</p>
+<div class="paragraph">
+<p>Strecken-Einstellungen der 1. Strecke öffnen<br>
+Bis zu 3 weitere Strecken der 1. Strecke zuordnen und einen Parcour-Namen festlegen.</p>
+</div>
+</li>
+<li>
+<p>A4-Wettbewerbs-Karte erzeugen</p>
 <div class="paragraph">
 <p>Strecke &#8594; OSM-Wettbewerbs-Karte &#8594; Zeige 1. Einstellungen<br>
 Check-Punkte zwischen SP und FP vom Druck auf die Karte abwählen (&#8594; Zu druckende Wendepunkte)<br>
@@ -3218,7 +3235,7 @@ Ggf. Startbahn-Richtung und An- und Abflug-Flugzeiten korrigieren<br>
 </div>
 <div class="paragraph">
 <p>Die hier gemachten Einstellungen können durch Klick auf den Strecken-Namen, der die Anzeige von "[Navigationstest hinzufügen]" ersetzt, erneut bearbeitet werden.<br>
-Hier können dann auch weitere Einstellungen vorgenommen werden, wie das Flugplan-Design, die Anzeige von Werten im Flugplan und geänderte Werte für Startbahn-Richtung und An- und Abflug-Flugzeiten.<br>
+Hier können dann auch weitere Einstellungen vorgenommen werden, wie die weiteren Strecken bei Mehrfach-Strecken-Parcours, das Flugplan-Design, die Anzeige von Werten im Flugplan und geänderte Werte für Startbahn-Richtung und An- und Abflug-Flugzeiten.<br>
 Weiterhin können hier auch die klassischen ANR-Formulare erzeugt werden. Dazu muss der Strecke des ANR-Parcours eine Default-Druck-Karte auf eine Karte, die mit ANR-Größe erzeugt wurde, zugewiesen sein.</p>
 </div>
 </li>
@@ -3226,7 +3243,7 @@ Weiterhin können hier auch die klassischen ANR-Formulare erzeugt werden. Dazu m
 <p>Zeitplan der Besatzungen berechnen</p>
 <div class="paragraph">
 <p>"Alle auswählen" anklicken<br>
-"Wind zuweisen" anklicken<br>
+"Strecke zuweisen" anklicken<br>
 "Zeitplan berechnen" anklicken</p>
 </div>
 </li>
@@ -4142,7 +4159,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime corridorwidth version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass route planningtime planningtimebefore takeofftime version</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">legtimelist</p></td>
@@ -4152,7 +4169,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablejudgelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime corridorwidth sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass route planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>

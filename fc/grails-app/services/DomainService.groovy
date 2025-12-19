@@ -6,7 +6,7 @@ public class DomainService
     def messageSource
     
     //--------------------------------------------------------------------------
-    Map GetRoute(Map params)
+    Map GetRouteMap(Map params)
     {
         Route route_instance = Route.get(params.id)
 
@@ -18,7 +18,7 @@ public class DomainService
     }
     
     //--------------------------------------------------------------------------
-    Map GetTask(Map params)
+    Map GetTaskMap(Map params)
     {
         Task task_instance = Task.get(params.id)
 
@@ -30,7 +30,7 @@ public class DomainService
     }
 
     //--------------------------------------------------------------------------
-    Map GetTest(Map params)
+    Map GetTestMap(Map params)
     {
         Test test_instance = Test.get(params.id)
 

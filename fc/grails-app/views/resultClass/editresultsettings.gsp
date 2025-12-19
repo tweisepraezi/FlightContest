@@ -130,8 +130,16 @@
                                 </div>
                                 <br/>
                                 <div>
+                                    <g:checkBox name="contestPrintStartNum" value="${resultclassInstance.contestPrintStartNum}" />
+                                    <label>${message(code:'fc.printstartnum')}</label>
+                                </div>
+                                <div>
                                     <g:checkBox name="contestPrintAircraft" value="${resultclassInstance.contestPrintAircraft}" />
                                     <label>${message(code:'fc.printaircraft')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="contestPrintTAS" value="${resultclassInstance.contestPrintTAS}" />
+                                    <label>${message(code:'fc.printtas')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="contestPrintTeam" value="${resultclassInstance.contestPrintTeam}" />

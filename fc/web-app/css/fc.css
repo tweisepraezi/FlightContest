@@ -84,6 +84,10 @@ td.positionpenalties {
     white-space:nowrap;
 }
 
+td.aircrafttas {
+    white-space:nowrap;
+}
+
 td.error {
 	font-weight:bold;
     color: red;

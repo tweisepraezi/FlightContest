@@ -129,9 +129,9 @@ class KmlService
     {
         boolean found_track = false
         
-        Route route_instance = testInstance.task.flighttest.route
+        Route route_instance = testInstance.flighttestwind.GetRoute()
         
-        printstart "ConvertTest2KMZ '${testInstance.crew.name}' -> ${webRootDir + kmzFileName}"
+        printstart "ConvertTest2KMZ '${testInstance.crew.name}' '${route_instance.GetRouteName()}' -> ${webRootDir + kmzFileName}"
         
         String kml_file_name = kmzFileName + ".kml"
         
@@ -2067,7 +2067,6 @@ class KmlService
         }
         if (track_points) {
             println "Write track points"
-            Route route_instance = testInstance.task.flighttest.route
             boolean observationsign_used = testInstance.task.flighttest.IsObservationSignUsed()
             // cache calc results
             List calc_results = []

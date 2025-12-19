@@ -18,7 +18,12 @@
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
 	                            <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
-	                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'disabledcheckpoints')}"/></td>
+                                    <g:if test="${taskInstance.flighttest.route.corridorWidth}">
+                                        <td/>
+                                    </g:if>
+                                    <g:else>
+                                        <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'disabledcheckpoints')}"/></td>
+                                    </g:else>
 	                            </g:if>
 	                            <g:else>
 	                            	<td/>
@@ -331,7 +336,7 @@
                                         </g:elseif>
 										<g:else>
 			                                <g:if test="${taskInstance.IsPlanningTestRun()}">
-			                                	<g:if test="${test_instance.IsPlanningTestRun() && !test_instance.reserve}">
+			                                	<g:if test="${test_instance.IsPlanningTestRun() && !test_instance.flightTestAdditionalResult}">
 				                                    <g:if test="${test_instance.planningtesttask}">
 				                                    	<td>${test_instance.planningTestPenalties} <g:if test="${test_instance.scannedPlanningTest}"> <a href="${createLink(controller:'test',action:'planningtaskformimage',params:[testid:test_instance.id])}" target="_blank"><img src="${createLinkTo(dir:'images',file:'scanned.png')}"/></a></g:if> <g:if test="${!test_instance.planningTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'planningtaskresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
                                                             <g:if test="${test_instance.planningTestComplete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsPlanningID}">
@@ -355,7 +360,7 @@
 											<g:if test="${taskInstance.IsFlightTestRun()}">
 												<g:if test="${test_instance.IsFlightTestRun()}">
                                                     <g:set var="set_color" value=""/>
-                                                    <g:if test="${test_instance.reserve}">
+                                                    <g:if test="${test_instance.flightTestAdditionalResult}">
                                                         <g:set var="set_color" value="color: blue;"/>
                                                     </g:if>
 													<g:if test="${test_instance.timeCalculated}">
@@ -379,7 +384,7 @@
 											</g:if>
 											
 			                                <g:if test="${taskInstance.IsObservationTestRun()}">
-				                                <g:if test="${test_instance.IsObservationTestRun() && !test_instance.reserve}">
+				                                <g:if test="${test_instance.IsObservationTestRun() && !test_instance.flightTestAdditionalResult}">
 		        	                            	<td>${test_instance.observationTestPenalties} <g:if test="${test_instance.scannedObservationTest}"> <a href="${createLink(controller:'test',action:'observationformimage',params:[testid:test_instance.id])}" target="_blank"><img src="${createLinkTo(dir:'images',file:'scanned.png')}"/></a></g:if> <g:if test="${!test_instance.observationTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'observationresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
                                                         <g:if test="${test_instance.observationTestComplete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsObservationID}">
                                                             <g:if test="${test_instance.observationTestLiveTrackingResultOk}">
@@ -399,8 +404,8 @@
 											<g:if test="${taskInstance.IsLandingTestRun()}">
 												<g:if test="${taskInstance.IsLandingTestAnyRun()}">
 													<g:if test="${taskInstance.IsLandingTest1Run()}">
-														<g:if test="${test_instance.IsLandingTest1Run() && !test_instance.reserve}">
-															<td>${test_instance.landingTest1Penalties} <g:if test="${!test_instance.landingTest1Complete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults1')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
+														<g:if test="${test_instance.IsLandingTest1Run() && !test_instance.flightTestAdditionalResult}">
+															<td>${test_instance.landingTest1Penalties} <g:if test="${!test_instance.landingTest1Complete}">[${message(code:'fc.provisional')}] </g:if> <g:if test="${test_instance.landingTest1VideoCheck}">[${message(code:'fc.landingresults.videocheck.short')}] </g:if><a href="${createLink(controller:'test',action:'landingresults1')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
 																<g:if test="${test_instance.landingTest1Complete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsLanding1ID}">
 																	<g:if test="${test_instance.landingTest1LiveTrackingResultOk}">
 																		<img src="${createLinkTo(dir:'images',file:'out-ok.svg')}" style="margin-left:0.2rem; height:0.6rem;"/>
@@ -416,8 +421,8 @@
 														</g:else>
 													</g:if>
 													<g:if test="${taskInstance.IsLandingTest2Run()}">
-														<g:if test="${test_instance.IsLandingTest2Run() && !test_instance.reserve}">
-															<td>${test_instance.landingTest2Penalties} <g:if test="${!test_instance.landingTest2Complete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults2')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
+														<g:if test="${test_instance.IsLandingTest2Run() && !test_instance.flightTestAdditionalResult}">
+															<td>${test_instance.landingTest2Penalties} <g:if test="${!test_instance.landingTest2Complete}">[${message(code:'fc.provisional')}] </g:if> <g:if test="${test_instance.landingTest2VideoCheck}">[${message(code:'fc.landingresults.videocheck.short')}] </g:if><a href="${createLink(controller:'test',action:'landingresults2')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
 																<g:if test="${test_instance.landingTest2Complete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsLanding2ID}">
 																	<g:if test="${test_instance.landingTest2LiveTrackingResultOk}">
 																		<img src="${createLinkTo(dir:'images',file:'out-ok.svg')}" style="margin-left:0.2rem; height:0.6rem;"/>
@@ -433,8 +438,8 @@
 														</g:else>
 													</g:if>
 													<g:if test="${taskInstance.IsLandingTest3Run()}">
-														<g:if test="${test_instance.IsLandingTest3Run() && !test_instance.reserve}">
-															<td>${test_instance.landingTest3Penalties} <g:if test="${!test_instance.landingTest3Complete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults3')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
+														<g:if test="${test_instance.IsLandingTest3Run() && !test_instance.flightTestAdditionalResult}">
+															<td>${test_instance.landingTest3Penalties} <g:if test="${!test_instance.landingTest3Complete}">[${message(code:'fc.provisional')}] </g:if> <g:if test="${test_instance.landingTest3VideoCheck}">[${message(code:'fc.landingresults.videocheck.short')}] </g:if><a href="${createLink(controller:'test',action:'landingresults3')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
 																<g:if test="${test_instance.landingTest3Complete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsLanding3ID}">
 																	<g:if test="${test_instance.landingTest3LiveTrackingResultOk}">
 																		<img src="${createLinkTo(dir:'images',file:'out-ok.svg')}" style="margin-left:0.2rem; height:0.6rem;"/>
@@ -450,8 +455,8 @@
 														</g:else>
 													</g:if>
 													<g:if test="${taskInstance.IsLandingTest4Run()}">
-														<g:if test="${test_instance.IsLandingTest4Run() && !test_instance.reserve}">
-															<td>${test_instance.landingTest4Penalties} <g:if test="${!test_instance.landingTest4Complete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults4')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
+														<g:if test="${test_instance.IsLandingTest4Run() && !test_instance.flightTestAdditionalResult}">
+															<td>${test_instance.landingTest4Penalties} <g:if test="${!test_instance.landingTest4Complete}">[${message(code:'fc.provisional')}] </g:if> <g:if test="${test_instance.landingTest4VideoCheck}">[${message(code:'fc.landingresults.videocheck.short')}] </g:if><a href="${createLink(controller:'test',action:'landingresults4')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
 																<g:if test="${test_instance.landingTest4Complete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsLanding4ID}">
 																	<g:if test="${test_instance.landingTest4LiveTrackingResultOk}">
 																		<img src="${createLinkTo(dir:'images',file:'out-ok.svg')}" style="margin-left:0.2rem; height:0.6rem;"/>
@@ -468,7 +473,7 @@
 													</g:if>
 												</g:if>
 												<g:else>
-													<g:if test="${test_instance.IsLandingTestRun() && !test_instance.reserve}">
+													<g:if test="${test_instance.IsLandingTestRun() && !test_instance.flightTestAdditionalResult}">
 														<td>${test_instance.landingTestPenalties} <g:if test="${!test_instance.landingTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
 															<g:if test="${test_instance.landingTestComplete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsLandingID}">
 																<g:if test="${test_instance.landingTestLiveTrackingResultOk}">
@@ -487,7 +492,7 @@
 											</g:if>
 	                                    	
 			                                <g:if test="${taskInstance.IsSpecialTestRun()}">
-				                                <g:if test="${test_instance.IsSpecialTestRun() && !test_instance.reserve}">
+				                                <g:if test="${test_instance.IsSpecialTestRun() && !test_instance.flightTestAdditionalResult}">
 			                                    	<td>${test_instance.specialTestPenalties} <g:if test="${!test_instance.specialTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'specialresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a>
                                                         <g:if test="${test_instance.specialTestComplete && BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsSpecialID}">
                                                             <g:if test="${test_instance.specialTestLiveTrackingResultOk}">
@@ -504,7 +509,7 @@
 												</g:else>
 											</g:if>
 			                                
-                                            <g:if test="${!test_instance.reserve}">
+                                            <g:if test="${!test_instance.flightTestAdditionalResult}">
                                                 <td><a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
                                                 <td>${test_instance.taskPenalties} ${message(code:'fc.points')}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
                                                 <g:if test="${test_instance.taskPosition}">

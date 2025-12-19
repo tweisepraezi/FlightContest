@@ -209,7 +209,7 @@ class TeamController {
     }
 
     def print = {
-        Map teams = printService.printTeams(params,false,false,GetPrintParams()) 
+        Map teams = printService.printTeams(params,false,session.lastContest.printTeamLandscape,GetPrintParams()) 
         if (teams.error) {
             flash.message = teams.message
             flash.error = true

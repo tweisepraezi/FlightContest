@@ -22,6 +22,7 @@ class FlightTestWind
 	String iTODurationFormula = "wind+:3NM"                // DB-2.39
     
     BigDecimal corridorWidthWind = 0.0                     // DB-2.43, NM
+    Long corridorRouteID = 0                               // DB-2.46
 
     Integer idTitle = 0                                    // DB-2.12
 	
@@ -56,16 +57,76 @@ class FlightTestWind
         
         // DB-2.43 compatibility
         corridorWidthWind(nullable:true)
+        
+        // DB-2.46 compatibility
+        corridorRouteID(nullable:true)
 	}
 	
 	String name()
 	{
-        if (corridorWidthWind) {
-            return "${wind.name()} (${idTitle}) (${FcMath.DistanceStr2(corridorWidthWind)}${getMsgArgs('fc.mile',[])})"
+        if (IsCorridor()) {
+            Route route_instance = GetRoute()
+            if (corridorWidthWind) {
+                return "${route_instance.name()} (${FcMath.DistanceStr2(corridorWidthWind)}${getMsgArgs('fc.mile',[])}) #${idTitle}"
+            }
+            return "${route_instance.name()} (${FcMath.DistanceStr2(route_instance.corridorWidth)}${getMsgArgs('fc.mile',[])}) #${idTitle}"
         }
-		return "${wind.name()} (${idTitle})"
+		return "${wind.name()} #${idTitle}"
 	}
     
+	String printName()
+	{
+        if (IsCorridor()) {
+            Route route_instance = GetRoute()
+            if (corridorWidthWind) {
+                return "${route_instance.name()} (${FcMath.DistanceStr2(corridorWidthWind)}${getPrintMsgArgs('fc.mile',[])})"
+            }
+            return "${route_instance.name()} (${FcMath.DistanceStr2(route_instance.corridorWidth)}${getPrintMsgArgs('fc.mile',[])})"
+        }
+		return "${wind.name()}"
+	}
+    
+    BigDecimal GetCorridorWidth()
+    {
+        if (corridorWidthWind) {
+            return corridorWidthWind
+        }
+        return GetRoute().corridorWidth
+    }
+
+    Route GetRoute()
+    {
+        Route route_instance = null
+        if (corridorRouteID) {
+            route_instance = Route.get(corridorRouteID)
+        }
+        if (!route_instance) {
+            route_instance = flighttest.route
+        }
+        return route_instance
+    }
+    
+    boolean IsCorridor()
+    {
+        if (GetParcour().corridorWidth) {
+            return true
+        }
+        return false
+    }
+
+    Route GetParcour()
+    {
+        return flighttest.route
+    }
+
+    boolean IsWind()
+    {
+        if (wind.speed) {
+            return true
+        }
+        return false
+    }
+
     boolean Used()
     {
         Test test_instance1 = Test.findByTask(flighttest.task,[sort:"id"])

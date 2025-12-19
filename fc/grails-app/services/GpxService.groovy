@@ -46,7 +46,11 @@ class GpxService
     final static BigDecimal CONTESTMAP_TPCANVAS_TRACK = 90 // Grad
     final static BigDecimal CONTESTMAP_TPCANVAS_DISTANCE = 0.7 // NM
     final static BigDecimal CONTESTMAP_TPNAME_DISTANCE = 1.1 // NM
+    final static String CONTESTMAP_TPNAME_FONTSIZE = "16"
+    final static String CONTESTMAP_TPNAME_ANR_FONTSIZE = "10"
     final static BigDecimal CONTESTMAP_TPNAME_ANR_DISTANCE = 0.7 // NM
+    final static String CONTESTMAP_ROUTENAME_ANR_FONTSIZE = "9"
+    final static BigDecimal CONTESTMAP_ROUTENAME_ANR_DISTANCE = 1.1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DISTANCE = 1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_ANR_DISTANCE = 0.5 // NM
     final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DIRECTION = 0 // Grad
@@ -1489,9 +1493,9 @@ class GpxService
     {
         boolean found_track = false
         
-        Route route_instance = testInstance.task.flighttest.route
+        Route route_instance = testInstance.flighttestwind.GetRoute()
         
-        printstart "ConvertTest2GPX '${testInstance.crew.name}' -> ${gpxFileName} [${params}]"
+        printstart "ConvertTest2GPX '${testInstance.crew.name}' '${route_instance.GetRouteName()}' -> ${gpxFileName} [${params}]"
         
         printstart "Generate GPX"
         BufferedWriter gpx_writer = null
@@ -2624,13 +2628,158 @@ class GpxService
         }
         
         printdone ""
-    }
+    } // gpx_route
     
     //--------------------------------------------------------------------------
     private void gpx_route_contestmap(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams)
     {
         printstart "gpx_route_contestmap $params $contestMapParams"
         
+        boolean wr_enroutesign = params.wrEnrouteSign
+        if (params.wrEnrouteSign && testInstance) {
+            wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
+        }
+
+        // observation settings & enroute signs without position
+        BigDecimal center_latitude = null
+        BigDecimal center_longitude = null
+              
+        Map rect = [latmin:null, lonmin:null, latmax:null, lonmax:null]
+        rect = gpx_route_contestmap_get_rect(routeInstance, contestMapParams.contestMapCenterPoints, rect)
+        if (routeInstance.route2ID) {
+            Route route_instance = Route.get(routeInstance.route2ID)
+            if (route_instance) {
+                rect = gpx_route_contestmap_get_rect(route_instance, contestMapParams.contestMapCenterPoints, rect)
+            }
+        }
+        if (routeInstance.route3ID) {
+            Route route_instance = Route.get(routeInstance.route3ID)
+            if (route_instance) {
+                rect = gpx_route_contestmap_get_rect(route_instance, contestMapParams.contestMapCenterPoints, rect)
+            }
+        }
+        if (routeInstance.route4ID) {
+            Route route_instance = Route.get(routeInstance.route4ID)
+            if (route_instance) {
+                rect = gpx_route_contestmap_get_rect(route_instance, contestMapParams.contestMapCenterPoints, rect)
+            }
+        }
+        
+        Map contest_map_rect = AviationMath.getShowRect(rect.latmin, rect.latmax, rect.lonmin, rect.lonmax, CONTESTMAP_MARGIN_DISTANCE)
+        rect.latmin = contest_map_rect.latmin
+        rect.lonmin = contest_map_rect.lonmin
+        rect.latmax = contest_map_rect.latmax
+        rect.lonmax = contest_map_rect.lonmax
+        
+        center_latitude = (rect.latmax+rect.latmin)/2
+        center_longitude = (rect.lonmax+rect.lonmin)/2
+        if (contestMapParams.contestMapCenterMoveY) {
+            if (contestMapParams.contestMapCenterMoveY > 0) {
+                center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 180, contestMapParams.contestMapCenterMoveY).lat
+            } else {
+                center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 0, -contestMapParams.contestMapCenterMoveY).lat
+            }
+        }
+        if (contestMapParams.contestMapCenterMoveX) {
+            if (contestMapParams.contestMapCenterMoveX > 0) {
+                center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 270, contestMapParams.contestMapCenterMoveX).lon
+            } else {
+                center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
+            }
+        }
+                
+        xml.extensions {
+            xml.flightcontest {
+                if (wr_enroutesign) {
+                    wr_route_settings(routeInstance, xml, contestMapParams + [
+                                        contestmapcurvedlegpoints:routeInstance.contestMapCurvedLegPoints,
+                                        contestmapcenterpoints: routeInstance.contestMapCenterPoints,
+                                        contestmapprintpoints: routeInstance.contestMapPrintPoints,
+                                        contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
+                                        contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
+                                        contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
+                                        contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
+                                        contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
+                                        contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
+                                     ])
+                }
+                xml.contestmap(
+                    min_latitude: rect.latmin,
+                    min_longitude: rect.lonmin,
+                    max_latitude: rect.latmax,
+                    max_longitude: rect.lonmax,
+                    center_latitude: center_latitude,
+                    center_longitude: center_longitude,
+                    center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
+                    center_graticule_longitude: GetRoundedDecimalGrad(center_longitude)
+                )
+            }
+        }
+        
+        boolean wr_routename = routeInstance.IsOtherRoute()
+        gpx_route_contestmap_track(routeInstance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+        if (routeInstance.route2ID) {
+            Route route_instance = Route.get(routeInstance.route2ID)
+            if (route_instance) {
+                gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+            }
+        }
+        if (routeInstance.route3ID) {
+            Route route_instance = Route.get(routeInstance.route3ID)
+            if (route_instance) {
+                gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+            }
+        }
+        if (routeInstance.route4ID) {
+            Route route_instance = Route.get(routeInstance.route4ID)
+            if (route_instance) {
+                gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+            }
+        }
+
+        printdone ""
+    } // gpx_route_contestmap
+    
+    //--------------------------------------------------------------------------
+    private Map gpx_route_contestmap_get_rect(Route routeInstance, String contestMapCenterPoints, Map rect)
+    {
+        boolean min_one_center_point = false
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                if (DisabledCheckPointsTools.Uncompress(contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
+                    min_one_center_point = true
+                    break
+                }
+            }
+        }
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
+                    BigDecimal lat = coordroute_instance.latMath()
+                    BigDecimal lon = coordroute_instance.lonMath()
+                    if (rect.latmin == null || lat < rect.latmin) {
+                        rect.latmin = lat
+                    }
+                    if (rect.lonmin == null || lon < rect.lonmin) {
+                        rect.lonmin = lon
+                    }
+                    if (rect.latmax == null || lat > rect.latmax) {
+                        rect.latmax = lat
+                    }
+                    if (rect.lonmax == null || lon > rect.lonmax) {
+                        rect.lonmax = lon
+                    }
+                }
+            }
+        }
+        return rect
+    }
+
+    //--------------------------------------------------------------------------
+    private void gpx_route_contestmap_track(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams, BigDecimal center_latitude, BigDecimal center_longitude, boolean wrRouteName)
+    {
+        printstart "gpx_route_contestmap_track $params $contestMapParams"
+
         boolean wr_enroutesign = params.wrEnrouteSign
         if (params.wrEnrouteSign && testInstance) {
             wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
@@ -2656,93 +2805,6 @@ class GpxService
         boolean export_semicircle_gates_contestmap = false
         if (params.gpxSemicircleGates) {
             export_semicircle_gates_contestmap = true
-        }
-
-        // observation settings & enroute signs without position
-        BigDecimal center_latitude = null
-        BigDecimal center_longitude = null
-        xml.extensions {
-            xml.flightcontest {
-                if (wr_enroutesign) {
-                    wr_route_settings(routeInstance, xml, contestMapParams + [
-                                        contestmapcurvedlegpoints:routeInstance.contestMapCurvedLegPoints,
-                                        contestmapcenterpoints: routeInstance.contestMapCenterPoints,
-                                        contestmapprintpoints: routeInstance.contestMapPrintPoints,
-                                        contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
-                                        contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
-                                        contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
-                                        contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
-                                        contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
-                                        contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
-                                     ])
-                }
-                BigDecimal min_latitude = null
-                BigDecimal min_longitude = null
-                BigDecimal max_latitude = null
-                BigDecimal max_longitude = null
-                boolean min_one_center_point = false
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
-                            min_one_center_point = true
-                            break
-                        }
-                    }
-                }
-                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                        if (!min_one_center_point || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints,routeInstance).contains(coordroute_instance.title()+',')) {
-                            BigDecimal lat = coordroute_instance.latMath()
-                            BigDecimal lon = coordroute_instance.lonMath()
-                            if (min_latitude == null || lat < min_latitude) {
-                                min_latitude = lat
-                            }
-                            if (min_longitude == null || lon < min_longitude) {
-                                min_longitude = lon
-                            }
-                            if (max_latitude == null || lat > max_latitude) {
-                                max_latitude = lat
-                            }
-                            if (max_longitude == null || lon > max_longitude) {
-                                max_longitude = lon
-                            }
-                        }
-                    }
-                }
-                
-                Map contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, CONTESTMAP_MARGIN_DISTANCE)
-                min_latitude = contest_map_rect.latmin
-                min_longitude = contest_map_rect.lonmin
-                max_latitude = contest_map_rect.latmax
-                max_longitude = contest_map_rect.lonmax
-                center_latitude = (max_latitude+min_latitude)/2
-                center_longitude = (max_longitude+min_longitude)/2
-                if (contestMapParams.contestMapCenterMoveY) {
-                    if (contestMapParams.contestMapCenterMoveY > 0) {
-                        center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 180, contestMapParams.contestMapCenterMoveY).lat
-                    } else {
-                        center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 0, -contestMapParams.contestMapCenterMoveY).lat
-                    }
-                }
-                if (contestMapParams.contestMapCenterMoveX) {
-                    if (contestMapParams.contestMapCenterMoveX > 0) {
-                        center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 270, contestMapParams.contestMapCenterMoveX).lon
-                    } else {
-                        center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
-                    }
-                }
-                
-                xml.contestmap(
-                    min_latitude: min_latitude,
-                    min_longitude: min_longitude,
-                    max_latitude: max_latitude,
-                    max_longitude: max_longitude,
-                    center_latitude: center_latitude,
-                    center_longitude: center_longitude,
-                    center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
-                    center_graticule_longitude: GetRoundedDecimalGrad(center_longitude)
-                )
-            }
         }
         
         // tracks
@@ -3057,6 +3119,12 @@ class GpxService
         
         // TP names
         BigDecimal contestmap_tpname_distance = CONTESTMAP_TPNAME_DISTANCE
+        String contestmap_tpname_size = CONTESTMAP_TPNAME_FONTSIZE
+        if (contestMapParams.contestMapPrintSize == Defs.CONTESTMAPPRINTSIZE_ANR) {
+            contestmap_tpname_size = CONTESTMAP_TPNAME_ANR_FONTSIZE
+        }
+        BigDecimal contestmap_routename_distance = CONTESTMAP_ROUTENAME_ANR_DISTANCE
+        String contestmap_routename_size = CONTESTMAP_ROUTENAME_ANR_FONTSIZE
         BigDecimal contestmap_tpname_runway_distance = CONTESTMAP_TPNAME_RUNWAY_DISTANCE
         if (routeInstance.corridorWidth) {
             contestmap_tpname_distance = CONTESTMAP_TPNAME_ANR_DISTANCE
@@ -3082,6 +3150,7 @@ class GpxService
                                     )
                                     xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
                                         xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.src contestmap_tpname_size
                                         xml.sym "empty.png"
                                         xml.type ""
                                     }
@@ -3102,6 +3171,7 @@ class GpxService
                                     )
                                     xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
                                         xml.name last_coordroute_instance.titleMediaCode(media)
+                                        xml.src contestmap_tpname_size
                                         xml.sym "empty.png"
                                         xml.type ""
                                     }
@@ -3118,6 +3188,7 @@ class GpxService
                                 )
                                 xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
                                     xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.src contestmap_tpname_size
                                     xml.sym "empty.png"
                                     xml.type ""
                                 }
@@ -3133,8 +3204,23 @@ class GpxService
                             )
                             xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
                                 xml.name last_coordroute_instance.titleMediaCode(media)
+                                xml.src contestmap_tpname_size
                                 xml.sym "empty.png"
                                 xml.type ""
+                            }
+                            if (wrRouteName) {
+                                Map route_name_coord = AviationMath.getOrthogonalTitlePoint(
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                    last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                                    center_latitude, center_longitude,
+                                    contestmap_routename_distance
+                                )
+                                xml.wpt(lat:route_name_coord.lat, lon:route_name_coord.lon) {
+                                    xml.name routeInstance.name()
+                                    xml.src contestmap_routename_size
+                                    xml.sym "empty.png"
+                                    xml.type ""
+                                }
                             }
                         }
                     }
@@ -3175,6 +3261,7 @@ class GpxService
                             )
                             xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
                                 xml.name coordroute_instance.titleMediaCode(media)
+                                xml.src contestmap_tpname_size
                                 xml.sym "empty.png"
                                 xml.type ""
                             }
@@ -3193,6 +3280,7 @@ class GpxService
                     )
                     xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
                         xml.name coordroute_instance.titleMediaCode(media)
+                        xml.src contestmap_tpname_size
                         xml.sym "empty.png"
                         xml.type ""
                     }
@@ -3472,7 +3560,7 @@ class GpxService
         }
         
         printdone ""
-    }
+    } // gpx_route_contestmap_track
     
     //--------------------------------------------------------------------------
     private void wr_route_settings(Route routeInstance, MarkupBuilder xml, Map params)
@@ -3606,7 +3694,7 @@ class GpxService
                 }
             }
         }
-}
+    }
     
     //--------------------------------------------------------------------------
     private BigDecimal GetRoundedDecimalGrad(BigDecimal decimalGrad)
@@ -3635,11 +3723,11 @@ class GpxService
         }
         boolean no_timecheck = coordrouteInstance.noTimeCheck
         if (taskInstance) {
-            no_timecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPoints,coordrouteInstance.route).contains("${coordrouteInstance.title()},")
+            no_timecheck = DisabledCheckPointsTools.Contains(taskInstance.disabledCheckPoints, coordrouteInstance.route, "${coordrouteInstance.title()},")
         }
         boolean no_gatecheck = coordrouteInstance.noGateCheck
         if (taskInstance) {
-            no_gatecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsNotFound,coordrouteInstance.route).contains("${coordrouteInstance.title()},")
+            no_gatecheck = DisabledCheckPointsTools.Contains(taskInstance.disabledCheckPointsNotFound, coordrouteInstance.route, "${coordrouteInstance.title()},")
         }
         boolean end_curved = coordrouteInstance.endCurved
         if (setEndCurved) {
@@ -3752,7 +3840,7 @@ class GpxService
             } else if (params.isPrint) {
                 media = Media.Print
             }
-            Route route_instance = testInstance.task.flighttest.route
+            Route route_instance = testInstance.flighttestwind.GetRoute()
             boolean observationsign_used = testInstance.task.flighttest.IsObservationSignUsed()
             boolean show_curved_point = route_instance.showCurvedPoints
             List curved_point_titlecodes = route_instance.GetCurvedPointTitleCodes(media)

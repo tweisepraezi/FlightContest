@@ -65,4 +65,22 @@ class DisabledCheckPointsTools
         }
         return uncompressed_str
     }
+    
+    static boolean Contains(String compressedValue, Route routeInstance, String titleValue, boolean retCorridorNoCheckCoord = true)
+    {
+        if (routeInstance.corridorWidth) {
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
+                if (coordroute_instance.type.IsCorridorNoCheckCoord()) {
+                    if (titleValue == "${coordroute_instance.title()},") {
+                        return retCorridorNoCheckCoord
+                    }
+                }
+            }
+        } else {
+            if (Uncompress(compressedValue, routeInstance).contains(titleValue)) {
+                return true
+            }
+        }
+        return false
+    }
 }

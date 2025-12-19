@@ -2,14 +2,24 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.flighttestwind.edit')}</title>
+        <g:if test="${flightTestWindInstance.IsCorridor()}">
+            <title>${message(code:'fc.route.edit')}</title>
+        </g:if>
+        <g:else>
+            <title>${message(code:'fc.flighttestwind.edit')}</title>
+        </g:else>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="contest" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.flighttestwind.edit')}</h2>
+                <g:if test="${flightTestWindInstance.IsCorridor()}">
+                    <h2>${message(code:'fc.route.edit')}</h2>
+                </g:if>
+                <g:else>
+                    <h2>${message(code:'fc.flighttestwind.edit')}</h2>
+                </g:else>
                 <g:hasErrors bean="${flightTestWindInstance}">
                     <div class="errors">
                         <g:renderErrors bean="${flightTestWindInstance}" />
@@ -25,46 +35,55 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td><g:flighttest var="${flightTestWindInstance?.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
+                                    <td>${message(code:'fc.flighttest')}: <g:flighttest var="${flightTestWindInstance?.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </tr>
                             </tbody>
                         </table>
                         <g:if test="${!flightTestWindInstance.Used() && !flightTestWindInstance.flighttest.task.lockPlanning}">
-                            <g:if test="${flightTestWindInstance.corridorWidthWind}">
+                            <g:if test="${flightTestWindInstance.IsCorridor()}">
                                 <fieldset>
-                                    <legend>${message(code:'fc.corridorwidth.deviating')}</legend>
+                                    <legend>${message(code:'fc.route')}</legend>
+                                    <g:showDeviatingRoute flighttestwind="${flightTestWindInstance}" routeid="${flightTestWindInstance.corridorRouteID}" ti="${ti}"/>
                                     <div>
-                                        <label>${message(code:'fc.corridorwidth')} [${message(code:'fc.mile')}]:</label>
+                                        <label>${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:</label>
                                         <br/>
                                         <input type="text" id="corridorWidthWind" name="corridorWidthWind" value="${fieldValue(bean:flightTestWindInstance,field:'corridorWidthWind')}" tabIndex="${ti[0]++}"/>
                                     </div>
                                 </fieldset>
                             </g:if>
-	                        <fieldset>
-	                            <legend>${message(code:'fc.wind')}</legend>
-	                            <p>
-	                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
-	                                <br/>
-	                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}" tabIndex="${ti[0]++}"/>
-	                            </p>
-	                            <p>
-	                                <label>${message(code:'fc.wind.velocity')}* [${message(code:'fc.knot')}]:</label>
-	                                <br/>
-	                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}" tabIndex="${ti[0]++}"/>
-	                            </p>
-	                        </fieldset>
-	                    </g:if>
-                        <g:else>
-                            <g:if test="${flightTestWindInstance.corridorWidthWind}">
+                            <g:if test="${!flightTestWindInstance.GetParcour().contest.anrFlying}">
                                 <fieldset>
-                                    <legend>${message(code:'fc.corridorwidth.deviating')}</legend>
-                                    <p>${FcMath.DistanceStr(flightTestWindInstance.corridorWidthWind)} ${message(code:'fc.mile')}</p>
+                                    <legend>${message(code:'fc.wind')}</legend>
+                                    <p>
+                                        <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
+                                        <br/>
+                                        <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}" tabIndex="${ti[0]++}"/>
+                                    </p>
+                                    <p>
+                                        <label>${message(code:'fc.wind.velocity')}* [${message(code:'fc.knot')}]:</label>
+                                        <br/>
+                                        <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}" tabIndex="${ti[0]++}"/>
+                                    </p>
                                 </fieldset>
                             </g:if>
-                            <fieldset>
-                                <legend>${message(code:'fc.wind')}</legend>
-                                <p>${flightTestWindInstance.wind.name()}</p>
-                            </fieldset>
+                            <g:else>
+                                <input type="hidden" name="direction" value="${0.0}" />
+                                <input type="hidden" name="speed" value="${0.0}" />
+                            </g:else>
+	                    </g:if>
+                        <g:else>
+                            <g:if test="${flightTestWindInstance.IsCorridor()}">
+                                <fieldset>
+                                    <legend>${message(code:'fc.route')}</legend>
+                                    <p><g:route var="${flightTestWindInstance.GetRoute()}" link="${createLink(controller:'route',action:'show')}" /></p>
+                                </fieldset>
+                            </g:if>
+                            <g:if test="${!flightTestWindInstance.IsCorridor() || flightTestWindInstance.IsWind()}">
+                                <fieldset>
+                                    <legend>${message(code:'fc.wind')}</legend>
+                                    <p>${flightTestWindInstance.wind.name()}</p>
+                                </fieldset>
+                            </g:if>
                         </g:else>
                         <fieldset>
                             <legend>${message(code:'fc.runway')}</legend>

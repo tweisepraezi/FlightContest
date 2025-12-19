@@ -38,6 +38,7 @@ class LiveResultsTagLib
                 outln"""<td/>"""
             }
         }
+        boolean summary_provisional = false
         if (attrs.livecontest.contestPrintTaskDetails || attrs.livecontest.contestPrintTaskTestDetails) {
             for (Map live_task in attrs.crew.tasks) {
                 int detail_num = 0
@@ -194,6 +195,10 @@ class LiveResultsTagLib
                                 String s = ""
                                 if (live_task.isLandingTest && live_task.isLanding1Test) {
                                     s += "${live_task.landingTest1Penalties}"
+                                    if (live_task.landingTest1VideoCheck) {
+                                        summary_provisional = true
+                                        s += " [${message(code:'fc.landingresults.videocheck.short')}]"
+                                    }
                                 } else {
                                     s += "-"
                                 }
@@ -209,6 +214,10 @@ class LiveResultsTagLib
                                 String s = ""
                                 if (live_task.isLandingTest && live_task.isLanding2Test) {
                                     s += "${live_task.landingTest2Penalties}"
+                                    if (live_task.landingTest2VideoCheck) {
+                                        summary_provisional = true
+                                        s += " [${message(code:'fc.landingresults.videocheck.short')}]"
+                                    }
                                 } else {
                                     s += "-"
                                 }
@@ -224,6 +233,10 @@ class LiveResultsTagLib
                                 String s = ""
                                 if (live_task.isLandingTest && live_task.isLanding3Test) {
                                     s += "${live_task.landingTest3Penalties}"
+                                    if (live_task.landingTest3VideoCheck) {
+                                        summary_provisional = true
+                                        s += " [${message(code:'fc.landingresults.videocheck.short')}]"
+                                    }
                                 } else {
                                     s += "-"
                                 }
@@ -239,6 +252,10 @@ class LiveResultsTagLib
                                 String s = ""
                                 if (live_task.isLandingTest && live_task.isLanding4Test) {
                                     s += "${live_task.landingTest4Penalties}"
+                                    if (live_task.landingTest4VideoCheck) {
+                                        summary_provisional = true
+                                        s += " [${message(code:'fc.landingresults.videocheck.short')}]"
+                                    }
                                 } else {
                                     s += "-"
                                 }
@@ -307,7 +324,12 @@ class LiveResultsTagLib
             if (attrs.task) {
                 outln"""    <td>${attrs.crew.contestPenalties} (${attrs.crew.contestPosition})</td>"""
             } else {
-                outln"""    <td>${attrs.crew.contestPenalties}</td>"""
+                String s = "<td>${attrs.crew.contestPenalties}"
+                if (summary_provisional) {
+                    s += " [${message(code:'fc.provisional')}]"
+                }
+                s += "</td>"
+                outln s
             }
         }
         outln"""</tr>"""
