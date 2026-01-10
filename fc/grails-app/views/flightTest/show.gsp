@@ -13,6 +13,15 @@
                 <div class="block" id="forms" >
                     <g:form params="${['flighttestReturnAction':flighttestReturnAction,'flighttestReturnController':flighttestReturnController,'flighttestReturnID':flighttestReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <g:task var="${flightTestInstance.task}" link="${createLink(controller:'task',action:'listplanning')}" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <fieldset>
                             <p>
                                 <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">

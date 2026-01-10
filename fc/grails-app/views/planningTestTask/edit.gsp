@@ -20,17 +20,10 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td><g:planningtest var="${planningTestTaskInstance?.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
+                                    <td>${message(code:'fc.planningtest')}: <g:planningtest var="${planningTestTaskInstance?.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <fieldset>
-                            <p>
-                                <label>${message(code:'fc.title')} (${planningTestTaskInstance.idName()}):</label>
-                                <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestTaskInstance,field:'title')}"/>
-                            </p>
-                        </fieldset>
                         <g:if test="${!planningTestTaskInstance.Used() && !planningTestTaskInstance.planningtest.task.lockPlanning}">
                             <fieldset>
                                 <p>
@@ -39,15 +32,19 @@
                                     <g:select from="${RouteTools.GetOkPlanningTestTaskRoutes(contestInstance)}" optionKey="id" optionValue="${{it.GetPlanningTestTaskRouteName()}}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
                                 </p>
                             </fieldset>
-                         </g:if>
-                         <g:else>
+                        </g:if>
+                        <g:else>
                             <fieldset>
-                                <legend>${message(code:'fc.route')}</legend>
-                                <p/>
-                                <br/>
-                                <p>${planningTestTaskInstance.route.name()}</p>
+                                <p>
+                                    <label>${message(code:'fc.route')}:</label>
+                                    <g:parcour var="${planningTestTaskInstance.route}" link="${createLink(controller:'route',action:'show')}"/>
+                                </p>
+                                <p>
+                                    <label>${message(code:'fc.wind')}:</label>
+                                    ${planningTestTaskInstance.wind.name()}
+                                </p>
                             </fieldset>
-                         </g:else>
+                        </g:else>
                         <g:if test="${!planningTestTaskInstance.Used() && !planningTestTaskInstance.planningtest.task.lockPlanning}">
 	                        <fieldset>
 	                            <legend>${message(code:'fc.wind')}</legend>
@@ -63,19 +60,10 @@
 	                            </p>
 	                        </fieldset>
                         </g:if>
-                        <g:else>
-                            <fieldset>
-                                <legend>${message(code:'fc.wind')}</legend>
-                                <p/>
-                                <br/>
-                                <p>${planningTestTaskInstance.wind.name()}</p>
-                            </fieldset>
-                        </g:else>
                         <input type="hidden" name="id" value="${planningTestTaskInstance?.id}" />
                         <input type="hidden" name="version" value="${planningTestTaskInstance?.version}" />
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
-                        <g:if test="${!Test.findByPlanningtesttask(planningTestTaskInstance) && !planningTestTaskInstance.planningtest.task.lockPlanning}">
-                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        <g:if test="${!planningTestTaskInstance.Used() && !planningTestTaskInstance.planningtest.task.lockPlanning}">
+                            <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
                         </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>

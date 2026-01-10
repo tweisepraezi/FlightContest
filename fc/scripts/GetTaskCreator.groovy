@@ -350,7 +350,6 @@ void check_locale(String srcFileName, String destFileName, String newFileName, S
 // if modified add char at version number
 
 // Thomas Weise
-// Version 4.2.0
 // 28.03.2024
 
 // ----------------------------------------------------------------------------------

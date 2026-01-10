@@ -28,22 +28,14 @@
                     <g:form method="post" params="${newparams}" >
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.title')}:</label>
-                                <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestInstance,field:'title')}"/>
-                            </p>
-                        </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.planningtesttask')}</legend>
-                            <p>
-                                <label>${message(code:'fc.title')}:</label>
-                                <br/>
-                                <input type="text" id="taskTitle" name="taskTitle" value="${fieldValue(bean:planningTestInstance,field:'taskTitle')}"/>
-                            </p>
-                            <p>
                                 <label>${message(code:'fc.route')}*:</label>
                                 <br/>
                                 <g:select from="${RouteTools.GetOkPlanningTestTaskRoutes(planningTestInstance.task.contest)}" optionKey="id" optionValue="${{it.GetPlanningTestTaskRouteName()}}" name="route.id" value="${planningTestInstance?.route?.id}" ></g:select>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.addtitle')}:</label>
+                                <br/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestInstance,field:'title')}"/>
                             </p>
                         </fieldset>
                         <fieldset>

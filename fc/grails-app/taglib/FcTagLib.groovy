@@ -156,9 +156,6 @@ class FcTagLib
     def flighttest = { p ->
         if (p.var.route) {
             String route_name = p.var.route.GetParcourName()
-            //if (p.var.route.corridorWidth) {
-            //    route_name += " (${FcMath.DistanceStr2(p.var.route.corridorWidth)}${message(code:'fc.mile')})"
-            //}
             if (p.var.title) {
                 out << """<a href="${p.link}/${p.var.id}">${route_name.encodeAsHTML()}</a> (${p.var.name().encodeAsHTML()})"""
             } else {
@@ -183,7 +180,17 @@ class FcTagLib
     // ====================================================================================================================
     // <g:planningtest var="${planningTestInstance}" link="${createLink(controller:'planningTest',action:'show')}"/>
     def planningtest = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        PlanningTestTask planningtesttask_instance = PlanningTestTask.findByPlanningtest(p.var)
+        if (planningtesttask_instance?.route) {
+            String route_name = planningtesttask_instance.route.GetParcourName()
+            if (p.var.title) {
+                out << """<a href="${p.link}/${p.var.id}">${route_name.encodeAsHTML()}</a> (${p.var.name().encodeAsHTML()})"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}">${route_name.encodeAsHTML()}</a>"""
+            }
+        } else {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        }
     }
 
     // ====================================================================================================================

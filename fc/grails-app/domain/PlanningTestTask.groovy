@@ -26,11 +26,14 @@ class PlanningTestTask
     
 	String name()
 	{
+        return wind.name()
+        /*
 		if(title) {
 			return "${title} (${idTitle})"
 		} else {
             return idName()
 		}
+        */
 	}
     
     boolean Used()

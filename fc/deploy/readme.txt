@@ -1,6 +1,11 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.1
+----------------
+- Planungstest: Vereinfachung der Konfiguration
+- Bug "Planung: 'Strecke/Wind zuweisen' stürzt ab, wenn nicht allen Besatzungen gleichzeitig die Strecke/Wind zugewiesen wird." behoben
+
 Änderungen 4.2.0
 ----------------
 - ANR: Parcour-Planung und -Auswertung mit mehreren Strecken hinzugefügt

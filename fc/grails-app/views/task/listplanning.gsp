@@ -22,7 +22,7 @@
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
                                 <g:if test="${taskInstance.contest.showPlanningTest}">
                                     <g:if test="${taskInstance.planningtest}">
-                                        <td>${message(code:'fc.planningtest')}: <g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/> (${taskInstance.planningtest.planningtesttasks?.size()} ${message(code:'fc.planningtesttask.list')})</td>
+                                        <td>${message(code:'fc.planningtest')}: <g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                     </g:if> <g:else>
                                         <td><g:if test="${!taskInstance.lockPlanning}"><g:link controller="planningTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.planningtest.add')}</g:link></g:if></td>
                                     </g:else>

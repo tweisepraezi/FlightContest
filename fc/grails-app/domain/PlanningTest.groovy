@@ -3,8 +3,7 @@ class PlanningTest
 	String title
 
 	// transient PlanningTestTask values
-	static transients = ['taskTitle','route','direction','speed']
-	String taskTitle
+	static transients = ['route','direction','speed']
 	Route route
 	BigDecimal direction = 0.0
 	BigDecimal speed = 0.0

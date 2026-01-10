@@ -58,7 +58,8 @@ class OsmPrintMapService
     
     final static String ATTR_OUTPUT_PROJECTION_PRINTPDF    = "3857" // Web Mercator projection, used by Google Maps, OpenStreetMap, OpenTopoMap and others
     final static String ATTR_OUTPUT_PROJECTION_TASKCREATOR = "4326" // linear lat lon projection
-    final static String ATTR_INPUT_SRS = "epsg:4326"
+    final static String ATTR_INPUT_SRS_OLD = "+init=epsg:4326"
+    final static String ATTR_INPUT_SRS_NEW = "epsg:4326"
      
     // Formate
     //   DIN-A1 Hochformat = 594 x 841 mm, DIN-A1 Querformat = 841 x 594 mm 
@@ -191,6 +192,11 @@ class OsmPrintMapService
         String map_projection = ATTR_OUTPUT_PROJECTION_PRINTPDF
         if (contestMapParams.taskCreator) {
             map_projection = ATTR_OUTPUT_PROJECTION_TASKCREATOR
+        }
+        
+        String input_srs = ATTR_INPUT_SRS_OLD
+        if (BootStrap.global.IsNewSRSSystax()) {
+            input_srs = ATTR_INPUT_SRS_NEW
         }
         
         String printjob_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
@@ -573,35 +579,35 @@ class OsmPrintMapService
         String gpx_short_file_name = gpx_file_name.substring(gpx_file_name.lastIndexOf('/')+1)
         String gpx_lines = """{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "routes"
         },
         {
             "Style": "<LineSymbolizer stroke='red' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "tracks"
         },
         {
             "Style": "<TextSymbolizer fontset-name='fontset-2' size='[src]' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true'>[name]</TextSymbolizer>",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
         },
         {
             "Style": "<MarkersSymbolizer file='[sym]' transform='${GEODATA_SYMBOL_SCALE}' placement='point' allow-overlap='true'/>",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
         },
         {
             "Style": "<TextSymbolizer fontset-name='fontset-2' size='${SYMBOL_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='10' placement='point'>[type]</TextSymbolizer>",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
@@ -613,21 +619,21 @@ class OsmPrintMapService
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
                     "Style": "<PolygonSymbolizer fill='lightgrey' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "SRS": "${input_srs}",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
                     "Layer": ""
                 },
                 {
                     "Style": "<LineSymbolizer stroke='black' stroke-width='${GRATICULE_STROKE_WIDTH}' stroke-linecap='round' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "SRS": "${input_srs}",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
                     "Layer": ""
                 },
                 {
                     "Style": "<TextSymbolizer fontset-name='fontset-0' size='${GRATICULE_TEXT_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true' horizontal-alignment='right' dx='5' dy='8' placement='vertex'>[name]</TextSymbolizer>",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
+                    "SRS": "${input_srs}",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
                     "Layer": ""
@@ -649,14 +655,14 @@ class OsmPrintMapService
             String mapobjects_short_file_name = mapobjects_file_name.substring(mapobjects_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
             mapobjects_lines = """,{
                 "Style": "<MarkersSymbolizer file='[symbol]' transform='${GEODATA_SYMBOL_SCALE}' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "SRS": "${input_srs}",
                 "Type": "csv",
                 "File": "${mapobjects_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='${OBJECT_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' horizontal-alignment='[horizontal-alignment]' vertical-alignment='[vertical-alignment]' dy='[dy]' placement='point'>[name]</TextSymbolizer>",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "SRS": "${input_srs}",
                 "Type": "csv",
                 "File": "${mapobjects_short_file_name}",
                 "Layer": ""
@@ -678,10 +684,10 @@ class OsmPrintMapService
 			} else {
 				airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
 			}
-            airspaces_lines += get_airspaces_lines(route_instance.contestMapAirspacesLayer2, airspaces_file_name)
+            airspaces_lines += get_airspaces_lines(route_instance.contestMapAirspacesLayer2, airspaces_file_name, input_srs)
             if (route_instance.contestMapShowMapObjectsFromRouteID) {
                 if (route_instance2) {
-                    airspaces_lines += get_airspaces_lines(route_instance2.contestMapAirspacesLayer2, airspaces_file_name)
+                    airspaces_lines += get_airspaces_lines(route_instance2.contestMapAirspacesLayer2, airspaces_file_name, input_srs)
                 }
             }
         }
@@ -696,14 +702,14 @@ class OsmPrintMapService
         if (contestMapParams.taskCreator) {
             airports_lines = """,{
                 "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='scale(0.6, ${latlon_relation*0.6}),rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0)' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "SRS": "${input_srs}",
                 "Type": "csv",
                 "File": "${airports_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, ${latlon_relation*0.6})' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "SRS": "${input_srs}",
                 "Type": "csv",
                 "File": "${airports_short_file_name}",
                 "Layer": ""
@@ -711,14 +717,14 @@ class OsmPrintMapService
         } else {
             airports_lines = """,{
                 "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_RUNWAY}]' transform='rotate([${OpenAIPService.CSV_AIRPORT_HEADING}],0,0),scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "SRS": "${input_srs}",
                 "Type": "csv",
                 "File": "${airports_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<MarkersSymbolizer file='[${OpenAIPService.CSV_AIRPORT_TYPE}]' transform='scale(0.6, 0.6)' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${ATTR_INPUT_SRS}",
+                "SRS": "${input_srs}",
                 "Type": "csv",
                 "File": "${airports_short_file_name}",
                 "Layer": ""
@@ -726,14 +732,14 @@ class OsmPrintMapService
         }
         airports_lines += """,{
             "Style": "<TextSymbolizer fontset-name='fontset-0' size='${OBJECT_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='${OBJECT_TEXT_LINE1_DY}' placement='point'>[${OpenAIPService.CSV_AIRPORT_NAME}]</TextSymbolizer>",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "csv",
             "File": "${airports_short_file_name}",
             "Layer": ""
         }
         ,{
             "Style": "<TextSymbolizer fontset-name='fontset-0' size='${OBJECT_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='${OBJECT_TEXT_LINE2_DY}' placement='point'>[${OpenAIPService.CSV_AIRPORT_ICAO}]</TextSymbolizer>",
-            "SRS": "+init=${ATTR_INPUT_SRS}",
+            "SRS": "${input_srs}",
             "Type": "csv",
             "File": "${airports_short_file_name}",
             "Layer": ""
@@ -994,7 +1000,7 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    private String get_airspaces_lines(String airspacesLayer, String airspacesFileName)
+    private String get_airspaces_lines(String airspacesLayer, String airspacesFileName, String inputSRS)
     {
         String airspaces_lines = ""
         String airspaces_short_file_name = airspacesFileName.substring(airspacesFileName.lastIndexOf('/')+1)
@@ -1050,21 +1056,21 @@ class OsmPrintMapService
                     airspace_text = Tools.GetMapnikString(airspace_text)
                     airspaces_lines += """,{
                         "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
-                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "SRS": "${inputSRS}",
                         "Type": "ogr",
                         "File": "${airspace_filename}",
                         "Layer": "${airspace_layer}"
                     }
                     ,{
                         "Style": "<LineSymbolizer stroke='${airspace_fillcolor}' stroke-width='${AIRSPACE_STROKE_WIDTH}' stroke-linecap='round' />",
-                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "SRS": "${inputSRS}",
                         "Type": "ogr",
                         "File": "${airspace_filename}",
                         "Layer": "${airspace_layer}"
                     }
                     ,{
                         "Style": "<TextSymbolizer fontset-name='fontset-0' size='${airspace_textsize}' fill='${airspace_textcolor}' allow-overlap='false' placement='line' halo-radius='1' halo-fill='white' spacing='${airspace_textspacing}' placement-type='simple' placements='X,12,10,8,6,4,2'>'${airspace_text}'</TextSymbolizer>",
-                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "SRS": "${inputSRS}",
                         "Type": "ogr",
                         "File": "${airspace_filename}",
                         "Layer": "${airspace_layer}"

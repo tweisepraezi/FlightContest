@@ -12,13 +12,31 @@
                 <h2>${message(code:'fc.planningtest.show')}</h2>
                 <div class="block" id="forms" >
                     <g:form params="${['planningtestReturnAction':planningtestReturnAction,'planningtestReturnController':planningtestReturnController,'planningtestReturnID':planningtestReturnID]}" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.title')}:</td>
-                                    <td>${planningTestInstance.name()}</td>
+                                    <td>
+                                        <g:task var="${planningTestInstance.task}" link="${createLink(controller:'task',action:'listplanning')}" />
+                                    </td>
                                 </tr>
-                                <tr>
+                            </tbody>
+                        </table>
+                        <fieldset>
+                           <p>
+                                <g:set var="planningtesttask_instance" value="${PlanningTestTask.findByPlanningtest(planningTestInstance)}" />
+                                <label>${message(code:'fc.route')}:</label>
+                                <g:parcour var="${planningtesttask_instance.route}" link="${createLink(controller:'route',action:'show')}"/>
+                            </p>
+                           <p>
+                                <label>${message(code:'fc.addtitle')}:</label>
+                                <br/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                        </fieldset>
+                        <table>
+                            <tbody>
+                               <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td>
                                         <g:each var="n" in="${planningTestInstance.planningtesttasks}">
@@ -30,7 +48,7 @@
                             </tbody>
                         </table>
                         <input type="hidden" name="id" value="${planningTestInstance?.id}" />
-                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
+                        <g:actionSubmit action="update" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
                         <g:each var="planningTestTaskInstance" in="${planningTestInstance.planningtesttasks}">
                             <g:if test="${Test.findByPlanningtesttask(planningTestTaskInstance)}">
                                 <g:set var="foundTest" value="${true}" />
@@ -38,9 +56,6 @@
                         </g:each>
                         <g:if test="${!foundTest && !planningTestInstance.task.lockPlanning}">
                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
-                        </g:if>
-                        <g:if test="${!planningTestInstance.task.lockPlanning}">
-                            <g:actionSubmit action="createplanningtesttask" value="${message(code:'fc.planningtesttask.add1')}" />
                         </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>

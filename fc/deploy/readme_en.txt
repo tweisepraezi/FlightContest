@@ -1,6 +1,11 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.1
+-------------
+- Planning test: Simplification of configuration
+- Bug "Planning: 'Assign route/wind' crashes if the route/wind is not assigned to all crews at the same time." fixed
+
 Changes 4.2.0
 -------------
 - ANR: Parcour planning and evaluation with multiple routes added.

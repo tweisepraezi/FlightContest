@@ -29,6 +29,7 @@ class Global
     static String ClientID = ""
     static String ConfigServer = ""
     static String FCMapServer = ""
+    static Boolean FCMapServerNewSRSSyntax = false
     static String OpenAIPServer = ""
     static String OpenAIPAPIKey = ""
     static String OpenAIPIgnoreAirspacesStartsWith = ""
@@ -420,6 +421,9 @@ class Global
         if (grailsApplication.config.flightcontest.maps.fcmap.server) {
             FCMapServer = grailsApplication.config.flightcontest.maps.fcmap.server
         }
+        if (grailsApplication.config.flightcontest.maps.fcmap.newsrssyntax) {
+            FCMapServerNewSRSSyntax = true
+        }
         if (grailsApplication.config.flightcontest.maps.openaip.server) {
             OpenAIPServer = grailsApplication.config.flightcontest.maps.openaip.server
         }
@@ -457,6 +461,12 @@ class Global
     String GetPrintServerAPI()
     {
         return FCMapServer
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsNewSRSSystax()
+    {
+        return FCMapServerNewSRSSyntax
     }
     
     // --------------------------------------------------------------------------------------------------------------------
