@@ -3781,6 +3781,45 @@ class RouteController {
         }
     }
     
+    def init_localprintmaps = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRouteMap(params) 
+            if (route.instance) {
+                osmPrintMapService.InitLocalPrintmaps(route.instance)
+                redirect(action:'mapexportquestion', id:params.id)
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def start_localprintmaps = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRouteMap(params) 
+            if (route.instance) {
+                osmPrintMapService.StartLocalPrintmaps(session.lastContest)
+                redirect(action:'mapexportquestion', id:params.id)
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def stop_localprintmaps = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRouteMap(params) 
+            if (route.instance) {
+                osmPrintMapService.StopLocalPrintmaps(session.lastContest)
+                redirect(action:'mapexportquestion', id:params.id)
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
     def mapgenerate_airportarea = {
         if (session?.lastContest) {
             Map route = domainService.GetRouteMap(params) 

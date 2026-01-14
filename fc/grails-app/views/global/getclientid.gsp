@@ -22,11 +22,17 @@
                             <g:if test="${BootStrap.global.FCMapServer}">
                                 ${message(code:'fc.config.fcmapserver.found')}<br/>
                             </g:if>
-                            <g:if test="${BootStrap.global.OpenAIPServer}">
+                            <g:if test="${BootStrap.global.OpenAIPServer && BootStrap.global.OpenAIPAPIKey}">
                                 ${message(code:'fc.config.openaipserver.found')}<br/>
                             </g:if>
-                            <g:if test="${BootStrap.global.OpenAIPAPIKey}">
-                                ${message(code:'fc.config.openaipapikey.found')}
+                            <g:if test="${BootStrap.global.SRTMUsername && BootStrap.global.SRTMPassword}">
+                                ${message(code:'fc.config.srtmlogin.found')}<br/>
+                            </g:if>
+                            <g:if test="${BootStrap.global.PostgreSQLHost && BootStrap.global.PostgreSQLPort}">
+                                ${message(code:'fc.config.postgresqlservice.found', args:[BootStrap.global.PostgreSQLHost, BootStrap.global.PostgreSQLPort])}<br/>
+                            </g:if>
+                            <g:if test="${BootStrap.global.PostgreSQLUsername && BootStrap.global.PostgreSQLPassword}">
+                                ${message(code:'fc.config.postgresqllogin.found')}<br/>
                             </g:if>
                         </p>
                         <g:if test="${BootStrap.global.FCMapCounter}">

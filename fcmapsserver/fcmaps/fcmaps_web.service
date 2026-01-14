@@ -1,0 +1,14 @@
+[Unit]
+Description=Flight Contest maps web service
+Requires=network.target
+After=network.target
+
+[Service]
+User=gis
+WorkingDirectory=/home/gis/fcmaps
+ExecStart=/home/gis/fcmaps/printmaps_webservice ./printmaps_webservice.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

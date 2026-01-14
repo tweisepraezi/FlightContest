@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.2.1
-:revdate:   10.01.2026
+:revnumber: 4.2.2
+:revdate:   14.01.2026
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -1930,6 +1930,7 @@ zu machen oder diese Datei zu löschen.
 <<fc.adoc#configuration-live>> +
 <<fc.adoc#configuration-livetracking>> +
 <<fc.adoc#configuration-fcmap>> +
+<<fc.adoc#configuration-fcmaplocal>> +
 <<fc.adoc#configuration-openaip>> +
 <<fc.adoc#configuration-onlinemap>> +
 <<fc.adoc#configuration-task-creator>> +
@@ -2104,8 +2105,25 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
    }
  }
 
-Errichtung eines eigenen Druck-Servers: +
-link:help_fcmaps.html[Flight Contest maps server^]
+Errichtung eines eigenen Druck-Servers: https://github.com/tweisepraezi/FlightContest/blob/master/fcmapsserver/_install.txt
+
+
+[[configuration-fcmaplocal]]
+=== Lokalen Karten-Druck-Server konfigurieren
+ flightcontest {
+   maps {
+     srtm {
+        username = "TODO"     // User-Name für Zugriff auf SRTM-Daten
+        password = "TODO"     // Passwort für Zugriff auf SRTM-Daten
+     }
+     postgresql {
+        host = "TODO"         // Adresse des lokalen PostgreSQL-Servers (DNS-Name oder IP-Adresse)
+        port = 5433           // Port, über den der lokale PostgreSQL-Server angesprochen wird
+        username = "postgres" // User-Name für Zugriff auf lokalen PostgreSQL-Server
+        password = "TODO"     // Passwort für Zugriff auf lokalen PostgreSQL-Server
+     }
+   }
+ }
 
 [[configuration-openaip]]
 === Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren

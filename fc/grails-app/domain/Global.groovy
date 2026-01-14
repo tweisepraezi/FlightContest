@@ -33,6 +33,12 @@ class Global
     static String OpenAIPServer = ""
     static String OpenAIPAPIKey = ""
     static String OpenAIPIgnoreAirspacesStartsWith = ""
+    static String SRTMUsername = ""
+    static String SRTMPassword = ""
+    static String PostgreSQLHost = ""
+    static String PostgreSQLPort = ""
+    static String PostgreSQLUsername = ""
+    static String PostgreSQLPassword = ""
     static String OwnerEMail = ""
     static String OwnerClub = ""
     static Integer FCMapCounter = 0
@@ -364,6 +370,12 @@ class Global
         OpenAIPServer = ""
         OpenAIPAPIKey = ""
         OpenAIPIgnoreAirspacesStartsWith = ""
+        SRTMUsername = ""
+        SRTMPassword = ""
+        PostgreSQLHost = ""
+        PostgreSQLPort = ""
+        PostgreSQLUsername = ""
+        PostgreSQLPassword = ""
         OwnerEMail = ""
         OwnerClub = ""
         
@@ -394,23 +406,41 @@ class Global
                 inputstream_instance.close()
                 def loaded_data = Eval.me(input_data)
                 if (loaded_data && loaded_data instanceof Map) {
-                    if (loaded_data.fcmap.server) {
-                        FCMapServer = loaded_data.fcmap.server
-                    }
-                    if (loaded_data.openaip.server) {
-                        OpenAIPServer = loaded_data.openaip.server
-                    }
-                    if (loaded_data.openaip.apikey) {
-                        OpenAIPAPIKey = loaded_data.openaip.apikey
-                    }
-                    if (loaded_data.openaip.ignoreAirspacesStartsWith) {
-                        OpenAIPIgnoreAirspacesStartsWith = loaded_data.openaip.ignoreAirspacesStartsWith
-                    }
-                    if (loaded_data.owner.email) {
+                    if (loaded_data.owner?.email) {
                         OwnerEMail = loaded_data.owner.email
                     }
-                    if (loaded_data.owner.club) {
+                    if (loaded_data.owner?.club) {
                         OwnerClub = loaded_data.owner.club
+                    }
+                    if (loaded_data.fcmap?.server) {
+                        FCMapServer = loaded_data.fcmap.server
+                    }
+                    if (loaded_data.openaip?.server) {
+                        OpenAIPServer = loaded_data.openaip.server
+                    }
+                    if (loaded_data.openaip?.apikey) {
+                        OpenAIPAPIKey = loaded_data.openaip.apikey
+                    }
+                    if (loaded_data.openaip?.ignoreAirspacesStartsWith) {
+                        OpenAIPIgnoreAirspacesStartsWith = loaded_data.openaip.ignoreAirspacesStartsWith
+                    }
+                    if (loaded_data.srtm?.username) {
+                        SRTMUsername = loaded_data.srtm.username
+                    }
+                    if (loaded_data.srtm?.password) {
+                        SRTMPassword = loaded_data.srtm.password
+                    }
+                    if (loaded_data.postgresql?.host) {
+                        PostgreSQLHost = loaded_data.postgresql.host
+                    }
+                    if (loaded_data.postgresql?.port) {
+                        PostgreSQLPort = loaded_data.postgresql.port
+                    }
+                    if (loaded_data.postgresql?.username) {
+                        PostgreSQLUsername = loaded_data.postgresql.username
+                    }
+                    if (loaded_data.postgresql?.password) {
+                        PostgreSQLPassword = loaded_data.postgresql.password
                     }
                     config_found = true
                 }
@@ -432,6 +462,24 @@ class Global
         }
         if (grailsApplication.config.flightcontest.maps.openaip.ignoreAirspacesStartsWith) {
             OpenAIPIgnoreAirspacesStartsWith = grailsApplication.config.flightcontest.maps.openaip.ignoreAirspacesStartsWith
+        }
+        if (grailsApplication.config.flightcontest.maps.srtm.username) {
+            SRTMUsername = grailsApplication.config.flightcontest.maps.srtm.username
+        }
+        if (grailsApplication.config.flightcontest.maps.srtm.password) {
+            SRTMPassword = grailsApplication.config.flightcontest.maps.srtm.password
+        }
+        if (grailsApplication.config.flightcontest.maps.postgresql.host) {
+            PostgreSQLHost = grailsApplication.config.flightcontest.maps.postgresql.host
+        }
+        if (grailsApplication.config.flightcontest.maps.postgresql.port) {
+            PostgreSQLPort = grailsApplication.config.flightcontest.maps.postgresql.port
+        }
+        if (grailsApplication.config.flightcontest.maps.postgresql.username) {
+            PostgreSQLUsername = grailsApplication.config.flightcontest.maps.postgresql.username
+        }
+        if (grailsApplication.config.flightcontest.maps.postgresql.password) {
+            PostgreSQLPassword = grailsApplication.config.flightcontest.maps.postgresql.password
         }
         
         return config_found
@@ -506,6 +554,51 @@ class Global
     String GetOpenAIPIgnoreAirspacesStartsWith()
     {
         return OpenAIPIgnoreAirspacesStartsWith
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsLocalPrintmaps()
+    {
+        if (SRTMUsername && SRTMPassword && PostgreSQLHost && PostgreSQLPort && PostgreSQLUsername && PostgreSQLPassword) {
+            return true
+        }
+        return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetSRTMUsername()
+    {
+        return SRTMUsername
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetSRTMPassword()
+    {
+        return SRTMPassword
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPostgreSQLHost()
+    {
+        return PostgreSQLHost
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPostgreSQLPort()
+    {
+        return PostgreSQLPort
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPostgreSQLUsername()
+    {
+        return PostgreSQLUsername
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPostgreSQLPassword()
+    {
+        return PostgreSQLPassword
     }
     
     // --------------------------------------------------------------------------------------------------------------------

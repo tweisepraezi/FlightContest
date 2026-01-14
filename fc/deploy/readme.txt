@@ -1,6 +1,11 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.2
+----------------
+- Installationsanleitung für Karten-Server erneuert
+    Update auf Ubuntu 24.04 LTS 64bit.
+
 Änderungen 4.2.1
 ----------------
 - Planungstest: Vereinfachung der Konfiguration

@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.2.1
-:revdate: 10.01.2026
+:revnumber: 4.2.2
+:revdate: 14.01.2026
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -1916,6 +1916,7 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.
 <<fc_en.adoc#configuration-live>> +
 <<fc_en.adoc#configuration-livetracking>> +
 <<fc_en.adoc#configuration-fcmap>> +
+<<fc_en.adoc#configuration-fcmaplocal>> +
 <<fc_en.adoc#configuration-openaip>> +
 <<fc_en.adoc#configuration-onlinemap>> +
 <<fc_en.adoc#configuration-task-creator>> +
@@ -2080,7 +2081,7 @@ To achieve this without copies or FTP upload, use the following configuration:
  }
 
 [[configuration-fcmap]]
-=== Configure your own map printing server
+=== Configure your own map print server
  flightcontest {
    maps {
      fcmap {
@@ -2089,8 +2090,24 @@ To achieve this without copies or FTP upload, use the following configuration:
    }
  }
 
-Setting up your own print server: +
-link:help_fcmaps.html[Flight Contest maps server^]
+Setting up your own print server: https://github.com/tweisepraezi/FlightContest/blob/master/fcmapsserver/_install.txt
+
+[[configuration-fcmaplocal]]
+=== Configure local map print server
+ flightcontest {
+   maps {
+     srtm {
+        username = "TODO"     // User name for accessing SRTM data
+        password = "TODO"     // Password for accessing SRTM data
+     }
+     postgresql {
+        host = "TODO"         // Address of the local PostgreSQL server (DNS name or IP address)
+        port = 5433           // Port through which the local PostgreSQL server is accessed
+        username = "postgres" // User name for accessing the local PostgreSQL server
+        password = "TODO"     // Password for accessing the local PostgreSQL server
+     }
+   }
+ }
 
 [[configuration-openaip]]
 === Configure your own OpenAIP API key for airspace display and map printing

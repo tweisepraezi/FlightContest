@@ -1,6 +1,11 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.2
+-------------
+- Installation instructions for map server updated
+    Update to Ubuntu 24.04 LTS 64bit.
+
 Changes 4.2.1
 -------------
 - Planning test: Simplification of configuration

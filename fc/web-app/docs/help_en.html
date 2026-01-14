@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.2.1,</span>
-<span id="revdate">10.01.2026</span>
+<span id="revnumber">version 4.2.2,</span>
+<span id="revdate">14.01.2026</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -538,7 +538,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-landing">Configure information for landing referees.</a></li>
 <li><a href="#configuration-live">Configure live display</a></li>
 <li><a href="#configuration-livetracking">Configure live tracking</a></li>
-<li><a href="#configuration-fcmap">Configure your own map printing server</a></li>
+<li><a href="#configuration-fcmap">Configure your own map print server</a></li>
+<li><a href="#configuration-fcmaplocal">Configure local map print server</a></li>
 <li><a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a></li>
 <li><a href="#configuration-onlinemap">Configure OSM online map</a></li>
 <li><a href="#configuration-task-creator">Task Creator configuration</a></li>
@@ -4487,7 +4488,8 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.</p
 <a href="#configuration-landing">Configure information for landing referees.</a><br>
 <a href="#configuration-live">Configure live display</a><br>
 <a href="#configuration-livetracking">Configure live tracking</a><br>
-<a href="#configuration-fcmap">Configure your own map printing server</a><br>
+<a href="#configuration-fcmap">Configure your own map print server</a><br>
+<a href="#configuration-fcmaplocal">Configure local map print server</a><br>
 <a href="#configuration-openaip">Configure your own OpenAIP API key for airspace display and map printing</a><br>
 <a href="#configuration-onlinemap">Configure OSM online map</a><br>
 <a href="#configuration-task-creator">Task Creator configuration</a><br>
@@ -4723,7 +4725,7 @@ To achieve this without copies or FTP upload, use the following configuration:</
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration-fcmap">Configure your own map printing server</h3>
+<h3 id="configuration-fcmap">Configure your own map print server</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
@@ -4736,8 +4738,28 @@ To achieve this without copies or FTP upload, use the following configuration:</
 </div>
 </div>
 <div class="paragraph">
-<p>Setting up your own print server:<br>
-<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+<p>Setting up your own print server: <a href="https://github.com/tweisepraezi/FlightContest/blob/master/fcmapsserver/_install.txt" class="bare">https://github.com/tweisepraezi/FlightContest/blob/master/fcmapsserver/_install.txt</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-fcmaplocal">Configure local map print server</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    srtm {
+       username = "TODO"     // User name for accessing SRTM data
+       password = "TODO"     // Password for accessing SRTM data
+    }
+    postgresql {
+       host = "TODO"         // Address of the local PostgreSQL server (DNS name or IP address)
+       port = 5433           // Port through which the local PostgreSQL server is accessed
+       username = "postgres" // User name for accessing the local PostgreSQL server
+       password = "TODO"     // Password for accessing the local PostgreSQL server
+    }
+  }
+}</pre>
+</div>
 </div>
 </div>
 <div class="sect2">

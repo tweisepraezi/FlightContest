@@ -1,0 +1,245 @@
+﻿Flight Contest maps server
+Thomas Weise
+13.01.2026
+
+Virtual server requirements
+---------------------------
+    RAM: 64GB, SSD: 960GB, CPU: 16, OS: Ubuntu 24.04 LTS 64bit
+    such as: STRATO VPS Linux VC16-64
+
+Tips
+----
+    Reboot:
+        sync;sync;shutdown -r now
+    Check successfully restart:
+        who -b
+    Nano:
+        Search with Ctrl-w
+        Exit with Ctrl-x
+    Screen:
+        Start with: screen
+        Continue:   screen -r
+        Close with: exit
+    Find out database size:
+        psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"
+    Display free disk space:
+        df
+    Display free ram:
+        free -m
+    List installed packages:
+        apt list --installed
+
+Software installation (as root)
+-------------------------------
+
+    # Update Linux
+    apt-get update
+
+    # Install postgresql
+    apt-get install -y postgresql postgresql-contrib postgis
+
+    # Install python3
+    apt-get install -y python3 python3-pip python3-venv
+
+    # Install OGR
+    apt-get install -y libxml2-dev libgeos-dev libgeos++-dev libpq-dev libbz2-dev libproj-dev
+    apt-get install -y libtiff5-dev libicu-dev libgdal-dev libcairo-dev libcairomm-1.0-dev libagg-dev
+    apt-get install -y python3-setuptools python3-matplotlib python3-bs4 python3-numpy python3-gdal
+    #apt-get install -y gdal-bin
+
+    # Install mapnik - https://mapnik.org/news/archive.html https://proj.org/en/stable/news.html
+    apt-get install -y fonts-unifont fonts-noto
+    apt-get install -y python3-mapnik
+
+    # Install osm2pgsql
+    apt-get install -y osm2pgsql
+
+    # Install pyhgtmap
+    pip install --break-system-packages pyhgtmap[geotiff]
+
+    # Install FTP
+    apt-get install -y vsftpd
+    #   https://documentation.ubuntu.com/server/how-to/networking/ftp/
+
+    # Install apps
+    apt-get install -y wget zip unzip
+    apt-get install -y nano mc
+
+    # Restart server
+    sync;sync;shutdown -r now
+ 
+    # Check successfully restart
+    who -b
+ 
+    # Create user *gis* with group *gis* and directory */home/gis*.
+    adduser gis
+
+    # Add role *gis* to Postgres database server
+    sudo -u postgres -i
+    createuser --createdb gis -s
+    exit
+
+    # Restart server
+    sync;sync;shutdown -r now
+ 
+    # Check successfully restart
+    who -b
+ 
+Configuration (as gis)
+----------------------
+
+    # Login
+    su -- gis
+    
+    # Create data folder
+    cd ~
+    mkdir data
+
+    # Download data
+    cd ~/data
+    wget http://download.flightcontest.de/fcmapsserver.zip
+    wget https://osmdata.openstreetmap.de/download/water-polygons-split-3857.zip
+        # https://osmdata.openstreetmap.de/data/water-polygons.html
+    
+    # Install Flight Contest maps server ~/fcmaps
+    cd ~
+    unzip ~/data/fcmapsserver.zip
+    cd ~/fcmaps/otm/mapnik/data
+    unzip ~/data/water-polygons-split-3857.zip
+    chmod +x ~/fcmaps/printmaps_buildservice
+    chmod +x ~/fcmaps/printmaps_webservice
+
+OSM data (as gis)
+-----------------
+
+    # Download osm data (Saarland)
+    cd ~/data
+    mkdir osm && cd osm
+    wget https://download.geofabrik.de/europe/germany/saarland-latest.osm.pbf
+
+    # Create database *gis_new*
+    dropdb gis_new
+    createdb gis_new
+    psql -d gis_new -c 'CREATE EXTENSION postgis;'
+
+    # Load OSM data into OSM database (~/data/osm/*.pbf -> gis_new, 24h)
+    osm2pgsql -d gis_new --slim --drop --bbox 6.24522242525,48.9348891599,7.83147757475,49.9660696535 --flat-nodes=osmnodes.dat --number-processes 10 --output pgsql --style ~/fcmaps/osmtools/fcmaps.style ~/data/osm/*.osm.pbf
+        # https://osm2pgsql.org/doc/man/osm2pgsql-2-2-0.html
+
+    # Preprocessing
+    cd ~/fcmaps/osmtools/
+    bash run_presteps.sh
+    
+    # Activate new databases *gis_eu* and *lowzoom_eu*
+    dropdb gisold_eu
+    dropdb lowzoomold_eu
+    psql -d postgres -c 'ALTER DATABASE gis_eu RENAME TO gisold_eu;'
+    psql -d postgres -c 'ALTER DATABASE gis_new RENAME TO gis_eu;'
+    psql -d postgres -c 'ALTER DATABASE lowzoom_eu RENAME TO lowzoomold_eu;'
+    psql -d postgres -c 'ALTER DATABASE lowzoom_new RENAME TO lowzoom_eu;'
+ 
+    # Change date
+    cd ~/fcmaps
+    nano printmaps_webservice_capabilities.json
+
+    # Restart server
+    sync;sync;shutdown -r now
+ 
+    # Check successfully restart
+    who -b
+ 
+    # Check database size
+    psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"
+ 
+Contour data (as gis)
+---------------------
+
+    # Download contour data (Saarland)
+    cd ~/data
+    mkdir contours && cd contours
+    pyhgtmap --area=6.24522242525:48.9348891599:7.83147757475:49.9660696535 --download-only --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf --srtm-user=... --srtm-password=...
+        # https://pypi.org/project/pyhgtmap/
+    
+    # Create database *contours_new*
+    createdb contours_new
+    psql -d contours_new -c 'CREATE EXTENSION postgis;'
+   
+    # Load contour data into contour database (4h)
+    osm2pgsql -d contours_new --slim --drop --flat-nodes=contournodes.dat --number-processes 10 --output pgsql --style ~/fcmaps/osmtools/contours.style lon*.pbf
+        # https://osm2pgsql.org/doc/man/osm2pgsql-2-2-0.html
+
+    # Activate new database *contours_eu*
+    dropdb contoursold_eu
+    psql -d postgres -c 'ALTER DATABASE contours_eu RENAME TO contoursold_eu;'
+    psql -d postgres -c 'ALTER DATABASE contours_new RENAME TO contours_eu;'
+
+    # Check database size
+    psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"
+
+Test service (as gis)
+---------------------
+
+    # Start services manually
+    cd ~/fcmaps
+    nohup ./printmaps_buildservice 1>./logs/printmaps_buildservice.out 2>&1 &
+    nohup ./printmaps_webservice 1>./logs/printmaps_webservice.out 2>&1 &
+
+    # Test web service
+    http://<server-dns-name>:8181/api/beta2/maps/capabilities/service
+ 
+    # Search running service processes
+    ps -Af | grep "printmaps_"
+    
+    # Terminate running service processes
+    kill <pid>
+ 
+    # Show log files
+    cat ./logs/printmaps_webservice.log
+    cat ./logs/printmaps_buildservice.log
+
+Install services autostart (as root)
+------------------------------------
+
+    # Create service descriptions
+    cd /etc/systemd/system
+    mv /home/gis/fcmaps/fcmaps_build.service .
+    mv /home/gis/fcmaps/fcmaps_web.service .
+
+    # Enable autostart
+    systemctl enable fcmaps_build.service
+    systemctl enable fcmaps_web.service
+ 
+    # Restart server
+    sync;sync;shutdown -r now
+ 
+    # Check successfully restart
+    who -b
+
+
+Configure Flight Contest
+------------------------
+
+     flightcontest {
+       maps {
+         fcmap {
+            server = "http://<server-dns-name>:8181/api/beta2/maps"
+         }
+       }
+     }
+ 
+
+Backup & restore database
+-------------------------
+    
+    # Backup
+    cd ~/data/databases
+    pg_dump contours_eu | gzip > contours_eu.gz
+    
+    # Restore
+    createdb contours_new
+    psql -d contours_new -c 'CREATE EXTENSION postgis;'
+    gunzip -c contours_eu.gz | psql contours_new
+    psql -d postgres -c 'ALTER DATABASE contours_new RENAME TO contours_eu;'
+
+    # Check database size
+    psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database ORDER BY pg_database.datname;"

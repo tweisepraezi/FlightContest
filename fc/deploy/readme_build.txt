@@ -50,11 +50,10 @@ Deployment sequence:
 	2. Set version number in '%PROJECT_ROOT%\EPJ\fcdev\fc\deploy\fc.is6'
     3. Set version number and date in '%PROJECT_ROOT%\EPJ\fcdev\fc\deploy\setup_names.bat'
     4. Set version number and date in '%PROJECT_ROOT%\EPJ\fcdev\fc\docs\fc.adoc'
-    5. Set version number and date in '%PROJECT_ROOT%\EPJ\fcdev\fc\docs\fcmaps.adoc'
-    6. Set version number and date in '%PROJECT_ROOT%\EPJ\fcdev\fc\docs\fc_en.adoc'
-	7. Set version number in '%PROJECT_ROOT%\EPJ\fcdev\fc\web-app\licenses\README.txt'
-	8. Call build.bat in development shell (generates %PROJECT_ROOT%\EPJ\fcdev\fc\output\FCSetup.exe)
-    9. Call install.bat in development shell (installs Flight Contest on your computer)
+    5. Set version number and date in '%PROJECT_ROOT%\EPJ\fcdev\fc\docs\fc_en.adoc'
+	6. Set version number in '%PROJECT_ROOT%\EPJ\fcdev\fc\web-app\licenses\README.txt'
+	7. Call build.bat in development shell (generates %PROJECT_ROOT%\EPJ\fcdev\fc\output\FCSetup.exe)
+    8. Call install.bat in development shell (installs Flight Contest on your computer)
 
 Application running details:
     Using the in-memory database H2

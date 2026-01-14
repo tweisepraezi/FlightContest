@@ -1,3 +1,0 @@
-# original OSM minutely replication sequence number 3306924
-timestamp=2019-01-03T21\:14\:02Z
-sequenceNumber=2117

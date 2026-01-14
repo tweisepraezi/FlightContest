@@ -95,8 +95,6 @@ call build_html_help.bat
 call build_html_help_en.bat
 call build_pdf_help.bat
 call build_pdf_help_en.bat
-call build_html_fcmaps.bat
-call build_pdf_fcmaps.bat
 
 ::-------------------------------------------------------------------
 :buildflightcontestmanager
@@ -145,8 +143,6 @@ echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help.pdf
 echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help_en.pdf
-echo.
-call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help_fcmaps.pdf
 echo.
 
 ::-------------------------------------------------------------------

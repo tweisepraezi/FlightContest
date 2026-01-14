@@ -1,6 +1,12 @@
 Flight Contest Maps Notes
 =========================
 
+Changes 14-Jan-2026
+-------------------
+- Launch of a new maps server
+  Maps created with the same settings as before may now show slight deviations in the positions of text and graphic objects.
+  Please report problems to support@flightcontest.de
+
 Changes 17-Oct-2025
 -------------------
 - Region EU (Germany, Austria, Switzerland, Poland, Czech Republic, Slovakia, Hungary, East France, South Denmark) updated

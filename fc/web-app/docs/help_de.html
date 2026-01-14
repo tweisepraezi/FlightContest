@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 4.2.1,</span>
-<span id="revdate">10.01.2026</span>
+<span id="revnumber">version 4.2.2,</span>
+<span id="revdate">14.01.2026</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -539,6 +539,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-live">Live-Anzeige konfigurieren</a></li>
 <li><a href="#configuration-livetracking">Live-Tracking konfigurieren</a></li>
 <li><a href="#configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</a></li>
+<li><a href="#configuration-fcmaplocal">Lokalen Karten-Druck-Server konfigurieren</a></li>
 <li><a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a></li>
 <li><a href="#configuration-onlinemap">OSM-Online-Karte konfigurieren</a></li>
 <li><a href="#configuration-task-creator">Task-Creator-Konfiguration</a></li>
@@ -4507,6 +4508,7 @@ zu machen oder diese Datei zu löschen.</p>
 <a href="#configuration-live">Live-Anzeige konfigurieren</a><br>
 <a href="#configuration-livetracking">Live-Tracking konfigurieren</a><br>
 <a href="#configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</a><br>
+<a href="#configuration-fcmaplocal">Lokalen Karten-Druck-Server konfigurieren</a><br>
 <a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a><br>
 <a href="#configuration-onlinemap">OSM-Online-Karte konfigurieren</a><br>
 <a href="#configuration-task-creator">Task-Creator-Konfiguration</a><br>
@@ -4755,8 +4757,28 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 </div>
 </div>
 <div class="paragraph">
-<p>Errichtung eines eigenen Druck-Servers:<br>
-<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+<p>Errichtung eines eigenen Druck-Servers: <a href="https://github.com/tweisepraezi/FlightContest/blob/master/fcmapsserver/_install.txt" class="bare">https://github.com/tweisepraezi/FlightContest/blob/master/fcmapsserver/_install.txt</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-fcmaplocal">Lokalen Karten-Druck-Server konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    srtm {
+       username = "TODO"     // User-Name für Zugriff auf SRTM-Daten
+       password = "TODO"     // Passwort für Zugriff auf SRTM-Daten
+    }
+    postgresql {
+       host = "TODO"         // Adresse des lokalen PostgreSQL-Servers (DNS-Name oder IP-Adresse)
+       port = 5433           // Port, über den der lokale PostgreSQL-Server angesprochen wird
+       username = "postgres" // User-Name für Zugriff auf lokalen PostgreSQL-Server
+       password = "TODO"     // Passwort für Zugriff auf lokalen PostgreSQL-Server
+    }
+  }
+}</pre>
+</div>
 </div>
 </div>
 <div class="sect2">

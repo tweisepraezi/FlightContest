@@ -1806,6 +1806,107 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
+    void InitLocalPrintmaps(Route routeInstance)
+    {
+        printstart "InitLocalPrintmaps"
+        
+        List pbf_list = [
+                           //"https://download.geofabrik.de/europe/germany/rheinland-pfalz-latest.osm.pbf",
+                           "https://download.geofabrik.de/europe/germany/saarland-latest.osm.pbf",
+                        ]
+        String pbf_links = ""
+        for (String pbf_link in pbf_list) {
+            if (pbf_links) {
+                pbf_links += " "
+            }
+            pbf_links += pbf_link
+        }
+
+        String docker_call = "docker rm initprintmaps"
+        println "Excecute $docker_call"
+        docker_call.execute().waitFor()
+                
+        docker_call = "docker"
+        docker_call += " run --detach --name initprintmaps"
+        docker_call += " --env dbid=${routeInstance.contest.contestUUID}"
+        docker_call += " --env PGHOST=${BootStrap.global.GetPostgreSQLHost()}"
+        docker_call += " --env PGPORT=${BootStrap.global.GetPostgreSQLPort()}"
+        docker_call += " --env PGUSER=${BootStrap.global.GetPostgreSQLUsername()}" 
+        docker_call += " --env PGPASSWORD=${BootStrap.global.GetPostgreSQLPassword()}" 
+        docker_call += " --env MINLON=6.24522242525"
+        docker_call += " --env MINLAT=48.9348891599"
+        docker_call += " --env MAXLON=7.83147757475"
+        docker_call += " --env MAXLAT=49.9660696535" 
+        docker_call += " --env SRTMUSER=${BootStrap.global.GetSRTMUsername()}"
+        docker_call += " --env SRTMPASSWORD=${BootStrap.global.GetSRTMPassword()}"
+        docker_call += """ --env PBFLINKS="${pbf_links}" """
+        docker_call += " createdb:latest"
+        println "Excecute ${remove_password(docker_call, ['--env PGPASSWORD=', '--env SRTMPASSWORD='])}"
+        docker_call.execute().waitFor()
+        
+        printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    void StartLocalPrintmaps(Contest contestInstance)
+    {
+        printstart "StartLocalPrintmaps"
+
+        String docker_call = "docker rm runprintmaps"
+        println "Excecute $docker_call"
+        docker_call.execute().waitFor()
+            
+        docker_call = "docker"
+        docker_call += " run --detach --name runprintmaps"
+        docker_call += " --env dbid=${contestInstance.contestUUID}"
+        docker_call += " --env PGHOST=${BootStrap.global.GetPostgreSQLHost()}"
+        docker_call += " --env PGPORT=${BootStrap.global.GetPostgreSQLPort()}"
+        docker_call += " --env PGUSER=${BootStrap.global.GetPostgreSQLUsername()}" 
+        docker_call += " --env PGPASSWORD=${BootStrap.global.GetPostgreSQLPassword()}" 
+        docker_call += " -p 127.0.0.1:8181:8181"
+        docker_call += " printmaps:latest"
+        println "Excecute ${remove_password(docker_call, ['--env PGPASSWORD='])}"
+        docker_call.execute().waitFor()
+            
+        printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    boolean IsLocalPrintmapsRunning()
+    {
+        Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
+        if (status.responseCode == 200) {
+            return true
+        }
+        return false
+    }
+    
+    //--------------------------------------------------------------------------
+    void StopLocalPrintmaps(Contest contestInstance)
+    {
+        printstart "StopLocalPrintmaps"
+
+        String docker_call = "docker stop runprintmaps"
+        println "Excecute $docker_call"
+        docker_call.execute().waitFor()
+            
+        printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private String remove_password(String logStr, List passwordPraefixes)
+    {
+        for (String password_praefix in passwordPraefixes) {
+            if (logStr.contains(password_praefix)) {
+                int start_pos = logStr.indexOf(password_praefix)
+                int end_pos = logStr.indexOf(" ", start_pos + password_praefix.size())
+                logStr = logStr.substring(0, start_pos) + logStr.substring(end_pos + 1)
+            }
+        }
+        return logStr
+    }
+    
+    //--------------------------------------------------------------------------
     private String getMsg(String code, List args, boolean isPrint)
     {
         def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
