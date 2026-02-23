@@ -44,7 +44,7 @@
                                 </div>
                             </fieldset>
                         </g:if>
-                        <g:if test="${!flightTestWindInstance.GetParcour().contest.anrFlying}">
+                        <g:if test="${!flightTestWindInstance.IsCorridor()}">
                             <fieldset>
                                 <legend>${message(code:'fc.wind')}</legend>
                                 <p>

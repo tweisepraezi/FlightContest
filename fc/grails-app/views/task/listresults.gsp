@@ -18,7 +18,7 @@
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
 	                            <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
-                                    <g:if test="${taskInstance.flighttest.route.corridorWidth}">
+                                    <g:if test="${taskInstance.IsCorridor()}">
                                         <td/>
                                     </g:if>
                                     <g:else>

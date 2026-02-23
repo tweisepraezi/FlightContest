@@ -2,7 +2,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <g:if test="${taskInstance.flighttest.route.corridorWidth}">
+        <g:if test="${taskInstance.IsCorridor()}">
             <title>${message(code:'fc.task.assignflighttestwind.route')}</title>
         </g:if>
         <g:else>
@@ -14,7 +14,7 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <g:if test="${taskInstance.flighttest.route.corridorWidth}">
+                <g:if test="${taskInstance.IsCorridor()}">
                     <h2>${message(code:'fc.task.assignflighttestwind.route')}</h2>
                 </g:if>
                 <g:else>
@@ -35,7 +35,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <g:if test="${taskInstance.flighttest.route.corridorWidth}">
+                                    <g:if test="${taskInstance.IsCorridor()}">
                                         <td class="detailtitle"><label>${message(code:'fc.route')}:</label></td>
                                     </g:if>
                                     <g:else>

@@ -25,7 +25,7 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
-                            <g:if test="${routeInstance.corridorWidth}">
+                            <g:if test="${routeInstance.corridorWidth || contestInstance.corridorRoutes}">
                                 <fieldset>
                                     <div>
                                         <label>${message(code:'fc.corridorwidth')} [${message(code:'fc.mile')}]:</label>

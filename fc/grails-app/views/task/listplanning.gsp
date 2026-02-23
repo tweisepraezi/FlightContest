@@ -41,7 +41,7 @@
                                     <td/>
                                 </g:else>
 	                            <g:if test="${taskInstance.flighttest}">
-                                    <g:if test="${taskInstance.flighttest.route.corridorWidth}">
+                                    <g:if test="${taskInstance.IsCorridor()}">
                                         <g:set var="list_label" value="${message(code:'fc.route.list')}" />
                                     </g:if>
                                     <g:else>
@@ -90,7 +90,7 @@
                                 </g:if>
                                 <th>${message(code:'fc.test.listpos')}</th>
                                 <th colspan="2">${message(code:'fc.planningtesttask')}</th>
-                                <g:if test="${taskInstance.flighttest && taskInstance.flighttest.route.corridorWidth}">
+                                <g:if test="${taskInstance.flighttest && taskInstance.IsCorridor()}">
                                     <th>${message(code:'fc.route')}</th>
                                 </g:if>
                                 <g:else>
@@ -241,7 +241,7 @@
                                 <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="disablecrew" value="${message(code:'fc.test.disablecrew')}"/></g:if></td>
 								<td><g:actionSubmit action="setpagebreak" value="${message(code:'fc.test.setpagebreak')}"/></td>
                                 <td><g:if test="${!taskInstance.lockPlanning && taskInstance.contest.showPlanningTest}"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}"/></g:if></td>
-                                <g:if test="${taskInstance.flighttest && taskInstance.flighttest.route.corridorWidth}">
+                                <g:if test="${taskInstance.flighttest && taskInstance.IsCorridor()}">
                                     <td><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.route.assign')}"/></g:if></td>
                                 </g:if>
                                 <g:else>

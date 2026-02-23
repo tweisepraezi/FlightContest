@@ -21,11 +21,19 @@
                         <g:if test="${contestInstance.anrFlying}" >
                             <div>
                                 <label>${message(code:'fc.corridorwidth.import')}:</label>
-                                <input type="text" id="corridorWidth" name="corridorWidth" value="0.5" tabIndex="${ti[0]++}"/>
+                                <input type="text" id="corridorWidth" name="corridorWidth" value="${Defs.ANR_INIT_CORRIDORWIDTH}" tabIndex="${ti[0]++}"/>
                                 <label>${message(code:'fc.mile')}</label>
                             </div>
                             <br/>
                         </g:if>
+                        <g:elseif test="${contestInstance.corridorRoutes}" >
+                            <div>
+                                <label>${message(code:'fc.corridorwidth.import')}:</label>
+                                <input type="text" id="corridorWidth" name="corridorWidth" value="" tabIndex="${ti[0]++}"/>
+                                <label>${message(code:'fc.mile')}</label>
+                            </div>
+                            <br/>
+                        </g:elseif>
                         <g:else>
                             <input type="hidden" id="corridorWidth" name="corridorWidth" value="0.0" tabIndex="${ti[0]++}"/>
                         </g:else>

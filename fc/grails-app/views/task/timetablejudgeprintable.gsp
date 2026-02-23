@@ -62,7 +62,7 @@
         </g:if>
         <g:form>
             <g:set var="printtimetablejudge_route" value="${false}"/>
-            <g:if test="${taskInstance.flighttest.route.corridorWidth && taskInstance.printTimetableJuryCorridorWidth}">
+            <g:if test="${taskInstance.IsCorridor() && taskInstance.printTimetableJuryCorridorWidth}">
                 <g:set var="printtimetablejudge_route" value="${true}"/>
             </g:if>
             <table class="timetablejudgelist">

@@ -86,8 +86,8 @@ class RouteController {
     }
 
     def create = {
-		def route = fcService.createRoute(params,session.lastContest)
-        return [routeInstance:route.instance]
+		def route = fcService.createRoute(params, session.lastContest)
+        return [routeInstance:route.instance, contestInstance:session.lastContest]
     }
 
     def save = {
@@ -225,9 +225,10 @@ class RouteController {
     
     def importfcroute2 = {
         def file = request.getFile('routefile')
+        String corridor_width_str = params?.corridorWidth?.replace(',','.')
         BigDecimal corridor_width = 0
-        if (params.corridorWidth && params.corridorWidth.isBigDecimal()) {
-            corridor_width = params.corridorWidth.toBigDecimal()
+        if (corridor_width_str && corridor_width_str.isBigDecimal()) {
+            corridor_width = corridor_width_str.toBigDecimal()
         }
         Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, corridor_width, file)
         if (!import_route.found) {
@@ -262,9 +263,10 @@ class RouteController {
     def importfileroute2 = {
         def file = request.getFile('routefile')
 		String secretcoursechange = params?.secretcoursechange?.replace(',','.')
+        String corridor_width_str = params?.corridorWidth?.replace(',','.')
         BigDecimal corridor_width = 0
-        if (params.corridorWidth && params.corridorWidth.isBigDecimal()) {
-            corridor_width = params.corridorWidth.toBigDecimal()
+        if (corridor_width_str && corridor_width_str.isBigDecimal()) {
+            corridor_width = corridor_width_str.toBigDecimal()
         }
         Map import_params = [foldername:params?.foldername,
                              readplacemarks:params?.readplacemarks == 'on',
@@ -868,7 +870,7 @@ class RouteController {
         Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             save_map_settings(route.instance, params)
-			Map ret = openAIPService.GetAirspacesAirportarea(route.instance, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+			Map ret = openAIPService.GetAirspacesAirportarea(route.instance, Defs.CONTESTMAPPOINTS_AIRFIELDS)
             if (ret.ok) {
                 flash.message = message(code:'fc.contestmap.contestmapgetairspaces.airportarea.done',args:[ret.airspacesnum])
             } else {
@@ -886,7 +888,7 @@ class RouteController {
         Map route = domainService.GetRouteMap(params) 
         if (route.instance) {
             save_map_settings(route.instance, params)
-			Map ret = openAIPService.GetAirfieldsAirportarea(route.instance, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},")
+			Map ret = openAIPService.GetAirfieldsAirportarea(route.instance, Defs.CONTESTMAPPOINTS_AIRFIELDS)
             if (ret.ok) {
                 flash.message = message(code:'fc.contestmap.contestmapgetairfields.airportarea.done',args:[ret.airfieldsnum])
             } else {
@@ -908,7 +910,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirfields2CSV(route.instance, webroot_dir, upload_csv_file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
+			Map ret = openAIPService.WriteAirfields2CSV(route.instance, webroot_dir, upload_csv_file_name, false, Defs.CONTESTMAPPOINTS_AIRFIELDS, true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -938,7 +940,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirfieldsOld2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
+			Map ret = openAIPService.WriteAirfieldsOld2CSV(route.instance, webroot_dir, upload_csv_file_name, false, false, Defs.CONTESTMAPPOINTS_AIRFIELDS, true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -968,7 +970,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_csv_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-			Map ret = openAIPService.WriteAirfieldsOld2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", true, false)
+			Map ret = openAIPService.WriteAirfieldsOld2CSV(route.instance, webroot_dir, upload_csv_file_name, false, true, Defs.CONTESTMAPPOINTS_AIRFIELDS, true, false)
             if (ret.ok) {
                 String route_file_name = "${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airports.csv" // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -1208,7 +1210,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
@@ -1222,7 +1223,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -1339,7 +1340,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
@@ -1353,7 +1353,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -1470,7 +1470,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
@@ -1484,7 +1483,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -1601,7 +1600,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
@@ -1615,7 +1613,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -1728,7 +1726,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
@@ -1742,7 +1739,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -1809,7 +1806,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                                          contestMapPrintSize:route.instance.contestMapPrintSize,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
@@ -1855,7 +1852,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos,
                                                                  taskCreator: true
@@ -1870,7 +1866,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -1937,7 +1933,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                                          contestMapPrintSize:route.instance.contestMapPrintSize,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
@@ -1983,7 +1979,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
@@ -1997,7 +1992,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2114,7 +2109,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
@@ -2128,7 +2122,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2199,7 +2193,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
                                          contestMapPrintSize:route.instance.contestMapPrintSize2,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
@@ -2245,7 +2239,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2,
                                                                  taskCreator: true
@@ -2260,7 +2253,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2331,7 +2324,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
                                          contestMapPrintSize:route.instance.contestMapPrintSize2,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
@@ -2377,7 +2370,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
@@ -2391,7 +2383,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2508,7 +2500,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
@@ -2522,7 +2513,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2593,7 +2584,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
                                          contestMapPrintSize:route.instance.contestMapPrintSize3,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
@@ -2639,7 +2630,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3,
                                                                  taskCreator: true
@@ -2654,7 +2644,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2725,7 +2715,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
                                          contestMapPrintSize:route.instance.contestMapPrintSize3,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
@@ -2771,7 +2761,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
@@ -2785,7 +2774,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2902,7 +2891,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
@@ -2916,7 +2904,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -2987,7 +2975,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
                                          contestMapPrintSize:route.instance.contestMapPrintSize4,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
@@ -3033,7 +3021,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4,
                                                                  taskCreator: true
@@ -3048,7 +3035,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3119,7 +3106,7 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
                                          contestMapPrintSize:route.instance.contestMapPrintSize4,
                                          contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
@@ -3165,7 +3152,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
@@ -3179,7 +3165,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3305,7 +3291,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
@@ -3319,7 +3304,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3449,7 +3434,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
@@ -3463,7 +3447,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3593,7 +3577,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
@@ -3607,7 +3590,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3737,7 +3720,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
@@ -3751,7 +3733,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3786,7 +3768,7 @@ class RouteController {
             Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 osmPrintMapService.InitLocalPrintmaps(route.instance)
-                redirect(action:'mapexportquestion', id:params.id)
+                redirect(action:'show', id:params.id)
             } else {
                 flash.message = route.message
                 redirect(action:"list")
@@ -3799,7 +3781,7 @@ class RouteController {
             Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 osmPrintMapService.StartLocalPrintmaps(session.lastContest)
-                redirect(action:'mapexportquestion', id:params.id)
+                redirect(action:'show', id:params.id)
             } else {
                 flash.message = route.message
                 redirect(action:"list")
@@ -3812,7 +3794,7 @@ class RouteController {
             Map route = domainService.GetRouteMap(params) 
             if (route.instance) {
                 osmPrintMapService.StopLocalPrintmaps(session.lastContest)
-                redirect(action:'mapexportquestion', id:params.id)
+                redirect(action:'show', id:params.id)
             } else {
                 flash.message = route.message
                 redirect(action:"list")
@@ -3860,8 +3842,8 @@ class RouteController {
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
-                                         contestMapCenterPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapCenterPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:true,
                                          contestMapPrintSize:print_size,
                                          contestMapCenterMoveX:0.0,
@@ -3908,7 +3890,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: HorizontalPos.Center,
                                                                  contestMapCenterVerticalPos: VerticalPos.Center
                                                                 ] + contestmap_params)
@@ -3922,7 +3903,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
@@ -3992,8 +3973,8 @@ class RouteController {
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
-                                         contestMapCenterPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
-                                         contestMapPrintPoints:",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},",
+                                         contestMapCenterPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
+                                         contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:true,
                                          contestMapPrintSize:print_size,
                                          contestMapCenterMoveX:0.0,
@@ -4040,7 +4021,6 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: HorizontalPos.Center,
                                                                  contestMapCenterVerticalPos: VerticalPos.Center,
                                                                  taskCreator: true
@@ -4055,7 +4035,7 @@ class RouteController {
                                 if (r.message) {
                                     flash.message = r.message
                                 } else {
-                                    flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
                                 }
                                 gpxService.printdone ""
                                 flash.error = true

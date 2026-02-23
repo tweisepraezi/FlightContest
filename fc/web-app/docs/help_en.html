@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 4.2.2,</span>
-<span id="revdate">14.01.2026</span>
+<span id="revnumber">version 4.2.3,</span>
+<span id="revdate">23.02.2026</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -4747,14 +4747,21 @@ To achieve this without copies or FTP upload, use the following configuration:</
 <div class="content">
 <pre>flightcontest {
   maps {
+    // contoursources = "srtm3" // Sources of contour data
+                                // Default: view3
     srtm {
-       username = "TODO"     // User name for accessing SRTM data
-       password = "TODO"     // Password for accessing SRTM data
+       // username = "TODO"  // User name for accessing to SRTM contour data
+       // password = "TODO"  // Password for accessing to SRTM contour data
     }
     postgresql {
-       host = "TODO"         // Address of the local PostgreSQL server (DNS name or IP address)
-       port = 5433           // Port through which the local PostgreSQL server is accessed
-       username = "postgres" // User name for accessing the local PostgreSQL server
+       // psqlexe = "TODO"   // Path of PostgreSQL console
+                             // Default: C:/Program Files/PostgreSQL/17/bin/psql.exe
+       // host = "TODO"      // Address of the local PostgreSQL server (DNS name or IP address)
+                             // Default: automatically determined
+       // port = 5433        // Port through which the local PostgreSQL server is accessed
+                             // Default: 5432 oder 5433, automatically determined
+       // username = "TODO"  // User name for accessing the local PostgreSQL server
+                             // Default: postgres
        password = "TODO"     // Password for accessing the local PostgreSQL server
     }
   }

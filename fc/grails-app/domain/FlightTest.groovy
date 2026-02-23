@@ -98,7 +98,7 @@ class FlightTest
     
     boolean CanObservationsAdd()
     {
-        if (route.corridorWidth) {
+        if (IsCorridor()) {
             return false
         }
         if (RouteTools.IsObservationSignOk(route)) {
@@ -128,10 +128,18 @@ class FlightTest
     
     boolean CanANRPlanPrinted()
     {
-        if (!route.corridorWidth) {
+        if (!IsCorridor()) {
             return false
         }
         if (GetPrintableANRPlanTests()) {
+            return true
+        }
+        return false
+    }
+    
+    boolean IsCorridor()
+    {
+        if (/*route.contest.anrFlying &&*/ route.corridorWidth) {
             return true
         }
         return false

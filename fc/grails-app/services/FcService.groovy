@@ -927,6 +927,7 @@ class FcService
         
         contestInstance.precisionFlying                         = contestRule.ruleValues.precisionFlying
         contestInstance.anrFlying                               = contestRule.ruleValues.anrFlying
+        contestInstance.corridorRoutes                          = contestRule.ruleValues.corridorRoutes
         contestInstance.flightPlanShowLegDistance               = contestRule.ruleValues.flightPlanShowLegDistance
         contestInstance.flightPlanShowTrueTrack                 = contestRule.ruleValues.flightPlanShowTrueTrack
         contestInstance.flightPlanShowTrueHeading               = contestRule.ruleValues.flightPlanShowTrueHeading
@@ -936,6 +937,7 @@ class FcService
         contestInstance.flightTestSubmissionMinutes             = contestRule.ruleValues.flightTestSubmissionMinutes
         contestInstance.minRouteLegs                            = contestRule.ruleValues.minRouteLegs
         contestInstance.maxRouteLegs                            = contestRule.ruleValues.maxRouteLegs
+        contestInstance.cpGateWidth                             = contestRule.ruleValues.cpGateWidth
         contestInstance.scGateWidth                             = contestRule.ruleValues.scGateWidth
         contestInstance.unsuitableStartNum                      = contestRule.ruleValues.unsuitableStartNum
         contestInstance.turnpointRule                           = contestRule.ruleValues.turnpointRule
@@ -1109,6 +1111,7 @@ class FcService
         
         values += [precisionFlying:fromInstance.precisionFlying]
         values += [anrFlying:fromInstance.anrFlying]
+        values += [corridorRoutes:fromInstance.corridorRoutes]
         values += [flightPlanShowLegDistance:fromInstance.flightPlanShowLegDistance]
         values += [flightPlanShowTrueTrack:fromInstance.flightPlanShowTrueTrack]
         values += [flightPlanShowTrueHeading:fromInstance.flightPlanShowTrueHeading]
@@ -1116,6 +1119,7 @@ class FcService
         values += [flightPlanShowLocalTime:fromInstance.flightPlanShowLocalTime]
         values += [flightPlanShowElapsedTime:fromInstance.flightPlanShowElapsedTime]
         values += [flightTestSubmissionMinutes:fromInstance.flightTestSubmissionMinutes]
+        values += [cpGateWidth:fromInstance.cpGateWidth]
         values += [scGateWidth:fromInstance.scGateWidth]
         values += [unsuitableStartNum:fromInstance.unsuitableStartNum]
         values += [turnpointRule:fromInstance.turnpointRule]
@@ -1282,6 +1286,7 @@ class FcService
     {
         if (fromInstance.minRouteLegs != oldContestRuleValues.minRouteLegs) {return true}
         if (fromInstance.maxRouteLegs != oldContestRuleValues.maxRouteLegs) {return true}
+        if (fromInstance.cpGateWidth != oldContestRuleValues.cpGateWidth) {return true}
         if (fromInstance.scGateWidth != oldContestRuleValues.scGateWidth) {return true}
         if (fromInstance.unsuitableStartNum != oldContestRuleValues.unsuitableStartNum) {return true}
         if (fromInstance.turnpointRule != oldContestRuleValues.turnpointRule) {return true}
@@ -2136,7 +2141,7 @@ class FcService
 				case PrintSettings.TimetableJuryPlanning:
 					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.planningtest.setprintsettings')
-                    if (task_instance.contest.anrFlying) {
+                    if (task_instance.IsCorridor()) {
                         task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.task.listplanning')
                     } else {
                         task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.planningtest')
@@ -3314,7 +3319,7 @@ class FcService
         }
         task.testinstanceids = test_instance_ids
         if (!assign_num) {
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 task.message = getMsg('fc.flighttestwind.someonemustselected.assign.route')
             } else {
                 task.message = getMsg('fc.flighttestwind.someonemustselected.assign.wind')
@@ -3938,7 +3943,7 @@ class FcService
 			}
         }
         if (call_return) {
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 task.message = getMsg('fc.flighttestwind.notassigned.route')
             } else {
                 task.message = getMsg('fc.flighttestwind.notassigned.wind')
@@ -4343,7 +4348,7 @@ class FcService
 			}
 		}
 		if (call_return) {
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 task.message = getMsg('fc.flighttestwind.notassigned.route')
             } else {
                 task.message = getMsg('fc.flighttestwind.notassigned.wind')
@@ -4935,10 +4940,17 @@ class FcService
                 route_instance.corridorWidth = params.corridorWidth.replace(',','.').toBigDecimal()
             }
             if (!old_corridorwidth && route_instance.corridorWidth) {
-                route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
-                route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
-                route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
-                route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
+                RouteFileTools.SetRouteFlags(route_instance, true)
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
+                    RouteFileTools.SetCorridorWidthFlags(coordroute_instance, true)
+                    coordroute_instance.save()
+                }
+            } else if (old_corridorwidth && !route_instance.corridorWidth) {
+                RouteFileTools.SetRouteFlags(route_instance, false)
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
+                    RouteFileTools.SetCorridorWidthFlags(coordroute_instance, false)
+                    coordroute_instance.save()
+                }
             }
             
             if(!route_instance.hasErrors() && route_instance.save()) {
@@ -4965,7 +4977,7 @@ class FcService
         route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
         route_instance.enrouteCanvasRoute = route_instance.enrouteCanvasMeasurement.GetEnrouteRoute()
         if (contestInstance.anrFlying) {
-            route_instance.corridorWidth = 0.5
+            route_instance.corridorWidth = Defs.ANR_INIT_CORRIDORWIDTH
         }
         return ['instance':route_instance]
     }
@@ -4985,6 +4997,7 @@ class FcService
         if (params.corridorWidth && params.corridorWidth.replace(',','.').isBigDecimal()) {
             route_instance.corridorWidth = params.corridorWidth.replace(',','.').toBigDecimal()
         }
+        route_instance.SetShowMapObjectsFromRouteID(contestInstance)
         if (noObservations || route_instance.corridorWidth) {
             route_instance.turnpointRoute = TurnpointRoute.None
             route_instance.enroutePhotoRoute = EnrouteRoute.None
@@ -6317,7 +6330,7 @@ class FcService
                     coordroute_instance.maxAltitudeAboveGround = params.maxAltitudeAboveGround.toInteger()
 			    }
                 if (coordroute_instance.route.corridorWidth) {
-                    // RouteFileTools.SetCorridorWidthFlags(coordroute_instance)
+                    // RouteFileTools.SetCorridorWidthFlags(coordroute_instance, true)
                 }
     
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
@@ -6459,7 +6472,11 @@ class FcService
     
         if (params.secret) {
             coordroute_instance.type = CoordType.SECRET
-			coordroute_instance.gatewidth2 = route_instance.contest.scGateWidth
+            if (route_instance.corridorWidth) {
+                coordroute_instance.gatewidth2 = Defs.GATEWIDTH_0_ANR
+            } else {
+                coordroute_instance.gatewidth2 = route_instance.contest.scGateWidth
+            }
             if (last_coordroute_instance) {
                 if (last_coordroute_instance.type.IsSecretAllowedCoord()) {
                    	coordroute_instance.titleNumber = findNextTitleNumber(last_coordroute_instance.route,CoordType.SECRET)
@@ -6470,11 +6487,26 @@ class FcService
                 return ['error':true,'message':getMsg('fc.coordroute.addsecret.notallowed')]
             }
         } else {
+            if (coordroute_instance.type.IsRunwayCoord()) {
+               coordroute_instance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
+            }
 	        if (last_coordroute_instance) {
 				coordroute_instance.type = last_coordroute_instance.type.GetNextValue()
 	        	if (coordroute_instance.type == null) {
                 	return ['error':true,'message':getMsg('fc.coordroute.add.notallowed')]
-	        	} else if (coordroute_instance.type == CoordType.TP) {
+                }
+                if (coordroute_instance.type.IsRunwayCoord()) {
+                    coordroute_instance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
+                } else if (route_instance.corridorWidth) {
+                    if (coordroute_instance.type.IsCorridorStartEndCoord()) {
+                        coordroute_instance.gatewidth2 = route_instance.contest.cpGateWidth
+                    } else {
+                        coordroute_instance.gatewidth2 = Defs.GATEWIDTH_0_ANR
+                    }
+                } else {
+                    coordroute_instance.gatewidth2 = route_instance.contest.cpGateWidth
+                }
+	        	if (coordroute_instance.type == CoordType.TP) {
 	                coordroute_instance.titleNumber = findNextTitleNumber(last_coordroute_instance.route,CoordType.TP)
 	        	} 
 	        }
@@ -6599,7 +6631,7 @@ class FcService
         }
         coordroute_instance.route = route_instance
         if (route_instance.corridorWidth) {
-            RouteFileTools.SetCorridorWidthFlags(coordroute_instance)
+            RouteFileTools.SetCorridorWidthFlags(coordroute_instance, true)
         }
 		calculate_leg_measure_distance(coordroute_instance, true)
 		
@@ -11853,6 +11885,13 @@ class FcService
             flighttest_instance.properties = params
 
 			if (old_route != flighttest_instance.route) {
+                for (FlightTestWind flighttestwind_instance in FlightTestWind.findAllByFlighttest(flighttest_instance,[sort:"id"])) {
+                    if (flighttest_instance.IsCorridor()) {
+                        flighttestwind_instance.corridorRouteID = flighttest_instance.route.id
+                    } else {
+                        flighttestwind_instance.corridorRouteID = 0
+                    }
+                }
 		        Test.findAllByTask(flighttest_instance.task,[sort:"id"]).each { Test test_instance ->
 		        	test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
@@ -12445,6 +12484,10 @@ class FcService
                 flighttestwind_instance.speed = FcMath.toBigDecimal(params.speed)
                 flighttestwind_instance.wind.direction = flighttestwind_instance.direction
                 flighttestwind_instance.wind.speed = flighttestwind_instance.speed
+            }
+            if (flighttestwind_instance.IsCorridor()) {
+                flighttestwind_instance.wind.direction = 0
+                flighttestwind_instance.wind.speed = 0
             }
             
             /*

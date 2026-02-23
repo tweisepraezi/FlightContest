@@ -1142,7 +1142,7 @@ class TrackerService
         for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
 			if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID) {
 	            if (!test_instance.flighttestwind) {
-                    if (taskInstance.flighttest.route.corridorWidth) {
+                    if (taskInstance.IsCorridor()) {
                         ret.message = getMsg('fc.flighttestwind.notassigned.route')
                     } else {
                         ret.message = getMsg('fc.flighttestwind.notassigned.wind')

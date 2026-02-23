@@ -1,6 +1,17 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.3
+----------------
+- Vorgaben: Tor-Breite von Checkpunkt-Koordinaten hinzugefügt
+    Diese Torbreite wird entsprechedn dem ausgewählten Regelwerk eingestellt.
+- UL: Experimentelles Regelwerk 'Wettbewerbsordnung Ultraleichtflug Deutschland - Ausgabe 2026' hinzugefügt
+    Dieses erlaubt die Nutzung von Rally-, Präzisionsflug- und Korridor-Strecken in einem Wettbewerb.
+- OSM-Wettbewerbs-Karten-Option "Flugplätze, Lufträume und Karten-Objekte von folgender Strecke verwenden" erweitert:
+    Alle neu angelegten oder importierten Strecken werden automatisch mit der ersten Strecke verbunden.
+    Die erste Strecke sollte deshalb nur die Koordinate des Fluppatzes sowie umgebende Flugplätze und Lufträume beinhalten.
+- Dieses Release verändert die Datenbank-Version.
+
 Änderungen 4.2.2
 ----------------
 - Installationsanleitung für Karten-Server erneuert
@@ -41,6 +52,7 @@
 - Endauswertung erweitert:
     Option "Ausdruck der Startnummer" hinzugefügt
     Option "Ausdruck der TAS" hinzugefügt
+- Dieses Release verändert die Datenbank-Version.
 
 Änderungen 4.1.11
 -----------------

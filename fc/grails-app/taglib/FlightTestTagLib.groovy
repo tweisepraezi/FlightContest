@@ -12,7 +12,7 @@ class FlightTestTagLib
         outln"""    <div>"""
         checkBox("flightPlanShowTrueTrack", attrs.flighttest.flightPlanShowTrueTrack, 'fc.flighttest.flightplan.showtruetrack', attrs)
         outln"""    </div>"""
-        if (attrs.flighttest.route.corridorWidth) {
+        if (attrs.flighttest.IsCorridor()) {
             outln"""<div>"""
             checkBox("flightPlanShowLocalTime", attrs.flighttest.flightPlanShowLocalTime, 'fc.flighttest.flightplan.showlocaltime', attrs)
             outln"""</div>"""

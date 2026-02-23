@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 4.2.2,</span>
-<span id="revdate">14.01.2026</span>
+<span id="revnumber">version 4.2.3,</span>
+<span id="revdate">23.02.2026</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -4766,14 +4766,21 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <div class="content">
 <pre>flightcontest {
   maps {
+    // contoursources = "srtm3" // Quelle von Contour-Daten
+                                // Default: view3
     srtm {
-       username = "TODO"     // User-Name für Zugriff auf SRTM-Daten
-       password = "TODO"     // Passwort für Zugriff auf SRTM-Daten
+       // username = "TODO"     // User-Name für Zugriff auf SRTM-Contour-Daten
+       // password = "TODO"     // Passwort für Zugriff auf SRTM-Contour-Daten
     }
     postgresql {
-       host = "TODO"         // Adresse des lokalen PostgreSQL-Servers (DNS-Name oder IP-Adresse)
-       port = 5433           // Port, über den der lokale PostgreSQL-Server angesprochen wird
-       username = "postgres" // User-Name für Zugriff auf lokalen PostgreSQL-Server
+       // psqlexe = "TODO"   // Pfad der PostgreSQL-Konsole
+                             // Default: C:/Program Files/PostgreSQL/17/bin/psql.exe
+       // host = "TODO"      // Adresse des lokalen PostgreSQL-Servers (DNS-Name oder IP-Adresse)
+                             // Default: automatisch ermittelt
+       // port = 5433        // Port, über den der lokale PostgreSQL-Server angesprochen wird
+                             // Default: 5432 oder 5433, automatisch ermittelt
+       // username = "TODO"  // User-Name für Zugriff auf lokalen PostgreSQL-Server
+                             // Default: postgres
        password = "TODO"     // Passwort für Zugriff auf lokalen PostgreSQL-Server
     }
   }

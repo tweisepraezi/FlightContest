@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.2.2
-:revdate:   14.01.2026
+:revnumber: 4.2.3
+:revdate:   23.02.2026
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -2112,14 +2112,21 @@ Errichtung eines eigenen Druck-Servers: https://github.com/tweisepraezi/FlightCo
 === Lokalen Karten-Druck-Server konfigurieren
  flightcontest {
    maps {
+     // contoursources = "srtm3" // Quelle von Contour-Daten
+                                 // Default: view3
      srtm {
-        username = "TODO"     // User-Name für Zugriff auf SRTM-Daten
-        password = "TODO"     // Passwort für Zugriff auf SRTM-Daten
+        // username = "TODO"     // User-Name für Zugriff auf SRTM-Contour-Daten
+        // password = "TODO"     // Passwort für Zugriff auf SRTM-Contour-Daten
      }
      postgresql {
-        host = "TODO"         // Adresse des lokalen PostgreSQL-Servers (DNS-Name oder IP-Adresse)
-        port = 5433           // Port, über den der lokale PostgreSQL-Server angesprochen wird
-        username = "postgres" // User-Name für Zugriff auf lokalen PostgreSQL-Server
+        // psqlexe = "TODO"   // Pfad der PostgreSQL-Konsole
+                              // Default: C:/Program Files/PostgreSQL/17/bin/psql.exe
+        // host = "TODO"      // Adresse des lokalen PostgreSQL-Servers (DNS-Name oder IP-Adresse)
+                              // Default: automatisch ermittelt
+        // port = 5433        // Port, über den der lokale PostgreSQL-Server angesprochen wird
+                              // Default: 5432 oder 5433, automatisch ermittelt
+        // username = "TODO"  // User-Name für Zugriff auf lokalen PostgreSQL-Server
+                              // Default: postgres
         password = "TODO"     // Passwort für Zugriff auf lokalen PostgreSQL-Server
      }
    }

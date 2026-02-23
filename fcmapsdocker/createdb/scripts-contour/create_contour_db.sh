@@ -8,8 +8,13 @@ createdb contours_$dbid
 echo "Create extension postgis..."
 psql -d contours_$dbid -c 'CREATE EXTENSION postgis;'
 
-echo "Start pyhgtmap..."
-pyhgtmap --area=$MINLON:$MINLAT:$MAXLON:$MAXLAT --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf --srtm-user=$SRTMUSER --srtm-password=$SRTMPASSWORD
+echo "Start pyhgtmap $CONTOURSOURCES..."
+if [[ -z $SRTMUSER ]]; then
+    pyhgtmap --sources=$CONTOURSOURCES --area=$MINLON:$MINLAT:$MAXLON:$MAXLAT --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf 
+fi
+if [ $SRTMUSER ]; then
+    pyhgtmap --sources=$CONTOURSOURCES --area=$MINLON:$MINLAT:$MAXLON:$MAXLAT --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf --srtm-user=$SRTMUSER --srtm-password=$SRTMPASSWORD
+fi
 
 echo "Start osm2pgsql (contours_$dbid)..."
 osm2pgsql -d contours_$dbid --slim --drop --flat-nodes=contournodes.dat --number-processes 10 --output pgsql --style contours.style lon*.pbf

@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.46
+	// Actual database version: DB-2.47
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 46
+	static int DB_MINOR = 47
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -33,6 +33,7 @@ class Global
     static String OpenAIPServer = ""
     static String OpenAIPAPIKey = ""
     static String OpenAIPIgnoreAirspacesStartsWith = ""
+    static String ContourSources = ""
     static String SRTMUsername = ""
     static String SRTMPassword = ""
     static String PostgreSQLHost = ""
@@ -370,6 +371,7 @@ class Global
         OpenAIPServer = ""
         OpenAIPAPIKey = ""
         OpenAIPIgnoreAirspacesStartsWith = ""
+        ContourSources = ""
         SRTMUsername = ""
         SRTMPassword = ""
         PostgreSQLHost = ""
@@ -424,6 +426,9 @@ class Global
                     if (loaded_data.openaip?.ignoreAirspacesStartsWith) {
                         OpenAIPIgnoreAirspacesStartsWith = loaded_data.openaip.ignoreAirspacesStartsWith
                     }
+                    if (loaded_data.contoursources) {
+                        ContourSources = loaded_data.contoursources
+                    }
                     if (loaded_data.srtm?.username) {
                         SRTMUsername = loaded_data.srtm.username
                     }
@@ -462,6 +467,9 @@ class Global
         }
         if (grailsApplication.config.flightcontest.maps.openaip.ignoreAirspacesStartsWith) {
             OpenAIPIgnoreAirspacesStartsWith = grailsApplication.config.flightcontest.maps.openaip.ignoreAirspacesStartsWith
+        }
+        if (grailsApplication.config.flightcontest.maps.srtm.username) {
+            ContourSources = grailsApplication.config.flightcontest.maps.contoursources
         }
         if (grailsApplication.config.flightcontest.maps.srtm.username) {
             SRTMUsername = grailsApplication.config.flightcontest.maps.srtm.username
@@ -559,10 +567,16 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsLocalPrintmaps()
     {
-        if (SRTMUsername && SRTMPassword && PostgreSQLHost && PostgreSQLPort && PostgreSQLUsername && PostgreSQLPassword) {
+        if (PostgreSQLPassword) {
             return true
         }
         return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetContourSources()
+    {
+        return ContourSources
     }
     
     // --------------------------------------------------------------------------------------------------------------------
@@ -575,6 +589,15 @@ class Global
     String GetSRTMPassword()
     {
         return SRTMPassword
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPostgrePsqlExe()
+    {
+        if (grailsApplication.config.flightcontest.maps.postgresql.psqlexe) {
+            return grailsApplication.config.flightcontest.maps.postgresql.psqlexe
+        }
+        return ""
     }
     
     // --------------------------------------------------------------------------------------------------------------------
@@ -709,6 +732,6 @@ class Global
         if (grailsApplication.config.flightcontest.taskcreator.url) {
             return grailsApplication.config.flightcontest.taskcreator.url
         }
-        return Defs.DEFAULT_EXTERNAL_TASKCREATOR
+        return Defs.TASKCREATOR_EXTERN_LINK
     }
 }

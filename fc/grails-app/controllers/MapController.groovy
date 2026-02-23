@@ -25,9 +25,9 @@ class MapController {
 
     def start_taskcreator_intern = {
         String base_url = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/"
-        String task_creator_url = Defs.TASKCREATOR_INTERN_ROOT_DIR + "/run_${session.taskCreatorLanguage}.html"
+        String task_creator_url = Defs.TASKCREATOR_INTERN_LINK + "/run_${session.taskCreatorLanguage}.html"
         if (BootStrap.global.IsTaskCreatorJSExtern()) {
-            task_creator_url = Defs.TASKCREATOR_INTERN_ROOT_DIR + "/run_jsextern_${session.taskCreatorLanguage}.html"
+            task_creator_url = Defs.TASKCREATOR_INTERN_LINK + "/run_jsextern_${session.taskCreatorLanguage}.html"
         }
         task_creator_url += "?lang=${session.taskCreatorLanguage}"
         task_creator_url += "&admin&baseurl=%22${base_url}%22"

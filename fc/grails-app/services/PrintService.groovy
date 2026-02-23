@@ -652,7 +652,7 @@ class PrintService
             }
         }
         if (call_return) {
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 task.message = getMsg('fc.flighttestwind.notassigned.route')
             } else {
                 task.message = getMsg('fc.flighttestwind.notassigned.wind')
@@ -769,7 +769,7 @@ class PrintService
             }
         }
         if (call_return) {
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 task.message = getMsg('fc.flighttestwind.notassigned.route')
             } else {
                 task.message = getMsg('fc.flighttestwind.notassigned.wind')
@@ -931,7 +931,7 @@ class PrintService
             }
         }
         if (call_return) {
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 task.message = getMsg('fc.flighttestwind.notassigned.route')
             } else {
                 task.message = getMsg('fc.flighttestwind.notassigned.wind')
@@ -1007,7 +1007,7 @@ class PrintService
         try {
             String print_action = "flightplanprintable"
             String print_params = ""
-            if (task.instance.flighttest.route.corridorWidth) {
+            if (task.instance.IsCorridor()) {
                 switch (task.instance.flighttest.flightPlanDesign) {
                     case FlightPlanDesign.TPList:
                         print_action = "flightplananrprintable"

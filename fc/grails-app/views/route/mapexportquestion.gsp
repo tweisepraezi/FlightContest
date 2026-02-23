@@ -192,11 +192,6 @@
 	                        <fieldset>
                                 <g:actionSubmit action="mapsavesettings" value="${message(code:'fc.save')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
                                 <g:if test="${CoordRoute.findByRouteAndType(routeInstance,CoordType.TO,[sort:"id"])}" >
-                                    <g:if test="${BootStrap.global.IsLocalPrintmaps()}">
-                                        <g:actionSubmit action="init_localprintmaps" value="${message(code:'fc.localprintmaps.init')}"  tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="start_localprintmaps" value="${message(code:'fc.localprintmaps.start')}"  tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="stop_localprintmaps" value="${message(code:'fc.localprintmaps.stop')}"  tabIndex="${ti[0]++}"/>
-                                    </g:if>
                                     <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
                                 </g:if>

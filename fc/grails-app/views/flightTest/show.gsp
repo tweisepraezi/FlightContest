@@ -29,7 +29,7 @@
                                         <g:set var="foundTest" value="${true}" />
                                     </g:if>
                                 </g:each>
-                                <g:if test="${flightTestInstance.route.corridorWidth}">
+                                <g:if test="${flightTestInstance.IsCorridor()}">
                                     <g:set var="route_label" value="${message(code:'fc.parcour')}" />
                                 </g:if>
                                 <g:else>
@@ -55,7 +55,7 @@
                         <fieldset>
                             <p>
                                 <g:set var="intermediate_landing" value="${flightTestInstance.route.IsIntermediateLanding()}"/>
-                                <g:if test="${flightTestInstance.route.corridorWidth}">
+                                <g:if test="${flightTestInstance.IsCorridor()}">
                                     <label>${message(code:'fc.route.list')}:</label>
                                 </g:if>
                                 <g:else>
@@ -128,7 +128,7 @@
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}" />
                         </g:if>
                         <g:if test="${!flightTestInstance.task.lockPlanning}">
-                            <g:if test="${flightTestInstance.route.corridorWidth}">
+                            <g:if test="${flightTestInstance.IsCorridor()}">
                                 <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.route.add')}" tabIndex="${ti[0]++}" />
                             </g:if>
                             <g:else>

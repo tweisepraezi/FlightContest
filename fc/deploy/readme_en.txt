@@ -1,6 +1,17 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.3
+-------------
+- Defaults: Gate width from checkpoint coordinates added
+    This gate width is set according to the selected rule.
+- UL: Rule 'Wettbewerbsordnung Ultraleichtflug Deutschland - Ausgabe 2026' added (experimental)
+    This allows the use of rally, precision flying, and corridor routes in a competition.
+- OSM Contest Map option "Use airfields, airspaces and map objects from the following route" extended:
+    All newly created or imported routes are automatically connected to the first route.
+    The first route should therefore only include the coordinates of the airport and surrounding airports and airspaces.
+- This release changes the database version.
+    
 Changes 4.2.2
 -------------
 - Installation instructions for map server updated
@@ -41,6 +52,7 @@ Changes 4.2.0
 - Final evaluation expanded:
     Option "Print start number" added
     Option "Print TAS" added
+- This release changes the database version.
 
 Changes 4.1.11
 --------------

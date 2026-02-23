@@ -31,6 +31,15 @@ class DefaultsTagLib
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.contestrule.gatewidth.cp')}* [${message(code:'fc.mile')}]:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="cpGateWidth" name="cpGateWidth" value="${fieldValue(bean:attrs.contest,field:'cpGateWidth')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.cpGateWidth != attrs.contest.contestRule.ruleValues.cpGateWidth) {
+            outln"""        !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </p>"""
         if (!attrs.contest.anrFlying) {        
             outln"""    <p>"""
             outln"""        <label>${message(code:'fc.contestrule.gatewidth.sc')}* [${message(code:'fc.mile')}]:</label>"""
@@ -269,6 +278,13 @@ class DefaultsTagLib
         outln"""        <div>"""
         checkBox("anrFlying", attrs.contest.anrFlying, 'fc.contestrule.anr', attrs)
         if (attrs.contest.anrFlying != attrs.contest.contestRule.ruleValues.anrFlying) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </div>"""
+        outln"""        <div>"""
+        checkBox("corridorRoutes", attrs.contest.corridorRoutes, 'fc.contestrule.corridorwidth', attrs)
+        if (attrs.contest.corridorRoutes != attrs.contest.contestRule.ruleValues.corridorRoutes) {
             outln"""    !"""
             attrs.ret.modifynum++
         }

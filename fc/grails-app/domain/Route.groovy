@@ -29,7 +29,7 @@ class Route
     String defaultOnlineMap = ""                                                 // DB-2.37
     String defaultPrintMap = ""                                                  // DB-2.41
     Boolean exportSemicircleGates = false                                        // DB-2.26, UNUSED, since DB-2.44
-    Integer semicircleCourseChange = 5                                           // DB-2.37
+    Integer semicircleCourseChange = Defs.SEMICIRCLE_COURSECHANGE_INIT           // DB-2.37
     BigDecimal corridorWidth = 0.0                                               // DB-2.41, NM
     BigDecimal corridorWidth2 = 0.0                                              // DB-2.45, NM
     BigDecimal corridorWidth3 = 0.0                                              // DB-2.45, NM
@@ -512,6 +512,87 @@ class Route
 		}
 	}
 	
+	Map GetCenter(Map contestMapParams = [:])
+	{
+		try {
+            boolean all_points = true
+            if (contestMapParams && contestMapParams.contestMapCenterPoints) {
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this, [sort:'id'])) {
+                    if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints, this).contains(coordroute_instance.title()+',')) {
+                            all_points = false
+                            break
+                        }
+                    }
+                }
+            }
+			BigDecimal min_latitude = null
+			BigDecimal max_latitude = null
+            BigDecimal min_longitude = null
+            BigDecimal max_longitude = null
+            List route_instances = []
+            route_instances += this
+            if (this.route2ID) {
+                route_instances += Route.get(this.route2ID)
+            }
+            if (this.route3ID) {
+                route_instances += Route.get(this.route3ID)
+            }
+            if (this.route4ID) {
+                route_instances += Route.get(this.route4ID)
+            }
+            for (Route route_instance in route_instances) {
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:'id'])) {
+                    if (all_points || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints, route_instance).contains(coordroute_instance.title()+',')) {
+                        BigDecimal latitude = coordroute_instance.latMath()
+                        if (min_latitude == null) {
+                            min_latitude = latitude
+                        } else if (latitude < min_latitude) {
+                            min_latitude = latitude
+                        }
+                        if (max_latitude == null) {
+                            max_latitude = latitude
+                        } else if (latitude > max_latitude) {
+                            max_latitude = latitude
+                        }
+                        BigDecimal longitude = coordroute_instance.lonMath()
+                        if (min_longitude == null) {
+                            min_longitude = longitude
+                        } else if (longitude < min_longitude) {
+                            min_longitude = longitude
+                        }
+                        if (max_longitude == null) {
+                            max_longitude = longitude
+                        } else if (longitude > max_longitude) {
+                            max_longitude = longitude
+                        }
+                    }
+                }
+            }
+            BigDecimal center_latitude = (max_latitude + min_latitude) / 2
+            BigDecimal center_longitude = (max_longitude + min_longitude) / 2
+            if (contestMapParams) {
+                if (contestMapParams.contestMapCenterMoveY) {
+                    if (contestMapParams.contestMapCenterMoveY > 0) {
+                        center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 180, contestMapParams.contestMapCenterMoveY).lat
+                    } else {
+                        center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 0, -contestMapParams.contestMapCenterMoveY).lat
+                    }
+                }
+                if (contestMapParams.contestMapCenterMoveX) {
+                    if (contestMapParams.contestMapCenterMoveX > 0) {
+                        center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 270, contestMapParams.contestMapCenterMoveX).lon
+                    } else {
+                        center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
+                    }
+                }
+            }
+			return [centerLatitude:center_latitude, centerLongitude:center_longitude]
+		} catch (Exception e) {
+			return [centerLatitude:0, centerLongitude:0]
+		}
+	}
+    
     String idName()
     {
 		return "${getMsg('fc.route')}-${idTitle}"
@@ -1359,7 +1440,7 @@ class Route
     
     Map GetFlightTestWindDirection()
     {
-        Map ret = [TODirection:0.0, LDGDirection:0.0, iTOiLDGDirection:0.0, isIntermediateRunway:false]
+        Map ret = [TODirection:0.0, LDGDirection:0.0, iTOiLDGDirection:0.0, isIntermediateRunway:false, corridorWidth:this.corridorWidth]
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,,[sort:"id"])) {
             switch (coordroute_instance.type) {
                 case CoordType.TO:
@@ -1412,5 +1493,16 @@ class Route
             parcour_names += route_instance.GetParcourName()
         }
         return parcour_names
+    }
+    
+    void SetShowMapObjectsFromRouteID(Contest contestInstance)
+    {
+        Route first_route_instance = Route.findByContestAndContestMapShowMapObjectsFromRouteID(contestInstance,0,[sort:"idTitle"])
+        if (first_route_instance) {
+            this.contestMapShowMapObjectsFromRouteID = first_route_instance.id
+            this.contestMapShowAirfields = false
+            this.contestMapShowAirspaces = false
+            this.contestMapShowMapObjects = false
+        }
     }
 }

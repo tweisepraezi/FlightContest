@@ -1486,4 +1486,9 @@ class Task
         }
         return ret
     }
+    
+    boolean IsCorridor()
+    {
+        return flighttest.IsCorridor()
+    }
 }

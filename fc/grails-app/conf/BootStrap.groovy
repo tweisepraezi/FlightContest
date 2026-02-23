@@ -1233,7 +1233,7 @@ class BootStrap {
                             print "    2.37 modifications"
                             Route.findAll().each { Route route_instance ->
                                 route_instance.defaultOnlineMap = ""
-                                route_instance.semicircleCourseChange = 10
+                                route_instance.semicircleCourseChange = Defs.SEMICIRCLE_COURSECHANGE_INIT
                                 route_instance.save()
                             }
                             Coord.findAll().each { Coord coord_instance ->
@@ -1454,6 +1454,15 @@ class BootStrap {
                             FlightTestWind.findAll().each { FlightTestWind flighttestwind_instance ->
                                 flighttestwind_instance.corridorRouteID = 0
                                 flighttestwind_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 47) { // DB-2.47 compatibility
+                            print "    2.47 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.cpGateWidth = contest_instance.contestRule.ruleValues.cpGateWidth
+                                contest_instance.corridorRoutes = contest_instance.contestRule.ruleValues.corridorRoutes
+                                contest_instance.save()
                             }
                             println " done."
                         }

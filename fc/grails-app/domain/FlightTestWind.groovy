@@ -108,7 +108,8 @@ class FlightTestWind
     
     boolean IsCorridor()
     {
-        if (GetParcour().corridorWidth) {
+        Route parcour_route = GetParcour()
+        if (/*parcour_route.contest.anrFlying &&*/ parcour_route.corridorWidth) {
             return true
         }
         return false

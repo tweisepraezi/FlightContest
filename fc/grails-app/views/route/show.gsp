@@ -391,9 +391,6 @@
                                         <g:if test="${!route_empty}">
                                             <g:actionSubmit action="showofflinemap_route" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="showonlinemap_route" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
-	                                        <g:if test="${BootStrap.global.GetPrintServerAPI()}">
-	                                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-	                                        </g:if>
                                             <g:actionSubmit action="kmzexport_route" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:if test="${route_status.exportSemicircleGates}">
                                                 <g:actionSubmit action="gpxexport_route_semicirclegates" value="${message(code:'fc.gpx.export.semicirclegates')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
@@ -410,6 +407,37 @@
 	                                    </g:if>
                                     </td>
                                 </tr>
+                                <g:if test="${BootStrap.global.IsLocalPrintmaps()}">
+                                    <tr> <td>
+                                        <g:set var="printserver_api" value="${PrintMapTools.GetPrintServerAPI()}"/>
+                                        <g:if test="${printserver_api}">
+                                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:if test="${printserver_api == Defs.PRINTMAPS_INTERN_LINK}">
+                                            <g:actionSubmit action="stop_localprintmaps" value="${message(code:'fc.localprintmaps.stop')}" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:set var="is_localprintmaps_startable" value="${PrintMapTools.IsLocalPrintmapsStartable(routeInstance.contest)}"/>
+                                            <g:if test="${is_localprintmaps_startable}">
+                                                <g:actionSubmit action="init_localprintmaps" value="${message(code:'fc.localprintmaps.init.again')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                            </g:if>
+                                            <g:else>
+                                                <g:actionSubmit action="init_localprintmaps" value="${message(code:'fc.localprintmaps.init')}" tabIndex="${ti[0]++}"/>
+                                            </g:else>
+                                            <g:if test="${is_localprintmaps_startable}">
+                                                <g:actionSubmit action="start_localprintmaps" value="${message(code:'fc.localprintmaps.start')}" tabIndex="${ti[0]++}"/>
+                                            </g:if>
+                                        </g:else>
+                                   </td> </tr>
+                                </g:if>
+                                <g:else>
+                                    <g:set var="printserver_api" value="${PrintMapTools.GetPrintServerAPI()}"/>
+                                    <g:if test="${printserver_api}">
+                                        <tr> <td>
+                                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </td> </tr>
+                                    </g:if>
+                                </g:else>
                             </tfoot>
                         </table>
                         <g:showRouteDetails route="${routeInstance}" ti="${ti}"/>

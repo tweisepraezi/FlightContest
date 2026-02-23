@@ -38,7 +38,7 @@ if [[ ! -z $PBFLINKS ]]; then
 fi
 
 # Generate contour database
-if [ $SRTMUSER ]; then
+if [ $CONTOURSOURCES ]; then
     echo "Generate contour database..."
     cd /scripts-contour
     bash create_contour_db.sh
@@ -52,6 +52,13 @@ if [ $dbid ]; then
 
     echo "Create database ready_$dbid..."
     createdb ready_$dbid
+    psql --dbname=ready_$dbid -c "CREATE TABLE Info (PBFTIME varchar(20), PBFDATE varchar(10));"
+    
+    if [ $PBFTIME ]; then
+        if [ $PBFDATE ]; then
+            psql --dbname=ready_$dbid -c "INSERT INTO Info VALUES ('$PBFTIME', '$PBFDATE');"
+        fi
+    fi
 fi
 
 # Show generated databases

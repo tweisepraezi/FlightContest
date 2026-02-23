@@ -17,14 +17,14 @@ if ($Restart -eq "de" -or $Restart -eq "en") {
 # Strings
 # -------
 $str_fcmanager = "Flight Contest Manager"
-$str_fc_version = "4.2.2"
+$str_fc_version = "4.2.3"
 $str_fc = "Flight Contest " + $str_fc_version
 $str_fc_url = "http://localhost:8080/fc/contest/start"
 $str_homepage = "flightcontest.de"
 $str_homepage_url = "https://flightcontest.de"
 $str_fcsave = "C:\FCSave"
 $str_firefox_url = "C:\Program Files\Mozilla Firefox\firefox.exe"
-$str_new_version_url = "http://download.flightcontest.de/FCSetup4-NewVersion.txt"
+$str_new_version_url = "http://download.flightcontest.de/FCSetup4-NewVersion2.txt"
 $str_new_setup_url = "http://download.flightcontest.de"
 $str_new_setup_path = "C:\FCSave\.fcsetups"
 if ($language -eq "de") {

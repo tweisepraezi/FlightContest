@@ -77,6 +77,7 @@ enum ContestRules
             // Defaults (other)
             precisionFlying:false,                                   // FAI-RF
             anrFlying:false,                                         // FAI-RF
+            corridorRoutes:false,                                    // FAI-RF
             flightTestLastGateNoBadCourseSeconds:45,                 // FAI-RF A3.1.9 defines 45s
             showPlanningTest:false,                                  // FAI-RF 
             activateFlightTestCheckLanding:true,                     // FAI-RF 
@@ -90,6 +91,7 @@ enum ContestRules
             flightPlanShowLocalTime:false,                           // FAI-RF
             flightPlanShowElapsedTime:true,                          // FAI-RF
             flightTestSubmissionMinutes:20,                          // FAI-RF
+            cpGateWidth:1.0f,                                        // FAI-RF
             scGateWidth:1.0f,                                        // FAI-RF
             unsuitableStartNum:"13",                                 // FAI-RF
             turnpointRule:TurnpointRule.TrueFalsePhoto,              // FAI-RF A3.4.4
@@ -185,6 +187,7 @@ enum ContestRules
             // Defaults (other)
 			precisionFlying:false,                                   // DE-RF
             anrFlying:false,                                         // DE-RF
+            corridorRoutes:false,                                    // DE-RF
             flightTestLastGateNoBadCourseSeconds:45,                 // DE-RF
             showPlanningTest:false,                                  // DE-RF
             activateFlightTestCheckLanding:true,                     // DE-RF
@@ -198,6 +201,7 @@ enum ContestRules
             flightPlanShowLocalTime:false,                           // DE-RF
             flightPlanShowElapsedTime:true,                          // DE-RF
             flightTestSubmissionMinutes:20,                          // DE-RF
+            cpGateWidth:1.0f,                                        // DE-RF
             scGateWidth:1.0f,                                        // DE-RF
             unsuitableStartNum:"13",                                 // DE-RF
             turnpointRule:TurnpointRule.TrueFalsePhoto,              // DE-RF 3.4.6
@@ -215,6 +219,116 @@ enum ContestRules
             maxEnrouteTargets:25,                                    // DE-RF (3.4.1)
             useProcedureTurns:false,                                 // DE-RF -
             liveTrackingScorecard:Defs.LIVETRACKING_SCORECARD_RF     // DE-RF
+		]
+	),
+
+	R14 ([
+            ruleTitle:"Wettbewerbsordnung Ultraleichtflug Deutschland - Ausgabe 2026", // DE-UL
+            
+			// General
+            increaseFactor:0,                                        // DE-UL
+            printPointsGeneral:false,                                // DE-UL
+			printPointsPlanningTest:false,                           // DE-UL
+			printPointsFlightTest:true,                              // DE-UL
+            printPointsObservationTest:true,                         // DE-UL
+			printPointsLandingTest1:true,                            // DE-UL
+			printPointsLandingTest2:false,                           // DE-UL
+			printPointsLandingTest3:false,                           // DE-UL
+			printPointsLandingTest4:false,                           // DE-UL
+            printPointsLandingField:true,                            // DE-UL
+            printPointsTurnpointSign:false,                          // DE-UL
+            printPointsEnrouteCanvas:true,                           // DE-UL
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],        // DE-UL
+            
+			// PlanningTest
+			planningTestDirectionCorrectGrad:2,                      // DE-UL -
+			planningTestDirectionPointsPerGrad:2,                    // DE-UL -
+			planningTestTimeCorrectSecond:5,                         // DE-UL -
+			planningTestTimePointsPerSecond:1,                       // DE-UL -
+			planningTestMaxPoints:200,                               // DE-UL -
+			planningTestPlanTooLatePoints:50,                        // DE-UL -
+			planningTestExitRoomTooLatePoints:100,                   // DE-UL -
+            planningTestForbiddenCalculatorsPoints:0,                // DE-UL -
+		
+			// FlightTest
+			flightTestTakeoffCorrectSecond:60,                       // DE-UL 4
+			flightTestTakeoffCheckSeconds:true,                      // DE-UL
+            flightTestTakeoffMissedPoints:100,                       // DE-UL 4
+			flightTestTakeoffPointsPerSecond:3,                      // DE-UL 4
+			flightTestCptimeCorrectSecond:2,                         // DE-UL 4
+			flightTestCptimePointsPerSecond:3,                       // DE-UL 4
+			flightTestCptimeMaxPoints:100,                           // DE-UL 4
+			flightTestCpNotFoundPoints:100,                          // DE-UL 4
+			flightTestProcedureTurnNotFlownPoints:100,               // DE-UL -
+			flightTestMinAltitudeMissedPoints:200,                   // DE-UL 4
+			flightTestBadCourseCorrectSecond:5,                      // DE-UL 3.3.6
+			flightTestBadCoursePoints:100,                           // DE-UL 4
+            flightTestBadCourseMaxPoints:400,                        // DE-UL 4
+			flightTestBadCourseStartLandingPoints:200,               // DE-UL 4
+            flightTestBadCourseStartLandingSeparatePoints:false,     // DE-UL
+			flightTestOutsideCorridorCorrectSecond:5,                // DE-UL -
+			flightTestOutsideCorridorPointsPerSecond:3,              // DE-UL -
+			flightTestLandingToLatePoints:0,                         // DE-UL 4
+			flightTestGivenToLatePoints:300,                         // DE-UL 4
+			flightTestSafetyAndRulesInfringementPoints:0,            // DE-UL
+			flightTestInstructionsNotFollowedPoints:0,               // DE-UL
+			flightTestFalseEnvelopeOpenedPoints:0,                   // DE-UL
+			flightTestSafetyEnvelopeOpenedPoints:400,                // DE-UL 4
+			flightTestFrequencyNotMonitoredPoints:0,                 // DE-UL
+            flightTestForbiddenEquipmentPoints:0,                    // DE-UL
+            flightTestExitRoomTooLatePoints:0,                       // DE-UL -
+		
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:50,               // DE-UL 4
+            observationTestTurnpointFalsePoints:100,                 // DE-UL 4
+            observationTestEnrouteValueUnit:EnrouteValueUnit.NM,     // DE-UL 4
+            observationTestEnrouteCorrectValue:0.5f,                 // DE-UL 4
+            observationTestEnrouteInexactValue:1.0f,                 // DE-UL 4
+            observationTestEnrouteInexactPoints:15,                  // DE-UL 4
+            observationTestEnrouteNotFoundPoints:30,                 // DE-UL 4
+            observationTestEnrouteFalsePoints:50,                    // DE-UL 4
+            
+			// LandingTest
+            landingTest1:ContestRulesLanding.DE_RF_ANR.data,         // DE-UL
+            landingTest2:ContestRulesLanding.DE_RF_ANR.data,         // DE-UL
+            landingTest3:ContestRulesLanding.DE_RF_ANR.data,         // DE-UL
+            landingTest4:ContestRulesLanding.DE_RF_ANR.data,         // DE-UL
+
+            // Defaults (other)
+			precisionFlying:false,                                   // DE-UL
+            anrFlying:false,                                         // DE-UL
+            corridorRoutes:true,                                     // DE-UL
+            flightTestLastGateNoBadCourseSeconds:45,                 // DE-UL
+            showPlanningTest:false,                                  // DE-UL
+            activateFlightTestCheckLanding:false,                    // DE-UL
+            showObservationTest:true,                                // DE-UL
+
+            // Defaults
+            flightPlanShowLegDistance:true,                          // DE-UL
+            flightPlanShowTrueTrack:true,                            // DE-UL
+            flightPlanShowTrueHeading:true,                          // DE-UL
+            flightPlanShowGroundSpeed:true,                          // DE-UL
+            flightPlanShowLocalTime:true,                            // DE-UL
+            flightPlanShowElapsedTime:false,                         // DE-UL
+            flightTestSubmissionMinutes:null,                        // DE-UL
+            cpGateWidth:0.3f,                                        // DE-UL
+            scGateWidth:0.3f,                                        // DE-UL
+            unsuitableStartNum:"13",                                 // DE-UL
+            turnpointRule:TurnpointRule.TrueFalsePhoto,              // DE-UL 3.4.6
+            turnpointMapMeasurement:false,                           // DE-UL
+            enroutePhotoRule:EnrouteRule.NMFromTP,                   // DE-UL 3.4.8
+            enrouteCanvasRule:EnrouteRule.NMFromTP,                  // DE-UL 3.4.8
+            enrouteCanvasMultiple:true,                              // DE-UL
+            minRouteLegs:10,                                         // DE-UL 3.1
+            maxRouteLegs:16,                                         // DE-UL 3.1
+            minEnroutePhotos:15,                                     // DE-UL 3.4.1
+            maxEnroutePhotos:20,                                     // DE-UL 3.4.1
+            minEnrouteCanvas:0,                                      // DE-UL 3.4.1
+            maxEnrouteCanvas:5,                                      // DE-UL 3.4.1
+            minEnrouteTargets:10,                                    // DE-UL (3.4.1)
+            maxEnrouteTargets:25,                                    // DE-UL (3.4.1)
+            useProcedureTurns:false,                                 // DE-UL -
+            liveTrackingScorecard:Defs.LIVETRACKING_SCORECARD_RF     // DE-UL
 		]
 	),
 
@@ -293,6 +407,7 @@ enum ContestRules
             // Defaults (other)
             precisionFlying:false,                                   // AT-RF
             anrFlying:false,                                         // AT-RF
+            corridorRoutes:false,                                    // AT-RF
             flightTestLastGateNoBadCourseSeconds:45,                 // AT-RF
             showPlanningTest:false,                                  // AT-RF
             activateFlightTestCheckLanding:true,                     // AT-RF
@@ -306,6 +421,7 @@ enum ContestRules
             flightPlanShowLocalTime:false,                           // AT-RF
             flightPlanShowElapsedTime:true,                          // AT-RF
             flightTestSubmissionMinutes:20,                          // AT-RF
+            cpGateWidth:1.0f,                                        // AT-RF
             scGateWidth:1.0f,                                        // AT-RF
             unsuitableStartNum:"13",                                 // AT-RF
             turnpointRule:TurnpointRule.TrueFalsePhoto,              // AT-RF 5.2.5c
@@ -400,7 +516,8 @@ enum ContestRules
 
             // Defaults (other)
 			precisionFlying:false,                                   // FAI-ANR
-            anrFlying:true,                                          // FAI-ANR 
+            anrFlying:true,                                          // FAI-ANR
+            corridorRoutes:false,                                    // FAI-ANR
             flightTestLastGateNoBadCourseSeconds:10,                 // FAI-ANR like Precision
             showPlanningTest:false,                                  // FAI-ANR 
             activateFlightTestCheckLanding:false,                    // FAI-ANR 
@@ -414,6 +531,7 @@ enum ContestRules
             flightPlanShowLocalTime:false,                           // FAI-ANR
             flightPlanShowElapsedTime:false,                         // FAI-ANR
             flightTestSubmissionMinutes:null,                        // FAI-ANR
+            cpGateWidth:0.6f,                                        // FAI-ANR
             scGateWidth:0.0f,                                        // FAI-ANR
             unsuitableStartNum:"13",                                 // FAI-ANR
             turnpointRule:TurnpointRule.None,                        // FAI-ANR -
@@ -509,6 +627,7 @@ enum ContestRules
             // Defaults (other)
 			precisionFlying:false,                                   // DE-ANR
             anrFlying:true,                                          // DE-ANR
+            corridorRoutes:false,                                    // DE-ANR
             flightTestLastGateNoBadCourseSeconds:10,                 // DE-ANR
             showPlanningTest:false,                                  // DE-ANR
             activateFlightTestCheckLanding:false,                    // DE-ANR
@@ -522,6 +641,7 @@ enum ContestRules
             flightPlanShowLocalTime:false,                           // DE-ANR
             flightPlanShowElapsedTime:false,                         // DE-ANR
             flightTestSubmissionMinutes:null,                        // DE-ANR
+            cpGateWidth:0.6f,                                        // DE-ANR
             scGateWidth:0.0f,                                        // DE-ANR
             unsuitableStartNum:"13",                                 // DE-ANR
             turnpointRule:TurnpointRule.None,                        // DE-ANR -
@@ -617,6 +737,7 @@ enum ContestRules
             // Defaults (other)
 			precisionFlying:true,                                    // FAI-PF
             anrFlying:false,                                         // FAI-PF
+            corridorRoutes:false,                                    // FAI-PF
             flightTestLastGateNoBadCourseSeconds:10,                 // FAI-PF A2.2.13, defines 0.5NM around gate
             showPlanningTest:true,                                   // FAI-PF 
             activateFlightTestCheckLanding:true,                     // FAI-PF 
@@ -630,6 +751,7 @@ enum ContestRules
             flightPlanShowLocalTime:true,                            // FAI-PF
             flightPlanShowElapsedTime:false,                         // FAI-PF
             flightTestSubmissionMinutes:null,                        // FAI-PF
+            cpGateWidth:1.0f,                                        // FAI-PF
             scGateWidth:1.0f,                                        // FAI-PF
             unsuitableStartNum:"13",                                 // FAI-PF
             turnpointRule:TurnpointRule.AssignCanvas,                // FAI-PF
@@ -725,6 +847,7 @@ enum ContestRules
             // Defaults (other)
             precisionFlying:false,                                   // DE-PF
             anrFlying:false,                                         // DE-PF
+            corridorRoutes:false,                                    // DE-PF
             flightTestLastGateNoBadCourseSeconds:10,                 // DE-PF 
             showPlanningTest:true,                                   // DE-PF
             activateFlightTestCheckLanding:true,                     // DE-PF
@@ -738,6 +861,7 @@ enum ContestRules
             flightPlanShowLocalTime:true,                            // DE-PF
             flightPlanShowElapsedTime:false,                         // DE-PF
             flightTestSubmissionMinutes:null,                        // DE-PF
+            cpGateWidth:1.0f,                                        // DE-PF
             scGateWidth:2.0f,                                        // DE-PF
             unsuitableStartNum:"13",                                 // DE-PF
             turnpointRule:TurnpointRule.AssignTrueFalse,             // DE-PF
@@ -833,6 +957,7 @@ enum ContestRules
             // Defaults (other)
 			precisionFlying:true,                                    // CH-PF
             anrFlying:false,                                         // CH-PF
+            corridorRoutes:false,                                    // CH-PF
             flightTestLastGateNoBadCourseSeconds:10,                 // CH-PF 4.7.15 defines 800m after gate passing
             showPlanningTest:true,                                   // CH-PF
             activateFlightTestCheckLanding:true,                     // CH-PF
@@ -846,6 +971,7 @@ enum ContestRules
             flightPlanShowLocalTime:true,                            // CH-PF
             flightPlanShowElapsedTime:false,                         // CH-PF
             flightTestSubmissionMinutes:null,                        // CH-PF
+            cpGateWidth:1.0f,                                        // CH-PF
             scGateWidth:1.0f,                                        // CH-PF
             unsuitableStartNum:"13",                                 // CH-PF
             turnpointRule:TurnpointRule.AssignCanvas,                // CH-PF
@@ -941,6 +1067,7 @@ enum ContestRules
             // Defaults (other)
             precisionFlying:true,                                    // AT-PF1
             anrFlying:false,                                         // AT-PF1
+            corridorRoutes:false,                                    // AT-PF1
             flightTestLastGateNoBadCourseSeconds:10,                 // AT-PF1 4.2.2j defines 0.5NM
             showPlanningTest:true,                                   // AT-PF1
             activateFlightTestCheckLanding:true,                     // AT-PF1
@@ -954,6 +1081,7 @@ enum ContestRules
             flightPlanShowLocalTime:true,                            // AT-PF1
             flightPlanShowElapsedTime:false,                         // AT-PF1
             flightTestSubmissionMinutes:null,                        // AT-PF1
+            cpGateWidth:1.0f,                                        // AT-PF1
             scGateWidth:1.0f,                                        // AT-PF1
             unsuitableStartNum:"13",                                 // AT-PF1
             turnpointRule:TurnpointRule.AssignCanvas,                // AT-PF1
@@ -1049,6 +1177,7 @@ enum ContestRules
             // Defaults (other)
             precisionFlying:true,                                    // AT-PF2
             anrFlying:false,                                         // AT-PF2
+            corridorRoutes:false,                                    // AT-PF2
             flightTestLastGateNoBadCourseSeconds:10,                 // AT-PF2 4.2.2j defines 0.5NM
             showPlanningTest:true,                                   // AT-PF2
             activateFlightTestCheckLanding:true,                     // AT-PF2
@@ -1062,6 +1191,7 @@ enum ContestRules
             flightPlanShowLocalTime:true,                            // AT-PF2
             flightPlanShowElapsedTime:false,                         // AT-PF2
             flightTestSubmissionMinutes:null,                        // AT-PF2
+            cpGateWidth:1.0f,                                        // AT-PF2
             scGateWidth:1.0f,                                        // AT-PF2
             unsuitableStartNum:"13",                                 // AT-PF2
             turnpointRule:TurnpointRule.AssignCanvas,                // AT-PF2
@@ -1157,6 +1287,7 @@ enum ContestRules
             // Defaults (other)
             precisionFlying:true,                                    // AT-PF3
             anrFlying:false,                                         // AT-PF3
+            corridorRoutes:false,                                    // AT-PF3
             flightTestLastGateNoBadCourseSeconds:10,                 // AT-PF3 4.2.2j defines 0.5NM
             showPlanningTest:true,                                   // AT-PF3
             activateFlightTestCheckLanding:true,                     // AT-PF3
@@ -1170,6 +1301,7 @@ enum ContestRules
             flightPlanShowLocalTime:true,                            // AT-PF3
             flightPlanShowElapsedTime:false,                         // AT-PF3
             flightTestSubmissionMinutes:null,                        // AT-PF3
+            cpGateWidth:1.0f,                                        // AT-PF3
             scGateWidth:1.0f,                                        // AT-PF3
             unsuitableStartNum:"13",                                 // AT-PF3
             turnpointRule:TurnpointRule.AssignCanvas,                // AT-PF3
@@ -1207,6 +1339,7 @@ enum ContestRules
         }
         ret += R1  // DE-RF   Wettbewerbsordnung Rallyeflug Deutschland
         ret += R13 // DE-ANR  Wettbewerbsordnung Air Navigation Race Deutschland
+        ret += R14 // DE-UL   Wettbewerbsordnung Ultraleichtflug Deutschland
         //ret += R11 // DE-PF   Wettbewerbsordnung Navigationsflug Deutschland
         ret += R6  // FAI-RF  FAI Air Rally Flying
         ret += R12 // FAI-ANR FAI Air Navigation Race

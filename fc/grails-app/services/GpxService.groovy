@@ -2641,9 +2641,14 @@ class GpxService
         }
 
         // observation settings & enroute signs without position
+        Map center_route = routeInstance.GetCenter(contestMapParams)
+        BigDecimal center_latitude = center_route.centerLatitude
+        BigDecimal center_longitude = center_route.centerLongitude
+        
+        /*      
         BigDecimal center_latitude = null
         BigDecimal center_longitude = null
-              
+        
         Map rect = [latmin:null, lonmin:null, latmax:null, lonmax:null]
         rect = gpx_route_contestmap_get_rect(routeInstance, contestMapParams.contestMapCenterPoints, rect)
         if (routeInstance.route2ID) {
@@ -2687,6 +2692,7 @@ class GpxService
                 center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
             }
         }
+        */
                 
         xml.extensions {
             xml.flightcontest {
@@ -2703,16 +2709,6 @@ class GpxService
                                         contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
                                      ])
                 }
-                xml.contestmap(
-                    min_latitude: rect.latmin,
-                    min_longitude: rect.lonmin,
-                    max_latitude: rect.latmax,
-                    max_longitude: rect.lonmax,
-                    center_latitude: center_latitude,
-                    center_longitude: center_longitude,
-                    center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
-                    center_graticule_longitude: GetRoundedDecimalGrad(center_longitude)
-                )
             }
         }
         
@@ -2776,7 +2772,7 @@ class GpxService
     }
 
     //--------------------------------------------------------------------------
-    private void gpx_route_contestmap_track(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams, BigDecimal center_latitude, BigDecimal center_longitude, boolean wrRouteName)
+    private void gpx_route_contestmap_track(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams, BigDecimal centerLatitude, BigDecimal centerLongitude, boolean wrRouteName)
     {
         printstart "gpx_route_contestmap_track $params $contestMapParams"
 
@@ -3145,7 +3141,7 @@ class GpxService
                                     Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                        center_latitude, center_longitude,
+                                        centerLatitude, centerLongitude,
                                         contestmap_tpname_distance
                                     )
                                     xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
@@ -3183,7 +3179,7 @@ class GpxService
                                 Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                     last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                     coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                    center_latitude, center_longitude,
+                                    centerLatitude, centerLongitude,
                                     contestmap_tpname_distance
                                 )
                                 xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
@@ -3199,7 +3195,7 @@ class GpxService
                             Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                 coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                center_latitude, center_longitude,
+                                centerLatitude, centerLongitude,
                                 contestmap_tpname_distance
                             )
                             xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
@@ -3212,7 +3208,7 @@ class GpxService
                                 Map route_name_coord = AviationMath.getOrthogonalTitlePoint(
                                     coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                     last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
-                                    center_latitude, center_longitude,
+                                    centerLatitude, centerLongitude,
                                     contestmap_routename_distance
                                 )
                                 xml.wpt(lat:route_name_coord.lat, lon:route_name_coord.lon) {
@@ -3275,7 +3271,7 @@ class GpxService
                     Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                         last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                        center_latitude, center_longitude,
+                        centerLatitude, centerLongitude,
                         distance_value
                     )
                     xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
@@ -3694,17 +3690,6 @@ class GpxService
                 }
             }
         }
-    }
-    
-    //--------------------------------------------------------------------------
-    private BigDecimal GetRoundedDecimalGrad(BigDecimal decimalGrad)
-    // Rundung auf ganze 10'
-    {
-        int grad_value = decimalGrad.toInteger()
-        BigDecimal minute_value = 60 * (decimalGrad - grad_value)
-        int minute_value2 = minute_value.toInteger()
-        minute_value2 = (minute_value2.toBigDecimal() / 10).toInteger() * 10
-        return minute_value2 / 60 + grad_value
     }
     
     //--------------------------------------------------------------------------

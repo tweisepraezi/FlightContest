@@ -1,6 +1,6 @@
 ﻿Flight Contest maps server
 Thomas Weise
-13.01.2026
+23-Jan-2026
 
 Virtual server requirements
 ---------------------------
@@ -157,7 +157,7 @@ Contour data (as gis)
     # Download contour data (Saarland)
     cd ~/data
     mkdir contours && cd contours
-    pyhgtmap --area=6.24522242525:48.9348891599:7.83147757475:49.9660696535 --download-only --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf --srtm-user=... --srtm-password=...
+    pyhgtmap --sources=view3 --area=6.24522242525:48.9348891599:7.83147757475:49.9660696535 --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf
         # https://pypi.org/project/pyhgtmap/
     
     # Create database *contours_new*

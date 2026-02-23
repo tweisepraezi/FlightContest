@@ -60,7 +60,7 @@
                                         <label>${message(code:'fc.resultclass.short')}</label>
                                     </div>
                                 </g:if>
-                                <g:if test="${taskInstance.flighttest?.route?.corridorWidth}">
+                                <g:if test="${taskInstance.IsCorridor()}">
                                     <div>
                                         <g:checkBox name="printTimetableJuryCorridorWidth" value="${taskInstance.printTimetableJuryCorridorWidth}" onclick="modify();"/>
                                         <label>${message(code:'fc.route')}</label>

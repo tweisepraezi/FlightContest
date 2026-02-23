@@ -70,6 +70,9 @@ grails.project.dependency.resolution = {
         //test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
         
         compile "com.fazecast:jSerialComm:2.8.0" // https://repo1.maven.org/maven2/com/fazecast/jSerialComm
+        
+        //compile "net.sourceforge.jtds:jtds:1.3.0"
+        compile "org.postgresql:postgresql:42.7.9" // https://repo1.maven.org/maven2/org/postgresql/postgresql
 	}
 	 
 	plugins {

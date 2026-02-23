@@ -50,10 +50,14 @@ class Defs
     static final String LIVETRACKING_SCORECARD_RF                      = "FAI Air Rally"
     final static List LIVETRACKING_SCORECARDS = [LIVETRACKING_SCORECARD_ANR, LIVETRACKING_SCORECARD_PF, LIVETRACKING_SCORECARD_RF]
     
+    final static Float GATEWIDTH_RUNWAY                                = 0.02f
+    final static Float GATEWIDTH_0_ANR                                 = 0.0f
+    
     final static int BADCOURSE_ONESECOND_TOLERANCE                     = 1
     
     final static int ANR_OUTSIDE_CORRIDOR_ONESECOND_TOLERANCE          = 1
     final static int ANR_LIVETRACKING_SECRETPOINT_OFFSET               = 100
+    final static BigDecimal ANR_INIT_CORRIDORWIDTH                     = 0.4
 
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
     static final String LIVETRACKING_DISPLAY_MAP                       = "/map/"
@@ -73,7 +77,6 @@ class Defs
     static final String LIVETRACKING_VISIBILITY_PUBLIC                 = "public"
     static final String LIVETRACKING_VISIBILITY_PRIVATE                = "private"
     static final String LIVETRACKING_VISIBILITY_UNLISTED               = "unlisted"
-    static final String TASKCREATOR_INTERN_ROOT_DIR                    = "http://localhost:8080/fc/taskcreator"
     
     static final int LANDING_SEL_VALUE                                 = 1
     static final int LANDING_SEL_NO                                    = 2
@@ -201,6 +204,8 @@ class Defs
     static final String CONTESTMAPPRINTSIZE_AIRPORTAREA                = "AIRPORTAREA"
     static final String CONTESTMAPPRINTSIZE_ANRAIRPORTAREA             = "ANRAIRPORTAREA"
     
+    static final String CONTESTMAPPOINTS_AIRFIELDS                     = ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},"
+    
     static final String NAME_AIRPORTAREA                               = "AirportArea"
     
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
@@ -210,6 +215,8 @@ class Defs
     static final String EMAIL_AT_CHAR                                  = "@"
     static final String EMAIL_NAME_SEPARATOR                           = "."
     static final String EMAIL_LIST_SEPARATOR                           = ","
+    
+    static final Integer SEMICIRCLE_COURSECHANGE_INIT                   = 5
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
@@ -235,5 +242,15 @@ class Defs
     static final String CONFIG_NAME                                    = "config.groovy"
     static final String FCMAP_COUNTER_NAME                             = "fcmap_counter.groovy"
     
-    static final String DEFAULT_EXTERNAL_TASKCREATOR                   = "https://www.airrats.cl/taskcreator?admin" 
+    static final String TASKCREATOR_INTERN_LINK                        = "http://localhost:8080/fc/taskcreator"
+    static final String TASKCREATOR_EXTERN_LINK                        = "https://www.airrats.cl/taskcreator?admin" 
+
+    static final String GEOFABRIK_INDEX                                = "https://download.geofabrik.de/index-v1.json"
+    static final List GEOFABRIK_IGNORE_FEATURES                        = ["dach"]
+    static final String GEOFABRIK_OSMSTATE_FILENAME                    = "state.txt"
+    
+    static final String PRINTMAPS_INTERN_LINK                          = "http://localhost:8181/api/beta2/maps"
+
+    static final String EXE_PSQL                                       = "C:/Program Files/PostgreSQL/17/bin/psql.exe"
+    static final String PBFTIME_UNKNOWN                                = "-"
 }

@@ -59,7 +59,7 @@
         <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
         <g:form>
             <g:set var="printtimetable_route" value="${false}"/>
-            <g:if test="${taskInstance.flighttest.route.corridorWidth && taskInstance.printTimetableCorridorWidth}">
+            <g:if test="${taskInstance.IsCorridor() && taskInstance.printTimetableCorridorWidth}">
                 <g:set var="printtimetable_route" value="${true}"/>
             </g:if>
             <table class="timetablelist">

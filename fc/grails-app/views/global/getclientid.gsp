@@ -25,6 +25,9 @@
                             <g:if test="${BootStrap.global.OpenAIPServer && BootStrap.global.OpenAIPAPIKey}">
                                 ${message(code:'fc.config.openaipserver.found')}<br/>
                             </g:if>
+                            <g:if test="${BootStrap.global.ContourSources}">
+                                ${message(code:'fc.config.contoursources.found')}<br/>
+                            </g:if>
                             <g:if test="${BootStrap.global.SRTMUsername && BootStrap.global.SRTMPassword}">
                                 ${message(code:'fc.config.srtmlogin.found')}<br/>
                             </g:if>

@@ -14,10 +14,6 @@ class RouteFileTools
     final static String ENROUTE_SIGN_EXTENSIONS = "${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}, ${RouteFileTools.TXT_EXTENSION}"
     final static String TURNPOINT_EXTENSIONS = "${RouteFileTools.TXT_EXTENSION}"
     
-    final static Float DEFAULT_GATEWIDTH_RUNWAY = 0.02f
-    final static Float DEFAULT_GATEWIDTH_TP = 1.0f
-    final static Float DEFAULT_GATEWIDTH_CORRIDORSTARTEND = 0.6f
-    
     final static String ALT = "Alt"
     final static String MINALT = "MinAlt"
     final static String MAXALT = "MaxAlt"
@@ -689,20 +685,16 @@ class RouteFileTools
         route_instance.enroutePhotoRoute = route_instance.enroutePhotoMeasurement.GetEnrouteRoute()
         route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
         route_instance.enrouteCanvasRoute = route_instance.enrouteCanvasMeasurement.GetEnrouteRoute()
-		route_instance.useProcedureTurns = contestInstance.useProcedureTurns
+        if (!corridorWidth) {
+            route_instance.useProcedureTurns = contestInstance.useProcedureTurns
+        }
         route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
         if (!route_instance.corridorWidth && corridorWidth) {
             route_instance.corridorWidth = corridorWidth
-            route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
-            route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
-            route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
-            route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
-            route_instance.enroutePhotoRoute = EnrouteRoute.Unassigned
-            route_instance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
-            route_instance.enrouteCanvasRoute = EnrouteRoute.Unassigned
-            route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
+            SetRouteFlags(route_instance, true)
             init_corridorwidth_flags = true
         }
+        route_instance.SetShowMapObjectsFromRouteID(contestInstance)
         if (!route_instance.save()) {
             return [gatenum: coord_num, valid: false, errors: "Could not save route ${routeData.routename}"]
         }
@@ -725,46 +717,46 @@ class RouteFileTools
             // T/O
             if (gate_pos == to_pos) {
                 coordroute_instance.type = CoordType.TO
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_RUNWAY
+                coordroute_instance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
                 coordroute_instance.gateDirection = importParams.todirection
             // SP
             } else if (gate_pos == to_pos + 1) {
                 coordroute_instance.type = CoordType.SP
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
             // FP
             } else if (gate_pos == fp_pos) {
                 coordroute_instance.type = CoordType.FP
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
             // LDG
             } else if (gate_pos == ldg_pos) {
                 coordroute_instance.type = CoordType.LDG
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_RUNWAY
+                coordroute_instance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
                 coordroute_instance.gateDirection = importParams.ldgdirection
             // iFP, iLDG, iSP
             } else if (importParams.ildg && gate_pos + 1 == importParams.ildgpos) {
                 coordroute_instance.type = CoordType.iFP
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
             } else if (importParams.ildg && gate_pos == importParams.ildgpos) {
                 coordroute_instance.type = CoordType.iLDG
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_RUNWAY
+                coordroute_instance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
                 coordroute_instance.gateDirection = importParams.ildgdirection
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
             } else if (importParams.ildg && gate_pos == importParams.ildgpos + 1) {
                 coordroute_instance.type = CoordType.iSP
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 coordroute_instance.noPlanningTest = true
             // Curved (TP, SC..., TP) (1)
             } else if (importParams.curved1 && gate_pos == importParams.curvedstartpos1 ) {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 tp_num++
             } else if (importParams.curved1 && gate_pos == importParams.curvedendpos1) {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 coordroute_instance.noPlanningTest = true
                 coordroute_instance.endCurved = true
                 tp_num++
@@ -781,12 +773,12 @@ class RouteFileTools
             } else if (importParams.curved2 && gate_pos == importParams.curvedstartpos2 ) {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 tp_num++
             } else if (importParams.curved2 && gate_pos == importParams.curvedendpos2) {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 coordroute_instance.noPlanningTest = true
                 coordroute_instance.endCurved = true
                 tp_num++
@@ -803,12 +795,12 @@ class RouteFileTools
             } else if (importParams.curved3 && gate_pos == importParams.curvedstartpos3) {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 tp_num++
             } else if (importParams.curved3 && gate_pos == importParams.curvedendpos3) {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 coordroute_instance.noPlanningTest = true
                 coordroute_instance.endCurved = true
                 tp_num++
@@ -861,7 +853,7 @@ class RouteFileTools
             } else {
                 coordroute_instance.type = CoordType.TP
                 coordroute_instance.titleNumber = tp_num
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
                 tp_num++
             }
             
@@ -876,7 +868,7 @@ class RouteFileTools
             coordroute_instance.altitude = gate.alt
             
             if (init_corridorwidth_flags) {
-                SetCorridorWidthFlags(coordroute_instance)
+                SetCorridorWidthFlags(coordroute_instance, true)
             }
             
             if (!coordroute_instance.save()) {
@@ -993,16 +985,11 @@ class RouteFileTools
                             }
                             if (!route_instance.corridorWidth && corridorWidth) {
                                 route_instance.corridorWidth = corridorWidth
-                                route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
-                                route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
-                                route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
-                                route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
-                                route_instance.enroutePhotoRoute = EnrouteRoute.Unassigned
-                                route_instance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
-                                route_instance.enrouteCanvasRoute = EnrouteRoute.Unassigned
-                                route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
+                                SetRouteFlags(route_instance, true)
                                 init_corridorwidth_flags = true
                             }
+                            route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+
                             route_instance.save()
                             //println "Route saved."
                             first = false
@@ -1089,7 +1076,7 @@ class RouteFileTools
                             }
                         }
                         if (init_corridorwidth_flags) {
-                            SetCorridorWidthFlags(coordroute_instance)
+                            SetCorridorWidthFlags(coordroute_instance, true)
                         }
                         if (!coordroute_instance.save()) {
                             read_errors = "Could not save ${coordroute_instance.title()}"
@@ -1163,10 +1150,12 @@ class RouteFileTools
                         route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(enroutecanvasmeasurement.toString())
                         save_route = true
                     }
-                    String useprocedureturn = gpx.extensions.flightcontest.observationsettings.'@useprocedureturn'[0]
-                    if (useprocedureturn) {
-                        route_instance.useProcedureTurns = useprocedureturn == "yes"
-                        save_route = true
+                    if (!corridorWidth) {
+                        String useprocedureturn = gpx.extensions.flightcontest.observationsettings.'@useprocedureturn'[0]
+                        if (useprocedureturn) {
+                            route_instance.useProcedureTurns = useprocedureturn == "yes"
+                            save_route = true
+                        }
                     }
                     String mapscale = gpx.extensions.flightcontest.observationsettings.'@mapscale'[0]
                     if (mapscale) {
@@ -1794,7 +1783,9 @@ class RouteFileTools
                             route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(d.value.text())
                             break
                         case "useprocedureturn":
-                            route_instance.useProcedureTurns = d.value.text() == "yes"
+                            if (!corridorWidth) {
+                                route_instance.useProcedureTurns = d.value.text() == "yes"
+                            }
                             break
 						case "mapscale":
 							route_instance.mapScale = d.value.text().toInteger()
@@ -2033,16 +2024,10 @@ class RouteFileTools
                 route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
                 if (!route_instance.corridorWidth && corridorWidth) {
                     route_instance.corridorWidth = corridorWidth
-                    route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
-                    route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
-                    route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
-                    route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
-                    route_instance.enroutePhotoRoute = EnrouteRoute.Unassigned
-                    route_instance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
-                    route_instance.enrouteCanvasRoute = EnrouteRoute.Unassigned
-                    route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
+                    SetRouteFlags(route_instance, true)
                     init_corridorwidth_flags = true
                 }
+                route_instance.SetShowMapObjectsFromRouteID(contestInstance)
                 route_instance.save()
                 
                 // Add coordinates
@@ -2846,11 +2831,11 @@ class RouteFileTools
                 coordroute_instance.altitude = import_sign.alt_value.alt
                 
                 if (import_sign.tptype.IsRunwayCoord()) {
-                    coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_RUNWAY
+                    coordroute_instance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
                 } else if (import_sign.tptype == CoordType.SECRET) {
                     coordroute_instance.gatewidth2 = routeInstance.contest.scGateWidth
                 } else {
-                    coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                    coordroute_instance.gatewidth2 = routeInstance.contest.cpGateWidth
                 }
                 
                 if (import_sign.other) {
@@ -2973,7 +2958,7 @@ class RouteFileTools
                 }
                 
                 if (initCorridorWidthFlags) {
-                    SetCorridorWidthFlags(coordroute_instance)
+                    SetCorridorWidthFlags(coordroute_instance, true)
                 }
                 
                 if (coordroute_instance.save()) {
@@ -3047,16 +3032,49 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    static void SetCorridorWidthFlags(CoordRoute coordRouteInstance)
+    static void SetCorridorWidthFlags(CoordRoute coordRouteInstance, boolean corridorRoute)
     {
-        if (coordRouteInstance.type.IsCorridorStartEndCoord()) {
-            coordRouteInstance.gatewidth2 = DEFAULT_GATEWIDTH_CORRIDORSTARTEND
-        } else if (coordRouteInstance.type.IsCorridorNoCheckCoord()) {
-            coordRouteInstance.noTimeCheck = true
-            coordRouteInstance.noGateCheck = true
-            coordRouteInstance.gatewidth2 = 0
-        } else if (!coordRouteInstance.type.IsRunwayCoord()) {
-            coordRouteInstance.gatewidth2 = 0
+        if (corridorRoute) {
+            if (coordRouteInstance.type.IsCorridorStartEndCoord()) {
+                if (coordRouteInstance.route.contest.cpGateWidth > coordRouteInstance.route.corridorWidth) {
+                    coordRouteInstance.gatewidth2 = coordRouteInstance.route.contest.cpGateWidth
+                } else {
+                    coordRouteInstance.gatewidth2 = coordRouteInstance.route.corridorWidth
+                }
+            } else if (coordRouteInstance.type.IsCorridorNoCheckCoord()) {
+                coordRouteInstance.noTimeCheck = true
+                coordRouteInstance.noGateCheck = true
+                coordRouteInstance.gatewidth2 = Defs.GATEWIDTH_0_ANR
+            } else if (!coordRouteInstance.type.IsRunwayCoord()) {
+                coordRouteInstance.gatewidth2 = Defs.GATEWIDTH_0_ANR
+            }
+        } else {
+            if (coordRouteInstance.type == CoordType.SECRET) {
+                coordRouteInstance.gatewidth2 = coordRouteInstance.route.contest.scGateWidth
+            } else if (coordRouteInstance.type.IsCpTimeCheckCoord()) {
+                coordRouteInstance.gatewidth2 = coordRouteInstance.route.contest.cpGateWidth
+            }
         }
     }
+    
+    //--------------------------------------------------------------------------
+    static void SetRouteFlags(Route routeInstance, boolean corridorRoute)
+    {
+        if (corridorRoute) {
+            routeInstance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
+            routeInstance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
+            routeInstance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
+            routeInstance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
+            routeInstance.enroutePhotoRoute = EnrouteRoute.Unassigned
+            routeInstance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
+            routeInstance.enrouteCanvasRoute = EnrouteRoute.Unassigned
+            routeInstance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
+        } else {
+            routeInstance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A3
+            routeInstance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A3
+            routeInstance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A3
+            routeInstance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A3
+        }
+    }
+    
 }

@@ -638,7 +638,7 @@ class RouteTools
             if (!routeInstance.corridorWidth) {
                 corridor_error = true
             }
-        } else {
+        } else if (!routeInstance.contest.corridorRoutes) {
             if (routeInstance.corridorWidth) {
                 corridor_error = true
             }

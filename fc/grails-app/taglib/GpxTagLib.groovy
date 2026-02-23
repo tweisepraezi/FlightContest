@@ -481,7 +481,7 @@ class GpxTagLib
         if (map_folder.exists()) {
             // add airportarea maps
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
-                if (map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA)) {
+                if (map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA) || map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA)) {
                     if (map_entry.projection == "3857") {
                         if (onlinemap_names) {
                             onlinemap_names += onlinemap_separator
@@ -497,7 +497,7 @@ class GpxTagLib
             }
             // add other maps
             for (Map map_entry in MapTools.GetMapList(servletContext, session)) {
-                if (!map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA)) {
+                if (!(map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA) || map_entry.size.contains(Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA))) {
                     if (map_entry.projection == "3857") {
                         if (onlinemap_names) {
                             onlinemap_names += onlinemap_separator

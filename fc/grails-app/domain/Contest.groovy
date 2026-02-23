@@ -208,6 +208,7 @@ class Contest
     // Defaults
     Integer minRouteLegs = 0                            // DB-2.13
     Integer maxRouteLegs = 8                            // DB-2.13
+    Float cpGateWidth = 1.0f                            // DB-2.47
     Float scGateWidth = 2.0f                            // DB-2.13
     String unsuitableStartNum = "13"                    // DB-2.13
     TurnpointRule turnpointRule = TurnpointRule.None    // DB-2.13
@@ -222,6 +223,7 @@ class Contest
     Integer minEnrouteTargets = 0                       // DB-2.13
     Integer maxEnrouteTargets = 0                       // DB-2.13
     Boolean anrFlying = false                           // DB-2.41
+    Boolean corridorRoutes = false                      // DB-2.47
     Integer flightTestLastGateNoBadCourseSeconds = 0    // DB-2.41
     Boolean showPlanningTest = false                    // DB-2.41
     Boolean activateFlightTestCheckLanding = false      // DB-2.41
@@ -679,6 +681,10 @@ class Contest
         contestPrintStartNum(nullable:true)
         contestPrintTAS(nullable:true)
         teamPrintStartNum(nullable:true)
+
+        // DB-2.47 compatibility
+        cpGateWidth(nullable:true, min:0.0f, max:100.0f)
+        corridorRoutes(nullable:true)
     }
 
     static mapping = {
@@ -822,6 +828,7 @@ class Contest
                 
                 minRouteLegs = contestInstance.minRouteLegs
                 maxRouteLegs = contestInstance.maxRouteLegs
+                cpGateWidth = contestInstance.cpGateWidth
                 scGateWidth = contestInstance.scGateWidth
                 unsuitableStartNum = contestInstance.unsuitableStartNum
                 turnpointRule = contestInstance.turnpointRule
@@ -839,6 +846,7 @@ class Contest
                 liveTrackingScorecard = contestInstance.liveTrackingScorecard
 
 				anrFlying = contestInstance.anrFlying
+                corridorRoutes = contestInstance.corridorRoutes
                 flightTestLastGateNoBadCourseSeconds = contestInstance.flightTestLastGateNoBadCourseSeconds
                 showPlanningTest = contestInstance.showPlanningTest
                 activateFlightTestCheckLanding = contestInstance.activateFlightTestCheckLanding

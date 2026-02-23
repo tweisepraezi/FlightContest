@@ -38,7 +38,6 @@ class OsmPrintMapService
 	def openAIPService
     
     final static Map HEADER_CONTENTTYPE = [name:"Content-Type", value:"application/vnd.api+json; charset=utf-8"]
-    final static Map HEADER_ACCEPT = [name:"Accept", value:"application/vnd.api+json; charset=utf-8"]
     
     final static String HIDELAYERS_FC                   = ""
     final static String HIDELAYERS_FC_CONTOURS20        = "contours20"
@@ -122,6 +121,8 @@ class OsmPrintMapService
     final static String AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR = ":"
     final static String AIRSPACE_LAYER_ID_PREAFIX = "id_"
     final static BigDecimal AIRSPACE_STROKE_WIDTH = 0.75
+
+    final static BigDecimal AIRPORTAREA_ADDITIONAL_LEN = 2.0 // NM
     
     // CSV files
     final static String CSV_DELIMITER = "|"
@@ -129,58 +130,12 @@ class OsmPrintMapService
     
     // Development options
     private final static boolean LOG_RESTAPI_CALLS = true        // true
-    private final static boolean LOG_RESTAPI_OUTPUTDATA = false  // false
-    private final static boolean LOG_RESTAPI_RETURNS = true      // true
-    private final static boolean LOG_RESTAPI_EXCEPTIONS = true   // true
         
-    //--------------------------------------------------------------------------
-    private enum DataType {
-        NONE,
-        JSON,
-        BINARY
-    }
-    
     //--------------------------------------------------------------------------
     Map PrintOSM(Map contestMapParams)
     {
         printstart "PrintOSM"
         
-        Map ret = [ok:false, message:'']
-        
-        Map add_params = [centerLatitude: 0.0, centerLongitude: 0.0, centerGraticuleLatitude: 0.0, centerGraticuleLongitude: 0.0]
-        File gpx_file = new File(contestMapParams.gpxFileName)
-        FileReader gpx_reader = new FileReader(gpx_file)
-        try {
-            def gpx = new XmlParser().parse(gpx_reader)
-            def m = gpx.extensions.flightcontest.contestmap
-            add_params.centerLatitude = m.'@center_latitude'[0].toBigDecimal()
-            add_params.centerLongitude = m.'@center_longitude'[0].toBigDecimal()
-            add_params.centerGraticuleLatitude = m.'@center_graticule_latitude'[0].toBigDecimal()
-            add_params.centerGraticuleLongitude = m.'@center_graticule_longitude'[0].toBigDecimal()
-            ret.ok = true
-        } catch (Exception e) {
-            println e.getMessage()
-        }
-        gpx_reader.close()
-        contestMapParams += add_params
-        println "Params: ${contestMapParams}"
-        
-        if (ret.ok) {
-            if (!contestMapParams.contestMapGraticule) {
-                contestMapParams.graticuleFileName = ""
-            }
-        }
-        if (ret.ok) {
-            ret = print_osm(contestMapParams)
-        }
-        
-        printdone ""
-        return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map print_osm(Map contestMapParams)
-    {
         Map ret = [ok:false, message:'']
         
         Route route_instance = Route.get(contestMapParams.routeId)
@@ -206,10 +161,14 @@ class OsmPrintMapService
         /*
         if (new File(printjob_filename).exists()) {
             ret.message = getMsg('fc.contestmap.previousjobrunningerror', false)
+            printerror ret.message
             return ret
         }
         */
         
+        if (!contestMapParams.contestMapGraticule) {
+            contestMapParams.graticuleFileName = ""
+        }
         String graticule_file_name = contestMapParams.graticuleFileName.replaceAll('\\\\', '/')
 
         String hide_layers = HIDELAYERS_FC
@@ -276,8 +235,11 @@ class OsmPrintMapService
             hide_layers = hide_layers.substring(1)
         }
         
-        int map_scale = contestMapParams.mapScale
-        int print_scale = map_scale
+        Map center_route = route_instance.GetCenter(contestMapParams)
+        BigDecimal center_latitude = center_route.centerLatitude
+        BigDecimal center_longitude = center_route.centerLongitude
+        
+        int map_scale = route_instance.mapScale
         BigDecimal scalebar_x_diff = 5*Defs.CONTESTMAPSCALE_200000/map_scale*GpxService.kmPerNM // 1 NM (9.26mm)
         
         int print_width = 0 // mm
@@ -352,33 +314,46 @@ class OsmPrintMapService
         }
         print_width -= 2*MARGIN
         print_height -= 2*MARGIN
-        BigDecimal print_width_nm = print_scale * print_width / Route.mmPerNM
-        BigDecimal print_height_nm = print_scale * print_height / Route.mmPerNM
-        Map rect_width = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
-        Map rect_height = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+        BigDecimal print_width_nm = map_scale * print_width / Route.mmPerNM
+        BigDecimal print_height_nm = map_scale * print_height / Route.mmPerNM
+        Map rect_width = AviationMath.getShowPoint(center_latitude, center_longitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+        Map rect_height = AviationMath.getShowPoint(center_latitude, center_longitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
         
         if (contestMapParams.contestMapCenterHorizontalPos != HorizontalPos.Center || contestMapParams.contestMapCenterVerticalPos != VerticalPos.Center) {
+            boolean correct_rect = false
             switch (contestMapParams.contestMapCenterHorizontalPos) {
                 case HorizontalPos.Left:
-                    contestMapParams.centerLongitude = rect_width.lonmax
+                    center_longitude = rect_width.lonmax
+                    correct_rect = true
                     break
                 case HorizontalPos.Right:
-                    contestMapParams.centerLongitude = rect_width.lonmin
+                    center_longitude = rect_width.lonmin
+                    correct_rect = true
                     break
             }
             switch (contestMapParams.contestMapCenterVerticalPos) {
                 case VerticalPos.Top:
-                    contestMapParams.centerLatitude = rect_height.latmin
+                    center_latitude = rect_height.latmin
+                    correct_rect = true
                     break
                 case VerticalPos.Bottom:
-                    contestMapParams.centerLatitude = rect_height.latmax
+                    center_latitude = rect_height.latmax
+                    correct_rect = true
                     break
             }
+            if (correct_rect) {
+            }
         }
+
+        rect_width = AviationMath.getShowPoint(center_latitude, center_longitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)        
+        rect_height = AviationMath.getShowPoint(center_latitude, center_longitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN)
+        println "center_latitude=${center_latitude}, center_longitude=${center_longitude}"
+        println "Width:  ${print_width} mm, ${print_width_nm} NM, ${rect_width}"
+        println "Height: ${print_height} mm, ${print_height_nm} NM, ${rect_height}"
         
         BigDecimal latlon_relation = 1
         if (contestMapParams.taskCreator) {
-            latlon_relation = AviationMath.getLatLonDistanceRelation(contestMapParams.centerLatitude)
+            latlon_relation = AviationMath.getLatLonDistanceRelation(center_latitude)
             print_height *= latlon_relation
         }
         int contest_title_ypos = print_height - CONTEST_TITLE_YPOS_TOP
@@ -394,7 +369,7 @@ class OsmPrintMapService
         String region_style = "" // printmaps_webservice_capabilities.json -> ConfigStyles -> Name, printmaps_buildservice.yaml -> styles -> name
         String mapdata_date = ""
         printstart "Get service capabilities"
-        Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
+        Map status = CallPrintServer("/capabilities/service", [PrintMapTools.HEADER_ACCEPT], "GET", PrintMapTools.DataType.JSON, "")
         if (status.responseCode == 200) {
 
             // check full page
@@ -436,7 +411,6 @@ class OsmPrintMapService
             }
             
             // check center page
-            println "Center $contestMapParams.centerLatitude $contestMapParams.centerLongitude"
             if (!region_style) {
                 for (def config_style in status.json.ConfigStyles) {
                     if (config_style.Name.startsWith('region-')) {
@@ -447,7 +421,7 @@ class OsmPrintMapService
                                 BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                                 BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
                                 print "Check center for $config_style.Name ($lat_bottom $lat_top $lon_left $lon_right)"
-                                if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
+                                if (center_latitude >= lat_bottom && center_latitude <= lat_top && center_longitude >= lon_left && center_longitude <= lon_right) {
                                     region_style = config_style.Name
                                     mapdata_date = config_style.Date
                                     println " found."
@@ -462,7 +436,7 @@ class OsmPrintMapService
                                 BigDecimal lon_left = get_value(config_style.LongDescription, 'Left(Lon):')
                                 BigDecimal lon_right = get_value(config_style.LongDescription, 'Right(Lon):')
                                 print "Check center for $config_style.Name ($lat_bottom $lat_top $lon_left $lon_right)"
-                                if (contestMapParams.centerLatitude >= lat_bottom && contestMapParams.centerLatitude <= lat_top && contestMapParams.centerLongitude >= lon_left && contestMapParams.centerLongitude <= lon_right) {
+                                if (center_latitude >= lat_bottom && center_latitude <= lat_top && center_longitude >= lon_left && center_longitude <= lon_right) {
                                     region_style = config_style.Name
                                     mapdata_date = config_style.Date
                                     println " found."
@@ -475,11 +449,15 @@ class OsmPrintMapService
                 }
             }
             
+            if (PrintMapTools.IsLocalPrintmapsRunning()) { // TODO
+                mapdata_date = PrintMapTools.GetLocalPrintmapsDate(route_instance.contest)
+            }
+            
             if (region_style) {
                 printdone "${region_style} ${mapdata_date}"
             } else {
                 printerror "No region found"
-                ret.message = getMsg('fc.contestmap.noregionerror', [contestMapParams.centerLatitude, contestMapParams.centerLongitude], false)
+                ret.message = getMsg('fc.contestmap.noregionerror', [center_latitude, center_longitude], false)
                 return ret
             }
         } else {
@@ -615,7 +593,7 @@ class OsmPrintMapService
         
         String graticule_lines = ""
         if (!contestMapParams.taskCreator && graticule_file_name) {
-            if (create_graticule_csv(graticule_file_name, contestMapParams.centerGraticuleLatitude, contestMapParams.centerGraticuleLongitude, contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_scale, print_width, print_height, min_print_height, alternate_pos)) {
+            if (create_graticule_csv(graticule_file_name, center_latitude, center_longitude, map_scale, print_width, print_height, min_print_height, alternate_pos)) {
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
                     "Style": "<PolygonSymbolizer fill='lightgrey' />",
@@ -678,6 +656,7 @@ class OsmPrintMapService
 				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false, false)
 				if (!ret2.ok) {
                     ret.message = getMsg('fc.contestmap.contestmapairspaces.kmzexport.missedairspaces', [ret2.missingAirspaces], false)
+                    printerror ret.message
                     return ret
 				}
 				airspaces_file_name = contestMapParams.webRootDir + file_name
@@ -696,7 +675,7 @@ class OsmPrintMapService
         String airports_file_name = ""
         String uuid = UUID.randomUUID().toString()
         String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRPORTS-${uuid}-UPLOAD.csv"
-        openAIPService.WriteAirfields2CSV(route_instance, contestMapParams.webRootDir, file_name, false, ",${CoordType.TO.title},${CoordType.LDG.title},${CoordType.iTO.title},${CoordType.iLDG.title},", openaip_airfields, contestMapParams.contestMapAdditionals)
+        openAIPService.WriteAirfields2CSV(route_instance, contestMapParams.webRootDir, file_name, false, Defs.CONTESTMAPPOINTS_AIRFIELDS, openaip_airfields, contestMapParams.contestMapAdditionals)
         airports_file_name = contestMapParams.webRootDir + file_name
         String airports_short_file_name = airports_file_name.substring(airports_file_name.lastIndexOf('/')+1) // transform='scale(0.5, 0.5)'
         if (contestMapParams.taskCreator) {
@@ -745,7 +724,8 @@ class OsmPrintMapService
             "Layer": ""
         }"""
         
-        printstart "print_osm Scale=1:${print_scale} Width=${print_width} Height=${print_height}"
+        printstart "Run job"
+        println "map_scale: 1:${map_scale}"
         println "print_width: $print_width mm"
         println "print_height: $print_height mm"
     
@@ -758,18 +738,18 @@ class OsmPrintMapService
         //...........................................................................................
         if (region_style) {
             printstart "Create job"
-            status = CallPrintServer("/metadata", [HEADER_CONTENTTYPE,HEADER_ACCEPT], "POST", DataType.JSON,
+            status = CallPrintServer("/metadata", [HEADER_CONTENTTYPE,PrintMapTools.HEADER_ACCEPT], "POST", PrintMapTools.DataType.JSON,
             """{
                 "Data": {
                     "Type": "maps",
                     "ID": "",
                     "Attributes": {
                         "Fileformat": "png",
-                        "Scale": ${print_scale},
+                        "Scale": ${map_scale},
                         "PrintWidth": ${print_width},
                         "PrintHeight": ${print_height},
-                        "Latitude": ${contestMapParams.centerLatitude},
-                        "Longitude": ${contestMapParams.centerLongitude},
+                        "Latitude": ${center_latitude},
+                        "Longitude": ${center_longitude},
                         "Style": "${region_style}",
                         "Projection": "${map_projection}",
                         "HideLayers": "${hide_layers}",
@@ -908,7 +888,7 @@ class OsmPrintMapService
         //...........................................................................................
         if (printjob_id) {
             printstart "Start job"
-            status = CallPrintServer("/mapfile", [HEADER_CONTENTTYPE,HEADER_ACCEPT], "POST", DataType.JSON, """
+            status = CallPrintServer("/mapfile", [HEADER_CONTENTTYPE,PrintMapTools.HEADER_ACCEPT], "POST", PrintMapTools.DataType.JSON, """
             {
                 "Data": {
                     "Type": "maps",
@@ -996,6 +976,7 @@ class OsmPrintMapService
             ret.ok = true
         }
         
+        printdone ""
         return ret
     }
     
@@ -1116,7 +1097,7 @@ class OsmPrintMapService
 
                 //...........................................................................................
                 printstart "Check job status"
-                Map status = CallPrintServer("/mapstate/${jobId}", [HEADER_ACCEPT], "GET", DataType.JSON, "")
+                Map status = CallPrintServer("/mapstate/${jobId}", [PrintMapTools.HEADER_ACCEPT], "GET", PrintMapTools.DataType.JSON, "")
                 if (status.responseCode == 200) {
                     if (status.json.Data.Attributes.MapBuildSuccessful) {
                         job_successfully = status.json.Data.Attributes.MapBuildSuccessful == "yes"
@@ -1152,7 +1133,7 @@ class OsmPrintMapService
                 //...........................................................................................
                 if (job_successfully) {
                     printstart "Download map"
-                    status = CallPrintServer("/mapfile/${jobId}", [HEADER_ACCEPT], "GET", DataType.BINARY, null)
+                    status = CallPrintServer("/mapfile/${jobId}", [PrintMapTools.HEADER_ACCEPT], "GET", PrintMapTools.DataType.BINARY, null)
                     if (status.responseCode == 200) {
                     
                         String download_zip_file_name = "${pngFileName}.zip"
@@ -1358,12 +1339,12 @@ class OsmPrintMapService
 
                 //...........................................................................................
                 printstart "View job"
-                status = CallPrintServer("/metadata/${jobId}", [HEADER_CONTENTTYPE], "GET", DataType.JSON, null)
+                status = CallPrintServer("/metadata/${jobId}", [HEADER_CONTENTTYPE], "GET", PrintMapTools.DataType.JSON, null)
                 printdone "responseCode=${status.responseCode}"
                 
                 //...........................................................................................
                 printstart "Remove job"
-                status = CallPrintServer("/${jobId}", [HEADER_ACCEPT], "DELETE", DataType.NONE, null)
+                status = CallPrintServer("/${jobId}", [PrintMapTools.HEADER_ACCEPT], "DELETE", PrintMapTools.DataType.NONE, null)
                 printdone "responseCode=${status.responseCode}"
             
                 //...........................................................................................
@@ -1391,15 +1372,15 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    private boolean create_graticule_csv(String graticuleFileName,
-                                         BigDecimal centerGraticuleLatitude, BigDecimal centerGraticuleLongitude,
-                                         BigDecimal centerLatitude, BigDecimal centerLongitude,
+    private boolean create_graticule_csv(String graticuleFileName, BigDecimal centerLatitude, BigDecimal centerLongitude,
                                          int printScale, int printWidth, int printHeight, int minPrintHeight, boolean alternatePos
                                         )
     {
+        BigDecimal center_graticule_latitude = get_rounded_decimal_grad(centerLatitude)
+        BigDecimal center_graticule_longitude = get_rounded_decimal_grad(centerLongitude)
+
         printstart "Write ${graticuleFileName}"
-        println "centerGraticuleLatitude: ${centerGraticuleLatitude}"
-        println "centerGraticuleLongitude: ${centerGraticuleLongitude}"
+        println "center_graticule_latitude=${center_graticule_latitude}, center_graticule_longitude=${center_graticule_longitude}"
         
         BigDecimal print_width_nm = printScale * printWidth / Route.mmPerNM
         BigDecimal print_height_nm = printScale * printHeight / Route.mmPerNM
@@ -1417,7 +1398,7 @@ class OsmPrintMapService
         CoordPresentation coord_presentation = CoordPresentation.DEGREEMINUTE
         
         // vertical line
-        BigDecimal start_lon = centerGraticuleLongitude
+        BigDecimal start_lon = center_graticule_longitude
         while (start_lon > rect_width.lonmin) {
             start_lon -= 10/60 // 10'
         }
@@ -1457,7 +1438,7 @@ class OsmPrintMapService
         }
         
         // horizontal line
-        BigDecimal start_lat = centerGraticuleLatitude
+        BigDecimal start_lat = center_graticule_latitude
         while (start_lat > rect_height.latmin) {
             start_lat -= 10/60 // 10'
         }
@@ -1496,6 +1477,17 @@ class OsmPrintMapService
         
         printdone ""
         return true
+    }
+    
+    //--------------------------------------------------------------------------
+    private BigDecimal get_rounded_decimal_grad(BigDecimal decimalGrad)
+    // Rundung auf ganze 10'
+    {
+        int grad_value = decimalGrad.toInteger()
+        BigDecimal minute_value = 60 * (decimalGrad - grad_value)
+        int minute_value2 = minute_value.toInteger()
+        minute_value2 = (minute_value2.toBigDecimal() / 10).toInteger() * 10
+        return minute_value2 / 60 + grad_value
     }
     
     //--------------------------------------------------------------------------
@@ -1562,89 +1554,16 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    private Map CallPrintServer(String funcURL, List headerList, String requestMethod, DataType dataType, def outputData)
+    private Map CallPrintServer(String funcURL, List headerList, String requestMethod, PrintMapTools.DataType dataType, def outputData)
     {
-        Map ret = [responseCode:null, json:null, binary:null]
-        
-        String url_path = BootStrap.global.GetPrintServerAPI() + funcURL
-        if (LOG_RESTAPI_CALLS) {
-            println url_path
-        }
-        if (LOG_RESTAPI_OUTPUTDATA) {
-            println outputData
-        }
-        def connection = url_path.toURL().openConnection()
-        
-        connection.requestMethod = requestMethod
-        
-        if (headerList) {
-            headerList.each {
-                connection.setRequestProperty( it.name, it.value )
-            }
-        }
-        
-        //String auth_str = "${LOGIN_NAME}:${LOGIN_PASSWORD}".getBytes().encodeBase64().toString()
-        //connection.setRequestProperty( "Authorization", "Basic ${auth_str}" )
-        try {
-            if (outputData) {
-                connection.doOutput = true
-                switch (dataType) {
-                    case DataType.JSON:
-                        byte[] output_bytes = outputData.getBytes("UTF-8")
-                        OutputStream os = connection.getOutputStream()
-                        os.write(output_bytes)
-                        os.close()
-                        break
-                    case DataType.BINARY:
-                        OutputStream os = connection.getOutputStream()
-                        os << outputData
-                        os.close()
-                        break
-                }
-            }
-            switch (dataType) {
-                case DataType.JSON:
-                    try {
-                        String s = connection.content.text
-                        s = new String(s.getBytes("ISO-8859-1"), "UTF-8")
-                        ret.json = new JsonSlurper().parseText(s)
-                    } catch (Exception e) {
-                        println "Exception (1): ${e.getMessage()} ${e}"
-                    }
-                    break
-                case DataType.BINARY:
-                    ret.binary = connection.content
-                    break
-            }
-            ret.responseCode = connection.responseCode
-            if (LOG_RESTAPI_RETURNS) {
-                switch (dataType) {
-                    case DataType.JSON:
-                        println "responseCode=${ret.responseCode}, data=${ret.json}"
-                        break
-                    case DataType.BINARY:
-                        println "responseCode=${ret.responseCode}"
-                        //println "${ret.responseCode} ${ret.binary}"
-                        break
-                    default:
-                        println "responseCode=${ret.responseCode}"
-                        break
-                }
-            }
-            return ret
-        } catch (Exception e) {
-            if (LOG_RESTAPI_EXCEPTIONS) {
-                println "Exception (2): ${e.getMessage()} ${e}"
-            }
-        }
-        
-        return ret
+        String url_path = PrintMapTools.GetPrintServerAPI() + funcURL       
+        return PrintMapTools.CallPrintServer(url_path, headerList, requestMethod, dataType, outputData)        
     }
 
     //--------------------------------------------------------------------------
     private void FileUpload(String funcURL, String FilePath)
     {
-        String url_path = BootStrap.global.GetPrintServerAPI() + funcURL
+        String url_path = PrintMapTools.GetPrintServerAPI() + funcURL
         if (LOG_RESTAPI_CALLS) {
             println url_path
         }
@@ -1733,7 +1652,7 @@ class OsmPrintMapService
     {
         Map ret = [responseCode:null, json:null, binary:null]
         
-        String url_path = BootStrap.global.GetPrintServerAPI() + funcURL
+        String url_path = PrintMapTools.GetPrintServerAPI() + funcURL
         if (LOG_RESTAPI_CALLS) {
             println url_path
         }
@@ -1810,39 +1729,106 @@ class OsmPrintMapService
     {
         printstart "InitLocalPrintmaps"
         
-        List pbf_list = [
-                           //"https://download.geofabrik.de/europe/germany/rheinland-pfalz-latest.osm.pbf",
-                           "https://download.geofabrik.de/europe/germany/saarland-latest.osm.pbf",
-                        ]
+        boolean get_osm_links = true
+        boolean get_contour_data = true
+        boolean get_osm_data = true
+        boolean call_docker = true
+        
+        Map center_route = routeInstance.GetCenter([contestMapCenterPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS])
+        BigDecimal center_latitude = center_route.centerLatitude
+        BigDecimal center_longitude = center_route.centerLongitude
+        int print_width = 0 // mm
+        int print_height = 0 // mm
+        String print_size = Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA
+        if (routeInstance.contest.anrFlying) {
+            print_size = Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA
+        }
+        switch (print_size) {
+            case Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA:
+                print_width = 2*AIRPORTAREA_A3_DISTANCE
+                print_height = 2*AIRPORTAREA_A3_DISTANCE
+                break
+            case Defs.CONTESTMAPPRINTSIZE_ANRAIRPORTAREA:
+                print_width = 2*AIRPORTAREA_A4_DISTANCE
+                print_height = 2*AIRPORTAREA_A4_DISTANCE
+                break
+        }
+        //print_width -= 2*MARGIN
+        //print_height -= 2*MARGIN
+        BigDecimal print_width_nm = routeInstance.mapScale * print_width / Route.mmPerNM
+        BigDecimal print_height_nm = routeInstance.mapScale * print_height / Route.mmPerNM
+        Map rect_width = AviationMath.getShowPoint(center_latitude, center_longitude, print_width_nm / 2 + AIRPORTAREA_ADDITIONAL_LEN, GRATICULE_SCALEBAR_LEN)
+        Map rect_height = AviationMath.getShowPoint(center_latitude, center_longitude, print_height_nm / 2 + AIRPORTAREA_ADDITIONAL_LEN, GRATICULE_SCALEBAR_LEN)
+        
+        println "center_latitude=${center_latitude}, center_longitude=${center_longitude}"
+        println "Width:  ${print_width} mm, ${print_width_nm} NM, ${rect_width}"
+        println "Height: ${print_height} mm, ${print_height_nm} NM, ${rect_height}"
+
         String pbf_links = ""
-        for (String pbf_link in pbf_list) {
-            if (pbf_links) {
-                pbf_links += " "
+        String pbf_time = Defs.PBFTIME_UNKNOWN
+        String pbf_date = Defs.PBFTIME_UNKNOWN
+        if (get_osm_links) {
+            String pbf_firsttime = Defs.PBFTIME_UNKNOWN
+            String pbf_lasttime = Defs.PBFTIME_UNKNOWN
+            for (Map pbf_data in get_pbf_list(rect_width, rect_height)) {
+                if (pbf_links) {
+                    pbf_links += " "
+                }
+                pbf_links += pbf_data.pbflink
+                if (pbf_data.pbftime != Defs.PBFTIME_UNKNOWN) {
+                    if (pbf_firsttime == Defs.PBFTIME_UNKNOWN || pbf_data.pbftime < pbf_firsttime) {
+                        pbf_firsttime = pbf_data.pbftime
+                    }
+                    if (pbf_lasttime == Defs.PBFTIME_UNKNOWN || pbf_data.pbftime > pbf_lasttime) {
+                        pbf_lasttime = pbf_data.pbftime
+                    }
+                }
             }
-            pbf_links += pbf_link
+            if (pbf_firsttime != Defs.PBFTIME_UNKNOWN && pbf_lasttime != Defs.PBFTIME_UNKNOWN) {
+                if (pbf_firsttime == pbf_lasttime) {
+                    pbf_time = pbf_firsttime
+                    pbf_date = pbf_time.substring(0,10)
+                } else {
+                    pbf_time = "${pbf_firsttime}..${pbf_lasttime}"
+                    pbf_date = "${pbf_firsttime.substring(0,10)}..${pbf_lasttime.substring(0,10)}"
+                }
+            }
+            println "Links: ${pbf_links}"
+            println "Time: ${pbf_time}, Date: ${pbf_date}"
         }
 
         String docker_call = "docker rm initprintmaps"
         println "Excecute $docker_call"
-        docker_call.execute().waitFor()
+        if (call_docker) {
+            docker_call.execute().waitFor()
+        }
                 
         docker_call = "docker"
         docker_call += " run --detach --name initprintmaps"
         docker_call += " --env dbid=${routeInstance.contest.contestUUID}"
-        docker_call += " --env PGHOST=${BootStrap.global.GetPostgreSQLHost()}"
-        docker_call += " --env PGPORT=${BootStrap.global.GetPostgreSQLPort()}"
-        docker_call += " --env PGUSER=${BootStrap.global.GetPostgreSQLUsername()}" 
-        docker_call += " --env PGPASSWORD=${BootStrap.global.GetPostgreSQLPassword()}" 
-        docker_call += " --env MINLON=6.24522242525"
-        docker_call += " --env MINLAT=48.9348891599"
-        docker_call += " --env MAXLON=7.83147757475"
-        docker_call += " --env MAXLAT=49.9660696535" 
-        docker_call += " --env SRTMUSER=${BootStrap.global.GetSRTMUsername()}"
-        docker_call += " --env SRTMPASSWORD=${BootStrap.global.GetSRTMPassword()}"
-        docker_call += """ --env PBFLINKS="${pbf_links}" """
+        docker_call += " --env PGHOST=${PrintMapTools.GetSQLHost()}"
+        docker_call += " --env PGPORT=${PrintMapTools.GetSQLPort()}"
+        docker_call += " --env PGUSER=${PrintMapTools.GetSQLUserName()}" 
+        docker_call += " --env PGPASSWORD=${PrintMapTools.GetSQLPassword()}" 
+        docker_call += " --env MINLON=${rect_width.lonmin}"
+        docker_call += " --env MINLAT=${rect_height.latmin}"
+        docker_call += " --env MAXLON=${rect_width.lonmax}"
+        docker_call += " --env MAXLAT=${rect_height.latmax}"
+        docker_call += " --env PBFTIME=${pbf_time}"
+        docker_call += " --env PBFDATE=${pbf_date} "
+        if (get_contour_data) {
+            docker_call += " --env CONTOURSOURCES=${PrintMapTools.GetContourSources()}"
+            docker_call += " --env SRTMUSER=${BootStrap.global.GetSRTMUsername()}" // neccessary for contour db
+            docker_call += " --env SRTMPASSWORD=${BootStrap.global.GetSRTMPassword()}"
+        }
+        if (get_osm_data) {
+            docker_call += """ --env PBFLINKS="${pbf_links}" """ // neccessary for osm db
+        }
         docker_call += " createdb:latest"
         println "Excecute ${remove_password(docker_call, ['--env PGPASSWORD=', '--env SRTMPASSWORD='])}"
-        docker_call.execute().waitFor()
+        if (call_docker) {
+            docker_call.execute().waitFor()
+        }
         
         printdone ""
     }
@@ -1859,26 +1845,18 @@ class OsmPrintMapService
         docker_call = "docker"
         docker_call += " run --detach --name runprintmaps"
         docker_call += " --env dbid=${contestInstance.contestUUID}"
-        docker_call += " --env PGHOST=${BootStrap.global.GetPostgreSQLHost()}"
-        docker_call += " --env PGPORT=${BootStrap.global.GetPostgreSQLPort()}"
-        docker_call += " --env PGUSER=${BootStrap.global.GetPostgreSQLUsername()}" 
-        docker_call += " --env PGPASSWORD=${BootStrap.global.GetPostgreSQLPassword()}" 
+        docker_call += " --env PGHOST=${PrintMapTools.GetSQLHost()}"
+        docker_call += " --env PGPORT=${PrintMapTools.GetSQLPort()}"
+        docker_call += " --env PGUSER=${PrintMapTools.GetSQLUserName()}" 
+        docker_call += " --env PGPASSWORD=${PrintMapTools.GetSQLPassword()}" 
         docker_call += " -p 127.0.0.1:8181:8181"
         docker_call += " printmaps:latest"
         println "Excecute ${remove_password(docker_call, ['--env PGPASSWORD='])}"
         docker_call.execute().waitFor()
             
+        sleep(5000)
+            
         printdone ""
-    }
-    
-    //--------------------------------------------------------------------------
-    boolean IsLocalPrintmapsRunning()
-    {
-        Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
-        if (status.responseCode == 200) {
-            return true
-        }
-        return false
     }
     
     //--------------------------------------------------------------------------
@@ -1906,6 +1884,106 @@ class OsmPrintMapService
         return logStr
     }
     
+    //--------------------------------------------------------------------------
+    List get_pbf_list(Map rectWidth, Map rectHeight)
+    {
+        println "get_pbf_list ${rectWidth.lonmin} ${rectHeight.latmin} ${rectWidth.lonmax} ${rectHeight.latmax}"
+        
+        List pbf_list = []
+        InputStream inputstream_instance = new URL(Defs.GEOFABRIK_INDEX).openStream()
+        BufferedReader input_reader = inputstream_instance.newReader("UTF-8")
+        def input_data = new JsonSlurper().parse(input_reader)
+        if (input_data) {
+            List parent_list = []
+            for (def feature in input_data.features) {
+                parent_list += feature.properties.parent
+            }
+            for (def feature in input_data.features) {
+                if (!(feature.properties.id in parent_list || feature.properties.id in Defs.GEOFABRIK_IGNORE_FEATURES)) {
+                    boolean point_inside = false
+                    boolean points_around = false
+                    for (def coordinate_area in feature.geometry.coordinates) {
+                        boolean not_found = false
+                        boolean found_topleft = false
+                        boolean found_top = false
+                        boolean found_topright = false
+                        boolean found_left = false
+                        boolean found_right = false
+                        boolean found_bottomleft = false
+                        boolean found_bottom = false
+                        boolean found_bottomright = false
+                        for (def coordinates2 in coordinate_area) {
+                            for (def coordinate in coordinates2) {
+                                BigDecimal lon = coordinate[0].toBigDecimal()
+                                BigDecimal lat = coordinate[1].toBigDecimal()
+                                if ( lon > rectWidth.lonmin && lon < rectWidth.lonmax && lat < rectHeight.latmax && lat > rectHeight.latmin) { // Point inside
+                                    point_inside = true
+                                    break
+                                } else if (lon < rectWidth.lonmin && lat > rectHeight.latmax) { // oben links
+                                    found_topleft = true
+                                } else if (lon > rectWidth.lonmin && lon < rectWidth.lonmax && lat > rectHeight.latmax) { // oben Mitte
+                                    found_top = true
+                                } else if (lon > rectWidth.lonmax && lat > rectHeight.latmax) { // oben rechts
+                                    found_topright = true
+                                } else if (lon < rectWidth.lonmin && lat < rectHeight.latmax && lat > rectHeight.latmin) { // links
+                                    found_left = true
+                                } else if (lon > rectWidth.lonmax && lat < rectHeight.latmax && lat > rectHeight.latmin) { // rechts
+                                    found_right = true
+                                } else if (lon < rectWidth.lonmin && lat < rectHeight.latmin) { // unten links
+                                    found_bottomleft = true
+                                } else if (lon > rectWidth.lonmin && lon < rectWidth.lonmax && lat < rectHeight.latmin) { // unten Mitte
+                                    found_bottom = true
+                                } else if (lon > rectWidth.lonmax && lat < rectHeight.latmin) { // unten rechts
+                                    found_bottomright = true
+                                } else {
+                                    not_found = true
+                                    break
+                                }
+                            }
+                            if (point_inside || not_found) {
+                                break
+                            }
+                            if (found_topleft && found_top && found_topright && found_left && found_right && found_bottomleft && found_bottom && found_bottomright) {
+                                points_around = true
+                                break
+                            }
+                        }
+                        if (point_inside || points_around) {
+                            break
+                        }
+                    }
+                    if (point_inside || points_around) {
+                        String pbf_time = Defs.PBFTIME_UNKNOWN
+                        String state_file_url = feature.properties.urls.updates + "/" + Defs.GEOFABRIK_OSMSTATE_FILENAME
+                        try {
+                            InputStream state_inputstream_instance = new URL(state_file_url).openStream()
+                            BufferedReader state_input_reader = state_inputstream_instance.newReader("UTF-8")
+                            while (true) {
+                                String line = state_input_reader.readLine()
+                                if (line == null) {
+                                    break
+                                }
+                                if (line.startsWith("timestamp=")) {
+                                    pbf_time = line.substring(10).replace('\\:',':')
+                                    break
+                                }
+                            }
+                            state_input_reader.close()
+                            state_inputstream_instance.close()
+                        } catch (Exception e) {
+                        }
+                        
+                        println "Inside=${point_inside} Around=${points_around} ${feature.properties.urls.pbf} Time=${pbf_time}"
+                        pbf_list += [pbflink:feature.properties.urls.pbf, pbftime:pbf_time]
+                    }
+                }
+            }
+        }
+        input_reader.close()
+        inputstream_instance.close()
+        return pbf_list
+    }
+
     //--------------------------------------------------------------------------
     private String getMsg(String code, List args, boolean isPrint)
     {

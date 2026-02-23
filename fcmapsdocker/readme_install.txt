@@ -24,23 +24,34 @@ Install Postgresql 17.7.2
 -------------------------
     postgresql-17.7-2-windows-x64.exe
 
-    Superuser password: pwd
+    Superuser password: ...
     Port: 5433
     Stack Builder: Spatial Extensions -> PostGIS 3.6.1
 
-    Eigene IP-Adresse ermitteln: ipconfig
-    
-    Eigene IP-Adresse eintragen in "C:\Program Files\PostgreSQL\17\data\pg_hba.conf"
-    host    all             all             192.168.178.22/32       scram-sha-256
+    In "C:\Program Files\PostgreSQL\17\data\pg_hba.conf" alle IP-Adressen für SQL-Abfragen zulassen
+        # All ip connections (for access from WSL docker linux)
+        host    all             all             0.0.0.0/0               scram-sha-256
 
 Configure _env.bat
 ------------------
-    @echo off
-    set dbid=1
-    set PGHOST=192.168.178.22
-    set PGPORT=5433
-    set PGUSER=postgres
-    set PGPASSWORD=pwd
-    set SRTMUSER=...
-    set SRTMPASSWORD=...
+    view3:
+        @echo off
+        set dbid=1
+        set PGHOST=172.20.144.1
+        set PGPORT=5433
+        set PGUSER=postgres
+        set PGPASSWORD=...
+        set CONTOURSOURCES=view3
+    srtm3 && view3:
+        @echo off
+        set dbid=1
+        set PGHOST=172.20.144.1
+        set PGPORT=5433
+        set PGUSER=postgres
+        set PGPASSWORD=...
+        set CONTOURSOURCES=srtm3,view3
+        set SRTMUSER=...
+        set SRTMPASSWORD=...
 
+    In PGHOST die IP-Adresse von "Ethernet-Adapter vEthernet (WSL (Hyper-V firewall))" eintragen.
+        Zu ermitteln mit: ipconfig
