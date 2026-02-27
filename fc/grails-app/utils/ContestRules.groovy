@@ -319,15 +319,15 @@ enum ContestRules
             enroutePhotoRule:EnrouteRule.NMFromTP,                   // DE-UL 3.4.8
             enrouteCanvasRule:EnrouteRule.NMFromTP,                  // DE-UL 3.4.8
             enrouteCanvasMultiple:true,                              // DE-UL
-            minRouteLegs:10,                                         // DE-UL 3.1
+            minRouteLegs:0,                                          // DE-UL 3.1
             maxRouteLegs:16,                                         // DE-UL 3.1
-            minEnroutePhotos:15,                                     // DE-UL 3.4.1
+            minEnroutePhotos:0,                                      // DE-UL 3.4.1
             maxEnroutePhotos:20,                                     // DE-UL 3.4.1
             minEnrouteCanvas:0,                                      // DE-UL 3.4.1
             maxEnrouteCanvas:5,                                      // DE-UL 3.4.1
-            minEnrouteTargets:10,                                    // DE-UL (3.4.1)
+            minEnrouteTargets:0,                                     // DE-UL (3.4.1)
             maxEnrouteTargets:25,                                    // DE-UL (3.4.1)
-            useProcedureTurns:false,                                 // DE-UL -
+            useProcedureTurns:true,                                  // DE-UL
             liveTrackingScorecard:Defs.LIVETRACKING_SCORECARD_RF     // DE-UL
 		]
 	),

@@ -233,51 +233,53 @@ class RouteTools
         boolean unassigned = false
         boolean noinput = false
         boolean noposition = false
-        if (enroutePhoto) {
-            switch (routeInstance.enroutePhotoMeasurement) {
-                case EnrouteMeasurement.None:
-                    // nothing
-                    break
-                case EnrouteMeasurement.Unassigned:
-                    unassigned = true
-                    break
-                case EnrouteMeasurement.Map:
-                    if (!routeInstance.enroutePhotoRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    }
-                    break
-                case EnrouteMeasurement.NMFromTP:
-                case EnrouteMeasurement.mmFromTP:
-                //case EnrouteMeasurement.PosFromTP:
-                    if (!routeInstance.enroutePhotoRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    } else if (!routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
-                        noposition = true
-                    }
-                    break
-            }
-        } else {
-            switch (routeInstance.enrouteCanvasMeasurement) {
-                case EnrouteMeasurement.None:
-                    // nothing
-                    break
-                case EnrouteMeasurement.Unassigned:
-                    unassigned = true
-                    break
-                case EnrouteMeasurement.Map:
-                    if (!routeInstance.enrouteCanvasRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    }
-                    break
-                case EnrouteMeasurement.NMFromTP:
-                case EnrouteMeasurement.mmFromTP:
-                //case EnrouteMeasurement.PosFromTP:
-                    if (!routeInstance.enrouteCanvasRoute.IsEnrouteRouteInput()) {
-                        noinput = true
-                    } else if (!routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
-                        noposition = true
-                    }
-                    break
+        if (!routeInstance.corridorWidth) {
+            if (enroutePhoto) {
+                switch (routeInstance.enroutePhotoMeasurement) {
+                    case EnrouteMeasurement.None:
+                        // nothing
+                        break
+                    case EnrouteMeasurement.Unassigned:
+                        unassigned = true
+                        break
+                    case EnrouteMeasurement.Map:
+                        if (!routeInstance.enroutePhotoRoute.IsEnrouteRouteInput()) {
+                            noinput = true
+                        }
+                        break
+                    case EnrouteMeasurement.NMFromTP:
+                    case EnrouteMeasurement.mmFromTP:
+                    //case EnrouteMeasurement.PosFromTP:
+                        if (!routeInstance.enroutePhotoRoute.IsEnrouteRouteInput()) {
+                            noinput = true
+                        } else if (!routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
+                            noposition = true
+                        }
+                        break
+                }
+            } else {
+                switch (routeInstance.enrouteCanvasMeasurement) {
+                    case EnrouteMeasurement.None:
+                        // nothing
+                        break
+                    case EnrouteMeasurement.Unassigned:
+                        unassigned = true
+                        break
+                    case EnrouteMeasurement.Map:
+                        if (!routeInstance.enrouteCanvasRoute.IsEnrouteRouteInput()) {
+                            noinput = true
+                        }
+                        break
+                    case EnrouteMeasurement.NMFromTP:
+                    case EnrouteMeasurement.mmFromTP:
+                    //case EnrouteMeasurement.PosFromTP:
+                        if (!routeInstance.enrouteCanvasRoute.IsEnrouteRouteInput()) {
+                            noinput = true
+                        } else if (!routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
+                            noposition = true
+                        }
+                        break
+                }
             }
         }
         return [unassigned:unassigned, noinput:noinput, noposition:noposition]
@@ -609,26 +611,28 @@ class RouteTools
 
         List curvedpointflags_errors = []
         List scenicpointflags_errors = []
-        boolean curved_point = false
-        boolean is_scenic_leg = false
-        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id", order:"desc"])) {
-            if (curved_point && coordroute_instance.type == CoordType.SECRET) {
-                if (is_scenic_leg) {
-                    if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck || !coordroute_instance.ignoreGate) {
-                        scenicpointflags_errors += coordroute_instance.titleCode()
+        if (!routeInstance.contest.corridorRoutes) { // TODO: maybe route flag to disable it
+            boolean curved_point = false
+            boolean is_scenic_leg = false
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id", order:"desc"])) {
+                if (curved_point && coordroute_instance.type == CoordType.SECRET) {
+                    if (is_scenic_leg) {
+                        if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck || !coordroute_instance.ignoreGate) {
+                            scenicpointflags_errors += coordroute_instance.titleCode()
+                        }
+                    } else {
+                        if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck) {
+                            curvedpointflags_errors += coordroute_instance.titleCode()
+                        }
                     }
                 } else {
-                    if (!coordroute_instance.noTimeCheck || !coordroute_instance.noGateCheck) {
-                        curvedpointflags_errors += coordroute_instance.titleCode()
-                    }
+                    curved_point = false
                 }
-            } else {
-                curved_point = false
-            }
-            if (coordroute_instance.endCurved) {
-                curved_point = true
-                if (false) { // TODO if (coordroute_instance.endScenic) {
-                    is_scenic_leg = true
+                if (coordroute_instance.endCurved) {
+                    curved_point = true
+                    if (false) { // TODO if (coordroute_instance.endScenic) {
+                        is_scenic_leg = true
+                    }
                 }
             }
         }

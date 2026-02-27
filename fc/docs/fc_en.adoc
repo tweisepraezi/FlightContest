@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.2.3
-:revdate: 23.02.2026
+:revnumber: 4.2.4
+:revdate: 27.02.2026
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -604,7 +604,7 @@ To correct the route, start the Task Creator by clicking on “Maps -> Task Crea
 load the saved CSV file with "Task name -> Load", load the "Map Url", and activate "Turn Points -> Edit". +
 Now the position of individual checkpoints can be changed, new checkpoints added or checkpoints deleted.
 
-. Import route (Routes -> Import FC route)
+. Import route (Routes -> Import Task Creator route)
 +
 Select the kml file exported in Task Creator. +
 The imported route appears in the route list. +
@@ -617,7 +617,7 @@ If you get the error "Coordinates procedure turn differences" press the button "
 The route can now be checked for correctness using "OSM online map". +
 +
 If the route includes a semi-circle, it must be converted into a route with semi-circle gates
-(run "GPX export (with semi-circle gates)", and run "Import FC route" again).
+(run "GPX export (with semi-circle gates)", and run then "Import FC route").
 
 [[route-planning-google-earth]]
 === Create competition routes with Google Earth Pro

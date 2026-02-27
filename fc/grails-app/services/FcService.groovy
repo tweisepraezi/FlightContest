@@ -5248,7 +5248,7 @@ class FcService
         String webroot_dir = servletContext.getRealPath("/")
         
         // read file
-        Map reader = import_fc_route(fileExtension, contestInstance, 0, webroot_dir + "testdata/" + originalFileName)
+        Map reader = import_fc_route(fileExtension, contestInstance, [:], webroot_dir + "testdata/" + originalFileName)
         
         if (!reader.valid) {
             ret.error = true
@@ -5273,7 +5273,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importFcRoute(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, def file)
+    Map importFcRoute(String fileExtension, Contest contestInstance, Map routeImportParams, def file)
     {
         Map ret = [found: false, error: false, message: ""]
         
@@ -5285,8 +5285,12 @@ class FcService
             ret.found = true
             ret.error = true
             ret.message = getMsg('fc.route.fcfileimport.nofile')
+        } else if (routeImportParams.setDefaults && contestInstance.anrFlying && !routeImportParams.corridorWidth) {
+            ret.found = true
+            ret.error = true
+            ret.message = getMsg('fc.route.fcfileimport.nocorridorwidth',[original_filename, RouteFileTools.FC_ROUTE_EXTENSIONS])
         } else {
-            printstart "importFcRoute '$original_filename' corridorWidth=$corridorWidth"
+            printstart "importFcRoute '$original_filename' routeImportParams=$routeImportParams"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -5300,7 +5304,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_fc_route(fileExtension, contestInstance, corridorWidth, webroot_dir + upload_filename)
+                Map reader = import_fc_route(fileExtension, contestInstance, routeImportParams, webroot_dir + upload_filename)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5314,6 +5318,12 @@ class FcService
                 } else if (!reader.gatenum) {
                     ret.error = true
                     ret.message = getMsg('fc.route.fcfileimport.noroutedata',[original_filename])
+                } else if (reader.route && contestInstance.anrFlying && !reader.route.corridorWidth) {
+                    ret.error = true
+                    ret.message = getMsg('fc.route.fcfileimport.nocorridorwidth2',[original_filename])
+                } else if (reader.route && !contestInstance.anrFlying && !contestInstance.corridorRoutes && reader.route.corridorWidth) {
+                    ret.error = true
+                    ret.message = getMsg('fc.route.fcfileimport.corridorwidth',[original_filename])
                 } else {
                     ret.message = getMsg('fc.route.fcfileimport.routeok',[original_filename])
                 }
@@ -5325,12 +5335,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_fc_route(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, String loadFileName)
+    private Map import_fc_route(String fileExtension, Contest contestInstance, Map routeImportParams, String loadFileName)
     {
-        printstart "import_fc_route '$loadFileName' corridorWidth=$corridorWidth"
+        printstart "import_fc_route '$loadFileName' routeImportParams=$routeImportParams"
         
         // read file
-        Map reader = RouteFileTools.ReadFcRouteFile(fileExtension, contestInstance, corridorWidth, loadFileName)
+        Map reader = RouteFileTools.ReadFcRouteFile(fileExtension, contestInstance, routeImportParams, loadFileName)
         
         // calculate legs
         if (reader.valid && !reader.errors && reader.route) {

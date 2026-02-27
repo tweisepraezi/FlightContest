@@ -1,6 +1,14 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.4
+----------------
+- Strecken-Kommando "Import Task-Creator-Strecke" hinzugefügt
+    Dieses Kommando wendet Vorgaben des Regelwerkes und andere Einstellungen wie die Korridorbreite auf die importierten Daten an.
+    Das Kommando "Import FC-Strecke" hingegen lässt alle importierten Daten unbeeinflusst.
+    Das Kommando "Import Koordinaten" hingegen importiert nur Koordinaten und wendet darauf vorgenommene Einstellungen und Vorgaben des Regelwerkes an.
+- Bei der Ultraleichtflug-Wettbewerbsordnung werden die Check-Punkt-Einstellungsfehlermeldungen krummer Streckenabschnitte nicht berechnet.
+
 Änderungen 4.2.3
 ----------------
 - Vorgaben: Tor-Breite von Checkpunkt-Koordinaten hinzugefügt

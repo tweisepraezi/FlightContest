@@ -3596,10 +3596,10 @@ class GpxService
             useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
             mapscale: routeInstance.mapScale,
             altitudeaboveground: routeInstance.altitudeAboveGround,
-            corridorwidth: params.contestMapCorridorWidth,
-            corridorwidth2: params.contestMapCorridorWidth2,
-            corridorwidth3: params.contestMapCorridorWidth3,
-            corridorwidth4: params.contestMapCorridorWidth4
+            corridorwidth: params.corridorwidth,
+            corridorwidth2: params.corridorwidth2,
+            corridorwidth3: params.corridorwidth3,
+            corridorwidth4: params.corridorwidth4
         )
         xml.mapsettings(
             contestmapairfields: routeInstance.contestMapAirfields,

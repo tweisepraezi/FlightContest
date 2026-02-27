@@ -112,8 +112,9 @@ class MainTagLib
 				}
 				if (p.importaction) {
 					if (p.controller == "route") {
-                        outln """    <li> <a href="${p.link}/../../${p.controller}/importfileroute">${message(code:'fc.route.fileimport')}</a> </li>"""
+                        outln """    <li> <a href="${p.link}/../../${p.controller}/importtaskcreatorroute">${message(code:'fc.route.fcfileimport.taskcreator')}</a> </li>"""
                         outln """    <li> <a href="${p.link}/../../${p.controller}/importfcroute">${message(code:'fc.route.fcfileimport')}</a> </li>"""
+                        outln """    <li> <a href="${p.link}/../../${p.controller}/importfileroute">${message(code:'fc.route.fileimport')}</a> </li>"""
 					} else if (p.controller == "crew") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
 					} else if (p.controller == "map") {

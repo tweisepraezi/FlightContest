@@ -211,6 +211,18 @@ class RouteController {
         redirect(controller:'coordEnrouteCanvas',action:'removeall',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
 
+    def selecttaskcreatorroute = {
+        if (session?.lastContest) {
+            return [contestInstance:session.lastContest]
+        } else {
+            return [:]
+        }
+    }
+    
+    def importtaskcreatorroute = {
+        redirect(action:'selecttaskcreatorroute')
+    }
+    
     def selectfcroute = {
         if (session?.lastContest) {
             return [contestInstance:session.lastContest]
@@ -225,20 +237,23 @@ class RouteController {
     
     def importfcroute2 = {
         def file = request.getFile('routefile')
+        Map route_import_params = [corridorWidth:0, setDefaults:false]
         String corridor_width_str = params?.corridorWidth?.replace(',','.')
-        BigDecimal corridor_width = 0
         if (corridor_width_str && corridor_width_str.isBigDecimal()) {
-            corridor_width = corridor_width_str.toBigDecimal()
+            route_import_params.corridorWidth = corridor_width_str.toBigDecimal()
         }
-        Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, corridor_width, file)
+        if (params?.setDefaults == "true") {
+            route_import_params.setDefaults = true
+        }
+        Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, route_import_params, file)
         if (!import_route.found) {
-            import_route = fcService.importFcRoute(RouteFileTools.KML_EXTENSION, session.lastContest, corridor_width, file)
+            import_route = fcService.importFcRoute(RouteFileTools.KML_EXTENSION, session.lastContest, route_import_params, file)
         }
         if (!import_route.found) {
-            import_route = fcService.importFcRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, corridor_width, file)
+            import_route = fcService.importFcRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, route_import_params, file)
         }
         if (!import_route.found) {
-            import_route = fcService.importFcRoute("", session.lastContest, corridor_width, file)
+            import_route = fcService.importFcRoute("", session.lastContest, route_import_params, file)
         }
         flash.error = import_route.error
         flash.message = import_route.message

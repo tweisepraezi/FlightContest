@@ -1,0 +1,39 @@
+
+RouteFileTools
+
+corridorWidth
+useProcedureTurns
+
+Import Task-Creator-Strecke
+---------------------------
+    - ReadFcRouteFile
+        - routeImportParams.setDefaults == true
+    - Enthaltene corridorwidth, corridorwidth2, corridorwidth3, corridorwidth4 werden beim Laden ignoriert
+    - Rallye:
+        - corridorWidth-Angabe nicht vorhanden
+    - ANR:
+        - corridorWidth-Angabe fehlt -> Fehlermeldung
+        - Enthaltene useProcedureTurns-Angabe wird beim Laden ignoriert
+    - UL:
+        - Bei corridorWidth-Angabe wird enthaltene useProcedureTurns-Angabe beim Laden ignoriert
+        
+Import FC-Strecke
+-----------------
+    - ReadFcRouteFile
+        - routeImportParams.setDefaults == false
+    - Rallye:
+        - Enthaltene corridorwidth-Angabe -> Fehlermeldung
+    - ANR:
+        - corridorwidth-Angabe nicht enthalten -> Fehlermeldung
+    - UL:
+        -
+
+Import Strecke
+--------------
+
+Neue Strecke
+------------
+
+Strecken-Einstellungen
+----------------------
+    

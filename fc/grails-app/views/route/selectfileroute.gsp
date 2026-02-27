@@ -13,6 +13,7 @@
                 <div class="block" id="forms" >
                     <g:uploadForm method="post">
                         <g:set var="ti" value="${[]+1}"/>
+                        <p class="warning">${message(code:'fc.route.fileimport.info.extern',args:[RouteFileTools.FC_ROUTE_EXTENSIONS])}</p>
                         <div>
                             <p>${message(code:'fc.route.fileimport.info',args:[RouteFileTools.ROUTE_EXTENSIONS])}</p>
                             <input type="file" size="80" accept="${RouteFileTools.ROUTE_EXTENSIONS}" name="routefile" tabIndex="${ti[0]++}"/>
@@ -105,7 +106,7 @@
                                 <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>
                                 <input type="text" id="ldgdirection" name="ldgdirection" value="270" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
                             </div>
-                            <g:if test="${contestInstance.precisionFlying}" >
+                            <g:if test="${contestInstance.precisionFlying || contestInstance.corridorRoutes}" >
                                 <br/>
                                 <div>
                                     <g:checkBox name="autosecret" value="${autosecret}" checked="${true}" tabIndex="${ti[0]++}"/>

@@ -1,6 +1,14 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.4
+-------------
+- Route command "Import Task Creator route" added
+    This command applies the rule defaults and other settings like corridor width to the imported data.
+    The command "Import FC Route", on the other hand, leaves all imported data unchanged.
+    The command "Import coordinates", on the other hand, only imports coordinates and applies the settings and rule defaults to them.
+- In the Ultraleichtflug rules, checkpoint setting error messages for curved legs are not calculated.
+
 Changes 4.2.3
 -------------
 - Defaults: Gate width from checkpoint coordinates added

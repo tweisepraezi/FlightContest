@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.2.3
-:revdate:   23.02.2026
+:revnumber: 4.2.4
+:revdate:   27.02.2026
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -616,7 +616,7 @@ die gespeicherte CSV-Datei mit "Task-Name -> Laden" zu laden, die "Karten-Url" z
 und "Check-Punkte -> Bearbeiten" zu aktivieren. +
 Jetzt kann die Position einzelner Check-Punkte geändert, neue Check-Punkte hinzugefügt oder Check-Punkte gelöscht werden.
 
-. Import der Strecke (Strecken -> Import FC-Strecke)
+. Import der Strecke (Strecken -> Import Task-Creator-Strecke)
 +
 Auswahl der im Task-Creator exportierten kml-Datei. +
 Die importierte Strecke erscheint in der Strecken-Liste. +
@@ -629,7 +629,7 @@ Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, dr�
 Die Korrektheit der Strecke kann nun mit "OSM-Online-Karte" geprüft werden. +
 +
 Enthält die Strecke einen Kreisbogen, muss sie in eine Strecke mit Halbkreis-Toren umgewandelt werden
-("GPX-Export (mit Halbkreis-Tore)" und erneutem "Import FC-Strecke")
+("GPX-Export (mit Halbkreis-Tore)" und folgendem "Import FC-Strecke")
 
 
 [[route-planning-google-earth]]

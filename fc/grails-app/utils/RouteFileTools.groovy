@@ -689,7 +689,7 @@ class RouteFileTools
             route_instance.useProcedureTurns = contestInstance.useProcedureTurns
         }
         route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
-        if (!route_instance.corridorWidth && corridorWidth) {
+        if (corridorWidth) {
             route_instance.corridorWidth = corridorWidth
             SetRouteFlags(route_instance, true)
             init_corridorwidth_flags = true
@@ -886,24 +886,24 @@ class RouteFileTools
     }
             
     //--------------------------------------------------------------------------
-    static Map ReadFcRouteFile(String fileExtension, Contest contestInstance, BigDecimal corridorWidth, String routeFileName)
+    static Map ReadFcRouteFile(String fileExtension, Contest contestInstance, Map routeImportParams, String routeFileName)
     // Return: gatenum - Number of gates 
     //         valid   - true, if valid FC gpx format
     //         errors  - <> ""
     {
         switch (fileExtension) {
             case GPX_EXTENSION:
-                return ReadFCGPXFile(contestInstance, corridorWidth, routeFileName)
+                return ReadFCGPXFile(contestInstance, routeImportParams, routeFileName)
             case KML_EXTENSION:
-                return ReadFCKMLFile(contestInstance, corridorWidth, routeFileName, false)
+                return ReadFCKMLFile(contestInstance, routeImportParams, routeFileName, false)
             case KMZ_EXTENSION:
-                return ReadFCKMLFile(contestInstance, corridorWidth, routeFileName, true)
+                return ReadFCKMLFile(contestInstance, routeImportParams, routeFileName, true)
         }
         return [gatenum: 0, valid: false, errors: ""]
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadFCGPXFile(Contest contestInstance, BigDecimal corridorWidth, String gpxFileName)
+    private static Map ReadFCGPXFile(Contest contestInstance, Map routeImportParams, String gpxFileName)
     // Return: gatenum - Number of gates 
     //         valid   - true, if valid FC gpx format
     //         errors  - <> ""
@@ -922,6 +922,7 @@ class RouteFileTools
                 
                 boolean first = true
                 boolean init_corridorwidth_flags = false
+                boolean init_route_flags = false
                 String new_title = ""
                 if (gpx.extensions.flightcontest.observationsettings.'@routetitle'[0]) {
                     new_title = gpx.extensions.flightcontest.observationsettings.'@routetitle'[0]
@@ -965,7 +966,7 @@ class RouteFileTools
                                 route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
                             }
                             route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
-                            if (gpx.extensions.flightcontest.observationsettings) {
+                            if (!routeImportParams.setDefaults && gpx.extensions.flightcontest.observationsettings) {
                                 String corridorwidth = gpx.extensions.flightcontest.observationsettings.'@corridorwidth'[0]
                                 if (corridorwidth) {
                                     route_instance.corridorWidth = corridorwidth.toBigDecimal()
@@ -983,10 +984,13 @@ class RouteFileTools
                                     route_instance.corridorWidth4 = corridorwidth4.toBigDecimal()
                                 }
                             }
-                            if (!route_instance.corridorWidth && corridorWidth) {
-                                route_instance.corridorWidth = corridorWidth
+                            if (routeImportParams.corridorWidth) {
+                                route_instance.corridorWidth = routeImportParams.corridorWidth
                                 SetRouteFlags(route_instance, true)
                                 init_corridorwidth_flags = true
+                            } else if (routeImportParams.setDefaults) {
+                                SetRouteFlags(route_instance, false)
+                                init_route_flags = true
                             }
                             route_instance.SetShowMapObjectsFromRouteID(contestInstance)
 
@@ -1077,6 +1081,8 @@ class RouteFileTools
                         }
                         if (init_corridorwidth_flags) {
                             SetCorridorWidthFlags(coordroute_instance, true)
+                        } else if (init_route_flags) {
+                            SetCorridorWidthFlags(coordroute_instance, false)
                         }
                         if (!coordroute_instance.save()) {
                             read_errors = "Could not save ${coordroute_instance.title()}"
@@ -1150,7 +1156,7 @@ class RouteFileTools
                         route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(enroutecanvasmeasurement.toString())
                         save_route = true
                     }
-                    if (!corridorWidth) {
+                    if (!route_instance.corridorWidth && !routeImportParams.corridorWidth) {
                         String useprocedureturn = gpx.extensions.flightcontest.observationsettings.'@useprocedureturn'[0]
                         if (useprocedureturn) {
                             route_instance.useProcedureTurns = useprocedureturn == "yes"
@@ -1677,7 +1683,7 @@ class RouteFileTools
     }       
      
     //--------------------------------------------------------------------------
-    private static Map ReadFCKMLFile(Contest contestInstance, BigDecimal corridorWidth, String kmFileName, boolean kmzFile)
+    private static Map ReadFCKMLFile(Contest contestInstance, Map routeImportParams, String kmFileName, boolean kmzFile)
     // Return: gatenum - Number of gates 
     //         valid   - true, if valid FC kml/kmz format
     //         errors  - <> ""
@@ -1713,6 +1719,7 @@ class RouteFileTools
             def mapobjects_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_MAPOBJECTS)
             if (settings_folder && turnpoints_folder) {
                 boolean init_corridorwidth_flags = false
+                boolean init_route_flags = false
                 valid_format = true
                 
                 def settings_data = settings_folder.ExtendedData.Data
@@ -1783,7 +1790,7 @@ class RouteFileTools
                             route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(d.value.text())
                             break
                         case "useprocedureturn":
-                            if (!corridorWidth) {
+                            if (!route_instance.corridorWidth && !routeImportParams.corridorWidth) {
                                 route_instance.useProcedureTurns = d.value.text() == "yes"
                             }
                             break
@@ -1794,16 +1801,24 @@ class RouteFileTools
 							route_instance.altitudeAboveGround = d.value.text().toInteger()
 							break
 						case "corridorwidth":
-							route_instance.corridorWidth = d.value.text().toBigDecimal()
+                            if (!routeImportParams.setDefaults) {
+                                route_instance.corridorWidth = d.value.text().toBigDecimal()
+                            }
 							break
 						case "corridorwidth2":
-							route_instance.corridorWidth2 = d.value.text().toBigDecimal()
+                            if (!routeImportParams.setDefaults) {
+                                route_instance.corridorWidth2 = d.value.text().toBigDecimal()
+                            }
 							break
 						case "corridorwidth3":
-							route_instance.corridorWidth3 = d.value.text().toBigDecimal()
+                            if (!routeImportParams.setDefaults) {
+                                route_instance.corridorWidth3 = d.value.text().toBigDecimal()
+                            }
 							break
 						case "corridorwidth4":
-							route_instance.corridorWidth4 = d.value.text().toBigDecimal()
+                            if (!routeImportParams.setDefaults) {
+                                route_instance.corridorWidth4 = d.value.text().toBigDecimal()
+                            }
 							break
                     }
                 }
@@ -2022,17 +2037,20 @@ class RouteFileTools
                     }
                 }
                 route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
-                if (!route_instance.corridorWidth && corridorWidth) {
-                    route_instance.corridorWidth = corridorWidth
+                if (routeImportParams.corridorWidth) {
+                    route_instance.corridorWidth = routeImportParams.corridorWidth 
                     SetRouteFlags(route_instance, true)
                     init_corridorwidth_flags = true
+                } else if (routeImportParams.setDefaults) {
+                    SetRouteFlags(route_instance, false)
+                    init_route_flags = true
                 }
                 route_instance.SetShowMapObjectsFromRouteID(contestInstance)
                 route_instance.save()
                 
                 // Add coordinates
                 Map sign_data = read_import_sign(ImportSign.RouteCoord, turnpoints_folder, "", false, kmz_file)
-                Map ret = add_sign_data(route_instance, ImportSign.RouteCoord, sign_data, false, init_corridorwidth_flags)
+                Map ret = add_sign_data(route_instance, ImportSign.RouteCoord, sign_data, false, init_corridorwidth_flags, init_route_flags)
                 
                 // Add observations
                 if (ret.valid && !ret.errors) {
@@ -2052,7 +2070,7 @@ class RouteFileTools
                     } else if (photos_folder) {
 						ImportSign import_sign = ImportSign.GetEnrouteSign(route_instance, true)
                         sign_data = read_import_sign(import_sign, photos_folder, "", false, kmz_file)
-                        add_sign_data(route_instance, import_sign, sign_data, false, false)
+                        add_sign_data(route_instance, import_sign, sign_data, false, false, false)
                     }
                     
                     if (route_instance.enrouteCanvasRoute == EnrouteRoute.InputName) {
@@ -2069,12 +2087,12 @@ class RouteFileTools
                     } else if (canvas_folder) {
 						ImportSign import_sign = ImportSign.GetEnrouteSign(route_instance, false)
                         sign_data = read_import_sign(import_sign, canvas_folder, "", false, kmz_file)
-                        add_sign_data(route_instance, import_sign, sign_data, false, false)
+                        add_sign_data(route_instance, import_sign, sign_data, false, false, false)
                     }
                     
                     if (mapobjects_folder) {
                         sign_data = read_import_sign(ImportSign.MapObject, mapobjects_folder, "", false, kmz_file)
-                        Map ret1 = add_sign_data(route_instance, ImportSign.MapObject, sign_data, false, false)
+                        Map ret1 = add_sign_data(route_instance, ImportSign.MapObject, sign_data, false, false, false)
                     }
                 }
                 
@@ -2104,13 +2122,13 @@ class RouteFileTools
         switch (fileExtension) {
             case TXT_EXTENSION:
                 Map sign_data = ReadImportSignTXTFile(routeInstance, routeFileName, importSign, namePrefix, autoName)
-                return add_sign_data(routeInstance, importSign, sign_data, true, false)
+                return add_sign_data(routeInstance, importSign, sign_data, true, false, false)
             case KML_EXTENSION:
                 Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, autoName, false)
-                return add_sign_data(routeInstance, importSign, sign_data, false, false)
+                return add_sign_data(routeInstance, importSign, sign_data, false, false, false)
             case KMZ_EXTENSION:
                 Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, autoName, true)
-                return add_sign_data(routeInstance, importSign, sign_data, false, false)
+                return add_sign_data(routeInstance, importSign, sign_data, false, false, false)
         }
         return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
     }
@@ -2628,7 +2646,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map add_sign_data(Route routeInstance, ImportSign importSign, Map signData, boolean txtFile, boolean initCorridorWidthFlags)
+    private static Map add_sign_data(Route routeInstance, ImportSign importSign, Map signData, boolean txtFile, boolean initCorridorWidthFlags, boolean initRouteFlags)
     {
         if (!signData.valid || signData.invalidlinenum || signData.errors) {
             return [importedsignnum: 0, filesignnum: 0, valid: signData.valid, invalidlinenum: signData.invalidlinenum, errors: signData.errors]
@@ -2959,6 +2977,8 @@ class RouteFileTools
                 
                 if (initCorridorWidthFlags) {
                     SetCorridorWidthFlags(coordroute_instance, true)
+                } else if (initRouteFlags) {
+                    SetCorridorWidthFlags(coordroute_instance, false)
                 }
                 
                 if (coordroute_instance.save()) {
@@ -3047,12 +3067,16 @@ class RouteFileTools
                 coordRouteInstance.gatewidth2 = Defs.GATEWIDTH_0_ANR
             } else if (!coordRouteInstance.type.IsRunwayCoord()) {
                 coordRouteInstance.gatewidth2 = Defs.GATEWIDTH_0_ANR
+            } else if (coordRouteInstance.type.IsRunwayCoord()) {
+                coordRouteInstance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
             }
         } else {
             if (coordRouteInstance.type == CoordType.SECRET) {
                 coordRouteInstance.gatewidth2 = coordRouteInstance.route.contest.scGateWidth
             } else if (coordRouteInstance.type.IsCpTimeCheckCoord()) {
                 coordRouteInstance.gatewidth2 = coordRouteInstance.route.contest.cpGateWidth
+            } else if (coordRouteInstance.type.IsRunwayCoord()) {
+                coordRouteInstance.gatewidth2 = Defs.GATEWIDTH_RUNWAY
             }
         }
     }
@@ -3065,10 +3089,6 @@ class RouteFileTools
             routeInstance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
             routeInstance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
             routeInstance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A4
-            routeInstance.enroutePhotoRoute = EnrouteRoute.Unassigned
-            routeInstance.enroutePhotoMeasurement = EnrouteMeasurement.Unassigned
-            routeInstance.enrouteCanvasRoute = EnrouteRoute.Unassigned
-            routeInstance.enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned
         } else {
             routeInstance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A3
             routeInstance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A3
