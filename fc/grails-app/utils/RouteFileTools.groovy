@@ -581,8 +581,8 @@ class RouteFileTools
             if (to_pos + 2 > importParams.curvedstartpos1) {
                 return [gatenum: coord_num, valid: true, errors: "Start pos of curved1 leg must be located after SP."]
             }
-            if (importParams.curvedendpos1 >= fp_pos) {
-                return [gatenum: coord_num, valid: true, errors: "End pos of curved1 leg must be located before FP."]
+            if (importParams.curvedendpos1 > fp_pos) {
+                return [gatenum: coord_num, valid: true, errors: "End pos of curved1 leg must be located before LDG."]
             }
         }
         if (importParams.curved2) {
@@ -604,8 +604,8 @@ class RouteFileTools
             if (to_pos + 2 > importParams.curvedstartpos2) {
                 return [gatenum: coord_num, valid: true, errors: "Start pos of curved2 leg must be located after SP."]
             }
-            if (importParams.curvedendpos2 >= fp_pos) {
-                return [gatenum: coord_num, valid: true, errors: "End pos of curved2 leg must be located before FP."]
+            if (importParams.curvedendpos2 > fp_pos) {
+                return [gatenum: coord_num, valid: true, errors: "End pos of curved2 leg must be located before LDG."]
             }
         }
         if (importParams.curved3) {
@@ -627,8 +627,8 @@ class RouteFileTools
             if (to_pos + 2 > importParams.curvedstartpos3) {
                 return [gatenum: coord_num, valid: true, errors: "Start pos of curved3 leg must be located after SP."]
             }
-            if (importParams.curvedendpos3 >= fp_pos) {
-                return [gatenum: coord_num, valid: true, errors: "End pos of curved3 leg must be located before FP."]
+            if (importParams.curvedendpos3 > fp_pos) {
+                return [gatenum: coord_num, valid: true, errors: "End pos of curved3 leg must be located before LDG."]
             }
         }
         if (importParams.ildg) {
@@ -694,7 +694,9 @@ class RouteFileTools
             SetRouteFlags(route_instance, true)
             init_corridorwidth_flags = true
         }
-        route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+        if (importParams.setShowMapObjectsFromRouteID) {
+            route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+        }
         if (!route_instance.save()) {
             return [gatenum: coord_num, valid: false, errors: "Could not save route ${routeData.routename}"]
         }
@@ -727,6 +729,10 @@ class RouteFileTools
             } else if (gate_pos == fp_pos) {
                 coordroute_instance.type = CoordType.FP
                 coordroute_instance.gatewidth2 = contestInstance.cpGateWidth
+                if (importParams.curved1 && gate_pos == importParams.curvedendpos1 || importParams.curved2 && gate_pos == importParams.curvedendpos2 || importParams.curved3 && gate_pos == importParams.curvedendpos3) {
+                    coordroute_instance.noPlanningTest = true
+                    coordroute_instance.endCurved = true
+                }
             // LDG
             } else if (gate_pos == ldg_pos) {
                 coordroute_instance.type = CoordType.LDG
@@ -967,6 +973,15 @@ class RouteFileTools
                             }
                             route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
                             if (!routeImportParams.setDefaults && gpx.extensions.flightcontest.observationsettings) {
+                                String objectsfromrouteid = gpx.extensions.flightcontest.observationsettings.'@objectsfromrouteid'[0]
+                                if (objectsfromrouteid && objectsfromrouteid.isLong()) {
+                                    Long objectsfromrouteid2 = objectsfromrouteid.toLong()
+                                    if (Route.get(objectsfromrouteid2)) {
+                                        route_instance.contestMapShowMapObjectsFromRouteID = objectsfromrouteid2
+                                        route_instance.contestMapShowAirfields = false
+                                        route_instance.contestMapShowAirspaces = false
+                                    }
+                                }
                                 String corridorwidth = gpx.extensions.flightcontest.observationsettings.'@corridorwidth'[0]
                                 if (corridorwidth) {
                                     route_instance.corridorWidth = corridorwidth.toBigDecimal()
@@ -992,7 +1007,9 @@ class RouteFileTools
                                 SetRouteFlags(route_instance, false)
                                 init_route_flags = true
                             }
-                            route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+                            if (routeImportParams.setShowMapObjectsFromRouteID) {
+                                route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+                            }
 
                             route_instance.save()
                             //println "Route saved."
@@ -2045,7 +2062,9 @@ class RouteFileTools
                     SetRouteFlags(route_instance, false)
                     init_route_flags = true
                 }
-                route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+                if (routeImportParams.setShowMapObjectsFromRouteID) {
+                    route_instance.SetShowMapObjectsFromRouteID(contestInstance)
+                }
                 route_instance.save()
                 
                 // Add coordinates

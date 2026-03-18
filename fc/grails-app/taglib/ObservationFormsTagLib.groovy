@@ -46,44 +46,47 @@ class ObservationFormsTagLib
             }
             outln"""    </thead>"""
             outln"""    <tbody>"""
+            List turnpoint_names = attrs.t.GetTurnpointObservationNames()
             for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                if (attrs.t.GetTurnpointRoute() == TurnpointRoute.AssignPhoto) {
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
-                    if (attrs.printResults) {
-                        outln"""<td class="turnpointphoto">${turnpointdata_instance.tpSign}</td>"""
-                    } else {
-                        outln"""<td class="turnpointphoto" />"""
-                    }
-                    outln"""</tr>"""
-                } else if (attrs.t.GetTurnpointRoute() == TurnpointRoute.AssignCanvas) {
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
-                    if (attrs.printResults) {
-                        outln"""<td class="turnpointcanvas">${turnpointdata_instance.tpSign}</td>"""
-                    } else {
-                        outln"""<td class="turnpointcanvas" />"""
-                    }
-                    outln"""</tr>"""
-                } else if (attrs.t.GetTurnpointRoute() == TurnpointRoute.TrueFalsePhoto) {
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
-                    if (attrs.printResults) {
-                        if (turnpointdata_instance.tpSignCorrect == TurnpointCorrect.True) {
-                            outln"""<td class="turnpointtrue">X</td>"""
+                if (attrs.t.IsObservationShown(turnpointdata_instance.tpTitle(), turnpoint_names) || attrs.t.IsObservationShown(turnpointdata_instance.tpPrintName(), turnpoint_names)) {
+                    if (attrs.t.GetTurnpointRoute() == TurnpointRoute.AssignPhoto) {
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
+                        if (attrs.printResults) {
+                            outln"""<td class="turnpointphoto">${turnpointdata_instance.tpSign}</td>"""
+                        } else {
+                            outln"""<td class="turnpointphoto" />"""
+                        }
+                        outln"""</tr>"""
+                    } else if (attrs.t.GetTurnpointRoute() == TurnpointRoute.AssignCanvas) {
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
+                        if (attrs.printResults) {
+                            outln"""<td class="turnpointcanvas">${turnpointdata_instance.tpSign}</td>"""
+                        } else {
+                            outln"""<td class="turnpointcanvas" />"""
+                        }
+                        outln"""</tr>"""
+                    } else if (attrs.t.GetTurnpointRoute() == TurnpointRoute.TrueFalsePhoto) {
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
+                        if (attrs.printResults) {
+                            if (turnpointdata_instance.tpSignCorrect == TurnpointCorrect.True) {
+                                outln"""<td class="turnpointtrue">X</td>"""
+                            } else {
+                                outln"""<td class="turnpointtrue" />"""
+                            }
+                            if (turnpointdata_instance.tpSignCorrect == TurnpointCorrect.False) {
+                                outln"""<td class="turnpointfalse">X</td>"""
+                            } else {
+                                outln"""<td class="turnpointfalse" />"""
+                            }
                         } else {
                             outln"""<td class="turnpointtrue" />"""
-                        }
-                        if (turnpointdata_instance.tpSignCorrect == TurnpointCorrect.False) {
-                            outln"""<td class="turnpointfalse">X</td>"""
-                        } else {
                             outln"""<td class="turnpointfalse" />"""
                         }
-                    } else {
-                        outln"""<td class="turnpointtrue" />"""
-                        outln"""<td class="turnpointfalse" />"""
+                        outln"""</tr>"""
                     }
-                    outln"""</tr>"""
                 }
             }
             outln"""    </tbody>"""
@@ -131,38 +134,41 @@ class ObservationFormsTagLib
             }
             outln"""    </thead>"""
             outln"""    <tbody>"""
+            List enroutephoto_names = attrs.t.GetEnroutePhotoObservationNames()
             for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(attrs.t,[sort:"id"])) {
-                if (enroutephoto_measurement == EnrouteMeasurement.Map) {
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="name">${enroutephotodata_instance.photoName}</td>"""
-                    outln"""    <td class="correct" />"""
-                    if (show_inexact_pos) {
-                        outln"""<td class="inexact" />"""
+                if (attrs.t.IsObservationShown(enroutephotodata_instance.photoName, enroutephoto_names)) {
+                    if (enroutephoto_measurement == EnrouteMeasurement.Map) {
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="name">${enroutephotodata_instance.photoName}</td>"""
+                        outln"""    <td class="correct" />"""
+                        if (show_inexact_pos) {
+                            outln"""<td class="inexact" />"""
+                        }
+                        outln"""    <td class="false" />"""
+                        outln"""</tr>"""
+                    } else if (enroutephoto_measurement == EnrouteMeasurement.NMFromTP) {
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="name">${enroutephotodata_instance.photoName}</td>"""
+                        if (attrs.printResults) {
+                            outln"""<td class="fromlasttp">${enroutephotodata_instance.tpPrintName()}</td>"""
+                            outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutephotodata_instance.distanceNM)}</td>"""
+                        } else {
+                            outln"""<td class="fromlasttp"/>"""
+                            outln"""<td class="nmfromtp"/>"""
+                        }
+                        outln"""</tr>"""
+                    } else if (enroutephoto_measurement == EnrouteMeasurement.mmFromTP) {
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="name">${enroutephotodata_instance.photoName}</td>"""
+                        if (attrs.printResults) {
+                            outln"""<td class="fromlasttp">${enroutephotodata_instance.tpPrintName()}</td>"""
+                            outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutephotodata_instance.distancemm)}</td>"""
+                        } else {
+                            outln"""<td class="fromlasttp"/>"""
+                            outln"""<td class="nmfromtp"/>"""
+                        }
+                        outln"""</tr>"""
                     }
-                    outln"""    <td class="false" />"""
-                    outln"""</tr>"""
-                } else if (enroutephoto_measurement == EnrouteMeasurement.NMFromTP) {
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="name">${enroutephotodata_instance.photoName}</td>"""
-                    if (attrs.printResults) {
-                        outln"""<td class="fromlasttp">${enroutephotodata_instance.tpPrintName()}</td>"""
-                        outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutephotodata_instance.distanceNM)}</td>"""
-                    } else {
-                        outln"""<td class="fromlasttp"/>"""
-                        outln"""<td class="nmfromtp"/>"""
-                    }
-                    outln"""</tr>"""
-                } else if (enroutephoto_measurement == EnrouteMeasurement.mmFromTP) {
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="name">${enroutephotodata_instance.photoName}</td>"""
-                    if (attrs.printResults) {
-                        outln"""<td class="fromlasttp">${enroutephotodata_instance.tpPrintName()}</td>"""
-                        outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutephotodata_instance.distancemm)}</td>"""
-                    } else {
-                        outln"""<td class="fromlasttp"/>"""
-                        outln"""<td class="nmfromtp"/>"""
-                    }
-                    outln"""</tr>"""
                 }
             }
             outln"""    </tbody>"""
@@ -274,53 +280,56 @@ class ObservationFormsTagLib
             }
             outln"""    </thead>"""
             outln"""    <tbody>"""
+            List enroutecanvas_names = attrs.t.GetEnrouteCanvasObservationNames()
             for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
-                if (enroutecanvas_measurement == EnrouteMeasurement.Map) {
-                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
-                    outln"""<tr class="data">"""
-                    outln"""    <td class="sign"><img src="${image_name}"/></td>"""
-                    outln"""    <td class="correct" />"""
-                    if (show_inexact_pos) {
-                        outln"""<td class="inexact" />"""
+                if (attrs.t.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
+                    if (enroutecanvas_measurement == EnrouteMeasurement.Map) {
+                        String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+                        outln"""<tr class="data">"""
+                        outln"""    <td class="sign"><img src="${image_name}"/></td>"""
+                        outln"""    <td class="correct" />"""
+                        if (show_inexact_pos) {
+                            outln"""<td class="inexact" />"""
+                        }
+                        outln"""    <td class="false" />"""
+                        outln"""</tr>"""
+                    } else if (enroutecanvas_measurement == EnrouteMeasurement.NMFromTP) {
+                        String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+                        outln"""<tr class="data">"""
+                        if (attrs.printResults) {
+                            outln"""<td class="sign"><img src="${image_name}"/></td>"""
+                            if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
+                                outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
+                                outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)}</td>"""
+                            } else {
+                                outln"""<td class="fromlasttp"/>"""
+                                outln"""<td class="nmfromtp"/>"""
+                            }
+                        } else {
+                            outln"""<td class="sign">.</td>"""
+                            outln"""<td class="fromlasttp"/>"""
+                            outln"""<td class="nmfromtp"/>"""
+                        }
+                        outln"""</tr>"""
+                    } else if (enroutecanvas_measurement == EnrouteMeasurement.mmFromTP) {
+                        String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+                        outln"""<tr class="data">"""
+                        if (attrs.printResults) {
+                            outln"""<td class="sign"><img src="${image_name}"/></td>"""
+                            if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
+                                outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
+                                outln"""<td class="mmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)}</td>"""
+                            } else {
+                                outln"""<td class="fromlasttp"/>"""
+                                outln"""<td class="mmfromtp"/>"""
+                            }
+                        } else {
+                            outln"""<td class="sign">.</td>"""
+                            outln"""<td class="fromlasttp"/>"""
+                            outln"""<td class="mmfromtp"/>"""
+                        }
+                        outln"""</tr>"""
                     }
-                    outln"""    <td class="false" />"""
-                    outln"""</tr>"""
-                } else if (enroutecanvas_measurement == EnrouteMeasurement.NMFromTP) {
-                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
-                    outln"""<tr class="data">"""
-                    if (attrs.printResults) {
-                        outln"""<td class="sign"><img src="${image_name}"/></td>"""
-						if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
-							outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
-							outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)}</td>"""
-						} else {
-							outln"""<td class="fromlasttp"/>"""
-							outln"""<td class="nmfromtp"/>"""
-						}
-                    } else {
-                        outln"""<td class="sign">.</td>"""
-                        outln"""<td class="fromlasttp"/>"""
-                        outln"""<td class="nmfromtp"/>"""
-                    }
-                    outln"""</tr>"""
-                } else if (enroutecanvas_measurement == EnrouteMeasurement.mmFromTP) {
-                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
-                    outln"""<tr class="data">"""
-                    if (attrs.printResults) {
-                        outln"""<td class="sign"><img src="${image_name}"/></td>"""
-						if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
-							outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
-							outln"""<td class="mmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)}</td>"""
-						} else {
-							outln"""<td class="fromlasttp"/>"""
-							outln"""<td class="mmfromtp"/>"""
-						}
-                    } else {
-                        outln"""<td class="sign">.</td>"""
-                        outln"""<td class="fromlasttp"/>"""
-                        outln"""<td class="mmfromtp"/>"""
-                    }
-                    outln"""</tr>"""
                 }
             }
             outln"""    </tbody>"""

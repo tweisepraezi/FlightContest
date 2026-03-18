@@ -1,6 +1,28 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.5
+-------------
+- OSM Contest Map option "Use airfields, airspaces and map objects from the following route" improved:
+    All newly created or imported routes are automatically connected to the first route that contains only a TO coordinate.
+- Route commands "Import Task Creator route" and "Import coordinates":
+    Option "Assign airfields, airspaces, and map objects from first route that contains only a TO coordinate" added (Default: on)
+    This option allows you to disable the assignment of the first route if necessary.
+    The assignment of the first route is disabled for the "Import FC Route" command because the export always includes all airports, airspaces, and map objects directly.
+- OSM Contest Map dialog:
+    The order of the selection objects has been redefined: First come the route-independent settings, then the route-related settings.
+    The number of airports, airspaces, and map objects and their origin are displayed in yellow.
+        Check this option in all routes and deselect "Use airports, airspaces, and map objects from the following route"
+        if unwanted assignments have been made. A change to the selection must be confirmed by clicking "Save".
+    Map objects can now be disabled to prevent them from appearing on the map.
+        For a disabled map object, the subtitle begins with #.
+- New contest: Default coordinate format changed to 'Degrees decimal'.
+- Task settings: Names of observations to be evaluated added
+    Selecting this option ensures that only the specified turnpoints, enroute photos, and/or enroute canvas are printed on forms and evaluated.
+    If only enroute photos are specified, all turnpoints and enroute canvas are printed and evaluated.
+- Bug "'Import coordinates' does not accept a landscape section before the FP" fixed
+- This release changes the database version.
+
 Changes 4.2.4
 -------------
 - Route command "Import Task Creator route" added

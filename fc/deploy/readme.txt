@@ -1,6 +1,29 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.5
+----------------
+- OSM-Wettbewerbs-Karten-Option "Flugplätze, Lufträume und Karten-Objekte von folgender Strecke verwenden" verbessert:
+    Alle neu angelegten oder importierten Strecken werden automatisch mit der ersten Strecke, die nur eine TO-Koordinate beinhaltet, verbunden.
+- Strecken-Kommando "Import Task-Creator-Strecke" und "Import Koordinaten":
+    Option "Flugplätze, Lufträume und Karten-Objekte von erster Strecke, die nur eine TO-Koordinate beinhaltet, zuordnen" hinzugefügt (Default: ein)
+    Diese Option ermöglicht es, dass das Zuordnen der ersten Strecke bei Bedarf abgeschaltet werden kann.
+    Beim Kommando "Import FC-Strecke" ist das Zuordnen der ersten Strecke deaktiviert, da der Export immer alle Flugplätze, Lufträume und Karten-Objekte direkt enthält.
+- OSM-Wettbewerbs-Karten-Dialog:
+    Die Reihenfolge der Auswahlobjekte wurde neu festgelegt: Zuerst kommen jetzt die strecken-unabhängigen, dann die strecken-bezogenen Einstellungen.
+    Die Anzahl von Flugplätzen, Lufträumen und Karten-Objekten und ihre Herkunft werden gelb markiert angezeigt.
+        Überprüfen Sie in allen Strecken diese Option und deaktivieren Sie die Auswahl "Flugplätze, Lufträume und Karten-Objekte von folgender Strecke verwenden",
+        falls unerwünschte Zurodnungen erfolgt sind. Eine Auswahländerung ist mit "Speichern" wirksam zu machen.
+    Karten-Objekte können nun deaktiviert werden, um deren Druck auf die Karte zu verhindern.
+        Bei einem deaktivierten Karten-Objekt beginnt der Untertitel mit #.
+- Neuer Wettbewerb: Default-Koordinatendarstellung auf 'Grad Dezimal' geändert.
+- Aufgaben-Einstellungen: Namen auszuwertender Beobachtungsobjekte hinzugefügt
+    Eine Eingabe bewirkt, dass nur die angegebenen Wendepunkte, Strecken-Bodenzeichen und/oder Strecken-Bodenzeichen in Formulare gedruckt und ausgewertet werden.
+    Werden nur Strecken-Bodenzeichen angegeben, werden Wendepunkte und Strecken-Bodenzeichen vollständig gedruckt und ausgewertet.
+- Bug "'Import Koordinaten' nimmt einen landschaftlichen Abschnitt vor dem FP nicht an" behoben
+- Dieses Release verändert die Datenbank-Version.
+
+
 Änderungen 4.2.4
 ----------------
 - Strecken-Kommando "Import Task-Creator-Strecke" hinzugefügt

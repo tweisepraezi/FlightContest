@@ -645,6 +645,80 @@ class Test
         return task.observationTestEnrouteCanvasRun
     }
     
+    boolean IsObservationShown(String observationName, List checkNames)
+    {
+        String observation_test_filter = ""
+        if (task.contest.resultClasses) {
+            if (crew.resultclass) {
+                TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+                if (taskclass_instance) {
+                    observation_test_filter = taskclass_instance.observationTestFilter
+                }
+            }
+        } else {
+            observation_test_filter = task.observationTestFilter
+        }
+        if (observation_test_filter) {
+            boolean check_name = false
+            for (String observation_filter in observation_test_filter.trim().split(',')) {
+                if (observation_filter.trim() in checkNames) {
+                    check_name = true
+                    break
+                }
+            }
+            if (check_name) {
+                for (String observation_filter in observation_test_filter.trim().split(',')) {
+                    String observation_filter2 = observation_filter.trim()
+                    if ((observation_filter2 in checkNames) && (observation_filter2 == observationName)) {
+                        return true
+                    }
+                }
+                return false
+            }
+        }
+        return true
+    }
+    
+    List GetTurnpointObservationNames()
+    {
+        List names = [] 
+        for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(this,[sort:"id"])) {
+            String name = turnpointdata_instance.tpTitle()
+            if (!(name in names)) {
+                names += name
+            }
+            name = turnpointdata_instance.tpPrintName()
+            if (!(name in names)) {
+                names += name
+            }
+        }
+        return names
+    }
+    
+    List GetEnroutePhotoObservationNames()
+    {
+        List names = [] 
+        for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(this,[sort:"id"])) {
+            String name = enroutephotodata_instance.photoName
+            if (!(name in names)) {
+                names += name
+            }
+        }
+        return names
+    }
+
+    List GetEnrouteCanvasObservationNames()
+    {
+        List names = [] 
+        for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(this,[sort:"id"])) {
+            String name = enroutecanvasdata_instance.canvasSign.canvasName
+            if (!(name in names)) {
+                names += name
+            }
+        }
+        return names
+    }
+    
 	boolean IsLandingTestRun()
 	{
 		if (task.contest.resultClasses) {
