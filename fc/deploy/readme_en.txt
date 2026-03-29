@@ -1,6 +1,18 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.6
+-------------
+- OSM Contest Map: Command "Search airspaces around the airport" saves coordinates directly in the text field now.
+    As a result, OpenAIP is no longer required when creating a map for the first time.
+- OSM Contest Map: Command "Import airspace" added
+    Allows you to add an airspace from a <Placemark> tag in a kml/kmz file:
+    <Placemark><name>...</name><Polygon><outerBoundaryIs><LinearRing><coordinates>...</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+- Updating of the following sets of rules
+    Wettbewerbsordnung Rallyeflug Deutschland 2026
+    Wettbewerbsordnung Air Navigation Race Deutschland 2026
+    Regelwerk Landewertung Deutschland 2026
+
 Changes 4.2.5
 -------------
 - OSM Contest Map option "Use airfields, airspaces and map objects from the following route" improved:

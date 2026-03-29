@@ -13,6 +13,7 @@ class RouteFileTools
     final static String FC_ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}, ${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}"
     final static String ENROUTE_SIGN_EXTENSIONS = "${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}, ${RouteFileTools.TXT_EXTENSION}"
     final static String TURNPOINT_EXTENSIONS = "${RouteFileTools.TXT_EXTENSION}"
+    final static String AIRSPACE_EXTENSIONS = "${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}"
     
     final static String ALT = "Alt"
     final static String MINALT = "MinAlt"
@@ -2569,6 +2570,104 @@ class RouteFileTools
         }
         
         return [import_signs: import_signs, valid: valid_format, invalidlinenum: invalid_line_num, errors: read_errors]
+    }
+    
+    //--------------------------------------------------------------------------
+    static Map ReadAirspaceFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, String folderName)
+    // Return: importedsignnum - Number of imported signs 
+    //         filesignnum     - Number of signs in file 
+    //         valid           - true, if valid route file format
+    //         errors          - <> ""
+    {
+        switch (fileExtension) {
+            case KML_EXTENSION:
+                return ReadAirspaceKMLFile(routeInstance, routeFileName, folderName, false)
+            case KMZ_EXTENSION:
+                return ReadAirspaceKMLFile(routeInstance, routeFileName, folderName, true)
+        }
+        return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static Map ReadAirspaceKMLFile(Route routeInstance, String kmFileName, String folderName, boolean kmzFile)
+    // Return: import_airspaces - List of airspaces
+    //         valid            - true, if valid sign file format
+    //         errors           - <> ""
+    {
+        Map ret = [importedairspacenum:0, valid: false, invalidlinenum: 0, errors: ""]
+        
+        File km_file = new File(kmFileName)
+        def kmz_file = null
+        def km_reader = null
+        if (kmzFile) {
+            kmz_file = new java.util.zip.ZipFile(km_file)
+            kmz_file.entries().findAll { !it.directory }.each {
+                if (!km_reader) {
+                    km_reader = kmz_file.getInputStream(it)
+                }
+            }
+        } else {
+            //km_reader = new FileReader(km_file)
+            km_reader = new InputStreamReader(new FileInputStream(km_file), "UTF-8")
+        }
+
+        try {
+            def kml = new XmlParser().parse(km_reader)
+            def folder = null
+            if (folderName) {
+                folder = search_folder_by_name(kml.Document, folderName)
+            } else {
+                folder = kml.Document.Folder[0] // first folder
+                if (!folder) {
+                    folder = kml.Document
+                }
+            }
+            if (folder) {
+                if (folder.Placemark) {
+                    ret.valid = true
+                    for (def pm in folder.Placemark) {
+                        if (pm.Polygon?.outerBoundaryIs?.LinearRing?.coordinates) {
+                            String coords = ""
+                            String coordinates = pm.Polygon.outerBoundaryIs.LinearRing.coordinates.text().trim()
+                            for (String coordinate in coordinates.split(' ')) {
+                                int i = 0
+                                String lon = ""
+                                String lat = ""
+                                String alt = "0"
+                                for (String c in coordinate.split(',')) {
+                                    i++
+                                    switch (i) {
+                                        case 1: lon = c; break
+                                        case 2: lat = c; break
+                                        case 3: alt = c; break
+                                    }
+                                }
+                                if (lon && lat) {
+                                    if (coords) {
+                                        coords += OsmPrintMapService.ADDITIONAL_AIRSPACE_COORD_SEPARATOR
+                                    }
+                                    coords += "${lon}${OsmPrintMapService.ADDITIONAL_AIRSPACE_LONLAT_SEPARATOR}${lat}"
+                                }
+                            }
+                            String airspace_line = "${OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME},text:${pm.name[0].text().trim()},fillcolor:blue,textcolor:black,coords:${coords}"
+                            routeInstance.contestMapAirspacesLayer2 += "\n"
+                            routeInstance.contestMapAirspacesLayer2 += airspace_line
+                            ret.importedairspacenum++
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            ret.read_errors += e.getMessage()
+        }
+        if (km_reader) {
+            km_reader.close()
+        }
+        if (kmz_file) {
+            kmz_file.close()
+        }
+        
+        return ret
     }
     
     //--------------------------------------------------------------------------

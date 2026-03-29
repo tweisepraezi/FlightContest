@@ -164,6 +164,7 @@ class OpenAIPService
     {
 		String missing_airspaces = ""
         boolean all_airspaces_written = true
+        int additional_airspace_no = 0
         for (String layer in routeInstance.contestMapAirspacesLayer2.split("\n")) {
             if (layer && layer.trim()) {
                 String airspace_name = layer.trim()
@@ -182,6 +183,7 @@ class OpenAIPService
                 if (!ignore_line) {
                     String airspace_text = ""
                     boolean first_style = true
+                    String airspace_coords = ""
                     for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
                         List airspace_style_values = Tools.Split(airspace_style.trim(), OsmPrintMapService.AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
                         if (airspace_style_values.size() == 1) {
@@ -195,6 +197,11 @@ class OpenAIPService
                                 case 'text': 
                                     airspace_text = airspace_style_values[1]
                                     break
+                                case 'coords':
+                                    airspace_coords = airspace_style_values[1] + " "
+                                    airspace_coords = airspace_coords.replace(OsmPrintMapService.ADDITIONAL_AIRSPACE_LONLAT_SEPARATOR, OsmPrintMapService.ADDITIONAL_AIRSPACE_LONLATALT_KML_SEPARATOR)
+                                    airspace_coords = airspace_coords.replace(OsmPrintMapService.ADDITIONAL_AIRSPACE_COORD_SEPARATOR, "${OsmPrintMapService.ADDITIONAL_AIRSPACE_LONLATALT_KML_SEPARATOR}0${OsmPrintMapService.ADDITIONAL_AIRSPACE_COORD_SEPARATOR}")
+                                    break
                             }
                         }
                         first_style = false
@@ -204,33 +211,39 @@ class OpenAIPService
                     }   
                     airspace_text = airspace_text.trim()
                     
-                    // get airspace from cache
-                    Map ret = get_airspace_from_cache(airspacesFilename, airspace_name) // get airspace from cache
-                    if (ret.ok && ret.coordinates) {
-                        write_airspace(xml, airspace_name, airspace_text, "airspace", ret.coordinates)
+                    // get airspaces from coordinates
+                    if (airspace_name == OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME) {
+                        additional_airspace_no++
+                        write_airspace(xml, "${airspace_name}_${additional_airspace_no}", airspace_text, "airspace", airspace_coords)
                     } else {
-                        // get airspace from OpenAIP
-                        ret = [:]
-                        if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
-                            String search_id = airspace_name.substring(3)
-                            println "Get airspace $search_id from OpenAIP"
-                            ret = call_rest("airspaces?id=${search_id}", "GET", 200, "", "items")
+                        // get airspace from cache
+                        Map ret = get_airspace_from_cache(airspacesFilename, airspace_name) // get airspace from cache
+                        if (ret.ok && ret.coordinates) {
+                            write_airspace(xml, airspace_name, airspace_text, "airspace", ret.coordinates)
                         } else {
-                            String search_name = URLEncoder.encode(airspace_name, "UTF-8")
-                            println "Get airspace '$search_name' from OpenAIP"
-                            ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items")
-                        }
-                        if (ret.ok && ret.data) {
-                            String airspace_coordinates = ret.data.geometry.coordinates.toString()
-                            airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
-                            write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
-                            newAirspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
-                        } else {
-                            all_airspaces_written = false
-                            if (missing_airspaces) {
-                                missing_airspaces += ", "
+                            // get airspace from OpenAIP
+                            ret = [:]
+                            if (airspace_name.startsWith(OsmPrintMapService.AIRSPACE_LAYER_ID_PREAFIX)) {
+                                String search_id = airspace_name.substring(3)
+                                println "Get airspace $search_id from OpenAIP"
+                                ret = call_rest("airspaces?id=${search_id}", "GET", 200, "", "items")
+                            } else {
+                                String search_name = URLEncoder.encode(airspace_name, "UTF-8")
+                                println "Get airspace '$search_name' from OpenAIP"
+                                ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items")
                             }
-                            missing_airspaces += airspace_name
+                            if (ret.ok && ret.data) {
+                                String airspace_coordinates = ret.data.geometry.coordinates.toString()
+                                airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
+                                write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
+                                newAirspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
+                            } else {
+                                all_airspaces_written = false
+                                if (missing_airspaces) {
+                                    missing_airspaces += ", "
+                                }
+                                missing_airspaces += airspace_name
+                            }
                         }
                     }
                 }
@@ -240,7 +253,7 @@ class OpenAIPService
     }
     
     //--------------------------------------------------------------------------
-    private void write_airspaces_to_cache(String airspacesFilename, List newAirspaces) // TODO
+    private void write_airspaces_to_cache(String airspacesFilename, List newAirspaces)
     {
         String new_filename = airspacesFilename + ".new.kml"
         
@@ -369,6 +382,55 @@ class OpenAIPService
     Map GetAirspacesAirportarea(Route routeInstance, String contestMapCenterPoints)
     {
         printstart "GetAirspacesAirportarea ${routeInstance.name()} ${routeInstance.contestMapAirspacesLowerLimit}ft"
+
+        boolean ok = false
+        int airspaces_num = 0
+        
+        Map airportarea = get_airportarea(routeInstance, contestMapCenterPoints, false)
+        if (airportarea) {
+            println "Center (Lat Lon): ${airportarea.centerLatitude} ${airportarea.centerLongitude}, Distance ${airportarea.airspaceDistance}m"
+            
+            Map ret = call_rest("airspaces?pos=${airportarea.centerLatitude},${airportarea.centerLongitude}&dist=${airportarea.airspaceDistance}", "GET", 200, "", "items")
+            if (ret.ok && ret.data) {
+                ok = true
+                String airspaces = ""
+                for (Map d in ret.data) {
+                    if (is_airspace(d, routeInstance.contestMapAirspacesLowerLimit)) {
+                        Map ret1 = call_rest("airspaces?id=${d._id}", "GET", 200, "", "items")
+                        if (ret1.ok && ret1.data) {
+                            String airspace_coordinates = ret1.data.geometry.coordinates.toString()
+                            airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','').replace(',',OsmPrintMapService.ADDITIONAL_AIRSPACE_LONLAT_SEPARATOR)
+                            if (airspaces) {
+                                airspaces += "\n"
+                            }
+                            if (is_hidden_airspace(d)) {
+                                airspaces += "#"
+                            }
+                            airspaces += OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME
+                            airspaces += ",id:${d._id}"
+                            airspaces += get_airspace_details(d)
+                            airspaces += ",coords:${airspace_coordinates}"
+                            airspaces_num++
+                        }
+                    }
+                }
+                routeInstance.contestMapAirspacesLayer2 = airspaces
+                routeInstance.save()
+                printdone ""
+            } else {
+                printerror ""
+            }
+        } else {
+            printerror ""
+        }
+        
+        return [ok:ok, airspacesnum:airspaces_num]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map GetAirspacesAirportareaOld(Route routeInstance, String contestMapCenterPoints)
+    {
+        printstart "GetAirspacesAirportareaOld ${routeInstance.name()} ${routeInstance.contestMapAirspacesLowerLimit}ft"
 
         boolean ok = false
         int airspaces_num = 0
@@ -679,7 +741,7 @@ class OpenAIPService
             // Additional airfields
             if (additionalAirfields) {
                 for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                    if (coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
+                    if (!coordmapobject_instance.mapObjectText.startsWith(Defs.IGNORE_LINE) && coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
                         String airport_symbol = "af_civil-small.svg"
                         if (coordmapobject_instance.mapObjectGliderAirfield) {
                             airport_symbol = "gliding-small.svg"

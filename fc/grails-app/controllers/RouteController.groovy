@@ -181,6 +181,36 @@ class RouteController {
         }
     }
     
+    def gotonext_mapexportquestion = {
+        Map route = domainService.GetRouteMap(params) 
+        if (route.instance) {
+            long next_id = route.instance.GetNextRouteID()
+            if (next_id) {
+                redirect(action:"mapexportquestion",id:next_id)
+            } else {
+                redirect(controller:"route",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"route",action:"list")
+        }
+    }
+    
+    def gotoprev_mapexportquestion = {
+        Map route = domainService.GetRouteMap(params) 
+        if (route.instance) {
+            long next_id = route.instance.GetPrevRouteID()
+            if (next_id) {
+                redirect(action:"mapexportquestion",id:next_id)
+            } else {
+                redirect(controller:"route",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"route",action:"list")
+        }
+    }
+    
 	def createcoordroutes = {
         Map route = domainService.GetRouteMap(params) 
         redirect(controller:'coordRoute',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
@@ -237,13 +267,16 @@ class RouteController {
     
     def importfcroute2 = {
         def file = request.getFile('routefile')
-        Map route_import_params = [corridorWidth:0, setDefaults:false]
+        Map route_import_params = [corridorWidth:0, setDefaults:false, setShowMapObjectsFromRouteID:false]
         String corridor_width_str = params?.corridorWidth?.replace(',','.')
         if (corridor_width_str && corridor_width_str.isBigDecimal()) {
             route_import_params.corridorWidth = corridor_width_str.toBigDecimal()
         }
         if (params?.setDefaults == "true") {
             route_import_params.setDefaults = true
+        }
+        if (params?.setShowMapObjectsFromRouteID == "on") {
+            route_import_params.setShowMapObjectsFromRouteID = true
         }
         Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, route_import_params, file)
         if (!import_route.found) {
@@ -308,6 +341,7 @@ class RouteController {
                              ldg:params?.ldg.toInteger(),
                              ldgdirection:params?.ldgdirection?.isBigDecimal()?params?.ldgdirection.toBigDecimal():0.0,
                              autosecret:params?.autosecret == 'on',
+                             setShowMapObjectsFromRouteID:params?.setShowMapObjectsFromRouteID == 'on',
 							 secretcoursechange:secretcoursechange?.isBigDecimal()?secretcoursechange.toBigDecimal():1.5,
                             ]
         Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, corridor_width, file, import_params)
@@ -360,6 +394,17 @@ class RouteController {
         Route route_instance = Route.get(params.routeid)
         Map mapobject_data = ImportSign.GetMapObjectData(route_instance)
         redirect(action:'selectimporttxt', params:[titlecode:'fc.coordroute.mapobjects.import', routeid:params.routeid, importSign:mapobject_data.importsign, lineContent:mapobject_data.linecontent, importEnrouteData: true, showFolderName:true, folderName:"mapobjects"])
+    }
+    
+    def importairspace = {
+        session.routeReturnAction = "mapexportquestion"
+        session.routeReturnController = controllerName
+        session.routeReturnID = params.routeid
+        redirect(action:'selectairspacekml', params:[titlecode:'fc.contestmap.contestmapairspaces.importairspace', routeid:params.routeid, showFolderName:true, folderName:""])
+    }
+    
+    def selectairspacekml = {
+        return [:]
     }
     
     def selectturnpointphotos = {
@@ -417,6 +462,21 @@ class RouteController {
         } else {
             redirect(action:"show",controller:"route",id:route_instance.id)
         }
+    }
+    
+    def importairspacekmz = {
+        Route route_instance = Route.get(params.routeid)
+        def file = request.getFile('kmzfile')
+        Map import_kmz = fcService.importAirspaceKmzFile(RouteFileTools.KML_EXTENSION, route_instance, file, params.foldername)
+        if (!import_kmz.found) {
+            import_kmz = fcService.importAirspaceKmzFile(RouteFileTools.KMZ_EXTENSION, route_instance, file, params.foldername)
+        }
+        if (!import_kmz.found) {
+            import_kmz = fcService.importAirspaceKmzFile("", route_instance, file, "")
+        }
+        flash.error = import_kmz.error
+        flash.message = import_kmz.message
+        redirect(action:"mapexportquestion",controller:"route",id:route_instance.id)
     }
     
     def selectenroutephotos = {
@@ -4197,7 +4257,6 @@ class RouteController {
             curvedleg_points += ","
         }
         routeInstance.contestMapCurvedLegPoints = DisabledCheckPointsTools.Compress(curvedleg_points, routeInstance)
-        routeInstance.contestMapShowFirstOptions = params.contestMapShowFirstOptions == "on"
         routeInstance.contestMapFirstTitle = params.contestMapFirstTitle
         routeInstance.contestMapCenterVerticalPos = params.contestMapCenterVerticalPos
         routeInstance.contestMapCenterHorizontalPos = params.contestMapCenterHorizontalPos
@@ -4211,7 +4270,6 @@ class RouteController {
         if (params.contestMapCenterMoveY && params.contestMapCenterMoveY.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY = params.contestMapCenterMoveY.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapShowSecondOptions = params.contestMapShowSecondOptions == "on"
         routeInstance.contestMapSecondTitle = params.contestMapSecondTitle
         routeInstance.contestMapCenterVerticalPos2 = params.contestMapCenterVerticalPos2
         routeInstance.contestMapCenterHorizontalPos2 = params.contestMapCenterHorizontalPos2
@@ -4225,7 +4283,6 @@ class RouteController {
         if (params.contestMapCenterMoveY2 && params.contestMapCenterMoveY2.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY2 = params.contestMapCenterMoveY2.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapShowThirdOptions = params.contestMapShowThirdOptions == "on"
         routeInstance.contestMapThirdTitle = params.contestMapThirdTitle
         routeInstance.contestMapCenterVerticalPos3 = params.contestMapCenterVerticalPos3
         routeInstance.contestMapCenterHorizontalPos3 = params.contestMapCenterHorizontalPos3
@@ -4239,7 +4296,6 @@ class RouteController {
         if (params.contestMapCenterMoveY3 && params.contestMapCenterMoveY3.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY3 = params.contestMapCenterMoveY3.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapShowForthOptions = params.contestMapShowForthOptions == "on"
         routeInstance.contestMapForthTitle = params.contestMapForthTitle
         routeInstance.contestMapCenterVerticalPos4 = params.contestMapCenterVerticalPos4
         routeInstance.contestMapCenterHorizontalPos4 = params.contestMapCenterHorizontalPos4
@@ -4253,7 +4309,6 @@ class RouteController {
         if (params.contestMapCenterMoveY4 && params.contestMapCenterMoveY4.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY4 = params.contestMapCenterMoveY4.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapShowMapObjects = params.contestMapShowMapObjects == "on"
         if (params.contestMapShowMapObjectsFromRouteID) {
             routeInstance.contestMapShowMapObjectsFromRouteID = params.contestMapShowMapObjectsFromRouteID.toLong()
         } else {

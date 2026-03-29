@@ -6,7 +6,7 @@
         <g:if test="${!NewOSMMap && (BreakButton || map_upload_job_status == UploadJobStatus.Waiting || map_upload_job_status == UploadJobStatus.Sending)}" >
             <meta http-equiv="refresh" content="5">
         </g:if>
-        <title>${message(code:'fc.contestmap')} ${routeInstance.name()}</title>
+        <title>${message(code:'fc.contestmap')} ${routeInstance.name()} ${Defs.ROUTE_NUM}${routeInstance.idTitle}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
@@ -14,14 +14,16 @@
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
                 <g:if test="${NewOSMMap}">
-                    <h2>${message(code:'fc.contestmap')} ${routeInstance.name()} - ${message(code:'fc.contestmap.edition')} ${routeInstance.contestMapEdition+1}</h2>
+                    <h2>${message(code:'fc.contestmap')} ${routeInstance.name()} ${Defs.ROUTE_NUM}${routeInstance.idTitle} - ${message(code:'fc.contestmap.edition')} ${routeInstance.contestMapEdition+1}</h2>
                 </g:if>
                 <g:else>
-                    <h2>${message(code:'fc.contestmap')} ${routeInstance.name()} - ${message(code:'fc.contestmap.edition')} ${routeInstance.contestMapEdition}</h2>
+                    <h2>${message(code:'fc.contestmap')} ${routeInstance.name()} ${Defs.ROUTE_NUM}${routeInstance.idTitle} - ${message(code:'fc.contestmap.edition')} ${routeInstance.contestMapEdition}</h2>
                 </g:else>
                 <div class="block" id="forms">
-                    <g:form params="${['mapexportquestionReturnAction':mapexportquestionReturnAction, 'mapexportquestionReturnController':mapexportquestionReturnController, 'mapexportquestionReturnID':mapexportquestionReturnID]}">
+                    <g:form params="${['mapexportquestionReturnAction':mapexportquestionReturnAction, 'mapexportquestionReturnController':mapexportquestionReturnController, 'mapexportquestionReturnID':mapexportquestionReturnID, 'routeid':routeInstance.id]}">
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${routeInstance.GetNextRouteID()}"/>
+						<g:set var="prev_id" value="${routeInstance.GetPrevRouteID()}"/>
                         <g:if test="${NewOSMMap}">
 	                        <table>
 	                            <tbody>
@@ -31,6 +33,154 @@
 	                                </tr>
 	                            </tbody>
 	                        </table>
+	                        <fieldset>
+                                <g:actionSubmit action="mapsavesettings" value="${message(code:'fc.save')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
+                                <g:if test="${CoordRoute.findByRouteAndType(routeInstance,CoordType.TO,[sort:"id"])}" >
+                                    <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
+                                    <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
+                                </g:if>
+                                <g:else>
+                                    <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" disabled="disabled" />
+                                    <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" disabled="disabled" />
+                                </g:else>
+                                <g:if test="${next_id}">
+                                    <g:actionSubmit action="gotonext_mapexportquestion" value="${message(code:'fc.route.gotonext')}" tabIndex="${ti[0]++}"/>
+                                </g:if>
+                                <g:else>
+                                    <g:actionSubmit action="gotonext_mapexportquestion" value="${message(code:'fc.route.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+                                </g:else>
+                                <g:if test="${prev_id}">
+                                    <g:actionSubmit action="gotoprev_mapexportquestion" value="${message(code:'fc.route.gotoprev')}" tabIndex="${ti[0]++}"/>
+                                </g:if>
+                                <g:else>
+                                    <g:actionSubmit action="gotoprev_mapexportquestion" value="${message(code:'fc.route.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+                                </g:else>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
+	                        </fieldset>
+	                        <fieldset>
+                                <g:showContestMapSelectOtherRoute route="${routeInstance}" ti="${ti}"/>
+								<div>
+                                    <g:if test="${routeInstance.contestMapShowMapObjectsFromRouteID}">
+                                        <g:set var="route_instance2" value="${Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)}"/>
+                                        <g:contestMapAirfieldsSelect airfields="${routeInstance.contestMapAirfields}" airfieldsname="contestMapAirfields" showairfields="${routeInstance.contestMapShowAirfields}" routeid="${routeInstance.id}" airfieldslines="${Tools.Split(routeInstance.contestMapAirfieldsData,'\n').size()}" airfieldsfromname="${route_instance2.name()}" airfieldslines2="${Tools.Split(route_instance2.contestMapAirfieldsData,'\n').size()}" ti="${ti}"/>
+                                    </g:if>
+                                    <g:else>
+                                        <g:contestMapAirfieldsSelect airfields="${routeInstance.contestMapAirfields}" airfieldsname="contestMapAirfields" showairfields="${routeInstance.contestMapShowAirfields}" routeid="${routeInstance.id}" airfieldslines="${Tools.Split(routeInstance.contestMapAirfieldsData,'\n').size()}" ti="${ti}"/>
+                                    </g:else>
+                                    <g:if test="${BootStrap.global.IsOpenAIP()}">
+                                        <g:set var="showairfields" value="hidden"/>
+                                        <g:if test="${routeInstance.contestMapShowAirfields}">
+                                            <g:set var="showairfields" value=""/>
+                                        </g:if>
+                                        <div style="margin-top:10px;margin-left:20px;" id="showairfields_id" title="${message(code:'fc.contestmap.contestmapairfields.edit',args:[])}" ${showairfields}>
+                                            <g:if test="${!routeInstance.contestMapShowMapObjectsFromRouteID}">
+                                                <g:if test="${routeInstance.contestMapAirfieldsData}">
+                                                    <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairfields.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
+                                                </g:if>
+                                                <g:else>
+                                                    <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" tabIndex="${ti[0]++}" />
+                                                </g:else>
+                                            </g:if>
+                                            <g:actionSubmit action="csvexport_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport')}" tabIndex="${ti[0]++}" />
+                                            <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
+                                                <label style="margin-left:20px;">Dev:</label>
+                                                <g:actionSubmit action="csvexportold_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport')} (old)" tabIndex="${ti[0]++}" />
+                                                <g:actionSubmit action="csvexport_check_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport.check')}" tabIndex="${ti[0]++}" />
+                                            </g:if>
+                                            <p style="margin-top:10px;">
+                                                <g:textArea id="contestMapAirfieldsData" name="contestMapAirfieldsData" value="${fieldValue(bean:routeInstance,field:'contestMapAirfieldsData')}" rows="5" style="width:100%;white-space:pre;" tabIndex="${ti[0]++}"/>
+                                            </p>
+                                        </div>
+                                    </g:if>
+								</div>
+	                            <g:if test="${BootStrap.global.IsOpenAIP()}">
+	                                <div>
+	                                    <g:checkBox name="contestMapAirspaces" value="${routeInstance.contestMapAirspaces}" tabIndex="${ti[0]++}" />
+	                                    <label>${message(code:'fc.contestmap.contestmapairspaces')}</label>
+                                        <g:if test="${routeInstance.contestMapShowMapObjectsFromRouteID}">
+                                            <g:set var="route_instance2" value="${Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)}"/>
+                                            <label style="background-color:yellow;">${message(code:'fc.contestmap.contestmap.entrynum2',args:[Tools.Split(routeInstance.contestMapAirspacesLayer2,'\n').size(),Tools.Split(route_instance2.contestMapAirspacesLayer2,'\n').size(),route_instance2.name()])}</label>
+                                        </g:if>
+                                        <g:else>
+                                            <label style="background-color:yellow;">${message(code:'fc.contestmap.contestmap.entrynum',args:[Tools.Split(routeInstance.contestMapAirspacesLayer2,'\n').size()])}</label>
+                                        </g:else>
+                                        <g:if test="${routeInstance.contestMapShowAirspaces}">
+                                            <a id="showairspaces_off_id" href="#x" class="arrowhead" onclick="showairspaces(false);">${Defs.ARROWHEAD_UP}</a>
+                                            <a id="showairspaces_on_id" href="#x" class="arrowhead" onclick="showairspaces(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
+                                        </g:if>
+                                        <g:else>
+                                            <a id="showairspaces_off_id" href="#x" class="arrowhead" onclick="showairspaces(false);" hidden>${Defs.ARROWHEAD_UP}</a>
+                                            <a id="showairspaces_on_id" href="#x" class="arrowhead" onclick="showairspaces(true);">${Defs.ARROWHEAD_DOWN}</a>
+                                        </g:else>
+                                        <g:set var="show_airspaces" value="hidden"/>
+                                        <g:if test="${routeInstance.contestMapShowAirspaces}">
+                                            <g:set var="show_airspaces" value=""/>
+                                        </g:if>
+                                        <div style="margin-top:10px;margin-left:20px;" id="showairspaces_id" title="${message(code:'fc.contestmap.contestmapairspaces.edit',args:[])}" ${show_airspaces}>
+                                            <g:if test="${!routeInstance.contestMapShowMapObjectsFromRouteID}">
+                                                <g:if test="${routeInstance.contestMapAirspacesLayer2}">
+                                                    <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairspaces.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
+                                                </g:if>
+                                                <g:else>
+                                                    <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" tabIndex="${ti[0]++}" />
+                                                </g:else>
+                                                <input type="text" name="contestMapAirspacesLowerLimit" value="${routeInstance.contestMapAirspacesLowerLimit}" min="0" size="6" tabIndex="${ti[0]++}"/> <label>${message(code:'fc.foot')}</label>
+                                            </g:if>
+                                            <g:actionSubmit action="importairspace" value="${message(code:'fc.contestmap.contestmapairspaces.importairspace')}" tabIndex="${ti[0]++}" />
+                                            <g:actionSubmit action="kmzexportairspaces_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport')}" tabIndex="${ti[0]++}" />
+                                            <g:actionSubmit action="kmzexportairspaceshidden_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport.hidden')}" tabIndex="${ti[0]++}" />
+                                            <p style="margin-top:10px;">
+                                                <g:textArea id="contestMapAirspacesLayer2" name="contestMapAirspacesLayer2" value="${fieldValue(bean:routeInstance,field:'contestMapAirspacesLayer2')}" rows="5" style="width:100%;white-space:pre;" tabIndex="${ti[0]++}"/>
+                                            </p>
+                                        </div>
+                                        <script>
+                                            function showairspaces(showAirspaces) {
+                                                $("#showairspaces_id").prop("hidden", !showAirspaces);
+                                                $("#showairspaces_off_id").prop("hidden", !showAirspaces);
+                                                $("#showairspaces_on_id").prop("hidden", showAirspaces);
+                                                $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowAirspaces:showAirspaces}, "json");
+                                            }
+                                        </script>
+	                                </div>
+	                            </g:if>
+                                <g:showContestMapRouteMapObjects route="${routeInstance}" ti="${ti}"/>
+	                        </fieldset>
+	                        <fieldset>
+                                <div>
+                                    <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
+                                    <label style="margin-right:10px;">${message(code:'fc.contestmap.contestmapgraticule')}</label>
+	                                <g:checkBox name="contestMapChurches" value="${routeInstance.contestMapChurches}" tabIndex="${ti[0]++}" />
+	                                <label>${message(code:'fc.contestmap.contestmapchurches')}</label>
+	                                <img style="margin-right:10px;" src="${createLinkTo(dir:'images/map',file:'church.png')}"/>
+	                                <g:checkBox name="contestMapCastles" value="${routeInstance.contestMapCastles}" tabIndex="${ti[0]++}" />
+	                                <label>${message(code:'fc.contestmap.contestmapcastles')}</label>
+	                                <img src="${createLinkTo(dir:'images/map',file:'castle.png')}"/><img style="margin-right:10px;" src="${createLinkTo(dir:'images/map',file:'castle_ruin.png')}"/>
+                                    <g:checkBox name="contestMapWindpowerstations" value="${routeInstance.contestMapWindpowerstations}" tabIndex="${ti[0]++}" />
+                                    <label>${message(code:'fc.contestmap.contestmapwindpowerstations')}</label>
+                                    <img style="margin-right:10px;" src="${createLinkTo(dir:'images/map',file:'windpowerstation.png')}"/>
+                                    <g:checkBox name="contestMapPowerlines" value="${routeInstance.contestMapPowerlines}" tabIndex="${ti[0]++}" />
+                                    <label>${message(code:'fc.contestmap.contestmappowerlines')}</label>
+                                </div>
+                                <div>
+                                    <g:contestMapSmallRoadsGradeSelect route="${routeInstance}" ti="${ti}" />
+                                </div>
+                                <div>
+                                    <g:contestMapContourLinesSelect contourlines="${routeInstance.contestMapContourLines}" contourlinesname="contestMapContourLines" ti="${ti}"/>
+                                </div>
+	                            <g:if test="${false}">
+	                                <div>
+	                                    <g:checkBox name="contestMapDropShadow" value="${routeInstance.contestMapDropShadow}" tabIndex="${ti[0]++}" />
+	                                    <label>${message(code:'fc.contestmap.contestmapdropshadow')}</label>
+	                                </div>
+	                            </g:if>
+	                            <g:if test="${false}">
+	                                <div>
+	                                    <g:checkBox name="contestMapMunicipalityNames" value="${routeInstance.contestMapMunicipalityNames}" tabIndex="${ti[0]++}" />
+	                                    <label>${message(code:'fc.contestmap.contestmapmunicipalitynames')}</label>
+	                                </div>
+	                            </g:if>
+	                        </fieldset>
+                            <g:contestMapDevOptions output="${routeInstance.contestMapOutput}" outputname="contestMapOutput" devstyle="${routeInstance.contestMapDevStyle}" devstylename="contestMapDevStyle" ti="${ti}"/>
 	                        <fieldset>
 	                            <g:set var="route_data" value="${routeInstance.GetRouteData()}" />
                                 <g:if test="${!routeInstance.corridorWidth}">
@@ -87,331 +237,233 @@
 	                        </fieldset>
 	                        <fieldset>
                                 <div>
-                                    <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
-                                    <label style="margin-right:10px;">${message(code:'fc.contestmap.contestmapgraticule')}</label>
-	                                <g:checkBox name="contestMapChurches" value="${routeInstance.contestMapChurches}" tabIndex="${ti[0]++}" />
-	                                <label>${message(code:'fc.contestmap.contestmapchurches')}</label>
-	                                <img style="margin-right:10px;" src="${createLinkTo(dir:'images/map',file:'church.png')}"/>
-	                                <g:checkBox name="contestMapCastles" value="${routeInstance.contestMapCastles}" tabIndex="${ti[0]++}" />
-	                                <label>${message(code:'fc.contestmap.contestmapcastles')}</label>
-	                                <img src="${createLinkTo(dir:'images/map',file:'castle.png')}"/><img style="margin-right:10px;" src="${createLinkTo(dir:'images/map',file:'castle_ruin.png')}"/>
-                                    <g:checkBox name="contestMapWindpowerstations" value="${routeInstance.contestMapWindpowerstations}" tabIndex="${ti[0]++}" />
-                                    <label>${message(code:'fc.contestmap.contestmapwindpowerstations')}</label>
-                                    <img style="margin-right:10px;" src="${createLinkTo(dir:'images/map',file:'windpowerstation.png')}"/>
-                                    <g:checkBox name="contestMapPowerlines" value="${routeInstance.contestMapPowerlines}" tabIndex="${ti[0]++}" />
-                                    <label>${message(code:'fc.contestmap.contestmappowerlines')}</label>
-                                </div>
-                                <div>
-                                    <g:contestMapSmallRoadsGradeSelect route="${routeInstance}" ti="${ti}" />
-                                </div>
-                                <div>
-                                    <g:contestMapContourLinesSelect contourlines="${routeInstance.contestMapContourLines}" contourlinesname="contestMapContourLines" ti="${ti}"/>
-                                </div>
-	                            <g:if test="${false}">
-	                                <div>
-	                                    <g:checkBox name="contestMapDropShadow" value="${routeInstance.contestMapDropShadow}" tabIndex="${ti[0]++}" />
-	                                    <label>${message(code:'fc.contestmap.contestmapdropshadow')}</label>
-	                                </div>
-	                            </g:if>
-	                            <g:if test="${false}">
-	                                <div>
-	                                    <g:checkBox name="contestMapMunicipalityNames" value="${routeInstance.contestMapMunicipalityNames}" tabIndex="${ti[0]++}" />
-	                                    <label>${message(code:'fc.contestmap.contestmapmunicipalitynames')}</label>
-	                                </div>
-	                            </g:if>
-	                        </fieldset>
-	                        <fieldset>
-                                <g:showContestMapSelectOtherRoute route="${routeInstance}" ti="${ti}"/>
-								<div>
-                                    <g:contestMapAirfieldsSelect airfields="${routeInstance.contestMapAirfields}" airfieldsname="contestMapAirfields" showairfields="${routeInstance.contestMapShowAirfields}" routeid="${routeInstance.id}" airfieldslines="${Tools.Split(routeInstance.contestMapAirfieldsData,'\n').size()}" ti="${ti}"/>
-                                    <g:if test="${BootStrap.global.IsOpenAIP()}">
-                                        <g:set var="showairfields" value="hidden"/>
-                                        <g:if test="${routeInstance.contestMapShowAirfields}">
-                                            <g:set var="showairfields" value=""/>
-                                        </g:if>
-                                        <div style="margin-top:10px;margin-left:20px;" id="showairfields_id" ${showairfields}>
-                                            <g:if test="${!routeInstance.contestMapShowMapObjectsFromRouteID}">
-                                                <g:if test="${routeInstance.contestMapAirfieldsData}">
-                                                    <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairfields.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
-                                                </g:if>
-                                                <g:else>
-                                                    <g:actionSubmit action="getairfields_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairfields.airportarea')}" tabIndex="${ti[0]++}" />
-                                                </g:else>
-                                            </g:if>
-                                            <g:actionSubmit action="csvexport_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport')}" tabIndex="${ti[0]++}" />
-                                            <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
-                                                <label style="margin-left:20px;">Dev:</label>
-                                                <g:actionSubmit action="csvexportold_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport')} (old)" tabIndex="${ti[0]++}" />
-                                                <g:actionSubmit action="csvexport_check_airfields_route" value="${message(code:'fc.contestmap.contestmapairfields.csvexport.check')}" tabIndex="${ti[0]++}" />
-                                            </g:if>
-                                            <p style="margin-top:10px;">
-                                                <g:textArea id="contestMapAirfieldsData" name="contestMapAirfieldsData" value="${fieldValue(bean:routeInstance,field:'contestMapAirfieldsData')}" rows="5" style="width:100%;" tabIndex="${ti[0]++}"/>
-                                            </p>
-                                        </div>
-                                    </g:if>
-								</div>
-	                            <g:if test="${BootStrap.global.IsOpenAIP()}">
-	                                <div style="margin-top:10px;">
-	                                    <g:checkBox name="contestMapAirspaces" value="${routeInstance.contestMapAirspaces}" tabIndex="${ti[0]++}" />
-	                                    <label>${message(code:'fc.contestmap.contestmapairspaces')}</label>
-                                        <g:checkBox style="margin-left:10px;" id="contestMapShowAirspaces" name="contestMapShowAirspaces" value="${routeInstance.contestMapShowAirspaces}" onclick="showairspaces_click();"/>
-                                        <label>${message(code:'fc.contestmap.contestmapairspaces.edit')}</label>
-                                        <label style="margin-left:10px;">${message(code:'fc.contestmap.contestmap.entrynum',args:[Tools.Split(routeInstance.contestMapAirspacesLayer2,'\n').size()])}</label>
-                                        <g:set var="showairspaces" value="hidden"/>
-                                        <g:if test="${routeInstance.contestMapShowAirspaces}">
-                                            <g:set var="showairspaces" value=""/>
-                                        </g:if>
-                                        <div style="margin-top:10px;margin-left:20px;" id="showairspaces_id" ${showairspaces}>
-                                            <g:if test="${!routeInstance.contestMapShowMapObjectsFromRouteID}">
-                                                <g:if test="${routeInstance.contestMapAirspacesLayer2}">
-                                                    <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" onclick="return confirm('${message(code:'fc.contestmap.contestmapgetairspaces.airportarea.overwrite')}');" tabIndex="${ti[0]++}" />
-                                                </g:if>
-                                                <g:else>
-                                                    <g:actionSubmit action="getairspaces_airportarea_route" value="${message(code:'fc.contestmap.contestmapgetairspaces.airportarea')}" tabIndex="${ti[0]++}" />
-                                                </g:else>
-                                                <input type="text" name="contestMapAirspacesLowerLimit" value="${routeInstance.contestMapAirspacesLowerLimit}" min="0" size="6" tabIndex="${ti[0]++}"/> <label>${message(code:'fc.foot')}</label>
-                                            </g:if>
-                                            <g:actionSubmit action="kmzexportairspaces_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport')}" tabIndex="${ti[0]++}" />
-                                            <g:actionSubmit action="kmzexportairspaceshidden_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport.hidden')}" tabIndex="${ti[0]++}" />
-                                            <p style="margin-top:10px;">
-                                                <g:textArea id="contestMapAirspacesLayer2" name="contestMapAirspacesLayer2" value="${fieldValue(bean:routeInstance,field:'contestMapAirspacesLayer2')}" rows="5" style="width:100%;" tabIndex="${ti[0]++}"/>
-                                            </p>
-                                        </div>
-                                        <script>
-                                            function showairspaces_click() {
-                                                var show_airspaces = $("#contestMapShowAirspaces").prop("checked");
-                                                $("#showairspaces_id").prop("hidden", !show_airspaces);
-                                                $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowAirspaces:show_airspaces}, "json");
-                                            }
-                                        </script>
-	                                </div>
-	                            </g:if>
-                                <g:showContestMapRouteMapObjects route="${routeInstance}" ti="${ti}"/>
-	                        </fieldset>
-                            <g:contestMapDevOptions output="${routeInstance.contestMapOutput}" outputname="contestMapOutput" devstyle="${routeInstance.contestMapDevStyle}" devstylename="contestMapDevStyle" ti="${ti}"/>
-	                        <fieldset>
-                                <g:actionSubmit action="mapsavesettings" value="${message(code:'fc.save')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
-                                <g:if test="${CoordRoute.findByRouteAndType(routeInstance,CoordType.TO,[sort:"id"])}" >
-                                    <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" />
-                                </g:if>
-                                <g:else>
-                                    <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" disabled="disabled" />
-                                    <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;" tabIndex="${ti[0]++}" disabled="disabled" />
-                                </g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
-	                        </fieldset>
-	                        <fieldset>
-                                <div>
-                                    <g:checkBox id="firstoptions_checkbox_id" name="contestMapShowFirstOptions" value="${routeInstance.contestMapShowFirstOptions}" onclick="firstoptions_click();"/>
                                     <label>${message(code:'fc.contestmap.printfirstoptions')}</label>
-                                </div>
-                                <g:set var="firstoptions" value="hidden"/>
-                                <g:if test="${routeInstance.contestMapShowFirstOptions}">
-                                    <g:set var="firstoptions" value=""/>
-                                </g:if>
-                                <div id="firstoptions_id" ${firstoptions}>
-	                                <div>
-                                        <br/>
-	                                    <p>
-	                                        <input type="text" id="contestMapFirstTitle" name="contestMapFirstTitle" value="${fieldValue(bean:routeInstance,field:'contestMapFirstTitle')}" tabIndex="${ti[0]++}"/>
-	                                    </p>
-	                                </div>
-                                    <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos}" vpname="contestMapCenterVerticalPos" hp="${routeInstance.contestMapCenterHorizontalPos}" hpname="contestMapCenterHorizontalPos" ti="${ti}"/>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints}" tpid="${Defs.TurnpointID_ContestMapCenterPoints}" ti="${ti}" printpoints="${false}"/>
-                                    <table class="mapexportquestiontable">
-                                        <tr class="mapexportquestiontable">
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX" fieldvalue="${routeInstance.contestMapCenterMoveX}" ti="${ti}"/>
-                                            </td>
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY" fieldvalue="${routeInstance.contestMapCenterMoveY}" ti="${ti}"/>
-                                            </td>
-                                            <g:if test="${routeInstance.corridorWidth}">
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
-                                                </td>
-                                            </g:if>
-                                        </tr>
-                                    </table>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints}" tpid="${Defs.TurnpointID_ContestMapPrintPoints}" ti="${ti}" printpoints="${true}"/>
-                                    <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize}" printsizename="contestMapPrintSize" printlandscape="${routeInstance.contestMapPrintLandscape}" printlandscapename="contestMapPrintLandscape" ti="${ti}"/>
-									<br/>
-									<input type="hidden" name="id" value="${routeInstance?.id}" />
-									<g:actionSubmit action="mapgenerate" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_takeoff" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_noroute" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_allroutedetails" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_taskcreator" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                </div>
-                                <script>
-                                    function firstoptions_click() {
-                                        var show_options = $("#firstoptions_checkbox_id").prop("checked");
-                                        $("#firstoptions_id").prop("hidden", !show_options);
-                                        $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowFirstOptions:show_options}, "json");
-                                    }
-                                </script>
-	                        </fieldset>
-	                        <fieldset>
-                                <div>
-                                    <g:checkBox id="secondoptions_checkbox_id" name="contestMapShowSecondOptions" value="${routeInstance.contestMapShowSecondOptions}" onclick="secondoptions_click();"/>
-                                    <label>${message(code:'fc.contestmap.printsecondoptions')}</label>
-                                </div>
-                                <g:set var="secondoptions" value="hidden"/>
-                                <g:if test="${routeInstance.contestMapShowSecondOptions}">
-                                    <g:set var="secondoptions" value=""/>
-                                </g:if>
-                                <div id="secondoptions_id" ${secondoptions}>
-	                                <div>
-                                        <br/>
-	                                    <p>
-	                                        <input type="text" id="contestMapSecondTitle" name="contestMapSecondTitle" value="${fieldValue(bean:routeInstance,field:'contestMapSecondTitle')}" tabIndex="${ti[0]++}"/>
-	                                    </p>
-	                                </div>
-                                    <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos2}" vpname="contestMapCenterVerticalPos2" hp="${routeInstance.contestMapCenterHorizontalPos2}" hpname="contestMapCenterHorizontalPos2" ti="${ti}"/>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints2}" tpid="${Defs.TurnpointID_ContestMapCenterPoints2}" ti="${ti}" printpoints="${false}"/>
-                                    <table class="mapexportquestiontable">
-                                        <tr class="mapexportquestiontable">
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX2" fieldvalue="${routeInstance.contestMapCenterMoveX2}" ti="${ti}"/>
-                                            </td>
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY2" fieldvalue="${routeInstance.contestMapCenterMoveY2}" ti="${ti}"/>
-                                            </td>
-                                            <g:if test="${routeInstance.corridorWidth}">
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
-                                                </td>
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth2" fieldvalue="${routeInstance.corridorWidth2}" ti="${ti}"/>
-                                                </td>
-                                            </g:if>
-                                        </tr>
-                                    </table>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints2}" tpid="${Defs.TurnpointID_ContestMapPrintPoints2}" ti="${ti}" printpoints="${true}"/>
-                                    <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize2}" printsizename="contestMapPrintSize2" printlandscape="${routeInstance.contestMapPrintLandscape2}" printlandscapename="contestMapPrintLandscape2" ti="${ti}"/>
-                                    <g:if test="${routeInstance.corridorWidth}">
+                                    <g:set var="show_firstoptions" value=""/>
+                                    <g:if test="${routeInstance.contestMapShowFirstOptions}">
+                                        <a id="showfirstoptions_off_id" href="#x" class="arrowhead" onclick="showfirstoptions(false);">${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showfirstoptions_on_id" href="#x" class="arrowhead" onclick="showfirstoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
                                     </g:if>
-                                    <br/>
-                                    <g:actionSubmit action="mapgenerate2" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_takeoff2" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_noroute2" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_allroutedetails2" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_taskcreator2" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    <g:else>
+                                        <g:set var="show_firstoptions" value="hidden"/>
+                                        <a id="showfirstoptions_off_id" href="#x" class="arrowhead" onclick="showfirstoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showfirstoptions_on_id" href="#x" class="arrowhead" onclick="showfirstoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:else>
+                                    <div style="margin-left:20px;" id="showfirstoptions_id" ${show_firstoptions}>
+                                        <div>
+                                            <br/>
+                                            <p>
+                                                <input type="text" id="contestMapFirstTitle" name="contestMapFirstTitle" value="${fieldValue(bean:routeInstance,field:'contestMapFirstTitle')}" tabIndex="${ti[0]++}"/>
+                                            </p>
+                                        </div>
+                                        <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos}" vpname="contestMapCenterVerticalPos" hp="${routeInstance.contestMapCenterHorizontalPos}" hpname="contestMapCenterHorizontalPos" ti="${ti}"/>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints}" tpid="${Defs.TurnpointID_ContestMapCenterPoints}" ti="${ti}" printpoints="${false}"/>
+                                        <table class="mapexportquestiontable">
+                                            <tr class="mapexportquestiontable">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX" fieldvalue="${routeInstance.contestMapCenterMoveX}" ti="${ti}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY" fieldvalue="${routeInstance.contestMapCenterMoveY}" ti="${ti}"/>
+                                                </td>
+                                                <g:if test="${routeInstance.corridorWidth}">
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                    </td>
+                                                </g:if>
+                                            </tr>
+                                        </table>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints}" tpid="${Defs.TurnpointID_ContestMapPrintPoints}" ti="${ti}" printpoints="${true}"/>
+                                        <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize}" printsizename="contestMapPrintSize" printlandscape="${routeInstance.contestMapPrintLandscape}" printlandscapename="contestMapPrintLandscape" ti="${ti}"/>
+                                        <br/>
+                                        <input type="hidden" name="id" value="${routeInstance?.id}" />
+                                        <g:actionSubmit action="mapgenerate" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_takeoff" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_noroute" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_allroutedetails" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_taskcreator" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    </div>
+                                    <script>
+                                        function showfirstoptions(showFirstOptions) {
+                                            $("#showfirstoptions_id").prop("hidden", !showFirstOptions);
+                                            $("#showfirstoptions_off_id").prop("hidden", !showFirstOptions);
+                                            $("#showfirstoptions_on_id").prop("hidden", showFirstOptions);
+                                            $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowFirstOptions:showFirstOptions}, "json");
+                                        }
+                                    </script>
                                 </div>
-                                <script>
-                                    function secondoptions_click() {
-                                        var show_options = $("#secondoptions_checkbox_id").prop("checked");
-                                        $("#secondoptions_id").prop("hidden", !show_options);
-                                        $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowSecondOptions:show_options}, "json");
-                                    }
-                                </script>
-	                        </fieldset>
-	                        <fieldset>
-                                <div>
-                                    <g:checkBox id="thirdoptions_checkbox_id" name="contestMapShowThirdOptions" value="${routeInstance.contestMapShowThirdOptions}" onclick="thirdoptions_click();"/>
+                                <div style="margin-top:10px;">
+                                    <label>${message(code:'fc.contestmap.printsecondoptions')}</label>
+                                    <g:set var="show_secondoptions" value=""/>
+                                    <g:if test="${routeInstance.contestMapShowSecondOptions}">
+                                        <a id="showsecondoptions_off_id" href="#x" class="arrowhead" onclick="showsecondoptions(false);">${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showsecondoptions_on_id" href="#x" class="arrowhead" onclick="showsecondoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:if>
+                                    <g:else>
+                                        <g:set var="show_secondoptions" value="hidden"/>
+                                        <a id="showsecondoptions_off_id" href="#x" class="arrowhead" onclick="showsecondoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showsecondoptions_on_id" href="#x" class="arrowhead" onclick="showsecondoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:else>
+                                    <div style="margin-left:20px;" id="showsecondoptions_id" ${show_secondoptions}>
+                                        <div>
+                                            <br/>
+                                            <p>
+                                                <input type="text" id="contestMapSecondTitle" name="contestMapSecondTitle" value="${fieldValue(bean:routeInstance,field:'contestMapSecondTitle')}" tabIndex="${ti[0]++}"/>
+                                            </p>
+                                        </div>
+                                        <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos2}" vpname="contestMapCenterVerticalPos2" hp="${routeInstance.contestMapCenterHorizontalPos2}" hpname="contestMapCenterHorizontalPos2" ti="${ti}"/>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints2}" tpid="${Defs.TurnpointID_ContestMapCenterPoints2}" ti="${ti}" printpoints="${false}"/>
+                                        <table class="mapexportquestiontable">
+                                            <tr class="mapexportquestiontable">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX2" fieldvalue="${routeInstance.contestMapCenterMoveX2}" ti="${ti}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY2" fieldvalue="${routeInstance.contestMapCenterMoveY2}" ti="${ti}"/>
+                                                </td>
+                                                <g:if test="${routeInstance.corridorWidth}">
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                    </td>
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth2" fieldvalue="${routeInstance.corridorWidth2}" ti="${ti}"/>
+                                                    </td>
+                                                </g:if>
+                                            </tr>
+                                        </table>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints2}" tpid="${Defs.TurnpointID_ContestMapPrintPoints2}" ti="${ti}" printpoints="${true}"/>
+                                        <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize2}" printsizename="contestMapPrintSize2" printlandscape="${routeInstance.contestMapPrintLandscape2}" printlandscapename="contestMapPrintLandscape2" ti="${ti}"/>
+                                        <g:if test="${routeInstance.corridorWidth}">
+                                        </g:if>
+                                        <br/>
+                                        <g:actionSubmit action="mapgenerate2" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_takeoff2" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_noroute2" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_allroutedetails2" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_taskcreator2" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    </div>
+                                    <script>
+                                        function showsecondoptions(showThirdOptions) {
+                                            $("#showsecondoptions_id").prop("hidden", !showThirdOptions);
+                                            $("#showsecondoptions_off_id").prop("hidden", !showThirdOptions);
+                                            $("#showsecondoptions_on_id").prop("hidden", showThirdOptions);
+                                            $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowSecondOptions:showThirdOptions}, "json");
+                                        }
+                                    </script>
+                                </div>
+                                <div style="margin-top:10px;">
                                     <label>${message(code:'fc.contestmap.printthirdoptions')}</label>
-                                </div>
-                                <g:set var="thirdoptions" value="hidden"/>
-                                <g:if test="${routeInstance.contestMapShowThirdOptions}">
-                                    <g:set var="thirdoptions" value=""/>
-                                </g:if>
-                                <div id="thirdoptions_id" ${thirdoptions}>
-	                                <div>
+                                    <g:set var="show_thirdoptions" value=""/>
+                                    <g:if test="${routeInstance.contestMapShowThirdOptions}">
+                                        <a id="showthirdoptions_off_id" href="#x" class="arrowhead" onclick="showthirdoptions(false);">${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showthirdoptions_on_id" href="#x" class="arrowhead" onclick="showthirdoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:if>
+                                    <g:else>
+                                        <g:set var="show_thirdoptions" value="hidden"/>
+                                        <a id="showthirdoptions_off_id" href="#x" class="arrowhead" onclick="showthirdoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showthirdoptions_on_id" href="#x" class="arrowhead" onclick="showthirdoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:else>
+                                    <div style="margin-left:20px;" id="showthirdoptions_id" ${show_thirdoptions}>
+                                        <div>
+                                            <br/>
+                                            <p>
+                                                <input type="text" id="contestMapThirdTitle" name="contestMapThirdTitle" value="${fieldValue(bean:routeInstance,field:'contestMapThirdTitle')}" tabIndex="${ti[0]++}"/>
+                                            </p>
+                                        </div>
+                                        <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos3}" vpname="contestMapCenterVerticalPos3" hp="${routeInstance.contestMapCenterHorizontalPos3}" hpname="contestMapCenterHorizontalPos3" ti="${ti}"/>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints3}" tpid="${Defs.TurnpointID_ContestMapCenterPoints3}" ti="${ti}" printpoints="${false}"/>
+                                        <table class="mapexportquestiontable">
+                                            <tr class="mapexportquestiontable">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX3" fieldvalue="${routeInstance.contestMapCenterMoveX3}" ti="${ti}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY3" fieldvalue="${routeInstance.contestMapCenterMoveY3}" ti="${ti}"/>
+                                                </td>
+                                                <g:if test="${routeInstance.corridorWidth}">
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                    </td>
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth3" fieldvalue="${routeInstance.corridorWidth3}" ti="${ti}"/>
+                                                    </td>
+                                                </g:if>
+                                            </tr>
+                                        </table>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints3}" tpid="${Defs.TurnpointID_ContestMapPrintPoints3}" ti="${ti}" printpoints="${true}"/>
+                                        <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize3}" printsizename="contestMapPrintSize3" printlandscape="${routeInstance.contestMapPrintLandscape3}" printlandscapename="contestMapPrintLandscape3" ti="${ti}"/>
                                         <br/>
-	                                    <p>
-	                                        <input type="text" id="contestMapThirdTitle" name="contestMapThirdTitle" value="${fieldValue(bean:routeInstance,field:'contestMapThirdTitle')}" tabIndex="${ti[0]++}"/>
-	                                    </p>
-	                                </div>
-                                    <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos3}" vpname="contestMapCenterVerticalPos3" hp="${routeInstance.contestMapCenterHorizontalPos3}" hpname="contestMapCenterHorizontalPos3" ti="${ti}"/>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints3}" tpid="${Defs.TurnpointID_ContestMapCenterPoints3}" ti="${ti}" printpoints="${false}"/>
-                                    <table class="mapexportquestiontable">
-                                        <tr class="mapexportquestiontable">
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX3" fieldvalue="${routeInstance.contestMapCenterMoveX3}" ti="${ti}"/>
-                                            </td>
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY3" fieldvalue="${routeInstance.contestMapCenterMoveY3}" ti="${ti}"/>
-                                            </td>
-                                            <g:if test="${routeInstance.corridorWidth}">
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
-                                                </td>
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth3" fieldvalue="${routeInstance.corridorWidth3}" ti="${ti}"/>
-                                                </td>
-                                            </g:if>
-                                        </tr>
-                                    </table>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints3}" tpid="${Defs.TurnpointID_ContestMapPrintPoints3}" ti="${ti}" printpoints="${true}"/>
-                                    <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize3}" printsizename="contestMapPrintSize3" printlandscape="${routeInstance.contestMapPrintLandscape3}" printlandscapename="contestMapPrintLandscape3" ti="${ti}"/>
-                                    <br/>
-                                    <g:actionSubmit action="mapgenerate3" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_takeoff3" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_noroute3" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_allroutedetails3" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_taskcreator3" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate3" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_takeoff3" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_noroute3" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_allroutedetails3" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_taskcreator3" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    </div>
+                                    <script>
+                                        function showthirdoptions(showThirdOptions) {
+                                            $("#showthirdoptions_id").prop("hidden", !showThirdOptions);
+                                            $("#showthirdoptions_off_id").prop("hidden", !showThirdOptions);
+                                            $("#showthirdoptions_on_id").prop("hidden", showThirdOptions);
+                                            $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowThirdOptions:showThirdOptions}, "json");
+                                        }
+                                    </script>
                                 </div>
-                                <script>
-                                    function thirdoptions_click() {
-                                        var show_options = $("#thirdoptions_checkbox_id").prop("checked");
-                                        $("#thirdoptions_id").prop("hidden", !show_options);
-                                        $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowThirdOptions:show_options}, "json");
-                                    }
-                                </script>
-	                        </fieldset>
-	                        <fieldset>
-                                <div>
-                                    <g:checkBox id="forthoptions_checkbox_id" name="contestMapShowForthOptions" value="${routeInstance.contestMapShowForthOptions}" onclick="forthoptions_click();"/>
+                                <div style="margin-top:10px;">
                                     <label>${message(code:'fc.contestmap.printforthoptions')}</label>
-                                </div>
-                                <g:set var="forthoptions" value="hidden"/>
-                                <g:if test="${routeInstance.contestMapShowForthOptions}">
-                                    <g:set var="forthoptions" value=""/>
-                                </g:if>
-                                <div id="forthoptions_id" ${forthoptions}>
-	                                <div>
+                                    <g:set var="show_forthoptions" value=""/>
+                                    <g:if test="${routeInstance.contestMapShowForthOptions}">
+                                        <a id="showforthoptions_off_id" href="#x" class="arrowhead" onclick="showforthoptions(false);">${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showforthoptions_on_id" href="#x" class="arrowhead" onclick="showforthoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:if>
+                                    <g:else>
+                                        <g:set var="show_forthoptions" value="hidden"/>
+                                        <a id="showforthoptions_off_id" href="#x" class="arrowhead" onclick="showforthoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
+                                        <a id="showforthoptions_on_id" href="#x" class="arrowhead" onclick="showforthoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
+                                    </g:else>
+                                    <div style="margin-left:20px;" id="showforthoptions_id" ${show_forthoptions}>
+                                        <div>
+                                            <br/>
+                                            <p>
+                                                <input type="text" id="contestMapForthTitle" name="contestMapForthTitle" value="${fieldValue(bean:routeInstance,field:'contestMapForthTitle')}" tabIndex="${ti[0]++}"/>
+                                            </p>
+                                        </div>
+                                        <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos4}" vpname="contestMapCenterVerticalPos4" hp="${routeInstance.contestMapCenterHorizontalPos4}" hpname="contestMapCenterHorizontalPos4" ti="${ti}"/>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints4}" tpid="${Defs.TurnpointID_ContestMapCenterPoints4}" ti="${ti}" printpoints="${false}"/>
+                                        <table class="mapexportquestiontable">
+                                            <tr class="mapexportquestiontable">
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX4" fieldvalue="${routeInstance.contestMapCenterMoveX4}" ti="${ti}"/>
+                                                </td>
+                                                <td class="mapexportquestiontable">
+                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY4" fieldvalue="${routeInstance.contestMapCenterMoveY4}" ti="${ti}"/>
+                                                </td>
+                                                <g:if test="${routeInstance.corridorWidth}">
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapShowCorridorWidth r="${routeInstance}"/>
+                                                    </td>
+                                                    <td class="mapexportquestiontable">
+                                                        <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth4" fieldvalue="${routeInstance.corridorWidth4}" ti="${ti}"/>
+                                                    </td>
+                                                </g:if>
+                                            </tr>
+                                        </table>
+                                        <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints4}" tpid="${Defs.TurnpointID_ContestMapPrintPoints4}" ti="${ti}" printpoints="${true}"/>
+                                        <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize4}" printsizename="contestMapPrintSize4" printlandscape="${routeInstance.contestMapPrintLandscape4}" printlandscapename="contestMapPrintLandscape4" ti="${ti}"/>
                                         <br/>
-	                                    <p>
-	                                        <input type="text" id="contestMapForthTitle" name="contestMapForthTitle" value="${fieldValue(bean:routeInstance,field:'contestMapForthTitle')}" tabIndex="${ti[0]++}"/>
-	                                    </p>
-	                                </div>
-                                    <g:contestMapPos vp="${routeInstance.contestMapCenterVerticalPos4}" vpname="contestMapCenterVerticalPos4" hp="${routeInstance.contestMapCenterHorizontalPos4}" hpname="contestMapCenterHorizontalPos4" ti="${ti}"/>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints4}" tpid="${Defs.TurnpointID_ContestMapCenterPoints4}" ti="${ti}" printpoints="${false}"/>
-                                    <table class="mapexportquestiontable">
-                                        <tr class="mapexportquestiontable">
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveX4" fieldvalue="${routeInstance.contestMapCenterMoveX4}" ti="${ti}"/>
-                                            </td>
-                                            <td class="mapexportquestiontable">
-                                                <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:" fieldid="contestMapCenterMoveY4" fieldvalue="${routeInstance.contestMapCenterMoveY4}" ti="${ti}"/>
-                                            </td>
-                                            <g:if test="${routeInstance.corridorWidth}">
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapShowCorridorWidth r="${routeInstance}"/>
-                                                </td>
-                                                <td class="mapexportquestiontable">
-                                                    <g:contestMapRouteInputField r="${routeInstance}" fieldlabel="${message(code:'fc.corridorwidth.deviating')} [${message(code:'fc.mile')}]:" fieldid="corridorWidth4" fieldvalue="${routeInstance.corridorWidth4}" ti="${ti}"/>
-                                                </td>
-                                            </g:if>
-                                        </tr>
-                                    </table>
-                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints4}" tpid="${Defs.TurnpointID_ContestMapPrintPoints4}" ti="${ti}" printpoints="${true}"/>
-                                    <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize4}" printsizename="contestMapPrintSize4" printlandscape="${routeInstance.contestMapPrintLandscape4}" printlandscapename="contestMapPrintLandscape4" ti="${ti}"/>
-                                    <br/>
-                                    <g:actionSubmit action="mapgenerate4" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_takeoff4" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_noroute4" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-									<g:actionSubmit action="mapgenerate_allroutedetails4" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                    <g:actionSubmit action="mapgenerate_taskcreator4" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate4" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_takeoff4" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_noroute4" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_allroutedetails4" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        <g:actionSubmit action="mapgenerate_taskcreator4" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    </div>
+                                    <script>
+                                        function showforthoptions(showForthOptions) {
+                                            $("#showforthoptions_id").prop("hidden", !showForthOptions);
+                                            $("#showforthoptions_off_id").prop("hidden", !showForthOptions);
+                                            $("#showforthoptions_on_id").prop("hidden", showForthOptions);
+                                            $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowForthOptions:showForthOptions}, "json");
+                                        }
+                                    </script>
                                 </div>
-                                <script>
-                                    function forthoptions_click() {
-                                        var show_options = $("#forthoptions_checkbox_id").prop("checked");
-                                        $("#forthoptions_id").prop("hidden", !show_options);
-                                        $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowForthOptions:show_options}, "json");
-                                    }
-                                </script>
 	                        </fieldset>
                         </g:if>
                         <g:else>

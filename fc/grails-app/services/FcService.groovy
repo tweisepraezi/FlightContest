@@ -5536,6 +5536,61 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map importAirspaceKmzFile(String fileExtension, Route routeInstance, def file, String folderName)
+    {
+        Map ret = [found: false, error: false, message: ""]
+        
+        String original_filename = file.getOriginalFilename()
+        if (!fileExtension) {
+            ret.error = true
+            ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.noairspacefile',[original_filename, RouteFileTools.AIRSPACE_EXTENSIONS])
+        } else if (!original_filename) {
+            ret.found = true
+            ret.error = true
+            ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.nofile')
+        } else {
+            printstart "importAirspaceKmzFile '$original_filename'"
+            if (original_filename.toLowerCase().endsWith(fileExtension)) {
+                
+                ret.found = true
+                
+                // upload file
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ENROUTE-${uuid}-UPLOAD${fileExtension}"
+                printstart "Upload $original_filename -> $upload_filename"
+                file.transferTo(new File(webroot_dir, upload_filename))
+                printdone ""
+                
+                // read file
+                Map reader = RouteFileTools.ReadAirspaceFile(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, folderName)
+                
+                // delete file
+                DeleteFile(webroot_dir + upload_filename)
+                
+                if (!reader.valid) {
+                    ret.error = true
+                    ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.invalidairspacefile',[original_filename])
+                } else if (reader.invalidlinenum) {
+                    ret.error = true
+                    ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.anyinvalidline',[original_filename, reader.invalidlinenum, reader.errors])
+                } else if (reader.errors) {
+                    ret.error = true
+                    ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.readerrors',[original_filename, reader.errors])
+                } else if (!reader.importedairspacenum) {
+                    ret.error = true
+                    ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.noairspacedata',[original_filename])
+                } else {
+                    ret.message = getMsg('fc.contestmap.contestmapairspaces.importairspace.imported',[original_filename, reader.importedairspacenum])
+                }
+            }
+            printdone ""
+        }
+        
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
     Map importTurnpointPhotos(Map params, MultipartFile zipFile)
     {
         Map ret = [importNum:0, updateNum:0]

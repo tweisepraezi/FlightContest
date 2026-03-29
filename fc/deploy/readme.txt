@@ -1,6 +1,18 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.6
+----------------
+- OSM-Wettbewerbs-Karte: Das Kommando "Lufträume um Flughafen suchen" speichert jetzt Koordinaten direkt im Textfeld.
+    Dadurch wird OpenAIP nicht mehr beim erstmaligen Erzeugen einer Karte benötigt.
+- OSM-Wettbewerbs-Karte: Kommando "Luftraum importieren" hinzugefügt
+    Ermöglicht das Hinzufügen eines Luftraumes aus einem <Placemark>-Tag einer kml/kmz-Datei
+    <Placemark><name>...</name><Polygon><outerBoundaryIs><LinearRing><coordinates>...</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+- Aktualisierung folgender Regelwerke
+    Wettbewerbsordnung Rallyeflug Deutschland 2026
+    Wettbewerbsordnung Air Navigation Race Deutschland 2026
+    Regelwerk Landewertung Deutschland 2026
+
 Änderungen 4.2.5
 ----------------
 - OSM-Wettbewerbs-Karten-Option "Flugplätze, Lufträume und Karten-Objekte von folgender Strecke verwenden" verbessert:
@@ -13,13 +25,13 @@
     Die Reihenfolge der Auswahlobjekte wurde neu festgelegt: Zuerst kommen jetzt die strecken-unabhängigen, dann die strecken-bezogenen Einstellungen.
     Die Anzahl von Flugplätzen, Lufträumen und Karten-Objekten und ihre Herkunft werden gelb markiert angezeigt.
         Überprüfen Sie in allen Strecken diese Option und deaktivieren Sie die Auswahl "Flugplätze, Lufträume und Karten-Objekte von folgender Strecke verwenden",
-        falls unerwünschte Zurodnungen erfolgt sind. Eine Auswahländerung ist mit "Speichern" wirksam zu machen.
+        falls unerwünschte Zuordnungen erfolgt sind. Eine Auswahländerung ist mit "Speichern" wirksam zu machen.
     Karten-Objekte können nun deaktiviert werden, um deren Druck auf die Karte zu verhindern.
         Bei einem deaktivierten Karten-Objekt beginnt der Untertitel mit #.
 - Neuer Wettbewerb: Default-Koordinatendarstellung auf 'Grad Dezimal' geändert.
 - Aufgaben-Einstellungen: Namen auszuwertender Beobachtungsobjekte hinzugefügt
-    Eine Eingabe bewirkt, dass nur die angegebenen Wendepunkte, Strecken-Bodenzeichen und/oder Strecken-Bodenzeichen in Formulare gedruckt und ausgewertet werden.
-    Werden nur Strecken-Bodenzeichen angegeben, werden Wendepunkte und Strecken-Bodenzeichen vollständig gedruckt und ausgewertet.
+    Eine Eingabe bewirkt, dass nur die angegebenen Wendepunkte, Strecken-Bilder und/oder Strecken-Bodenzeichen in Formulare gedruckt und ausgewertet werden.
+    Werden nur Strecken-Bilder angegeben, werden Wendepunkte und Strecken-Bodenzeichen vollständig gedruckt und ausgewertet.
 - Bug "'Import Koordinaten' nimmt einen landschaftlichen Abschnitt vor dem FP nicht an" behoben
 - Dieses Release verändert die Datenbank-Version.
 

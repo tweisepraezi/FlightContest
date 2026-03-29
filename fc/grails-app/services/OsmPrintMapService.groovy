@@ -122,6 +122,11 @@ class OsmPrintMapService
     final static String AIRSPACE_LAYER_ID_PREAFIX = "id_"
     final static BigDecimal AIRSPACE_STROKE_WIDTH = 0.75
 
+    final static String ADDITIONAL_AIRSPACE_NAME = "coord"
+    final static String ADDITIONAL_AIRSPACE_LONLAT_SEPARATOR = ";"
+    final static String ADDITIONAL_AIRSPACE_LONLATALT_KML_SEPARATOR = ","
+    final static String ADDITIONAL_AIRSPACE_COORD_SEPARATOR = " "
+
     final static BigDecimal AIRPORTAREA_ADDITIONAL_LEN = 2.0 // NM
     
     // CSV files
@@ -314,8 +319,8 @@ class OsmPrintMapService
         }
         print_width -= 2*MARGIN
         print_height -= 2*MARGIN
-        BigDecimal print_width_nm = map_scale * print_width / Route.mmPerNM
-        BigDecimal print_height_nm = map_scale * print_height / Route.mmPerNM
+        BigDecimal print_width_nm = map_scale * print_width / Defs.mmPerNM
+        BigDecimal print_height_nm = map_scale * print_height / Defs.mmPerNM
         Map rect_width = AviationMath.getShowPoint(center_latitude, center_longitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
         Map rect_height = AviationMath.getShowPoint(center_latitude, center_longitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
         
@@ -449,7 +454,7 @@ class OsmPrintMapService
                 }
             }
             
-            if (PrintMapTools.IsLocalPrintmapsRunning()) { // TODO
+            if (PrintMapTools.IsLocalPrintmapsRunning()) {
                 mapdata_date = PrintMapTools.GetLocalPrintmapsDate(route_instance.contest)
             }
             
@@ -985,6 +990,7 @@ class OsmPrintMapService
     {
         String airspaces_lines = ""
         String airspaces_short_file_name = airspacesFileName.substring(airspacesFileName.lastIndexOf('/')+1)
+        int additional_airspace_no = 0
         for (String layer in airspacesLayer.split("\n")) {
             if (layer && layer.trim()) {
                 String airspace_layer = layer.trim()
@@ -1002,6 +1008,10 @@ class OsmPrintMapService
                         if (airspace_style_values.size() == 1) {
                             if (first_style) {
                                 airspace_layer = airspace_style_values[0].trim()
+                                if (airspace_layer == OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME) {
+                                    additional_airspace_no++
+                                    airspace_layer += "_${additional_airspace_no}"
+                                }
                                 airspace_text = airspace_layer
                             } else if (airspace_text) {
                                 airspace_text += OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR + airspace_style
@@ -1382,8 +1392,8 @@ class OsmPrintMapService
         printstart "Write ${graticuleFileName}"
         println "center_graticule_latitude=${center_graticule_latitude}, center_graticule_longitude=${center_graticule_longitude}"
         
-        BigDecimal print_width_nm = printScale * printWidth / Route.mmPerNM
-        BigDecimal print_height_nm = printScale * printHeight / Route.mmPerNM
+        BigDecimal print_width_nm = printScale * printWidth / Defs.mmPerNM
+        BigDecimal print_height_nm = printScale * printHeight / Defs.mmPerNM
         Map rect_width = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)
         Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN*printHeight/minPrintHeight) 
         println "Width:  ${printWidth} mm, ${print_width_nm} NM, ${rect_width}"
@@ -1520,7 +1530,7 @@ class OsmPrintMapService
         List mapobjects_symbol_filenames = []
         
         for (CoordMapObject coordmapobject_instance in CoordMapObject.findAllByRoute(routeInstance, [sort:"enrouteViewPos"])) {
-            if (coordmapobject_instance.mapObjectType != MapObjectType.Airfield) {
+            if (!coordmapobject_instance.mapObjectText.startsWith(Defs.IGNORE_LINE) && coordmapobject_instance.mapObjectType != MapObjectType.Airfield) {
                 csvWriter << CSV_LINESEPARATOR + lineID[0]
                 if (coordmapobject_instance.mapObjectType == MapObjectType.Symbol) {
                     String symbol_name = symbolPraefix + coordmapobject_instance.id + '.png'
@@ -1755,8 +1765,8 @@ class OsmPrintMapService
         }
         //print_width -= 2*MARGIN
         //print_height -= 2*MARGIN
-        BigDecimal print_width_nm = routeInstance.mapScale * print_width / Route.mmPerNM
-        BigDecimal print_height_nm = routeInstance.mapScale * print_height / Route.mmPerNM
+        BigDecimal print_width_nm = routeInstance.mapScale * print_width / Defs.mmPerNM
+        BigDecimal print_height_nm = routeInstance.mapScale * print_height / Defs.mmPerNM
         Map rect_width = AviationMath.getShowPoint(center_latitude, center_longitude, print_width_nm / 2 + AIRPORTAREA_ADDITIONAL_LEN, GRATICULE_SCALEBAR_LEN)
         Map rect_height = AviationMath.getShowPoint(center_latitude, center_longitude, print_height_nm / 2 + AIRPORTAREA_ADDITIONAL_LEN, GRATICULE_SCALEBAR_LEN)
         

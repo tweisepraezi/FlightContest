@@ -113,7 +113,7 @@ enum ContestRules
     ),
 
 	R1 ([
-            ruleTitle:"Wettbewerbsordnung Rallyeflug Deutschland - Ausgabe 2025", // DE-RF
+            ruleTitle:"Wettbewerbsordnung Rallyeflug Deutschland - Ausgabe 2026", // DE-RF
             
 			// General
             increaseFactor:0,                                        // DE-RF
@@ -553,7 +553,7 @@ enum ContestRules
 	),
 
 	R13 ([
-            ruleTitle:"Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2025", // DE-ANR
+            ruleTitle:"Wettbewerbsordnung Air Navigation Race Deutschland - Ausgabe 2026", // DE-ANR
             
 			// General
             increaseFactor:0,                                        // DE-ANR
