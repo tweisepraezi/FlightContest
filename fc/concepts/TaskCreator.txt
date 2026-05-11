@@ -1,6 +1,10 @@
 
 https://www.airrats.cl/taskcreator?lang=en
 https://www.airrats.cl/taskcreator?lang=en&admin
+https://www.airrats.cl/taskcreator?lang=de&admin
+
+https://www.airrats.cl.naa.umr.mybluehost.me/taskcreator?lang=en&admin
+https://www.airrats.cl.naa.umr.mybluehost.me/taskcreator?lang=de&admin
 
 https://www.airrats.cl/taskcreator/js/airrats.min.js
 Download -> Convert to ANSI -> Save "C:\Projects\EPJ\fcdev\fc\web-app\taskcreator\js\airrats.min.js"

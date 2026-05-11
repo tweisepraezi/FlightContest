@@ -2547,7 +2547,7 @@ class GpxService
         if (params.gpxExport) {
             int view_pos = 1
             List coordmapobject_instances = []
-            if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+            if (routeInstance.contestMapShowMapObjectsFromRouteID && !export_semicircle_gates) {
                 Route route_instance_from = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
                 if (route_instance_from) {
                     coordmapobject_instances += CoordMapObject.findAllByRoute(route_instance_from,[sort:"enrouteViewPos"])
@@ -2582,16 +2582,23 @@ class GpxService
                     view_pos++
                 }
             }
-            if (export_semicircle_gates && !routeInstance.corridorWidth) {
+            
+            // Circle center coordinate
+            if (export_semicircle_gates) {
                 int circle_pos = 1
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRouteAndCircleCenter(routeInstance,true,[sort:'id'])) {
+                    String circle_text = ""
+                    if (routeInstance.corridorWidth) {
+                        circle_text += Defs.IGNORE_LINE
+                    }
+                    circle_text += "Circle-${circle_pos}"
                     xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
                         xml.extensions {
                             xml.flightcontest {
                                 xml.mapobject(
                                     type:              MapObjectType.CircleCenter,
                                     viewpos:           view_pos,
-                                    text:              "Circle-${circle_pos}",
+                                    text:              circle_text,
                                     directionairfield: 0,
                                     gliderairfield:    getYesNo(false),
                                     pavedairfield:     getYesNo(false)
@@ -2613,6 +2620,7 @@ class GpxService
                 xml.flightcontest {
                     wr_route_settings(routeInstance, xml, [corridorwidth:routeInstance.corridorWidth, corridorwidth2:routeInstance.corridorWidth2,
                                                            corridorwidth3:routeInstance.corridorWidth3, corridorwidth4:routeInstance.corridorWidth4,
+                                                           objectsfromrouteid:routeInstance.contestMapShowMapObjectsFromRouteID,
                                                            contestmapcurvedlegpoints:"", // DisabledCheckPointsTools.Compress2(contestmapcurvedlegpoints, gate_titles)
                                                            contestmapcenterpoints: DisabledCheckPointsTools.Compress2(contestmapcenterpoints, gate_titles),
                                                            contestmapprintpoints: DisabledCheckPointsTools.Compress2(contestmapprintpoints, gate_titles),
@@ -2622,7 +2630,7 @@ class GpxService
                                                            contestmapprintpoints3: DisabledCheckPointsTools.Compress2(contestmapprintpoints3, gate_titles),
                                                            contestmapcenterpoints4: DisabledCheckPointsTools.Compress2(contestmapcenterpoints4, gate_titles),
                                                            contestmapprintpoints4: DisabledCheckPointsTools.Compress2(contestmapprintpoints4, gate_titles),
-                                                          ])
+                                                          ], true)
                 }
             }
         }
@@ -2712,27 +2720,38 @@ class GpxService
             }
         }
         
-        boolean wr_routename = routeInstance.IsOtherRoute()
-        gpx_route_contestmap_track(routeInstance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
-        if (routeInstance.route2ID) {
-            Route route_instance = Route.get(routeInstance.route2ID)
-            if (route_instance) {
-                gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+        if (routeInstance.IsOtherRoute()) {
+            boolean wr_routename = !contestMapParams.contestMapRoute
+            if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 1) {
+                gpx_route_contestmap_track(routeInstance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
             }
-        }
-        if (routeInstance.route3ID) {
-            Route route_instance = Route.get(routeInstance.route3ID)
-            if (route_instance) {
-                gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+            if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 2) {
+                if (routeInstance.route2ID) {
+                    Route route_instance = Route.get(routeInstance.route2ID)
+                    if (route_instance) {
+                        gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+                    }
+                }
             }
-        }
-        if (routeInstance.route4ID) {
-            Route route_instance = Route.get(routeInstance.route4ID)
-            if (route_instance) {
-                gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+            if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 3) {
+                if (routeInstance.route3ID) {
+                    Route route_instance = Route.get(routeInstance.route3ID)
+                    if (route_instance) {
+                        gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+                    }
+                }
             }
+            if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 4) {
+                if (routeInstance.route4ID) {
+                    Route route_instance = Route.get(routeInstance.route4ID)
+                    if (route_instance) {
+                        gpx_route_contestmap_track(route_instance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, wr_routename)
+                    }
+                }
+            }
+        } else {
+            gpx_route_contestmap_track(routeInstance, testInstance, xml, params, contestMapParams, center_latitude, center_longitude, false)
         }
-
         printdone ""
     } // gpx_route_contestmap
     
@@ -2860,7 +2879,8 @@ class GpxService
                                 if (contestMapParams.contestMapCurvedLeg &&
                                     DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints,routeInstance).contains(coordroute_instance.title()+',') && 
                                     DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',') &&
-                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
+                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) 
+                                {
                                     xml.rte {
                                         xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
                                         boolean run = false
@@ -2899,7 +2919,8 @@ class GpxService
                                 }
                             } else if (contestMapParams.contestMapLeg) {
                                 if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(coordroute_instance.title()+',') &&
-                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+',')) {
+                                    DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints,routeInstance).contains(last_coordroute_instance.title()+','))
+                                {
                                     Map track_coords_start = AviationMath.getTrack2Circle(
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
@@ -3559,10 +3580,10 @@ class GpxService
     } // gpx_route_contestmap_track
     
     //--------------------------------------------------------------------------
-    private void wr_route_settings(Route routeInstance, MarkupBuilder xml, Map params)
+    private void wr_route_settings(Route routeInstance, MarkupBuilder xml, Map params, boolean exportSemicircleGates = false)
     {
         String airfields = routeInstance.contestMapAirfieldsData
-        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+        if (routeInstance.contestMapShowMapObjectsFromRouteID && !exportSemicircleGates) {
             Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
             if (route_instance && route_instance.contestMapAirfieldsData) {
                 if (airfields ) {
@@ -3572,7 +3593,7 @@ class GpxService
             }
         }
         String airspaces = routeInstance.contestMapAirspacesLayer2
-        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+        if (routeInstance.contestMapShowMapObjectsFromRouteID && !exportSemicircleGates) {
             Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
             if (route_instance && route_instance.contestMapAirspacesLayer2) {
                 if (airspaces ) {
@@ -3596,6 +3617,7 @@ class GpxService
             useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
             mapscale: routeInstance.mapScale,
             altitudeaboveground: routeInstance.altitudeAboveGround,
+            objectsfromrouteid: params.objectsfromrouteid,
             corridorwidth: params.corridorwidth,
             corridorwidth2: params.corridorwidth2,
             corridorwidth3: params.corridorwidth3,

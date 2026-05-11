@@ -47,9 +47,6 @@ class Route
     Boolean showEnroutePhotos = false                                            // DB-2.30
     Boolean showEnrouteCanvas = false                                            // DB-2.30
     
-    static int mmPerNM = 1852000
-    static int mmPerkm = 1000000
-    
     // transient values 
     static transients = ['contestMapOutput','contestMapPrint','contestMapDevStyle','contestMapPrintName']
             
@@ -312,7 +309,7 @@ class Route
         contestMapAirfieldsData sqlType: "nvarchar(max)"
 	}
 	
-	void CopyValues(Route routeInstance)
+	void CopyValues(Route routeInstance, boolean copyContest = false)
 	{
 		title = routeInstance.title
 		idTitle = routeInstance.idTitle
@@ -342,10 +339,12 @@ class Route
         corridorWidth2 = routeInstance.corridorWidth2
         corridorWidth3 = routeInstance.corridorWidth3
         corridorWidth4 = routeInstance.corridorWidth4
-        if (routeInstance.contestMapShowMapObjectsFromRouteID) {
-            contestMapShowMapObjectsFromRouteID = routeInstance.contestMapShowMapObjectsFromRouteID
-        } else if (routeInstance.mapobjects) {
-            contestMapShowMapObjectsFromRouteID = routeInstance.id
+        if (!copyContest) {
+            if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                contestMapShowMapObjectsFromRouteID = routeInstance.contestMapShowMapObjectsFromRouteID
+            } else if (routeInstance.mapobjects) {
+                contestMapShowMapObjectsFromRouteID = routeInstance.id
+            }
         }
 
         contestMapAirfields = routeInstance.contestMapAirfields
@@ -531,15 +530,27 @@ class Route
             BigDecimal min_longitude = null
             BigDecimal max_longitude = null
             List route_instances = []
-            route_instances += this
-            if (this.route2ID) {
-                route_instances += Route.get(this.route2ID)
-            }
-            if (this.route3ID) {
-                route_instances += Route.get(this.route3ID)
-            }
-            if (this.route4ID) {
-                route_instances += Route.get(this.route4ID)
+            if (IsOtherRoute()) {
+                if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 1) {
+                    route_instances += this
+                }
+                if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 2) {
+                    if (this.route2ID) {
+                        route_instances += Route.get(this.route2ID)
+                    }
+                }
+                if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 3) {
+                    if (this.route3ID) {
+                        route_instances += Route.get(this.route3ID)
+                    }
+                }
+                if (!contestMapParams.contestMapRoute || contestMapParams.contestMapRoute == 4) {
+                    if (this.route4ID) {
+                        route_instances += Route.get(this.route4ID)
+                    }
+                }
+            } else {
+                route_instances += this
             }
             for (Route route_instance in route_instances) {
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:'id'])) {
@@ -641,7 +652,11 @@ class Route
     
     String GetOSMRouteName1()
     {
-        String route_name = osm_name()
+        String route_name = ""
+		if (parcourName) {
+            route_name = "${parcourName} - "
+        }
+        route_name += name()
         if (corridorWidth) {
             route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
         }
@@ -653,7 +668,20 @@ class Route
     
     String GetOSMRouteName2()
     {
-        String route_name = osm_name()
+        String route_name = ""
+		if (parcourName) {
+            route_name = "${parcourName} - "
+        }
+        if (IsOtherRoute()) {
+            if (route2ID) {
+                Route route_instance = Route.get(route2ID)
+                if (route_instance) {
+                    route_name += route_instance.name()
+                }
+            }
+        } else {
+            route_name += name()
+        }
         if (corridorWidth) {
             if (corridorWidth2) {
                 route_name += " (${FcMath.DistanceStr2(corridorWidth2)}${getMsgArgs('fc.mile',[])})"
@@ -669,7 +697,20 @@ class Route
     
     String GetOSMRouteName3()
     {
-        String route_name = osm_name()
+        String route_name = ""
+		if (parcourName) {
+            route_name = "${parcourName} - "
+        }
+        if (IsOtherRoute()) {
+            if (route3ID) {
+                Route route_instance = Route.get(route3ID)
+                if (route_instance) {
+                    route_name += route_instance.name()
+                }
+            }
+        } else {
+            route_name += name()
+        }
         if (corridorWidth) {
             if (corridorWidth3) {
                 route_name += " (${FcMath.DistanceStr2(corridorWidth3)}${getMsgArgs('fc.mile',[])})"
@@ -685,7 +726,20 @@ class Route
     
     String GetOSMRouteName4()
     {
-        String route_name = osm_name()
+        String route_name = ""
+		if (parcourName) {
+            route_name = "${parcourName} - "
+        }
+        if (IsOtherRoute()) {
+            if (route4ID) {
+                Route route_instance = Route.get(route4ID)
+                if (route_instance) {
+                    route_name += route_instance.name()
+                }
+            }
+        } else {
+            route_name += name()
+        }
         if (corridorWidth) {
             if (corridorWidth4) {
                 route_name += " (${FcMath.DistanceStr2(corridorWidth4)}${getMsgArgs('fc.mile',[])})"
@@ -697,36 +751,6 @@ class Route
             return "${route_name} - ${contestMapForthTitle}"
         }
         return route_name
-    }
-    
-    String osm_name()
-    {
-        String osm_route_name = ""
-		if (parcourName) {
-            osm_route_name = "${parcourName} - "
-        }
-        osm_route_name += name()
-        if (corridorWidth) {
-            if (route2ID) {
-                Route route_instance = Route.get(route2ID)
-                if (route_instance) {
-                    osm_route_name += ", ${route_instance.name()}"
-                }
-            }
-            if (route3ID) {
-                Route route_instance = Route.get(route3ID)
-                if (route_instance) {
-                    osm_route_name += ", ${route_instance.name()}"
-                }
-            }
-            if (route4ID) {
-                Route route_instance = Route.get(route4ID)
-                if (route_instance) {
-                    osm_route_name += ", ${route_instance.name()}"
-                }
-            }
-        }
-        return osm_route_name
     }
     
 	boolean Used()
@@ -1291,8 +1315,41 @@ class Route
         return [distance_to2ldg:distance_to2ldg, distance_sp2fp:distance_sp2fp, procedureturn_num:procedureturn_num, secret_num:secret_num, curved_num:curved_num]
     }
     
-    void SetAllContestMapPoints()
+    void ResetAllContestMapPoints()
     {
+        if (IsOtherRoute()) {
+            if (route2ID) {
+                contestMapCenterPoints2 = Defs.CONTESTMAPPOINTS_INIT
+                contestMapPrintPoints2 = Defs.CONTESTMAPPOINTS_INIT
+                SetAllContestMapPoints(Route.get(route2ID))
+            }
+            if (route3ID) {
+                contestMapCenterPoints3 = Defs.CONTESTMAPPOINTS_INIT
+                contestMapPrintPoints3 = Defs.CONTESTMAPPOINTS_INIT
+                SetAllContestMapPoints(Route.get(route3ID))
+            }
+            if (route4ID) {
+                contestMapCenterPoints4 = Defs.CONTESTMAPPOINTS_INIT
+                contestMapPrintPoints4 = Defs.CONTESTMAPPOINTS_INIT
+                SetAllContestMapPoints(Route.get(route4ID))
+            }
+        } else {
+            contestMapCenterPoints2 = Defs.CONTESTMAPPOINTS_INIT
+            contestMapPrintPoints2 = Defs.CONTESTMAPPOINTS_INIT
+            contestMapCenterPoints3 = Defs.CONTESTMAPPOINTS_INIT
+            contestMapPrintPoints3 = Defs.CONTESTMAPPOINTS_INIT
+            contestMapCenterPoints4 = Defs.CONTESTMAPPOINTS_INIT
+            contestMapPrintPoints4 = Defs.CONTESTMAPPOINTS_INIT
+            SetAllContestMapPoints()
+        }
+    }
+    
+    void SetAllContestMapPoints(Route otherRouteInstance = null)
+    {
+        Route route_instance = this
+        if (otherRouteInstance) {
+            route_instance = otherRouteInstance
+        }
         boolean save_points = false
         if (!contestMapCenterPoints || contestMapCenterPoints == Defs.CONTESTMAPPOINTS_INIT) {
             save_points = true
@@ -1325,7 +1382,7 @@ class Route
             String center_points = ""
             String print_points = ""
             String curvedleg_points = ""
-            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id"])) {
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
                 if (coordroute_instance.type.IsContestMapQuestionCoord()) {
                     if (center_points) {
                         center_points += ",${coordroute_instance.title()}"
@@ -1361,31 +1418,31 @@ class Route
             print_points += ","
             curvedleg_points += ","
             if (!contestMapCenterPoints || contestMapCenterPoints == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapCenterPoints = DisabledCheckPointsTools.Compress(center_points, this)
+                contestMapCenterPoints = DisabledCheckPointsTools.Compress(center_points, route_instance)
             }
             if (!contestMapCenterPoints2 || contestMapCenterPoints2 == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapCenterPoints2 = DisabledCheckPointsTools.Compress(center_points, this)
+                contestMapCenterPoints2 = DisabledCheckPointsTools.Compress(center_points, route_instance)
             }
             if (!contestMapCenterPoints3 || contestMapCenterPoints3 == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapCenterPoints3 = DisabledCheckPointsTools.Compress(center_points, this)
+                contestMapCenterPoints3 = DisabledCheckPointsTools.Compress(center_points, route_instance)
             }
             if (!contestMapCenterPoints4 || contestMapCenterPoints4 == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapCenterPoints4 = DisabledCheckPointsTools.Compress(center_points, this)
+                contestMapCenterPoints4 = DisabledCheckPointsTools.Compress(center_points, route_instance)
             }
             if (!contestMapPrintPoints || contestMapPrintPoints == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapPrintPoints = DisabledCheckPointsTools.Compress(print_points, this)
+                contestMapPrintPoints = DisabledCheckPointsTools.Compress(print_points, route_instance)
             }
             if (!contestMapPrintPoints2 || contestMapPrintPoints2 == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points, this)
+                contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points, route_instance)
             }
             if (!contestMapPrintPoints3 || contestMapPrintPoints3 == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points, this)
+                contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points, route_instance)
             }
             if (!contestMapPrintPoints4 || contestMapPrintPoints4 == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points, this)
+                contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points, route_instance)
             }
             if (!contestMapCurvedLegPoints || contestMapCurvedLegPoints == Defs.CONTESTMAPPOINTS_INIT) {
-                contestMapCurvedLegPoints = DisabledCheckPointsTools.Compress(curvedleg_points, this)
+                contestMapCurvedLegPoints = DisabledCheckPointsTools.Compress(curvedleg_points, route_instance)
             }
         }
     }
@@ -1395,7 +1452,7 @@ class Route
         if (measureValue == null) {
             return null
         }
-        BigDecimal nm_value = mapScale * measureValue / mmPerNM
+        BigDecimal nm_value = mapScale * measureValue / Defs.mmPerNM
         if (round) {
             return FcMath.RoundEnrouteDistance(nm_value)
         }
@@ -1407,7 +1464,7 @@ class Route
         if (distanceValue == null) {
             return null
         }
-        BigDecimal mm_value = distanceValue * mmPerNM / mapScale
+        BigDecimal mm_value = distanceValue * Defs.mmPerNM / mapScale
         if (round) {
             return FcMath.RoundMeasureDistance(mm_value)
         }
@@ -1419,7 +1476,7 @@ class Route
         if (distanceValue == null) {
             return null
         }
-        return distanceValue * mmPerNM / 1000 
+        return distanceValue * Defs.mmPerNM / 1000 
     }
 
     BigDecimal Convert_mm2km(BigDecimal measureValue)
@@ -1427,7 +1484,7 @@ class Route
         if (measureValue == null) {
             return null
         }
-        return mapScale * measureValue / mmPerkm
+        return mapScale * measureValue / Defs.mmPerkm
     }
 
     BigDecimal Convert_km2mm(Contest contestInstance, BigDecimal distanceValue)
@@ -1435,7 +1492,7 @@ class Route
         if (distanceValue == null) {
             return null
         }
-        return distanceValue * mmPerkm / mapScale 
+        return distanceValue * Defs.mmPerkm / mapScale 
     }
     
     Map GetFlightTestWindDirection()
@@ -1465,6 +1522,104 @@ class Route
             return true
         }
         return false
+    }
+    
+    boolean ShowSecondMapOptions()
+    {
+        if (!IsOtherRoute() || route2ID) {
+            return true 
+        }
+        return false
+    }
+    
+    boolean ShowThirdMapOptions()
+    {
+        if (!IsOtherRoute() || route3ID) {
+            return true 
+        }
+        return false
+    }
+    
+    boolean ShowForthMapOptions()
+    {
+        if (!IsOtherRoute() || route4ID) {
+            return true 
+        }
+        return false
+    }
+    
+    String GetFirstRouteName()
+    {
+        if (IsOtherRoute()) {
+            return " - ${name()}"
+        }
+        return ""
+    }
+    
+    String GetSecondRouteName()
+    {
+        if (IsOtherRoute() && route2ID) {
+            Route route_instance = Route.get(route2ID)
+            if (route_instance) {
+                return " - ${route_instance.name()}"
+            }
+        }
+        return ""
+    }
+    
+    String GetThirdRouteName()
+    {
+        if (IsOtherRoute() && route3ID) {
+            Route route_instance = Route.get(route3ID)
+            if (route_instance) {
+                return " - ${route_instance.name()}"
+            }
+        }
+        return ""
+    }
+    
+    String GetForthRouteName()
+    {
+        if (IsOtherRoute() && route4ID) {
+            Route route_instance = Route.get(route4ID)
+            if (route_instance) {
+                return " - ${route_instance.name()}"
+            }
+        }
+        return ""
+    }
+    
+    Route GetSecondRoute()
+    {
+        if (IsOtherRoute() && route2ID) {
+            Route route_instance = Route.get(route2ID)
+            if (route_instance) {
+                return route_instance
+            }
+        }
+        return this
+    }
+    
+    Route GetThirdRoute()
+    {
+        if (IsOtherRoute() && route3ID) {
+            Route route_instance = Route.get(route3ID)
+            if (route_instance) {
+                return route_instance
+            }
+        }
+        return this
+    }
+    
+    Route GetForthRoute()
+    {
+        if (IsOtherRoute() && route4ID) {
+            Route route_instance = Route.get(route4ID)
+            if (route_instance) {
+                return route_instance
+            }
+        }
+        return this
     }
     
     String GetInParcourNames()
@@ -1497,12 +1652,16 @@ class Route
     
     void SetShowMapObjectsFromRouteID(Contest contestInstance)
     {
-        Route first_route_instance = Route.findByContestAndContestMapShowMapObjectsFromRouteID(contestInstance,0,[sort:"idTitle"])
-        if (first_route_instance) {
-            this.contestMapShowMapObjectsFromRouteID = first_route_instance.id
-            this.contestMapShowAirfields = false
-            this.contestMapShowAirspaces = false
-            this.contestMapShowMapObjects = false
+        List routes_without_inheritance = Route.findAllByContestAndContestMapShowMapObjectsFromRouteID(contestInstance,0,[sort:"idTitle"])
+        for (Route route_instance in routes_without_inheritance) {
+            int coord_num = CoordRoute.countByRoute(route_instance)
+            if (coord_num == 1) {
+                this.contestMapShowMapObjectsFromRouteID = route_instance.id
+                this.contestMapShowAirfields = false
+                this.contestMapShowAirspaces = false
+                this.contestMapShowMapObjects = false
+                break
+            }
         }
     }
 }

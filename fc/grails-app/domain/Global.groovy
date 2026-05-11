@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.47
+	// Actual database version: DB-2.48
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 47
+	static int DB_MINOR = 48
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -535,6 +535,46 @@ class Global
             return true
         }
         return false
+    }
+    
+    //--------------------------------------------------------------------------
+    String GetAirspaceStyle(Map d)
+    {
+        if (grailsApplication.config.flightcontest.maps.styles) {
+            String airspace_style_name = "airspaceICAO${d.icaoClass}type${d.type}"
+            if (grailsApplication.config.flightcontest.maps.styles.containsKey(airspace_style_name)) {
+                return grailsApplication.config.flightcontest.maps.styles[airspace_style_name]
+            }
+            if (grailsApplication.config.flightcontest.maps.styles.airspaceDefault) {
+                return grailsApplication.config.flightcontest.maps.styles.airspaceDefault
+            }
+        }
+        if (d.icaoClass == 8 && d.type == 1) { // ED-R
+            return "fillcolor:red,textcolor:red"
+        } else if (d.icaoClass == 8 && d.type == 6) { // RMZ
+            return "fillcolor:steelblue,textcolor:black"
+        } else if (d.icaoClass == 3 && d.type == 4) { // CTR
+            return "" // nothing
+        }
+        return "fillcolor:gray,textcolor:black" // default
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetAirspaceImportStyle()
+    {
+        if (grailsApplication.config.flightcontest.maps.styles.airspaceImport) {
+            return grailsApplication.config.flightcontest.maps.styles.airspaceImport
+        }
+        return "fillcolor:blue,textcolor:black"
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetANRRouteAreaStyle()
+    {
+        if (grailsApplication.config.flightcontest.maps.styles.anrRouteArea) {
+            return grailsApplication.config.flightcontest.maps.styles.anrRouteArea
+        }
+        return "fillcolor:gray,textcolor:black"
     }
     
     // --------------------------------------------------------------------------------------------------------------------

@@ -1,6 +1,16 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.7
+-------------
+- OSM Contest Map generation for ANR parcours with multiple routes expanded
+    The OSM Contest Map dialog has been modified so that each route is assigned to exactly one
+    settings area. The "Generate" command now prints only the corridor of the assigned route.
+    At the positions of the other routes, an airspace rectangle is generated for each one, 
+    which completely encloses the respective other route.
+- Configuration of display style for airspaces and other routes in the ANR parcour added
+    see Help -> Display style for airspaces and other routes in the ANR parcour
+
 Changes 4.2.6
 -------------
 - OSM Contest Map: Command "Search airspaces around the airport" saves coordinates directly in the text field now.

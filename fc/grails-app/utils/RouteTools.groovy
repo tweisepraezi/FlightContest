@@ -850,4 +850,264 @@ class RouteTools
         }
     }
     
+    //--------------------------------------------------------------------------
+    static String GetANRRouteAreaCoords(Route routeInstance)
+    {
+        /*
+        BigDecimal min_latitude = null
+        BigDecimal max_latitude = null
+        BigDecimal min_longitude = null
+        BigDecimal max_longitude = null
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            if (coordroute_instance.type.IsCorridorCoord()) {
+                BigDecimal latitude = coordroute_instance.latMath()
+                if (min_latitude == null) {
+                    min_latitude = latitude
+                } else if (latitude < min_latitude) {
+                    min_latitude = latitude
+                }
+                if (max_latitude == null) {
+                    max_latitude = latitude
+                } else if (latitude > max_latitude) {
+                    max_latitude = latitude
+                }
+                BigDecimal longitude = coordroute_instance.lonMath()
+                if (min_longitude == null) {
+                    min_longitude = longitude
+                } else if (longitude < min_longitude) {
+                    min_longitude = longitude
+                }
+                if (max_longitude == null) {
+                    max_longitude = longitude
+                } else if (longitude > max_longitude) {
+                    max_longitude = longitude
+                }
+            }
+        }
+        // coords:9.56361;47.53917 
+        String route_area_coords = ""
+        route_area_coords += "$min_longitude;$min_latitude"
+        route_area_coords += " $max_longitude;$min_latitude"
+        route_area_coords += " $max_longitude;$max_latitude"
+        route_area_coords += " $min_longitude;$max_latitude"
+        route_area_coords += " $min_longitude;$min_latitude"
+        return route_area_coords
+        */
+
+        BigDecimal sp_latitude = null
+        BigDecimal sp_longitude = null
+        BigDecimal fp_latitude = null
+        BigDecimal fp_longitude = null
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            if (coordroute_instance.type == CoordType.SP) {
+                sp_latitude = coordroute_instance.latMath()
+                sp_longitude = coordroute_instance.lonMath()
+            } else if (coordroute_instance.type == CoordType.FP) {
+                fp_latitude = coordroute_instance.latMath()
+                fp_longitude = coordroute_instance.lonMath()
+            }
+        }
+        
+        // get initial area
+        BigDecimal gate_width = 0.5
+        Map sp_gate = AviationMath.getGate(fp_latitude, fp_longitude, sp_latitude, sp_longitude, gate_width)
+        Map fp_gate = AviationMath.getGate(sp_latitude, sp_longitude, fp_latitude, fp_longitude, gate_width)
+        BigDecimal sp_left_lon = sp_gate.coordRight.lon
+        BigDecimal sp_left_lat = sp_gate.coordRight.lat
+        BigDecimal sp_right_lon = sp_gate.coordLeft.lon
+        BigDecimal sp_right_lat = sp_gate.coordLeft.lat
+        BigDecimal fp_left_lon = fp_gate.coordLeft.lon
+        BigDecimal fp_left_lat = fp_gate.coordLeft.lat
+        BigDecimal fp_right_lon = fp_gate.coordRight.lon
+        BigDecimal fp_right_lat = fp_gate.coordRight.lat
+        
+        // move sp -> fp left
+        boolean calc_again = false
+        boolean calc_again2 = true
+        while (true) {
+            if (calc_again) {
+                gate_width += 0.3
+                sp_gate = AviationMath.getGate(fp_latitude, fp_longitude, sp_latitude, sp_longitude, gate_width)
+                fp_gate = AviationMath.getGate(sp_latitude, sp_longitude, fp_latitude, fp_longitude, gate_width)
+                sp_left_lon = sp_gate.coordRight.lon
+                sp_left_lat = sp_gate.coordRight.lat
+                fp_left_lon = fp_gate.coordLeft.lon
+                fp_left_lat = fp_gate.coordLeft.lat
+                calc_again = false
+            }
+            Map track_line_left = [x1:sp_left_lon, y1:sp_left_lat, x2:fp_left_lon, y2:fp_left_lat]
+            CoordRoute last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsCorridorCoord()) {
+                    if (last_coordroute_instance) {
+                        Map gate_line = [x1:last_coordroute_instance.lonMath(), y1:last_coordroute_instance.latMath(), x2:coordroute_instance.lonMath(), y2:coordroute_instance.latMath()]
+                        Map line_crossed = CalcMath.isLineCrossed(track_line_left, gate_line, gate_line)
+                        if (line_crossed.onTrackLine && line_crossed.onGateLine) {
+                            calc_again = true
+                            break
+                        }
+                    }
+                    last_coordroute_instance = coordroute_instance
+                }
+            }
+            if (!calc_again) {
+                gate_width += 0.5
+                sp_gate = AviationMath.getGate(fp_latitude, fp_longitude, sp_latitude, sp_longitude, gate_width)
+                fp_gate = AviationMath.getGate(sp_latitude, sp_longitude, fp_latitude, fp_longitude, gate_width)
+                sp_left_lon = sp_gate.coordRight.lon
+                sp_left_lat = sp_gate.coordRight.lat
+                fp_left_lon = fp_gate.coordLeft.lon
+                fp_left_lat = fp_gate.coordLeft.lat
+                if (!calc_again2) {
+                    break
+                }
+                calc_again2 = false
+                calc_again = true
+            }
+        }
+        
+        // move sp -> fp right
+        calc_again = false
+        calc_again2 = true
+        gate_width = 0.5
+        while (true) {
+            if (calc_again) {
+                gate_width += 0.3
+                sp_gate = AviationMath.getGate(fp_latitude, fp_longitude, sp_latitude, sp_longitude, gate_width)
+                fp_gate = AviationMath.getGate(sp_latitude, sp_longitude, fp_latitude, fp_longitude, gate_width)
+                sp_right_lon = sp_gate.coordLeft.lon
+                sp_right_lat = sp_gate.coordLeft.lat
+                fp_right_lon = fp_gate.coordRight.lon
+                fp_right_lat = fp_gate.coordRight.lat
+                calc_again = false
+            }
+            Map track_line_right = [x1:sp_right_lon, y1:sp_right_lat, x2:fp_right_lon, y2:fp_right_lat]
+            CoordRoute last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsCorridorCoord()) {
+                    if (last_coordroute_instance) {
+                        Map gate_line = [x1:last_coordroute_instance.lonMath(), y1:last_coordroute_instance.latMath(), x2:coordroute_instance.lonMath(), y2:coordroute_instance.latMath()]
+                        Map line_crossed = CalcMath.isLineCrossed(track_line_right, gate_line, gate_line)
+                        if (line_crossed.onTrackLine && line_crossed.onGateLine) {
+                            calc_again = true
+                            break
+                        }
+                    }
+                    last_coordroute_instance = coordroute_instance
+                }
+            }
+            if (!calc_again) {
+                gate_width += 0.5
+                sp_gate = AviationMath.getGate(fp_latitude, fp_longitude, sp_latitude, sp_longitude, gate_width)
+                fp_gate = AviationMath.getGate(sp_latitude, sp_longitude, fp_latitude, fp_longitude, gate_width)
+                sp_right_lon = sp_gate.coordLeft.lon
+                sp_right_lat = sp_gate.coordLeft.lat
+                fp_right_lon = fp_gate.coordRight.lon
+                fp_right_lat = fp_gate.coordRight.lat
+                if (!calc_again2) {
+                    break
+                }
+                calc_again2 = false
+                calc_again = true
+            }
+        }
+
+        // move sp
+        calc_again = false
+        calc_again2 = true
+        while (true) {
+            if (calc_again) {
+                gate_width = 0.3
+                Map left_gate = AviationMath.getGate(sp_right_lat, sp_right_lon, sp_left_lat, sp_left_lon, gate_width)
+                Map right_gate = AviationMath.getGate(sp_left_lat, sp_left_lon, sp_right_lat, sp_right_lon, gate_width)
+                sp_left_lon = left_gate.coordLeft.lon
+                sp_left_lat = left_gate.coordLeft.lat
+                sp_right_lon = right_gate.coordRight.lon
+                sp_right_lat = right_gate.coordRight.lat
+                calc_again = false
+            }
+            Map track_line_bottom = [x1:sp_right_lon, y1:sp_right_lat, x2:sp_left_lon, y2:sp_left_lat]
+            CoordRoute last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsCorridorCoord()) {
+                    if (last_coordroute_instance) {
+                        Map gate_line = [x1:last_coordroute_instance.lonMath(), y1:last_coordroute_instance.latMath(), x2:coordroute_instance.lonMath(), y2:coordroute_instance.latMath()]
+                        Map line_crossed = CalcMath.isLineCrossed(track_line_bottom, gate_line, gate_line)
+                        if (line_crossed.onTrackLine && line_crossed.onGateLine) {
+                            calc_again = true
+                            break
+                        }
+                    }
+                    last_coordroute_instance = coordroute_instance
+                }
+            }
+            if (!calc_again) {
+                gate_width = 0.5
+                Map left_gate = AviationMath.getGate(sp_right_lat, sp_right_lon, sp_left_lat, sp_left_lon, gate_width)
+                Map right_gate = AviationMath.getGate(sp_left_lat, sp_left_lon, sp_right_lat, sp_right_lon, gate_width)
+                sp_left_lon = left_gate.coordLeft.lon
+                sp_left_lat = left_gate.coordLeft.lat
+                sp_right_lon = right_gate.coordRight.lon
+                sp_right_lat = right_gate.coordRight.lat
+                if (!calc_again2) {
+                    break
+                }
+                calc_again2 = false
+                calc_again = true
+            }
+        }
+
+        // move fp
+        calc_again = false
+        calc_again2 = true
+        while (true) {
+            if (calc_again) {
+                gate_width = 0.3
+                Map left_gate = AviationMath.getGate(fp_right_lat, fp_right_lon, fp_left_lat, fp_left_lon, gate_width)
+                Map right_gate = AviationMath.getGate(fp_left_lat, fp_left_lon, fp_right_lat, fp_right_lon, gate_width)
+                fp_left_lon = left_gate.coordRight.lon
+                fp_left_lat = left_gate.coordRight.lat
+                fp_right_lon = right_gate.coordLeft.lon
+                fp_right_lat = right_gate.coordLeft.lat
+                calc_again = false
+            }
+            Map track_line_bottom = [x1:fp_right_lon, y1:fp_right_lat, x2:fp_left_lon, y2:fp_left_lat]
+            CoordRoute last_coordroute_instance = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type.IsCorridorCoord()) {
+                    if (last_coordroute_instance) {
+                        Map gate_line = [x1:last_coordroute_instance.lonMath(), y1:last_coordroute_instance.latMath(), x2:coordroute_instance.lonMath(), y2:coordroute_instance.latMath()]
+                        Map line_crossed = CalcMath.isLineCrossed(track_line_bottom, gate_line, gate_line)
+                        if (line_crossed.onTrackLine && line_crossed.onGateLine) {
+                            calc_again = true
+                            break
+                        }
+                    }
+                    last_coordroute_instance = coordroute_instance
+                }
+            }
+            if (!calc_again) {
+                gate_width = 0.5
+                Map left_gate = AviationMath.getGate(fp_right_lat, fp_right_lon, fp_left_lat, fp_left_lon, gate_width)
+                Map right_gate = AviationMath.getGate(fp_left_lat, fp_left_lon, fp_right_lat, fp_right_lon, gate_width)
+                fp_left_lon = left_gate.coordRight.lon
+                fp_left_lat = left_gate.coordRight.lat
+                fp_right_lon = right_gate.coordLeft.lon
+                fp_right_lat = right_gate.coordLeft.lat
+                if (!calc_again2) {
+                    break
+                }
+                calc_again2 = false
+                calc_again = true
+            }
+        }
+
+        String route_area_coords = "${sp_right_lon};${sp_right_lat}"
+        route_area_coords += " ${sp_left_lon};${sp_left_lat}"
+        route_area_coords += " ${fp_left_lon};${fp_left_lat}"
+        route_area_coords += " ${fp_right_lon};${fp_right_lat}"
+        route_area_coords += " ${sp_right_lon};${sp_right_lat}"
+        
+        return route_area_coords
+    }
 }

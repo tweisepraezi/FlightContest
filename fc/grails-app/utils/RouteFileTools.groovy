@@ -2573,7 +2573,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    static Map ReadAirspaceFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, String folderName)
+    static Map ReadAirspaceFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, String folderName, String airspaceImportStyle)
     // Return: importedsignnum - Number of imported signs 
     //         filesignnum     - Number of signs in file 
     //         valid           - true, if valid route file format
@@ -2581,15 +2581,15 @@ class RouteFileTools
     {
         switch (fileExtension) {
             case KML_EXTENSION:
-                return ReadAirspaceKMLFile(routeInstance, routeFileName, folderName, false)
+                return ReadAirspaceKMLFile(routeInstance, routeFileName, folderName, airspaceImportStyle, false)
             case KMZ_EXTENSION:
-                return ReadAirspaceKMLFile(routeInstance, routeFileName, folderName, true)
+                return ReadAirspaceKMLFile(routeInstance, routeFileName, folderName, airspaceImportStyle, true)
         }
         return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadAirspaceKMLFile(Route routeInstance, String kmFileName, String folderName, boolean kmzFile)
+    private static Map ReadAirspaceKMLFile(Route routeInstance, String kmFileName, String folderName, String airspaceImportStyle, boolean kmzFile)
     // Return: import_airspaces - List of airspaces
     //         valid            - true, if valid sign file format
     //         errors           - <> ""
@@ -2649,7 +2649,7 @@ class RouteFileTools
                                     coords += "${lon}${OsmPrintMapService.ADDITIONAL_AIRSPACE_LONLAT_SEPARATOR}${lat}"
                                 }
                             }
-                            String airspace_line = "${OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME},text:${pm.name[0].text().trim()},fillcolor:blue,textcolor:black,coords:${coords}"
+                            String airspace_line = "${OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME},text:${pm.name[0].text().trim()},${airspaceImportStyle},coords:${coords}"
                             routeInstance.contestMapAirspacesLayer2 += "\n"
                             routeInstance.contestMapAirspacesLayer2 += airspace_line
                             ret.importedairspacenum++

@@ -4932,6 +4932,9 @@ class FcService
             }
             
             BigDecimal old_corridorwidth = route_instance.corridorWidth
+            Long old_route2id = route_instance.route2ID
+            Long old_route3id = route_instance.route3ID
+            Long old_route4id = route_instance.route4ID
             route_instance.showCoords = params.showCoords == "on"
             route_instance.showCoordObservations = params.showCoordObservations == "on"
             route_instance.showResultLegs = params.showResultLegs == "on"
@@ -4954,6 +4957,9 @@ class FcService
                     RouteFileTools.SetCorridorWidthFlags(coordroute_instance, false)
                     coordroute_instance.save()
                 }
+            }
+            if (route_instance.route2ID != old_route2id || route_instance.route3ID != old_route3id || route_instance.route4ID != old_route4id) {
+                route_instance.ResetAllContestMapPoints()
             }
             
             if(!route_instance.hasErrors() && route_instance.save()) {
@@ -5563,7 +5569,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = RouteFileTools.ReadAirspaceFile(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, folderName)
+                Map reader = RouteFileTools.ReadAirspaceFile(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, folderName, BootStrap.global.GetAirspaceImportStyle())
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)

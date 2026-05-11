@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.2.6
-:revdate: 28.03.2026
+:revnumber: 4.2.7
+:revdate: 11.05.2026
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -1915,6 +1915,7 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.
 <<fc_en.adoc#configuration-livetracking>> +
 <<fc_en.adoc#configuration-fcmap>> +
 <<fc_en.adoc#configuration-fcmaplocal>> +
+<<fc_en.adoc#configuration-fcmapstyles>> +
 <<fc_en.adoc#configuration-openaip>> +
 <<fc_en.adoc#configuration-onlinemap>> +
 <<fc_en.adoc#configuration-task-creator>> +
@@ -2113,6 +2114,26 @@ Setting up your own print server: https://github.com/tweisepraezi/FlightContest/
      }
    }
  }
+
+[[configuration-fcmapstyles]]
+=== Display style for airspaces and other routes in the ANR parcour
+ flightcontest {
+   maps {
+     styles { 
+       // Airspace style 
+       // airspaceICAO8type1 = "TODO" // Default ED-R: fillcolor:red,textcolor:red
+       // airspaceICAO8type6 = "TODO" // Default RMZ: fillcolor:steelblue,textcolor:black
+       // airspaceDefault = "TODO" // Default: fillcolor:gray,textcolor:black
+       //
+       // Style of an additional airspace import
+       // airspaceImport = "TODO" // Default: fillcolor:blue,textcolor:black
+       //
+       // The style of the rectangle for all other routes of the ANR parcour
+       // anrRouteArea = "TODO" // Default: fillcolor:gray,textcolor:black
+     }
+   }
+ }
+
 
 [[configuration-openaip]]
 === Configure your own OpenAIP API key for airspace display and map printing

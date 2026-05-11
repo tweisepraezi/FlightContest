@@ -1,6 +1,16 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.7
+----------------
+- OSM-Wettbewerbs-Karten-Erzeugung für ANR-Parcours mit mehreren Strecken erweitert
+    Der OSM-Wettbewerbs-Karten-Dialog wurde dahinggend umgestellt, dass jede Strecke genau einem 
+    Einstellungsbereich zugeordnet wird. Das Erzeugen-Kommando druckt nun nur den Korridor der zugeordneten Strecke.
+    An den Positionen der anderen Strecken wird je ein Luftraum-Rechteck erzeugt, der die jeweilige andere Strecke
+    vollständig umschliesst.
+- Konfiguration zum Anzeige-Stil von Lufträumen und anderer Strecken im ANR-Parcour hinzugefügt
+    siehe Hilfe -> Anzeige-Stil von Lufträumen und anderer Strecken im ANR-Parcour
+
 Änderungen 4.2.6
 ----------------
 - OSM-Wettbewerbs-Karte: Das Kommando "Lufträume um Flughafen suchen" speichert jetzt Koordinaten direkt im Textfeld.

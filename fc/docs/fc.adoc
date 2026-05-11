@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.2.6
-:revdate:   28.03.2026
+:revnumber: 4.2.7
+:revdate:   11.05.2026
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -1929,6 +1929,7 @@ zu machen oder diese Datei zu löschen.
 <<fc.adoc#configuration-livetracking>> +
 <<fc.adoc#configuration-fcmap>> +
 <<fc.adoc#configuration-fcmaplocal>> +
+<<fc.adoc#configuration-fcmapstyles>> +
 <<fc.adoc#configuration-openaip>> +
 <<fc.adoc#configuration-onlinemap>> +
 <<fc.adoc#configuration-task-creator>> +
@@ -2126,6 +2127,25 @@ Errichtung eines eigenen Druck-Servers: https://github.com/tweisepraezi/FlightCo
         // username = "TODO"  // User-Name für Zugriff auf lokalen PostgreSQL-Server
                               // Default: postgres
         password = "TODO"     // Passwort für Zugriff auf lokalen PostgreSQL-Server
+     }
+   }
+ }
+
+[[configuration-fcmapstyles]]
+=== Anzeige-Stil von Lufträumen und anderer Strecken im ANR-Parcour
+ flightcontest {
+   maps {
+     styles { 
+       // Luftraum-Stil 
+       // airspaceICAO8type1 = "TODO" // Default ED-R: fillcolor:red,textcolor:red
+       // airspaceICAO8type6 = "TODO" // Default RMZ: fillcolor:steelblue,textcolor:black
+       // airspaceDefault = "TODO" // Default: fillcolor:gray,textcolor:black
+       //
+       // Stil eines zusätzlichen Luftraum-Importes
+       // airspaceImport = "TODO" // Default: fillcolor:blue,textcolor:black
+       //
+       // Stil des Rechtecks der anderen Strecken im ANR-Parcour
+       // anrRouteArea = "TODO" // Default: fillcolor:gray,textcolor:black
      }
    }
  }

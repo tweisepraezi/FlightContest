@@ -126,6 +126,8 @@ class OsmPrintMapService
     final static String ADDITIONAL_AIRSPACE_LONLAT_SEPARATOR = ";"
     final static String ADDITIONAL_AIRSPACE_LONLATALT_KML_SEPARATOR = ","
     final static String ADDITIONAL_AIRSPACE_COORD_SEPARATOR = " "
+    
+    final static String AIRSPACE_COORDS = "coords"
 
     final static BigDecimal AIRPORTAREA_ADDITIONAL_LEN = 2.0 // NM
     
@@ -353,6 +355,7 @@ class OsmPrintMapService
         rect_width = AviationMath.getShowPoint(center_latitude, center_longitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)        
         rect_height = AviationMath.getShowPoint(center_latitude, center_longitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN)
         println "center_latitude=${center_latitude}, center_longitude=${center_longitude}"
+        println "PrintSize: ${contestMapParams.contestMapPrintSize}, Landscape: ${contestMapParams.contestMapPrintLandscape}"
         println "Width:  ${print_width} mm, ${print_width_nm} NM, ${rect_width}"
         println "Height: ${print_height} mm, ${print_height_nm} NM, ${rect_height}"
         
@@ -483,7 +486,7 @@ class OsmPrintMapService
         }
         copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
         // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
-        if (BootStrap.global.IsOpenAIP() && ((contestMapParams.contestMapAirspaces && (route_instance.contestMapAirspacesLayer2 || route_instance2?.contestMapAirspacesLayer2)) || (openaip_airfields && (route_instance.contestMapAirfieldsData || route_instance2?.contestMapAirfieldsData)))) {
+        if (BootStrap.global.IsOpenAIP() && ((route_instance.contestMapAirspaces && (route_instance.contestMapAirspacesLayer2 || route_instance2?.contestMapAirspacesLayer2)) || (openaip_airfields && (route_instance.contestMapAirfieldsData || route_instance2?.contestMapAirfieldsData)))) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.openaip',[],true)}"
         }
         String user_text = ""
@@ -654,25 +657,48 @@ class OsmPrintMapService
         
         String airspaces_lines = ""
         String airspaces_file_name = "" // will be uploaded
-        if (contestMapParams.contestMapAirspaces) {
+        if (true) {
+            String route_areas = ""
+			String uuid = UUID.randomUUID().toString()
+			String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
 			if (BootStrap.global.IsOpenAIP()) {
-				String uuid = UUID.randomUUID().toString()
-				String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
-				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false, false)
+				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false, false, contestMapParams.contestMapRoute)
 				if (!ret2.ok) {
                     ret.message = getMsg('fc.contestmap.contestmapairspaces.kmzexport.missedairspaces', [ret2.missingAirspaces], false)
                     printerror ret.message
                     return ret
 				}
-				airspaces_file_name = contestMapParams.webRootDir + file_name
-			} else {
-				airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
-			}
-            airspaces_lines += get_airspaces_lines(route_instance.contestMapAirspacesLayer2, airspaces_file_name, input_srs)
-            if (route_instance.contestMapShowMapObjectsFromRouteID) {
-                if (route_instance2) {
-                    airspaces_lines += get_airspaces_lines(route_instance2.contestMapAirspacesLayer2, airspaces_file_name, input_srs)
+                if (ret2.routeAreas) {
+                    route_areas = ret2.routeAreas
                 }
+			}
+            
+            String airspaces_layer = ""
+            if (route_instance.contestMapAirspaces) {
+                airspaces_layer += route_instance.contestMapAirspacesLayer2
+                if (route_instance.contestMapShowMapObjectsFromRouteID) {
+                    if (route_instance2 && route_instance2.contestMapAirspacesLayer2) {
+                        if (airspaces_layer) {
+                            airspaces_layer += "\n"
+                        }
+                        airspaces_layer += route_instance2.contestMapAirspacesLayer2
+                    }
+                }
+            }
+            if (route_areas) {
+                if (airspaces_layer) {
+                    airspaces_layer += "\n"
+                }
+                airspaces_layer += route_areas
+            }
+            
+            if (airspaces_layer) {
+                if (BootStrap.global.IsOpenAIP()) {
+                    airspaces_file_name = contestMapParams.webRootDir + file_name
+                } else {
+                    airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
+                }
+                airspaces_lines += get_airspaces_lines(airspaces_layer, airspaces_file_name, input_srs)
             }
         }
         

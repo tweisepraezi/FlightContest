@@ -889,7 +889,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
-			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, false)
+			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, false, 0)
             if (ret.ok) {
                 String route_file_name = ("${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airspaces.kmz") // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -919,7 +919,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
-			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, true)
+			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, true, 0)
             if (ret.ok) {
                 String route_file_name = ("${Defs.NAME_AIRPORTAREA} ${route.instance.name()} Airspaces.kmz") // .replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -1237,7 +1237,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:1,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
@@ -1367,7 +1367,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:2,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
@@ -1497,7 +1497,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:3,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
@@ -1627,7 +1627,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:4,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
@@ -1753,7 +1753,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:1,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
@@ -1879,7 +1879,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:1,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
@@ -2006,7 +2006,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:1,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
@@ -2136,7 +2136,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:2,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
@@ -2266,7 +2266,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:2,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
@@ -2397,7 +2397,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:2,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
@@ -2527,7 +2527,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:3,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
@@ -2657,7 +2657,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:3,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
@@ -2788,7 +2788,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:3,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
@@ -2918,7 +2918,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:4,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
@@ -3048,7 +3048,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:4,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
@@ -3179,7 +3179,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:4,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
@@ -3318,7 +3318,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:1,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
@@ -3461,7 +3461,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:2,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints2,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
@@ -3604,7 +3604,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:3,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints3,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
@@ -3747,7 +3747,7 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
+                                         contestMapRoute:4,
                                          contestMapCenterPoints:route.instance.contestMapCenterPoints4,
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
@@ -3800,6 +3800,132 @@ class RouteController {
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, false, true, 4, route.instance.contestMapForthTitle)
+                                gpxService.printdone ""
+                                flash.message = message(code:'fc.contestmap.job.started',args:[])
+                                redirect(action:'mapexportquestion', id:params.id)
+                            } else {
+                                gpxService.DeleteFile(printjob_filename)
+                                if (r.message) {
+                                    flash.message = r.message
+                                } else {
+                                    flash.message = message(code:'fc.contestmap.connectionerror')
+                                }
+                                gpxService.printdone ""
+                                flash.error = true
+                                redirect(action:'mapexportquestion', id:params.id)
+                            }
+                            gpxService.DeleteFile(map_png_file_name)
+                            gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
+                            gpxService.DeleteFile(tif_file_name)
+                            gpxService.DeleteFile(vrt_file_name)
+                            gpxService.DeleteFile(map_graticule_file_name)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    }
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(route_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+            } else {
+                flash.message = route.message
+                redirect(action:"list")
+            }
+        }
+    }
+    
+    def mapgenerate_anrmap_allroutes = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRouteMap(params) 
+            if (route.instance) {
+                route.instance.contestMapEdition++
+                save_map_settings(route.instance, params)
+                gpxService.printstart "Export map '${route.instance.name()}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                Map contestmap_params = [contestMapEdition:route.instance.contestMapEdition,
+                                         contestMapCircle:route.instance.contestMapCircle,
+                                         contestMapProcedureTurn:route.instance.contestMapProcedureTurn,
+                                         contestMapLeg:route.instance.contestMapLeg,
+                                         contestMapCurvedLeg:route.instance.contestMapCurvedLeg,
+                                         contestMapCurvedLegPoints:route.instance.contestMapCurvedLegPoints,
+                                         contestMapTpName:route.instance.contestMapTpName,
+                                         contestMapSecretGates:route.instance.contestMapSecretGates,
+                                         contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
+                                         contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                                         contestMapTurnpointSign:route.instance.contestMapTurnpointSign,
+                                         contestMapGraticule:route.instance.contestMapGraticule,
+                                         contestMapContourLines:route.instance.contestMapContourLines,
+                                         contestMapCorridorWidth:route.instance.corridorWidth,
+                                         contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
+                                         contestMapAirfields:route.instance.contestMapAirfields,
+                                         contestMapChurches:route.instance.contestMapChurches,
+                                         contestMapCastles:route.instance.contestMapCastles,
+                                         contestMapChateaus:route.instance.contestMapChateaus,
+                                         contestMapPowerlines:route.instance.contestMapPowerlines,
+                                         contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                                         contestMapSmallRoadsGrade:route.instance.contestMapSmallRoadsGrade,
+                                         contestMapPeaks:route.instance.contestMapPeaks,
+                                         contestMapDropShadow:route.instance.contestMapDropShadow,
+                                         contestMapAdditionals:route.instance.contestMapAdditionals,
+                                         contestMapRoute:0,
+                                         contestMapCenterPoints:Defs.CONTESTMAPPOINTS_INIT, // route.instance.contestMapCenterPoints,
+                                         contestMapPrintPoints:route.instance.contestMapPrintPoints,
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
+                                         contestMapDevStyle:route.instance.contestMapDevStyle,
+                                        ]
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + route_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:false, gpxExport:false], contestmap_params)
+                if (converter.ok) {
+                    if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP) {
+                        gpxService.printdone ""
+                        session.gpxviewerReturnAction = 'show'
+                        session.gpxviewerReturnController = controllerName
+                        session.gpxviewerReturnID = params.id
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
+                        String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                        gpxService.Download(webroot_dir + route_gpx_file_name, route_file_name, response.outputStream)
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP) {
+                        String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+                        File printjob_file = new File(printjob_filename)
+                        if (printjob_file.exists()) {
+                            flash.message = message(code:'fc.contestmap.previousjobrunningerror',args:[])
+                            redirect(action:'mapexportquestion', id:params.id)
+                        } else {
+                            BufferedWriter printjob_writer = printjob_file.newWriter()
+                            printjob_writer << route.instance.id
+                            printjob_writer.close()
+                            String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                            String world_file_name = "${map_png_file_name}${Defs.MAP_PNG_WORLD_FILE_SUFFIX}"
+                            String info_file_name = "${map_png_file_name}${Defs.MAP_PNG_INFO_FILE_SUFFIX}"
+                            String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
+                            String vrt_file_name = "${tif_file_name}.vrt"
+                            String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                            Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                                 routeTitle: route.instance.GetOSMRouteName1(),
+                                                                 routeId: route.instance.id,
+                                                                 webRootDir: webroot_dir,
+                                                                 gpxFileName: webroot_dir + route_gpx_file_name,
+                                                                 pngFileName: webroot_dir + map_png_file_name,
+                                                                 graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
+                                                                ] + contestmap_params)
+                            if (r.ok) {
+                                emailService.CreateUploadJobRouteMap(route.instance, false, false, 1, route.instance.contestMapFirstTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -3916,7 +4042,6 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:true,
@@ -4047,7 +4172,6 @@ class RouteController {
                                          contestMapPeaks:route.instance.contestMapPeaks,
                                          contestMapDropShadow:route.instance.contestMapDropShadow,
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
-                                         contestMapAirspaces:route.instance.contestMapAirspaces,
                                          contestMapCenterPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintPoints:Defs.CONTESTMAPPOINTS_AIRFIELDS,
                                          contestMapPrintLandscape:true,
@@ -4173,14 +4297,10 @@ class RouteController {
         if (params.contestMapAirspacesLowerLimit && params.contestMapAirspacesLowerLimit.isInteger()) {
             routeInstance.contestMapAirspacesLowerLimit = params.contestMapAirspacesLowerLimit.toInteger()
         }
+       
+        // 1. settings
         String center_points = ""
-        String center_points2 = ""
-        String center_points3 = ""
-        String center_points4 = ""
         String print_points = ""
-        String print_points2 = ""
-        String print_points3 = ""
-        String print_points4 = ""
         String curvedleg_points = ""
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
             if (params.("${Defs.TurnpointID_ContestMapCenterPoints}${coordroute_instance.title()}") == "on") {
@@ -4190,53 +4310,11 @@ class RouteController {
                     center_points = coordroute_instance.title()
                 }
             }
-            if (params.("${Defs.TurnpointID_ContestMapCenterPoints2}${coordroute_instance.title()}") == "on") {
-                if (center_points2) {
-                    center_points2 += ",${coordroute_instance.title()}"
-                } else {
-                    center_points2 = coordroute_instance.title()
-                }
-            }
-            if (params.("${Defs.TurnpointID_ContestMapCenterPoints3}${coordroute_instance.title()}") == "on") {
-                if (center_points3) {
-                    center_points3 += ",${coordroute_instance.title()}"
-                } else {
-                    center_points3 = coordroute_instance.title()
-                }
-            }
-            if (params.("${Defs.TurnpointID_ContestMapCenterPoints4}${coordroute_instance.title()}") == "on") {
-                if (center_points4) {
-                    center_points4 += ",${coordroute_instance.title()}"
-                } else {
-                    center_points4 = coordroute_instance.title()
-                }
-            }
             if (params.("${Defs.TurnpointID_ContestMapPrintPoints}${coordroute_instance.title()}") == "on") {
                 if (print_points) {
                     print_points += ",${coordroute_instance.title()}"
                 } else {
                     print_points = coordroute_instance.title()
-                }
-            }
-            if (params.("${Defs.TurnpointID_ContestMapPrintPoints2}${coordroute_instance.title()}") == "on") {
-                if (print_points2) {
-                    print_points2 += ",${coordroute_instance.title()}"
-                } else {
-                    print_points2 = coordroute_instance.title()
-                }
-            }
-            if (params.("${Defs.TurnpointID_ContestMapPrintPoints3}${coordroute_instance.title()}") == "on") {
-                if (print_points3) {
-                    print_points3 += ",${coordroute_instance.title()}"
-                } else {
-                    print_points3 = coordroute_instance.title()
-                }
-            }
-            if (params.("${Defs.TurnpointID_ContestMapPrintPoints4}${coordroute_instance.title()}") == "on") {
-                if (print_points4) {
-                    print_points4 += ",${coordroute_instance.title()}"
-                } else {
-                    print_points4 = coordroute_instance.title()
                 }
             }
             if (params.("${Defs.TurnpointID_ContestMapCurvedLegPoints}${coordroute_instance.title()}") == "on") {
@@ -4270,45 +4348,175 @@ class RouteController {
         if (params.contestMapCenterMoveY && params.contestMapCenterMoveY.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY = params.contestMapCenterMoveY.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapSecondTitle = params.contestMapSecondTitle
-        routeInstance.contestMapCenterVerticalPos2 = params.contestMapCenterVerticalPos2
-        routeInstance.contestMapCenterHorizontalPos2 = params.contestMapCenterHorizontalPos2
-        routeInstance.contestMapCenterPoints2 = DisabledCheckPointsTools.Compress(center_points2, routeInstance)
-        routeInstance.contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points2, routeInstance)
-        routeInstance.contestMapPrintLandscape2 = params.contestMapPrintLandscape2 == "on"
-        routeInstance.contestMapPrintSize2 = params.contestMapPrintSize2
+        
+        // 2. settings
+        String center_points2 = ""
+        String print_points2 = ""
+        Route route_instance2 = routeInstance
+        if (routeInstance.IsOtherRoute()) {
+            route_instance2 = Route.get(routeInstance.route2ID)
+        }
+        if (!route_instance2) {
+            route_instance2 = routeInstance
+        }
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance2,[sort:"id"])) {
+            if (params.("${Defs.TurnpointID_ContestMapCenterPoints2}${coordroute_instance.title()}") == "on") {
+                if (center_points2) {
+                    center_points2 += ",${coordroute_instance.title()}"
+                } else {
+                    center_points2 = coordroute_instance.title()
+                }
+            }
+            if (params.("${Defs.TurnpointID_ContestMapPrintPoints2}${coordroute_instance.title()}") == "on") {
+                if (print_points2) {
+                    print_points2 += ",${coordroute_instance.title()}"
+                } else {
+                    print_points2 = coordroute_instance.title()
+                }
+            }
+        }
+        if (center_points2) {
+            center_points2 += ","
+        }
+        if (print_points2) {
+            print_points2 += ","
+        }
+        if (params.contestMapSecondTitle) {
+            routeInstance.contestMapSecondTitle = params.contestMapSecondTitle
+        }
+        if (params.contestMapCenterVerticalPos2) {
+            routeInstance.contestMapCenterVerticalPos2 = params.contestMapCenterVerticalPos2
+        }
+        if (params.contestMapCenterHorizontalPos2) {
+            routeInstance.contestMapCenterHorizontalPos2 = params.contestMapCenterHorizontalPos2
+        }
+        routeInstance.contestMapCenterPoints2 = DisabledCheckPointsTools.Compress(center_points2, route_instance2)
+        routeInstance.contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points2, route_instance2)
+        if (params.contestMapPrintLandscape2) {
+            routeInstance.contestMapPrintLandscape2 = params.contestMapPrintLandscape2 == "on"
+        }
+        if (params.contestMapPrintSize2) {
+            routeInstance.contestMapPrintSize2 = params.contestMapPrintSize2
+        }
         if (params.contestMapCenterMoveX2 && params.contestMapCenterMoveX2.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveX2 = params.contestMapCenterMoveX2.replace(',','.').toBigDecimal()
         }
         if (params.contestMapCenterMoveY2 && params.contestMapCenterMoveY2.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY2 = params.contestMapCenterMoveY2.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapThirdTitle = params.contestMapThirdTitle
-        routeInstance.contestMapCenterVerticalPos3 = params.contestMapCenterVerticalPos3
-        routeInstance.contestMapCenterHorizontalPos3 = params.contestMapCenterHorizontalPos3
-        routeInstance.contestMapCenterPoints3 = DisabledCheckPointsTools.Compress(center_points3, routeInstance)
-        routeInstance.contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points3, routeInstance)
-        routeInstance.contestMapPrintLandscape3 = params.contestMapPrintLandscape3 == "on"
-        routeInstance.contestMapPrintSize3 = params.contestMapPrintSize3
+        
+        // 3. settings
+        String center_points3 = ""
+        String print_points3 = ""
+        Route route_instance3 = routeInstance
+        if (routeInstance.IsOtherRoute()) {
+            route_instance3 = Route.get(routeInstance.route3ID)
+        }
+        if (!route_instance3) {
+            route_instance3 = routeInstance
+        }
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance3,[sort:"id"])) {
+            if (params.("${Defs.TurnpointID_ContestMapCenterPoints3}${coordroute_instance.title()}") == "on") {
+                if (center_points3) {
+                    center_points3 += ",${coordroute_instance.title()}"
+                } else {
+                    center_points3 = coordroute_instance.title()
+                }
+            }
+            if (params.("${Defs.TurnpointID_ContestMapPrintPoints3}${coordroute_instance.title()}") == "on") {
+                if (print_points3) {
+                    print_points3 += ",${coordroute_instance.title()}"
+                } else {
+                    print_points3 = coordroute_instance.title()
+                }
+            }
+        }
+        if (center_points3) {
+            center_points3 += ","
+        }
+        if (print_points3) {
+            print_points3 += ","
+        }
+        if (params.contestMapThirdTitle) {
+            routeInstance.contestMapThirdTitle = params.contestMapThirdTitle
+        }
+        if (params.contestMapCenterVerticalPos3) {
+            routeInstance.contestMapCenterVerticalPos3 = params.contestMapCenterVerticalPos3
+        }
+        if (params.contestMapCenterHorizontalPos3) {
+            routeInstance.contestMapCenterHorizontalPos3 = params.contestMapCenterHorizontalPos3
+        }
+        routeInstance.contestMapCenterPoints3 = DisabledCheckPointsTools.Compress(center_points3, route_instance3)
+        routeInstance.contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points3, route_instance3)
+        if (params.contestMapPrintLandscape3) {
+            routeInstance.contestMapPrintLandscape3 = params.contestMapPrintLandscape3 == "on"
+        }
+        if (params.contestMapPrintSize3) {
+            routeInstance.contestMapPrintSize3 = params.contestMapPrintSize3
+        }
         if (params.contestMapCenterMoveX3 && params.contestMapCenterMoveX3.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveX3 = params.contestMapCenterMoveX3.replace(',','.').toBigDecimal()
         }
         if (params.contestMapCenterMoveY3 && params.contestMapCenterMoveY3.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY3 = params.contestMapCenterMoveY3.replace(',','.').toBigDecimal()
         }
-        routeInstance.contestMapForthTitle = params.contestMapForthTitle
-        routeInstance.contestMapCenterVerticalPos4 = params.contestMapCenterVerticalPos4
-        routeInstance.contestMapCenterHorizontalPos4 = params.contestMapCenterHorizontalPos4
-        routeInstance.contestMapCenterPoints4 = DisabledCheckPointsTools.Compress(center_points4, routeInstance)
-        routeInstance.contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points4, routeInstance)
-        routeInstance.contestMapPrintLandscape4 = params.contestMapPrintLandscape4 == "on"
-        routeInstance.contestMapPrintSize4 = params.contestMapPrintSize4
+        
+        // 4. settings
+        String center_points4 = ""
+        String print_points4 = ""
+        Route route_instance4 = routeInstance
+        if (routeInstance.IsOtherRoute()) {
+            route_instance4 = Route.get(routeInstance.route4ID)
+        }
+        if (!route_instance4) {
+            route_instance4 = routeInstance
+        }
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance4,[sort:"id"])) {
+            if (params.("${Defs.TurnpointID_ContestMapCenterPoints4}${coordroute_instance.title()}") == "on") {
+                if (center_points4) {
+                    center_points4 += ",${coordroute_instance.title()}"
+                } else {
+                    center_points4 = coordroute_instance.title()
+                }
+            }
+            if (params.("${Defs.TurnpointID_ContestMapPrintPoints4}${coordroute_instance.title()}") == "on") {
+                if (print_points4) {
+                    print_points4 += ",${coordroute_instance.title()}"
+                } else {
+                    print_points4 = coordroute_instance.title()
+                }
+            }
+        }
+        if (center_points4) {
+            center_points4 += ","
+        }
+        if (print_points4) {
+            print_points4 += ","
+        }
+        if (params.contestMapForthTitle) {
+            routeInstance.contestMapForthTitle = params.contestMapForthTitle
+        }
+        if (params.contestMapCenterVerticalPos4) {
+            routeInstance.contestMapCenterVerticalPos4 = params.contestMapCenterVerticalPos4
+        }
+        if (params.contestMapCenterHorizontalPos4) {
+            routeInstance.contestMapCenterHorizontalPos4 = params.contestMapCenterHorizontalPos4
+        }
+        routeInstance.contestMapCenterPoints4 = DisabledCheckPointsTools.Compress(center_points4, route_instance4)
+        routeInstance.contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points4, route_instance4)
+        if (params.contestMapPrintLandscape4) {
+            routeInstance.contestMapPrintLandscape4 = params.contestMapPrintLandscape4 == "on"
+        }
+        if (params.contestMapPrintSize4) {
+            routeInstance.contestMapPrintSize4 = params.contestMapPrintSize4
+        }
         if (params.contestMapCenterMoveX4 && params.contestMapCenterMoveX4.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveX4 = params.contestMapCenterMoveX4.replace(',','.').toBigDecimal()
         }
         if (params.contestMapCenterMoveY4 && params.contestMapCenterMoveY4.replace(',','.').isBigDecimal()) {
             routeInstance.contestMapCenterMoveY4 = params.contestMapCenterMoveY4.replace(',','.').toBigDecimal()
         }
+        
         if (params.contestMapShowMapObjectsFromRouteID) {
             routeInstance.contestMapShowMapObjectsFromRouteID = params.contestMapShowMapObjectsFromRouteID.toLong()
         } else {

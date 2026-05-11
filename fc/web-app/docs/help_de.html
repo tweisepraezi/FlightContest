@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 4.2.6,</span>
-<span id="revdate">28.03.2026</span>
+<span id="revnumber">version 4.2.7,</span>
+<span id="revdate">11.05.2026</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -540,6 +540,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-livetracking">Live-Tracking konfigurieren</a></li>
 <li><a href="#configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</a></li>
 <li><a href="#configuration-fcmaplocal">Lokalen Karten-Druck-Server konfigurieren</a></li>
+<li><a href="#configuration-fcmapstyles">Anzeige-Stil von Lufträumen und anderer Strecken im ANR-Parcour</a></li>
 <li><a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a></li>
 <li><a href="#configuration-onlinemap">OSM-Online-Karte konfigurieren</a></li>
 <li><a href="#configuration-task-creator">Task-Creator-Konfiguration</a></li>
@@ -4506,6 +4507,7 @@ zu machen oder diese Datei zu löschen.</p>
 <a href="#configuration-livetracking">Live-Tracking konfigurieren</a><br>
 <a href="#configuration-fcmap">Eigenen Karten-Druck-Server konfigurieren</a><br>
 <a href="#configuration-fcmaplocal">Lokalen Karten-Druck-Server konfigurieren</a><br>
+<a href="#configuration-fcmapstyles">Anzeige-Stil von Lufträumen und anderer Strecken im ANR-Parcour</a><br>
 <a href="#configuration-openaip">Eigenen OpenAIP-API-Key für Luftraum-Anzeige und -Kartendruck konfigurieren</a><br>
 <a href="#configuration-onlinemap">OSM-Online-Karte konfigurieren</a><br>
 <a href="#configuration-task-creator">Task-Creator-Konfiguration</a><br>
@@ -4779,6 +4781,29 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
        // username = "TODO"  // User-Name für Zugriff auf lokalen PostgreSQL-Server
                              // Default: postgres
        password = "TODO"     // Passwort für Zugriff auf lokalen PostgreSQL-Server
+    }
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-fcmapstyles">Anzeige-Stil von Lufträumen und anderer Strecken im ANR-Parcour</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    styles {
+      // Luftraum-Stil
+      // airspaceICAO8type1 = "TODO" // Default ED-R: fillcolor:red,textcolor:red
+      // airspaceICAO8type6 = "TODO" // Default RMZ: fillcolor:steelblue,textcolor:black
+      // airspaceDefault = "TODO" // Default: fillcolor:gray,textcolor:black
+      //
+      // Stil eines zusätzlichen Luftraum-Importes
+      // airspaceImport = "TODO" // Default: fillcolor:blue,textcolor:black
+      //
+      // Stil des Rechtecks der anderen Strecken im ANR-Parcour
+      // anrRouteArea = "TODO" // Default: fillcolor:gray,textcolor:black
     }
   }
 }</pre>

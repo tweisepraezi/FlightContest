@@ -72,7 +72,7 @@ class OpenAIPService
     
 
     //--------------------------------------------------------------------------
-    Map WriteAirspaces2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean isHidden)
+    Map WriteAirspaces2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean isHidden, int contestMapRoute)
     {
         printstart "WriteAirspaces2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
         
@@ -90,6 +90,7 @@ class OpenAIPService
 		boolean all_airspaces_written = true
 		String missing_airspaces = ""
         List new_airspaces = []
+        String route_areas = ""
 		
         BufferedWriter kml_writer = null
         CharArrayWriter kml_data = null
@@ -122,24 +123,97 @@ class OpenAIPService
                         }
 					}
 				}
-				Map ret = write_airspace_from_layer(routeInstance, airspaces_filename, isHidden, new_airspaces, xml)
-                missing_airspaces = ret.missingAirspaces
-                if (!ret.allAirspacesWritten) {
-                    all_airspaces_written = false
+                int airspace_no = 0
+                if (routeInstance.contestMapAirspaces) {
+                    Map ret = write_airspace_from_layer(routeInstance.contestMapAirspacesLayer2, airspaces_filename, isHidden, airspace_no, new_airspaces, xml)
+                    missing_airspaces = ret.missingAirspaces
+                    if (!ret.allAirspacesWritten) {
+                        all_airspaces_written = false
+                    }
+                    airspace_no = ret.airspaceNo
+                    new_airspaces = ret.newAirspaces
+                    if (routeInstance.contestMapShowMapObjectsFromRouteID) {
+                        Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
+                        if (route_instance) {
+                            ret = write_airspace_from_layer(route_instance.contestMapAirspacesLayer2, airspaces_filename, isHidden, airspace_no, new_airspaces, xml)
+                            if (missing_airspaces) {
+                                missing_airspaces += ", "
+                            }
+                            missing_airspaces += ret.missingAirspaces
+                            if (!ret.allAirspacesWritten) {
+                                all_airspaces_written = false
+                            }
+                            airspace_no = ret.airspaceNo
+                            new_airspaces = ret.newAirspaces
+                        }
+                    }
                 }
-                new_airspaces = ret.newAirspaces
-                if (routeInstance.contestMapShowMapObjectsFromRouteID) {
-                    Route route_instance = Route.get(routeInstance.contestMapShowMapObjectsFromRouteID)
-                    if (route_instance) {
-                        ret = write_airspace_from_layer(route_instance, airspaces_filename, isHidden, new_airspaces, xml)
-                        if (missing_airspaces) {
-                            missing_airspaces += ", "
+                if (routeInstance.IsOtherRoute() && contestMapRoute) {
+                    String anr_route_area_style = BootStrap.global.GetANRRouteAreaStyle()
+                    if (contestMapRoute != 1) {
+                        String route_area_coords = RouteTools.GetANRRouteAreaCoords(routeInstance)
+                        if (route_area_coords) {
+                            String route_area = OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME
+                            route_area += ",text:${routeInstance.name()},${anr_route_area_style}"
+                            route_area += ",${OsmPrintMapService.AIRSPACE_COORDS}:${route_area_coords}"
+                            if (route_areas) {
+                                route_areas += "\n"
+                            }
+                            route_areas += route_area
+                            Map ret = write_airspace_from_layer(route_area, airspaces_filename, false, airspace_no, null, xml)
+                            airspace_no = ret.airspaceNo
                         }
-                        missing_airspaces += ret.missingAirspaces
-                        if (!ret.allAirspacesWritten) {
-                            all_airspaces_written = false
+                    }
+                    if (routeInstance.route2ID && contestMapRoute != 2) {
+                        Route route_instance = Route.get(routeInstance.route2ID)
+                        if (route_instance) {
+                            String route_area_coords = RouteTools.GetANRRouteAreaCoords(route_instance)
+                            if (route_area_coords) {
+                                String route_area = OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME
+                                route_area += ",text:${route_instance.name()},${anr_route_area_style}"
+                                route_area += ",${OsmPrintMapService.AIRSPACE_COORDS}:${route_area_coords}"
+                                if (route_areas) {
+                                    route_areas += "\n"
+                                }
+                                route_areas += route_area
+                                Map ret = write_airspace_from_layer(route_area, airspaces_filename, false, airspace_no, null, xml)
+                                airspace_no = ret.airspaceNo
+                            }
                         }
-                        new_airspaces = ret.newAirspaces
+                    }
+                    if (routeInstance.route3ID && contestMapRoute != 3) {
+                        Route route_instance = Route.get(routeInstance.route3ID)
+                        if (route_instance) {
+                            String route_area_coords = RouteTools.GetANRRouteAreaCoords(route_instance)
+                            if (route_area_coords) {
+                                String route_area = OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME
+                                route_area += ",text:${route_instance.name()},${anr_route_area_style}"
+                                route_area += ",${OsmPrintMapService.AIRSPACE_COORDS}:${route_area_coords}"
+                                if (route_areas) {
+                                    route_areas += "\n"
+                                }
+                                route_areas += route_area
+                                Map ret = write_airspace_from_layer(route_area, airspaces_filename, false, airspace_no, null, xml)
+                                airspace_no = ret.airspaceNo
+                            }
+                        }
+                    }
+                    if (routeInstance.route4ID && contestMapRoute != 4) {
+                        Route route_instance = Route.get(routeInstance.route4ID)
+                        if (route_instance) {
+                            String route_area_coords = RouteTools.GetANRRouteAreaCoords(route_instance)
+                            if (route_area_coords) {
+                                String route_area = OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME
+                                route_area += ",text:${route_instance.name()},${anr_route_area_style}"
+                                route_area += ",${OsmPrintMapService.AIRSPACE_COORDS}:${route_area_coords}"
+                                if (route_areas) {
+                                    route_areas += "\n"
+                                }
+                                route_areas += route_area
+                                Map ret = write_airspace_from_layer(route_area, airspaces_filename, false, airspace_no, null, xml)
+                                airspace_no = ret.airspaceNo
+                            }
+                        }
                     }
                 }
 			}
@@ -156,16 +230,15 @@ class OpenAIPService
 
         printdone ""
         
-        return [ok:all_airspaces_written, missingAirspaces:missing_airspaces]
+        return [ok:all_airspaces_written, missingAirspaces:missing_airspaces, routeAreas:route_areas]
     }
 
     //--------------------------------------------------------------------------
-    private Map write_airspace_from_layer(Route routeInstance, String airspacesFilename, boolean isHidden, List newAirspaces, def xml)
+    private Map write_airspace_from_layer(String airspacesLayer, String airspacesFilename, boolean isHidden, int airspaceNo, List newAirspaces, def xml)
     {
 		String missing_airspaces = ""
         boolean all_airspaces_written = true
-        int additional_airspace_no = 0
-        for (String layer in routeInstance.contestMapAirspacesLayer2.split("\n")) {
+        for (String layer in airspacesLayer.split("\n")) {
             if (layer && layer.trim()) {
                 String airspace_name = layer.trim()
                 boolean ignore_line = false
@@ -213,8 +286,8 @@ class OpenAIPService
                     
                     // get airspaces from coordinates
                     if (airspace_name == OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME) {
-                        additional_airspace_no++
-                        write_airspace(xml, "${airspace_name}_${additional_airspace_no}", airspace_text, "airspace", airspace_coords)
+                        airspaceNo++
+                        write_airspace(xml, "${airspace_name}_${airspaceNo}", airspace_text, "airspace", airspace_coords)
                     } else {
                         // get airspace from cache
                         Map ret = get_airspace_from_cache(airspacesFilename, airspace_name) // get airspace from cache
@@ -236,7 +309,9 @@ class OpenAIPService
                                 String airspace_coordinates = ret.data.geometry.coordinates.toString()
                                 airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
                                 write_airspace(xml, airspace_name, airspace_text, "airspace", airspace_coordinates)
-                                newAirspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
+                                if (newAirspaces) {
+                                    newAirspaces += [airspaceName:airspace_name, airspaceText:airspace_text, airspaceStyle:"airspace", airspaceCoordinates:airspace_coordinates]
+                                }
                             } else {
                                 all_airspaces_written = false
                                 if (missing_airspaces) {
@@ -249,7 +324,7 @@ class OpenAIPService
                 }
             }
         }
-        return [missingAirspaces:missing_airspaces, allAirspacesWritten:all_airspaces_written, newAirspaces:newAirspaces]
+        return [missingAirspaces:missing_airspaces, allAirspacesWritten:all_airspaces_written, airspaceNo:airspaceNo, newAirspaces:newAirspaces]
     }
     
     //--------------------------------------------------------------------------
@@ -409,7 +484,7 @@ class OpenAIPService
                             airspaces += OsmPrintMapService.ADDITIONAL_AIRSPACE_NAME
                             airspaces += ",id:${d._id}"
                             airspaces += get_airspace_details(d)
-                            airspaces += ",coords:${airspace_coordinates}"
+                            airspaces += ",${OsmPrintMapService.AIRSPACE_COORDS}:${airspace_coordinates}"
                             airspaces_num++
                         }
                     }
@@ -523,14 +598,9 @@ class OpenAIPService
         if (false) { // Test
             s += " (icaoClass=${d.icaoClass} type=${d.type})"
         }
-        if (d.icaoClass == 8 && d.type == 1) { // ED-R
-            s += ",fillcolor:red,textcolor:red"
-        } else if (d.icaoClass == 8 && d.type == 6) { // RMZ
-            s += ",fillcolor:steelblue,textcolor:black"
-        } else if (d.icaoClass == 3 && d.type == 4) { // CTR
-            // nothing
-        } else {
-            s += ",fillcolor:gray,textcolor:black"
+        String airspace_style = BootStrap.global.GetAirspaceStyle(d)
+        if (airspace_style) {
+            s += ",${airspace_style}"
         }
         return s
     }
