@@ -51,6 +51,12 @@
                             <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" disabled tabIndex="${ti[0]++}"/>
                         </g:else>
                         <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${coordMapObjectInstance.mapObjectText.startsWith(Defs.IGNORE_LINE)}">
+                            <g:actionSubmit action="enable" value="${message(code:'fc.enable')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+                            <g:actionSubmit action="disable" value="${message(code:'fc.disable')}" tabIndex="${ti[0]++}"/>
+                        </g:else>
                         <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>

@@ -9,6 +9,7 @@ class TaskClass
     Boolean observationTestTurnpointRun      = false // DB-2.13
     Boolean observationTestEnroutePhotoRun   = false // DB-2.13
     Boolean observationTestEnrouteCanvasRun  = false // DB-2.13
+	String observationTestFilter             = ""    // DB-2.48
 	boolean landingTestRun                   = false
 	boolean landingTest1Run                  = false
 	boolean landingTest2Run                  = false
@@ -39,6 +40,9 @@ class TaskClass
         observationTestTurnpointRun(nullable:true)
         observationTestEnroutePhotoRun(nullable:true)
         observationTestEnrouteCanvasRun(nullable:true)
+        
+        // DB-2.48 compatibility
+        observationTestFilter(nullable:true)
 	}
 
 	int GetResultColumns()

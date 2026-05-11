@@ -37,7 +37,7 @@
                         <th>${message(code:'fc.distance.to2ldg')}</th>
                         <th>${message(code:'fc.distance.sp2fp')}</th>
                         <th>${message(code:'fc.task.tasks')}</th>
-                        <th/>
+                        <th>${message(code:'fc.test.listpos')}</th>
                     </tr>
                 </thead>
                 <tbody>

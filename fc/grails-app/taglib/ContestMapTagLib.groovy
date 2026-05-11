@@ -126,20 +126,31 @@ class ContestMapTagLib
         } else if (attrs.airfields == Defs.CONTESTMAPAIRFIELDS_OSM_NAME) {
             airfields_checked_name = "checked"
         }
-        outln"""<label>${message(code:'fc.contestmap.contestmapairfields')}</label>:"""
+        outln"""<label>${message(code:'fc.contestmap.contestmapairfields')}</label>"""
+        if (attrs.airfieldsfromname) {
+            outln"""<label style="background-color:yellow;">${message(code:'fc.contestmap.contestmap.entrynum2',args:[attrs.airfieldslines,attrs.airfieldslines2,attrs.airfieldsfromname])}:</label>"""
+        } else {
+            outln"""<label style="background-color:yellow;">${message(code:'fc.contestmap.contestmap.entrynum',args:[attrs.airfieldslines])}:</label>"""
+        }
         outln"""<label><input type="radio" name="${attrs.airfieldsname}" id="${Defs.CONTESTMAPAIRFIELDS_AUTO}" value="${Defs.CONTESTMAPAIRFIELDS_AUTO}" ${airfields_checked_auto} tabIndex="${attrs.ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.auto')}</label>"""
         if (BootStrap.global.IsOpenAIP()) {
             outln"""<label><input type="radio" name="${attrs.airfieldsname}" id="${Defs.CONTESTMAPAIRFIELDS_OPENAIP}" value="${Defs.CONTESTMAPAIRFIELDS_OPENAIP}" ${airfields_checked_openaip} tabIndex="${attrs.ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.openaip')}</label>"""
         }
         outln"""<label><input type="radio" name="${attrs.airfieldsname}" id="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" ${airfields_checked_icao} tabIndex="${attrs.ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.icao')}</label>"""
-        outln"""<label style="margin-right:10px;"><input type="radio" name="${attrs.airfieldsname}" id="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" ${airfields_checked_name} tabIndex="${attrs.ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.name')}</label>"""
-        checkBoxClick("contestMapShowAirfields", attrs.showairfields, "fc.contestmap.contestmapairfields.edit", [], "showairfields_click();", attrs)
-        outln"""<label style="margin-left:10px;">${message(code:'fc.contestmap.contestmap.entrynum',args:[attrs.airfieldslines])}</label>"""
+        outln"""<label><input type="radio" name="${attrs.airfieldsname}" id="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" ${airfields_checked_name} tabIndex="${attrs.ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.name')}</label>"""
+        if (attrs.showairfields) {
+            outln"""<a id="showairfields_off_id" href="#x" class="arrowhead" onclick="showairfields(false);">${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showairfields_on_id" href="#x" class="arrowhead" onclick="showairfields(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+        } else {
+            outln"""<a id="showairfields_off_id" href="#x" class="arrowhead" onclick="showairfields(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showairfields_on_id" href="#x" class="arrowhead" onclick="showairfields(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+        }
         outln"""<script>"""
-        outln"""    function showairfields_click() {"""
-        outln"""        var show_airfields = \$("#contestMapShowAirfields").prop("checked");"""
-        outln"""        \$("#showairfields_id").prop("hidden", !show_airfields);"""
-        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.routeid}, contestMapShowAirfields:show_airfields}, "json");"""
+        outln"""    function showairfields(showAirfields) {"""
+        outln"""        \$("#showairfields_id").prop("hidden", !showAirfields);"""
+        outln"""        \$("#showairfields_off_id").prop("hidden", !showAirfields);"""
+        outln"""        \$("#showairfields_on_id").prop("hidden", showAirfields);"""
+        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.routeid}, contestMapShowAirfields:showAirfields}, "json");"""
         outln"""    }"""
         outln"""</script>"""
     }
@@ -280,16 +291,17 @@ class ContestMapTagLib
 	
     // --------------------------------------------------------------------------------------------------------------------
     def showContestMapSelectOtherRoute = { attrs, body ->
-        outln"""<div style="margin-bottom:10px;" >"""
+        outln"""<div>"""
         outln"""    <label>${message(code:'fc.coordroute.writeobjects.fromroute')}:</label>"""
         outln"""    <select id="contestMapShowMapObjectsFromRouteID" name="contestMapShowMapObjectsFromRouteID" tabIndex="${attrs.ti[0]++}">"""
         outln"""            <option></option>"""
         for (Route route_instance in Route.findAllByContest(attrs.route.contest,[sort:"idTitle"])) {
             if (route_instance.id != attrs.route.id) {
+                String route_name = "${route_instance.name()} ${Defs.ROUTE_NUM}${route_instance.idTitle}"
                 if (route_instance.id == attrs.route.contestMapShowMapObjectsFromRouteID) {
-                    outln"""<option value="${route_instance.id}" selected>${route_instance.name()}</option>"""
+                    outln"""<option value="${route_instance.id}" selected>${route_name}</option>"""
                 } else {
-                    outln"""<option value="${route_instance.id}">${route_instance.name()}</option>"""
+                    outln"""<option value="${route_instance.id}">${route_name}</option>"""
                 }
             }
         }
@@ -310,17 +322,26 @@ class ContestMapTagLib
     def showContestMapRouteMapObjects = { attrs, body ->
     
         // Map objects
-        String show_map_objets = "hidden"
-        if (attrs.route.contestMapShowMapObjects) {
-            show_map_objets = ""
-        }
         List maps_objects = CoordMapObject.findAllByRoute(attrs.route,[sort:"enrouteViewPos"])
-        outln"""<div style="margin-top:10px;"/>"""
         checkBoxClick("contestMapAdditionals", attrs.route.contestMapAdditionals, "fc.contestmap.contestmapadditionals", [], "additionals_click();", attrs)
+        if (attrs.route.contestMapShowMapObjectsFromRouteID) {
+            Route route_instance2 = Route.get(attrs.route.contestMapShowMapObjectsFromRouteID)
+            List maps_objects2 = CoordMapObject.findAllByRoute(route_instance2,[sort:"enrouteViewPos"])
+            outln"""<label style="background-color:yellow;">${message(code:'fc.contestmap.contestmap.entrynum2',args:[maps_objects.size(),maps_objects2.size(),route_instance2.name()])}</label>"""
+        } else {
+            outln"""<label style="background-color:yellow;">${message(code:'fc.contestmap.contestmap.entrynum',args:[maps_objects.size()])}</label>"""
+        }
         outln"""<label style="margin-left:10px;"></label>"""
-        checkBoxClick("contestMapShowMapObjects", attrs.route.contestMapShowMapObjects, "fc.coordroute.mapobjects.edit.all", [], "showmapobjects_click();", attrs)
-        outln"""<label style="margin-left:10px;">${message(code:'fc.contestmap.contestmap.entrynum',args:[maps_objects.size()])}</label>"""
-        outln"""<div class="mapexportquestionsection" id="showmapobjects_id" ${show_map_objets}>"""
+        String show_mapobjects = ""
+        if (attrs.route.contestMapShowMapObjects) {
+            outln"""<a id="showmapobjects_off_id" href="#x" class="arrowhead" onclick="showmapobjects(false);">${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showmapobjects_on_id" href="#x" class="arrowhead" onclick="showmapobjects(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+        } else {
+            show_mapobjects = "hidden"
+            outln"""<a id="showmapobjects_off_id" href="#x" class="arrowhead" onclick="showmapobjects(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showmapobjects_on_id" href="#x" class="arrowhead" onclick="showmapobjects(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+        }
+        outln"""<div class="mapexportquestionsection" id="showmapobjects_id" ${show_mapobjects}>"""
         outln"""    <div class="mapexportquestionbuttonline" >"""
         outln"""        <input type="button" class="mapexportquestionbutton" id="" value="${message(code:'fc.coordroute.mapobjects.import')}" onclick="importmapobjects_click();"/>"""
         outln"""        <input type="button" class="mapexportquestionbutton" id="" value="${message(code:'fc.coordroute.mapobjects.add')}" onclick="addmapobject_click();"/>"""
@@ -369,7 +390,12 @@ class ContestMapTagLib
             } else if (coordmapobject_instance.imagecoord) {
                 image_str = """<img style="max-height:12px;" src="/fc/route/get_mapobject_symbol/${coordmapobject_instance.id}"/>"""
             }
-            outln"""            <td style="white-space: nowrap;">${message(code:coordmapobject_instance.mapObjectType?.code)} ${image_str}</td>"""
+            s = """             <td style="white-space: nowrap;">${message(code:coordmapobject_instance.mapObjectType?.code)} ${image_str}"""
+            if (coordmapobject_instance.mapObjectText.startsWith(Defs.IGNORE_LINE)) {
+                s += " (${message(code:'fc.disabled')})"
+            }
+            s += """</td>"""
+            outln s
             outln"""            <td style="white-space: nowrap;">${coordmapobject_instance.mapObjectText}</td>"""
             if (coordmapobject_instance.mapObjectType == MapObjectType.Airfield) {
                 String details_str = "${coordmapobject_instance.gateDirection}${message(code:'fc.grad')}"
@@ -391,10 +417,11 @@ class ContestMapTagLib
         outln"""    </table>"""
         outln"""</div>"""
         outln"""<script>"""
-        outln"""    function showmapobjects_click() {"""
-        outln"""        var show_mapobjects = \$("#contestMapShowMapObjects").prop("checked");"""
-        outln"""        \$("#showmapobjects_id").prop("hidden", !show_mapobjects);"""
-        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, contestMapShowMapObjects:show_mapobjects}, "json");"""
+        outln"""    function showmapobjects(showMapObjects) {"""
+        outln"""        \$("#showmapobjects_id").prop("hidden", !showMapObjects);"""
+        outln"""        \$("#showmapobjects_off_id").prop("hidden", !showMapObjects);"""
+        outln"""        \$("#showmapobjects_on_id").prop("hidden", showMapObjects);"""
+        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, contestMapShowMapObjects:showMapObjects}, "json");"""
         outln"""    }"""
         outln"""    function additionals_click() {"""
         outln"""        var additionals = \$("#contestMapAdditionals").prop("checked");"""

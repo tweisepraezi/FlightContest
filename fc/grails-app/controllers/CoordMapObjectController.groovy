@@ -220,6 +220,20 @@ class CoordMapObjectController {
         flash.message = coordmapobject.message
         redirect(controller:"route",action:"mapexportquestion",id:coordmapobject.instance.route.id)
     }
+    
+    def enable = {
+        def coordmapobject = fcService.enableCoordMapObject(params)
+        flash.error = coordmapobject.error
+        flash.message = coordmapobject.message
+        redirect(action:"edit",id:coordmapobject.instance.id)
+    }
+    
+    def disable = {
+        def coordmapobject = fcService.disableCoordMapObject(params)
+        flash.error = coordmapobject.error
+        flash.message = coordmapobject.message
+        redirect(action:"edit",id:coordmapobject.instance.id)
+    }
 	
 	def cancel = {
         def coordmapobject = fcService.getCoordMapObject(params) 

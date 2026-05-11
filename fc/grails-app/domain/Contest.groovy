@@ -16,7 +16,7 @@ class Contest
 	
 	String title = ""
 	int mapScale = 200000                               // UNUSED, since DB-2.21
-    CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
+    CoordPresentation coordPresentation = CoordPresentation.DEGREE // DB-2.12 
     TimeZone timeZone2 = TimeZone.getDefault()          // DB-2.21
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
 	boolean resultClasses = false          	            // Klassen, DB-2.0
@@ -875,7 +875,7 @@ class Contest
 				Route.findAllByContest(contestInstance,[sort:"idTitle"]).each { Route route_instance ->
 					Route new_route_instance = new Route()
 					new_route_instance.contest = this
-					new_route_instance.CopyValues(route_instance)
+					new_route_instance.CopyValues(route_instance, true)
 					new_route_instance.save()
 				}
 			}

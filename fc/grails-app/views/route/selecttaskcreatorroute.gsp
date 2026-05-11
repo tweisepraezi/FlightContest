@@ -38,6 +38,11 @@
                         <g:else>
                             <input type="hidden" id="corridorWidth" name="corridorWidth" value="0.0" tabIndex="${ti[0]++}"/>
                         </g:else>
+                        <div>
+                            <g:checkBox name="setShowMapObjectsFromRouteID" value="${setShowMapObjectsFromRouteID}" checked="${true}" tabIndex="${ti[0]++}"/>
+                            <label>${message(code:'fc.route.fileimport.setshowmapobjectsfromrouteid')}</label>
+                        </div>
+                        <br/>
                         <input type="hidden" id="setDefaults" name="setDefaults" value="true" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="importfcroute2" value="${message(code:'fc.import')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>

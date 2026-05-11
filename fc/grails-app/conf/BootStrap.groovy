@@ -1466,6 +1466,18 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 48) { // DB-2.48 compatibility
+                            print "    2.48 modifications"
+							Task.findAll().each { Task task_instance ->
+								task_instance.observationTestFilter = ""
+								task_instance.save()
+							}
+							TaskClass.findAll().each { TaskClass taskclass_instance ->
+								taskclass_instance.observationTestFilter = ""
+								taskclass_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.route.show')} ${routeInstance.name()}</title>
+        <title>${message(code:'fc.route.show')} ${routeInstance.name()} ${Defs.ROUTE_NUM}${routeInstance.idTitle}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="." />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.route.show')} ${routeInstance.name()}</h2>
+                <h2>${message(code:'fc.route.show')} ${routeInstance.name()} ${Defs.ROUTE_NUM}${routeInstance.idTitle}</h2>
                 <div class="block" id="forms" >
                     <g:form params="${['routeReturnAction':routeReturnAction,'routeReturnController':routeReturnController,'routeReturnID':routeReturnID]}">
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>

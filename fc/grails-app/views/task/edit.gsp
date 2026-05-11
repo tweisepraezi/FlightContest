@@ -191,6 +191,14 @@
                                                     <g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestEnrouteCanvasRun}" value="${taskclass_instance.observationTestEnrouteCanvasRun}" />
                                                     <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
                                                 </div>
+                                                <p>
+                                                    <g:if test="${taskInstance.lockPlanning}">
+                                                        ${message(code:'fc.observationtest.filter')}: <input type="text" id="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestFilter}" name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestFilter}" value="${fieldValue(bean:taskclass_instance,field:'observationTestFilter')}" tabIndex="${ti[0]++}" disabled/>
+                                                    </g:if>
+                                                    <g:else>
+                                                        ${message(code:'fc.observationtest.filter')}: <input type="text" id="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestFilter}" name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_ObservationTestFilter}" value="${fieldValue(bean:taskclass_instance,field:'observationTestFilter')}" tabIndex="${ti[0]++}"/>
+                                                    </g:else>
+                                                </p>
                                             </div>
                                         </g:if>
 		                                <div>
@@ -218,8 +226,8 @@
 		                                <div>
 			                               	<g:checkBox name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_SpecialTestRun}" value="${taskclass_instance.specialTestRun}" />
 		    	                            <label>${message(code:'fc.specialtest')}</label>
-		    	                            <p>
-                                                <input type="text" id="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_SpecialTestTitle}" name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_SpecialTestTitle}" value="${fieldValue(bean:taskclass_instance,field:'specialTestTitle')}" tabIndex="${ti[0]++}"/>
+		    	                            <p style="margin-left:20px;">
+                                                ${message(code:'fc.specialtest.title')}: <input type="text" id="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_SpecialTestTitle}" name="${Defs.TaskClassID}${taskclass_instance.resultclass.id}${Defs.TaskClassSubID_SpecialTestTitle}" value="${fieldValue(bean:taskclass_instance,field:'specialTestTitle')}" tabIndex="${ti[0]++}"/>
                                             </p>
 		                                </div>
 		                            </p>
@@ -284,6 +292,14 @@
                                                 <g:checkBox name="observationTestEnrouteCanvasRun" value="${taskInstance.observationTestEnrouteCanvasRun}" />
                                                 <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
                                             </div>
+                                            <p>
+                                                <g:if test="${taskInstance.lockPlanning}">
+                                                    ${message(code:'fc.observationtest.filter')}: <input type="text" id="observationTestFilter" name="observationTestFilter" value="${fieldValue(bean:taskInstance,field:'observationTestFilter')}" tabIndex="${ti[0]++}" disabled/>
+                                                </g:if>
+                                                <g:else>
+                                                    ${message(code:'fc.observationtest.filter')}: <input type="text" id="observationTestFilter" name="observationTestFilter" value="${fieldValue(bean:taskInstance,field:'observationTestFilter')}" tabIndex="${ti[0]++}"/>
+                                                </g:else>
+                                            </p>
                                         </div>
                                     </g:if>
 	                                <div>
@@ -311,8 +327,8 @@
 	                                <div>
 		                               	<g:checkBox name="specialTestRun" value="${taskInstance.specialTestRun}" />
 	    	                            <label>${message(code:'fc.specialtest')}</label>
-	                                    <p>
-	                                        <input type="text" id="specialTestTitle" name="specialTestTitle" value="${fieldValue(bean:taskInstance,field:'specialTestTitle')}" tabIndex="${ti[0]++}"/>
+	                                    <p style="margin-left:20px;">
+	                                        ${message(code:'fc.specialtest.title')}: <input type="text" id="specialTestTitle" name="specialTestTitle" value="${fieldValue(bean:taskInstance,field:'specialTestTitle')}" tabIndex="${ti[0]++}"/>
 	                                    </p>
 	                                </div>
 	                            </p>

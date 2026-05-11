@@ -143,6 +143,7 @@ class Defs
     static final String TaskClassSubID_ObservationTestTurnpointRun     = "_observationTestTurnpointRun"
     static final String TaskClassSubID_ObservationTestEnroutePhotoRun  = "_observationTestEnroutePhotoRun"
     static final String TaskClassSubID_ObservationTestEnrouteCanvasRun = "_observationTestEnrouteCanvasRun"
+    static final String TaskClassSubID_ObservationTestFilter           = "_observationTestFilter"
     static final String TaskClassSubID_LandingTestRun                  = "_landingTestRun"
     static final String TaskClassSubID_LandingTest1Run                 = "_landingTest1Run"
     static final String TaskClassSubID_LandingTest2Run                 = "_landingTest2Run"
@@ -208,6 +209,9 @@ class Defs
     
     static final String NAME_AIRPORTAREA                               = "AirportArea"
     
+    static int mmPerNM                                                 = 1852000
+    static int mmPerkm                                                 = 1000000
+    
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
     static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"
     static final String BACKGROUNDUPLOAD_IDLINK_SEPARATOR              = "§"
@@ -235,6 +239,11 @@ class Defs
 	
 	static final String RESULTS_FOOTER_LINE_SEPARATOR                  = "+"
 	static final String RESULTS_FOOTER_COLUMN_SEPARATOR                = ","
+    
+    static final String ARROWHEAD_UP                                   = "&#x2227;" // https://www.compart.com/de/unicode/block/U+2200
+    static final String ARROWHEAD_DOWN                                 = "&#x2228;"
+    
+    static final String ROUTE_NUM                                      = '#'
     
     static final String IGNORE_LINE                                    = '#'
     

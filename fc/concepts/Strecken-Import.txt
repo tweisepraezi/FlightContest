@@ -16,6 +16,7 @@ Import Task-Creator-Strecke
         - Enthaltene useProcedureTurns-Angabe wird beim Laden ignoriert
     - UL:
         - Bei corridorWidth-Angabe wird enthaltene useProcedureTurns-Angabe beim Laden ignoriert
+    - setShowMapObjectsFromRouteID eingebbar, Default: ein
         
 Import FC-Strecke
 -----------------
@@ -27,9 +28,11 @@ Import FC-Strecke
         - corridorwidth-Angabe nicht enthalten -> Fehlermeldung
     - UL:
         -
+    - setShowMapObjectsFromRouteID nicht eingebbar (= aus)
 
 Import Strecke
 --------------
+    - setShowMapObjectsFromRouteID eingebbar, Default: ein
 
 Neue Strecke
 ------------

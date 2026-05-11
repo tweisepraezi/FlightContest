@@ -15,6 +15,7 @@ class Task
     Boolean observationTestTurnpointRun      = false // DB-2.13
     Boolean observationTestEnroutePhotoRun   = false // DB-2.13
     Boolean observationTestEnrouteCanvasRun  = false // DB-2.13
+	String observationTestFilter             = ""    // DB-2.48
 	boolean landingTestRun                   = false
 	boolean landingTest1Run                  = false // DB-2.0
 	boolean landingTest2Run                  = false // DB-2.0
@@ -422,6 +423,9 @@ class Task
         // DB-2.44 compatibility
         printTimetableCorridorWidth(nullable:true)
         printTimetableJuryCorridorWidth(nullable:true)
+
+        // DB-2.48 compatibility
+        observationTestFilter(nullable:true)
 	}
 
     static mapping = {

@@ -67,11 +67,11 @@ class FlightTestWind
         if (IsCorridor()) {
             Route route_instance = GetRoute()
             if (corridorWidthWind) {
-                return "${route_instance.name()} (${FcMath.DistanceStr2(corridorWidthWind)}${getMsgArgs('fc.mile',[])}) #${idTitle}"
+                return "${route_instance.name()} (${FcMath.DistanceStr2(corridorWidthWind)}${getMsgArgs('fc.mile',[])}) ${Defs.ROUTE_NUM}${idTitle}"
             }
-            return "${route_instance.name()} (${FcMath.DistanceStr2(route_instance.corridorWidth)}${getMsgArgs('fc.mile',[])}) #${idTitle}"
+            return "${route_instance.name()} (${FcMath.DistanceStr2(route_instance.corridorWidth)}${getMsgArgs('fc.mile',[])}) ${Defs.ROUTE_NUM}${idTitle}"
         }
-		return "${wind.name()} #${idTitle}"
+		return "${wind.name()} ${Defs.ROUTE_NUM}${idTitle}"
 	}
     
 	String printName()

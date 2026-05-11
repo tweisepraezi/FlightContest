@@ -262,12 +262,10 @@ class DefaultsTagLib
         
         // other defaults
         outln"""<fieldset>"""
-        outln"""    <div>"""
-        outln"""        <input type="checkbox" id="otherdefaults_checkbox_id" tabIndex="${attrs.ti[0]++}" onclick="otherdefaults_click();"/>"""
-        outln"""        <label>${message(code:'fc.contestrule.defaults.showother')}</label>"""
-        outln"""    </div>"""
-        outln"""    <div id="otherdefaults_id" hidden>"""
-        outln"""        <br/>"""
+        outln"""    <label>${message(code:'fc.contestrule.defaults.showother')}</label>"""
+        outln"""    <a id="showotherdefaults_off_id" href="#x" class="arrowhead" onclick="showotherdefaults(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+        outln"""    <a id="showotherdefaults_on_id" href="#x" class="arrowhead" onclick="showotherdefaults(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+        outln"""    <div style="margin-left:10px;" id="showotherdefaults_id" hidden>"""
         outln"""        <div>"""
         checkBox("precisionFlying", attrs.contest.precisionFlying, 'fc.general.precisionflying', attrs)
         if (attrs.contest.precisionFlying != attrs.contest.contestRule.ruleValues.precisionFlying) {
@@ -323,8 +321,10 @@ class DefaultsTagLib
         outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<script>"""
-        outln"""    function otherdefaults_click() {"""
-        outln"""        \$("#otherdefaults_id").prop("hidden", !\$("#otherdefaults_checkbox_id").prop("checked"));"""
+        outln"""    function showotherdefaults(showOtherDefaults) {"""
+        outln"""        \$("#showotherdefaults_id").prop("hidden", !showOtherDefaults);"""
+        outln"""        \$("#showotherdefaults_off_id").prop("hidden", !showOtherDefaults);"""
+        outln"""        \$("#showotherdefaults_on_id").prop("hidden", showOtherDefaults);"""
         outln"""    }"""
         outln"""</script>"""
         

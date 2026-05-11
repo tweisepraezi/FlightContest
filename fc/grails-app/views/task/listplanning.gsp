@@ -238,7 +238,7 @@
                             <tr>
                                 <td colspan="2"><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}"/></td>
                                	<td colspan="${add_col+2}"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}"/></g:if></td>
-                                <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="disablecrew" value="${message(code:'fc.test.disablecrew')}"/></g:if></td>
+                                <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="disablecrew" value="${message(code:'fc.disable')}"/></g:if></td>
 								<td><g:actionSubmit action="setpagebreak" value="${message(code:'fc.test.setpagebreak')}"/></td>
                                 <td><g:if test="${!taskInstance.lockPlanning && taskInstance.contest.showPlanningTest}"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}"/></g:if></td>
                                 <g:if test="${taskInstance.flighttest && taskInstance.IsCorridor()}">
@@ -253,7 +253,7 @@
                             <tr class="join">
                             	<td colspan="2"><g:actionSubmit action="selectend" value="${message(code:'fc.selectend')}"/></td>
                             	<td colspan="${add_col+2}"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="moveend" value="${message(code:'fc.test.moveend')}"/></g:if></td>
-                                <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="enablecrew" value="${message(code:'fc.test.enablecrew')}"/></g:if></td>
+                                <td colspan="2"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="enablecrew" value="${message(code:'fc.enable')}"/></g:if></td>
 								<td><g:actionSubmit action="resetallpagebreak" value="${message(code:'fc.test.resetpagebreak.all')}"/></td>
                             	<td><g:if test="${taskInstance.contest.showPlanningTest}"><g:actionSubmit action="printplanningtesttask" value="${message(code:'fc.planningtesttask.print')}"/></g:if></td>
                             	<td colspan="3"><g:if test="${!taskInstance.lockPlanning}"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}"/></g:if></td>

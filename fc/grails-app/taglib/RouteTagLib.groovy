@@ -742,18 +742,20 @@ class RouteTagLib
         
         // Koordinaten
         outln"""<fieldset>"""
-        String show_coords = "hidden"
-        if (attrs.route.showCoords) {
-            show_coords = ""
-        }
         outln"""<div>"""
-        checkBoxClick("showCoords", attrs.route.showCoords, "fc.coordroute.list", "showcoords_click();", attrs)
-        outln"""</div>"""
-        outln"""<table id="showcoords_id" ${show_coords}>"""
+        outln"""<label>${message(code:'fc.coordroute.list')}</label>"""
+        String show_coords = ""
+        if (attrs.route.showCoords) {
+            outln"""<a id="showcoords_off_id" href="#x" class="arrowhead" onclick="showcoords(false);">${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showcoords_on_id" href="#x" class="arrowhead" onclick="showcoords(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+        } else {
+            show_coords = "hidden"
+            outln"""<a id="showcoords_off_id" href="#x" class="arrowhead" onclick="showcoords(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showcoords_on_id" href="#x" class="arrowhead" onclick="showcoords(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+        }
+        
+        outln"""<table style="margin-left:20px;" id="showcoords_id" ${show_coords}>"""
         outln"""    <thead>"""
-        //outln"""        <tr>"""
-        //outln"""            <th class="table-head" colspan="13">${message(code:'fc.coordroute.list')}</th>"""
-        //outln"""        </tr>"""
         outln"""        <tr>"""
         outln"""            <th>${message(code:'fc.number')}</th>""" // 1
         outln"""            <th>${message(code:'fc.title')}</th>""" // 2
@@ -884,25 +886,29 @@ class RouteTagLib
         outln"""    </tbody>"""
         outln"""</table>"""
         outln"""<script>"""
-        outln"""    function showcoords_click() {"""
-        outln"""        var show_coords = \$("#showCoords").prop("checked");"""
-        outln"""        \$("#showcoords_id").prop("hidden", !show_coords);"""
-        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showCoords:show_coords}, "json");"""
+        outln"""    function showcoords(showCoords) {"""
+        outln"""        \$("#showcoords_id").prop("hidden", !showCoords);"""
+        outln"""        \$("#showcoords_off_id").prop("hidden", !showCoords);"""
+        outln"""        \$("#showcoords_on_id").prop("hidden", showCoords);"""
+        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showCoords:showCoords}, "json");"""
         outln"""    }"""
         outln"""</script>"""
-        outln"""</fieldset>"""
+        outln"""</div>"""
         
-        // Beobachtungen
+        // Koordinaten-Beobachtungen
         if (!attrs.route.corridorWidth && (attrs.route.turnpointRoute.IsTurnpointSign() || attrs.route.enroutePhotoRoute.IsEnrouteRouteInput())) {
-            outln"""<fieldset>"""
-            String show_coord_observations = "hidden"
-            if (attrs.route.showCoordObservations) {
-                show_coord_observations = ""
-            }
             outln"""<div>"""
-            checkBoxClick("showCoordObservations", attrs.route.showCoordObservations, "fc.observation.turnpoint", "showcoordobservations_click();", attrs)
-            outln"""</div>"""
-            outln"""<table id="showcoordobservations_id" ${show_coord_observations}>"""
+            outln"""<label>${message(code:'fc.observation.turnpoint')}</label>"""
+            String show_coord_observations = ""
+            if (attrs.route.showCoordObservations) {
+                outln"""<a id="showcoordobservations_off_id" href="#x" class="arrowhead" onclick="showcoordobservations(false);">${Defs.ARROWHEAD_UP}</a>"""
+                outln"""<a id="showcoordobservations_on_id" href="#x" class="arrowhead" onclick="showcoordobservations(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+            } else {
+                show_coord_observations = "hidden"
+                outln"""<a id="showcoordobservations_off_id" href="#x" class="arrowhead" onclick="showcoordobservations(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+                outln"""<a id="showcoordobservations_on_id" href="#x" class="arrowhead" onclick="showcoordobservations(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+            }
+            outln"""<table style="margin-left:20px;" id="showcoordobservations_id" ${show_coord_observations}>"""
             outln"""    <thead>"""
             int col_span = 3
             int col_span2 = 0
@@ -922,9 +928,6 @@ class RouteTagLib
                 col_span++
                 col_span3++
             }
-            //outln"""        <tr>"""
-            //outln"""            <th class="table-head" colspan="${col_span}">${message(code:'fc.observation')}</th>"""
-            //outln"""        </tr>"""
             outln"""        <tr>"""
             outln"""            <th>${message(code:'fc.number')}</th>""" // 1
             outln"""            <th>${message(code:'fc.title')}</th>""" // 2
@@ -1044,30 +1047,31 @@ class RouteTagLib
             outln"""    </tbody>"""
             outln"""</table>"""
             outln"""<script>"""
-            outln"""    function showcoordobservations_click() {"""
-            outln"""        var show_coordobservations = \$("#showCoordObservations").prop("checked");"""
-            outln"""        \$("#showcoordobservations_id").prop("hidden", !show_coordobservations);"""
-            outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showCoordObservations:show_coordobservations}, "json");"""
+            outln"""    function showcoordobservations(showCoordObservations) {"""
+            outln"""        \$("#showcoordobservations_id").prop("hidden", !showCoordObservations);"""
+            outln"""        \$("#showcoordobservations_off_id").prop("hidden", !showCoordObservations);"""
+            outln"""        \$("#showcoordobservations_on_id").prop("hidden", showCoordObservations);"""
+            outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showCoordObservations:showCoordObservations}, "json");"""
             outln"""    }"""
             outln"""</script>"""
-            outln"""</fieldset>"""
+            outln"""</div>"""
         }
         
         // Auswerte-Etappen
-        outln"""<fieldset>"""
-        String show_result_legs = "hidden"
-        if (attrs.route.showResultLegs) {
-            show_result_legs = ""
-        }
         outln"""<div>"""
-        checkBoxClick("showResultLegs", attrs.route.showResultLegs, "fc.routelegcoord.list", "showresultlegs_click();", attrs)
-        outln"""</div>"""
-        outln"""<table id="showresultlegs_id" ${show_result_legs}>"""
+        outln"""<label>${message(code:'fc.routelegcoord.list')}</label>"""
+        String show_result_legs = ""
+        if (attrs.route.showResultLegs) {
+            outln"""<a id="showresultlegs_off_id" href="#x" class="arrowhead" onclick="showresultlegs(false);">${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showresultlegs_on_id" href="#x" class="arrowhead" onclick="showresultlegs(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+        } else {
+            show_result_legs = "hidden"
+            outln"""<a id="showresultlegs_off_id" href="#x" class="arrowhead" onclick="showresultlegs(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showresultlegs_on_id" href="#x" class="arrowhead" onclick="showresultlegs(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+        }
+        outln"""<table style="margin-left:20px;" id="showresultlegs_id" ${show_result_legs}>"""
         BigDecimal total_distance = 0.0
         outln"""    <thead>"""
-        //outln"""        <tr>"""
-        //outln"""            <th class="table-head" colspan="6">${message(code:'fc.routelegcoord.list')}</th>"""
-        //outln"""        </tr>"""
         outln"""        <tr>"""
         outln"""            <th>${message(code:'fc.number')}</th>"""
         outln"""            <th>${message(code:'fc.title')}</th>"""
@@ -1122,29 +1126,30 @@ class RouteTagLib
         outln"""    </tfoot>"""
         outln"""</table>"""
         outln"""<script>"""
-        outln"""    function showresultlegs_click() {"""
-        outln"""        var show_resultlegs = \$("#showResultLegs").prop("checked");"""
-        outln"""        \$("#showresultlegs_id").prop("hidden", !show_resultlegs);"""
-        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showResultLegs:show_resultlegs}, "json");"""
+        outln"""    function showresultlegs(showResultLegs) {"""
+        outln"""        \$("#showresultlegs_id").prop("hidden", !showResultLegs);"""
+        outln"""        \$("#showresultlegs_off_id").prop("hidden", !showResultLegs);"""
+        outln"""        \$("#showresultlegs_on_id").prop("hidden", showResultLegs);"""
+        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showResultLegs:showResultLegs}, "json");"""
         outln"""    }"""
         outln"""</script>"""
-        outln"""</fieldset>"""
+        outln"""</div>"""
         
         // Test-Etappen
-        outln"""<fieldset>"""
-        String show_test_legs = "hidden"
-        if (attrs.route.showTestLegs) {
-            show_test_legs = ""
-        }
         outln"""<div>"""
-        checkBoxClick("showTestLegs", attrs.route.showTestLegs, "fc.routelegtest.list", "showtestlegs_click();", attrs)
-        outln"""</div>"""
-        outln"""<table id="showtestlegs_id" ${show_test_legs}>"""
+        outln"""<label>${message(code:'fc.routelegtest.list')}</label>"""
+        String show_test_legs = ""
+        if (attrs.route.showTestLegs) {
+            outln"""<a id="showtestlegs_off_id" href="#x" class="arrowhead" onclick="showtestlegs(false);">${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showtestlegs_on_id" href="#x" class="arrowhead" onclick="showtestlegs(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+        } else {
+            show_test_legs = "hidden"
+            outln"""<a id="showtestlegs_off_id" href="#x" class="arrowhead" onclick="showtestlegs(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+            outln"""<a id="showtestlegs_on_id" href="#x" class="arrowhead" onclick="showtestlegs(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+        }
+        outln"""<table style="margin-left:20px;" id="showtestlegs_id" ${show_test_legs}>"""
         total_distance = 0.0
         outln"""    <thead>"""
-        //outln"""        <tr>"""
-        //outln"""            <th class="table-head" colspan="6">${message(code:'fc.routelegtest.list')}</th>"""
-        //outln"""        </tr>"""
         outln"""        <tr>"""
         outln"""            <th>${message(code:'fc.number')}</th>"""
         outln"""            <th>${message(code:'fc.title')}</th>"""
@@ -1199,29 +1204,30 @@ class RouteTagLib
         outln"""    </tfoot>"""
         outln"""</table>"""
         outln"""<script>"""
-        outln"""    function showtestlegs_click() {"""
-        outln"""        var show_testlegs = \$("#showTestLegs").prop("checked");"""
-        outln"""        \$("#showtestlegs_id").prop("hidden", !show_testlegs);"""
-        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showTestLegs:show_testlegs}, "json");"""
+        outln"""    function showtestlegs(showTestLegs) {"""
+        outln"""        \$("#showtestlegs_id").prop("hidden", !showTestLegs);"""
+        outln"""        \$("#showtestlegs_off_id").prop("hidden", !showTestLegs);"""
+        outln"""        \$("#showtestlegs_on_id").prop("hidden", showTestLegs);"""
+        outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showTestLegs:showTestLegs}, "json");"""
         outln"""    }"""
         outln"""</script>"""
-        outln"""</fieldset>"""
+        outln"""</div>"""
         
         // Strecken-Fotos
         if (!attrs.route.corridorWidth && attrs.route.enroutePhotoRoute.IsEnrouteRouteInput()) {
-            outln"""<fieldset>"""
-            String show_enroute_photos = "hidden"
-            if (attrs.route.showEnroutePhotos) {
-                show_enroute_photos = ""
-            }
             outln"""<div>"""
-            checkBoxClick("showEnroutePhotos", attrs.route.showEnroutePhotos, "fc.coordroute.photos", "showenroutephotos_click();", attrs)
-            outln"""</div>"""
-            outln"""<table id="showenroutephotos_id" ${show_enroute_photos}>"""
+            outln"""<label>${message(code:'fc.coordroute.photos')}</label>"""
+            String show_enroute_photos = ""
+            if (attrs.route.showEnroutePhotos) {
+                outln"""<a id="showenroutephotos_off_id" href="#x" class="arrowhead" onclick="showenroutephotos(false);">${Defs.ARROWHEAD_UP}</a>"""
+                outln"""<a id="showenroutephotos_on_id" href="#x" class="arrowhead" onclick="showenroutephotos(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+            } else {
+                show_enroute_photos = "hidden"
+                outln"""<a id="showenroutephotos_off_id" href="#x" class="arrowhead" onclick="showenroutephotos(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+                outln"""<a id="showenroutephotos_on_id" href="#x" class="arrowhead" onclick="showenroutephotos(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+            }
+            outln"""<table style="margin-left:20px;" id="showenroutephotos_id" ${show_enroute_photos}>"""
             outln"""    <thead>"""
-            //outln"""        <tr>"""
-            //outln"""           <th class="table-head" colspan="9">${message(code:'fc.coordroute.photos')}</th>"""
-            //outln"""        </tr>"""
             outln"""        <tr>"""
             outln"""            <th>${message(code:'fc.number')}</th>"""
             outln"""            <th>${message(code:'fc.observation.enroute.photo.name')}</th>"""
@@ -1317,30 +1323,31 @@ class RouteTagLib
             outln"""    </tbody>"""
             outln"""</table>"""
             outln"""<script>"""
-            outln"""    function showenroutephotos_click() {"""
-            outln"""        var show_enroutephotos = \$("#showEnroutePhotos").prop("checked");"""
-            outln"""        \$("#showenroutephotos_id").prop("hidden", !show_enroutephotos);"""
-            outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showEnroutePhotos:show_enroutephotos}, "json");"""
+            outln"""    function showenroutephotos(showEnroutePhotos) {"""
+            outln"""        \$("#showenroutephotos_id").prop("hidden", !showEnroutePhotos);"""
+            outln"""        \$("#showenroutephotos_off_id").prop("hidden", !showEnroutePhotos);"""
+            outln"""        \$("#showenroutephotos_on_id").prop("hidden", showEnroutePhotos);"""
+            outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showEnroutePhotos:showEnroutePhotos}, "json");"""
             outln"""    }"""
             outln"""</script>"""
-            outln"""</fieldset>"""
+            outln"""</div>"""
         }
         
         // Strecken-Bodenzeichen
         if (!attrs.route.corridorWidth && attrs.route.enrouteCanvasRoute.IsEnrouteRouteInput()) {
-            outln"""<fieldset>"""
-            String show_enroute_canvas = "hidden"
-            if (attrs.route.showEnrouteCanvas) {
-                show_enroute_canvas = ""
-            }
             outln"""<div>"""
-            checkBoxClick("showEnrouteCanvas", attrs.route.showEnrouteCanvas, "fc.coordroute.canvas", "showenroutecanvas_click();", attrs)
-            outln"""</div>"""
-            outln"""<table id="showenroutecanvas_id" ${show_enroute_canvas}>"""
+            outln"""<label>${message(code:'fc.coordroute.canvas')}</label>"""
+            String show_enroute_canvas = ""
+            if (attrs.route.showEnrouteCanvas) {
+                outln"""<a id="showenroutecanvas_off_id" href="#x" class="arrowhead" onclick="showenroutecanvas(false);">${Defs.ARROWHEAD_UP}</a>"""
+                outln"""<a id="showenroutecanvas_on_id" href="#x" class="arrowhead" onclick="showenroutecanvas(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>"""
+            } else {
+                show_enroute_canvas = "hidden"
+                outln"""<a id="showenroutecanvas_off_id" href="#x" class="arrowhead" onclick="showenroutecanvas(false);" hidden>${Defs.ARROWHEAD_UP}</a>"""
+                outln"""<a id="showenroutecanvas_on_id" href="#x" class="arrowhead" onclick="showenroutecanvas(true);">${Defs.ARROWHEAD_DOWN}</a>"""
+            }
+            outln"""<table style="margin-left:20px;" id="showenroutecanvas_id" ${show_enroute_canvas}>"""
             outln"""    <thead>"""
-            //outln"""        <tr>"""
-            //outln"""           <th class="table-head" colspan="8">${message(code:'fc.coordroute.canvas')}</th>"""
-            //outln"""        </tr>"""
             outln"""        <tr>"""
             outln"""            <th>${message(code:'fc.number')}</th>"""
             outln"""            <th>${message(code:'fc.observation.enroute.canvas.sign')}</th>"""
@@ -1436,14 +1443,16 @@ class RouteTagLib
             outln"""    </tbody>"""
             outln"""</table>"""
             outln"""<script>"""
-            outln"""    function showenroutecanvas_click() {"""
-            outln"""        var show_enroutecanvas = \$("#showEnrouteCanvas").prop("checked");"""
-            outln"""        \$("#showenroutecanvas_id").prop("hidden", !show_enroutecanvas);"""
-            outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showEnrouteCanvas:show_enroutecanvas}, "json");"""
+            outln"""    function showenroutecanvas(showEnrouteCanvas) {"""
+            outln"""        \$("#showenroutecanvas_id").prop("hidden", !showEnrouteCanvas);"""
+            outln"""        \$("#showenroutecanvas_off_id").prop("hidden", !showEnrouteCanvas);"""
+            outln"""        \$("#showenroutecanvas_on_id").prop("hidden", showEnrouteCanvas);"""
+            outln"""        \$.post("/fc/route/saveshow_ajax", {id:${attrs.route.id}, showEnrouteCanvas:showEnrouteCanvas}, "json");"""
             outln"""    }"""
             outln"""</script>"""
-            outln"""</fieldset>"""
+            outln"""</div>"""
         }
+        outln"""</fieldset>"""
     }
         
     // --------------------------------------------------------------------------------------------------------------------
