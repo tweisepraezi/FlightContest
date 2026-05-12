@@ -72,7 +72,7 @@ class OpenAIPService
     
 
     //--------------------------------------------------------------------------
-    Map WriteAirspaces2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean isHidden, int contestMapRoute)
+    Map WriteAirspaces2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean isHidden, Integer contestMapRoute)
     {
         printstart "WriteAirspaces2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
         

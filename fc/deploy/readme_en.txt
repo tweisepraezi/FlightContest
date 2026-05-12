@@ -1,6 +1,10 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.8
+-------------
+- Bug "OSM Contest Map: 'Generate Map around airport' crashes" fixed
+
 Changes 4.2.7
 -------------
 - OSM Contest Map generation for ANR parcours with multiple routes expanded

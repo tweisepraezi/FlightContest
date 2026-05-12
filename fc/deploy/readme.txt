@@ -1,6 +1,10 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.8
+----------------
+- Bug "OSM-Wettbewerbs-Karte: 'Karte um Flughafen erzeugen' stürzt ab" behoben
+
 Änderungen 4.2.7
 ----------------
 - OSM-Wettbewerbs-Karten-Erzeugung für ANR-Parcours mit mehreren Strecken erweitert
