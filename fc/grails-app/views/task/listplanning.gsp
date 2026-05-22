@@ -29,6 +29,7 @@
                                 </g:if> <g:else>
                                     <td/>
                                 </g:else>
+                                <td><g:if test="${taskInstance.flighttest?.route?.IsOtherRoute() && taskInstance.flighttest.route.corridorWidth}"><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'parcouroverview')}"/></g:if></td>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetableoverview')}"/></td>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetable')}"/></td>
                                 <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
@@ -51,6 +52,7 @@
 	                            </g:if> <g:else>
 	                                <td><g:if test="${!taskInstance.lockPlanning}"><g:link controller="flightTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.flighttest.add')}</g:link></g:if></td>
 	                            </g:else>
+                                <td/>
 								<td><g:if test="${taskInstance.IsLandingTestRun()}"><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'landingstartlist')}"/></g:if></td>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetablejudge')}"/></td>
                                 <td/>
@@ -64,6 +66,7 @@
                                             <a href="${livetracking_map}" target="_blank">${message(code:'fc.livetracking.navigationtaskmap')}<img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></a> (${taskInstance.GetLiveTrackingVisibility()})
                                         </g:if>
                                     </td>
+                                    <td/>
                                     <td/>
                                     <td/>
                                     <td/>
@@ -199,7 +202,13 @@
 		                                    </g:else>
 		                                    
 		                                    <g:if test="${test_instance.flighttestwind}">
-		                                        <td><g:flighttestwind var="${test_instance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
+											    <g:set var="route_class" value=""/>
+                                                <g:set var="route_attension" value=""/>
+                                                <g:if test="${test_instance.planningWarning}">
+                                                    <g:set var="route_class" value="errors"/>
+                                                    <g:set var="route_attension" value=" !"/>
+                                                </g:if>
+		                                        <td class="${route_class}"><g:flighttestwind var="${test_instance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/>${route_attension}</td>
 		                                    </g:if> <g:else>
 		                                        <td>${message(code:'fc.noassigned')}</td>                                    
 		                                    </g:else>
@@ -212,18 +221,23 @@
 											    <g:else>
 											        <td>${test_instance.testingTime.format('HH:mm')}</td>
 											    </g:else>
+                                                
 		                                        <g:if test="${test_instance.takeoffTimeWarning}">
 		                                            <td class="errors">${test_instance.takeoffTime?.format('HH:mm')} !</td>
-		                                        </g:if> <g:else>
+		                                        </g:if>
+                                                <g:else>
 		                                            <td>${test_instance.takeoffTime?.format('HH:mm')}</td>
 		                                        </g:else>
-												<td>${test_instance.maxLandingTime?.format('HH:mm:ss')}</td>
-		                                        <g:if test="${test_instance.arrivalTimeWarning}">
+												
+                                                <td>${test_instance.maxLandingTime?.format('HH:mm:ss')}</td>
+		                                        
+                                                <g:if test="${test_instance.arrivalTimeWarning}">
 		                                            <td class="errors">${test_instance.arrivalTime?.format('HH:mm:ss')} !</td>
 		                                        </g:if> <g:else>
 		                                            <td>${test_instance.arrivalTime?.format('HH:mm:ss')}</td>
 		                                        </g:else>
-		                                        <td><a href="${createLink(controller:'test',action:'flightplan')}/${test_instance.id}">${message(code:'fc.test.flightplan.here')}</a></td>
+		                                        
+                                                <td><a href="${createLink(controller:'test',action:'flightplan')}/${test_instance.id}">${message(code:'fc.test.flightplan.here')}</a></td>
 		                                    </g:if> <g:else>
 		                                        <td colspan="6">${message(code:'fc.nocalculated')}</td>
 		                                    </g:else>

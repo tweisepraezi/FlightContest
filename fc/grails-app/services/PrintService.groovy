@@ -693,7 +693,7 @@ class PrintService
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
+                if (test_instance.planningWarning || test_instance.takeoffTimeWarning || test_instance.arrivalTimeWarning) {
                     call_return = true
                 }
             }
@@ -810,7 +810,7 @@ class PrintService
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
+                if (test_instance.planningWarning || test_instance.takeoffTimeWarning || test_instance.arrivalTimeWarning) {
                     call_return = true
                 }
             }
@@ -975,7 +975,7 @@ class PrintService
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
+                if (test_instance.planningWarning || test_instance.takeoffTimeWarning || test_instance.arrivalTimeWarning) {
                     call_return = true
                 }
             }

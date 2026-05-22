@@ -1478,6 +1478,14 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 49) { // DB-2.49 compatibility
+                            print "    2.49 modifications"
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.planningWarning = false
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

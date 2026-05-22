@@ -79,9 +79,13 @@ class KmlService
     final static String GPXDATA = "GPXDATA"
 	
     //--------------------------------------------------------------------------
-    Map ConvertRoute2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean wrEnrouteSign)
+    Map ConvertRoute2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean wrEnrouteSign, boolean wrParcour)
     {
-        printstart "ConvertRoute2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
+        if (wrParcour) {
+            printstart "ConvertRoute2KMZ ${routeInstance.GetParcourName()} -> ${webRootDir + kmzFileName}"
+        } else {
+            printstart "ConvertRoute2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
+        }
         
         String kml_file_name = kmzFileName + ".kml"
         
@@ -105,6 +109,26 @@ class KmlService
             xml.Document {
                 kmz_styles(xml)
                 photo_list = kmz_route(routeInstance, null, isPrint, wrEnrouteSign, xml)
+                if (wrParcour && routeInstance.IsOtherRoute()) {
+                    if (routeInstance.route2ID) {
+                        Route route_instances = Route.get(routeInstance.route2ID)
+                        if (route_instances) {
+                            kmz_route(route_instances, null, isPrint, wrEnrouteSign, xml)
+                        }
+                    }
+                    if (routeInstance.route3ID) {
+                        Route route_instances = Route.get(routeInstance.route3ID)
+                        if (route_instances) {
+                            kmz_route(route_instances, null, isPrint, wrEnrouteSign, xml)
+                        }
+                    }
+                    if (routeInstance.route4ID) {
+                        Route route_instances = Route.get(routeInstance.route4ID)
+                        if (route_instances) {
+                            kmz_route(route_instances, null, isPrint, wrEnrouteSign, xml)
+                        }
+                    }
+                }
             }
         }
         kml_writer.close()
@@ -475,40 +499,6 @@ class KmlService
         if (isPrint) {
             media = Media.Print
         }
-        
-        Map contest_map_rect = [:]
-        BigDecimal center_latitude = null
-        BigDecimal center_longitude = null
-        BigDecimal min_latitude = null
-        BigDecimal min_longitude = null
-        BigDecimal max_latitude = null
-        BigDecimal max_longitude = null
-        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                BigDecimal lat = coordroute_instance.latMath()
-                BigDecimal lon = coordroute_instance.lonMath()
-                if (min_latitude == null || lat < min_latitude) {
-                    min_latitude = lat
-                }
-                if (min_longitude == null || lon < min_longitude) {
-                    min_longitude = lon
-                }
-                if (max_latitude == null || lat > max_latitude) {
-                    max_latitude = lat
-                }
-                if (max_longitude == null || lon > max_longitude) {
-                    max_longitude = lon
-                }
-            }
-        }
-        
-        contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, MARGIN_DISTANCE)
-        min_latitude = contest_map_rect.latmin
-        min_longitude = contest_map_rect.lonmin
-        max_latitude = contest_map_rect.latmax
-        max_longitude = contest_map_rect.lonmax
-        center_latitude = (max_latitude+min_latitude)/2
-        center_longitude = (max_longitude+min_longitude)/2
         
         String route_name = routeInstance.GetName(isPrint)
         BigDecimal corridor_width = routeInstance.corridorWidth

@@ -4257,10 +4257,14 @@ class FcService
                         
                         Map new_value = [startnum:        test_instance.crew.startNum,
                                          registration:    test_instance.crew.aircraft.registration,
+                                         trackerid:       test_instance.crew.trackerID,
                                          crewname:        test_instance.crew.name,
                                          teamname:        team,
                                          resultclassname: result_class,
-                                         tas:             FcMath.SpeedStr_TAS(test_instance.crew.tas),
+                                         routename:       test_instance.flighttestwind.GetRoute().name(),
+                                         winddirection:   test_instance.flighttestwind.wind.direction.toFloat(),
+                                         windspeed:       test_instance.flighttestwind.wind.speed.toFloat(),
+                                         tas:             test_instance.crew.tas.toFloat(),
                                          gate_times:      gate_times
                                         ]
                         export_values += new_value
@@ -4392,7 +4396,7 @@ class FcService
 		call_return = false
 		Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-				if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
+				if (test_instance.planningWarning || test_instance.takeoffTimeWarning || test_instance.arrivalTimeWarning) {
 					call_return = true
 				}
 			}
@@ -14146,6 +14150,39 @@ class FcService
 	            test_instance.save()
 			}
         }
+        
+        // calculate planningWarning
+        if (taskInstance?.flighttest.route.IsOtherRoute() && taskInstance.flighttest.route.corridorWidth) { // only ANR
+            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                    boolean planning_error = false
+                    Route route_instance = test_instance.flighttestwind?.GetRoute()
+                    if (route_instance) {
+                        for (Task task_instance in Task.findAllByContest(taskInstance.contest)) {
+                            if (task_instance.id != taskInstance.id) { // other task
+                                if (task_instance.flighttest.route.id == taskInstance.flighttest.route.id) { // same parcour
+                                    Test test_instance2 = Test.findByTaskAndCrew(task_instance, test_instance.crew)
+                                    if (test_instance2 && !test_instance2.disabledCrew && !test_instance2.crew.disabled) {
+                                        Route route_instance2 = test_instance2.flighttestwind?.GetRoute()
+                                        if (route_instance2 && route_instance2.id == route_instance.id) { // identical route
+                                            planning_error = true
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    test_instance.planningWarning = false
+                    if (planning_error) {
+                        test_instance.planningWarning = true
+                        println "Planning warning ($test_instance.crew.name)."
+                    }
+                    test_instance.save()
+                }
+            }
+        }
+        
 		printdone ""
     }
  

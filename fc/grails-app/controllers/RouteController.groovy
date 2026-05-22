@@ -860,7 +860,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.kmz"
-            Map converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, true, true) // false - no Print, true - wrEnrouteSign
+            Map converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, true, true, false) // false - no Print, true - wrEnrouteSign, false - no wrParcour
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.kmz').replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -871,6 +871,34 @@ class RouteController {
             } else {
                 flash.error = true
                 flash.message = message(code:'fc.kmz.notexported',args:[route.instance.name()])
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printerror flash.message
+                redirect(action:'show',id:params.id)
+            }
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+    }
+	
+    def kmzexport_anrparcour = {
+        Map route = domainService.GetRouteMap(params) 
+        if (route.instance) {
+            kmlService.printstart "kmzexport_anrparcour: Export route '${route.instance.GetParcourName()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.kmz"
+            Map converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, true, true, true) // false - no Print, true - wrEnrouteSign, true - wrParcour
+            if (converter.ok) {
+                String route_file_name = (route.instance.GetParcourName() + '.kmz').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_kmz_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.kmz.notexported',args:[route.instance.GetParcourName()])
                 kmlService.DeleteFile(upload_kmz_file_name)
                 kmlService.printerror flash.message
                 redirect(action:'show',id:params.id)
@@ -3915,7 +3943,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.GetOSMRouteName1(),
+                                                                 routeTitle: route.instance.GetParcourName(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -4381,9 +4409,7 @@ class RouteController {
         if (print_points2) {
             print_points2 += ","
         }
-        if (params.contestMapSecondTitle) {
-            routeInstance.contestMapSecondTitle = params.contestMapSecondTitle
-        }
+        routeInstance.contestMapSecondTitle = params.contestMapSecondTitle
         if (params.contestMapCenterVerticalPos2) {
             routeInstance.contestMapCenterVerticalPos2 = params.contestMapCenterVerticalPos2
         }
@@ -4437,9 +4463,7 @@ class RouteController {
         if (print_points3) {
             print_points3 += ","
         }
-        if (params.contestMapThirdTitle) {
-            routeInstance.contestMapThirdTitle = params.contestMapThirdTitle
-        }
+        routeInstance.contestMapThirdTitle = params.contestMapThirdTitle
         if (params.contestMapCenterVerticalPos3) {
             routeInstance.contestMapCenterVerticalPos3 = params.contestMapCenterVerticalPos3
         }
@@ -4493,9 +4517,7 @@ class RouteController {
         if (print_points4) {
             print_points4 += ","
         }
-        if (params.contestMapForthTitle) {
-            routeInstance.contestMapForthTitle = params.contestMapForthTitle
-        }
+        routeInstance.contestMapForthTitle = params.contestMapForthTitle
         if (params.contestMapCenterVerticalPos4) {
             routeInstance.contestMapCenterVerticalPos4 = params.contestMapCenterVerticalPos4
         }

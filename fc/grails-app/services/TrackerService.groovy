@@ -1967,8 +1967,9 @@ class TrackerService
             "takeoff_time": to_time,
             "minutes_to_starting_point": (60*FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime)).toInteger(),
             "finished_by_time": arrival_time,
-            "wind_direction": testInstance.flighttestwind.wind.direction,
-            "wind_speed": testInstance.flighttestwind.wind.speed,
+            "wind_direction": testInstance.flighttestwind.wind.direction, // FcMath.DataStr()
+            "wind_speed": testInstance.flighttestwind.wind.speed, // FcMath.DataStr()
+            //"route_name": testInstance.flighttestwind.GetRoute().name(),
             "gate_times": gate_times
         ]
         Map gate_types = [:]

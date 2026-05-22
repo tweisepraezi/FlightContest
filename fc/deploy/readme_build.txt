@@ -9,7 +9,7 @@ Windows x64
 
 Downloads:
 ----------
-Open JDK 8: https://adoptium.net/de/temurin/releases/?os=windows&arch=x64&package=jdk&version=8 (Windows, x64, JDK, 8)
+Temurin JDK 8: https://adoptium.net/de/temurin/releases/?os=windows&arch=x64&package=jdk&version=8 (Windows, x64, JDK, 8)
 Grails 2.5.6: https://grails.org/download.html/
 Apache Tomcat 9: https://tomcat.apache.org/download-90.cgi -> 64-bit Windows zip
 AsciiDoctorJ 2.5.1: https://docs.asciidoctor.org/asciidoctorj/latest/distribution/ -> asciidoctorj

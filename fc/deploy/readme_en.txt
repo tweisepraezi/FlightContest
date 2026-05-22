@@ -1,6 +1,18 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.9
+-------------
+- Route command "KMZ export (ANR parcour)" added
+    For ANR parcours with multiple routes, all routes of the parcour are written to the KMZ file.
+    For transferring the parcour to a live tracking system.
+- Planning: "Export timetable (Data)" has been expanded to include "routename", "winddirection", "windspeed", and "trackerid" for each crew.
+    For transferring the start list to a live tracking system.
+- ANR multi-parcour planning: Warning if a route is already being used in another task within the same parcour added
+- ANR Planning: Parcour overview added.
+    Displays the route assignments for all tasks of the parcour.
+- This release changes the database version.
+
 Changes 4.2.8
 -------------
 - Bug "OSM Contest Map: 'Generate Map around airport' crashes" fixed

@@ -1,5 +1,5 @@
 
-Flight Contest 4.2.8
+Flight Contest 4.2.9
 Copyright 2009-2026 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
@@ -25,8 +25,8 @@ https://www.apache.org/licenses/LICENSE-2.0
 
 ============================================================================
 
-OpenJDK 8
-https://github.com/ojdkbuild/ojdkbuild
+Temurin JDK 8
+https://adoptium.net/de/temurin/releases
 
 GNU General Public License 2
 https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -54,14 +54,6 @@ https://jquery.com/
 
 MIT License
 https://jquery.org/license/
-
-============================================================================
-
-GDAL 3.2.1
-https://gdal.org
-
-MIT License
-https://gdal.org/license.html#license
 
 ============================================================================
 

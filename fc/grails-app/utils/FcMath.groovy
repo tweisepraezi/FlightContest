@@ -205,6 +205,13 @@ class FcMath
     }
     
     //--------------------------------------------------------------------------
+    static String DataStr(BigDecimal dataValue)
+    {
+        DecimalFormat df = new DecimalFormat("0")
+        return df.format(dataValue)
+    }
+	
+    //--------------------------------------------------------------------------
     static int RoundAltitude(BigDecimal altitudeValue)
     {
         return altitudeValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()

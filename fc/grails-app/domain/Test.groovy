@@ -30,8 +30,9 @@ class Test
     Date maxLandingTime = Date.parse("HH:mm","00:00")
 	Date arrivalTime    = Date.parse("HH:mm","00:00")
 
-	boolean arrivalTimeWarning = false
+    Boolean planningWarning = false                        // DB-2.49
 	boolean takeoffTimeWarning = false
+	boolean arrivalTimeWarning = false
 	
 	// results
 	int     planningTestLegPenalties = 0
@@ -344,6 +345,9 @@ class Test
         landingTest3VideoCheck(nullable:true)
         landingTest4Comment(nullable:true)
         landingTest4VideoCheck(nullable:true)
+        
+        // DB-2.49 compatibility
+        planningWarning(nullable:true)
     }
 
 	static mapping = {

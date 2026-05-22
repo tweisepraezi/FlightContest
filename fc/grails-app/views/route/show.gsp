@@ -392,6 +392,9 @@
                                             <g:actionSubmit action="showofflinemap_route" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="showonlinemap_route" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="kmzexport_route" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:if test="${routeInstance.IsOtherRoute()}" >
+                                                <g:actionSubmit action="kmzexport_anrparcour" value="${message(code:'fc.kmz.export.anrparcour')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            </g:if>
                                             <g:if test="${route_status.exportSemicircleGates}">
                                                 <g:actionSubmit action="gpxexport_route_semicirclegates" value="${message(code:'fc.gpx.export.semicirclegates')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>

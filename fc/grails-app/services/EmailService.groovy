@@ -30,7 +30,7 @@ class EmailService
         String upload_pdf_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.pdf"
         Map gpx_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:true, wrPhotoImage:true])
         Map gpx_view_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx4htm_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:false])
-        Map kmz_converter = kmlService.ConvertRoute2KMZ(routeInstance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
+        Map kmz_converter = kmlService.ConvertRoute2KMZ(routeInstance, webroot_dir, upload_kmz_file_name, true, true, false) // true - Print, true - wrEnrouteSign, false - no wrParcour
         Map pdf_converter = printService.ConvertRoute2PDF(routeInstance, webroot_dir + upload_pdf_file_name, false, false, GetPrintParams(routeInstance.contest, printLanguage, grailsAttributes, request)) 
         if (gpx_converter.ok && gpx_view_converter.ok && kmz_converter.ok && pdf_converter.ok) {
             String route_name = routeInstance.printName().replaceAll(' ','-')

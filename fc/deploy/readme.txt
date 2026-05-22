@@ -1,6 +1,18 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.9
+----------------
+- Strecken-Kommando "KMZ-Export (ANR-Parcour)" hinzugefügt
+    Bei ANR-Parcours mit mehreren Strecken werden alle Strecken des Parcours in die kmz-Datei geschrieben.
+    Für die Übergabe des Parcours in ein Live-Tracking-System.
+- Planung: "Zeitplan-Export (Daten)" wurde um "routename", "winddirection", "windspeed" und "trackerid" bei jeder Besatzung erweitert.
+    Für die Übergabe der Startliste in ein Live-Tracking-System.
+- Planung ANR-Mehr-Strecken-Parcour: Warnung, wenn eine Strecke bereits in einer anderen Aufgabe des selben Parcours benutzt wird, hinzugefügt.
+- ANR-Planung: Parcour-Übersicht hinzugefügt.
+    Zeigt die Strecken-Zuordnungen aller Aufgaben des Parcours an.
+- Dieses Release verändert die Datenbank-Version.
+
 Änderungen 4.2.8
 ----------------
 - Bug "OSM-Wettbewerbs-Karte: 'Karte um Flughafen erzeugen' stürzt ab" behoben

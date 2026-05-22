@@ -36,7 +36,7 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}"/>
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:actionSubmit action="refresh" value="${message(code:'fc.refresh')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="refresh_listdifferences" value="${message(code:'fc.refresh')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>

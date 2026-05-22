@@ -1524,6 +1524,32 @@ class Route
         return false
     }
     
+    List GetRoutes() {
+        List route_list = []
+        if (IsOtherRoute()) {
+            route_list += this
+            if (route2ID) {
+                Route route_instance = Route.get(route2ID)
+                if (route_instance) {
+                    route_list += route_instance
+                }
+            }
+            if (route3ID) {
+                Route route_instance = Route.get(route3ID)
+                if (route_instance) {
+                    route_list += route_instance
+                }
+            }
+            if (route4ID) {
+                Route route_instance = Route.get(route4ID)
+                if (route_instance) {
+                    route_list += route_instance
+                }
+            }
+        }
+        return route_list
+    }
+    
     boolean ShowSecondMapOptions()
     {
         if (!IsOtherRoute() || route2ID) {
