@@ -4418,9 +4418,7 @@ class RouteController {
         }
         routeInstance.contestMapCenterPoints2 = DisabledCheckPointsTools.Compress(center_points2, route_instance2)
         routeInstance.contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points2, route_instance2)
-        if (params.contestMapPrintLandscape2) {
-            routeInstance.contestMapPrintLandscape2 = params.contestMapPrintLandscape2 == "on"
-        }
+        routeInstance.contestMapPrintLandscape2 = params.contestMapPrintLandscape2 == "on"
         if (params.contestMapPrintSize2) {
             routeInstance.contestMapPrintSize2 = params.contestMapPrintSize2
         }
@@ -4472,9 +4470,7 @@ class RouteController {
         }
         routeInstance.contestMapCenterPoints3 = DisabledCheckPointsTools.Compress(center_points3, route_instance3)
         routeInstance.contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points3, route_instance3)
-        if (params.contestMapPrintLandscape3) {
-            routeInstance.contestMapPrintLandscape3 = params.contestMapPrintLandscape3 == "on"
-        }
+        routeInstance.contestMapPrintLandscape3 = params.contestMapPrintLandscape3 == "on"
         if (params.contestMapPrintSize3) {
             routeInstance.contestMapPrintSize3 = params.contestMapPrintSize3
         }
@@ -4526,9 +4522,7 @@ class RouteController {
         }
         routeInstance.contestMapCenterPoints4 = DisabledCheckPointsTools.Compress(center_points4, route_instance4)
         routeInstance.contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points4, route_instance4)
-        if (params.contestMapPrintLandscape4) {
-            routeInstance.contestMapPrintLandscape4 = params.contestMapPrintLandscape4 == "on"
-        }
+        routeInstance.contestMapPrintLandscape4 = params.contestMapPrintLandscape4 == "on"
         if (params.contestMapPrintSize4) {
             routeInstance.contestMapPrintSize4 = params.contestMapPrintSize4
         }

@@ -1,6 +1,11 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.10
+-----------------
+- Bug "OSM-Wettbewerbs-Karte: 'Ausdruck im Querformat' lässt sich für 2. - 4. Einstellungen nicht deaktivieren" behoben
+- Bug "OSM-Wettbewerbs-Karte: Ausdruck ohne Strecke für ANR-Einzel-Strecken-Parcours nicht vorhanden" behoben
+
 Änderungen 4.2.9
 ----------------
 - Strecken-Kommando "KMZ-Export (ANR-Parcour)" hinzugefügt

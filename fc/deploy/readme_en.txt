@@ -1,6 +1,11 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.10
+--------------
+- Bug "OSM Contest Map: 'Print landscape' cannot be disabled for settings 2–4" fixed
+- Bug "OSM Contest Map: No printout without the route available for single-route ANR parcours" fixed
+
 Changes 4.2.9
 -------------
 - Route command "KMZ export (ANR parcour)" added

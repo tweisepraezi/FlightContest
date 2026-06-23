@@ -277,9 +277,11 @@
                                         <br/>
                                         <input type="hidden" name="id" value="${routeInstance?.id}" />
                                         <g:actionSubmit action="mapgenerate" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                        <g:if test="${!routeInstance.corridorWidth}">
+                                        <g:if test="${!routeInstance.IsOtherRoute()}" >
                                             <g:actionSubmit action="mapgenerate_takeoff" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                             <g:actionSubmit action="mapgenerate_noroute" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                        </g:if>
+                                        <g:if test="${!routeInstance.corridorWidth}">
                                             <g:actionSubmit action="mapgenerate_allroutedetails" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                         </g:if>
                                         <g:if test="${!routeInstance.IsOtherRoute()}" >
@@ -344,9 +346,11 @@
                                             </g:if>
                                             <br/>
                                             <g:actionSubmit action="mapgenerate2" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                            <g:if test="${!routeInstance.corridorWidth}">
+                                            <g:if test="${!routeInstance.IsOtherRoute()}" >
                                                 <g:actionSubmit action="mapgenerate_takeoff2" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                                 <g:actionSubmit action="mapgenerate_noroute2" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                            </g:if>
+                                            <g:if test="${!routeInstance.corridorWidth}">
                                                 <g:actionSubmit action="mapgenerate_allroutedetails2" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                             </g:if>
                                             <g:if test="${!routeInstance.IsOtherRoute()}" >
@@ -407,9 +411,11 @@
                                             <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize3}" printsizename="contestMapPrintSize3" printlandscape="${routeInstance.contestMapPrintLandscape3}" printlandscapename="contestMapPrintLandscape3" ti="${ti}"/>
                                             <br/>
                                             <g:actionSubmit action="mapgenerate3" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                            <g:if test="${!routeInstance.corridorWidth}">
+                                            <g:if test="${!routeInstance.IsOtherRoute()}" >
                                                 <g:actionSubmit action="mapgenerate_takeoff3" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                                 <g:actionSubmit action="mapgenerate_noroute3" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                            </g:if>
+                                            <g:if test="${!routeInstance.corridorWidth}">
                                                 <g:actionSubmit action="mapgenerate_allroutedetails3" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                             </g:if>
                                             <g:if test="${!routeInstance.IsOtherRoute()}" >
@@ -470,9 +476,11 @@
                                             <g:contestMapPrintOptions printsize="${routeInstance.contestMapPrintSize4}" printsizename="contestMapPrintSize4" printlandscape="${routeInstance.contestMapPrintLandscape4}" printlandscapename="contestMapPrintLandscape4" ti="${ti}"/>
                                             <br/>
                                             <g:actionSubmit action="mapgenerate4" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
-                                            <g:if test="${!routeInstance.corridorWidth}">
+                                            <g:if test="${!routeInstance.IsOtherRoute()}" >
                                                 <g:actionSubmit action="mapgenerate_takeoff4" value="${message(code:'fc.generate.takeoff')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                                 <g:actionSubmit action="mapgenerate_noroute4" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                            </g:if>
+                                            <g:if test="${!routeInstance.corridorWidth}">
                                                 <g:actionSubmit action="mapgenerate_allroutedetails4" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                             </g:if>
                                             <g:if test="${!routeInstance.IsOtherRoute()}" >
