@@ -1021,15 +1021,15 @@ class ObservationResultsTagLib
                 }
             } else if ((coord_title.type == CoordType.UNKNOWN) && (coord_title.number == 1)) {
                 if (enrouteDataInstance.IsEvaluationFromTPNotFound()) {
-                    outln"""<option value="${Defs.EnrouteValue_NotFound}" selected="selected">${message(code:'fc.observation.evaluationvalue.enroute.notfound')}</option>"""
+                    outln"""<option value="${Defs.EnrouteValue_NotFound}" selected="selected">${message(code:'fc.observation.evaluationvalue.enroute.notfound.text')}</option>"""
                 } else {
-                    outln"""<option value="${Defs.EnrouteValue_NotFound}">${message(code:'fc.observation.evaluationvalue.enroute.notfound')}</option>"""
+                    outln"""<option value="${Defs.EnrouteValue_NotFound}">${message(code:'fc.observation.evaluationvalue.enroute.notfound.text')}</option>"""
                 }
             } else if ((coord_title.type == CoordType.UNKNOWN) && (coord_title.number == 2)) {
                 if (enrouteDataInstance.IsEvaluationFromTPFalse()) {
-                    outln"""<option value="${Defs.EnrouteValue_False}" selected="selected">${message(code:'fc.observation.evaluationvalue.enroute.false')}</option>"""
+                    outln"""<option value="${Defs.EnrouteValue_False}" selected="selected">${message(code:'fc.observation.evaluationvalue.enroute.false.text')}</option>"""
                 } else {
-                    outln"""<option value="${Defs.EnrouteValue_False}">${message(code:'fc.observation.evaluationvalue.enroute.false')}</option>"""
+                    outln"""<option value="${Defs.EnrouteValue_False}">${message(code:'fc.observation.evaluationvalue.enroute.false.text')}</option>"""
                 }
             } else {
                 if ((coord_title.type == enrouteDataInstance.evaluationType) && (coord_title.number == enrouteDataInstance.evaluationNumber)) {
@@ -1060,17 +1060,17 @@ class ObservationResultsTagLib
                 }
             } else if ((coordtitle_instance.type == CoordType.UNKNOWN) && (coordtitle_instance.number == 1)) {
                 if (enrouteDataInstance.IsEvaluationFromTPNotFound()) {
-                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound.text')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
 					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${Defs.EnrouteValue_NotFound}"/>"""
                 } else {
-                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound.text')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
                 }
             } else if ((coordtitle_instance.type == CoordType.UNKNOWN) && (coordtitle_instance.number == 2)) {
                 if (enrouteDataInstance.IsEvaluationFromTPFalse()) {
-                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.false')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_False}');"/>"""
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.false.text')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_False}');"/>"""
 					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${Defs.EnrouteValue_False}"/>"""
                 } else {
-                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.false')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_False}');"/>"""
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${get_coordtitle_id(coordtitle_instance)}" value="${message(code:'fc.observation.evaluationvalue.enroute.false.text')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${get_coordtitle_id(coordtitle_instance)}','${input_id}','${Defs.EnrouteValue_False}');"/>"""
                 }
             } else {
                 if ((coordtitle_instance.type == enrouteDataInstance.evaluationType) && (coordtitle_instance.number == enrouteDataInstance.evaluationNumber)) {

@@ -5,8 +5,8 @@ enum EvaluationValue // DB-2.13
     Unevaluated ('fc.observation.evaluationvalue.enroute.noinput',  'fc.observation.resultvalue.enroute.unevaluated', 'fc.observation.evaluationvalue.turnpoint.noinput',  'fc.observation.resultvalue.turnpoint.unevaluated'),
     Correct     ('fc.observation.evaluationvalue.enroute.correct',  'fc.observation.resultvalue.enroute.correct',     'fc.observation.evaluationvalue.turnpoint.true',     'fc.observation.resultvalue.turnpoint.true'),
     Inexact     ('fc.observation.evaluationvalue.enroute.inexact',  'fc.observation.resultvalue.enroute.inexact',     'fc.observation.evaluationvalue.turnpoint.inexact',  'fc.observation.resultvalue.turnpoint.inexact'),
-    NotFound    ('fc.observation.evaluationvalue.enroute.notfound', 'fc.observation.resultvalue.enroute.notfound',    'fc.observation.evaluationvalue.turnpoint.notfound', 'fc.observation.resultvalue.turnpoint.notfound'),
-    False       ('fc.observation.evaluationvalue.enroute.false',    'fc.observation.resultvalue.enroute.false',       'fc.observation.evaluationvalue.turnpoint.false',    'fc.observation.resultvalue.turnpoint.false')
+    NotFound    ('fc.observation.evaluationvalue.enroute.notfound.text', 'fc.observation.resultvalue.enroute.notfound',    'fc.observation.evaluationvalue.turnpoint.notfound.text', 'fc.observation.resultvalue.turnpoint.notfound'),
+    False       ('fc.observation.evaluationvalue.enroute.false.text',    'fc.observation.resultvalue.enroute.false',       'fc.observation.evaluationvalue.turnpoint.false',    'fc.observation.resultvalue.turnpoint.false')
     
     EvaluationValue(String enrouteEvaluationCode, String enrouteResultCode, String turnpointEvaluationCode, String turnpointResultCode)
     {

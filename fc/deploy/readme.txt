@@ -1,6 +1,11 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.11
+-----------------
+- Beobachtungsformulare: Spalte 'Nicht gefunden' bei manuellem Debriefing hinzugefügt
+- Beobachtungsergebniseingabe: '---' durch 'Nicht gefunden' ersetzt
+
 Änderungen 4.2.10
 -----------------
 - Bug "OSM-Wettbewerbs-Karte: 'Ausdruck im Querformat' lässt sich für 2. - 4. Einstellungen nicht deaktivieren" behoben

@@ -111,7 +111,8 @@ class ObservationFormsTagLib
                 if (show_inexact_pos) {
                     outln"""    <th class="inexact">${message(code:'fc.observation.evaluationvalue.enroute.inexact',args:[attrs.t.GetObservationTestEnrouteInexactValueStr(true)])}</th>"""
                 }
-                outln"""        <th class="false">${message(code:'fc.observation.evaluationvalue.enroute.false')}</th>"""
+                outln"""        <th class="false">${message(code:'fc.observation.evaluationvalue.enroute.false.text')}</th>"""
+                outln"""        <th class="false">${message(code:'fc.observation.evaluationvalue.enroute.notfound.text')}</th>"""
                 outln"""    </tr>"""
             } else if (enroutephoto_measurement == EnrouteMeasurement.NMFromTP) {
                 outln"""    <tr class="title">"""
@@ -144,6 +145,7 @@ class ObservationFormsTagLib
                         if (show_inexact_pos) {
                             outln"""<td class="inexact" />"""
                         }
+                        outln"""    <td class="false" />"""
                         outln"""    <td class="false" />"""
                         outln"""</tr>"""
                     } else if (enroutephoto_measurement == EnrouteMeasurement.NMFromTP) {
@@ -251,7 +253,8 @@ class ObservationFormsTagLib
                 if (show_inexact_pos) {
                     outln"""    <th class="inexact">${message(code:'fc.observation.evaluationvalue.enroute.inexact',args:[attrs.t.GetObservationTestEnrouteInexactValueStr(true)])}</th>"""
                 }
-                outln"""        <th class="false">${message(code:'fc.observation.evaluationvalue.enroute.false')}</th>"""
+                outln"""        <th class="false">${message(code:'fc.observation.evaluationvalue.enroute.false.text')}</th>"""
+                outln"""        <th class="false">${message(code:'fc.observation.evaluationvalue.enroute.notfound.text')}</th>"""
                 outln"""    </tr>"""
             } else if (enroutecanvas_measurement == EnrouteMeasurement.NMFromTP) {
                 outln"""    <tr class="hide">"""
@@ -291,6 +294,7 @@ class ObservationFormsTagLib
                         if (show_inexact_pos) {
                             outln"""<td class="inexact" />"""
                         }
+                        outln"""    <td class="false" />"""
                         outln"""    <td class="false" />"""
                         outln"""</tr>"""
                     } else if (enroutecanvas_measurement == EnrouteMeasurement.NMFromTP) {

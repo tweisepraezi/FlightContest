@@ -1,6 +1,11 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.11
+--------------
+- Observation forms: 'Not observed' column added for manual debriefing
+- Observation results input: '---' replaced with 'Not observed'
+
 Changes 4.2.10
 --------------
 - Bug "OSM Contest Map: 'Print landscape' cannot be disabled for settings 2–4" fixed
