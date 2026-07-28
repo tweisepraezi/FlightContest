@@ -48,7 +48,8 @@ enum TurnpointSign // DB-2.13
     N17 ('17', false, '', ''),
     N18 ('18', false, '', ''),
     N19 ('19', false, '', ''),
-    N20 ('20', false, '', '')
+    N20 ('20', false, '', ''),
+    FalseSign ('?', true, '', '')
     
     TurnpointSign(String title, boolean canvas, String imageName, String imagePngName)
     {
@@ -68,6 +69,8 @@ enum TurnpointSign // DB-2.13
         List ret = []
         for (def v in values()) {
             if (v == v.Unevaluated) {
+                // nothing
+            } else if (v == v.FalseSign) {
                 // nothing
             } else if (v == v.None) {
                 ret += v

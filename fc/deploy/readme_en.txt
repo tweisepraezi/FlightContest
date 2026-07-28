@@ -1,6 +1,11 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.12
+--------------
+- Turnpoint canvas: Observation results input '?' for non-existing canvas added
+- Observation results input: The active input field is now displayed with an orange background.
+
 Changes 4.2.11
 --------------
 - Observation forms: 'Not observed' column added for manual debriefing

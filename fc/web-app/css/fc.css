@@ -180,6 +180,10 @@ a.error {
 	border-radius: 4px;
 }
 
+.observationinputradio:focus-within {
+    background-color: #ffc107;
+}
+
 .observationinputbutton {
 	background-color: yellow;
 }
@@ -190,6 +194,10 @@ a.error {
 
 .observationinputcanvasimage {
 	height: 16px;
+}
+
+.observationresultinput:focus {
+    background-color: #ffc107;
 }
 
 tr.pagebreak td {

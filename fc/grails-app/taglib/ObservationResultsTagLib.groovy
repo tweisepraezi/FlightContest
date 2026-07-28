@@ -451,7 +451,7 @@ class ObservationResultsTagLib
                             case TurnpointRoute.AssignPhoto:
                             case TurnpointRoute.AssignCanvas:
                                 outln"""<td>"""
-                                outln"""    <select name="turnpointdataevaluation_${turnpointdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+                                outln"""    <select class="observationresultinput" name="turnpointdataevaluation_${turnpointdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
                                 for (TurnpointSign turnpoint_sign in TurnpointSign.GetEvaluationSigns(attrs.t.GetTurnpointRoute() == TurnpointRoute.AssignCanvas)) {
                                     if (turnpoint_sign == turnpointdata_instance.evaluationSign) {
                                         outln"""<option selected="selected">"""
@@ -630,7 +630,7 @@ class ObservationResultsTagLib
                                         disabled_attribute = "disabled"
                                     }
                                 } else {
-                                    outln"""    <select name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+                                    outln"""    <select class="observationresultinput" name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
                                     write_select_options(enroutephotodata_instance)
                                     outln"""    </select>"""
                                 }
@@ -659,7 +659,7 @@ class ObservationResultsTagLib
                                         disabled_attribute = "disabled"
                                     }
                                 } else {
-                                    outln"""    <select name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+                                    outln"""    <select class="observationresultinput" name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
                                     write_select_options(enroutephotodata_instance)
                                     outln"""    </select>"""
                                 }
@@ -841,7 +841,7 @@ class ObservationResultsTagLib
                                         disabled_attribute = "disabled"
                                     }
                                 } else {
-                                    outln"""    <select name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+                                    outln"""    <select class="observationresultinput" name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
                                     write_select_options(enroutecanvasdata_instance)
                                     outln"""    </select>"""
                                 }
@@ -870,7 +870,7 @@ class ObservationResultsTagLib
                                         disabled_attribute = "disabled"
                                     }
                                 } else {
-                                    outln"""    <select name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+                                    outln"""    <select class="observationresultinput" name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
                                     write_select_options(enroutecanvasdata_instance)
                                     outln"""    </select>"""
                                 }

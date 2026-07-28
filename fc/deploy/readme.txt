@@ -1,6 +1,11 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.12
+-----------------
+- Wendepunkt-Bodenzeichen: Beobachtungsergebniseingabe '?' für ein nicht vorhandenes Zeichen hinzugefügt
+- Beobachtungsergebniseingabe: Aktives Eingabefeld wird jetzt mit orangem Hintergrund angezeigt.
+
 Änderungen 4.2.11
 -----------------
 - Beobachtungsformulare: Spalte 'Nicht gefunden' bei manuellem Debriefing hinzugefügt
