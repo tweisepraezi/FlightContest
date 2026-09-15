@@ -1,6 +1,20 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.13
+-----------------
+- Ergebnisse: Kommando "Ergebnis-Export (Daten)" hinzugefügt.
+    Liefert eine JSON-Datei, die die detailierten Strafpunkte für alle Besatzungen beinhaltet.
+- Unterstützung für Mehrfach-Flugzeugnutzung erweitert:
+    Für Flugzeuge, die für mehr als zwei Besatzungen genutzt werden, ist ein weiteres Flugzeug 
+      mit dem selben Kennzeichen und dem Präfix . anzulegen und Besatzungen zuzuordnen.
+      Beim Import einer Besatzungsliste erfolgt das automatisch.
+    'Planung - Takeoff-Zeitplan-Warnung' und 'Besatzungen - Reihenfolge berechnen' 
+      berücksichtigen dieses zusätzliche Flugzeug. 
+- Bug "Landeergebniseingabe stürzt ab, wenn der Aufgabe kein Navigationstest zugeordnet ist" behoben
+- Bug "ANR-Ergebnisdruck: Strafpunkte für Verlassen des Korridors im Kreisbogen werden nicht ausgedruckt" behoben
+- Bug "Deaktiverung eines doppelten Bodenzeichens entfernt beide Bodenzeichen aus dem Ergebnis" behoben
+
 Änderungen 4.2.12
 -----------------
 - Wendepunkt-Bodenzeichen: Beobachtungsergebniseingabe '?' für ein nicht vorhandenes Zeichen hinzugefügt

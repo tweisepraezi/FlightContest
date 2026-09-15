@@ -20,6 +20,11 @@ class CoordResult extends Coord
             return false
         }
         Route route_instance = test.flighttestwind.GetRoute()
+        if (test.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
+            if (GetOutsideCorridorPenalties() > 0) {
+                return false
+            }
+        }
         if (test.GetFlightTestBadCoursePoints() > 0) {
             if (resultEntered) {
                 if (!DisabledCheckPointsTools.Contains(test.task.disabledCheckPointsBadCourse, route_instance, title()+',', false)) {

@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.2.12
-:revdate:   28.07.2026
+:revnumber: 4.2.13
+:revdate:   15.09.2026
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -292,6 +292,9 @@ Diese Liste muss am Wettbewerbstag vorliegen (Sortierung nicht notwendig).
 Start-Nummern nur angegeben, wenn eine besondere Nummerierung benötigt wird.
 Nicht angegebene Start-Nummern erhalten beim Import automatisch eine Nummer
 (die jeweils erste Nummer nach der höchsten existierenden Nummer).
+
+Für Flugzeuge, die mehr als zweimal verwendet werden, wird ab dem 3. Flugzeug
+automatisch ein Flugzeug mit dem selben Kennzeichen und dem Präfix . zugeordnet.
 
 Diese Vorlage kann auch zur Planung anderer Belange des Wettbewerbes 
 (Hotel, Kontaktdaten) verwendet werden. Dazu dürfen Spalten, Zeilen und

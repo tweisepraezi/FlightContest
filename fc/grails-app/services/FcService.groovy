@@ -2888,12 +2888,14 @@ class FcService
                         }
                         enroutephotodata_instance.save()
                     }
+                    int canvas_pos = 1
                     for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(test_instance,[sort:"id"])) {
-                        calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, test_instance, false)
+                        calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, test_instance, false, canvas_pos)
                         if (enroutecanvasdata_instance.isDirty()) {
                             observationresult_modified = true
                         }
                         enroutecanvasdata_instance.save()
+                        canvas_pos++
                     }
 					calculate_test_penalties(test_instance,false)
                     if (coordresult_modified) {
@@ -2993,12 +2995,14 @@ class FcService
                         }
                         enroutephotodata_instance.save()
                     }
+                    int canvas_pos = 1
                     for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(test_instance,[sort:"id"])) {
-                        calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, test_instance, false)
+                        calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, test_instance, false, canvas_pos)
                         if (enroutecanvasdata_instance.isDirty()) {
                             observationresult_modified = true
                         }
                         enroutecanvasdata_instance.save()
+                        canvas_pos++
                     }
 					calculate_test_penalties(test_instance,false)
                     if (coordresult_modified) {
@@ -3423,87 +3427,6 @@ class FcService
 		printdone ""
 	}
 	
-    //--------------------------------------------------------------------------
-    Map calculatesequenceTask(Map params)
-    {
-		printstart "calculatesequenceTask"
-		
-        Map task = domainService.GetTaskMap(params) 
-        if (!task.instance) {
-			printerror ""
-            return task
-        }
-
-        /*
-        // Have all crews an aircraft?
-        boolean call_return = false
-        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-            if (!test_instance.taskAircraft) {
-                call_return = true
-            }
-        }
-        if (call_return) {
-            task.message = getMsg('fc.aircraft.notassigned')
-            task.error = true
-            return task
-        }
-        */
-
-    	// set viewpos for aircraft of user1 
-        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-	        	if (test_instance.taskAircraft) {
-	        		if (test_instance.taskAircraft.user1 == test_instance.crew) {
-	        			test_instance.viewpos = 4000+test_instance.taskTAS
-	        		}
-	        	}
-			}
-        }
-
-        // set viewpos for aircraft of user2 
-        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-	            if (test_instance.taskAircraft) {
-	                if (test_instance.taskAircraft.user2 == test_instance.crew) {
-	                    test_instance.viewpos = 3000+test_instance.taskTAS
-	                }
-	            }
-			}
-        }
-
-        // set viewpos for user without aircraft 
-        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-	            if (!test_instance.taskAircraft) {
-	                test_instance.viewpos = 2000+test_instance.taskTAS
-	            }
-			}
-        }
-
-        // set viewpos for disabled user 
-        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (test_instance.disabledCrew || test_instance.crew.disabled) {
-                test_instance.viewpos = 1000+test_instance.taskTAS
-			}
-        }
-
-        // set viewpos
-        Test.findAllByTask(task.instance,[sort:"viewpos",order:"desc"]).eachWithIndex { Test test_instance, int i ->
-            test_instance.viewpos = i
-            test_instance.timeCalculated = false
-			test_instance.ResetFlightTestResults()
-			test_instance.CalculateTestPenalties()
-            test_instance.flightTestLink = ""
-			delete_uploadjobtest(test_instance)
-            test_instance.crewResultsModified = true
-            test_instance.save()
-        }
-        
-        task.message = getMsg('fc.test.sequence.calculated')    
-		printdone task.message    
-        return task
-    }
-    
     //--------------------------------------------------------------------------
     Map resetsequenceTask(Map params)
     {
@@ -4279,6 +4202,87 @@ class FcService
                 upload_writer.close()
             } else {
                 task.message = getMsg('fc.test.timetable.export.someonemustselected')
+                task.error = true
+                printerror task.message
+                return task
+            }
+            printdone ""
+        } catch (Exception e) {
+            task.message = e.getMessage()
+            task.error = true
+            printerror e.getMessage()
+        }
+        return task
+
+    }
+    
+    //--------------------------------------------------------------------------
+    Map exportresultsdataTask(Map params, String uploadFileName)
+    {
+        printstart "exportresultsdataTask $uploadFileName"
+        
+        Map task = domainService.GetTaskMap(params)
+        if (!task.instance) {
+            return task
+        }
+        /*
+        if (!task.instance.liveTrackingNavigationTaskDate) {
+            return task + [error:true, message:getMsg('fc.livetracking.navigationtaskdate.notexists')]
+        }
+        */
+        try {
+            List export_values = []
+            Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                    if (true) { // TODO data exists
+                        String result_class = ""
+                        if (test_instance.crew.resultclass) {
+                            result_class = test_instance.crew.resultclass.name
+                        }
+                        String team = ""
+                        if (test_instance.crew.team) {
+                            team = test_instance.crew.team.name
+                        }
+                        String route_name = ""
+                        if (test_instance.flighttestwind) {
+                            route_name = test_instance.flighttestwind.GetRoute().name()
+                        }
+                        /*
+                        Contest contest_instance = task.instance.contest
+                        */
+                        
+                        Map new_value = [startnum:                 test_instance.crew.startNum,
+                                         registration:             test_instance.crew.aircraft.registration,
+                                         crewname:                 test_instance.crew.name,
+                                         teamname:                 team,
+                                         resultclassname:          result_class,
+                                         routename:                route_name,
+                                         tas:                      test_instance.crew.tas.toFloat(),
+                                         planningtestpenalties:    test_instance.planningTestPenalties,
+                                         flighttestpenalties:      test_instance.flightTestPenalties,
+                                         observationtestturnpointphotopenalties: test_instance.observationTestTurnPointPhotoPenalties,
+                                         observationTestRoutePhotoPenalties:     test_instance.observationTestRoutePhotoPenalties,
+                                         observationTestGroundTargetPenalties:   test_instance.observationTestGroundTargetPenalties,
+                                         observationtestpenalties: test_instance.observationTestPenalties,
+                                         landingtest1penalties:    test_instance.landingTest1Penalties,
+                                         landingtest2penalties:    test_instance.landingTest2Penalties,
+                                         landingtest3penalties:    test_instance.landingTest3Penalties,
+                                         landingtest4penalties:    test_instance.landingTest4Penalties,
+                                         landingtestpenalties:     test_instance.landingTestPenalties,
+                                         specialtestpenalties:     test_instance.specialTestPenalties,
+                                        ]
+                        export_values += new_value
+                    }
+                }
+            }
+            if (export_values.size() > 0) {
+                JsonBuilder json_builder = new JsonBuilder(export_values)
+                File upload_file = new File(uploadFileName)
+                BufferedWriter upload_writer = upload_file.newWriter("UTF-8")
+                upload_writer.writeLine json_builder.toString()
+                upload_writer.close()
+            } else {
+                task.message = getMsg('fc.task.noresultsexists')
                 task.error = true
                 printerror task.message
                 return task
@@ -8773,7 +8777,19 @@ class FcService
                 } else if (!aircraft_instance.user2) {
                     aircraft_instance.user2 = crew_instance
                 } else {
-                	aircraft_instance = null
+                    params.registration += Defs.MULTIUSED_AIRCRAFT_SUFFIX
+                    aircraft_instance = Aircraft.findByRegistrationAndContest(params.registration,contestInstance)
+                    if (!aircraft_instance) {
+                        aircraft_instance = new Aircraft(params)
+                        aircraft_instance.contest = crew_instance.contest
+                        aircraft_instance.type = params.type
+                        aircraft_instance.colour = params.colour
+                    }
+                    if (!aircraft_instance.user1) {
+                        aircraft_instance.user1 = crew_instance
+                    } else if (!aircraft_instance.user2) {
+                        aircraft_instance.user2 = crew_instance
+                    }
                 }
                 if (aircraft_instance) {
                     if(!aircraft_instance.hasErrors() && aircraft_instance.save()) {
@@ -9325,7 +9341,7 @@ class FcService
 			if (!crew_instance.disabled) {
 	        	if (crew_instance.aircraft) {
 	        		if (crew_instance.aircraft.user1 == crew_instance) {
-	        			crew_instance.viewpos = 4000+crew_instance.tas
+	        			crew_instance.viewpos = 5000+crew_instance.tas
 	        		}
 	        	}
 			}
@@ -9336,12 +9352,23 @@ class FcService
 			if (!crew_instance.disabled) {
 	            if (crew_instance.aircraft) {
 	                if (crew_instance.aircraft.user2 == crew_instance) {
-	                    crew_instance.viewpos = 3000+crew_instance.tas
+	                    crew_instance.viewpos = 4000+crew_instance.tas
 	                }
 	            }
 			}
         }
 
+        // set viewpos for multiple used aircaft
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
+			if (!crew_instance.disabled) {
+	        	if (crew_instance.aircraft) {
+	        		if (crew_instance.aircraft.registration.endsWith(Defs.MULTIUSED_AIRCRAFT_SUFFIX)) {
+	        			crew_instance.viewpos = 3000+crew_instance.tas
+	        		}
+	        	}
+			}
+        }
+        
         // set viewpos for user without aircraft 
         Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
 			if (!crew_instance.disabled) {
@@ -10575,8 +10602,9 @@ class FcService
             switch (testInstance.GetEnrouteCanvasMeasurement()) {
                 case EnrouteMeasurement.Map:
                     List enroutecanvas_names = testInstance.GetEnrouteCanvasObservationNames()
+                    int canvas_pos = 1
                     for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
-                        if (testInstance.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
+                        if (testInstance.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
                             if (params["${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}"]) {
                                 enroutecanvasdata_instance.evaluationValue = EvaluationValue.(params["${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}"])
                                 if (enroutecanvasdata_instance.canvasSign == EnrouteCanvasSign.NoSign) {
@@ -10588,7 +10616,7 @@ class FcService
                                 } else {
                                     enroutecanvasdata_instance.resultValue = enroutecanvasdata_instance.evaluationValue
                                 }
-                                calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, testInstance, false)
+                                calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, testInstance, false, canvas_pos)
                                 if (enroutecanvasdata_instance.isDirty()) {
                                     modified = true
                                 }
@@ -10597,6 +10625,7 @@ class FcService
                                 ok = false
                             }
                         }
+                        canvas_pos++
                     }
                     break
                 case EnrouteMeasurement.NMFromTP:
@@ -10638,16 +10667,19 @@ class FcService
             evaluationvalue_id = Defs.EnrouteID_PhotoEvaluationValue
         } else {
             List enroutecanvas_names = testInstance.GetEnrouteCanvasObservationNames()
+            int canvas_pos = 1
             for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
-                if (testInstance.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
+                if (testInstance.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
                     enroute_data += enroutecanvasdata_instance
                 }
+                canvas_pos++
             }
             //enroute_data = EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])
             enroute_measurement = testInstance.GetEnrouteCanvasMeasurement()
             coordtitle_id = Defs.EnrouteID_CanvasCoordTitle
             evaluationvalue_id = Defs.EnrouteID_CanvasEvaluationValue
         }
+        int canvas_pos = 1
         for (EnrouteData enroutedata_instance in enroute_data) {
             if (params.("${coordtitle_id}${enroutedata_instance.id}") != Defs.EnrouteValue_Unevaluated) {
                 if (params["${coordtitle_id}${enroutedata_instance.id}"] == Defs.EnrouteValue_NotFound) {
@@ -10701,7 +10733,11 @@ class FcService
                 } else {
                     enroutedata_instance.resultValue = EvaluationValue.False
                 }
-                calculate_penalty_enroute_data_instance(enroutedata_instance, testInstance, enroutePhoto)
+                if (enroutePhoto) {
+                    calculate_penalty_enroute_data_instance(enroutedata_instance, testInstance, true)
+                } else {
+                    calculate_penalty_enroute_data_instance(enroutedata_instance, testInstance, false, canvas_pos)
+                }
                 if (enroutedata_instance.isDirty()) {
                     modified = true
                 }
@@ -10709,6 +10745,7 @@ class FcService
             } else {
                 ret = false
             }
+            canvas_pos++
         }
         return [ret: ret, modified: modified]
     }
@@ -10737,7 +10774,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private void calculate_penalty_enroute_data_instance(EnrouteData enrouteDataInstance, Test testInstance, boolean enroutePhoto)
+    private void calculate_penalty_enroute_data_instance(EnrouteData enrouteDataInstance, Test testInstance, boolean enroutePhoto, int canvasPos = 0)
     {
         boolean is_disabled = false
         if (enroutePhoto) {
@@ -10745,7 +10782,7 @@ class FcService
                 is_disabled = true
             }
         } else {
-            if (testInstance.task.disabledEnrouteCanvasObs.contains("${enrouteDataInstance.canvasSign.canvasName},")) {
+            if (testInstance.task.disabledEnrouteCanvasObs.contains("${enrouteDataInstance.GetUniqueCanvasName(canvasPos)},")) {
                 is_disabled = true
             }
         }
@@ -11350,9 +11387,11 @@ class FcService
             }
 
             // recalculate EnrouteCanvasData
+            int canvas_pos = 1
             for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
-                calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, testInstance, false)
+                calculate_penalty_enroute_data_instance(enroutecanvasdata_instance, testInstance, false, canvas_pos)
                 enroutecanvasdata_instance.save()
+                canvas_pos++
             }
 		}
 
@@ -11393,7 +11432,7 @@ class FcService
         if (testInstance.flighttestwind) {
             route_instance = testInstance.flighttestwind.GetRoute()
         }
-        if (!route_instance) {
+        if (!route_instance && testInstance.task.flighttest) {
             route_instance = testInstance.task.flighttest.route
         }
         if (route_instance) {
@@ -11581,12 +11620,14 @@ class FcService
             if (testInstance.IsObservationTestEnrouteCanvasRun()) {
                 if (testInstance.GetEnrouteCanvasMeasurement().IsEnrouteMeasurement()) {
                     List enroutecanvas_names = testInstance.GetEnrouteCanvasObservationNames()
+                    int canvas_pos = 1
                     for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
-                        if (!testInstance.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")) {
-                            if (testInstance.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
+                        if (!testInstance.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos)},")) {
+                            if (testInstance.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
                                 testInstance.observationTestGroundTargetPenalties += enroutecanvasdata_instance.penaltyCoord
                             }
                         }
+                        canvas_pos++
                     }
                 }
                 testInstance.observationTestPenalties += testInstance.observationTestGroundTargetPenalties
@@ -12349,12 +12390,12 @@ class FcService
                 }
             }
         }
-        CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"id"]).each { CoordEnrouteCanvas coordenroutecanvas_instance ->
-            if (params.("${Defs.EnrouteID_CanvasObs}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}") == "on") {
+        for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"id"])) {
+            if (params.("${Defs.EnrouteID_CanvasObs}${coordenroutecanvas_instance.GetUniqueCanvasName()}") == "on") {
                 if (disabled_enroute_canvasobs) {
-                    disabled_enroute_canvasobs += ",${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}"
+                    disabled_enroute_canvasobs += ",${coordenroutecanvas_instance.GetUniqueCanvasName()}"
                 } else {
-                    disabled_enroute_canvasobs = coordenroutecanvas_instance.enrouteCanvasSign.canvasName
+                    disabled_enroute_canvasobs = coordenroutecanvas_instance.GetUniqueCanvasName()
                 }
             }
         }
@@ -14103,8 +14144,8 @@ class FcService
 	            GregorianCalendar last_takeoff_time = null
 	            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
 					if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
-		                if (test_instance.taskAircraft == test_instance2.taskAircraft) {
-		                	if (test_instance == test_instance2) {
+		                if (has_same_aircraft(test_instance, test_instance2)) {
+		                	if (test_instance.id == test_instance2.id) {
 		                		found_aircraft = true
 		                	}
 							if (!found_aircraft) {
@@ -14129,7 +14170,7 @@ class FcService
 				BigDecimal last_tasktas = 0
 				Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
 					if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
-						if (test_instance == test_instance2) {
+						if (test_instance.id == test_instance2.id) {
 							found_predecessor = true
 						}
 						if (!found_predecessor) {
@@ -14186,6 +14227,25 @@ class FcService
 		printdone ""
     }
  
+    //--------------------------------------------------------------------------
+    private boolean has_same_aircraft(Test testInstance1, Test testInstance2)
+    {
+        if (testInstance1.taskAircraft == testInstance2.taskAircraft) {
+            return true
+        }
+        if (testInstance1.taskAircraft.registration.endsWith(Defs.MULTIUSED_AIRCRAFT_SUFFIX)) {
+            if (testInstance1.taskAircraft.registration.substring(0, testInstance1.taskAircraft.registration.size()-1) == testInstance2.taskAircraft.registration) {
+                return true
+            }
+        }
+        if (testInstance2.taskAircraft.registration.endsWith(Defs.MULTIUSED_AIRCRAFT_SUFFIX)) {
+            if (testInstance2.taskAircraft.registration.substring(0, testInstance2.taskAircraft.registration.size()-1) == testInstance1.taskAircraft.registration) {
+                return true
+            }
+        }
+        return false
+    }
+    
     //--------------------------------------------------------------------------
     private int calulate_timetable(Task taskInstance)
     {
@@ -14286,7 +14346,7 @@ class FcService
         boolean found_aircraft = false
         GregorianCalendar last_takeoff_time = null
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
-            if (testInstance.taskAircraft == test_instance2.taskAircraft) {
+            if (has_same_aircraft(testInstance, test_instance2)) {
                 if (testInstance == test_instance2) {
                     found_aircraft = true
                 }
@@ -15487,17 +15547,6 @@ class FcService
 		}
 	}
 	
-    //--------------------------------------------------------------------------
-    Map runcalculatesequenceTask(Map task)
-    {
-		printstart "runcalculatesequenceTask"
-        Map p = [:]
-        p.id = task.instance.id 
-        Map ret = calculatesequenceTask(p)
-		printdone ret
-		return ret
-    }
-    
     //--------------------------------------------------------------------------
 	void puttimetableTask(Map task, List crewStartTimes)
 	{

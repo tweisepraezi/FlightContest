@@ -248,9 +248,10 @@ class ObservationResultsTagLib
                     outln"""    <tbody>"""
                 }
                 List enroutecanvas_names = attrs.t.GetEnrouteCanvasObservationNames()
+                int canvas_pos = 1
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
-                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
-                        boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
+                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
+                        boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos)},")
                         String image_name = ""
                         if (enroutecanvasdata_instance.canvasSign.imageName) {
                             image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
@@ -315,6 +316,7 @@ class ObservationResultsTagLib
                             penalty_sum += enroutecanvasdata_instance.penaltyCoord
                         }
                     }
+                    canvas_pos++
                 }
                 if (!attrs.crewResults) {
                     outln"""    </tbody>"""
@@ -745,13 +747,15 @@ class ObservationResultsTagLib
                 int penalty_sum = 0
                 boolean complete = true
                 List enroutecanvas_names = attrs.t.GetEnrouteCanvasObservationNames()
+                int canvas_pos = 1
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
-                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
+                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
                         if (enroutecanvasdata_instance.resultValue == EvaluationValue.Unevaluated) {
                             complete = false
                             attrs.complete[0] = false
                         }
                     }
+                    canvas_pos++
                 }
                 int col_span = 2
                 if (complete) {
@@ -794,9 +798,10 @@ class ObservationResultsTagLib
                 }
                 outln"""    </thead>"""
                 outln"""    <tbody>"""
+                canvas_pos = 1
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
-                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
-                        boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
+                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
+                        boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos)},")
                         String image_name = ""
                         if (enroutecanvasdata_instance.canvasSign.imageName) {
                             image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
@@ -906,6 +911,7 @@ class ObservationResultsTagLib
                             penalty_sum += enroutecanvasdata_instance.penaltyCoord
                         }
                     }
+                    canvas_pos++
                 }
                 outln"""    </tbody>"""
                 outln"""    <tfoot>"""
@@ -1317,9 +1323,10 @@ class ObservationResultsTagLib
                 outln"""    </thead>"""
                 outln"""    <tbody>"""
                 List enroutecanvas_names = attrs.t.GetEnrouteCanvasObservationNames()
+                int canvas_pos = 1
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
-                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
-                        boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
+                    if (attrs.t.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
+                        boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos)},")
                         String image_name = ""
                         if (enroutecanvasdata_instance.canvasSign.imageName) {
                             image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
@@ -1385,6 +1392,7 @@ class ObservationResultsTagLib
                             penalty_sum += enroutecanvasdata_instance.penaltyCoord
                         }
                     }
+                    canvas_pos++
                 }
                 outln"""    </tbody>"""
                 outln"""    <tfoot>"""

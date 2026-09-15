@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 4.2.12
-:revdate: 28.07.2026
+:revnumber: 4.2.13
+:revdate: 15.09.2026
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -280,7 +280,7 @@ The list captures the following data:
 * Team (optional)
 * Class (for competitions with different evaluation classes)
 * TAS (kn)
-* Aircraft registration plate
+* Aircraft registration
 * Aircraft type (optional)
 * Aircraft color (optional)
 * Tracker ID (optional, for competitions with live tracking)
@@ -290,6 +290,9 @@ This list must be available on the day of the competition (sorting is not necess
 Specify start numbers only if special numbering is required.
 Start numbers that are not specified are automatically assigned a number during import
 (the first number after the highest existing number).
+
+For aircraft used more than twice, starting with the third aircraft,
+an aircraft with the same registration number and the prefix . is automatically assigned.
 
 This template can also be used for planning of other matters of the competition
 (hotel, contact details). For this purpose, columns, rows, and

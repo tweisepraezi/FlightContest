@@ -284,8 +284,9 @@ class ObservationFormsTagLib
             outln"""    </thead>"""
             outln"""    <tbody>"""
             List enroutecanvas_names = attrs.t.GetEnrouteCanvasObservationNames()
+            int canvas_pos = 1
             for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
-                if (attrs.t.IsObservationShown(enroutecanvasdata_instance.canvasSign.canvasName, enroutecanvas_names)) {
+                if (attrs.t.IsObservationShown(enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos), enroutecanvas_names)) {
                     if (enroutecanvas_measurement == EnrouteMeasurement.Map) {
                         String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
                         outln"""<tr class="data">"""
@@ -335,6 +336,7 @@ class ObservationFormsTagLib
                         outln"""</tr>"""
                     }
                 }
+                canvas_pos++
             }
             outln"""    </tbody>"""
             outln"""</table>"""

@@ -14,8 +14,6 @@ class Defs
     static final String FCSAVE_FILE_GEODATA_CHATEAUS                   = "${FCSAVE_FOLDER_GEODATA}/chateaus.csv"
     static final String FCSAVE_FILE_GEODATA_WINDPOWERSTATIONS          = "${FCSAVE_FOLDER_GEODATA}/windpowerstations.csv"
     static final String FCSAVE_FILE_GEODATA_PEAKS                      = "${FCSAVE_FOLDER_GEODATA}/peaks.csv"
-    static final String FCSAVE_FILE_GEODATA_ADDITIONALS                = "${FCSAVE_FOLDER_GEODATA}/additionals.csv"
-    static final String FCSAVE_FILE_GEODATA_SPECIALS                   = "${FCSAVE_FOLDER_GEODATA}/specials.csv"
     static final String FCSAVE_FILE_GEODATA_AIRSPACES                  = "${FCSAVE_FOLDER_GEODATA}/airspaces.kmz"
     
     static final String ROOT_FOLDER_GPXUPLOAD                          = "gpxupload" // alternate: GpxService.GPXDATA
@@ -246,6 +244,8 @@ class Defs
     static final String ROUTE_NUM                                      = '#'
     
     static final String IGNORE_LINE                                    = '#'
+    
+    static final String MULTIUSED_AIRCRAFT_SUFFIX                      = "."
     
     static final String DEFAULT_CONFIG_SERVER                          = "https://config.flightcontest.de"
     static final String CONFIG_NAME                                    = "config.groovy"

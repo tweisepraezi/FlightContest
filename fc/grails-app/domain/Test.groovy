@@ -713,12 +713,14 @@ class Test
 
     List GetEnrouteCanvasObservationNames()
     {
-        List names = [] 
+        List names = []
+        int canvas_pos = 1
         for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(this,[sort:"id"])) {
-            String name = enroutecanvasdata_instance.canvasSign.canvasName
+            String name = enroutecanvasdata_instance.GetUniqueCanvasName(canvas_pos)
             if (!(name in names)) {
                 names += name
             }
+            canvas_pos++
         }
         return names
     }

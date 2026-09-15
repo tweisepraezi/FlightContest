@@ -961,17 +961,6 @@ class TaskController {
         }
     }
 
-	def calculatesequence = {
-        def task = fcService.calculatesequenceTask(params) 
-        flash.message = task.message
-        if (!task.instance) {
-            redirect(controller:"contest",action:"tasks")
-        } else {
-            flash.error = task.error
-        	redirect(action:listplanning,id:task.instance.id)
-        }
-	}
-
 	def resetsequence = {
         def task = fcService.resetsequenceTask(params) 
         flash.message = task.message
@@ -1209,6 +1198,33 @@ class TaskController {
         String webroot_dir = servletContext.getRealPath("/")
         String upload_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/JSON-${uuid}-UPLOAD.json"
         def task = fcService.exporttimetabledataTask(params, webroot_dir + upload_file_name)
+        if (task.instance) {
+            boolean run_redirect = true
+            if (!task.error) {
+                String timetable_file_name = (task.instance.name() + '.json').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${timetable_file_name}")
+                fcService.Download(webroot_dir + upload_file_name, timetable_file_name, response.outputStream)
+                fcService.DeleteFile(webroot_dir + upload_file_name)
+                run_redirect = false
+            }
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            if (run_redirect) {
+                redirect(action:listplanning,id:task.instance.id)
+            }
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+
+    def exportresults_data = {
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/JSON-${uuid}-UPLOAD.json"
+        def task = fcService.exportresultsdataTask(params, webroot_dir + upload_file_name)
         if (task.instance) {
             boolean run_redirect = true
             if (!task.error) {

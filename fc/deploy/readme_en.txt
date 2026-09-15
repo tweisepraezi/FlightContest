@@ -1,6 +1,20 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.13
+--------------
+- Results: Command "Export results (Data)" added
+    Returns a JSON file containing the detailed penalties for all crews.
+- Support for multiple usage of aircraft expanded:
+    For aircraft used by more than two crews, create an additional aircraft
+      with the same registration and the prefix . and assign crews to it.
+      This happens automatically when you import a crew list.
+    'Planning - Takeoff schedule warning' and 'Crews - Calculate sequence'
+      take this additional aircraft into account.    
+- Bug "Input of landing results crashes if the task has no navigation test" fixed
+- Bug "ANR result printing: Penalties for leaving the corridor on a semi-circle leg are not printed" fixed
+- Bug "Deactivating of a duplicate canvas removes both canvas from the result" fixed
+
 Changes 4.2.12
 --------------
 - Turnpoint canvas: Observation results input '?' for non-existing canvas added

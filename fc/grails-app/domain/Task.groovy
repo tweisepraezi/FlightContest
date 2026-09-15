@@ -1493,6 +1493,6 @@ class Task
     
     boolean IsCorridor()
     {
-        return flighttest.IsCorridor()
+        return flighttest?.IsCorridor()
     }
 }

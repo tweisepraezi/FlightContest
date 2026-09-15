@@ -572,6 +572,7 @@
                                     <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID && taskInstance.contest.liveTrackingScorecard && taskInstance.liveTrackingNavigationTaskID}" >
                                         <g:actionSubmit action="livetracking_updatetestresults" value="${message(code:'fc.livetracking.results.updatetestresults')}"/>
                                     </g:if>
+                                    <g:actionSubmit action="exportresults_data" value="${message(code:'fc.tast.exportresultsdata')}" />
                                 </td>
                                 <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                             </tr>

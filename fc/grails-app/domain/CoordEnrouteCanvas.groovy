@@ -29,4 +29,9 @@ class CoordEnrouteCanvas extends Coord
         }
         return 0
     }
+    
+    String GetUniqueCanvasName()
+    {
+        return "${enrouteCanvasSign.canvasName}_${enrouteViewPos}"
+    }
 }

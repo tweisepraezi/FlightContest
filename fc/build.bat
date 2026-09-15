@@ -83,6 +83,7 @@ del /Q web-app\jobs\*
 del /Q web-app\jobs\done\*
 del /Q web-app\jobs\error\*
 del /Q web-app\live\*
+del /Q web-app\live2\*
 
 ::-------------------------------------------------------------------
 :createfolder
