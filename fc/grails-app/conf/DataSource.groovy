@@ -64,7 +64,7 @@ environments {
 	production {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:h2:file:../fc/fcdb"
+			url = "jdbc:h2:file:" + (System.getenv("FC_DB_PATH") ?: "../fc/fcdb")
             pooled = true
             driverClassName = 'org.h2.Driver'
             username = 'sa'

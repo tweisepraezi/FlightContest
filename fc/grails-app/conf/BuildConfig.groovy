@@ -7,7 +7,7 @@ grails.project.work.dir = "target/work"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 
-grails.project.war.file = ".\\output\\fc.war"
+grails.project.war.file = "output/fc.war"
 
 
 grails.project.fork = [ 

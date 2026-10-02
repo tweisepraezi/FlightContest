@@ -24,10 +24,10 @@ class MapController {
     }
 
     def start_taskcreator_intern = {
-        String base_url = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/"
-        String task_creator_url = Defs.TASKCREATOR_INTERN_LINK + "/run_${session.taskCreatorLanguage}.html"
+        String base_url = "${FlightContestRuntime.publicBaseUrl()}/map/${session.lastContest.contestUUID}/"
+        String task_creator_url = (FlightContestRuntime.publicBaseUrl() + "/taskcreator") + "/run_${session.taskCreatorLanguage}.html"
         if (BootStrap.global.IsTaskCreatorJSExtern()) {
-            task_creator_url = Defs.TASKCREATOR_INTERN_LINK + "/run_jsextern_${session.taskCreatorLanguage}.html"
+            task_creator_url = (FlightContestRuntime.publicBaseUrl() + "/taskcreator") + "/run_jsextern_${session.taskCreatorLanguage}.html"
         }
         task_creator_url += "?lang=${session.taskCreatorLanguage}"
         task_creator_url += "&admin&baseurl=%22${base_url}%22"
@@ -278,7 +278,7 @@ class MapController {
     }
     
 	Map GetPrintParams() {
-        return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
+        return [baseuri:FlightContestRuntime.internalBaseUrl(request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request)),
                 contest:session.lastContest,
                 lang:session.printLanguage
                ]

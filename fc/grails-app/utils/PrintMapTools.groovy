@@ -101,6 +101,9 @@ class PrintMapTools
     //--------------------------------------------------------------------------
     static boolean IsLocalPrintmapsRunning()
     {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') == 'disabled') {
+            return false
+        }
         String url_path = Defs.PRINTMAPS_INTERN_LINK + "/capabilities/service" 
         Map status = CallPrintServer(url_path, [HEADER_ACCEPT], "GET", DataType.JSON, "")
         if (status.responseCode == 200) {
@@ -112,6 +115,9 @@ class PrintMapTools
     //--------------------------------------------------------------------------
     static String GetPrintServerAPI()
     {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') == 'disabled') {
+            return ''
+        }
         if (BootStrap.global.IsLocalPrintmaps() && IsLocalPrintmapsRunning()) {
             return Defs.PRINTMAPS_INTERN_LINK
         }
