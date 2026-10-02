@@ -88,7 +88,8 @@ Persist data, not the entire `webapps` tree, so replacing an image replaces appl
 | `TZ`, `CATALINA_OPTS` | Timezone, memory, UTF-8, headless operation, and existing numeric-formatting locale. |
 | `FC_SAVE_DIR` | Image default `/var/lib/flightcontest/save`. |
 | `FC_DB_PATH` | Image default `/var/lib/flightcontest/db/fcdb`, without a database extension. |
-| `FC_CONFIG_FILE` | Compose mounts external Groovy configuration at `save/.fc/config.groovy`. |
+| `FC_CONFIG_FILE` | Writable Groovy configuration at `save/.fc/config.groovy` in the state volume. The application settings page saves changes here. |
+| `FC_CONFIG_SEED_FILE` | Read-only initial configuration at `/etc/flightcontest/config.groovy`; copied into writable storage only when uninitialized. |
 | `FC_CLIENT_ID` | Optional original installation ID; otherwise persist a generated ID. |
 | `FC_REMOTE_CONFIG` | Defaults `false`; remote configuration is outside first-release acceptance. |
 | `FC_PUBLIC_BASE_URL` | Browser URL including `/fc`; derive from requests when empty. |

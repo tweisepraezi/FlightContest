@@ -31,8 +31,11 @@ RUN mkdir -p webapps/fc /var/lib/flightcontest/db /var/lib/flightcontest/save/.f
     && chown -R flightcontest:flightcontest /usr/local/tomcat /var/lib/flightcontest
 COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/flightcontest-entrypoint
 COPY docker/scripts/restore-volume.py /usr/local/lib/flightcontest/restore-volume.py
+COPY docker/config.groovy /etc/flightcontest/config.groovy
 ENV FC_SAVE_DIR=/var/lib/flightcontest/save \
     FC_DB_PATH=/var/lib/flightcontest/db/fcdb \
+    FC_CONFIG_FILE=/var/lib/flightcontest/save/.fc/config.groovy \
+    FC_CONFIG_SEED_FILE=/etc/flightcontest/config.groovy \
     FC_INTERNAL_BASE_URL=http://127.0.0.1:8080/fc \
     FC_MAP_MODE=disabled \
     FC_REMOTE_CONFIG=false \

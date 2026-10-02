@@ -17,6 +17,7 @@ services:
       FC_PUBLIC_BASE_URL: ${FC_PUBLIC_BASE_URL:-}
       FC_MAP_MODE: disabled
       FC_CONFIG_FILE: /var/lib/flightcontest/save/.fc/config.groovy
+      FC_CONFIG_SEED_FILE: /etc/flightcontest/config.groovy
       CATALINA_OPTS: ${CATALINA_OPTS:--Xms256m -Xmx2048m -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Duser.language=de -Duser.country=DE}
     volumes:
       - state:/var/lib/flightcontest
@@ -25,7 +26,7 @@ services:
       - maps:/usr/local/tomcat/webapps/fc/map
       - live:/usr/local/tomcat/webapps/fc/live
       - live2:/usr/local/tomcat/webapps/fc/live2
-      - ./config.groovy:/var/lib/flightcontest/save/.fc/config.groovy:ro
+      - ./config.groovy:/etc/flightcontest/config.groovy:ro
 volumes:
   state:
   uploads:

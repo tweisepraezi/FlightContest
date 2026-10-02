@@ -47,3 +47,11 @@ python3 fc/docker/tests/smoke.py http://localhost:18080/fc --demo 99 --output /p
 A restored real Windows installation, exact PDF layout/font comparison, spreadsheet round trips, concurrent operators, interrupted background jobs, operation without Internet, a clean-cache build, and other host platforms have not been verified in this check. Backup/restore and an image-update rollback rehearsal require separate verification before operator deployment.
 
 Map generation, region/contour import, PostGIS, GDAL/tile generation, remote integrations, and desktop/hardware tools are deferred. No compatibility claim is made for those components.
+
+## Writable settings configuration fix — 2 October 2026
+
+The original Compose mount placed `config.groovy` read-only at the path written by `GlobalController.update`. Updating language settings therefore returned HTTP 500. The seed configuration now mounts at `/etc/flightcontest/config.groovy`; startup copies it into the writable state volume only when no saved configuration exists, including migration of the empty root-owned placeholder left by the old mount. Existing saved configuration is retained.
+
+The rebuilt image is `sha256:3bf6f7be2625e2dfe842a7eb1b8b87d9f5be674d106925d3fb0671a0d97a4de6`. The running project was recreated and is healthy. Its saved configuration is owned by the application user, mode `0600`, and verified readable/writable. The operator reported the settings update working after deployment. ClientID remains `8D266B31-672C-4D68-A1BC-2BD72C938F00`.
+
+Backup now includes the writable configuration in the application archive, and restore accepts that configuration entry. Shell/Python syntax, Compose configuration, and Git whitespace checks pass. Backup/restore and replacement after a settings edit have not been exercised for this fix.

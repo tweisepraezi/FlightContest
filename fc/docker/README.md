@@ -38,14 +38,18 @@ Copy `.env.example` to `.env` to change deployment settings. `.env` is ignored b
 
 The image also supports `FC_SAVE_DIR`, `FC_DB_PATH`, `FC_CONFIG_FILE`, and `FC_INTERNAL_BASE_URL`; image defaults and Compose mounts align these paths with persistent storage. If overriding them, update the storage mounts and backup/restore scripts accordingly.
 
-The checked-in `config.groovy` enables application logs. To supply private settings for existing integrations, copy it to an ignored `config.local.groovy` and create `compose.override.yaml`:
+The checked-in `config.groovy` supplies initial settings. On first startup the entrypoint copies it from `/etc/flightcontest/config.groovy` into writable `state` storage at `save/.fc/config.groovy`. The application settings page edits that persistent copy. Later restarts and image replacements preserve saved configuration, including an intentionally empty file.
+
+To supply private initial settings for a new installation, copy the seed to an ignored `config.local.groovy` and create `compose.override.yaml`:
 
 ```yaml
 services:
   flightcontest:
     volumes:
-      - ./config.local.groovy:/var/lib/flightcontest/save/.fc/config.groovy:ro
+      - ./config.local.groovy:/etc/flightcontest/config.groovy:ro
 ```
+
+Changing the seed does not overwrite an initialized installation; use the application configuration editor to update its settings. Existing deployments with the former read-only configuration mount copy that mounted configuration on upgrade when their underlying volume contains only the empty Docker placeholder. Update any private override to use the new seed mount target.
 
 Standard `docker compose` loads this override automatically. Commands with explicit `-f` flags must include it explicitly. The backup/restore scripts include `compose.override.yaml` automatically when present. Keep credentials out of tracked files and images. Groovy configuration files are executable application configuration and must come from trusted operators.
 
@@ -81,7 +85,7 @@ Restore into a **new Compose project with fresh volumes**, with the same image v
 COMPOSE_PROJECT_NAME=flightcontest-restored sh scripts/restore.sh /absolute/path/to/backup
 ```
 
-Restoration refuses a running app, nonempty application storage, unsafe archive paths, or symbolic/hard links. Review the saved configuration, restore required private settings, then start the new project with an available host port. Do not paste an old resolved Compose file blindly: it may contain absolute paths specific to the original computer.
+Restoration refuses a running app, nonempty application storage, unsafe archive paths, or symbolic/hard links. The archive restores the saved writable configuration with the data. Review it and any private settings before starting the new project with an available host port. Do not paste an old resolved Compose file blindly: it may contain absolute paths specific to the original computer.
 
 Use a restored test project to verify reports and contest data before relying on a backup. For rollback after an update, restore the prior image **and matching pre-update data** if startup changed database contents. Preserve the backup until the updated installation has passed its workflow checks.
 

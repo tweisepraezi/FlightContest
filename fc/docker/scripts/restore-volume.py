@@ -28,7 +28,7 @@ with tempfile.TemporaryFile() as stream:
                 sys.exit('Invalid path in backup')
             if not any(name == root or name.startswith(root + '/') for root in roots):
                 sys.exit('Unexpected path in backup')
-            if not (member.isfile() or member.isdir()) or name == str(config).lstrip('/'):
+            if not (member.isfile() or member.isdir()):
                 sys.exit('Unsupported backup entry')
         archive.extractall('/', filter='data')
 print('Restored application storage.')

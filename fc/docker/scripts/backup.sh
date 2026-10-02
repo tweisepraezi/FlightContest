@@ -22,7 +22,7 @@ compose config > "$backup_dir/compose.resolved.yaml"
 compose run --rm --no-deps -T --entrypoint cat flightcontest \
     /var/lib/flightcontest/save/.fc/config.groovy > "$backup_dir/config.groovy"
 compose run --rm --no-deps -T --entrypoint tar flightcontest \
-    -C / -czf - --exclude=var/lib/flightcontest/save/.fc/config.groovy \
+    -C / -czf - \
     var/lib/flightcontest \
     usr/local/tomcat/webapps/fc/gpxupload usr/local/tomcat/webapps/fc/jobs \
     usr/local/tomcat/webapps/fc/map usr/local/tomcat/webapps/fc/live \
