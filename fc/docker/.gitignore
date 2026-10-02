@@ -2,3 +2,4 @@
 compose.override.yaml
 config.local.groovy
 backups/
+backup/

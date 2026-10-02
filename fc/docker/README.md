@@ -31,7 +31,7 @@ Copy `.env.example` to `.env` to change deployment settings. `.env` is ignored b
 | `FC_BIND_ADDRESS`, `FC_PORT` | `127.0.0.1`, `8080`. |
 | `TZ` | `Europe/Warsaw`; configure for the installation. Contest timezone settings still apply. |
 | `FC_CLIENT_ID` | Empty generates and persists an ID. Set the original Windows installation ID when moving an existing installation that uses remote configuration or map counters. |
-| `FC_REMOTE_CONFIG` | `false` prevents startup requests to the remote configuration provider. Set `true` only when using that provider. Requests have connection/read timeouts. |
+| `FC_REMOTE_CONFIG` | `false` disables remote configuration both at startup and via Extras → Get ClientID → Load Configuration. Set `true` to load the owner and provider settings registered for `FC_CLIENT_ID`, then recreate the container. Requests have connection/read timeouts. |
 | `FC_PUBLIC_BASE_URL` | Empty derives browser links from the request. Set explicitly when accessed through a proxy or a fixed LAN address. Include `/fc`. |
 | `FC_MAP_MODE` | Fixed to `disabled` in Compose for this web-app release. |
 | `CATALINA_OPTS` | 256 MB initial / 2 GB maximum heap, UTF-8, headless mode, German JVM locale. Preserve the locale options unless intentionally changing legacy numeric formatting. Browser language is chosen independently in the application. |

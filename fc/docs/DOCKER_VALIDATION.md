@@ -55,3 +55,21 @@ The original Compose mount placed `config.groovy` read-only at the path written 
 The rebuilt image is `sha256:3bf6f7be2625e2dfe842a7eb1b8b87d9f5be674d106925d3fb0671a0d97a4de6`. The running project was recreated and is healthy. Its saved configuration is owned by the application user, mode `0600`, and verified readable/writable. The operator reported the settings update working after deployment. ClientID remains `8D266B31-672C-4D68-A1BC-2BD72C938F00`.
 
 Backup now includes the writable configuration in the application archive, and restore accepts that configuration entry. Shell/Python syntax, Compose configuration, and Git whitespace checks pass. Backup/restore and replacement after a settings edit have not been exercised for this fix.
+
+## Remote client configuration — 2 October 2026
+
+The operator requested the existing Extras → Get ClientID → Load Configuration workflow. The installation's private `.env` now sets `FC_REMOTE_CONFIG=true`; the default for new installations remains `false`. The old value disabled both startup loading and the manual action.
+
+The container reached the provider's configuration endpoint with HTTP 200. After recreation, the application is healthy. An HTTP POST to `/global/loadconfig` succeeded and displayed the requested ClientID, registered owner/club, configured map server, and configured OpenAIP server. Provider credentials were not printed or written into repository files. This verifies configuration loading only; rendering and other external provider operations remain outside this check.
+
+The displayed generated-map count is `Global.FCMapCounter`, an in-memory value incremented by this application instance. Loading client configuration does not retrieve the count from a Windows instance.
+
+## Operator H2 database restore — 2 October 2026
+
+Restored the supplied `docker/backup/fcdb.h2.db` into the existing project's state volume after stopping the app. Read-only inspection with H2 1.3.176 confirmed schema version 2.49, 4 contests, 2 crews, and 16 routes. The copied database matched the supplied file before startup and was assigned to application UID/GID 10001.
+
+The previous database directory, including diagnostic logs, is preserved under `docker/backups/before-db-restore-20261002/db/`. The supplied backup files were retained unchanged. `fcdb.trace.db` is a diagnostic log and was not needed for the restored database.
+
+The app restarted and became healthy. The start page lists all four restored contests: `Trasy rekreacyjne.`, `Precyzyjne`, `Rajdowe`, and `Precyzyjne (stopnie, minuty, sekundy)`. Existing configuration, ClientID override, and other application volumes were retained. No separate saved-file or map-asset backup was supplied, so this operation restores the H2 database only.
+
+The input `docker/backup/` directory is now ignored by Git and excluded from the Docker build context.
