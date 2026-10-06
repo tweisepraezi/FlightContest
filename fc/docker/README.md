@@ -33,7 +33,7 @@ Copy `.env.example` to `.env` to change deployment settings. `.env` is ignored b
 | `FC_CLIENT_ID` | Empty generates and persists an ID. Set the original Windows installation ID when moving an existing installation that uses remote configuration or map counters. |
 | `FC_REMOTE_CONFIG` | `false` disables remote configuration both at startup and via Extras → Get ClientID → Load Configuration. Set `true` to load the owner and provider settings registered for `FC_CLIENT_ID`, then recreate the container. Requests have connection/read timeouts. |
 | `FC_PUBLIC_BASE_URL` | Empty derives browser links from the request. Set explicitly when accessed through a proxy or a fixed LAN address. Include `/fc`. |
-| `FC_MAP_MODE` | Fixed to `disabled` in Compose for this web-app release. |
+| `FC_MAP_MODE` | `disabled` by default; set `remote` to use the map server loaded for your ClientID. Local map containers remain deferred. |
 | `CATALINA_OPTS` | 256 MB initial / 2 GB maximum heap, UTF-8, headless mode, German JVM locale. Preserve the locale options unless intentionally changing legacy numeric formatting. Browser language is chosen independently in the application. |
 
 The image also supports `FC_SAVE_DIR`, `FC_DB_PATH`, `FC_CONFIG_FILE`, and `FC_INTERNAL_BASE_URL`; image defaults and Compose mounts align these paths with persistent storage. If overriding them, update the storage mounts and backup/restore scripts accordingly.
@@ -54,6 +54,12 @@ Changing the seed does not overwrite an initialized installation; use the applic
 Standard `docker compose` loads this override automatically. Commands with explicit `-f` flags must include it explicitly. The backup/restore scripts include `compose.override.yaml` automatically when present. Keep credentials out of tracked files and images. Groovy configuration files are executable application configuration and must come from trusted operators.
 
 The application retains its existing access model. Start with local or trusted-LAN use; containerization does not add Internet-facing authentication.
+
+## Remote OSM Contest Maps
+
+Set `FC_REMOTE_CONFIG=true`, your registered `FC_CLIENT_ID`, and `FC_MAP_MODE=remote` in `.env`, then recreate the container with `docker compose up -d`. Open a contest and route, then use **OSM Contest Map** from the route details or route settings page. The existing generator submits the route to the configured remote server, polls the job, and downloads the rendered map for printing or saving.
+
+Remote mode skips local PostgreSQL/container checks even if the client configuration contains local-map credentials. It needs Internet access and server coverage for the route region. HTTP calls use a 5-second connection timeout and a 60-second read timeout. Existing application volumes retain downloaded maps and job files. Keep local map services, GDAL conversions, and tile generation as separate later work.
 
 ## Stored data and moving an existing installation
 
@@ -99,4 +105,4 @@ python3 docker/tests/smoke.py http://localhost:8080/fc --demo 99
 
 This creates the built-in demo contests, checks their expected scoring results, runs module checks, downloads a crew-list PDF, and uploads/converts a logger file. Omit `--demo` to avoid creating contests. `--contest-id NUMBER` checks a retained/restored contest and its report. Results are saved under `/tmp/flightcontest-smoke` unless `--output` is supplied.
 
-Map rendering, GDAL conversions, and tile generation are deferred. Direct USB/GPS access, Brother COM label printing, Windows tray tools, and opening desktop viewers also remain outside the container scope. Use logger-file upload and browser/PDF output. Real-event data restoration, exact report layout comparison, external-provider credentials, and Windows-host testing must be verified for the intended installation. See the validation record for what was actually run.
+Local map rendering, GDAL conversions, and tile generation are deferred. Direct USB/GPS access, Brother COM label printing, Windows tray tools, and opening desktop viewers also remain outside the container scope. Use logger-file upload and browser/PDF output. Real-event data restoration, exact report layout comparison, external-provider credentials, and Windows-host testing must be verified for the intended installation. See the validation record for what was actually run.

@@ -24,7 +24,8 @@ Keep Grails 2.5.6, Java 8, Tomcat 9, the current compatible H2 driver, and one a
 | Competition database | Keep H2 in persistent storage; run the production profile. |
 | Saved files, uploads, jobs, existing map assets, live output | Persist mutable application directories across container replacement. Storing existing map assets does not enable map rendering. |
 | Background jobs | Keep existing application jobs in the single web-app instance. |
-| Local and remote map generation, GDAL conversions, tile generation | Disabled/unavailable in this Docker release; deferred. |
+| Remote OSM map generation | Optional `FC_MAP_MODE=remote`; use the provider loaded for the registered ClientID from route settings/details. Validate server coverage, rendering, and downloads. |
+| Local map generation, GDAL conversions, tile generation | Deferred. |
 | Email, FTP, tracking, external configuration providers | No new integration work in this release. Remote startup configuration is off by default. Validate separately before using existing integrations. |
 | USB/GPS devices, Brother COM printing, tray utilities, desktop viewers | Deferred; use browser downloads, PDF output, and logger-file upload. |
 | `fcmapsdocker/`, `fcmapsserver/`, `gpx2gac/`, `printlabel/`, `dotnet/` | No changes or build/runtime dependencies for this deployment. |
@@ -65,7 +66,7 @@ Keep `/fc` as the context path. Configure the internal application URL separatel
 | Some sources use legacy Windows encoding | Normalize Groovy sources in the disposable build copy with `prepare-source.py`. Preserve repository source encoding. |
 | Mutable files are beneath the deployed application | Explode the WAR in the image and mount only mutable directories. Preserve static-file serving and `servletContext.getRealPath()` behavior. |
 | PDFs use a browser-visible host for internal requests | Retain internal URL overrides in print parameters. Retain public URL handling for existing web links/assets. |
-| Restored configuration could enable unavailable map services | Set `FC_MAP_MODE=disabled` and retain small guards that skip map-provider/local-map checks. Skip GDAL availability on Linux. No Linux map conversion implementation is included. |
+| Restored configuration could enable local map services | Default to `FC_MAP_MODE=disabled`; optional `remote` uses the configured provider while skipping local PostgreSQL/container checks. Skip GDAL availability on Linux. |
 | Tomcat responding does not prove the application is initialized | [HealthController.groovy](../grails-app/controllers/HealthController.groovy) checks completed bootstrap, database version compatibility, and database access. |
 
 Keep these changes separate from competition calculations. Roll back map metadata JDBC rewrites, externally managed map lifecycle/UI changes, map-specific environment settings, Linux GDAL commands, and changes to the map Dockerfiles/import/renderer scripts.
@@ -94,7 +95,7 @@ Persist data, not the entire `webapps` tree, so replacing an image replaces appl
 | `FC_REMOTE_CONFIG` | Defaults `false`; remote configuration is outside first-release acceptance. |
 | `FC_PUBLIC_BASE_URL` | Browser URL including `/fc`; derive from requests when empty. |
 | `FC_INTERNAL_BASE_URL` | Image default `http://127.0.0.1:8080/fc` for application self-calls. |
-| `FC_MAP_MODE` | Fixed to `disabled` by the current Compose deployment. |
+| `FC_MAP_MODE` | `disabled` by default; optional `remote` enables the existing remote OSM generator. |
 
 Keep secrets, operator databases, and private configuration outside the build context and Git. To move an installation, stop it, take a consistent copy of H2 and referenced files, preserve its client ID, and restore into an isolated project first. Startup may apply existing Flight Contest schema/data upgrades even though the database engine is unchanged.
 
@@ -153,6 +154,6 @@ All build inputs come from `fc/`; no parent-folder context or sibling component 
 
 ## 9. Later work
 
-After accepting the web-app deployment, plan map rendering, PostGIS, region/contour import, GDAL/tile generation, map lifecycle and contest selection, and mapping backups separately. Then evaluate other repository tools, desktop/hardware integration, framework upgrades, or the C# migration according to need.
+After accepting the web-app deployment and optional remote OSM workflow, plan local map rendering, PostGIS, region/contour import, GDAL/tile generation, map lifecycle and contest selection, and mapping backups separately. Then evaluate other repository tools, desktop/hardware integration, framework upgrades, or the C# migration according to need.
 
 None of those projects is a prerequisite for this release. The remaining uncertainties here are legacy dependency retrieval, copied database compatibility, generated web assets, filesystem assumptions, and workflow/report parity.

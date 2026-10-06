@@ -15,7 +15,7 @@ services:
       FC_CLIENT_ID: ${FC_CLIENT_ID:-}
       FC_REMOTE_CONFIG: ${FC_REMOTE_CONFIG:-false}
       FC_PUBLIC_BASE_URL: ${FC_PUBLIC_BASE_URL:-}
-      FC_MAP_MODE: disabled
+      FC_MAP_MODE: ${FC_MAP_MODE:-disabled}
       FC_CONFIG_FILE: /var/lib/flightcontest/save/.fc/config.groovy
       FC_CONFIG_SEED_FILE: /etc/flightcontest/config.groovy
       CATALINA_OPTS: ${CATALINA_OPTS:--Xms256m -Xmx2048m -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Duser.language=de -Duser.country=DE}

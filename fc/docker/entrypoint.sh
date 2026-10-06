@@ -1,6 +1,11 @@
 #!/bin/sh
 set -eu
 
+case "${FC_MAP_MODE:-disabled}" in
+    disabled|remote) ;;
+    *) echo 'FC_MAP_MODE must be disabled or remote.' >&2; exit 1 ;;
+esac
+
 for directory in "$FC_SAVE_DIR/.fc" "$(dirname "$FC_DB_PATH")" \
     /var/lib/flightcontest/work \
     "$CATALINA_HOME/webapps/fc/gpxupload" "$CATALINA_HOME/webapps/fc/jobs/done" \

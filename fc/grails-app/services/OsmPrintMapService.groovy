@@ -378,6 +378,10 @@ class OsmPrintMapService
         String mapdata_date = ""
         printstart "Get service capabilities"
         Map status = CallPrintServer("/capabilities/service", [PrintMapTools.HEADER_ACCEPT], "GET", PrintMapTools.DataType.JSON, "")
+        if (status.responseCode != 200 || !status.json) {
+            ret.message = getMsg('fc.contestmap.connectionerror', false)
+            return ret
+        }
         if (status.responseCode == 200) {
 
             // check full page
@@ -1620,6 +1624,8 @@ class OsmPrintMapService
             URL url = new URL(url_path)
             // Open a HTTP connection to the URL
             conn = (HttpURLConnection) url.openConnection()
+            conn.connectTimeout = 5000
+            conn.readTimeout = 60000
             // Allow Inputs
             conn.setDoInput(true)
             // Allow Outputs

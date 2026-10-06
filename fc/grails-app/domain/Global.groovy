@@ -605,7 +605,7 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsLocalPrintmaps()
     {
-        if (FlightContestRuntime.setting('FC_MAP_MODE') == 'disabled') {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') in ['disabled', 'remote']) {
             return false
         }
         if (PostgreSQLPassword) {

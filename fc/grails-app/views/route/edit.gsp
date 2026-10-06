@@ -88,6 +88,9 @@
                         <input type="hidden" name="version" value="${routeInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}"  tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
+                        <g:if test="${PrintMapTools.GetPrintServerAPI()}">
+                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
                     </g:form>
                 </div>
             </div>
