@@ -30,7 +30,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${message(code:'fc.task.landingstartlist')} - ${taskInstance.printName()} (${message(code:'fc.crew.num', args:[landingtest_num])})"
+                    content: "${message(code:'fc.task.landingstartlist')} - ${taskInstance.printName()} - ${message(code:'fc.crew.num', args:[landingtest_num])}"
                 }
                 @top-right {
                     font-family: Noto Sans;
@@ -56,7 +56,7 @@
     </head>
     <body>
 	    <h2>${message(code:'fc.task.landingstartlist')}<g:if test="${taskInstance.printLandingStartlistPrintTitle}"> - ${taskInstance.printLandingStartlistPrintTitle}</g:if></h2>
-	    <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[landingtest_num])})</h3>
+	    <h3>${taskInstance.printName()} - ${message(code:'fc.crew.num', args:[landingtest_num])}</h3>
         <g:if test="${taskInstance.printLandingStartlistLandingField}">
             <h4>${message(code:'fc.test.landing.printinfo', args:[BootStrap.global.GetLandingInfo()])}</h4>
         </g:if>

@@ -79,8 +79,12 @@ class CrewTagLib
             }
         }
         if (attrs.contest.printCrewTeam) {
-            if (attrs.crew.team) {                          
-                outln"""<td class="team">${attrs.crew.team.name} ${attrs.teamOrderProblem}</td>"""
+            if (attrs.crew.team) {                         
+                if (attrs.crew.disabledTeam) {
+                    outln"""<td class="team">(${attrs.crew.team.name}) ${attrs.teamOrderProblem}</td>"""
+                } else {
+                    outln"""<td class="team">${attrs.crew.team.name} ${attrs.teamOrderProblem}</td>"""
+                }
             } else {
                 outln"""<td class="team">-</td>"""
             }

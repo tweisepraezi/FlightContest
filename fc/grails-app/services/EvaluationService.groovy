@@ -20,7 +20,7 @@ class EvaluationService
         }
 
         // calculate positions
-        if (task_instance.contest.resultClasses) {
+        if (false && task_instance.contest.resultClasses) {
             for (ResultClass resultclass_instance in ResultClass.findAllByContest(task_instance.contest,[sort:"id"])) {
                 calculatepositions_task(task_instance, [resultclass_instance], null, false) // TODO_OLD: GetResultSettings(), ignoreProvisional
             }
@@ -162,7 +162,8 @@ class EvaluationService
         
         Map result_settings = contestInstance.GetResultSettings()
 
-        Map live_contest = [contestPrintAircraft:contestInstance.contestPrintAircraft,
+        Map live_contest = [contestPrintStartNum:contestInstance.contestPrintStartNum,
+                            contestPrintAircraft:contestInstance.contestPrintAircraft,
                             contestPrintTeam:contestInstance.contestPrintTeam,
                             contestPrintClass:contestInstance.contestPrintClass,
                             contestPrintShortClass:contestInstance.contestPrintShortClass,

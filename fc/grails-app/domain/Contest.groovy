@@ -1490,4 +1490,16 @@ class Contest
     {
         return "${liveTrackingContestVisibility.substring(0,1).toUpperCase()}${liveTrackingContestVisibility.substring(1).toLowerCase()}"
     }
+    
+    List GetRoutesWithSingelCoordinate()
+    {
+        List ret = []
+        for (Route route_instance in Route.findAllByContest(this,[sort:"idTitle"])) {
+            int coord_num = CoordRoute.countByRoute(route_instance)
+            if (coord_num == 1) {
+                ret += route_instance
+            }
+        }
+        return ret
+    }
 }

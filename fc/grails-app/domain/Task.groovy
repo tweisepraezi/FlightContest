@@ -146,7 +146,7 @@ class Task
 	Boolean printLandingStartlistLandscape   = false // DB-2.35
 	Boolean printLandingStartlistA3          = false // DB-2.35
 	
-    String briefingTime                      = "10:00" // DB-2.8
+    String briefingTime                      = "" // DB-2.8
     Boolean printTimetableOverviewLegTimes   = true  // DB-2.8
     Boolean printTimetableOverviewLandscape  = false // DB-2.8
     Boolean printTimetableOverviewA3         = false // DB-2.8
@@ -194,7 +194,7 @@ class Task
 	boolean printSpecialResults = true
 	boolean printAircraft = true
 	boolean printTeam = false
-	boolean printClass = false
+	boolean printClass = true
 	boolean printShortClass = false
 	String printResults = ""
     boolean printModifiedResults = true
@@ -670,20 +670,12 @@ class Task
         return "${getTrackingMsg('fc.task')}-${idTitle}"
     }
     
-	String baseName()
-	{
-        if (flighttest) {
-            if (flighttest.title) {
-                return "${flighttest.route.GetParcourName()} (${flighttest.title})"
-            }
-            return flighttest.route.GetParcourName()
-        }
-        return idName()
-    }
-    
 	String name()
 	{
 		if (title) {
+            if (title.endsWith(Defs.TASK_NAME_ADDITIONAL)) {
+                return "${title.substring(0,title.size()-1)} (${baseName()})"
+            }
 			return title
         }
         return baseName()
@@ -692,11 +684,14 @@ class Task
     String printName()
     {
         if (title) {
+            if (title.endsWith(Defs.TASK_NAME_ADDITIONAL)) {
+                return "${title.substring(0,title.size()-1)} (${baseName()})"
+            }
             return title
         }
         if (flighttest) {
             if (flighttest.title) {
-                return "${flighttest.route.GetParcourName()} (${flighttest.title})"
+                return "${flighttest.route.GetParcourName()} / ${flighttest.title}"
             }
             return flighttest.route.GetParcourName()
         }
@@ -706,15 +701,29 @@ class Task
     String trackingName()
     {
 		if (title) {
+            if (title.endsWith(Defs.TASK_NAME_ADDITIONAL)) {
+                return "${title.substring(0,title.size()-1)} (${baseName()})"
+            }
 			return title
         }
         if (flighttest) {
             if (flighttest.title) {
-                return "${flighttest.route.GetParcourName()} (${flighttest.title})"
+                return "${flighttest.route.GetParcourName()} / ${flighttest.title}"
             }
             return flighttest.route.GetParcourName()
         }
         return idNameTracking()
+    }
+    
+	String baseName()
+	{
+        if (flighttest) {
+            if (flighttest.title) {
+                return "${flighttest.route.GetParcourName()} / ${flighttest.title}"
+            }
+            return flighttest.route.GetParcourName()
+        }
+        return idName()
     }
     
     String GetName(boolean isPrint)
@@ -995,7 +1004,7 @@ class Task
 			return true
 		}
 		for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-			if (test_instance.IsTestResultsProvisional(resultSettings)) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.IsTestResultsProvisional(resultSettings)) {
 				return true
 			}
 		}
@@ -1009,7 +1018,7 @@ class Task
 		}
 		for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 			if (test_instance.crew.resultclass.id == resultclassInstance.id) {
-				if (test_instance.IsTestClassResultsProvisional(resultSettings,resultclassInstance)) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.IsTestClassResultsProvisional(resultSettings,resultclassInstance)) {
 					return true
 				}
 			}

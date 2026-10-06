@@ -239,15 +239,18 @@
                                 <div>
                                     <label>${message(code:'fc.contestmap.printfirstoptions')}${routeInstance.GetFirstRouteName()}</label>
                                     <g:set var="show_firstoptions" value=""/>
+                                    <g:set var="show_firstoptions_title" value="hidden"/>
                                     <g:if test="${routeInstance.contestMapShowFirstOptions}">
                                         <a id="showfirstoptions_off_id" href="#x" class="arrowhead" onclick="showfirstoptions(false);">${Defs.ARROWHEAD_UP}</a>
                                         <a id="showfirstoptions_on_id" href="#x" class="arrowhead" onclick="showfirstoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
                                     </g:if>
                                     <g:else>
                                         <g:set var="show_firstoptions" value="hidden"/>
+                                        <g:set var="show_firstoptions_title" value=""/>
                                         <a id="showfirstoptions_off_id" href="#x" class="arrowhead" onclick="showfirstoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
                                         <a id="showfirstoptions_on_id" href="#x" class="arrowhead" onclick="showfirstoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
                                     </g:else>
+                                    <label id="showfirstoptions_title_id" ${show_firstoptions_title}>${routeInstance.contestMapFirstTitle}</label>
                                     <div style="margin-left:20px;" id="showfirstoptions_id" ${show_firstoptions}>
                                         <div>
                                             <br/>
@@ -294,6 +297,7 @@
                                     <script>
                                         function showfirstoptions(showFirstOptions) {
                                             $("#showfirstoptions_id").prop("hidden", !showFirstOptions);
+                                            $("#showfirstoptions_title_id").prop("hidden", showFirstOptions);
                                             $("#showfirstoptions_off_id").prop("hidden", !showFirstOptions);
                                             $("#showfirstoptions_on_id").prop("hidden", showFirstOptions);
                                             $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowFirstOptions:showFirstOptions}, "json");
@@ -304,15 +308,18 @@
                                     <div style="margin-top:10px;">
                                         <label>${message(code:'fc.contestmap.printsecondoptions')}${routeInstance.GetSecondRouteName()}</label>
                                         <g:set var="show_secondoptions" value=""/>
+                                        <g:set var="show_secondoptions_title" value="hidden"/>
                                         <g:if test="${routeInstance.contestMapShowSecondOptions}">
                                             <a id="showsecondoptions_off_id" href="#x" class="arrowhead" onclick="showsecondoptions(false);">${Defs.ARROWHEAD_UP}</a>
                                             <a id="showsecondoptions_on_id" href="#x" class="arrowhead" onclick="showsecondoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
                                         </g:if>
                                         <g:else>
                                             <g:set var="show_secondoptions" value="hidden"/>
+                                            <g:set var="show_secondoptions_title" value=""/>
                                             <a id="showsecondoptions_off_id" href="#x" class="arrowhead" onclick="showsecondoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
                                             <a id="showsecondoptions_on_id" href="#x" class="arrowhead" onclick="showsecondoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
                                         </g:else>
+                                        <label id="showsecondoptions_title_id" ${show_secondoptions_title}>${routeInstance.contestMapSecondTitle}</label>
                                         <div style="margin-left:20px;" id="showsecondoptions_id" ${show_secondoptions}>
                                             <div>
                                                 <br/>
@@ -358,11 +365,12 @@
                                             </g:if>    
                                         </div>
                                         <script>
-                                            function showsecondoptions(showThirdOptions) {
-                                                $("#showsecondoptions_id").prop("hidden", !showThirdOptions);
-                                                $("#showsecondoptions_off_id").prop("hidden", !showThirdOptions);
-                                                $("#showsecondoptions_on_id").prop("hidden", showThirdOptions);
-                                                $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowSecondOptions:showThirdOptions}, "json");
+                                            function showsecondoptions(showSecondOptions) {
+                                                $("#showsecondoptions_id").prop("hidden", !showSecondOptions);
+                                                $("#showsecondoptions_title_id").prop("hidden", showSecondOptions);
+                                                $("#showsecondoptions_off_id").prop("hidden", !showSecondOptions);
+                                                $("#showsecondoptions_on_id").prop("hidden", showSecondOptions);
+                                                $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowSecondOptions:showSecondOptions}, "json");
                                             }
                                         </script>
                                     </div>
@@ -371,15 +379,18 @@
                                     <div style="margin-top:10px;">
                                         <label>${message(code:'fc.contestmap.printthirdoptions')}${routeInstance.GetThirdRouteName()}</label>
                                         <g:set var="show_thirdoptions" value=""/>
+                                        <g:set var="show_thirdoptions_title" value="hidden"/>
                                         <g:if test="${routeInstance.contestMapShowThirdOptions}">
                                             <a id="showthirdoptions_off_id" href="#x" class="arrowhead" onclick="showthirdoptions(false);">${Defs.ARROWHEAD_UP}</a>
                                             <a id="showthirdoptions_on_id" href="#x" class="arrowhead" onclick="showthirdoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
                                         </g:if>
                                         <g:else>
                                             <g:set var="show_thirdoptions" value="hidden"/>
+                                            <g:set var="show_thirdoptions_title" value=""/>
                                             <a id="showthirdoptions_off_id" href="#x" class="arrowhead" onclick="showthirdoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
                                             <a id="showthirdoptions_on_id" href="#x" class="arrowhead" onclick="showthirdoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
                                         </g:else>
+                                        <label id="showthirdoptions_title_id" ${show_thirdoptions_title}>${routeInstance.contestMapThirdTitle}</label>
                                         <div style="margin-left:20px;" id="showthirdoptions_id" ${show_thirdoptions}>
                                             <div>
                                                 <br/>
@@ -425,6 +436,7 @@
                                         <script>
                                             function showthirdoptions(showThirdOptions) {
                                                 $("#showthirdoptions_id").prop("hidden", !showThirdOptions);
+                                                $("#showthirdoptions_title_id").prop("hidden", showThirdOptions);
                                                 $("#showthirdoptions_off_id").prop("hidden", !showThirdOptions);
                                                 $("#showthirdoptions_on_id").prop("hidden", showThirdOptions);
                                                 $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowThirdOptions:showThirdOptions}, "json");
@@ -436,15 +448,18 @@
                                     <div style="margin-top:10px;">
                                         <label>${message(code:'fc.contestmap.printforthoptions')}${routeInstance.GetForthRouteName()}</label>
                                         <g:set var="show_forthoptions" value=""/>
+                                        <g:set var="show_forthoptions_title" value="hidden"/>
                                         <g:if test="${routeInstance.contestMapShowForthOptions}">
                                             <a id="showforthoptions_off_id" href="#x" class="arrowhead" onclick="showforthoptions(false);">${Defs.ARROWHEAD_UP}</a>
                                             <a id="showforthoptions_on_id" href="#x" class="arrowhead" onclick="showforthoptions(true);" hidden>${Defs.ARROWHEAD_DOWN}</a>
                                         </g:if>
                                         <g:else>
                                             <g:set var="show_forthoptions" value="hidden"/>
+                                            <g:set var="show_forthoptions_title" value=""/>
                                             <a id="showforthoptions_off_id" href="#x" class="arrowhead" onclick="showforthoptions(false);" hidden>${Defs.ARROWHEAD_UP}</a>
                                             <a id="showforthoptions_on_id" href="#x" class="arrowhead" onclick="showforthoptions(true);">${Defs.ARROWHEAD_DOWN}</a>
                                         </g:else>
+                                        <label id="showforthoptions_title_id" ${show_forthoptions_title}>${routeInstance.contestMapForthTitle}</label>
                                         <div style="margin-left:20px;" id="showforthoptions_id" ${show_forthoptions}>
                                             <div>
                                                 <br/>
@@ -490,6 +505,7 @@
                                         <script>
                                             function showforthoptions(showForthOptions) {
                                                 $("#showforthoptions_id").prop("hidden", !showForthOptions);
+                                                $("#showforthoptions_title_id").prop("hidden", showForthOptions);
                                                 $("#showforthoptions_off_id").prop("hidden", !showForthOptions);
                                                 $("#showforthoptions_on_id").prop("hidden", showForthOptions);
                                                 $.post("/fc/route/saveshow_ajax", {id:${routeInstance.id}, contestMapShowForthOptions:showForthOptions}, "json");

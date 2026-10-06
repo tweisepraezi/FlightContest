@@ -306,7 +306,12 @@
 	                                    
                                     	<td><g:if test="${test_instance.taskAircraft}"><g:aircraft var="${test_instance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')})</td>
                                         <g:if test="${test_instance.crew.team}">
-                                        	<td><g:team var="${test_instance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                            <g:if test="${test_instance.crew.disabledTeam}">
+                                                <td>(<g:team var="${test_instance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/>)</td>
+                                            </g:if>
+                                            <g:else>
+                                                <td><g:team var="${test_instance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                            </g:else>
                                         </g:if>
                                         <g:else>
                                             <td>-</td>

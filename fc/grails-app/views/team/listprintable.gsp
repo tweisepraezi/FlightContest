@@ -70,7 +70,7 @@
            	            <g:if test="${!team_instance.disabled && Crew.findByTeam(team_instance)}">
                             <g:set var="j" value="${new Integer(0)}"/>
                             <g:each var="crew_instance" in="${Crew.findAllByTeam(team_instance,[sort:'name'])}">
-                                <g:if test="${!crew_instance.disabled && !crew_instance.disabledTeam}">
+                                <g:if test="${!crew_instance.disabled}">
                                     <tr class="value" id="${crew_instance.startNum}">
                            	            <g:if test="${j==0}">
                                	            <td class="team">${team_instance.name}</td>
@@ -78,7 +78,12 @@
                                         <g:else>
                                	            <td class="team"/>
                                         </g:else>
-                                        <td class="crew">${crew_instance.startNum} - ${crew_instance.name}</td>
+                                        <g:if test="${crew_instance.disabledTeam}">
+                                            <td class="crew">(${crew_instance.startNum} - ${crew_instance.name})</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td class="crew">${crew_instance.startNum} - ${crew_instance.name}</td>
+                                        </g:else>
                                         <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
                                         <td class="tas">${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
                                     </tr>

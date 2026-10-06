@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 4.2.13
-:revdate:   15.09.2026
+:revnumber: 4.2.14
+:revdate:   10.06.2026
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -150,7 +150,7 @@ _Ausrichter des Wettbewerbes_ +
 
 .. _Briefing_
 *** Strecke (Wendeschleifen, Unbekannte Zeitkontrollen, An-/Abflugverfahren, Funk, Tower-Kommunikation)
-*** Ablauf (Unterlagenausgabe, Auswerteformular-/Loggerabgabe nach Ankunft, Ergebnis-Entgegennahme)
+*** Ablauf (Unterlagenausgabe, Auswerteformular-/Loggerabgabe nach Parken, Ergebnis-Entgegennahme)
 *** Wetter
 
 .. _Vorbereitungsraum für Planungstest und Flugvorbereitung koordinieren_
@@ -1170,9 +1170,8 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).
 |===
 |Ausdruck|Anwendungsbeispiel
 
-|wind+:3NM|Flugplatz mit Standard-Platzrunde (TO -> SP, iLDG -> iSP)
+|wind+:3NM|Flugplatz mit Standard-Platzrunde (TO -> SP, iFP -> iLDG, iLDG -> iSP, FP -> LDG)
 |wind+:xNM|Bei größeren Platzrunden eine größere Entfernung x anwenden.
-|wind+:6NM|Spätestete Landezeit (FP -> LDG)
 |time+:xmin|Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
 |wind+:1.3|Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.
 |wind:1|Flugzeit mit Entfernung und Wind ohne Korrekturen berechnen
@@ -1801,7 +1800,7 @@ Tabellen-Klassen:
 |timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass route planningtime planningtimebefore takeofftime version
 |legtimelist|value [#tas]|tas legtime
 |timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass route planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
-|timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
+|timetableoverviewlist|briefing planningstart planningend takeoff takeoffinterval intermediatelanding landing latestsubmission, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 |landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4
 
@@ -1824,9 +1823,9 @@ Tabellen-Klassen:
 
 |planningtaskresultlist|name1 name2 value [#tpname] summary|tpname plantrueheading trueheading penaltytrueheading planlegtime legtime penaltylegtime 
 |summary [planningtaskresults]|legpenalties giventolate exitroomtolate otherpenalties penalties|
-|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed 
+|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime timediff penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed 
 |summary [flightresults]|checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties|
-|flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime procedureturn badcoursenum altitude
+|flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime timediff procedureturn badcoursenum altitude
 |loggerdatalist|title value tpvalue|time latitude longitude altitude distance truetrack groundspeed info badcourseinfo nobadcourseinfo
 |observationturnpointresultlist|name1 name2 value [#tpname] summary|tpname evaluation plan result penalties
 |observationsroutephotoresultlist|name1 name2 value [#photoName] summary|photoname evaluation plan result penalties

@@ -292,6 +292,7 @@
                                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        <g:actionSubmit action="copybackwardroute" value="${message(code:'fc.route.copybackward')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                     </td>
                                 </tr>

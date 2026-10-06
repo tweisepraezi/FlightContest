@@ -17,8 +17,8 @@ class FlightTestWind
     BigDecimal iTOiLDGOrthogonalOffset = 0.0               // DB-2.12, Positionsabweichung quer zur Startbahn, NM
 
 	String TODurationFormula = "wind+:3NM"                 // DB-2.39
-	String LDGDurationFormula = "wind+:6NM"                // DB-2.39
-	String iLDGDurationFormula = "wind+:2NM"               // DB-2.39
+	String LDGDurationFormula = "wind+:3NM"                // DB-2.39
+	String iLDGDurationFormula = "wind+:3NM"               // DB-2.39
 	String iTODurationFormula = "wind+:3NM"                // DB-2.39
     
     BigDecimal corridorWidthWind = 0.0                     // DB-2.43, NM

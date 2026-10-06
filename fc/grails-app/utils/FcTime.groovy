@@ -101,13 +101,16 @@ class FcTime
     }
 
     //--------------------------------------------------------------------------
-    static String UTCGetLocalTime(String utcDateTime, String timeZone)
+    static String UTCGetLocalTime(String utcDateTime, String timeZone, boolean showGpxDateDifferenz = false)
     // utcDateTime - yyyy-mm-ddThh:mm:ssZ
     // timeZone
     // Return: Local time hh:mm:ss
     {
         Date utc_date = getDate(utcDateTime)
         Date local_date = GetLocalTime(utc_date, timeZone)
+        if (showGpxDateDifferenz && utcDateTime.substring(0,10) != GPX_DATE) {
+            return local_date.format("HH:mm:ss") + '+'
+        }
         return local_date.format("HH:mm:ss")
     }
     

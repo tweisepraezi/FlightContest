@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 4.2.13,</span>
-<span id="revdate">15.09.2026</span>
+<span id="revnumber">version 4.2.14,</span>
+<span id="revdate">10.06.2026</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -910,7 +910,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Strecke (Wendeschleifen, Unbekannte Zeitkontrollen, An-/Abflugverfahren, Funk, Tower-Kommunikation)</p>
 </li>
 <li>
-<p>Ablauf (Unterlagenausgabe, Auswerteformular-/Loggerabgabe nach Ankunft, Ergebnis-Entgegennahme)</p>
+<p>Ablauf (Unterlagenausgabe, Auswerteformular-/Loggerabgabe nach Parken, Ergebnis-Entgegennahme)</p>
 </li>
 <li>
 <p>Wetter</p>
@@ -2792,15 +2792,11 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:3NM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Flugplatz mit Standard-Platzrunde (TO &#8594; SP, iLDG &#8594; iSP)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flugplatz mit Standard-Platzrunde (TO &#8594; SP, iFP &#8594; iLDG, iLDG &#8594; iSP, FP &#8594; LDG)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:xNM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Bei größeren Platzrunden eine größere Entfernung x anwenden.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:6NM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Spätestete Landezeit (FP &#8594; LDG)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">time+:xmin</p></td>
@@ -4176,7 +4172,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planningstart planningend takeoff takeoffinterval intermediatelanding landing latestsubmission, legtimes [#tas]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">col1 col2 col3</p></td>
 </tr>
 <tr>
@@ -4282,7 +4278,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">flightresultlist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname] summary</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime timediff penaltycp penaltyoutsidecorridor penaltyprocedureturn penaltybadcourse penaltyaltitudemissed</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">summary [flightresults]</p></td>
@@ -4292,7 +4288,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">flightmeasurementlist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime procedureturn badcoursenum altitude</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime timediff procedureturn badcoursenum altitude</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">loggerdatalist</p></td>

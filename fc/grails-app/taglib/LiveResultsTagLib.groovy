@@ -9,7 +9,11 @@ class LiveResultsTagLib
     def liveResultLine = { attrs, body ->
         outln"""<tr class="even">"""
         outln"""    <td>${attrs.pos}</td>"""
-        outln"""    <td>${attrs.crew.name}</td>"""
+        if (attrs.livecontest.contestPrintStartNum) {
+            outln"""<td>${attrs.crew.startNum} - ${attrs.crew.name}</td>"""
+        } else {
+            outln"""<td>${attrs.crew.name}</td>"""
+        }
         if (attrs.livecontest.contestPrintAircraft) {
             if (attrs.crew.registration) {
                 outln"""<td>${attrs.crew.registration}</td>"""

@@ -83,10 +83,15 @@
                                         <g:set var="team_order_problem" value="!"></g:set>
                                     </g:elseif>
                                     <td>
-                                        <g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/>
+                                        <g:if test="${crew_instance.disabledTeam}">
+                                            (<g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/>)
+                                        </g:if>
+                                        <g:else>
+                                            <g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/>
+                                        </g:else>
                                         ${team_order_problem}
                                         <g:if test="${crew_instance.team.disabled}"> (${message(code:'fc.disabled')})</g:if>
-                                        <g:elseif test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:elseif>
+                                        
                                     </td>
                                 </g:if>
                                 <g:else>

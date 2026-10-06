@@ -219,7 +219,7 @@
                                     </g:else> 
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.arrival')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.test.parking')}:</td>
                                     <g:if test="${testInstance.timeCalculated}">
                                         <g:if test="${testInstance.arrivalTimeWarning}">
                                             <td class="errors">${testInstance.arrivalTime.format('HH:mm')}${message(code:'fc.time.h')} !</td>

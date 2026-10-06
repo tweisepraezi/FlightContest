@@ -56,10 +56,10 @@
     <body>
         <h2>${message(code:'fc.landingresults')} ${testInstance.GetStartNum()}</h2>
         <g:if test="${!testInstance.landingTestComplete}">
-            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+            <h3>${testInstance?.task.printName()} - ${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()} [${message(code:'fc.provisional')}]</h3>
         </g:if>
         <g:else>
-            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})</h3>
+            <h3>${testInstance?.task.printName()} - ${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()}</h3>
         </g:else>
         <div>
             <g:form>

@@ -413,7 +413,7 @@ class RouteTagLib
         outln"""    <legend>${message(code:'fc.latitude')}*</legend>"""
         outln"""    <div>"""
         if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREE) {
-            outln"""    <input type="text" id="latGradDecimal" name="latGradDecimal" value="${coordValue.latGradDecimal?.toFloat()}"  tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="latGradDecimal" name="latGradDecimal" value="${CoordPresentation.DecimalGradStr(coordValue.latGradDecimal?.toBigDecimal())}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.grad')}</label>"""
         } else if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE) {
             outln"""    <select class="direction" id="latDirection" name="latDirection" tabIndex="${attrs.ti[0]++}">"""
@@ -461,7 +461,7 @@ class RouteTagLib
         outln"""    <legend>${message(code:'fc.longitude')}*</legend>"""
         outln"""    <div>"""
         if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREE) {
-            outln"""    <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${coordValue.lonGradDecimal?.toFloat()}"  tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""    <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${CoordPresentation.DecimalGradStr(coordValue.lonGradDecimal?.toBigDecimal())}"  tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    <label>${message(code:'fc.grad')}</label>"""
         } else if (coordValue.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE) {
             outln"""    <select class="direction" id="lonDirection" name="lonDirection" tabIndex="${attrs.ti[0]++}">"""

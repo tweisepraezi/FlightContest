@@ -446,7 +446,7 @@ class TaskController {
         task.instance.showTurnPointSigns = params.showTurnPointSigns == "on"
         task.instance.showEnroutePhotos = params.showEnroutePhotos == "on"
         task.instance.showEnrouteCanavas = params.showEnrouteCanavas == "on"
-        render(view:'listdifferences',model:[taskInstance:task.instance])
+        render(view:'listdifferences',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
     }
     
     def parcouroverview = {
@@ -899,7 +899,17 @@ class TaskController {
     }
     
     def setplanningtesttask = {
-        def task = fcService.setplanningtesttaskTask(params) 
+        def task = fcService.setplanningtesttaskTask(params, false) 
+        flash.message = task.message
+        if (!task.instance) {
+            redirect(controller:"contest",action:"tasks")
+        } else {
+        	redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+    
+    def deleteplanningtesttask = {
+        def task = fcService.setplanningtesttaskTask(params, true) 
         flash.message = task.message
         if (!task.instance) {
             redirect(controller:"contest",action:"tasks")
@@ -936,7 +946,17 @@ class TaskController {
     }
     
     def setflighttestwind = {
-        def task = fcService.setflighttestwindTask(params) 
+        def task = fcService.setflighttestwindTask(params, false)
+        flash.message = task.message
+        if (!task.instance) {
+            redirect(controller:"contest",action:"tasks")
+        } else {
+        	redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+
+    def deleteflighttestwind = {
+        def task = fcService.setflighttestwindTask(params, true)
         flash.message = task.message
         if (!task.instance) {
             redirect(controller:"contest",action:"tasks")

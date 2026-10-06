@@ -57,7 +57,7 @@
         <g:set var="detail_num" value="${testInstance.GetDetailNum()}" />
         <g:if test="${(detail_num > 0) || (testInstance.printSummaryResults)}">
             <h2>${message(code:'fc.crewresults')} ${testInstance.GetStartNum()}</h2>
-            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h3>
+            <h3>${testInstance?.task.printName()} - ${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()}<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h3>
         </g:if>
         <g:form>
             <g:if test="${(detail_num > 0) || (testInstance.printSummaryResults) || (testInstance.IsIncreaseEnabled())}">

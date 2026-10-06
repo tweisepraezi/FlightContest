@@ -84,7 +84,7 @@
                                    </g:if>
                                    <tr>
                                        <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.startlocaltime')}:</label></td>
-                                       <td><g:select from="${track_points.trackPoints}" name="loggerdata_startutc" value="${last_startutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
+                                       <td><g:select from="${track_points.trackPoints}" name="loggerdata_startutc" value="${last_startutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone,true)}}"></g:select></td>
                                    </tr>
                                    <tr>
                                        <td>${message(code:CoordType.TO.code)}:</td>
@@ -96,7 +96,7 @@
                                    </tr>
                                    <tr>
                                        <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.endlocaltime')}:</label></td>
-                                       <td><g:select from="${track_points.trackPoints}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
+                                       <td><g:select from="${track_points.trackPoints}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone,true)}}"></g:select></td>
                                    </tr>
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.flightresults.noremove.existingdata')}:</label></td>

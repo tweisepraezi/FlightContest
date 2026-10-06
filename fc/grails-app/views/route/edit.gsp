@@ -75,7 +75,7 @@
 	                        <g:if test="${!route_used && (!routeInstance.corridorWidth || routeInstance.useProcedureTurns)}">
                                 <g:editRouteUseProcedureTurns route="${routeInstance}" ti="${ti}"/>
 	                        </g:if>
-	                        <g:if test="${!routeInstance.IsObservationSignUsed() && !routeInstance.corridorWidth}">
+	                        <g:if test="${!routeInstance.IsObservationSignUsed() && !routeInstance.corridorWidth && !routeInstance.contest.anrFlying}">
                                 <a href="/fc/docs/help_${session.showLanguage}.html#route-planning-photos-canvas" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
 	                        </g:if>

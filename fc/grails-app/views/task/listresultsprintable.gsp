@@ -201,13 +201,18 @@
 		                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 			                        <tr id="${test_instance.taskPosition}">
 			                            <td class="pos">${test_instance.taskPosition}</td>
-			                            <td class="crew">${test_instance.crew.name}</td>
+			                            <td class="crew">${test_instance.crew.startNum} - ${test_instance.crew.name}</td>
 			                            <g:if test="${params.printAircraft=='true'}">
 			                                <td class="aircraft"><g:if test="${test_instance.taskAircraft}">${test_instance.taskAircraft.registration}</g:if><g:else>-</g:else></td>
 			                            </g:if>
                                         <g:if test="${params.printTeam=='true'}">
 				                            <g:if test="${test_instance.crew.team}">
-				                                <td class="team">${test_instance.crew.team.name}</td>
+                                                <g:if test="${test_instance.crew.disabledTeam}">
+                                                    <td class="team">(${test_instance.crew.team.name})</td>
+                                                </g:if>
+                                                <g:else>
+                                                    <td class="team">${test_instance.crew.team.name}</td>
+                                                </g:else>
 				                            </g:if>
 			                                <g:else>
 			                                    <td class="team">-</td>
@@ -389,13 +394,18 @@
 	                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 		                        <tr>
 		                            <td class="pos">${test_instance.taskPosition}</td>
-		                            <td class="crew">${test_instance.crew.name}</td>
+		                            <td class="crew">${test_instance.crew.startNum} - ${test_instance.crew.name}</td>
                                     <g:if test="${params.printAircraft=='true'}">
                                         <td class="aircraft"><g:if test="${test_instance.taskAircraft}">${test_instance.taskAircraft.registration}</g:if><g:else>-</g:else></td>
                                     </g:if>
                                     <g:if test="${params.printTeam=='true'}">
 				                        <g:if test="${test_instance.crew.team}">
-				                            <td class="team">${test_instance.crew.team.name}</td>
+                                            <g:if test="${test_instance.crew.disabledTeam}">
+                                                <td class="team">(${test_instance.crew.team.name})</td>
+                                            </g:if>
+                                            <g:else>
+                                                <td class="team">${test_instance.crew.team.name}</td>
+                                            </g:else>
 				                        </g:if>
 		                                <g:else>
 		                                    <td class="team">-</td>

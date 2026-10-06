@@ -318,7 +318,7 @@ class RouteController {
         }
         Map import_params = [foldername:params?.foldername,
                              readplacemarks:params?.readplacemarks == 'on',
-                             firstcoordto:params?.firstcoordto == 'on',
+                             to:params?.to.toInteger(),
                              todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
                              curved1:params?.curved1 == 'on',
                              curvedstartpos1:params?.curvedstartpos1?.isInteger()?params?.curvedstartpos1.toInteger():null,
@@ -329,6 +329,9 @@ class RouteController {
                              curved3:params?.curved3 == 'on',
                              curvedstartpos3:params?.curvedstartpos3?.isInteger()?params?.curvedstartpos3.toInteger():null,
                              curvedendpos3:params?.curvedendpos3?.isInteger()?params?.curvedendpos3.toInteger():null,
+                             scenic1:params?.scenic1 == 'on',
+                             scenic2:params?.scenic2 == 'on',
+                             scenic3:params?.scenic3 == 'on',
                              semicircle1:params?.semicircle1 == 'on',
                              semicirclepos1:params?.semicirclepos1?.isInteger()?params?.semicirclepos1.toInteger():null,
                              semicircle2:params?.semicircle2 == 'on',
@@ -639,6 +642,17 @@ class RouteController {
 	
     def copyroute = {
         def route = fcService.copyRoute(params) 
+        if (route.error) {
+            flash.message = route.message
+            flash.error = true
+            redirect(action:"list")
+        } else {
+            redirect(action:"list")
+        }
+	}
+	
+    def copybackwardroute = {
+        def route = fcService.copyRoute(params, true) // true - backward
         if (route.error) {
             flash.message = route.message
             flash.error = true

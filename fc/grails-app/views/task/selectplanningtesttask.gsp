@@ -60,6 +60,7 @@
                         </table>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <g:actionSubmit action="setplanningtesttask" value="${message(code:'fc.assign')}" />
+                        <g:actionSubmit action="deleteplanningtesttask" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         <g:actionSubmit action="listplanning" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>

@@ -12,7 +12,7 @@
                 <h2>${message(code:'fc.test.results.print')} ${taskInstance.name()}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['listresultsprintquestionReturnAction':listresultsprintquestionReturnAction,'listresultsprintquestionReturnController':listresultsprintquestionReturnController,'listresultsprintquestionReturnID':listresultsprintquestionReturnID]}">
-                        <g:if test="${taskInstance.contest.resultClasses}">
+                        <g:if test="${false && taskInstance.contest.resultClasses}">
 	                        <fieldset>
 	                        	<p>
 		                        	<g:each var="resultclass_instance" in="${taskInstance.contest.resultclasses}">
@@ -34,10 +34,12 @@
                                     <g:checkBox name="printTeam" value="${taskInstance.printTeam}" />
                                     <label>${message(code:'fc.printteam')}</label>
                                 </div>
-                                <div>
-                                    <g:checkBox name="printClass" value="${taskInstance.printClass}" />
-                                    <label>${message(code:'fc.printresultclass')}</label>
-                                </div>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+                                    <div>
+                                        <g:checkBox name="printClass" value="${taskInstance.printClass}" />
+                                        <label>${message(code:'fc.printresultclass')}</label>
+                                    </div>
+                                </g:if>
                                 <div>
                                     <g:checkBox name="printShortClass" value="${taskInstance.printShortClass}" />
                                     <label>${message(code:'fc.printresultclass.short')}</label>
@@ -53,7 +55,7 @@
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
-                        <g:if test="${taskInstance.contest.resultClasses}">
+                        <g:if test="${false && taskInstance.contest.resultClasses}">
                             <g:actionSubmit action="printresultclassresults" value="${message(code:'fc.print')}" />
                         </g:if>
                         <g:else>

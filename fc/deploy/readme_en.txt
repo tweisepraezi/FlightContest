@@ -1,6 +1,34 @@
 ﻿Flight Contest Release Notes
 ============================
 
+Changes 4.2.14
+--------------
+- Command "Routes -> Import coordinates" expanded:
+    When importing curved legs, it is now possible to distinguish between semicircles with a bad course check
+    and scenic legs without a bad course check.
+    The TO coordinate can now be added from another route that contains only the airfield coordinate.
+- Team Evaluation:
+    For crews that do not participate in team evaluation, the team name is displayed and printed in parentheses.
+- Planning:
+    The display list has been optimized and stripped of unnecessary columns.
+    The timetable information has been expanded to include SP and FP times, and the term 'Arrival' has been replaced with 'Parking'.
+- Precision Flying: An assignment for a planning task can now be deleted in 'Assign planning task'.
+    If all assignments have been deleted, the planning test itself can also be deleted.
+    This allows you to recreate and reassign a planning test with different wind without deleting the task.
+- Overview time table expanded:
+    The start and end times of the planning test are now shown separately.
+    The latest submission time of the navigation test are now shown.
+- Navigation Flight Results: Now also displays the difference between planned and measured values in seconds for overflying times.
+- Precision Flying Planning Results: Now also displays the difference between planned and given values.
+- Command "Results -> Differences" improved:
+    The results table can now be scrolled horizontally.
+    The values for turnpoint signs are now displayed in the title.
+    The table is displayed in the order of the calculated positions.
+- The coordinate display in degree-decimal format now shows up to 12 digits after the decimal point, other formats 6 digits after the decimal point.
+- Route command "Copy backward" added
+- Bug "Landing final results printed incorrect column title when one landing test was disabled" fixed
+- Bug "The logger evaluation displays a warning when a landing cannot be found, even if no landing is configured for evaluation" fixed
+
 Changes 4.2.13
 --------------
 - Results: Command "Export results (Data)" added
@@ -282,14 +310,14 @@ Changes 4.1.0
 - OSM Contest Map: Airfield OpenAIP queries are now saved in the route.
     Use "Search airfields around the airport" to determine the airfields before printing.
     Airfields starting with # are ignored during map generation.
-- OSM Contest Map: "Generate (only T/O)" added.
-    Prints map with T/O point but without further turning points.
+- OSM Contest Map: "Generate (only TO)" added.
+    Prints map with TO point but without further turning points.
 - Internal Task Creator: Page guide added.
     The selected page size (A3, A4, ...) and orientation (Portrait or Landscape W) 
     is displayed around the center of existing check and plotting points.
     To define the page location before entering the route, first enter the takeoff and a plotting point.
 - Option to launch the internal and external Task Creator in the map menu added.
-- Bug "OSM Contest Map cannot be printed with ANR rules if only the T/O point is available" fixed
+- Bug "OSM Contest Map cannot be printed with ANR rules if only the TO point is available" fixed
 - Bug "Google Earth display in the internal Task Creator no longer works" fixed
 - Bug "Live tracking contest cannot be created" fixed
 - Bug "OpenAIP layer in OSM online map no longer works" fixed
@@ -301,12 +329,12 @@ Changes 4.0.2
     This considerably speeds up the start of map generation for follow-up orders.
     The boundaries of retrieved airspaces can be displayed in the map menu under the 'Airspaces' entry.    
 - Logger evaluation: When adjusting the runway with "Wind (Move runway)", the following actions are now available there:
-    "Offline map (T/O)" - Display logger data with route at T/O point
+    "Offline map (TO)" - Display logger data with route at TO point
     "Offline map (LDG)" - Display logger data with route at LDG point
     "Recalculate logger data again" - calculates the penalty points with the moved runway immediately
-    The position deviation of the LDG point along the runway is now preset to -0.03NM to avoid an identical position with a T/O point.
+    The position deviation of the LDG point along the runway is now preset to -0.03NM to avoid an identical position with a TO point.
 - Bug "Penalty points for landings are not configured correctly in the German ANR rules" fixed
-- Bug "Gate width of T/O and LDG of a used route cannot be changed with ANR rules" fixed
+- Bug "Gate width of TO and LDG of a used route cannot be changed with ANR rules" fixed
 - Bug "When map regions overlap, the OSM Contest Map is not always printed completely" fixed
 - Bug "Non-ANR formats can be selected for the route default print map" fixed
 - Bug "OSM competition map cannot be printed if airspace name contains a quotation mark" fixed
@@ -449,7 +477,7 @@ Changes 3.4.4
 
 Changes 3.4.3
 -------------
-- Online/Offline viewer in the navigation flight result has been extended by buttons "T/O-SP" and "FP-LDG".
+- Online/Offline viewer in the navigation flight result has been extended by buttons "TO-SP" and "FP-LDG".
   Zooms to the logger data of the clicked area, whereby the two points determine the resolution.
 - The settings for the flight time calculation of take-offs and landings have been moved from the task settings to the wind settings.
   This makes it possible to use different values when changing the direction of the runway,
@@ -496,11 +524,11 @@ Changes 3.4.0
     With "Import map", a map export can be imported on another notebook or in another competition.
 - OSM Contest Map extended:
     1. Button "Generate online map around airport" added,
-       which creates a map with T/O in the center with 420mm distance to the edge for OSM online map display.
+       which creates a map with TO in the center with 420mm distance to the edge for OSM online map display.
     2. Button "Generate Task Creator map around airport" added,
-       which creates a map with T/O in the center with 420mm distance to the edge for use in the Task Creator.
+       which creates a map with TO in the center with 420mm distance to the edge for use in the Task Creator.
     3. Button "Generate (for Task Creator)" in the 1./2./3./4. settings,
-       which creates maps with T/O and possibly LDG but without further route details for use in the Task Creator.
+       which creates maps with TO and possibly LDG but without further route details for use in the Task Creator.
     4. Generated OSM maps are now always saved locally and can then be accessed via the menu item "Maps",
        where further processing commands are available.
 - OSM online map: Display of locally saved maps added

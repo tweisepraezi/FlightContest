@@ -2338,8 +2338,8 @@ class FcService
 					break
 				case PrintSettings.TimetableJuryArrival:
 					settings_name = getMsg('fc.task.timetablejudge')
-					detail_name = getMsg('fc.flighttest.arrival.setprintsettings')
-					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.arrival')
+					detail_name = getMsg('fc.flighttest.parking.setprintsettings')
+					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.parking')
 					task_instance.printTimetableJuryNumber = true
 					task_instance.printTimetableJuryCrew = false
 					task_instance.printTimetableJuryAircraft = true
@@ -2360,15 +2360,15 @@ class FcService
                     task_instance.printTimetableJurySubmission = true
 					task_instance.printTimetableJuryEmptyColumn1 = true
                     if (task_instance.flighttest.submissionMinutes) {
-                        task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.arrival.givingtime')
+                        task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.parking.givingtime')
                     } else {
-                        task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.arrival.stoptime')
+                        task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.parking.stoptime')
                     }
 					task_instance.printTimetableJuryEmptyColumn2 = true
                     if (task_instance.flighttest.submissionMinutes) {
                         task_instance.printTimetableJuryEmptyTitle2 = ""
                     } else {
-                        task_instance.printTimetableJuryEmptyTitle2 = "" // getPrintMsg('fc.test.arrival.givingtime')
+                        task_instance.printTimetableJuryEmptyTitle2 = "" // getPrintMsg('fc.test.parking.givingtime')
                     }
 					task_instance.printTimetableJuryEmptyColumn3 = true
 					task_instance.printTimetableJuryEmptyTitle3 = ""
@@ -3264,16 +3264,19 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map setplanningtesttaskTask(Map params)
+    Map setplanningtesttaskTask(Map params, boolean deletePlanningTest)
     {
         Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
-            PlanningTestTask planningtesttask_instance = PlanningTestTask.get(params.planningtesttask.id)
+            PlanningTestTask planningtesttask_instance = null
+            if (!deletePlanningTest) {
+                planningtesttask_instance = PlanningTestTask.get(params.planningtesttask.id)
+            }
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
 					if (!test_instance.disabledCrew && !test_instance.crew.disabled && !test_instance.flightTestAdditionalResult) {
-	                    test_instance.planningtesttask = planningtesttask_instance 
+                        test_instance.planningtesttask = planningtesttask_instance 
 	                    calulate_test_leg_plannings(test_instance)
 						test_instance.ResetPlanningTestResults()
 						test_instance.CalculateTestPenalties()
@@ -3284,7 +3287,11 @@ class FcService
 					}
                 }
             }
-            task.message = getMsg('fc.task.selectplanningtesttask.assigned',[planningtesttask_instance.name()])
+            if (deletePlanningTest) {
+                task.message = getMsg('fc.task.selectplanningtesttask.deleted',[])
+            } else {
+                task.message = getMsg('fc.task.selectplanningtesttask.assigned',[planningtesttask_instance?.name()])
+            }
         }
         return task
     }
@@ -3341,18 +3348,27 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map setflighttestwindTask(Map params)
+    Map setflighttestwindTask(Map params, boolean deleteFlightTestWind)
     {
 		printstart "setflighttestwindTask"
         Map task = domainService.GetTaskMap(params) 
         if (task.instance) {
-            FlightTestWind flighttestwind_instance = FlightTestWind.get(params.flighttestwind.id)
+            FlightTestWind flighttestwind_instance = null
+            if (!deleteFlightTestWind) {
+                flighttestwind_instance = FlightTestWind.get(params.flighttestwind.id)
+            }
             boolean wind_set = false
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
 					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-						set_flighttestwind_test(test_instance, task.instance, flighttestwind_instance)
+                        if (deleteFlightTestWind) {
+                            test_instance.flighttestwind = null
+                            test_instance.timeCalculated = false
+                            test_instance.save()
+                        } else {
+                            set_flighttestwind_test(test_instance, task.instance, flighttestwind_instance)
+                        }
                         wind_set = true
 					}
                 }
@@ -3360,7 +3376,11 @@ class FcService
             if (wind_set) {
                 calulate_timetable_warnings(task.instance)
             }
-            task.message = getMsg('fc.task.assignflighttestwind.assigned',[flighttestwind_instance.name()])
+            if (deleteFlightTestWind) {
+                task.message = getMsg('fc.task.assignflighttestwind.deleted',[])
+            } else {
+                task.message = getMsg('fc.task.assignflighttestwind.assigned',[flighttestwind_instance.name()])
+            }
         }
 		printdone ""
         return task
@@ -3375,8 +3395,8 @@ class FcService
         if (testInstance.timeCalculated) {
 			GregorianCalendar testing_time = new GregorianCalendar()
 			testing_time.setTime(testInstance.testingTime)
-			calculate_test_time(testInstance, taskInstance, testing_time, null, true)
-			calculate_coordresults_test(testInstance)
+            calculate_test_time(testInstance, taskInstance, testing_time, null, true)
+            calculate_coordresults_test(testInstance)
 			taskInstance.timetableModified = true
 			taskInstance.save()
         }
@@ -4952,6 +4972,8 @@ class FcService
             route_instance.properties = params
             if (params.corridorWidth && params.corridorWidth.replace(',','.').isBigDecimal()) {
                 route_instance.corridorWidth = params.corridorWidth.replace(',','.').toBigDecimal()
+            } else {
+                route_instance.corridorWidth = 0.0
             }
             if (!old_corridorwidth && route_instance.corridorWidth) {
                 RouteFileTools.SetRouteFlags(route_instance, true)
@@ -5015,14 +5037,14 @@ class FcService
             route_instance.corridorWidth = params.corridorWidth.replace(',','.').toBigDecimal()
         }
         route_instance.SetShowMapObjectsFromRouteID(contestInstance)
-        if (noObservations || route_instance.corridorWidth) {
+        if (noObservations || route_instance.corridorWidth || contestInstance.anrFlying) {
             route_instance.turnpointRoute = TurnpointRoute.None
             route_instance.enroutePhotoRoute = EnrouteRoute.None
             route_instance.enrouteCanvasRoute = EnrouteRoute.None
             route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
             route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
         }
-        if (route_instance.corridorWidth) {
+        if (route_instance.corridorWidth || contestInstance.anrFlying) {
             route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
             route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A4
             route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A4
@@ -5142,7 +5164,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map copyRoute(Map params)
+    Map copyRoute(Map params, boolean copyBackward = false)
     {
         Map route = domainService.GetRouteMap(params)
         if (!route.instance) {
@@ -5151,10 +5173,21 @@ class FcService
 
         Route new_route_instance = new Route()
 		new_route_instance.contest = route.instance.contest
-		new_route_instance.CopyValues(route.instance)
+        if (copyBackward) {
+            new_route_instance.CopyValues(route.instance, false, copyBackward)
+        } else {
+            new_route_instance.CopyValues(route.instance)
+        }
 		new_route_instance.title = getRouteCopyTitle(route.instance)
         new_route_instance.idTitle = Route.countByContest(route.instance.contest)
         if(!new_route_instance.hasErrors() && new_route_instance.save()) {
+            if (copyBackward) {
+                renumber_coord_route(new_route_instance)
+                calculate_all_leg_measure_distances(new_route_instance)
+                calculate_secret_leg_ratio(new_route_instance)
+                calculate_route_legs(new_route_instance)
+                calculate_enroute_values(new_route_instance)
+            }
             return ['instance':new_route_instance,'saved':true,'message':getMsg('fc.created',["${new_route_instance.title}"])]
         } else {
             return ['instance':new_route_instance]

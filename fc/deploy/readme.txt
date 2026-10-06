@@ -1,6 +1,34 @@
 ﻿Flight Contest Versionshinweise
 ===============================
 
+Änderungen 4.2.14
+-----------------
+- Kommando "Strecken -> Import Koordinaten" erweitert:
+    Beim Import gekrümmter Streckenabschnitte kann jetzt zwischen Halbkreisen, die Kursabweichungsprüfungen beinhalten,
+    und landschaftlichen Abschnitten ohne Kursabweichungsprüfung unterschieden werden.
+    Die TO-Koordinate kann jetzt aus einer anderen Strecke, die nur die Flupplatz-Koordinate beinhaltet, hinzugefügt werden.
+- Team-Auswertung:
+    Bei Besatzungen, die nicht an der Team-Auswertung teilnehmen, wird der Team-Name in Klammern angezeigt und ausgedruckt.
+- Planung:
+    Die Anzeige-Liste wurde optimiert und von überflüssigen Spalten befreit.
+    Die Zeitplan-Angaben wurden um die SP- und FP-Zeit erweitert sowie der Begriff 'Ankunft' durch 'Parken' ersetzt.
+- Präsisionsflug: Die Zuweisung einer Planungsaufgabe kann nun in 'Planungsaufgabe zuweisen' gelöscht werden.
+    Sind alle Zuweisungen gelöscht, kann auch der Planungstest selbst gelöscht werden.
+    Daduch kann ein Planungstest mit anderem Wind ohne Löschen der Aufgabe neu angelegt und zugewiesen werden.
+- Übersichts-Zeitplan erweitert:
+    Anfangs- und und End-Zeiten des Planungstests werden jetzt separat ausgewiesen.
+    Die späteste Abgabezeit des Navigationstests wird jetzt ausgewiesen.
+- Navigationsflug-Ergebnisse: Zeigt bei Überflugzeiten jetzt auch die Differenz von Plan- und Messwerten in Sekunden an.
+- Präsisionsflug-Planungsergebnisse: Zeigt nun auch die Differenz zwischen Plan- und Abgabewerten an.
+- Kommando "Ergebnisse -> Abweichungen" verbessert:
+    Die Ergebnis-Tabelle ist nun horizontal scrollbar.
+    Die Werte von Wendepunkt-Bodenzeichen werden nun im Titel mit angezeigt.
+    Die Tabelle wird in der Reihenfolge berechneter Positionen angezeigt.
+- Koordinaten-Anzeige bei Grad-Decimal-Format zeigt nun bis zu 12 Nachkommastellen an, bei anderen Formaten 6 Nachkommastellen.
+- Strecken-Kommando "Rückwärts kopieren" hinzugefügt
+- Bug "Landetest-Endergebnis-Ausdruck bei einem deaktiviertem Landetest druckte falsche Spalten-Überschriften" behoben
+- Bug "Logger-Auswertung zeigt Warnung bei einer nicht gefundenen Landung an, auch wenn keine Landung ausgewertet wird" behoben
+
 Änderungen 4.2.13
 -----------------
 - Ergebnisse: Kommando "Ergebnis-Export (Daten)" hinzugefügt.
@@ -283,14 +311,14 @@
 - OSM-Wettbewerbs-Karte: Flugplatz-OpenAIP-Abfragen werden jetzt in Strecke gespeichert.
     Mit "Flugplätze um Flughafen suchen" sind die Flugplätze vor dem Druck zu ermitteln.
     Mit # beginnende Flugplätze werden bei der Kartenerzeugung ignoriert.
-- OSM-Wettbewerbs-Karte: "Erzeugen (nur T/O)" hinzugefügt.
-    Druckt Karte mit T/O-Punkt aber ohne weitere Wendepunkte.
+- OSM-Wettbewerbs-Karte: "Erzeugen (nur TO)" hinzugefügt.
+    Druckt Karte mit TO-Punkt aber ohne weitere Wendepunkte.
 - Interner Task-Creator: Seiten-Leitfaden hinzugefügt.
     Die ausgewählte Seitengröße (A3, A4, ...)  und Orientierung (Hochformat oder Querformat W) 
     wird um den Mittelpunkt aller vorhandenen Check- und Plotting-Punkte angezeigt. 
     Um eine Seite vor der Streckeneingabe festzulegen, zuerst den Takeoff- und einen Plotting-Punkt eingeben.
 - Wählbarer Aufruf des internen und externen Task-Creators im Karten-Menü hinzugefügt.
-- Bug "OSM-Wettbewerbs-Karte kann bei ANR-Regelwerk nicht gedruckt werden, wenn nur der Punkt T/O vorhanden ist" behoben
+- Bug "OSM-Wettbewerbs-Karte kann bei ANR-Regelwerk nicht gedruckt werden, wenn nur der Punkt TO vorhanden ist" behoben
 - Bug "Google-Earth-Darstellung im internen Task-Creator funktioniert nicht mehr" behoben
 - Bug "Live-Tracking-Contest kann nicht angelegt werden" behoben
 - Bug "OpenAIP-Layer in OSM-Online-Karte funktioniert nicht mehr" behoben
@@ -302,12 +330,12 @@
     Das beschleunigt den Start der Kartenerzeugung für Folge-Aufträge erheblich.
     Die Grenzen abgerufener Lufträume können im Karten-Menü unter dem Eintrag 'Lufträume' zur Anzeige gebracht werden.    
 - Logger-Auswertung: Bei der Anpassung der Startbahn mit "Wind (Startbahn verschieben)" stehen dort jetzt folgende Aktionen zur Verfügung:
-    "Offline-Karte (T/O)" - Logger-Daten mit Strecke am T/O-Punkt anzeigen
+    "Offline-Karte (TO)" - Logger-Daten mit Strecke am TO-Punkt anzeigen
     "Offline-Karte (LDG)" - Logger-Daten mit Strecke am LDG-Punkt anzeigen
     "Logger-Daten erneut kalkulieren" - berechnet sofort die Strafpunkte mit der verschobenen Startbahn
-    Die Positionsabweichung des LDG-Punktes längs zur Startbahn wird nun mit -0.03NM voreingestellt, damit eine identische Position mit T/O-Punkt vermieden wird.
+    Die Positionsabweichung des LDG-Punktes längs zur Startbahn wird nun mit -0.03NM voreingestellt, damit eine identische Position mit TO-Punkt vermieden wird.
 - Bug "Strafpunkte für Landungen sind im deutschen ANR-Regelwerk nicht korrekt konfiguriert" behoben
-- Bug "Tor-Breite von T/O und LDG einer verwendeten Strecke bei ANR-Regelwerk nicht änderbar" behoben
+- Bug "Tor-Breite von TO und LDG einer verwendeten Strecke bei ANR-Regelwerk nicht änderbar" behoben
 - Bug "Bei überlappenden Karten-Regionen wird die OSM-Wettbewerbs-Karte nicht immer vollständig gedruckt" behoben
 - Bug "Bei der Strecken-Default-Druck-Karte können Nicht-ANR-Formate ausgewählt werden" behoben
 - Bug "OSM-Wettbewerbs-Karte kann nicht gedruckt werden, wenn Luftraum-Name ein Anführungszeichen enthält" behoben
@@ -450,7 +478,7 @@
 
 Änderungen 3.4.3
 ----------------
-- Online/Offline-Viewer im Navigationsflug-Ergebnis wurde um Buttons "T/O-SP" und "FP-LDG" erweitert.
+- Online/Offline-Viewer im Navigationsflug-Ergebnis wurde um Buttons "TO-SP" und "FP-LDG" erweitert.
   Zoomt zu den Logger-Daten des angeklickten Bereiches, wobei die beiden Punkte die Auflösung bestimmen.
 - Die Einstellungen für die Flugzeit-Berechnung von Starts und Landungen wurden von den Aufgaben- zu den Wind-Einstellungen verlegt.
   Damit wird es möglich, dass bei Richtungswechsel der Startbahn andere Werte verwendet werden können,
@@ -497,11 +525,11 @@
     Mit "Karte importieren" kann ein Karten-Export auf einem anderen Notebook oder in einem anderen Wettbewerb importiert werden.
 - OSM-Wettbewerbs-Karte erweitert:
     1. Schaltfläche "Online-Karte um Flughafen erzeugen" hinzugefügt,
-       welche eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für OSM-Online-Anzeige erzeugt.
+       welche eine Karte mit TO in der Mitte mit 420mm Abstand zum Rand für OSM-Online-Anzeige erzeugt.
     2. Schaltfläche "Task-Creator-Karte um Flughafen erzeugen" hinzugefügt,
-       welche eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für Verwendung im Task-Creator erzeugt.
+       welche eine Karte mit TO in der Mitte mit 420mm Abstand zum Rand für Verwendung im Task-Creator erzeugt.
     3. Schaltfläche "Erzeugen (für Task-Creator)" jeweils in den 1./2./3./4. Einstellungen hinzugefügt,
-       welche Karten mit T/O und ggf. LDG aber ohne weitere Streckendetails zur Verwendung im Task-Creator erzeugt.
+       welche Karten mit TO und ggf. LDG aber ohne weitere Streckendetails zur Verwendung im Task-Creator erzeugt.
     4. Erzeugte OSM-Karten werden jetzt immer lokal gespeichert und sind dann über den Menüpunkt "Karten" erreichbar,
        wo Weiterverarbeitungs-Kommandos zur Verfügung stehen.
 - OSM-Online-Karte: Anzeige lokal gespeicherter Karten hinzugefügt

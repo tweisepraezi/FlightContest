@@ -56,18 +56,10 @@
                                         <label>${message(code:'fc.route')}</label>
                                     </div>
                                 </g:if>
-                                <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
-                                    <div>
-                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" onclick="modify();"/>
-                                        <label>${message(code:'fc.test.planning.publish')}</label>
-                                    </div>
-                                </g:if>
-                                <g:else>
-                                    <div>
-                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" onclick="modify();"/>
-                                        <label>${message(code:'fc.test.planning')}</label>
-                                    </div>
-                                </g:else>
+                                <div>
+                                    <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" onclick="modify();"/>
+                                    <label>${message(code:'fc.test.planning.short')}</label>
+                                </div>
                                 <div>
                                     <g:checkBox name="printTimetableTakeoff" value="${taskInstance.printTimetableTakeoff}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.takeoff')}</label>

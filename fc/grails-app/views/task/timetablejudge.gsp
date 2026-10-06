@@ -127,11 +127,11 @@
                                 </div>
                                 <div>
                                     <g:checkBox name="printTimetableJuryLanding" value="${taskInstance.printTimetableJuryLanding}" onclick="modify();"/>
-                                    <label>${message(code:'fc.test.landing.latest')}</label>
+                                    <label>${message(code:'fc.test.landing.latest.short')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="printTimetableJuryArrival" value="${taskInstance.printTimetableJuryArrival}" onclick="modify();"/>
-                                    <label>${message(code:'fc.test.arrival')}</label>
+                                    <label>${message(code:'fc.test.parking')}</label>
                                 </div>
 			                    <g:if test="${taskInstance.flighttest?.submissionMinutes}">
                                     <div>
@@ -212,7 +212,7 @@
                                     <g:actionSubmit action="updatetimetablejudgesettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="${ti[0]++}"/>
                                 </g:if>
                             </g:if>
-                            <g:actionSubmit action="updatetimetablejudgesettingsarrival" value="${message(code:'fc.flighttest.arrival.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsarrival" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="${ti[0]++}"/>
                             <g:actionSubmit action="updatetimetablejudgesettingsdebriefing" value="${message(code:'fc.flighttest.debriefing.setprintsettings')}" tabIndex="${ti[0]++}"/>
                             <g:actionSubmit action="updatetimetablejudgesettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="${ti[0]++}"/>
                             <g:actionSubmit action="updatetimetablejudgesettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="${ti[0]++}"/>

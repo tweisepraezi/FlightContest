@@ -247,6 +247,8 @@ class Defs
     
     static final String MULTIUSED_AIRCRAFT_SUFFIX                      = "."
     
+    static final String TASK_NAME_ADDITIONAL                           = "+"
+    
     static final String DEFAULT_CONFIG_SERVER                          = "https://config.flightcontest.de"
     static final String CONFIG_NAME                                    = "config.groovy"
     static final String FCMAP_COUNTER_NAME                             = "fcmap_counter.groovy"

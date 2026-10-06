@@ -13,8 +13,8 @@ class FlightTest
     BigDecimal LDGDirection = 0.0
     BigDecimal iTOiLDGDirection = 0.0
 	String TODurationFormula = "wind+:3NM"        // DB-2.39
-	String LDGDurationFormula = "wind+:6NM"       // DB-2.39
-	String iLDGDurationFormula = "wind+:2NM"      // DB-2.39
+	String LDGDurationFormula = "wind+:3NM"       // DB-2.39
+	String iLDGDurationFormula = "wind+:3NM"      // DB-2.39
 	String iTODurationFormula = "wind+:3NM"       // DB-2.39
 
     // print styles

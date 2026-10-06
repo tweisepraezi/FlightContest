@@ -30,7 +30,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${message(code:'fc.test.timetable')} - ${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})"
+                    content: "${message(code:'fc.test.timetable')} - ${taskInstance.printName()} - ${message(code:'fc.crew.num', args:[flighttest_num])} - ${message(code:'fc.version')} ${taskInstance.timetableVersion}"
                 }
                 @top-right {
                     font-family: Noto Sans;
@@ -56,7 +56,7 @@
     </head>
     <body>
         <h2>${message(code:'fc.test.timetable')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
-        <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
+        <h3>${taskInstance.printName()} - ${message(code:'fc.crew.num', args:[flighttest_num])} - ${message(code:'fc.version')} ${taskInstance.timetableVersion}</h3>
         <g:form>
             <g:set var="printtimetable_route" value="${false}"/>
             <g:if test="${taskInstance.IsCorridor() && taskInstance.printTimetableCorridorWidth}">
@@ -92,12 +92,7 @@
                             <th>${message(code:'fc.route')}</th>
                         </g:if>
                         <g:if test="${taskInstance.printTimetablePlanning}">
-                            <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
-                                <th>${message(code:'fc.test.planning.publish')}</th>
-                            </g:if>
-                            <g:else>
-                                <th>${message(code:'fc.test.planning')}</th>
-                            </g:else>
+                            <th>${message(code:'fc.test.planning.short')}</th>
                         </g:if>
                         <g:if test="${taskInstance.printTimetableTakeoff}">
                             <th>${message(code:'fc.test.takeoff')}</th>

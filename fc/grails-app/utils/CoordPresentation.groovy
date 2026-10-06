@@ -66,8 +66,11 @@ enum CoordPresentation
     //--------------------------------------------------------------------------
     static String DecimalGradStr(BigDecimal decimalGrad)
     {
-        DecimalFormat df = new DecimalFormat("0.00000")
-        return df.format(decimalGrad)
+        if (decimalGrad != null) {
+            DecimalFormat df = new DecimalFormat("0.000000######")
+            return df.format(decimalGrad)
+        }
+        return ""
     }
 
     //--------------------------------------------------------------------------
@@ -92,7 +95,7 @@ enum CoordPresentation
     //--------------------------------------------------------------------------
     static String DecimalMinuteStr(BigDecimal decimalMin)
     {
-        DecimalFormat df = new DecimalFormat("00.00000")
+        DecimalFormat df = new DecimalFormat("00.000000")
         return df.format(decimalMin)
     }
     
@@ -110,7 +113,7 @@ enum CoordPresentation
     // 12.25 -> 15
     {
         BigDecimal second_value = GetSecond(decimalMin)
-        DecimalFormat df = new DecimalFormat("00.0000")
+        DecimalFormat df = new DecimalFormat("00.000000")
         return df.format(second_value)
     }
 

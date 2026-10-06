@@ -86,6 +86,15 @@ class FcTagLib
             }
         }
     }
+    def resultclassshort = { p ->
+        if (p.var) {
+            if (p.next) {
+                out << """<a href="${p.link}/${p.var.id}${p.next}" title="${p.var.name.encodeAsHTML()}">${p.var.shortName.encodeAsHTML()}</a>"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}" title="${p.var.name.encodeAsHTML()}">${p.var.shortName.encodeAsHTML()}</a>"""
+            }
+        }
+    }
     
     // ====================================================================================================================
     // <g:coordroute var="${coordRouteInstance}" link="${createLink(controller:'coordRoute',action:'show')}"/>

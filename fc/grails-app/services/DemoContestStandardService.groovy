@@ -2306,7 +2306,7 @@ class DemoContestStandardService
         flightTestCheckPointPenalties:13,flightTestPenalties:13,
         observationTestRoutePhotoPenalties:0,observationTestTurnPointPhotoPenalties:0,
         observationTestGroundTargetPenalties:10,observationTestPenalties:10,landingTestPenalties:110,
-        taskPenalties:120,taskPosition:1
+        taskPenalties:120,taskPosition:3
        ],
        [crew:[name:"Besatzung 19"],viewpos:3,taskTAS:80,
         flighttestwind:[wind:[direction:300,speed:15]],
@@ -2331,7 +2331,7 @@ class DemoContestStandardService
         flightTestCheckPointPenalties:537,flightTestPenalties:537,
         observationTestRoutePhotoPenalties:120,observationTestTurnPointPhotoPenalties:0,
         observationTestGroundTargetPenalties:10,observationTestPenalties:130,landingTestPenalties:80,
-        taskPenalties:558,taskPosition:3
+        taskPenalties:558,taskPosition:5
        ],
        [crew:[name:"Besatzung 11"],viewpos:1,taskTAS:70,
         flighttestwind:[wind:[direction:300,speed:15]],
@@ -2356,7 +2356,7 @@ class DemoContestStandardService
         flightTestCheckPointPenalties:252,flightTestPenalties:252,
         observationTestRoutePhotoPenalties:0,observationTestTurnPointPhotoPenalties:0,
         observationTestGroundTargetPenalties:0,observationTestPenalties:0,landingTestPenalties:130,
-        taskPenalties:130,taskPosition:2
+        taskPenalties:130,taskPosition:4
        ],
        [crew:[name:"Besatzung 13"],viewpos:2,taskTAS:70,
         flighttestwind:[wind:[direction:300,speed:15]],

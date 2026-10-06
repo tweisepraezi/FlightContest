@@ -166,6 +166,17 @@ class FcMath
     }
 	
     //--------------------------------------------------------------------------
+    static String GetGradDiff(BigDecimal gradValue1, BigDecimal gradValue2)
+    {
+		BigDecimal diff_trueheading = Math.abs(gradValue1 - gradValue2)
+		if (diff_trueheading > 180) {
+			diff_trueheading = 360 - diff_trueheading
+		}
+        DecimalFormat df = new DecimalFormat("0.#")
+        return df.format(diff_trueheading)
+    }
+        
+    //--------------------------------------------------------------------------
     static String GradStrMinus(BigDecimal gradValue)
     {
         DecimalFormat df = new DecimalFormat("0")

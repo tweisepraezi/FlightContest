@@ -30,7 +30,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${message(code:'fc.task.timetableoverview')} - ${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})"
+                    content: "${message(code:'fc.task.timetableoverview')} - ${taskInstance.printName()} - ${message(code:'fc.crew.num', args:[flighttest_num])} - ${message(code:'fc.version')} ${taskInstance.timetableVersion}"
                 }
                 @top-right {
                     font-family: Noto Sans;
@@ -56,7 +56,7 @@
     </head>
     <body>
         <h2>${message(code:'fc.task.timetableoverview')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
-        <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
+        <h3>${taskInstance.printName()} - ${message(code:'fc.crew.num', args:[flighttest_num])} - ${message(code:'fc.version')} ${taskInstance.timetableVersion}</h3>
         <g:form>
             <g:if test="${params.spfptimes == 'false'}">
                 <table class="timetableoverviewlist">
@@ -79,21 +79,23 @@
                                 </g:if>
                                 <g:if test="${first_test && last_test}">
                                     <g:set var="first_landing_time" value="${first_test.GetIntermediateLandingTime(true)}"/>
-                        
-                                    <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
-                                        <tr class="planning">
-                                            <td class="col1">${message(code:'fc.test.planning.publish')}${test_num}:</td>
-                                            <td class="col2">${first_planning.GetTestingTime().format('HH:mm')}</td>
+                                    <tr class="planningstart">
+                                        <g:if test="${taskInstance.planningTestDuration}">
+                                            <td class="col1">${message(code:'fc.planningtest.start')}${test_num}:</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td class="col1">${message(code:'fc.flighttest.documentsoutput')}${test_num}:</td>
+                                        </g:else>
+                                        <td class="col2">${first_planning.GetTestingTime().format('HH:mm')}</td>
+                                        <td class="col3">- ${last_test.GetTestingTime().format('HH:mm')}</td>
+                                    </tr>
+                                    <g:if test="${taskInstance.planningTestDuration}">
+                                        <tr class="planningend">
+                                            <td class="col1">${message(code:'fc.planningtest.end')}${test_num}:</td>
+                                            <td class="col2">${first_planning.endTestingTime.format('HH:mm')}</td>
                                             <td class="col3">- ${last_test.endTestingTime.format('HH:mm')}</td>
                                         </tr>
                                     </g:if>
-                                    <g:else>
-                                        <tr class="planning">
-                                            <td class="col1">${message(code:'fc.planningtest')}${test_num}:</td>
-                                            <td class="col2">${first_planning.GetTestingTime().format('HH:mm')}</td>
-                                            <td class="col3">- ${last_test.endTestingTime.format('HH:mm')}</td>
-                                        </tr>
-                                    </g:else>
                                     <tr class="takeoff">
                                         <td class="col1">${message(code:'fc.test.takeoff')}${test_num}:</td>
                                         <td class="col2">${first_test.takeoffTime.format('HH:mm')}</td>
@@ -106,11 +108,22 @@
                                             <td class="col3">- ${last_test.GetIntermediateLandingTime(true)}</td>
                                         </tr>
                                     </g:if>
-                                    <tr class="landing">
+                                    <g:set var="last_line_class" value="lastline"/>
+                                    <g:if test="${taskInstance.flighttest.submissionMinutes}">
+                                        <g:set var="last_line_class" value=""/>
+                                    </g:if>
+                                    <tr class="landing ${last_line_class}">
                                         <td class="col1">${message(code:'fc.landingtest.landings')}${test_num}:</td>
                                         <td class="col2">${first_test.maxLandingTime.format('HH:mm')}</td>
                                         <td class="col3">- ${last_test.maxLandingTime.format('HH:mm')}</td>
                                     </tr>
+                                    <g:if test="${taskInstance.flighttest.submissionMinutes}">
+                                        <tr class="latestsubmission lastline">
+                                            <td class="col1">${message(code:'fc.test.submission.latest2')}${test_num}:</td>
+                                            <td class="col2">${first_test.GetMaxSubmissionTime().format('HH:mm')}</td>
+                                            <td class="col3">- ${last_test.GetMaxSubmissionTime().format('HH:mm')}</td>
+                                        </tr>
+                                    </g:if>
                                 </g:if>
                             </g:each>
                             <tr class="takeoffinterval">

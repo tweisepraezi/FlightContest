@@ -376,12 +376,24 @@ class FlightResultsTagLib
             for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(attrs.t.loggerResult,[sort:'utc'])) {
                 if (calcresult_instance.coordTitle) {
                     switch (calcresult_instance.coordTitle.type) {
-                        case CoordType.TO:
-                        case CoordType.LDG:
                         case CoordType.iTO:
                         case CoordType.iLDG:
                             if (calcresult_instance.gateNotFound) {
                                 notfound_message = true
+                            }
+                            break
+                        case CoordType.TO:
+                            if (attrs.t.IsFlightTestCheckTakeOff() && attrs.t.GetFlightTestTakeoffCheckSeconds()) {
+                                if (calcresult_instance.gateNotFound) {
+                                    notfound_message = true
+                                }
+                            }
+                            break
+                        case CoordType.LDG:
+                            if (attrs.t.IsFlightTestCheckLanding()) {
+                                if (calcresult_instance.gateNotFound) {
+                                    notfound_message = true
+                                }
                             }
                             break
                     }
@@ -951,7 +963,7 @@ class FlightResultsTagLib
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.tpname')}</th>"""
-			outln"""			<th colspan="3">${message(code:'fc.cptime')}</th>"""
+			outln"""			<th colspan="4">${message(code:'fc.cptime')}</th>"""
             if (show_outside) {
                 outln"""        <th>${message(code:'fc.outside.short')}</th>"""
             }
@@ -969,6 +981,7 @@ class FlightResultsTagLib
 			outln"""			<th/>"""
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
+            outln"""			<th>${message(code:'fc.test.results.diff')}</th>"""
 			outln"""			<th>${message(code:'fc.points')}</th>"""
             if (show_outside) {
                 outln"""		<th/>"""
@@ -1005,8 +1018,10 @@ class FlightResultsTagLib
     					outln"""	<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     					if (last_coordresult_instance.resultCpNotFound) {
     						outln"""<td class="cptime">-</td>"""
+                            outln"""<td class="timediff">-</td>"""
     					} else {
     						outln"""<td class="cptime">${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
+                            outln"""<td class="timediff">${FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, last_coordresult_instance.resultCpTime)}${message(code:'fc.time.s')}</td>"""
     					}
                         if (last_coordresult_instance.resultCpNotFound) {
                             if (DisabledCheckPointsTools.Contains(attrs.t.task.disabledCheckPointsNotFound, route_instance, "${last_coordresult_instance.title()},")) {
@@ -1117,8 +1132,10 @@ class FlightResultsTagLib
     				outln"""		<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     				if (last_coordresult_instance.resultCpNotFound) {
     					outln"""	<td class="cptime">-</td>"""
+                        outln"""    <td class="timediff">-</td>"""
     				} else {
     					outln"""	<td class="cptime">${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
+                        outln"""    <td class="timediff">${FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, last_coordresult_instance.resultCpTime)}${message(code:'fc.time.s')}</td>"""
     				}
                     if (last_coordresult_instance.resultCpNotFound) {
                         if (DisabledCheckPointsTools.Contains(attrs.t.task.disabledCheckPointsNotFound, route_instance, "${last_coordresult_instance.title()},")) {
@@ -1203,7 +1220,7 @@ class FlightResultsTagLib
 			outln"""	</tbody>"""
 			outln"""	<tfoot>"""
 			outln"""		<tr class="summary">"""
-            outln"""	        <td class="tpname" colspan="3">${message(code:'fc.test.results.summary')}</td>"""
+            outln"""	        <td class="tpname" colspan="4">${message(code:'fc.test.results.summary')}</td>"""
 			outln"""			<td class="penaltycp">${penalty_coord_summary}</td>"""
             if (show_outside) {
                 outln"""        <td class="penaltyoutsidecorridor">${penalty_outsidecorridor_summary}</td>"""
@@ -1324,7 +1341,7 @@ class FlightResultsTagLib
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.tpname')}</th>"""
-			outln"""			<th colspan="2">${message(code:'fc.cptime')}</th>"""
+			outln"""			<th colspan="3">${message(code:'fc.cptime')}</th>"""
             if (show_outside) {
                 outln"""        <th>${message(code:'fc.outside.short')}</th>"""
             }
@@ -1342,6 +1359,7 @@ class FlightResultsTagLib
 			outln"""			<th/>"""
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
+            outln"""			<th>${message(code:'fc.test.results.diff')}</th>"""
             if (show_outside) {
                 outln"""		<th/>"""
             }
@@ -1368,8 +1386,10 @@ class FlightResultsTagLib
     					outln"""	<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     					if (last_coordresult_instance.resultCpNotFound) {
     						outln"""<td class="cptime">-</td>"""
+                            outln"""<td class="timediff">-</td>"""
     					} else {
     						outln"""<td class="cptime">${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
+                            outln"""<td class="timediff">${FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, last_coordresult_instance.resultCpTime)}${message(code:'fc.time.s')}</td>"""
     					}
                         if (show_outside) {
                             if (last_coordresult_instance.type.IsCorridorResultCoord()) {
@@ -1438,8 +1458,10 @@ class FlightResultsTagLib
     				outln"""		<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     				if (last_coordresult_instance.resultCpNotFound) {
     					outln"""	<td class="cptime">-</td>"""
+                        outln"""    <td class="timediff">-</td>"""
     				} else {
     					outln"""	<td class="cptime">${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
+                        outln"""    <td class="timediff">${FcMath.TimeDiffSeconds(last_coordresult_instance.planCpTime, last_coordresult_instance.resultCpTime)}${message(code:'fc.time.s')}</td>"""
     				}
                     if (show_outside) {
                         if (attrs.t.GetFlightTestOutsideCorridorPointsPerSecond() > 0) {
@@ -1556,9 +1578,9 @@ class FlightResultsTagLib
                 outside_sec = r.outsideSec
                 outln"""    <tr class="${r.trclass}">"""
                 if (trackpoint_instance.interpolated) {
-                    outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone)} i</td>"""
+                    outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone,true)} i</td>"""
                 } else {
-                    outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone)}</td>"""
+                    outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone,true)}</td>"""
                 }
                 outln"""        <td class="latitude">${coord_presentation.GetCoordName(trackpoint_instance.latitude,true)}</td>"""
                 outln"""        <td class="longitude">${coord_presentation.GetCoordName(trackpoint_instance.longitude,false)}</td>"""

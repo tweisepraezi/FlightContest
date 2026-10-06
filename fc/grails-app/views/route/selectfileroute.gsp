@@ -36,8 +36,19 @@
                         </div>
                         <p>
                             <div>
-                                <g:checkBox name="firstcoordto" value="${firstcoordto}" checked= "${true}" tabIndex="${ti[0]++}"/>
-                                <label>${message(code:'fc.route.fileimport.firstcoordto')}</label>
+                                <label>${message(code:'fc.route.fileimport.to')}:</label>
+                                <br/>
+                                <g:set var="labels" value="${[message(code:'fc.route.fileimport.to.firstcoord'),message(code:'fc.route.fileimport.notspecified')]}"/>
+                                <g:set var="values" value="${[0,1]}"/>
+                                <g:each var="route_instance" in="${contestInstance.GetRoutesWithSingelCoordinate()}" status="i">
+                                    <g:set var="labels" value="${labels += message(code:'fc.route.fileimport.to.coordfromroute',args:[route_instance.name()])}"/>
+                                    <g:set var="values" value="${values += (i+2)}"/>
+                                </g:each>
+                                <g:radioGroup name="to" labels="${labels}" values="${values}" value="${0}" tabIndex="${ti[0]++}">
+                                    <div>
+                                        <label>${it.radio} ${it.label}</label>
+                                    </div>
+                                </g:radioGroup>
                             </div>
                             <div>
                                 <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>
@@ -50,18 +61,24 @@
                                     <label>${message(code:'fc.route.fileimport.curved1')}*:</label>
                                     <input type="text" id="curvedstartpos1" name="curvedstartpos1" value="5" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
                                     <input type="text" id="curvedendpos1" name="curvedendpos1" value="8" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
+                                    <g:checkBox name="scenic1" value="${scenic1}" checked= "${false}" tabIndex="${ti[0]++}"/>
+                                    <label>${message(code:'fc.route.fileimport.scenic')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="curved2" value="${curved2}" checked= "${false}" tabIndex="${ti[0]++}"/>
                                     <label>${message(code:'fc.route.fileimport.curved2')}*:</label>
                                     <input type="text" id="curvedstartpos2" name="curvedstartpos2" value="8" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
                                     <input type="text" id="curvedendpos2" name="curvedendpos2" value="12" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
+                                    <g:checkBox name="scenic2" value="${scenic2}" checked= "${false}" tabIndex="${ti[0]++}"/>
+                                    <label>${message(code:'fc.route.fileimport.scenic')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="curved3" value="${curved3}" checked= "${false}" tabIndex="${ti[0]++}"/>
                                     <label>${message(code:'fc.route.fileimport.curved3')}*:</label>
                                     <input type="text" id="curvedstartpos3" name="curvedstartpos3" value="15" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
                                     <input type="text" id="curvedendpos3" name="curvedendpos3" value="18" maxlength="3" size="3" tabIndex="${ti[0]++}"/>
+                                    <g:checkBox name="scenic3" value="${scenic3}" checked= "${false}" tabIndex="${ti[0]++}"/>
+                                    <label>${message(code:'fc.route.fileimport.scenic')}</label>
                                 </div>
                                 <br/>
                                 <div>
@@ -96,7 +113,7 @@
                             <div>
                                 <label>${message(code:'fc.route.fileimport.ldg')}:</label>
                                 <br/>
-                                <g:radioGroup name="ldg" labels="${[message(code:'fc.route.fileimport.lastcoord'),message(code:'fc.route.fileimport.addto'),message(code:'fc.route.fileimport.nothing')]}" values="${[0,1,2]}" value="${0}" tabIndex="${ti[0]++}">
+                                <g:radioGroup name="ldg" labels="${[message(code:'fc.route.fileimport.lastcoord'),message(code:'fc.route.fileimport.addto'),message(code:'fc.route.fileimport.notspecified')]}" values="${[0,1,2]}" value="${0}" tabIndex="${ti[0]++}">
                                     <div>
                                         <label>${it.radio} ${it.label}</label>
                                     </div>

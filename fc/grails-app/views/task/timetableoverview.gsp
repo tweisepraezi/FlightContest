@@ -39,10 +39,25 @@
                                             </g:if>
                                             <g:if test="${first_test && last_test}">
                                                 <g:set var="first_landing_time" value="${first_test.GetIntermediateLandingTime(true)}"/>
-                                                <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
+                                                <tr>
+                                                    <g:if test="${taskInstance.planningTestDuration}">
+                                                        <td class="detailtitle">${message(code:'fc.planningtest.start')}${test_num}:</td>
+                                                    </g:if>
+                                                    <g:else>
+                                                        <td class="detailtitle">${message(code:'fc.flighttest.documentsoutput')}${test_num}:</td>
+                                                    </g:else>
+                                                    <td>${first_planning.GetTestingTime().format('HH:mm')} - ${last_test.GetTestingTime().format('HH:mm')}</td>
+                                                    <td/>
+                                                    <g:if test="${first_landing_time}">
+                                                        <td/>
+                                                        <td/>
+                                                    </g:if>
+                                                    <td/>
+                                                </tr>
+                                                <g:if test="${taskInstance.planningTestDuration}">
                                                     <tr>
-                                                        <td class="detailtitle">${message(code:'fc.test.planning.publish')}${test_num}:</td>
-                                                        <td>${first_planning.GetTestingTime().format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
+                                                        <td class="detailtitle">${message(code:'fc.planningtest.end')}${test_num}:</td>
+                                                        <td>${first_planning.endTestingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
                                                         <td/>
                                                         <g:if test="${first_landing_time}">
                                                             <td/>
@@ -51,18 +66,6 @@
                                                         <td/>
                                                     </tr>
                                                 </g:if>
-                                                <g:else>
-                                                    <tr>
-                                                        <td class="detailtitle">${message(code:'fc.planningtest')}${test_num}:</td>
-                                                        <td>${first_planning.GetTestingTime().format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
-                                                        <td/>
-                                                        <g:if test="${first_landing_time}">
-                                                            <td/>
-                                                            <td/>
-                                                        </g:if>
-                                                        <td/>
-                                                    </tr>
-                                                </g:else>
                                                 <tr>
                                                     <td class="detailtitle">${message(code:'fc.test.takeoff')}${test_num}:</td>
                                                     <td>${first_test.takeoffTime.format('HH:mm')} - ${last_test.takeoffTime.format('HH:mm')}</td>
@@ -93,6 +96,16 @@
                                                     </g:if>
                                                     <td/>
                                                 </tr>
+                                                <g:if test="${taskInstance.flighttest.submissionMinutes}">
+                                                    <td class="detailtitle">${message(code:'fc.test.submission.latest2')}${test_num}:</td>
+                                                    <td>${first_test.GetMaxSubmissionTime().format('HH:mm')} - ${last_test.GetMaxSubmissionTime().format('HH:mm')}</td>
+                                                    <td/>
+                                                    <g:if test="${first_landing_time}">
+                                                        <td/>
+                                                        <td/>
+                                                    </g:if>
+                                                    <td/>
+                                                </g:if>
                                                 <tr>
                                                     <g:if test="${first_landing_time}">
                                                         <td colspan="7">.</td>

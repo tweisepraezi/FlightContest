@@ -547,7 +547,14 @@ class RouteFileTools
         int sc_num = 1
         
         int to_pos = 0
-        if (importParams.firstcoordto) {
+        if (importParams.to == 0) { // firstcoordto
+            to_pos =  1
+        } else if (importParams.to > 1) { // to from route
+            List route_instances = contestInstance.GetRoutesWithSingelCoordinate()
+            CoordRoute first_coord = CoordRoute.findByRoute(route_instances[importParams.to-2])
+            Map first_coord_map = [lat:CoordPresentation.GetDirectionGradDecimalMinute(first_coord.latMath(),true), lon:CoordPresentation.GetDirectionGradDecimalMinute(first_coord.lonMath(),false), alt:first_coord.altitude, track:null, next_track:null]
+            routeData.gates = [first_coord_map] + routeData.gates
+            coord_num++
             to_pos =  1
         }
         
@@ -556,7 +563,7 @@ class RouteFileTools
         if (importParams.ldg == 0) { // lastcoord
             fp_pos = coord_num - 1
             ldg_pos = coord_num
-        } else if (importParams.firstcoordto && importParams.ldg == 1) { // addto
+        } else if ((importParams.to == 0 || importParams.to > 1) && importParams.ldg == 1) { // addto
             routeData.gates += routeData.gates[0]
             fp_pos = coord_num
             ldg_pos = coord_num + 1
@@ -774,7 +781,9 @@ class RouteFileTools
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
-                coordroute_instance.ignoreGate = true
+                if (importParams.scenic1) {
+                    coordroute_instance.ignoreGate = true
+                }
                 sc_num++
             // Curved (TP, SC..., TP) (2)
             } else if (importParams.curved2 && gate_pos == importParams.curvedstartpos2 ) {
@@ -796,7 +805,9 @@ class RouteFileTools
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
-                coordroute_instance.ignoreGate = true
+                if (importParams.scenic2) {
+                    coordroute_instance.ignoreGate = true
+                }
                 sc_num++
             // Curved (TP, SC..., TP) (3)
             } else if (importParams.curved3 && gate_pos == importParams.curvedstartpos3) {
@@ -818,7 +829,9 @@ class RouteFileTools
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
-                coordroute_instance.ignoreGate = true
+                if (importParams.scenic3) {
+                    coordroute_instance.ignoreGate = true
+                }
                 sc_num++
             // Semicircle (SC) (1)
             } else if (importParams.semicircle1 && gate_pos == importParams.semicirclepos1) {

@@ -126,8 +126,10 @@
 				                    <g:if test="${liveContest.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (live_task.isTaskIncreaseEnabled))}">
 				                        <g:set var="detail_num" value="${detail_num+1}"/>
 				                    </g:if>
-	                                <th colspan="${detail_num}">${live_task.bestOfName}</th>
-                                    <g:set var="col_num" value="${col_num+detail_num}"/>
+                                    <g:if test="${detail_num>0}">
+                                        <th colspan="${detail_num}">${live_task.bestOfName}</th>
+                                        <g:set var="col_num" value="${col_num+detail_num}"/>
+                                    </g:if>
 	                            </g:each>
 	                        </g:if>
 	                        <g:if test="${liveContest.liveShowSummary}">
@@ -235,9 +237,6 @@
                                         <g:if test="${liveContest.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (live_task.isTaskIncreaseEnabled))}">
 		                                    <th>${message(code:'fc.test.results.summary.short')}</th>
 		                                </g:if>
-	                                    <g:elseif test="${liveContest.contestPrintTaskTestDetails && (detail_num==0)}">
-	                                        <th>${message(code:'fc.test.results.summary.short')}</th>
-	                                    </g:elseif>
 	                                </g:each>
 	                            </g:if>
 	                            <g:if test="${liveContest.liveShowSummary}">

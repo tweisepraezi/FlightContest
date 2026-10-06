@@ -142,7 +142,9 @@
                                 <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                 </g:if>
-                         	    <th colspan="${detail_num}">${task_instance.bestOfNamePrintable()}</th>
+                                <g:if test="${detail_num>0}">
+                                    <th colspan="${detail_num}">${task_instance.bestOfNamePrintable()}</th>
+                                </g:if>
                             </g:each>
                         </g:if>
                        	<th>${message(code:'fc.test.results.summary')}</th>
@@ -247,9 +249,6 @@
 	                                <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
 	                                    <th>${message(code:'fc.test.results.summary.short')}</th>
 	                                </g:if>
-	                                <g:elseif test="${contestInstance.contestPrintTaskTestDetails && (detail_num==0)}">
-	                                    <th>${message(code:'fc.test.results.summary.short')}</th>
-	                                </g:elseif>
 	                            </g:each>
 	                        </g:if>
 	                        <th/>
@@ -268,8 +267,13 @@
                                 <td class="tas">${FcMath.SpeedStr_TAS(crew_instance.tas)}${message(code:'fc.knot')}</td>
                             </g:elseif>
                             <g:if test="${contestInstance.contestPrintTeam}">
-                                <g:if test="${crew_instance.team}">                          
-                                    <td class="team">${crew_instance.team.name}</td>
+                                <g:if test="${crew_instance.team}">
+                                    <g:if test="${crew_instance.disabledTeam}">
+                                        <td class="team">(${crew_instance.team.name})</td>
+                                    </g:if>
+                                    <g:else>
+                                        <td class="team">${crew_instance.team.name}</td>
+                                    </g:else>
                                 </g:if>
                                 <g:else>
                                     <td class="team">-</td>

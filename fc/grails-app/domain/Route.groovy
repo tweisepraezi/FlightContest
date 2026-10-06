@@ -309,7 +309,7 @@ class Route
         contestMapAirfieldsData sqlType: "nvarchar(max)"
 	}
 	
-	void CopyValues(Route routeInstance, boolean copyContest = false)
+	void CopyValues(Route routeInstance, boolean copyContest = false, boolean copyBackward = false)
 	{
 		title = routeInstance.title
 		idTitle = routeInstance.idTitle
@@ -423,12 +423,64 @@ class Route
 		}
 		
 		// coords:CoordRoute
-		CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
-			CoordRoute new_coordroute_instance = new CoordRoute()
-			new_coordroute_instance.route = this
-			new_coordroute_instance.CopyValues(coordroute_instance)
-			new_coordroute_instance.save()
-		}
+        if (copyBackward) {
+            boolean set_endcurved = false
+            boolean set_endcurved_done = false
+            int set_tp_title_number = 1
+            int set_sc_title_number = 1
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id", order:"desc"])) {
+                CoordRoute new_coordroute_instance = new CoordRoute()
+                new_coordroute_instance.route = this
+                new_coordroute_instance.CopyValues(coordroute_instance)
+                
+                switch (coordroute_instance.type) {
+                    case CoordType.TO: new_coordroute_instance.type = CoordType.LDG; break;
+                    case CoordType.LDG: new_coordroute_instance.type = CoordType.TO; break;
+                    case CoordType.SP: new_coordroute_instance.type = CoordType.FP; break;
+                    case CoordType.iSP: new_coordroute_instance.type = CoordType.iFP; break;
+                    case CoordType.FP: new_coordroute_instance.type = CoordType.SP; break;
+                    case CoordType.iFP: new_coordroute_instance.type = CoordType.iSP; break;
+                }
+                
+                if (set_endcurved) {
+                    switch (new_coordroute_instance.type) {
+                        case CoordType.TP:
+                        case CoordType.iFP:
+                        case CoordType.FP:
+                            new_coordroute_instance.endCurved = true
+                            set_endcurved = false
+                            set_endcurved_done = true
+                            break
+                    }
+                }
+                if (coordroute_instance.endCurved) {
+                    if (!set_endcurved_done) {
+                        new_coordroute_instance.endCurved = false
+                    }
+                    set_endcurved = true
+                    set_endcurved_done = false
+                }
+                
+                if (new_coordroute_instance.type == CoordType.TP) {
+                    new_coordroute_instance.titleNumber = set_tp_title_number
+                    set_tp_title_number++
+                    new_coordroute_instance.planProcedureTurn = false
+                }
+                if (new_coordroute_instance.type == CoordType.SECRET) {
+                    new_coordroute_instance.titleNumber = set_sc_title_number
+                    set_sc_title_number++
+                }
+                
+                new_coordroute_instance.save()
+            }
+        } else {
+            CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
+                CoordRoute new_coordroute_instance = new CoordRoute()
+                new_coordroute_instance.route = this
+                new_coordroute_instance.CopyValues(coordroute_instance)
+                new_coordroute_instance.save()
+            }
+        }
 		
 		// routelegs:RouteLegCoord
 		RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"]).each { RouteLegCoord routelegcoord_instance ->
@@ -604,34 +656,6 @@ class Route
 		}
 	}
     
-    String idName()
-    {
-		return "${getMsg('fc.route')}-${idTitle}"
-    }
-    
-    String idNamePrintable()
-    {
-        return "${getPrintMsg('fc.route')}-${idTitle}"
-    }
-
-	String name()
-	{
-		if(title) {
-			return title
-		} else {
-            return idName()
-		}
-	}
-	
-    String printName()
-    {
-        if(title) {
-            return title
-        } else {
-            return idNamePrintable()
-        }
-    }
-    
     String GetName(boolean isPrint)
     {
         if (isPrint) {
@@ -652,13 +676,12 @@ class Route
     
     String GetOSMRouteName1()
     {
-        String route_name = ""
-		if (parcourName) {
-            route_name = "${parcourName} - "
-        }
-        route_name += name()
+        String route_name = name()
         if (corridorWidth) {
             route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
+        }
+		if (parcourName) {
+            route_name += " - ${parcourName}"
         }
         if (contestMapFirstTitle) {
             return "${route_name} - ${contestMapFirstTitle}"
@@ -669,9 +692,6 @@ class Route
     String GetOSMRouteName2()
     {
         String route_name = ""
-		if (parcourName) {
-            route_name = "${parcourName} - "
-        }
         if (IsOtherRoute()) {
             if (route2ID) {
                 Route route_instance = Route.get(route2ID)
@@ -689,6 +709,9 @@ class Route
                 route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
             }
         }
+		if (parcourName) {
+            route_name += " - ${parcourName}"
+        }
         if (contestMapSecondTitle) {
             return "${route_name} - ${contestMapSecondTitle}"
         }
@@ -698,9 +721,6 @@ class Route
     String GetOSMRouteName3()
     {
         String route_name = ""
-		if (parcourName) {
-            route_name = "${parcourName} - "
-        }
         if (IsOtherRoute()) {
             if (route3ID) {
                 Route route_instance = Route.get(route3ID)
@@ -718,6 +738,9 @@ class Route
                 route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
             }
         }
+		if (parcourName) {
+            route_name += " - ${parcourName}"
+        }
         if (contestMapThirdTitle) {
             return "${route_name} - ${contestMapThirdTitle}"
         }
@@ -727,9 +750,6 @@ class Route
     String GetOSMRouteName4()
     {
         String route_name = ""
-		if (parcourName) {
-            route_name = "${parcourName} - "
-        }
         if (IsOtherRoute()) {
             if (route4ID) {
                 Route route_instance = Route.get(route4ID)
@@ -747,12 +767,43 @@ class Route
                 route_name += " (${FcMath.DistanceStr2(corridorWidth)}${getMsgArgs('fc.mile',[])})"
             }
         }
+		if (parcourName) {
+            route_name += " - ${parcourName}"
+        }
         if (contestMapForthTitle) {
             return "${route_name} - ${contestMapForthTitle}"
         }
         return route_name
     }
     
+	String name()
+	{
+		if(title) {
+			return title
+		} else {
+            return idName()
+		}
+	}
+	
+    String idName()
+    {
+		return "${getMsg('fc.route')}-${idTitle}"
+    }
+    
+    String printName()
+    {
+        if(title) {
+            return title
+        } else {
+            return idNamePrintable()
+        }
+    }
+    
+    String idNamePrintable()
+    {
+        return "${getPrintMsg('fc.route')}-${idTitle}"
+    }
+
 	boolean Used()
 	{
         // TODOIF: look in SearchTools.GetRouteTasks() for extensions
