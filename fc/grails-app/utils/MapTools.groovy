@@ -12,8 +12,8 @@ class MapTools
                     Map map_entry = [name:"",title:"", titlecode:'', localref:"",top:0,bottom:0,right:0,left:0,projection:"",landscape:false,size:"",tif:false]
                     map_entry.name = file.name
                     map_entry.title = file.name.substring(0,file.name.size()-4)
-                    //map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
-                    map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${map_entry.title}.png"
+                    //map_entry.localref = "${FlightContestRuntime.publicBaseUrl()}/map/${session.lastContest.contestUUID}/${map_entry.title}${Defs.MAP_PNG_WARP_FILE_SUFFIX}"
+                    map_entry.localref = "${FlightContestRuntime.publicBaseUrl()}/map/${session.lastContest.contestUUID}/${map_entry.title}.png"
                     File map_tif = new File("${map_folder_name}${map_entry.title}.tif")
                     if (map_tif.exists()) {
                         map_entry.tif = true
@@ -59,7 +59,7 @@ class MapTools
                     map_entry.name = file.name
                     map_entry.title = file.name.substring(0,file.name.size()-4)
                     map_entry.titlecode = "fc.map.airspaces"
-                    map_entry.localref = "http://localhost:8080/fc/map/${session.lastContest.contestUUID}/${Defs.MAP_AIRSPACES_FILE}"
+                    map_entry.localref = "${FlightContestRuntime.publicBaseUrl()}/map/${session.lastContest.contestUUID}/${Defs.MAP_AIRSPACES_FILE}"
                     map_list += map_entry
                 }
             }

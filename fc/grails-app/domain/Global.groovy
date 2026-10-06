@@ -338,24 +338,15 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     String GetClientID()
     {
-        String client_id = ""
-        def process = ['powershell', '-command', '(get-itemproperty -path HKLM:\\SOFTWARE\\Microsoft\\SQMClient -Name MachineID).MachineID'].execute()
-        client_id = process.text
-        if (client_id) {
-            client_id = client_id.trim()
-        }
-        if (client_id) {
-            client_id = client_id.replace('{','')
-        }
-        if (client_id) {
-            client_id = client_id.replace('}','')
-        }
-        return client_id
+        return FlightContestRuntime.clientId()
     }
 
     // --------------------------------------------------------------------------------------------------------------------
     String GetConfigServer()
     {
+        if (FlightContestRuntime.setting('FC_REMOTE_CONFIG', 'true') == 'false') {
+            return ''
+        }
         if (grailsApplication.config.flightcontest.config.server) {
             return grailsApplication.config.flightcontest.config.server
         }
@@ -386,6 +377,8 @@ class Global
         if (ClientID && ConfigServer) {
             String config_url = ConfigServer + "/" + ClientID + "/" + Defs.CONFIG_NAME
             def connection = config_url.toURL().openConnection()
+            connection.connectTimeout = 5000
+            connection.readTimeout = 10000
             connection.requestMethod = "GET"
             connection.doInput = true
             int response_code = 503
@@ -500,6 +493,8 @@ class Global
         if (ClientID && ConfigServer) {
             String config_url = ConfigServer + "/" + ClientID + "/" + Defs.FCMAP_COUNTER_NAME
             def connection = config_url.toURL().openConnection()
+            connection.connectTimeout = 5000
+            connection.readTimeout = 10000
             connection.requestMethod = "GET"
             connection.doInput = true
             int response_code = 503
@@ -516,6 +511,9 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     String GetPrintServerAPI()
     {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') == 'disabled') {
+            return ''
+        }
         return FCMapServer
     }
     
@@ -607,6 +605,9 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsLocalPrintmaps()
     {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') in ['disabled', 'remote']) {
+            return false
+        }
         if (PostgreSQLPassword) {
             return true
         }
@@ -702,6 +703,9 @@ class Global
     
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsGDALAvailable() {
+        if (!FlightContestRuntime.isWindows()) {
+            return false
+        }
         return gdalJNI.isAvailable()
     }
     

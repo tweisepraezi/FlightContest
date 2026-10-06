@@ -1,0 +1,36 @@
+name: flightcontest
+services:
+  flightcontest:
+    image: flightcontest:4.2.13-docker
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 60s
+    ports:
+      - "${FC_BIND_ADDRESS:-127.0.0.1}:${FC_PORT:-8080}:8080"
+    environment:
+      TZ: ${TZ:-Europe/Warsaw}
+      FC_CLIENT_ID: ${FC_CLIENT_ID:-}
+      FC_REMOTE_CONFIG: ${FC_REMOTE_CONFIG:-false}
+      FC_PUBLIC_BASE_URL: ${FC_PUBLIC_BASE_URL:-}
+      FC_MAP_MODE: ${FC_MAP_MODE:-disabled}
+      FC_CONFIG_FILE: /var/lib/flightcontest/save/.fc/config.groovy
+      FC_CONFIG_SEED_FILE: /etc/flightcontest/config.groovy
+      CATALINA_OPTS: ${CATALINA_OPTS:--Xms256m -Xmx2048m -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Duser.language=de -Duser.country=DE}
+    volumes:
+      - state:/var/lib/flightcontest
+      - uploads:/usr/local/tomcat/webapps/fc/gpxupload
+      - jobs:/usr/local/tomcat/webapps/fc/jobs
+      - maps:/usr/local/tomcat/webapps/fc/map
+      - live:/usr/local/tomcat/webapps/fc/live
+      - live2:/usr/local/tomcat/webapps/fc/live2
+      - ./config.groovy:/etc/flightcontest/config.groovy:ro
+volumes:
+  state:
+  uploads:
+  jobs:
+  maps:
+  live:
+  live2:

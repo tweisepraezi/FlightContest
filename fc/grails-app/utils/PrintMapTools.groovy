@@ -23,26 +23,28 @@ class PrintMapTools
     //--------------------------------------------------------------------------
     static Map CallPrintServer(String urlPath, List headerList, String requestMethod, DataType dataType, def outputData)
     {
-        Map ret = [responseCode:null, json:null, binary:null]
+        Map ret = [responseCode:null, json:null, binary:null, error:'']
         if (LOG_RESTAPI_CALLS) {
             println urlPath
         }
         if (LOG_RESTAPI_OUTPUTDATA) {
             println outputData
         }
-        def connection = urlPath.toURL().openConnection()
-        
-        connection.requestMethod = requestMethod
-        
-        if (headerList) {
-            headerList.each {
-                connection.setRequestProperty( it.name, it.value )
-            }
-        }
-        
-        //String auth_str = "${LOGIN_NAME}:${LOGIN_PASSWORD}".getBytes().encodeBase64().toString()
-        //connection.setRequestProperty( "Authorization", "Basic ${auth_str}" )
         try {
+            def connection = urlPath.toURL().openConnection()
+            connection.connectTimeout = 5000
+            connection.readTimeout = 60000
+
+            connection.requestMethod = requestMethod
+
+            if (headerList) {
+                headerList.each {
+                    connection.setRequestProperty( it.name, it.value )
+                }
+            }
+
+            //String auth_str = "${LOGIN_NAME}:${LOGIN_PASSWORD}".getBytes().encodeBase64().toString()
+            //connection.setRequestProperty( "Authorization", "Basic ${auth_str}" )
             if (outputData) {
                 connection.doOutput = true
                 switch (dataType) {
@@ -59,6 +61,11 @@ class PrintMapTools
                         break
                 }
             }
+            ret.responseCode = connection.responseCode
+            if (ret.responseCode >= 400) {
+                ret.error = "HTTP ${ret.responseCode}"
+                return ret
+            }
             switch (dataType) {
                 case DataType.JSON:
                     try {
@@ -66,6 +73,7 @@ class PrintMapTools
                         s = new String(s.getBytes("ISO-8859-1"), "UTF-8")
                         ret.json = new JsonSlurper().parseText(s)
                     } catch (Exception e) {
+                        ret.error = 'Invalid map server response'
                         println "Exception (1): ${e.getMessage()} ${e}"
                     }
                     break
@@ -90,6 +98,7 @@ class PrintMapTools
             }
             return ret
         } catch (Exception e) {
+            ret.error = e instanceof java.net.SocketTimeoutException ? 'Map server request timed out' : 'Cannot connect to the map server'
             if (LOG_RESTAPI_EXCEPTIONS) {
                 println "Exception (2): ${e.getMessage()} ${e}"
             }
@@ -101,6 +110,9 @@ class PrintMapTools
     //--------------------------------------------------------------------------
     static boolean IsLocalPrintmapsRunning()
     {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') in ['disabled', 'remote']) {
+            return false
+        }
         String url_path = Defs.PRINTMAPS_INTERN_LINK + "/capabilities/service" 
         Map status = CallPrintServer(url_path, [HEADER_ACCEPT], "GET", DataType.JSON, "")
         if (status.responseCode == 200) {
@@ -112,6 +124,12 @@ class PrintMapTools
     //--------------------------------------------------------------------------
     static String GetPrintServerAPI()
     {
+        if (FlightContestRuntime.setting('FC_MAP_MODE') == 'disabled') {
+            return ''
+        }
+        if (FlightContestRuntime.setting('FC_MAP_MODE') == 'remote') {
+            return BootStrap.global.GetPrintServerAPI()
+        }
         if (BootStrap.global.IsLocalPrintmaps() && IsLocalPrintmapsRunning()) {
             return Defs.PRINTMAPS_INTERN_LINK
         }

@@ -244,7 +244,7 @@ class FlightTestController {
     }
 
     Map GetPrintParams() {
-        return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
+        return [baseuri:FlightContestRuntime.internalBaseUrl(request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request)),
                 contest:session.lastContest,
                 lang:session.printLanguage
                ]

@@ -3,9 +3,10 @@
 // in the classpath in ConfigSlurper format
 
 // FC: User specific configuration (Mail, Upload, etc.)
-grails.config.locations = [ "file:C:/FCSave/.fc/config.groovy",
-                            "file:C:/FCSave/.fc/migrate_db.groovy"
-                          ]
+def fcSaveRoot = System.getenv('FC_SAVE_DIR') ?: 'C:/FCSave'
+def fcConfigFile = System.getenv('FC_CONFIG_FILE') ?: "${fcSaveRoot}/.fc/config.groovy"
+grails.config.locations = [new File(fcConfigFile).toURI().toString(),
+                           new File("${fcSaveRoot}/.fc/migrate_db.groovy").toURI().toString()]
 
 // grails.config.locations = [ "classpath:${appName}-config.properties",
 //                             "classpath:${appName}-config.groovy",

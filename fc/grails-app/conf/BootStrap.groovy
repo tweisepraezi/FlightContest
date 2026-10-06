@@ -7,6 +7,7 @@ class BootStrap {
 	def messageSource
 	def grailsApplication
 	
+    static boolean ready = false
     static Global global = null 
     static TempData tempData = null
 
@@ -1587,9 +1588,11 @@ class BootStrap {
         }
 		
 		println "Init done."
+        ready = true
     }
     
     def destroy = {
+        ready = false
     }
     
     private void mk_root_dir(def actServletContext, String dirName)

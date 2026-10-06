@@ -4358,9 +4358,9 @@ class GpxService
                 String live_url
                 LiveCrews = 0
                 if (uploadNoLiveResults) {
-                    live_url = "http://localhost:8080/fc/contest/listnoliveresults/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
+                    live_url = "${FlightContestRuntime.internalBaseUrl('http://localhost:8080/fc')}/contest/listnoliveresults/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
                 } else {
-                live_url = "http://localhost:8080/fc/contest/listresultslive/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}&livestartpos=${LiveStartPos}&liveshowsize=${contest_instance.liveShowSize}&livenewestshowsize=${contest_instance.liveNewestShowSize}"
+                live_url = "${FlightContestRuntime.internalBaseUrl('http://localhost:8080/fc')}/contest/listresultslive/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}&livestartpos=${LiveStartPos}&liveshowsize=${contest_instance.liveShowSize}&livenewestshowsize=${contest_instance.liveNewestShowSize}"
                 }
                 printstart "${live_url} -> ${live_html_file_name}"
                 byte[] utf8_bom = new byte[3]

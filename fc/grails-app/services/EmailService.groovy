@@ -453,7 +453,7 @@ class EmailService
     //--------------------------------------------------------------------------
     private Map GetPrintParams(Contest contestInstance, String printLanguage, def grailsAttributes, def request)
     {
-        return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
+        return [baseuri:FlightContestRuntime.internalBaseUrl(request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request)),
                 contest:contestInstance,
                 lang:printLanguage
                ]
